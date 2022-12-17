@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminInstServ;
 use App\Models\Asistente;
 use App\Models\Bono;
 use App\Models\Instituciones;
@@ -92,6 +93,21 @@ class FlujoCajaController extends Controller
         else if(Auth::user()->hasRole('Servicio'))
         {
             $servicio = Servicios::where('id_usuario',Auth::user()->id)->first();
+            $filtro[] = array();
+        }
+        else if(Auth::user()->hasRole('Adm_Institucion'))
+        {
+            $servicio = Servicios::where('id_usuario',Auth::user()->id)->first();
+            $filtro[] = array();
+        }
+        else if(Auth::user()->hasRole('Adm_Servicio'))
+        {
+            $servicio = AdminInstServ::where('id_usuario',Auth::user()->id)->first();
+            $filtro[] = array();
+        }
+        else if(Auth::user()->hasRole('Contador'))
+        {
+            // $servicio = Servicios::where('id_usuario',Auth::user()->id)->first();
             $filtro[] = array();
         }
 
