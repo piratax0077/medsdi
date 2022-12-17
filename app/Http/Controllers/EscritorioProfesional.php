@@ -1,0 +1,2689 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\AntConfidenciales;
+use App\Models\AntecedenteAlergiaPaciente;
+use App\Models\AntecedenteEnferCronica;
+use App\Models\AntecedenteMedicamentoCronico;
+use App\Models\AntecedentesCirugias;
+use App\Models\AntecedentesPaciente;
+use App\Models\Asistente;
+use App\Models\AsistenteLugarAtencion;
+use App\Models\Bono;
+use App\Models\Bancos;
+use App\Models\CertificadoReposo;
+use App\Models\Ciudad;
+use App\Models\ContactoEmergencia;
+use App\Models\ControlObesidad;
+use App\Models\DetalleReceta;
+use App\Models\DiagnosticoCie;
+use App\Models\Direccion;
+use App\Models\Especialidad;
+use App\Models\ExamenPPF;
+use App\Models\FichaAtencion;
+use App\Models\FichaOtorrinoTipo;
+use App\Models\GrupoSanguineo;
+use App\Models\Hipertension;
+use App\Models\HoraMedica;
+use App\Models\InformeMedico;
+use App\Models\Interconsulta;
+use App\Models\LugarAtencion;
+use App\Models\LiquidacionRecibo;
+use App\Models\Paciente;
+use App\Models\PacienteContactoEmergencia;
+use App\Models\Prevision;
+use App\Models\Profesional;
+use App\Models\ProfesionalAntecedenteAcademico;
+use App\Models\ProfesionalAsistente;
+use App\Models\ProfesionalConvenio;
+use App\Models\ProfesionalDiagnosticoCie;
+use App\Models\ProfesionalesLugaresAtencion;
+use App\Models\ProfesionalHorario;
+use App\Models\RecetaAudifono;
+use App\Models\Region;
+use App\Models\RegistroConfirmacionHoraAgenda;
+use App\Models\SolicitudPabellonQuirurgico;
+use App\Models\TipoAntecedenteAcademico;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use PDF;
+
+class EscritorioProfesional extends Controller
+{
+
+    public function eliminar_horario_agenda(Request $request)
+    {
+
+        // $profesional = Profesional::where('id_usuario', Auth::user()->id);
+        $horario = ProfesionalHorario::where('id', $request->id_horario)->first();
+
+        if ($horario->delete()) {
+
+            return json_encode(['success' => true]);
+        } else {
+            return json_encode(['success' => false]);
+        }
+        // dd($horario);
+    }
+
+    public function ver_ficha_atencion(Request $request)
+    {
+
+        $ficha = FichaAtencion::where('id', $request->id_ficha)->first();
+        return json_encode($ficha);
+    }
+
+    public function examenes_frecuentes()
+    {
+        // $profesional = Profesional::find(Auth::user()->id_profesional);
+        // $diagnosticos = $profesional->diagnosticos_frecuentes;
+        return view('app.profesional.configuracion.examenes_frecuentes');
+    }
+
+    public function editar_datos_personales_perfil(Request $request)
+    {
+
+        $user = Auth::user();
+        $profesional = Profesional::where('id_usuario', $user->id)->first();
+
+        $profesional->nombre = $request->nombre;
+        $profesional->apellido_uno = $request->apellido_uno;
+        $profesional->apellido_dos = $request->apellido_dos;
+        // $profesional->telefono_uno = $request->telefono_uno;
+        // $profesional->celular = $request->celular;
+        // $profesional->email = $request->email;
+        // $profesional->fecha_nacimiento = $request->fecha_nacimiento;
+        $profesional->sexo = $request->sexo;
+        $profesional->id_especialidad = $request->especialidad;
+        $profesional->save();
+
+        if (!$profesional->save()) {
+
+            return response()->json(['success' => false, 'message' => 'Error al editar el profesional.']);
+        } else {
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Profesional Editado correctamente.',
+                    'profesional' => $profesional
+                ]
+            );
+        }
+    }
+
+    public function editar_datos_contacto_perfil(Request $request)
+    {
+
+        $user = Auth::user();
+        $profesional = Profesional::where('id_usuario', $user->id)->first();
+
+        $profesional->email = $request->email;
+        $profesional->telefono_uno = $request->telefono_uno;
+
+        $profesional->save();
+
+        if (!$profesional->save()) {
+
+            return response()->json(['success' => false, 'message' => 'Error al editar el profesional.']);
+        } else {
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Profesional Editado correctamente.',
+                    'profesional' => $profesional
+                ]
+            );
+        }
+    }
+
+    public function editar_datos_residencia_perfil(Request $request)
+    {
+
+        $user = Auth::user();
+        $profesional = Profesional::where('id_usuario', $user->id)->first();
+        $direccion = Direccion::where('id', $profesional->id_direccion)->first();
+
+        if($direccion)
+        {
+            // $direccion->region = $request->region;
+            $direccion->id_ciudad = $request->ciudad;
+            $direccion->direccion = $request->direccion;
+            $direccion->numero_dir = $request->numero_dir;
+            if($direccion->save())
+            {
+                return response()->json(
+                    [
+                        'success' => true,
+                        'message' => 'Profesional Editado correctamente.',
+                        'profesional' => $profesional
+                    ]
+                );
+            }
+            else
+            {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'proble a al actualziar direcion del Profesional.',
+                        'profesional' => $profesional
+                    ]
+                );
+            }
+        }
+        else
+        {
+            $direccion = new Direccion();
+            // $direccion->region = $request->region;
+            $direccion->id_ciudad = $request->ciudad;
+            $direccion->direccion = $request->direccion;
+            $direccion->numero_dir = $request->numero_dir;
+            if($direccion->save())
+            {
+                return response()->json(
+                    [
+                        'success' => true,
+                        'message' => 'Profesional Editado correctamente.',
+                        'profesional' => $profesional
+                    ]
+                );
+            }
+            else
+            {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'proble a al actualziar direcion del Profesional.',
+                        'profesional' => $profesional
+                    ]
+                );
+            }
+        }
+    }
+
+    public function agregar_medicamento_cronico_paciente(Request $request)
+    {
+        $paciente = Paciente::find($request->paciente);
+        $antecedente = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+
+        $medicamento_cronico = new AntecedenteMedicamentoCronico();
+        $medicamento_cronico->id_antecedentes = $antecedente->id;
+        $medicamento_cronico->id_medicamento = $request->id_medicamento_cronico;
+        $medicamento_cronico->nombre_medicamento_cronico = $request->medicamento_cronico;
+        $medicamento_cronico->id_dosis = $request->id_dosis;
+        $medicamento_cronico->dosis = $request->dosis;
+
+        if ($medicamento_cronico->save())
+        {
+
+            $medicamentos_cronicos = AntecedenteMedicamentoCronico::where('id_antecedentes', $antecedente->id)->get();
+
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Medicamento agregado correctamente.',
+                    'medicamentos_cronicos' => $medicamentos_cronicos
+                ]
+            );
+        } else {
+            return response()->json(['success' => false, 'message' => 'Error al agregar el medicamento crónica.']);
+        }
+    }
+
+    public function eliminar_medicamento_cronico_paciente(Request $request)
+    {
+        $paciente = Paciente::find($request->paciente);
+        $antecedente = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+        $antecedenteMedCronico = AntecedenteMedicamentoCronico::where('id',$request->id)->first()->delete();
+
+        $med_cronico = AntecedenteMedicamentoCronico::where('id_antecedentes', $antecedente->id)->get();
+
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Medicamento eliminada correctamente.',
+                'medicamento' => $med_cronico,
+                'result' => $antecedenteMedCronico
+            ]
+        );
+    }
+
+    public function agregar_cirugias_paciente(Request $request)
+    {
+        $paciente = Paciente::find($request->paciente);
+        $antecedente = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+
+        $antCirugia = new AntecedentesCirugias();
+        $antCirugia->nombre = $request->nombre;
+        $antCirugia->fecha_cirugia = $request->fecha_cirugia;
+        $antCirugia->comentarios = $request->comentarios;
+        $antCirugia->id_antecedentes = $antecedente->id;
+
+        if ($antCirugia->save())
+        {
+
+            $antCirugias = AntecedentesCirugias::where('id_antecedentes', $antecedente->id)->get();
+
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Cirugia agregada correctamente.',
+                    'cirugias' => $antCirugias
+                ]
+            );
+        } else {
+            return response()->json(['success' => false, 'message' => 'Error al agregar el medicamento crónica.']);
+        }
+    }
+
+    public function eliminar_cirugias_paciente(Request $request)
+    {
+        $paciente = Paciente::find($request->paciente);
+        $antecedente = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+        $antCirugia = AntecedentesCirugias::where('id',$request->id)->first()->delete();
+
+        $antCirugias = AntecedentesCirugias::where('id_antecedentes', $antecedente->id)->get();
+
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Cirugia eliminada correctamente.',
+                'cirugias' => $antCirugias,
+                'result' => $antCirugia
+            ]
+        );
+    }
+
+    public function agregar_patologia_cronica_paciente(Request $request)
+    {
+        $paciente = Paciente::find($request->paciente);
+        $antecedente = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+
+        $patologia_cronica = new AntecedenteEnferCronica();
+        $patologia_cronica->id_antecedentes = $antecedente->id;
+        $patologia_cronica->id_enfermedad_cronica = $request->id_patologia_cronica;
+        $patologia_cronica->nombre_patologia_cronica = $request->patologia_cronica;
+
+        if ($patologia_cronica->save()) {
+
+            $patologias_cronicas = AntecedenteEnferCronica::where('id_antecedentes', $antecedente->id)->get();
+
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Alergia agregada correctamente.',
+                    'patologias_cronicas' => $patologias_cronicas
+                ]
+            );
+        } else {
+            return response()->json(['success' => false, 'message' => 'Error al agregar la patologia crónica.']);
+        }
+    }
+
+    public function eliminarPatologiaCronicaPaciente(Request $request)
+    {
+        $paciente = Paciente::find($request->paciente);
+        $antecedente = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+        $antecedentesEnferCronicas = AntecedenteEnferCronica::where('id',$request->id)->first()->delete();
+
+        $cronicas = AntecedenteEnferCronica::where('id_antecedentes', $antecedente->id)->get();
+
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Alergia eliminada correctamente.',
+                'cronicas' => $cronicas,
+                'result' => $antecedentesEnferCronicas
+            ]
+        );
+    }
+
+    public function agregar_alergia_paciente(Request $request)
+    {
+        $paciente = Paciente::find($request->paciente);
+        $antecedente = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+
+        $alergiaPaciente = new AntecedenteAlergiaPaciente();
+        $alergiaPaciente->id_antecedentes = $antecedente->id;
+        $alergiaPaciente->nombre_alergia = $request->alergia;
+        $alergiaPaciente->id_alergia = $request->id_alergia;
+        $alergiaPaciente->comentario = $request->comentario;
+
+
+
+        if ($alergiaPaciente->save()) {
+
+            $alergias = AntecedenteAlergiaPaciente::where('id_antecedentes', $antecedente->id)->get();
+
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Alergia agregada correctamente.',
+                    'alergias' => $alergias
+                ]
+            );
+        } else {
+            return response()->json(['success' => false, 'message' => 'Error al agregar la alergia.']);
+        }
+        // $paciente->alergias()->attach($request->alergia_id);
+        return response()->json(['success' => 'Alergia agregada correctamente.']);
+    }
+
+    public function eliminarAlergiaPaciente(Request $request)
+    {
+        $paciente = Paciente::find($request->paciente);
+        $antecedente = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+        $antecedente_alergia_paciente = AntecedenteAlergiaPaciente::where('id',$request->id_alergia_paciente)->first()->delete();
+
+        $alergias = AntecedenteAlergiaPaciente::where('id_antecedentes', $antecedente->id)->get();
+
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'Alergia eliminada correctamente.',
+                'alergias' => $alergias
+            ]
+        );
+    }
+
+    public function solicitar_codigo_fmu(Request $request)
+    {
+        $paciente = Paciente::find($request->id_paciente);
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        $paciente->fecha_autorizacion = Carbon::now();
+        $paciente->codigo_autorizacion = mt_Rand(1, 10000000);
+
+        if ($paciente->save()) {
+
+            $details = [
+                'title' => 'Código autorización FMU',
+                'body' => 'Estimado/a ' . $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos . ',<br/>
+                        Junto con saludar, por medio de este correo le informamos que el profesional Dr. ' .
+                    $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos .
+                    ' <br/> ha solicitado acceder a su Ficha Medica Unica (FMU), favor entregar siguiente codigo al profesional:  <br/>' .
+                    $paciente->codigo_autorizacion . ' <br/>' .
+                    '<br/> Que tenga un excelente día. <br/><br/> \n' .
+                    ' Saludos.',
+            ];
+            //dd($details);
+
+            Mail::to('crisescobar233@gmail.com')->send(new \App\Mail\RegistroPacienteMail($details));
+            //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
+
+            return 'success';
+        } else {
+            return 'error';
+        }
+    }
+
+    public function lugares_atencion_profesional_agenda()
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        // $lugares_atencion_profesional = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->where('estado', 1)->get();
+        // dd($lugares_atencion_profesional);
+        $lugares_atencion_profesional = $profesional->LugaresAtencion()->get();
+        // dd($lugares_atencion_profesional);
+        //$lugares_atencion_profesional = null;
+        //dd($lugares_atencion_profesional);
+        //$lugares_atencion_profesional = '';
+        // dd($lugares_atencion_profesional);
+
+
+        if (count($lugares_atencion_profesional) == 0) {
+            return 'fail';
+        }
+
+        return json_encode($lugares_atencion_profesional);
+    }
+
+    public function ver_receta_pdf($id)
+    {
+        $detalleReceta = DetalleReceta::where('id_ficha', $id)->get();
+
+
+        // return PdfController::generarPDF('RECETA MEDICA');
+        // return $detalleReceta;
+
+        $pdf = PDF::loadView('atencion_medica.PDF.pdf_prueba', compact('$detalleReceta'));
+
+        // return $pdf->download('ejemplo.pdf');
+
+        // return 'hola';
+    }
+
+    public function index()
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $region = Region::all();
+        $especialidad = Especialidad::all();
+
+        if (isset($profesional)) {
+            $horas_dia = HoraMedica::where('id_profesional', $profesional->id)->whereDate('fecha_consulta', \Carbon\Carbon::now()->format('Y-m-d'))->get();
+            foreach ($horas_dia as $h) {
+                $h->paciente = Paciente::where('id', $h->id_paciente)->first();
+            }
+
+
+            return view('app.profesional.escritorio_profesional')->with(['region' => $region, 'profesional' => $profesional, 'hora_dia' => $horas_dia]);
+        }
+
+
+        return view('auth.Registros.registro_profesional')->with([
+            'region' => $region,
+            'especialidad' => $especialidad]);
+    }
+
+
+    public function validar_rut(Request $request)
+    {
+        $email = User::where('email', $request->email)->first();
+
+        if (isset($email) || $email != '') {
+            return 'fail';
+        }
+
+        return 'ok';
+    }
+
+    public function registro()
+    {
+        return view('auth.Registros.registro_profesional');
+    }
+
+    public function ficha_medica_unica_auth(Request $request)
+    {
+        // dd($request);
+        $paciente = Paciente::where('id', $request->id_paciente_fmu)->first();
+
+        if ($paciente->codigo_autorizacion == $request->paciente_codigo) {
+            return view('app.paciente.ficha_medica', ['paciente' => $paciente]);
+            // return json_encode($paciente->id);
+        }
+
+        return redirect()->back()->with('mensaje_codigo', $paciente->id);
+    }
+
+
+
+    public function miFichaMedicaAtencion(Request $request)
+    {
+        $paciente = Paciente::where('id', $request->id)->first();
+
+        return view('app.paciente.ficha_medica', ['paciente' => $paciente]);
+    }
+
+    public function diagnosticos_frecuentes()
+    {
+        return view('app.profesional.diagnosticos_frecuentes_configuracion');
+    }
+
+    public function ver_flujo_caja()
+    {
+
+        $rendicion_caja = array();
+        return view('app.profesional.flujo_caja_profesional')->with([
+            'rendicion' => $rendicion_caja
+        ]);
+    }
+
+    public function diagnosticos_cie10()
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        // $df_cies = DB::table('diagnosticos_cies')->paginate(25);
+        $diagnoticos_profesional = ProfesionalDiagnosticoCie::where('id_profesional', $profesional->id)->get();
+
+        // return view('app.profesional.diagnosticos_cie10_configuracion')->with(['diagnostico' => $df_cies, 'diagnoticos_profesional' => $diagnoticos_profesional]);
+        return view('app.profesional.diagnosticos_cie10_configuracion')->with(['diagnoticos_profesional' => $diagnoticos_profesional]);
+    }
+
+    public function buscarDiagnostico_cie10(Request $request)
+    {
+        $datos = array();
+        $registros = DiagnosticoCie::where('descripcion', 'like', ''.$request->descripcion.'%')->get();
+
+        $datos['count'] = $registros->count();
+        if($registros->count())
+        {
+            foreach ($registros as $key => $value) {
+                $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+                $filtro = array();
+                $filtro[] = array('id_diagnostico_cie',$value->id);
+                $filtro[] = array('id_profesional', $profesional->id);
+                $diagnoticos_profesional = ProfesionalDiagnosticoCie::where($filtro)->first();
+                if( $diagnoticos_profesional )
+                {
+                    $registros[$key]['activo'] = 1;
+                }
+                else
+                {
+                    $registros[$key]['activo'] = 0;
+                }
+            }
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registros;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
+        }
+        return $datos;
+    }
+
+    public function registrarDiagnosticoCie10Profesional(Request $request)
+    {
+        $datos = array();
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $lista_diagnosticos = $request->lista_diagnostico;
+        if(count($lista_diagnosticos) > 0)
+        {
+            foreach ($lista_diagnosticos as $key => $value)
+            {
+                $id_diagnostico = $value[0];
+                $estado_diagnostico = $value[1];
+                /** buscar registro esxistene */
+                $filtro = array();
+                $filtro[] = array('id_diagnostico_cie',$id_diagnostico);
+                $filtro[] = array('id_profesional',Auth::user()->id);
+                $registro = ProfesionalDiagnosticoCie::where($filtro)->first();
+
+                if($registro)
+                {
+                    $datos['diagnostico_encontrado'][] = $registro;
+                    /** encontrado */
+                    /** inactivo */
+                    if($estado_diagnostico == 'false')
+                    {
+                        if($registro->delete()){
+                            /** eliminado  */
+                            $datos['diagnostico'][$key]['estado'] = 1;
+                            $datos['diagnostico'][$key]['msj'] = 'desactivacion exitosa';
+                            $datos['diagnostico'][$key]['datos'] = $value;
+                        }
+                        else
+                        {
+                            /** falla al eliminar */
+                            $datos['diagnostico'][$key]['estado'] = 0;
+                            $datos['diagnostico'][$key]['msj'] = 'problemas al desactivacion';
+                            $datos['diagnostico'][$key]['datos'] = $value;
+                        }
+                    }
+                }
+                else
+                {
+                    /** no encotrnado */
+                    /** activo */
+                    if($estado_diagnostico== 'true')
+                    {
+                        $nuevo_registro = new ProfesionalDiagnosticoCie();
+                        $nuevo_registro->id_profesional = Auth::user()->id;
+                        $nuevo_registro->id_diagnostico_cie = $id_diagnostico;
+                        if($nuevo_registro->save()){
+                            /** registro con exito */
+                            $datos['diagnostico'][$key]['estado'] = 1;
+                            $datos['diagnostico'][$key]['msj'] = 'registro exitoso';
+                            $datos['diagnostico'][$key]['datos'] = $value;
+                        }
+                        else
+                        {
+                            /** falla en el registro */
+                            $datos['diagnostico'][$key]['estado'] = 0;
+                            $datos['diagnostico'][$key]['msj'] = 'registro con error al registrar';
+                            $datos['diagnostico'][$key]['datos'] = $value;
+                        }
+                    }
+                }
+
+            }
+
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros actualizados';
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'debe ingresar lista de diagnostico cie 10';
+        }
+        return $datos;
+
+    }
+
+
+    public function buscar_contacto(Request $request)
+    {
+        $contacto = ContactoEmergencia::where('rut', $request->rut_contacto)->get();
+
+        foreach ($contacto as $con) {
+            $contacto_paciente = PacienteContactoEmergencia::where('id_contacto', $con->id)->where('id_paciente', $request->id_paciente_contacto)->first();
+            if ($contacto_paciente != '') {
+                return 'existe';
+            }
+        }
+
+        $contacto = ContactoEmergencia::where('rut', $request->rut_contacto)->first();
+
+        // $contacto_paciente = PacienteContactoEmergencia::where('id_contacto', $contacto->id)->where('id_paciente', $request->id_paciente_contacto)->first();
+
+        //$contacto = $resultado->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre;
+        $region = region::all();
+        if ($contacto == null) {
+            $contacto = Paciente::where('rut', $request->rut_contacto)->first();
+
+            if ($contacto == null) {
+                $contacto = Profesional::where('rut', $request->rut_contacto)->first();
+
+                if ($contacto == null) {
+                    $contacto = Asistente::where('rut', $request->rut_contacto)->first();
+                    if ($contacto == null) {
+                        return 'vacio';
+                    } else {
+                        //$contacto->nombres = $contacto->nombre;
+                        $contacto->direccion = $contacto->Direccion()->first()->direccion;
+                        $contacto->numero_dir = $contacto->Direccion()->first()->numero_dir;
+                        $contacto->ciudad = $contacto->Direccion()->first()->Ciudad()->first();
+                        $contacto->region = $region;
+
+                        return json_encode($contacto);
+                    }
+                } else {
+                    $contacto->direccion = $contacto->Direccion()->first()->direccion;
+                    $contacto->nombres = $contacto->nombre;
+                    $contacto->numero_dir = $contacto->Direccion()->first()->numero_dir;
+                    $contacto->ciudad = $contacto->Direccion()->first()->Ciudad()->first();
+                    $contacto->region = $region;
+
+                    return json_encode($contacto);
+                }
+            } else {
+                $contacto->direccion = $contacto->Direccion()->first()->direccion;
+                $contacto->numero_dir = $contacto->Direccion()->first()->numero_dir;
+                $contacto->ciudad = $contacto->Direccion()->first()->Ciudad()->first();
+                $contacto->region = $region;
+
+                return json_encode($contacto);
+            }
+        } else {
+            $contacto->telefono_uno = $contacto->telefono;
+            $contacto->nombres = $contacto->nombre;
+            $contacto->direccion = $contacto->Direccion()->first()->direccion;
+            $contacto->numero_dir = $contacto->Direccion()->first()->numero_dir;
+            $contacto->ciudad = $contacto->Direccion()->first()->Ciudad()->first();
+            $contacto->region = $region;
+
+            return json_encode($contacto);
+        }
+    }
+
+    public function mis_estadisticas()
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        $now = Carbon::now();
+        $last = Carbon::now()->add(-30, 'day');
+        $total_pacientes = FichaAtencion::where('id_profesional', $profesional->id)->distinct()->count('id_paciente');
+        $treinta_dias = FichaAtencion::where('id_profesional', $profesional->id)->whereBetween('created_at', [$last, $now])->distinct()->count('id_paciente');
+
+        return view('app.profesional.estadisticas_profesional')->with(['total_pacientes' => $total_pacientes, 'treinta_dias' => $treinta_dias]);
+    }
+
+    public function mis_pacientes()
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $ficha_atencion = FichaAtencion::where('id_profesional', $profesional->id)->distinct()->get(['id_paciente']);
+        $prevision = Prevision::all();
+        $region = Region::all();
+        $paciente = [];
+        foreach ($ficha_atencion as $f) {
+            array_push($paciente, $f->Paciente()->first());
+        }
+        // dd($paciente);
+
+        return view('app.profesional.pacientes_profesional')->with(
+            [
+                'ficha_atencion' => $ficha_atencion,
+                'prevision' => $prevision,
+                'paciente' => $paciente,
+                'profesional' => $profesional,
+                'region' => $region
+            ]
+        );
+    }
+
+    public function buscar_ciudad_region(Request $request)
+    {
+        $ciudad = Ciudad::where('id_region', $request->region)->orderBy('nombre')->get();
+
+        return json_encode($ciudad);
+    }
+
+    public function mis_asistentes()
+    {
+        /*$sistentes = Profesional::where('id', 3)->first();
+        $ficha_atencion = FichaAtencion::where('id_profesional', $profesional->id)->get();
+        $paciente = [];
+        foreach ($ficha_atencion as $f) {
+            array_push($paciente, $f->Paciente()->first());
+        }*/
+        $user = Auth::user()->id;
+        $profesional = Profesional::where('id_usuario', $user)->first();
+        $region = Region::all();
+
+        $asistentes = $profesional->Asistentes()->get();
+        $asistentes_lugar_atencion = AsistenteLugarAtencion::where('id_profesional', $profesional->id)->get();
+        // dd($asistentes_lugar_atencion);
+
+        return view('app.profesional.mis_asistentes')->with(['asistentes' => $asistentes, 'region' => $region, 'asistentes_lugar_atencion' => $asistentes_lugar_atencion]);
+    }
+
+    public function crear_asistente(Request $request)
+    {
+        /** REGISTRO DE ASISTENTE EXISTENTE */
+        if ($request->id_asistente_registrado != null) {
+            $user = Auth::user()->id;
+            $profesional = Profesional::where('id_usuario', $user)->first();
+            $asistente = Asistente::find($request->id_asistente_registrado);
+            $asistente->rut = $request->rut_nuevo_asistente;
+            $asistente->nombres = $request->nombre_nuevo_asistente;
+            $asistente->apellido_uno = $request->apellido_nuevo_asistente;
+            $asistente->apellido_dos = $request->apellido_dos_nuevo_asistente;
+            $asistente->telefono_uno = $request->telefono_nuevo_asistente;
+
+            $direccion = $asistente->Direccion()->first();
+            $direccion->direccion = $request->direccion_nuevo_asistente;
+            $direccion->numero_dir = $request->numero_nuevo_asistente;
+            $direccion->id_ciudad = $request->ciudad_agregar;
+
+            $asistente->save();
+            $direccion->save();
+
+            $profesional_asistente = new ProfesionalAsistente();
+            $profesional_asistente->id_profesional = $profesional->id;
+            $profesional_asistente->id_asistente = $asistente->id;
+
+            if (!$profesional_asistente->save()) {
+                return back()->with('mensaje', 'error al registrar asistente');
+            }
+
+            return back()->with('mensaje', "Se ha registrado asistente $asistente->nombre");
+        }
+        /** REGISTRO DE ASISTENTE NUEVA */
+        else
+        {
+            $user = Auth::user()->id;
+            $profesional = Profesional::where('id_usuario', $user)->first();
+            $asistente = new Asistente();
+            $asistente->rut = $request->rut_nuevo_asistente;
+            $asistente->nombres = $request->nombre_nuevo_asistente;
+            $asistente->apellido_uno = $request->apellido_nuevo_asistente;
+            $asistente->apellido_dos = $request->apellido_dos_nuevo_asistente;
+            $asistente->telefono_uno = $request->telefono_nuevo_asistente;
+            //$asistente->telefono_dos = $request->;
+            //$asistente->sexo = $request->;
+            $asistente->email = $request->email_nuevo_asistente;
+            //$asistente->fecha_nac = $request->;
+
+            $direccion = new Direccion();
+            $direccion->direccion = $request->direccion_nuevo_asistente;
+            $direccion->numero_dir = $request->numero_nuevo_asistente;
+            $direccion->id_ciudad = $request->ciudad_agregar;
+
+            if ($direccion->save()) {
+                $asistente->id_direccion = $direccion->id;
+            }
+
+            if (!$asistente->save()) {
+                return back()->with('mensaje', 'error al registrar asistente');
+            }
+
+            $profesional_asistente = new ProfesionalAsistente();
+            $profesional_asistente->id_profesional = $profesional->id;
+            $profesional_asistente->id_asistente = $asistente->id;
+
+            if (!$profesional_asistente->save()) {
+                return back()->with('mensaje', 'error al registrar asistente');
+            }
+
+            return back()->with('mensaje', "Se ha registrado asistente $asistente->nombre");
+        }
+
+    }
+
+    public function ver_lugar_atencion(Request $request)
+    {
+        $lugar_atencion = LugarAtencion::where('id', $request->lugar_atencion)->first();
+        $direccion = Direccion::where('id', $lugar_atencion->id_direccion)->first();
+
+        $direccion->Ciudad = $direccion->Ciudad()->first();
+        $region = Region::all();
+        $ciudad = Ciudad::where('id_region', $direccion->Ciudad->id_region)->orderBy('nombre')->get();
+
+        $data = [
+            'LugarAtencion' => $lugar_atencion,
+            'Direccion' => $direccion,
+            'Regiones' => $region,
+            'Ciudades' => $ciudad,
+        ];
+
+        return json_encode($data);
+    }
+
+    public function editar_lugar_atencion(Request $request)
+    {
+        $lugar_atencion = LugarAtencion::where('id', $request->id_lugar_atencion)->first();
+        $lugar_atencion->email = $request->email;
+        $lugar_atencion->telefono = $request->telefono;
+        $lugar_atencion->nombre = $request->nombre;
+        $lugar_atencion->tipo = $request->tipo;
+
+        $direccion = Direccion::where('id', $lugar_atencion->id_direccion)->first();
+
+        $direccion->direccion = $request->direccion;
+        $direccion->numero_dir = $request->numero_dir;
+        $direccion->id_ciudad = $request->id_ciudad;
+
+        if (!$lugar_atencion->save()) {
+            return 'error';
+        }
+
+        if (!$direccion->save()) {
+            return 'error';
+        }
+
+        if ($request->notificar_pacientes_modificar == 'on') {
+            $fichas = FichaAtencion::where('id_profesional', Auth::user()->id)->get();
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+            $ciudad = Ciudad::where('id', $direccion->id_ciudad)->first();
+
+            $pacientes = [];
+            foreach ($fichas as $f) {
+                array_push($pacientes, $f->Paciente()->first());
+            }
+
+            foreach ($pacientes as $p) {
+                $details = [
+                    'title' => 'Edición lugar de atención',
+                    'body' => 'Estimado/a ' . $p->nombres . ' ' . $p->apellido_uno . ' ' . $p->apellido_dos . ',<br/>
+                    Junto con saludar, por medio de este correo le informamos que el profesional Dr. ' .
+                        $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos .
+                        ' <br/> ha Editado los datos del lugar de atención:  <br/>' .
+                        'Nombre:' . $lugar_atencion->nombre . ' <br/>' .
+                        'Dirección: ' . $direccion->direccion . ' ' . $direccion->numero_dir . ' <br/>' .
+                        'Ciudad: ' . $ciudad->nombre .
+                        '<br/> Que tenga un excelente día. <br/><br/> \n' .
+                        ' Saludos.',
+                ];
+
+                //Mail::to('crisescobar233@gmail.com')->send(new \App\Mail\RegistroPacienteMail($details));
+            }
+        }
+
+        return json_encode($lugar_atencion);
+    }
+
+    public function buscar_hora_medica(Request $request)
+    {
+        $hora_medica = HoraMedica::where('id', $request->id_hora_medica)->first();
+        $paciente = Paciente::where('id', $hora_medica->id_paciente)->first();
+        $profesional = Profesional::where('id', $hora_medica->id_profesional)->first();
+
+        // return json_encode($paciente);
+        return array(
+            'paciente' => $paciente,
+            'profesional' =>$profesional,
+            'estado_hora' =>$hora_medica->id_estado
+        );
+    }
+
+    //funciones mis lugares de atencion
+    public function mi_asistente_lugar_atencion(Request $request)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $asistenteLugar = AsistenteLugarAtencion::where('id_lugar_atencion', $request->id_lugar_atencion)->where('id_profesional', $profesional->id)->get();
+
+        $asistente = [];
+        foreach ($asistenteLugar as $a) {
+            array_push($asistente, $a->Asistentes()->first());
+        }
+
+        return json_encode($asistente);
+    }
+
+    public function cambio_estado_asistente(Request $request)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $asistenteLugar = AsistenteLugarAtencion::where('id_asistente', $request->id_asistente)->where('id_profesional', $profesional->id)->first();
+
+        $asistenteLugar->estado = $request->estado;
+        if (!$asistenteLugar->save()) {
+            return 'fail';
+        }
+        //$asistente = $asistenteLugar->Asistentes()->first();
+        return 'ok';
+    }
+
+    public function cambio_estado_lugar_atencion(Request $request)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $ProfesionalLugar = ProfesionalesLugaresAtencion::where('id_lugar_atencion', $request->id_lugar_atencion)->where('id_profesional', $profesional->id)->first();
+
+        $ProfesionalLugar->estado = $request->estado;
+        if (!$ProfesionalLugar->save()) {
+            return 'fail';
+        }
+        //$asistente = $asistenteLugar->Asistentes()->first();
+        return 'ok';
+    }
+
+    public function mis_valores_lugar_atencion(Request $request)
+    {
+        $user = Auth::user()->id;
+        $profesional = Profesional::where('id_usuario', $user)->first();
+        $valores = ProfesionalConvenio::where('id_profesional', $profesional->id)->where('id_lugar_atencion', $request->id_lugar_atencion)->get();
+
+        return json_encode($valores);
+    }
+
+    public function eliminar_contacto_paciente(Request $request)
+    {
+        $pacienteContacto = PacienteContactoEmergencia::where('id_paciente', $request->id_paciente)->where('id_contacto', $request->id_contacto)->first();
+        if (!$pacienteContacto->delete()) {
+            return 'error';
+        } else {
+            return 'ok';
+        }
+    }
+
+    public function guardar_valores_lugar_atencion(Request $request)
+    {
+        $user = Auth::user()->id;
+        $profesional = Profesional::where('id_usuario', $user)->first();
+
+        $profesional_convenio = new ProfesionalConvenio();
+
+        $profesional_convenio->convenios = $request->convenios;
+        $profesional_convenio->tipo_atencion = $request->lugar_atencion_convenio;
+        $profesional_convenio->valor = $request->valor;
+        $profesional_convenio->id_profesional = $profesional->id;
+        $profesional_convenio->id_lugar_atencion = $request->id_lugar_atencion_valor;
+
+        if (!$profesional_convenio->save()) {
+            return 'Error';
+        }
+
+        return json_encode($profesional_convenio);
+    }
+
+    public function paciente_esperando(Request $request)
+    {
+        $hora_medica = HoraMedica::where('id', $request->id_hora_medica)->first();
+        $hora_medica->id_estado = 4;
+        // $paciente = Paciente::where('id', $hora_medica->id_paciente)->first();
+        // $profesional = Profesional::where('id', $hora_medica->id_profesional)->first();
+
+        if (!$hora_medica->save()) {
+            return 'error';
+        }
+
+        return json_encode($hora_medica);
+    }
+
+    public function buscar_asistente_profesional(Request $request)
+    {
+        $asistente = Asistente::where('rut', $request->rut_asistente)->first();
+
+        if ($asistente == null) {
+            return 'null';
+        }
+
+        $usuario = Auth::user();
+
+        $profesional = Profesional::where('id_usuario', $usuario->id)->first();
+
+        $asistenteP = ProfesionalAsistente::where('id_asistente', $asistente->id)->where('id_profesional', $profesional->id)->first();
+        if ($asistenteP == null) {
+            $asistente->ciudad = $asistente->Direccion()->first()->id_ciudad;
+            $asistente->region = $asistente->Direccion()->first()->Ciudad()->first()->id_region;
+            $asistente->direccion = $asistente->Direccion()->first()->direccion;
+            $asistente->numero_dir = $asistente->Direccion()->first()->numero_dir;
+
+            return json_encode($asistente);
+        } else {
+            return 'existe';
+        }
+    }
+
+    public function buscar_asistente(Request $request)
+    {
+        $asistente = Asistente::where('rut', $request->rut)->first();
+        $lugar = LugarAtencion::where('id', $request->id_lugar)->first();
+
+        if ($asistente == null) {
+            return 'null';
+        }
+
+        $asistenteL = AsistenteLugarAtencion::where('id_asistente', $asistente->id)->where('id_lugar_atencion', $lugar->id)->first();
+
+        if ($asistenteL == null) {
+            return json_encode($asistente);
+        } else {
+            return 'existe';
+        }
+
+        /* if ($asistente == null) {
+             $paciente = Paciente::where('rut', $request->rut_asistente)->first();
+             if ($paciente == null) {
+                 $profesional = Paciente::where('rut', $request->rut_asistente)->first();
+                 if ($profesional == null) {
+                     return 'null';
+                 } else {
+                     return json_encode($profesional);
+                 }
+             } else {
+                 return json_encode($paciente);
+             }
+         } else {
+             return json_encode($asistente);
+         }*/
+    }
+
+    public function agregar_asistente_lugar_atencion(Request $request)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        $asistente_lugar_atencion = new AsistenteLugarAtencion();
+        $asistente_lugar_atencion->id_asistente = $request->id_asistente;
+        $asistente_lugar_atencion->id_lugar_atencion = $request->id_lugar_atencion;
+        $asistente_lugar_atencion->id_profesional = $profesional->id;
+
+        if (!$asistente_lugar_atencion->save()) {
+            return 'error';
+        }
+
+        return json_encode($asistente_lugar_atencion);
+    }
+
+    public function ver_paciente($id)
+    {
+        $paciente = Paciente::where('id', $id)->first();
+        //$contacto_emergencia = PacienteContactoEmergencia::where('id_paciente', $paciente->id)->first();
+        //$contacto = ContactoEmergencia::where('id', $contacto_emergencia->id_contacto)->first();
+        $prevision = Prevision::all();
+        $direccion = $paciente->Direccion()->first();
+        $ciudad = $direccion->Ciudad()->first();
+        $contacto = $paciente->ContactosEmergencia()->get();
+        $region = Region::all();
+        $ciudades = Ciudad::orderBy('nombre');
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        $antecedentes = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+
+        $ant_confidenciales = AntConfidenciales::where('id_paciente', $paciente->id)->first();
+
+        if (isset($antecedentes)) {
+
+            $medicamentos_cronicos = AntecedenteMedicamentoCronico::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+            $alergias = AntecedenteAlergiaPaciente::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+            $antecedentes_quirurgicos = SolicitudPabellonQuirurgico::where('id_paciente', $paciente->id)->get();
+            $antecedentes_cirugias = AntecedentesCirugias::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+            $patoligias_cronicas = AntecedenteEnferCronica::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+        } else {
+            $medicamentos_cronicos = [];
+            $alergias = [];
+            $antecedentes_quirurgicos = [];
+            $patoligias_cronicas = [];
+            $antecedentes_cirugias = [];
+        }
+
+
+        // $alergias = AntecedenteAlergiaPaciente::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+        // $antecedentes_quirurgicos = SolicitudPabellonQuirurgico::where('id_paciente', $paciente->id)->get();
+        // $patoligias_cronicas = AntecedenteEnferCronica::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+        //$contacto = $paciente->ContactosEmergencia()->first();
+        //$alergias = $paciente->alergias()->get();
+        //$operaciones = $paciente->operaciones()->get();
+        //$organosDonar = $paciente->organosDonar()->get();
+        //$EnfeCronica = $paciente->enf_cronicas()->get();
+        // $medicamentos_cronicos = AntecedenteMedicamentoCronico::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+        $fichasConfi = FichaAtencion::where('id_paciente', 4)->where('confidencial', true)->get();
+        $grupo_sanguineo = GrupoSanguineo::all();
+
+        return view('app.profesional.editar_perfil_paciente_profesional')
+            ->with([
+                'paciente' => $paciente,
+                'prevision' => $prevision,
+                'contacto' => $contacto,
+                'direccion' => $direccion,
+                'ciudad' => $ciudad,
+                'region' => $region,
+                'ciudades' => $ciudades,
+                'profesional' => $profesional,
+                'alergias' => $alergias,
+                'antecedentes_quirurgicos' => $antecedentes_quirurgicos,
+                'antecedentes_cirugias' => $antecedentes_cirugias,
+                'ant_confidenciales' => $ant_confidenciales,
+                //'organosDonar'=>$organosDonar,
+                'patoligias_cronicas' => $patoligias_cronicas,
+                'medicamentos_cronicos' => $medicamentos_cronicos,
+                'grupo_sanguineo' => $grupo_sanguineo,
+            ]);
+    }
+
+    public function editar_antecedentes_paciente(Request $request)
+    {
+        $user = Auth::user()->id;
+        $profesional = Profesional::where('id_usuario', $user)->first();
+
+        $paciente = Paciente::where('id', $request->id_paciente)->first();
+
+        $antecedente = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+
+        if ($antecedente == null) {
+            $antecedente = new AntecedentesPaciente();
+        }
+
+
+        $antecedente->transfusion = $request->edit_transfusion;
+        $antecedente->dona_organos = $request->edit_donante_total;
+        $antecedente->dona_organos_parcial = $request->edit_donante_parcial;
+        $antecedente->dona_sangre = $request->edit_dona_sangre;
+        $antecedente->impedimento_donar = $request->comentarios_impedimento;
+        // $antecedente->comentario_gs = $request->comentarios_gruposangre;
+        $antecedente->comentarios = $request->comentarios_organo;
+        $antecedente->hepatitis = $request->edit_hepatitis;
+        $antecedente->comentario_hepa = $request->comentarios_hepatitis;
+        $antecedente->id_grupo_sanguineo = $request->editar_grupo_sanguineo;
+
+        if ($antecedente->save()) {
+            $paciente->id_antecedente = $antecedente->id;
+            $paciente->save();
+
+            return json_encode($antecedente);
+        }
+
+
+        return 'failed';
+    }
+
+    public function editar_antecedentes_confidenciales_paciente(Request $request)
+    {
+        $user = Auth::user()->id;
+        $profesional = Profesional::where('id_usuario', $user)->first();
+
+        $paciente = Paciente::where('id', $request->id_paciente)->first();
+
+        $antecedente = AntConfidenciales::where('id_paciente', $request->id_paciente)->first();
+
+        if ($antecedente == null) {
+            $antecedente = new AntConfidenciales();
+        }
+
+
+        $antecedente->id_paciente = $request->id_paciente;
+        $antecedente->rompeclave = $request->rompeclave;
+        $antecedente->antecedentes = $request->antecedentes;
+        $antecedente->otros_antecedentes = $request->otros_antecedentes;
+
+        if ($antecedente->save()) {
+            $paciente->id_antecedente = $antecedente->id;
+            $paciente->save();
+
+            return json_encode($antecedente);
+        }
+
+
+        return 'failed';
+    }
+
+    public function mi_perfil()
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $especialidades = Especialidad::all();
+        $regiones = Region::all();
+        $ciudades = Ciudad::all();
+        $perfil_academico = ProfesionalAntecedenteAcademico::where('id_profesional',$profesional->id)->get();
+        $tipo_ant_academico = TipoAntecedenteAcademico::all();
+        $bancos = Bancos::where('estado',1)->get();
+        $liquidacion = LiquidacionRecibo::where('id_seccion',Auth::user()->id)->get();
+
+        $liqui_principal = 0;
+
+        if($liquidacion)
+        foreach ($liquidacion as $key => $value)
+        {
+            $id_banco = decrypt($value->casa);
+            $banco = Bancos::select('id', 'nombre')->where('id',$id_banco)->first();
+            $liquidacion[$key]->banco = $banco;
+            if($value->serie!='')
+                $liquidacion[$key]->serie  = decrypt($value->serie);
+            if($value->autor!='')
+                $liquidacion[$key]->autor = decrypt($value->autor);
+            if($value->casa!='')
+                $liquidacion[$key]->casa = decrypt($value->casa);
+            if($value->numero_control!='')
+                $liquidacion[$key]->numero_control = decrypt($value->numero_control);
+            if($value->email!='')
+                $liquidacion[$key]->email = decrypt($value->email);
+            if($value->otro!='')
+                $liquidacion[$key]->otro = decrypt($value->otro);
+            if($liqui_principal == 0 && $value->principal == 1)
+                $liqui_principal = 1;
+        }
+        // $user = Auth::user()->password;
+        // // $pass = Crypt::decryptString($user);
+        // dd($user);
+
+        return view('app.profesional.perfil_profesional')->with(
+            [
+                'profesional' => $profesional,
+                'especialidades' => $especialidades,
+                'regiones' => $regiones,
+                'ciudades' => $ciudades,
+                'perfil_academico' => $perfil_academico,
+                'tipo_ant_academico' => $tipo_ant_academico,
+                'bancos' => $bancos,
+                'liquidacion' => $liquidacion,
+                'liqui_principal' => $liqui_principal,
+                // 'pass' => $pass,
+            ]
+        );
+    }
+
+    public function index_receta()
+    {
+        return view('app.profesional.receta_online.inicio_receta_online_profesional');
+    }
+
+    public function mis_examenes()
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $ficha = FichaAtencion::where('id_profesional', $profesional->id)->get();
+
+        $examenes = array();
+        foreach ($ficha as $key_f => $value_f)
+        {
+            $nombre_paciente = $value_f->Paciente()->first()->nombres .' ' .$value_f->Paciente()->first()->apellido_uno .' ' .$value_f->Paciente()->first()->apellido_dos;
+            $rut_paciente = $value_f->Paciente()->first()->rut;
+            $created_at = $value_f->created_at;
+
+            $registros = ExamenPPF::where('id_ficha_atencion', $value_f->id)->get();
+
+
+            if($registros->count())
+            {
+
+                $examen = '';
+                $examen_array = array();
+                $tipo_examen = '';
+                $tipo_examen_array = array();
+                foreach ($registros as $key_examen => $value_examen) {
+                    if(!in_array($value_examen->examen, $examen_array)){
+                        $examen .= $value_examen->examen.' | ';
+                        array_push($examen_array,$value_examen->examen);
+                    }
+                    if(!in_array($value_examen->tipo_examen, $tipo_examen_array)){
+                        $tipo_examen .= $value_examen->tipo_examen.' | ';
+                        array_push($tipo_examen_array,$value_examen->tipo_examen);
+                    }
+                }
+
+                $examen_temp = array(
+                    'created_at'=>\Carbon\Carbon::parse($created_at)->format('Y-m-d'),
+                    'id_ficha_atencion'=>$value_f->id,
+                    'examen'=>$examen,
+                    'tipo_examen'=>$tipo_examen,
+                    'Paciente' => array(
+                        'nombre' => $nombre_paciente,
+                        'rut' => $rut_paciente,
+                    ),
+                );
+
+                array_push($examenes,$examen_temp);
+            }
+        }
+        // $examenes = $profesional->Examenes()->get();
+        return view('app.profesional.receta_online.mis_examenes_profesional')->with(
+            [
+                'examenes' => $examenes,
+            ]
+        );
+    }
+
+    public function mis_recetas()
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $fichas = FichaAtencion::where('id_profesional',$profesional->id)->with('Recetas')->get();
+        return view('app.profesional.receta_online.mis_recetas_profesional')->with(['ficha' => $fichas]);
+    }
+
+    public function mis_certificados()
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $ficha = FichaAtencion::where('id_profesional', $profesional->id)->get();
+        $reposo = array();
+        $interconsulta = array();
+        $informesMedicos = array();
+        $controlObesidad = array();
+        $hipertensiones = array();
+        foreach ($ficha as $key_f => $value_f) {
+            $result_CertificadoReposo = CertificadoReposo::where('id_ficha_atencion', $value_f->id)->first();
+            $result_Interconsulta = Interconsulta::where('id_ficha_atencion_soli', $value_f->id)->first();
+            $result_InformeMedico = InformeMedico::where('id_ficha_atencion', $value_f->id)->first();
+            if(!empty($result_CertificadoReposo))
+                array_push($reposo,$result_CertificadoReposo);
+            if(!empty($result_Interconsulta))
+                array_push($interconsulta,$result_Interconsulta);
+            if(!empty($result_InformeMedico))
+                array_push($informesMedicos,$result_InformeMedico);
+
+        }
+
+        // $reposo = CertificadoReposo::where('id_profesional', $profesional->id)->get();
+        // $interconsulta = Interconsulta::where('id_profesional', $profesional->id)->get();
+        // $informesMedicos = InformeMedico::where('id_profesional', $profesional->id)->get();
+        // $controlObesidad = ControlObesidad::where('id_profesional', $profesional->id)->get();
+        // $hipertensiones = Hipertension::where('id_profesional', $profesional->id)->get();
+
+        return view('app.profesional.receta_online.mis_certificados_profesional')->with(
+            [
+                'ficha' => $ficha,
+                'reposo' => $reposo,
+                'interconsulta' => $interconsulta,
+                'informesMedicos' => $informesMedicos,
+                'controlObesidad' => $controlObesidad,
+                'hipertensiones' => $hipertensiones,
+            ]
+        );
+    }
+
+    public function config_profesional()
+    {
+        return view('app.profesional.configuracion_profesional');
+    }
+
+    public function mis_lugares()
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        //$lugarAtencion = LugarAtencion::where()
+        $lugares = $profesional->LugaresAtencion()->get();
+        //ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->get();
+
+        //$lugares = [];
+        //
+        //foreach ($lugares as $lt) {
+        //     $lt->lugar = $lt->LugaresAtencion()->first();
+        //array_push($lugares, $a->LugaresAtencion()->first()->estado);
+        //}
+
+        //$lugares = $profesional->LugaresAtencion()->get();
+        $region = Region::all();
+
+        return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region]);
+    }
+
+    public function eliminar_valor_lugar_atencion(Request $request)
+    {
+        $user = Auth::user()->id;
+        $profesional = Profesional::where('id_usuario', $user)->first();
+
+        $convenio = ProfesionalConvenio::where('id', $request->id_convenio)->first();
+
+        if (!$convenio->delete()) {
+            return 'failed';
+        }
+
+        return 'ok';
+    }
+
+    public function mi_agenda(Request $request)
+    {
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $horario = ProfesionalHorario::where('id_profesional', $profesional->id)->where('id_lugar_atencion', $request->lugares_atencion)->get();
+        $horas_medicas = HoraMedica::where('id_profesional', $profesional->id)
+                                    ->whereIn('id_estado',[1,2,4,5,6,7,8])
+                                    ->with(['Paciente'=> function($query){
+                                                $query->select('id','id_prevision','rut')
+                                                        ->with(['Prevision'=>function($query2){
+                                                                    $query2->select('id','nombre');
+                                                }]);
+                                            }])
+                                    ->get();
+        $lugares = $profesional->LugaresAtencion()->get();
+        //$horario = ProfesionalHorario::where('id_profesional', $profesional->id)->get();
+        $prevision = Prevision::all();
+        $region = Region::all();
+        $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
+        $lugarAtencion = LugarAtencion::find($request->lugares_atencion);
+
+
+
+        if (count($horario) == 0) {
+            return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region, 'mensaje' => 'Debe ingresar un horario']);
+        }
+
+        // dd($horario);
+
+        $horario_agenda = '1,2,3,4,5,6,7';
+        $periodo_agenda = '';
+        $periodo_agenda_temp = '01:00';
+        $hora_inicio_agenda = '';
+        $hora_inicio_agenda_temp = '24:00';
+        $hora_termino_agenda = '';
+        $hora_termino_agenda_temp = 0;
+        foreach ($horario as $hor) {
+            $ho = explode(',', $hor->dia);
+            // dd($ho);
+            foreach ($ho as $h) {
+                if ($h == '1') {
+                    $horario_agenda = str_replace($h, '', $horario_agenda);
+                } else {
+                    $horario_agenda = str_replace(',' . $h, '', $horario_agenda);
+                }
+            }
+            if(strtotime($hor->duracion_consulta) < strtotime($periodo_agenda_temp))
+                $periodo_agenda_temp = $hor->duracion_consulta;
+
+            if(strtotime($hor->hora_inicio) < strtotime($hora_inicio_agenda_temp))
+                $hora_inicio_agenda_temp = $hor->hora_inicio;
+
+            if(strtotime($hor->hora_termino) > strtotime($hora_termino_agenda_temp))
+                $hora_termino_agenda_temp = $hor->hora_termino;
+        }
+        $horario_agenda = ltrim($horario_agenda, ',');
+        $periodo_agenda = $periodo_agenda_temp;
+        $hora_inicio_agenda = $hora_inicio_agenda_temp;
+        $hora_termino_agenda = $hora_termino_agenda_temp;
+
+
+
+        if (!isset($horario)) {
+            return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region, 'mensaje' => 'Debe ingresar un horario']);
+        }
+
+        return view('app.profesional.agenda')->with(
+            [
+                'horas_medicas' => $horas_medicas,
+                'horario' => $horario,
+                'horario_agenda' => $horario_agenda,
+                'periodo_agenda' => $periodo_agenda,
+                'hora_inicio_agenda' => $hora_inicio_agenda,
+                'hora_termino_agenda' => $hora_termino_agenda,
+                'prevision' => $prevision,
+                'region' => $region,
+                'lugar_atencion' => $request->lugares_atencion,
+                'lugar_atencion_nombre' => $lugarAtencion->nombre,
+                'reg_confirmacion_hora' => $reg_confirmacion_hora,
+                'profesional' => $profesional
+            ]
+        );
+    }
+
+    public function atenciones_previas_paciente($id)
+    {
+        $user = Auth::user()->id;
+        $profesional = Profesional::where('id_usuario', $user)->first();
+        $fichas = FichaAtencion::where('id_paciente', $id)->where('id_profesional', $profesional->id)->where('finalizada', 1)->get();
+
+        //$detalle_receta = $fichas->Recetas()->get();
+        //dd($detalle_receta);
+
+        return view('app.profesional.atenciones_previas_paciente')->with(['fichas' => $fichas]);
+    }
+
+    public function buscar_receta_ficha(Request $request)
+    {
+        $ficha = FichaAtencion::where('id', $request->id_ficha)->first();
+
+        $detalle_receta = DetalleReceta::where('id_ficha', $request->id_ficha)->get();
+
+        return json_encode($detalle_receta);
+    }
+
+    public function buscar_examen_ficha(Request $request)
+    {
+        $ficha = FichaAtencion::where('id', $request->id_ficha)->first();
+        $examenes = $ficha->Examenes()->get();
+
+        return json_encode($examenes);
+    }
+
+    public function agregar_lugar_atencion(Request $request)
+    {
+        $user = Auth::user()->id;
+        $profesional = Profesional::where('id_usuario', $user)->first();
+
+        $direccion = new Direccion();
+        $direccion->direccion = $request->direccion_lugar_atencion;
+        $direccion->numero_dir = $request->numero_lugar_atencion;
+        $direccion->id_ciudad = $request->ciudad_agregar;
+
+        $lugar_existente = LugarAtencion::where('email', $request->email_lugar_atencion)->first();
+
+        if ($lugar_existente != '') {
+            return back()->with('mensaje', 'email ya existe');
+        }
+
+        $ciudad = Ciudad::where('id', $direccion->id_ciudad)->first();
+
+        if (!$direccion->save()) {
+            return 'error';
+        }
+
+        $lugar_atencion = new LugarAtencion();
+        $lugar_atencion->nombre = $request->nombre_lugar_atencion;
+        $lugar_atencion->email = $request->email_lugar_atencion;
+        $lugar_atencion->rut = $request->rut_lugar_atencion;
+        $lugar_atencion->telefono = $request->telefono_lugar_atencion;
+        $lugar_atencion->id_direccion = $direccion->id;
+        $lugar_atencion->tipo = $request->tipo_agregar_lugar_atencion;
+
+        if ($lugar_atencion->save()) {
+            $profesional_lugar_atencion = new ProfesionalesLugaresAtencion();
+            $profesional_lugar_atencion->id_profesional = $profesional->id;
+            $profesional_lugar_atencion->id_lugar_atencion = $lugar_atencion->id;
+
+            if (!$profesional_lugar_atencion->save()) {
+                return 'error';
+            }
+
+            if ($request->notificar_pacientes == 'on') {
+                $fichas = FichaAtencion::where('id_profesional', Auth::user()->id)->get();
+
+                $pacientes = [];
+                foreach ($fichas as $f) {
+                    array_push($pacientes, $f->Paciente()->first());
+                }
+
+                foreach ($pacientes as $p) {
+                    $details = [
+                        'title' => 'Nuevo lugar de atención',
+                        'body' => 'Estimado/a ' . $p->nombres . ' ' . $p->apellido_uno . ' ' . $p->apellido_dos . ',<br/>
+                    Junto con saludar, por medio de este correo le informamos que el profesional Dr. ' .
+                            $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos .
+                            ' <br/> ha agregado un nuevo lugar de atención:  <br/>' .
+                            'Nombre:' . $lugar_atencion->nombre . ' <br/>' .
+                            'Dirección: ' . $direccion->direccion . ' ' . $direccion->numero_dir . ' <br/>' .
+                            'Ciudad: ' . $ciudad->nombre .
+                            '<br/> Que tenga un excelente día. <br/><br/> \n' .
+                            ' Saludos.',
+                    ];
+
+                    //Mail::to('crisescobar233@gmail.com')->send(new \App\Mail\RegistroPacienteMail($details));
+                }
+            }
+
+            return back()->with(['mensaje' => 'se agregado centro de atención','titulo_mensaje'=>'Mis Lugares de Atención']);
+        }
+
+        return 'error';
+    }
+
+    public function crear_contacto_paciente(Request $request)
+    {
+        $user = Auth::user()->id;
+        $profesional = Profesional::where('id_usuario', $user)->first();
+
+        $apellidoPaso = explode(' ', $request->apellidos_paciente);
+
+        $contacto = new ContactoEmergencia();
+        $contacto->rut = $request->rut_paciente;
+        $contacto->nombre = $request->nombres_paciente;
+        $contacto->apellido_uno = $apellidoPaso[0];
+        $contacto->apellido_dos = $apellidoPaso[1];
+        $contacto->id_direccion = mt_rand(1, 10);
+        $contacto->email = $request->email_paciente;
+        $contacto->telefono = $request->telefono_paciente;
+        $contacto->fecha_nac = $request->fecha_nac_paciente;
+        $contacto->prioridad = $request->prioridad;
+
+        $paciente = paciente::where('id', $request->id_paciente)->first();
+
+        if ($contacto->save()) {
+            $paciente->ContactosEmergencia()->attach($contacto->id);
+
+            return back()->with('mensaje', 'se agregado centro de atención');
+        }
+
+        return 'error';
+    }
+
+    public function mis_horas()
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $horas_medicas = $profesional->mis_horas()->get();
+
+        $duracion = 15;
+
+        $datos = [];
+        foreach ($horas_medicas as $hora_medica) {
+            array_push(
+                $datos,
+                [
+                    'id' => $hora_medica->id_hora_medica,
+                    'title' => $hora_medica->descripcion_estado_hora_medica+'Bienvenido!!',
+                    'extendedProps' => ['estado' => $hora_medica->id_estado_hora_medica],
+                    'start' => $hora_medica->fecha_hora_medica . 'T' . $hora_medica->hora_hora_medica . ':10',
+                    'end' => $hora_medica->fecha_hora_medica . 'T' . date('H:i', strtotime($hora_medica->hora_hora_medica) + (60 * $duracion)) . ':00',
+                    'color' => $hora_medica->color_estado_hora_medica,
+                ]
+            );
+        }
+
+        return json_encode($datos);
+    }
+
+    public function datos_hora_paciente($id_hora_medica)
+    {
+        if (!is_numeric($id_hora_medica)) {
+            print_r(json_encode(['success' => 0, 'message' => 'Hora médica no válida']));
+            exit();
+        }
+
+        $respuesta = $this->Agenda_profesional_model->datos_hora_paciente($id_hora_medica);
+        print_r(json_encode($respuesta));
+    }
+
+    public function desasociar_asistente(Request $request)
+    {
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $asistente = ProfesionalAsistente::where('id_asistente', $request->id)->first();
+
+        if ($asistente == null) {
+
+            $asistentes = AsistenteLugarAtencion::where('id_asistente', $request->id)->first();
+            if (!$asistentes->delete()) {
+
+                return 'fail';
+            }
+        } else {
+            if (!$asistente->delete()) {
+                return 'fail';
+            }
+        }
+
+        return 'ok';
+    }
+
+    public function buscar_rut_paciente(Request $request)
+    {
+        if ($request->tipo == 'asistente') {
+            $asistente = Asistente::where('rut', $request->rut)->with(['Direccion' => function($query){$query->with('Ciudad')->first();}])->first();
+
+            if ($asistente != null) {
+                return 'asistente';
+            }
+        }
+
+        $tipo_paciente = 1;
+        $paciente = Paciente::where('rut', $request->rut)->with('Prevision')->with(['Direccion' => function($query){$query->with('Ciudad')->first();}])->first();
+        if ($paciente == null) {
+            $tipo_paciente++;
+            $paciente = Asistente::where('rut', $request->rut)->with(['Direccion' => function($query){$query->with('Ciudad')->first();}])->first();
+            if ($paciente == null) {
+                $tipo_paciente++;
+                $paciente = Profesional::where('rut', $request->rut)->with(['Direccion' => function($query){$query->with('Ciudad')->first();}])->first();
+            }
+        }
+        if(isset($paciente))
+            $paciente['code'] = Crypt::encryptString( $paciente['email'] );
+        else
+            $paciente = null;
+
+        // validar si es paciente
+        if($tipo_paciente > 1)
+            $paciente['tipo_paciente'] = 'NO';
+        else
+            $paciente['tipo_paciente'] = 'SI';
+
+        return json_encode($paciente);
+    }
+
+    public function agendar_horas(Request $request)
+    {
+
+        $paciente = paciente::where('id', $request->reserva_hora_id)->first();
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        // validar si paciente tiene otra consulta
+        $validar = HoraMedica::where('id_paciente', $paciente->id)
+                                ->where('id_profesional',$profesional->id)
+                                ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
+                                ->first();
+        if($validar)
+        {
+            return json_encode(array(
+                    'estado' => 'error',
+                    'id_profesional' => $profesional->id,
+                    'msj' => 'Paciente ya tiene Hora para este dia'
+                    ));
+        }
+
+        /** buscar tiempo de la consult */
+        $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
+        $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
+                                                    ->where('id_profesional', $profesional->id)
+                                                    ->where('id_lugar_atencion',$request->id_lugar_atencion)
+                                                    ->where('dia','like','%'.$dia_de_semana.'%')
+                                                    ->first();
+
+        // $profesional_horarios = '00:30:00';
+        // $tiempo_consulta = 30;
+        $horas = date('H',strtotime($profesional_horarios->duracion_consulta));
+        $minutos = date('i',strtotime($profesional_horarios->duracion_consulta));
+        $totales = ($horas*60) + $minutos;
+        $tiempo_consulta = $totales;
+
+        $hora_medica = new HoraMedica();
+
+        $hora_medica->id_paciente = $request->reserva_hora_id;
+        $hora_medica->id_profesional = $profesional->id;
+        $hora_medica->id_estado = '1';
+        $hora_medica->fecha_consulta = \Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d');
+
+        $hora_medica->hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
+        $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->format('H:i:s');
+        $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
+        $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
+
+        if (!$hora_medica->save()) {
+            return 'error';
+        }
+
+        $details = [
+            'title' => 'Hora medica Reservada',
+            'body' => 'Estimado/a ' . $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos . ',<br>
+                    Junto con saludar, por medio de este correo le informamos que se ha reservado su hora medida <br>' .
+                'Fecha: ' . $hora_medica->fecha_consulta . '<br>' .
+                'Hora : ' . $hora_medica->hora_inicio . '<br>' .
+                'Profesional: <b>' . $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos . '<b> <br><br>' .
+                'Que tenga un excelente día. </br></br>' .
+                'Saludos.',
+        ];
+
+        //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
+
+        return json_encode($hora_medica);
+    }
+
+    public function buscar_horas_medicas(Request $request)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        // $horas_medicas = HoraMedica::where('id_profesional', $profesional->id)->where('fecha_consulta', $request->buscar_horas)->get();
+        $filtro = array();
+        $filtro[] = array('id_profesional', $profesional->id);
+        $filtro[] = array('fecha_consulta', $request->buscar_horas);
+        if(!empty($request->id_lugares_atencion))
+            $filtro[] = array('id_lugar_atencion', $request->id_lugares_atencion);
+        $horas_medicas = HoraMedica::where($filtro)->get();
+
+        foreach ($horas_medicas as $h) {
+            $h->id_paciente = Paciente::where('id', $h->id_paciente)->first();
+        }
+
+        return json_encode($horas_medicas);
+    }
+
+    public function agendar_hora_nuevo_paciente(Request $request)
+    {
+        $user = Auth::user()->id;
+        $paciente = new Paciente();
+        $direccion = new Direccion();
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        $direccion->direccion = $request->reserva_hora_direccion;
+        $direccion->numero_dir = $request->reserva_hora_numero_dir;
+        $direccion->id_ciudad = $request->reserva_hora_comuna;
+        $direccion->save();
+        $paciente->rut = $request->rut_paciente_reserva;
+        $paciente->nombres = $request->reserva_hora_nombre;
+        $paciente->apellido_uno = $request->reserva_hora_primer_apellido;
+        $paciente->apellido_dos = $request->reserva_hora_segundo_apellido;
+        $paciente->sexo = $request->reserva_hora_sexo;
+        $paciente->profesion = $request->reserva_hora_profesion;
+        $paciente->fecha_nac = $request->reserva_hora_fecha_nac;
+        $paciente->id_prevision = $request->reserva_hora_convenio;
+        $paciente->email = $request->reserva_hora_email;
+        $paciente->telefono_uno = $request->reserva_hora_telefono;
+        $paciente->id_direccion = $direccion->id;
+
+        if ($paciente->save()) {
+
+            /** buscar tiempo de la consult */
+        $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
+        $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
+                                                    ->where('id_profesional', $profesional->id)
+                                                    ->where('id_lugar_atencion',$request->id_lugar_atencion)
+                                                    ->where('dia','like','%'.$dia_de_semana.'%')
+                                                    ->first();
+
+        // $profesional_horarios = '00:30:00';
+        // $tiempo_consulta = 30;
+        $horas = date('H',strtotime($profesional_horarios->duracion_consulta));
+        $minutos = date('i',strtotime($profesional_horarios->duracion_consulta));
+        $totales = ($horas*60) + $minutos;
+        $tiempo_consulta = $totales;
+
+            $hora_medica = new HoraMedica();
+
+            $hora_medica->id_paciente = $paciente->id;
+            $hora_medica->id_profesional = $profesional->id;
+            $hora_medica->id_estado = 1;
+            $hora_medica->fecha_consulta = \Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d');
+
+            $hora_medica->hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
+            $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->format('H:i:s');
+            $hora_medica->descripcion = $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
+
+            if (!$hora_medica->save()) {
+                return 'error';
+            }
+
+            $details = [
+                'title' => 'Hora medica Reservada',
+                'body' => 'Estimado/a ' . $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos . ',<br>
+                    Junto con saludar, por medio de este correo le informamos que se ha reservado su hora medida <br>' .
+                    'Fecha: ' . $hora_medica->fecha_consulta . '<br>' .
+                    'Hora : ' . $hora_medica->hora_inicio . '<br>' .
+                    'Profesional: <b>' . $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos . '<b> <br><br>' .
+                    'Que tenga un excelente día. </br></br>' .
+                    'Saludos.',
+            ];
+
+            //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
+
+            return json_encode($hora_medica);
+        }
+
+        return 'algo';
+    }
+
+    public function confirmar_hora(Request $request)
+    {
+        $hora_medica = HoraMedica::where('id', $request->id_hora_medica)->first();
+
+        $hora_medica->comentarios_confirmacion = $request->comentario;
+        $hora_medica->fecha_confirmacion = Carbon::now();
+        $hora_medica->id_estado = 2;
+        $paciente = Paciente::where('id', $hora_medica->id_paciente)->first();
+        $profesional = Profesional::where('id', $hora_medica->id_profesional)->first();
+
+        if (!$hora_medica->save()) {
+            return 'error';
+        }
+
+        $details = [
+            'title' => 'Hora medica Confirmada',
+            'body' => 'Estimado/a ' . $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos . ',<br>
+                    Junto con saludar, por medio de este correo le informamos que se ha Confirmado su hora médica <br>' .
+                'Fecha: ' . $hora_medica->fecha_consulta . '<br>' .
+                'Hora : ' . $hora_medica->hora_inicio . '<br>' .
+                'Profesional: <b>' . $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos . '<b> <br><br>' .
+                'Que tenga un excelente día. </br></br>' .
+                'Saludos.',
+        ];
+
+        //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
+
+        return json_encode($hora_medica);
+    }
+
+    public function recibir_bono(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->convenio))
+        {
+            $error['convenio'] = 'campo requerido';
+            $valido = 0;
+        }
+        // if(empty($request->numero_bono))
+        // {
+        //     $error['numero_bono'] = 'campo requerido';
+        //     $valido = 0;
+        // }
+
+        if(empty($request->valor_atencion))
+        {
+            $error['valor_atencion'] = 'campo requerido';
+            $valido = 0;
+        }
+        // if(empty($request->glosa))
+        // {
+        //     $error['glosa'] = 'campo requerido';
+        //     $valido = 0;
+        // }
+
+        if(empty($request->id_profesional))
+        {
+            $error['id_profesional'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_asistente))
+        {
+            $error['id_asistente'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_paciente))
+        {
+            $error['id_paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_tipo_bono))
+        {
+            $error['id_tipo_bono'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_referencia))
+        {
+            $error['id_referencia'] = 'campo requerido';
+            $valido = 0;
+        }
+        // if(empty($request->numero_sesiones))
+        // {
+        //     $error['numero_sesiones'] = 'campo requerido';
+        //     $valido = 0;
+        // }
+
+
+        if($valido == 1)
+        {
+            /** registro bono */
+            $bono = new Bono();
+            $bono->convenio = $request->convenio;
+            // $bono->convenio = $request->convenio_nombre;
+            $bono->numero_bono = $request->numero_bono;
+            $bono->fecha_atencion = date('Y-m-d H:i:s');
+            $bono->valor_atencion = $request->valor_atencion;
+            $bono->glosa = empty($request->glosa)?'0':$request->glosa;
+            $bono->rendido = 0;
+            $bono->id_profesional = $request->id_profesional;
+            $bono->id_asistente = $request->id_asistente;
+            $bono->id_paciente = $request->id_paciente;
+            $bono->id_clase_bono = $request->id_clase_bono;
+            $bono->id_tipo_bono = $request->id_tipo_bono;
+            $bono->id_referencia = $request->id_referencia;// id_hora/id_hora_dental/..
+            $bono->numero_sesiones = empty($request->numero_sesiones)?'0':$request->numero_sesiones;
+            $bono->estado_consulta = 4;
+
+            if($bono->save())
+            {
+                $datos['bono']['estado'] = 1;
+                $datos['bono']['mensaje'] = 'Bonos registrado';
+                /** cambio estado hora medica */
+                switch ($request->id_tipo_bono) {
+                    case  '1': /** hora medica -> Bonos de Consultas Medicas */
+                            $hora_medica = HoraMedica::find($request->id_referencia);
+                            $hora_medica->id_estado = 4;
+                            if($hora_medica->save())
+                            {
+                                $datos['estado'] = 1;
+                                $datos['msj'] = 'Bono registrado';
+                                $datos['hora_medica']['estado'] = 1;
+                                $datos['hora_medica']['msj'] = 'Hora medica actualizada';
+                            }
+                            else
+                            {
+                                $datos['hora_medica']['estado'] = 0;
+                                $datos['hora_medica']['msj'] = 'Problema a actualizar hora medica';
+                            }
+                    break;
+                    case  '2': /** Bono de Examen */
+                        /** code */
+                    break;
+                    case  '3': /** Bonos de Cirugía */
+                        /** code */
+                    break;
+                    case  '4': /** Bonos Parto Normal */
+                        /** code */
+                    break;
+                    case  '5': /** Bonos de Cesarea */
+                        /** code */
+                    break;
+                    case  '6': /** Bonos de Laboratorio */
+                        /** code */
+                    break;
+                    case  '7': /** Bonos de Radiologia */
+                        /** code */
+                    break;
+                    case  '8': /** Bonos de Fonaudiología */
+                        /** code */
+                    break;
+                    case  '9': /** Bonos de Kinesiología */
+                        /** code */
+                    break;
+                    case '10': /** Bonos de Nutrición */
+                        /** code */
+                    break;
+                    case '11': /** Bonos de Procedimiento */
+                        /** code */
+                    break;
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'problema al registrar pago';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function enviar_email(Request $request)
+    {
+
+        if ($request->titulo_email == '' || $request->mensaje_email == '') {
+            return 'error';
+        }
+
+        $titulo = $request->titulo_email;
+        $mensaje = $request->mensaje_email;
+        $paciente = Paciente::where('id', $request->id_paciente)->first();
+
+        $details = [
+            'title' => $titulo,
+            'body' => $mensaje,
+        ];
+
+        ////Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
+        Mail::to('crisescobar233@gmail.com')->send(new \App\Mail\RegistroPacienteMail($details));
+
+        return 'ok';
+    }
+
+    public function cancelar_hora(Request $request)
+    {
+        $hora_medica = HoraMedica::where('id', $request->id_hora_medica)->first();
+
+        $hora_medica->comentarios_cancelacion = $request->comentario;
+        $hora_medica->fecha_cancelacion = Carbon::now();
+        $hora_medica->id_estado = 3;
+        $paciente = Paciente::where('id', $hora_medica->id_paciente)->first();
+        $profesional = Profesional::where('id', $hora_medica->id_profesional)->first();
+
+        if (!$hora_medica->save()) {
+            return 'error';
+        }
+
+        $details = [
+            'title' => 'Hora medica Cancelada',
+            'body' => 'Estimado/a ' . $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos . ',<br>
+                    Junto con saludar, por medio de este correo le informamos que se ha Cancelado su hora medida <br>' .
+                'Fecha: ' . $hora_medica->fecha_consulta . '<br>' .
+                'Hora : ' . $hora_medica->hora_inicio . '<br>' .
+                'Profesional: <b>' . $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos . '<b> <br><br>' .
+                'Que tenga un excelente día. </br></br>' .
+                'Saludos.',
+        ];
+
+        //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
+
+        return json_encode($hora_medica);
+    }
+
+    public function mi_horario_lugar_atencion(Request $request)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $horario = ProfesionalHorario::where('id_profesional', $profesional->id)->where('id_lugar_atencion', $request->id_lugar_atencion)->get();
+
+        return json_encode($horario);
+    }
+
+    public function mi_horario_lugar_atencion_agregar(Request $request)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $hora_inicio = \Carbon\Carbon::parse($request->hora_inicio . ':01')->format('H:i:s');
+        $hora_termino = \Carbon\Carbon::parse($request->hora_termino . ':00')->format('H:i:s');
+
+        $validate = ProfesionalHorario::where('id_profesional', $profesional->id)
+            ->where('dia', 'like', "%$request->dia%")
+            ->whereRaw("('$hora_inicio' BETWEEN hora_inicio AND hora_termino OR '$hora_termino' BETWEEN hora_inicio AND hora_termino)", [0])
+            ->get();
+
+        if (count($validate) > 0) {
+            return 'Failed';
+        }
+
+        $horario = ProfesionalHorario::where('hora_inicio', $hora_inicio)
+            ->where('hora_termino', $hora_termino)
+            ->where('duracion_consulta', $request->duracion)
+            ->where('id_profesional', $profesional->id)
+            ->first();
+
+
+
+        if (isset($horario->id)) {
+            $horario->dia = $horario->dia . ',' . $request->dia;
+        } else {
+
+            $horario = new ProfesionalHorario();
+            $horario->hora_inicio = $hora_inicio;
+            $horario->hora_termino = $hora_termino;
+            $horario->dia = $request->dia;
+            $horario->duracion_consulta = $request->duracion;
+            $horario->id_profesional = $profesional->id;
+            $horario->id_lugar_atencion = $request->id_lugar_atencion;
+            $horario->tipo_Agenda = (int) $request->tipo_agenda_medica;
+        }
+        if (!$horario->save()) {
+            return 'error';
+        }
+
+        return json_encode($horario);
+    }
+
+    // modulo editar perfil paciente
+    public function registrar_contacto_emergencia(Request $request)
+    {
+        $id_paciente = Paciente::where('id', $request->id_paciente)->first();
+        $contacto_emergencia = ContactoEmergencia::where('rut', $request->rut)->first();
+        //$direccion_contacto = Direccion::where('id', $contacto_emergencia->id_direccion)->first();
+
+        if ($contacto_emergencia == null) {
+            $contacto_emergencia = new ContactoEmergencia();
+            $direccion_contacto = new Direccion();
+        } else {
+            $direccion_contacto = Direccion::where('id', $contacto_emergencia->id_direccion)->first();
+        }
+
+        $direccion_contacto->direccion = $request->direccion;
+        $direccion_contacto->numero_dir = $request->numero_dir;
+        $direccion_contacto->id_ciudad = $request->id_ciudad;
+
+        $direccion_contacto->save();
+
+        $contacto_emergencia->rut = $request->rut;
+        $contacto_emergencia->nombre = $request->nombres;
+        $contacto_emergencia->apellido_uno = $request->apellido_uno;
+        $contacto_emergencia->apellido_dos = $request->apellido_dos;
+        $contacto_emergencia->parentezco = $request->parentezco;
+        $contacto_emergencia->fecha_nac = \Carbon\Carbon::parse($request->fecha)->format('Y-m-d');
+        $contacto_emergencia->prioridad = $request->prioridad;
+        $contacto_emergencia->id_direccion = $direccion_contacto->id;
+
+        if ($contacto_emergencia->email != $request->email) {
+            $contacto_emergencia->email = $request->email;
+        }
+        $contacto_emergencia->telefono = $request->telefono;
+
+        //$direccion_contacto = Direccion::where('id', $contacto_emergencia->id_direccion)->first();
+
+        if ($contacto_emergencia->save()) {
+            $pacienteContacto = new PacienteContactoEmergencia();
+
+            $pacienteContacto->id_paciente = $request->id_paciente;
+            $pacienteContacto->id_contacto = $contacto_emergencia->id;
+            $contacto_emergencia->relacion = $request->parentezco;
+
+            if (!$pacienteContacto->save()) {
+                return 'error';
+            }
+
+            return json_encode($contacto_emergencia);
+        } else {
+            return 'error al registrar el contacto de emergencia';
+        }
+
+        /*
+
+        $contacto = new ContactoEmergencia();
+        $direccion = new Direccion();
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        $direccion->direccion = $request->direccion;
+        $direccion->numero_dir = mt_rand(100, 9999);
+        $direccion->id_ciudad = $request->id_ciudad;
+        $direccion->save();
+        $contacto->rut = $request->rut;
+        $contacto->nombre = $request->nombres;
+        $contacto->apellido_uno = $request->apellido_uno;
+        $contacto->apellido_dos = $request->apellido_dos;
+        $contacto->parentezco = $request->parentezco;
+        $contacto->fecha_nac = \Carbon\Carbon::parse($request->fecha)->format('Y-m-d');
+        $contacto->prioridad = $request->prioridad;
+        $contacto->email = $request->email;
+        $contacto->telefono = $request->telefono;
+        $contacto->id_direccion = $direccion->id;
+
+        if ($contacto->save()) {
+            $pacienteContacto = new PacienteContactoEmergencia();
+
+            $pacienteContacto->id_paciente = $request->id_paciente;
+            $pacienteContacto->id_contacto = $contacto->id;
+            $contacto->relacion = $request->parentezco;
+
+            if (!$pacienteContacto->save()) {
+                return 'error';
+            }
+
+            /*  $details = [
+                      'title' => 'Hora medica Reservada',
+                      'body' => 'Estimado/a '.$contacto->nombres.' '.$contacto->apellido_uno.' '.$contacto->apellido_dos.',<br>
+                      Junto con saludar, por medio de este correo le informamos que se ha reservado su hora medida <br>'.
+                      'Fecha: '.$contacto->fecha_consulta.'<br>'.
+                      'Hora : '.$hora_medica->hora_inicio.'<br>'.
+                      'Profesional: <b>'.$profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos.'<b> <br><br>'.
+                      'Que tenga un excelente día. </br></br>'.
+                      'Saludos.',
+                  ];
+
+              //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
+
+            return json_encode($contacto);
+        }
+
+        return 'algo';*/
+    }
+
+    public function cargar_datos_contacto(Request $request)
+    {
+        $contacto = ContactoEmergencia::where('id', $request->id_contacto)->first();
+        $contacto->direccion = $contacto->Direccion()->first();
+        $contacto->ciudad = $contacto->Direccion()->first()->Ciudad()->first();
+        $contacto->region = Region::find($contacto->Direccion()->first()->Ciudad()->first()->id_region);
+        //$contacto->region  = $contacto->Direccion()->first()->Ciudad()->first()->Region()->first();
+
+        return $contacto;
+    }
+
+    public function editar_contacto_emergencia(Request $request)
+    {
+        $contacto = ContactoEmergencia::where('id', $request->id_contacto)->first();
+        $direccion = Direccion::where('id', $contacto->id_direccion)->first();
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        $direccion->direccion = $request->direccion;
+        $direccion->numero_dir = $request->numero_dir;
+        $direccion->id_ciudad = $request->id_ciudad;
+        $direccion->save();
+
+        $contacto->rut = $request->rut;
+        $contacto->nombre = $request->nombres;
+        $contacto->apellido_uno = $request->apellido_uno;
+        $contacto->apellido_dos = $request->apellido_dos;
+        $contacto->parentezco = $request->parentezco;
+        //$contacto->fecha_nac = \Carbon\Carbon::parse($request->fecha)->format('Y-m-d');
+        $contacto->prioridad = $request->prioridad;
+        $contacto->email = $request->email;
+        $contacto->telefono = $request->telefono;
+        $contacto->id_direccion = $direccion->id;
+
+        if ($contacto->save()) {
+            /*  $details = [
+                      'title' => 'Hora medica Reservada',
+                      'body' => 'Estimado/a '.$contacto->nombres.' '.$contacto->apellido_uno.' '.$contacto->apellido_dos.',<br>
+                      Junto con saludar, por medio de este correo le informamos que se ha reservado su hora medida <br>'.
+                      'Fecha: '.$contacto->fecha_consulta.'<br>'.
+                      'Hora : '.$hora_medica->hora_inicio.'<br>'.
+                      'Profesional: <b>'.$profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos.'<b> <br><br>'.
+                      'Que tenga un excelente día. </br></br>'.
+                      'Saludos.',
+                  ];
+
+              //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
+        */
+            return json_encode($contacto);
+        }
+
+        return 'error';
+    }
+
+    public function modificarAntecedenteAademico(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id)){
+            $error['id'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->nombre)){
+            $error['nombre'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->universidad)){
+            $error['universidad'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->anio)){
+            $error['anio'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->ciudad_pais)){
+            $error['ciudad_pais'] = 'campo requerido';
+            $valido = 0;
+        }
+        // if(empty($request->supersalud)){
+        //     $error['supersalud'] = 'campo requerido';
+        //     $valido = 0;
+        // }
+        // if(empty($request->numero_colegio)){
+        //     $error['numero_colegio'] = 'campo requerido';
+        //     $valido = 0;
+        // }
+
+        if($valido == 1)
+        {
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+            $filtro = array();
+            $filtro[] = array('id_profesional',$profesional->id);
+            $filtro[] = array('id',$request->id);
+            $registro = ProfesionalAntecedenteAcademico::where($filtro)->first();
+            if($registro)
+            {
+                $registro->nombre = $request->nombre;
+                $registro->universidad = $request->universidad;
+                $registro->anio = $request->anio;
+                $registro->ciudad_pais = $request->ciudad_pais;
+                if(!empty($request->supersalud))
+                    $registro->supersalud = $request->supersalud;
+                if(!empty($request->numero_colegio))
+                    $registro->numero_colegio = $request->numero_colegio;
+
+                if($registro->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Registro Academico Actualizado.';
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Registro Academico no actualizado.';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Registro Academico no disponible.';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos.';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
+    public function agregarAntecedenteAademico(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_tipo_antecedente_academico)){
+            $error['id_tipo_antecedente_academico'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->nombre)){
+            $error['nombre'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->universidad)){
+            $error['universidad'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->anio)){
+            $error['anio'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->ciudad_pais)){
+            $error['ciudad_pais'] = 'campo requerido';
+            $valido = 0;
+        }
+        // if(empty($request->supersalud)){
+        //     $error['supersalud'] = 'campo requerido';
+        //     $valido = 0;
+        // }
+        // if(empty($request->numero_colegio)){
+        //     $error['numero_colegio'] = 'campo requerido';
+        //     $valido = 0;
+        // }
+
+        if($valido == 1)
+        {
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+            $registro = new ProfesionalAntecedenteAcademico();
+
+            $registro->id_profesional = $profesional->id;
+            $registro->id_tipo_antecedente_academico = $request->id_tipo_antecedente_academico;
+            $registro->nombre = $request->nombre;
+            $registro->universidad = $request->universidad;
+            $registro->anio = $request->anio;
+            $registro->ciudad_pais = $request->ciudad_pais;
+            if(!empty($request->supersalud))
+                $registro->supersalud = $request->supersalud;
+            if(!empty($request->numero_colegio))
+                $registro->numero_colegio = $request->numero_colegio;
+
+            if($registro->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'Registro Academico Agregado.';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Registro Academico no Agregado.';
+            }
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos.';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
+    public function agregarFichaTipoOtorrino(Request $request)
+    {
+        $datos = array();
+        $ficha_tipo = new FichaOtorrinoTipo();
+        $ficha_tipo->id_profesional = $request->id_profesional;
+        $ficha_tipo->nombre = $request->registro_f_t_orl_nombre;
+        $ficha_tipo->descripcion = $request->registro_f_t_orl_descripcion;
+        $ficha_tipo->id_usa_audifono = $request->modal_agregar_tipo_usa_audifono;
+        $ficha_tipo->audifono = $request->observaciones_audifono;
+        $ficha_tipo->apreciacion_auditiva = $request->modal_agregar_tipo_apreciacion_auditiva;
+        $ficha_tipo->aprec_auditiva_def = $request->observaciones_aprec_auditiva_def;
+        $ficha_tipo->examen_oi = $request->modal_agregar_tipo_examen_oi;
+        $ficha_tipo->ex_oi_anormal = $request->observaciones_ex_oi_anormal;
+        $ficha_tipo->examen_od = $request->modal_agregar_tipo_examen_od;
+        $ficha_tipo->ex_od_anormal = $request->observaciones_ex_od_anormal;
+        $ficha_tipo->obs_ex_oidos = $request->observaciones_obs_ex_oidos;
+        $ficha_tipo->examen_bio_oi = $request->modal_agregar_tipo_examen_bio_oi;
+        $ficha_tipo->obs_examen_bio_oi = $request->observaciones_obs_examen_bio_oi;
+        $ficha_tipo->examen_bio_od = $request->modal_agregar_tipo_examen_bio_od;
+        $ficha_tipo->obs_examen_bio_od = $request->observaciones_obs_examen_bio_od;
+        $ficha_tipo->obs_ex_biom = $request->observaciones_obs_ex_biom;
+        $ficha_tipo->nariz_general = $request->modal_agregar_tipo_nariz_general;
+        $ficha_tipo->det_nariz_general = $request->observaciones_det_nariz_general;
+        $ficha_tipo->apreciacion_resp = $request->modal_agregar_tipo_apreciacion_resp;
+        $ficha_tipo->aprec_resp_def = $request->observaciones_aprec_resp_def;
+        $ficha_tipo->examen_fni = $request->modal_agregar_tipo_examen_fni;
+        $ficha_tipo->ex_fni_anormal = $request->observaciones_ex_fni_anormal;
+        $ficha_tipo->examen_fnd = $request->modal_agregar_tipo_examen_fnd;
+        $ficha_tipo->ex_fnd_anormal = $request->observaciones_ex_fnd_anormal;
+        $ficha_tipo->obs_ex_nasal = $request->observaciones_obs_ex_nasal;
+        $ficha_tipo->disfonia = $request->modal_agregar_tipo_disfonia;
+        $ficha_tipo->det_disfonia = $request->observaciones_det_disfonia;
+        $ficha_tipo->ex_boca = $request->modal_agregar_tipo_ex_boca;
+        $ficha_tipo->detalle_ex_boca = $request->observaciones_detalle_ex_boca;
+        $ficha_tipo->examen_faringe =$request->modal_agregar_tipo_examen_faringe;
+        $ficha_tipo->ex_farige_anormal = $request->observaciones_ex_farige_anormal;
+        $ficha_tipo->examen_laringe =$request->modal_agregar_tipo_examen_laringe;
+        $ficha_tipo->ex_larige_anormal = $request->observaciones_ex_larige_anormal;
+        $ficha_tipo->obs_ex_orl = $request->observaciones_obs_ex_orl;
+        $ficha_tipo->hip_diag_orl = '';
+        $ficha_tipo->ind_orl = '';
+
+        if($ficha_tipo->save())
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro exitoso';
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro NO exitoso';
+        }
+        return $datos;
+    }
+
+    public function buscarFichaTipoOtorrino(Request $request)
+    {
+        $datos = array();
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $registro = FichaOtorrinoTipo::where('id_profesional',$profesional->id)->where('id',$request->id_ficha_tipo)->first();
+
+        if($registro)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registro;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
+        }
+
+        return $datos;
+    }
+
+
+    public function agregarAudifono(Request $request)
+    {
+        $datos = array();
+
+        $filtro = array();
+        $filtro[] = array('id_ficha_atencion',$request->id_ficha_atencion);
+        $filtro[] = array('id_paciente',$request->id_paciente);
+        $filtro[] = array('id_profesional',$request->id_profesional);
+        $registro_existente = RecetaAudifono::where($filtro)->first();
+
+        if($registro_existente)
+        {
+            $registros = $registro_existente;
+        }
+        else
+        {
+            $registros = new RecetaAudifono();
+        }
+
+        $registros->id_ficha_atencion = $request->id_ficha_atencion;
+        $registros->id_paciente = $request->id_paciente;
+        $registros->id_profesional = $request->id_profesional;
+        $registros->fecha = date('Y-m-d H:i:s');
+        $registros->tipo = $request->tipo;
+        $registros->od = $request->od;
+        $registros->especificacion_od = $request->especificacion_od;
+        $registros->oi = $request->oi;
+        $registros->especificacion_oi = $request->especificacion_oi;
+        $registros->bi = $request->bi;
+        $registros->especificacion_bi = $request->especificacion_bi;
+        $registros->especificacion_general = $request->especificacion_general;
+
+        if($registros->save())
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro con exito';
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro con falla';
+        }
+
+        return $datos;
+    }
+
+    public function verAudifono(Request $request)
+    {
+        $datos = array();
+        $filtro = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_ficha_atencion))
+        {
+            $valido = 0;
+            $error['id_ficha_atencion'] = 'campo requerido';
+        }
+        if(empty($request->id_paciente))
+        {
+            $valido = 0;
+            $error['id_paciente'] = 'campo requerido';
+        }
+        if(empty($request->id_profesional))
+        {
+            $valido = 0;
+            $error['id_profesional'] = 'campo requerido';
+        }
+
+        if($valido == 1)
+        {
+            $filtro[] = array('id_ficha_atencion',$request->id_ficha_atencion);
+            $filtro[] = array('id_paciente',$request->id_paciente);
+            $filtro[] = array('id_profesional',$request->id_profesional);
+            $registro = RecetaAudifono::where($filtro)->first();
+            if($registro)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registro;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+
+            }
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campo requerido';
+            $datos['error'] = $error;
+
+        }
+
+        return $datos;
+    }
+
+    public function agregarLiquidacion(Request $request)
+    {
+        $result = LiquidacionReciboController::store( Auth::user()->id, $request->rut, $request->nombre, $request->banco, $request->cuenta, $request->email, $request->principal, $request->tipo_cuenta,1);
+        return $result;
+    }
+
+    public function modificarLiquidacion(Request $request)
+    {
+        $result = LiquidacionReciboController::edit($request->id, Auth::user()->id, $request->rut, $request->nombre, $request->banco, $request->cuenta, $request->email, $request->principal, $request->tipo_cuenta,1);
+        return $result;
+    }
+}
