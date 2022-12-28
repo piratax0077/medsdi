@@ -126,7 +126,7 @@ class EscritorioAsistenteCmPublico extends Controller
 
         $filtro = array();
         $filtro[] = array('tipo_empleado',strtoupper($asistente_tipo->nombre));
-        $filtro[] = array('estado',1) ;
+        $filtro[] = array('estado',2) ;
         $contrato = ContratoDependiente::where($filtro)->first();
         $id_lugar_atencion = $contrato->id_lugar_atencion;
 
@@ -153,7 +153,7 @@ class EscritorioAsistenteCmPublico extends Controller
 
         $filtro = array();
         $filtro[] = array('tipo_empleado',$asistente_tipo->nombre);
-        $filtro[] = array('estado',1) ;
+        $filtro[] = array('estado',2) ;
         $contrato = ContratoDependiente::where($filtro)->first();
         $id_lugar_atencion = $contrato->id_lugar_atencion;
 

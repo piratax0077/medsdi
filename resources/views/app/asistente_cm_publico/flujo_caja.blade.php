@@ -37,7 +37,7 @@
                                         <div class="tab-pane fade show active " id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Rendiciones de Caja</h5>
+                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Rendiciones de Caja {{ date('d-m-Y') }}</h5>
                                                     <a href="{{ route('asistentecm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
                                                         <i class="feather icon-home"></i>
                                                     </a>
@@ -83,7 +83,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12 col-md-2 text-center">
-                                                    <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja();">Rendir Caja</button>
+                                                    <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja();" id="btn_rendicion_caja_diaria">Rendir Caja</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -283,7 +283,6 @@
                         $('#aprobacion').html('En espera de recepción.');
 
                         $('#rendicion_caja_diaria').modal('show',{backdrop: 'static', keyboard: false});
-
                     }
                     else
                     {
@@ -319,6 +318,8 @@
                 }
             })
         }
+
+        {{--  function actualizar_registros  --}}
     </script>
 
 @endsection
