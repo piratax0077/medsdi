@@ -1,0 +1,36 @@
+ function cargarSeccion(select,div_destino)
+        {
+            var tipo = $('#'+select+'').val();
+            $('#'+div_destino).html('');
+            if(tipo != '')
+            {
+                if(tipo == 1)
+                {
+                    {{--  seccion_oido  --}}
+                    $('#seccion_oido').find('select,textarea').each(function(key, elemento){
+                        console.log($(elemento).attr('id'));
+                        console.log($(elemento).data('titulo'));
+                        console.log($(elemento).val());
+                        console.log('*******');
+                        html ='';
+                        html +='<div class="row">';
+                        html +='<div class="col-md-6">'+$(elemento).data('titulo')+'</div>';
+                        html +='<div class="col-md-6">'+$(elemento).val()+'</div>';
+                        html +='</div>';
+                        $('#'+div_destino).append(html);
+                    });
+                }
+                else if(tipo == 2)
+                {
+
+                }
+                else if(tipo == 3)
+                {
+
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }

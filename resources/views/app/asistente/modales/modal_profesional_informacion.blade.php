@@ -10,7 +10,7 @@
 
             </div>
             <div class="modal-body">
-                <div id="reserva_datos_paciente" class="row mx-3" style="">
+                <div id="reserva_datos_profesional" class="row mx-3" style="">
                     <div class="row">
                         <div class="col-md-12">
                             <h6 class="mb-1 text-primary">Profesional</h6>

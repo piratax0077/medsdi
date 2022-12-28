@@ -23,7 +23,7 @@
                 <div class="card-body">
                 	<div class="row">
 	            		<div class="col-sm-12 text-center">
-		                    <img src="../assets/images/iconos/candado.svg" alt="" class="img-fluid mb-4 wid-60">
+                            <img src="{{ asset('images/iconos/candado.svg') }}" alt="" class="img-fluid mb-4 wid-50">
 		                    <p style="font-size: 14px;" class="f-w-400 mb-3">¿Dónde desea recibir sus códigos de seguridad?</p>
 						</div>
 					</div>

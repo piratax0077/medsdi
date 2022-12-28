@@ -479,7 +479,8 @@ Route::group([
     Route::get('Buscar_Paciente', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscar_paciente'])->name('asistentecm.buscar_paciente');
     Route::get('Reservar_Hora', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'reservar_hora'])->name('asistentecm.reservar_hora');
     Route::get('Mis_Profesionales', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'mis_profesionales'])->name('asistentecm.mis_profesionales');
-    Route::get('Flujo_Caja', [App\Http\Controllers\FlujoCajaController::class, 'rendirCaja'])->name('asistentecm.flujo_caja');
+    Route::get('caja/rendir', [App\Http\Controllers\FlujoCajaController::class, 'rendirCajaDiaria'])->name('asistentecm.rendir');
+    Route::get('caja/historico', [App\Http\Controllers\FlujoCajaController::class, 'historicoCajaDiaria'])->name('asistentecm.historico_caja');
 
     Route::get('Subcripcion', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'index'])->name('asistentecm.subcripcion');
     Route::get('Venta_Productos', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'index'])->name('asistentecm.venta_productos');
@@ -498,15 +499,17 @@ Route::group([
     Route::post('perfil/editar_datos/personales', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'editar_datos_personales_perfil'])->name('asistentecm.editar_datos_personales_perfil');
     Route::post('perfil/editar_datos/contacto', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'editar_datos_contacto_perfil'])->name('asistentecm.editar_datos_contacto_perfil');
     Route::post('perfil/editar_datos/direccion', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'editar_datos_direccion_perfil'])->name('asistentecm.editar_datos_direccion_perfil');
-        /** contacto emergencia */
+    /** contacto emergencia */
     Route::get('perfil/contacto/emergencia/cargar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'cargar_contacto_emergencia'])->name('asistentecm.cargar_contacto_emergencia');
     Route::get('perfil/contacto/emergencia/registrar_contacto_emergencia', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'registrar_contacto_emergencia'])->name('asistentecm.registrar_contacto_emergencia');
-        /** contacto */
+    /** contacto */
     Route::get('perfil/contacto/cargar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'cargar_datos_contacto'])->name('asistentecm.cargar_datos_contacto');
     Route::get('perfil/contacto/editar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'editar_contacto_emergencia'])->name('asistentecm.editar_contacto');
     Route::get('perfil/contacto/eliminar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'eliminar_contacto_asistente'])->name('asistentecm.eliminar_contacto_asistente');
     Route::get('perfil/contacto/buscar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscar_contacto'])->name('asistentecm.buscar_contacto');
 
+    /** rendicion caja */
+    Route::post('caja/crear/rendicion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucion'])->name('asistentecm.solicitar_rendir_caja');
 
 
 });
@@ -943,7 +946,7 @@ Route::get('perfil.cambio_contrasena', [App\Http\Controllers\UtilsController::cl
 
 /** FLUJO DE CAJA */
 Route::group([
-    'middleware' => ['role:Admin|Profesional|Asistente|Institucion|Servicio'],
+    'middleware' => ['role:Admin|Profesional|Asistente|AsistenteCaja|AsistenteJefaCaja|Institucion|Servicio'],
     'prefix' => 'flujo_caja',
 ], function () {
     // Route::get('ver', [App\Http\Controllers\FlujoCajaController::class, 'ver_flujo_caja'])->name('flujo_caja.flujo_caja'); /** se llama en cada perfil */

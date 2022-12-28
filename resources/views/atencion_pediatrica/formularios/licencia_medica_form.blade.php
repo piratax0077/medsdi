@@ -14,6 +14,7 @@
 
         <input type="hidden" name="id_paciente_li" value="{{ $paciente->id }}" id="id_paciente_fc">
         <input type="hidden" name="id_profesional_li" value="{{ $profesional->id }}" id="id_profesional_fc">
+        <input type="hidden" name="rut_paciente_fc" value="{{ $paciente->rut }}" id="rut_paciente_fc">
 
 
 
@@ -60,8 +61,9 @@
                         </div>
                         <div class="form-group col-md-4">
                             <label class="floating-label">Rut</label>
-                            <input type="text" class="form-control form-control-sm" name="rut_paciente_li"
-                                id="rut_paciente_li">
+                            <input type="text" class="form-control form-control-sm" name="rut_paciente_fc"
+                                id="rut_paciente_fc">
+                                value="{{ $paciente->rut }}">
                         </div>
                         <div class="form-group col-md-4">
                             <button type="button" id="buscar_btn" class="btn btn-sm btn-success btn-block"

@@ -152,11 +152,6 @@
         {
             $('.loader-bg').hide();
 
-            {{--  Tablas rendir caja  --}}
-            $('#tabla_rendir_caja').DataTable({
-                responsive: true,
-            });
-
             $(".cerrar_modal_info_profesional").click(function() {
                 $("#info_profesional").modal('hide');
             });

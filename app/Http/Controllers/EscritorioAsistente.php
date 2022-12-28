@@ -610,6 +610,20 @@ class EscritorioAsistente extends Controller
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
         $profesional = Profesional::where('id', $request->id_profesional)->first();
 
+        // validar si paciente tiene otra consulta
+        $validar = HoraMedica::where('id_paciente', $paciente->id)
+                ->where('id_profesional',$profesional->id)
+                ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
+                ->first();
+        if($validar)
+        {
+            return json_encode(array(
+                'estado' => 'error',
+                'id_profesional' => $profesional->id,
+                'msj' => 'Paciente ya tiene Hora para este dia'
+            ));
+        }
+
         /** buscar tiempo de la consult */
         $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
         $profesional_horarios = ProfesionalHorario::select('duracion_consulta')

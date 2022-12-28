@@ -576,7 +576,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>   
+                            </div>
                             <hr>
                             <div class="row mb-3">
                                 <div class="col-md-12 text-center">
@@ -713,16 +713,16 @@
                                                         <label class="floating-label">Región / Comuna</label>
                                                         <select id="region_comuna" name="region_comuna" class="form-control form-control-sm"  >
                                                             <option selected value="0">Seleccione una opción</option>
-                                                                <optgroup label="Región de Valparaíso"> 
-                                                                    <option>Viña del Mar</option> 
-                                                                    <option>Valparaíso</option> 
+                                                                <optgroup label="Región de Valparaíso">
+                                                                    <option>Viña del Mar</option>
+                                                                    <option>Valparaíso</option>
                                                                     <option>San Felipe</option>
                                                                     <option>etc...</option>
-                                                                </optgroup> 
-                                                                <optgroup label="Región Metropolitana"> 
-                                                                    <option >Santiago</option> 
-                                                                    <option >Maipú</option> 
-                                                                    <option >etc...</option> 
+                                                                </optgroup>
+                                                                <optgroup label="Región Metropolitana">
+                                                                    <option >Santiago</option>
+                                                                    <option >Maipú</option>
+                                                                    <option >etc...</option>
                                                                 </optgroup>
                                                         </select>
                                                     </div>
@@ -832,10 +832,10 @@
                         <div class="tab-pane fade" id="pills-fmu" role="tabpanel" aria-labelledby="pills-fmu-tab">
                             <div class="row">
                                 <div class="col-md-4 mx-auto m-ingreso-ficha">
-                                    <!--Ingreso a Ficha Médica Única-->    
+                                    <!--Ingreso a Ficha Médica Única-->
                                     <div class="row">
                                         <div class="col-sm-12 text-center">
-                                            <img src="../assets/images/iconos/candado.svg" alt="" class="img-fluid mb-4 wid-90">
+                                        <img src="{{ asset('images/iconos/candado.svg') }}" alt="" class="img-fluid mb-4 wid-50">
                                             <p class="f-w-400 mb-4">Ingrese uno de los códigos de seguridad que se le ha enviado por correo electrónico</p>
                                         </div>
                                     </div>
@@ -1121,7 +1121,7 @@
                 </div>
             </div>
             <!--Cierre:Contenido Pills-->
-            <!--Sidebar 1-->    
+            <!--Sidebar 1-->
             <div id="antecedentes_paciente" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="370px" data-offset="true">
                 <header class="bs-canvas-header p-3 bg-info overflow-auto">
                     <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true" class="text-light">&times;</span></button>
@@ -1147,7 +1147,7 @@
                                     <div class="form-row mt-1">
                                         <label class="col-4 text-info-2 font-weight-bolder">Apellidos</label>
                                         <div class="col-7 ml-2 text-secondary">
-                                            Apellido_1 Apellido_2 
+                                            Apellido_1 Apellido_2
                                         </div>
                                     </div>
                                     <hr class="mt-2">
@@ -1244,7 +1244,7 @@
                                 <div class="form-row mt-1">
                                     <label class="col-4 text-info-2 font-weight-bolder">Dirección</label>
                                     <div class="col-7 ml-2 text-secondary">
-                                    Calle Nº... 
+                                    Calle Nº...
                                     </div>
                                 </div>
                                 <hr class="mt-2">
@@ -1422,9 +1422,9 @@
                         </div>
                     </div>
                 </div>
-            </div>     
+            </div>
             <!--Cierre: Sidebar 1-->
-            <!--Sidebar 2-->   
+            <!--Sidebar 2-->
             <div id="formularios_atencion" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="300px" data-offset="true">
                 <header class="bs-canvas-header p-3 bg-info overflow-auto">
                     <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true" class="text-light">&times;</span></button>
@@ -1445,14 +1445,14 @@
                                     <!--Boton Modal Formulario certificado de reposo-->
                                     <button type="button" class="btn btn-sm btn-info  btn-block accion_modal_certificado_reposo">Certificado de reposo</button>
 
-                                    <!--Boton Modal Formulario de interconsulta--> 
-                                    <button type="button" class="btn btn-sm btn-info  btn-block accion_modal_interconsulta">Interconsulta</button> 
+                                    <!--Boton Modal Formulario de interconsulta-->
+                                    <button type="button" class="btn btn-sm btn-info  btn-block accion_modal_interconsulta">Interconsulta</button>
 
-                                    <!--Boton Modal Formulario de informe médico--> 
-                                    <button type="button" class="btn btn-sm btn-info  btn-block accion_modal_inf_medico">Informe Médico</button> 
+                                    <!--Boton Modal Formulario de informe médico-->
+                                    <button type="button" class="btn btn-sm btn-info  btn-block accion_modal_inf_medico">Informe Médico</button>
 
-                                    <!--Boton Modal formulario uso personal--> 
-                                    <button type="button" class="btn btn-sm btn-info  btn-block accion_modal_uso_personal">Uso Personal</button>  
+                                    <!--Boton Modal formulario uso personal-->
+                                    <button type="button" class="btn btn-sm btn-info  btn-block accion_modal_uso_personal">Uso Personal</button>
                                 </div>
                             </div>
                         </div>
@@ -1496,7 +1496,7 @@
                             </div>
                         </div>
                     </div>
-                </div>    
+                </div>
             </div>
             <!--Cierre: Sidebar 2-->
         </div>
@@ -1513,7 +1513,7 @@
 
 <!--***************MODALS*******************-->
 
-<!--Modals Formularios generales--> 
+<!--Modals Formularios generales-->
 
     <!---******* Modal Formulario certificado de reposo ********-->
     <div id="modal_certificado_reposo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_certificado_reposo" aria-hidden="true">
@@ -1609,16 +1609,16 @@
                                 <label class="floating-label">Región / Comuna</label>
                                 <select id="region_comuna" name="region_comuna" class="form-control form-control-sm"  >
                                     <option selected value="0">Seleccione una opción </option>
-                                    <optgroup label="Región de Valparaíso"> 
-                                        <option>Viña del Mar</option> 
-                                        <option>Valparaíso</option> 
+                                    <optgroup label="Región de Valparaíso">
+                                        <option>Viña del Mar</option>
+                                        <option>Valparaíso</option>
                                         <option>San Felipe</option>
                                         <option>etc...</option>
-                                    </optgroup> 
-                                    <optgroup label="Región Metropolitana"> 
-                                        <option >Santiago</option> 
-                                        <option >Maipú</option> 
-                                        <option >etc...</option> 
+                                    </optgroup>
+                                    <optgroup label="Región Metropolitana">
+                                        <option >Santiago</option>
+                                        <option >Maipú</option>
+                                        <option >etc...</option>
                                     </optgroup>
                                 </select>
                             </div>
@@ -1736,16 +1736,16 @@
                                 <label class="floating-label">Región / Comuna</label>
                                 <select id="region_comuna" name="region_comuna" class="form-control form-control-sm"  >
                                     <option selected value="0">Seleccione una opción </option>
-                                     <optgroup label="Región de Valparaíso"> 
-                                         <option>Viña del Mar</option> 
-                                         <option>Valparaíso</option> 
+                                     <optgroup label="Región de Valparaíso">
+                                         <option>Viña del Mar</option>
+                                         <option>Valparaíso</option>
                                          <option>San Felipe</option>
                                          <option>etc...</option>
-                                     </optgroup> 
-                                     <optgroup label="Región Metropolitana"> 
-                                         <option >Santiago</option> 
-                                         <option >Maipú</option> 
-                                         <option >etc...</option> 
+                                     </optgroup>
+                                     <optgroup label="Región Metropolitana">
+                                         <option >Santiago</option>
+                                         <option >Maipú</option>
+                                         <option >etc...</option>
                                      </optgroup>
                                 </select>
                             </div>
@@ -1816,7 +1816,7 @@
     </div>
 
 
-<!--Modals Formularios de Notificación--> 
+<!--Modals Formularios de Notificación-->
 
     <!---******* Modal Formulario Constancia Ges ********-->
     <div id="modal_constancia_ges" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_constancia_ges" aria-hidden="true">
@@ -2057,16 +2057,16 @@
                                         <label class="floating-label">Región / Comuna</label>
                                         <select id="prevision" name="prevision" class="form-control form-control-sm"  >
                                             <option selected value="0">Seleccione una opción </option>
-                                                <optgroup label="Región de Valparaíso"> 
-                                                <option value="1">Viña del Mar</option> 
-                                                <option value="2">Valparaíso</option> 
+                                                <optgroup label="Región de Valparaíso">
+                                                <option value="1">Viña del Mar</option>
+                                                <option value="2">Valparaíso</option>
                                                 <option value="3">San Felipe</option>
                                                 <option value="3">etc...</option>
-                                                </optgroup> 
-                                                <optgroup label="Región Metropolitana"> 
-                                                <option value="10">Santiago</option> 
-                                                <option value="11">Maipú</option> 
-                                                <option value="12">etc...</option> 
+                                                </optgroup>
+                                                <optgroup label="Región Metropolitana">
+                                                <option value="10">Santiago</option>
+                                                <option value="11">Maipú</option>
+                                                <option value="12">etc...</option>
                                             </optgroup>
                                         </select>
                                     </div>
@@ -2247,7 +2247,7 @@
                     <div class="form-group col-sm-6 col-md-6">
                     <label class="floating-label-activo-sm">Hora</label>
                     <input type="time" class="form-control form-control-sm" name="fecha" id="fecha">
-                    </div>          
+                    </div>
                     </div>
                     <div class="row">
                     <div class="col-md-12">
@@ -2437,7 +2437,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>                               
+                                </form>
                             </div>
                             <div class="tab-pane pt-4" id="ant_reembolso">
                                 <form>
@@ -2873,7 +2873,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>                             
+                                </form>
                             </div>
                             <div class="tab-pane pt-4" id="ant_reembolso_dental">
                                 <form>
@@ -3228,16 +3228,16 @@
                                 <label class="floating-label">Región / Comuna</label>
                                 <select id="region_comuna" name="region_comuna" class="form-control form-control-sm"  >
                                     <option selected value="0">Seleccione una opción </option>
-                                         <optgroup label="Región de Valparaíso"> 
-                                         <option>Viña del Mar</option> 
-                                         <option>Valparaíso</option> 
+                                         <optgroup label="Región de Valparaíso">
+                                         <option>Viña del Mar</option>
+                                         <option>Valparaíso</option>
                                          <option>San Felipe</option>
                                          <option>etc...</option>
-                                     </optgroup> 
-                                     <optgroup label="Región Metropolitana"> 
-                                         <option >Santiago</option> 
-                                         <option >Maipú</option> 
-                                         <option >etc...</option> 
+                                     </optgroup>
+                                     <optgroup label="Región Metropolitana">
+                                         <option >Santiago</option>
+                                         <option >Maipú</option>
+                                         <option >etc...</option>
                                      </optgroup>
                                 </select>
                             </div>
@@ -3383,7 +3383,7 @@
                     </div>
                 </div>
             </div>
-        </div>     
+        </div>
     </div>
 
     <!---******* Modal Exámenes ********-->
@@ -3436,7 +3436,7 @@
                     </div>
                 </div>
             </div>
-        </div>     
+        </div>
     </div>
 
     <!---******* Modal Recetas ********-->
@@ -3492,7 +3492,7 @@
                     </div>
                 </div>
             </div>
-        </div>     
+        </div>
     </div>
 
     <!---******* Modal Archivos ********-->
@@ -3511,7 +3511,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-center align-middle">Fecha</th>
-                                    <th class="text-center align-middle">Tipo</th>                                              
+                                    <th class="text-center align-middle">Tipo</th>
                                     <th class="text-center align-middle">Nombre</th>
                                     <th class="text-center align-middle">Ver</th>
                                 </tr>
@@ -3538,7 +3538,7 @@
                     </div>
                 </div>
             </div>
-        </div>     
+        </div>
     </div>
 
 <!--Modals Formularios Enfermedades crónicas y GES-->
@@ -3628,7 +3628,7 @@
                                     <tr>
                                         <th class="text-center align-middle">Nº Control</th>
                                         <th class="text-center align-middle">Fecha</th>
-                                        <th class="text-center align-middle">Peso</th>                                      
+                                        <th class="text-center align-middle">Peso</th>
                                         <th class="text-center align-middle">Variación</th>
                                         <th class="text-center align-middle">Peso Ideal</th>
                                         <th class="text-center align-middle">Acción</th>
@@ -3728,7 +3728,7 @@
                                     <tr>
                                         <th class="text-center align-middle">Nº Control</th>
                                         <th class="text-center align-middle">Fecha</th>
-                                        <th class="text-center align-middle">Presión Sistólica</th>                                      
+                                        <th class="text-center align-middle">Presión Sistólica</th>
                                         <th class="text-center align-middle">Presión Diastólica</th>
                                         <th class="text-center align-middle">Presión Ideal</th>
                                         <th class="text-center align-middle">Acción</th>
@@ -3822,7 +3822,7 @@
                                         <tr>
                                             <th class="text-center align-middle">Nº Control</th>
                                             <th class="text-center align-middle">Fecha</th>
-                                            <th class="text-center align-middle">Peso</th>                                      
+                                            <th class="text-center align-middle">Peso</th>
                                             <th class="text-center align-middle">Piés</th>
                                             <th class="text-center align-middle">Hg A1c</th>
                                             <th class="text-center align-middle">Colesterol</th>
@@ -3856,7 +3856,7 @@
                 </div>
             </div>
         </div>
-    </div>     
+    </div>
 
     <!--******* Modal: GES *******-->
     <div id="form_ges" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="form_ges" aria-hidden="true">
@@ -4116,7 +4116,7 @@
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
-        </div>  
+        </div>
     </div>
 
     <!--Botón Flotante-->
@@ -4137,8 +4137,8 @@
     </div>
     <!--Cierre: Botón Flotante-->
 
-    
-    
+
+
     <!--Cierre: Footer-->
     <!-- [ Main Content ] end -->
     <!-- Warning Section start -->
@@ -4208,9 +4208,9 @@
     <script src="../assets/js/tablas_control_cronicos.js"></script>
 
     <!--Sidebars-->
-    <script src="../assets/js/bs_canvas.js"></script>  
+    <script src="../assets/js/bs_canvas.js"></script>
 
-    <!--Modals de atención--> 
+    <!--Modals de atención-->
     <script src="../assets/js/modals_atencion_medica.js"></script>
 
     <!--Form wizard-->

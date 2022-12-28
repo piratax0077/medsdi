@@ -900,10 +900,13 @@
                 mensaje += 'Campo requerido RUT DEL PROFESIONAL\n';
                 valido = 0;
             }
-            if(bono_numero == '')
+            if(bono_id_clase_bono != 6)
             {
-                mensaje += 'Campo requerido NUMERO DEL BONO O PROGRAMA\n';
-                valido = 0;
+                if(bono_numero == '')
+                {
+                    mensaje += 'Campo requerido NUMERO DEL BONO O PROGRAMA\n';
+                    valido = 0;
+                }
             }
             if(bono_valor_consulta == '')
             {
@@ -931,7 +934,7 @@
                         valor_atencion: bono_valor_consulta,
                         glosa: '1',
                         id_profesional: bono_id_profesional,
-                        id_asistente: '{{ Auth::user()->id }}',
+                        id_asistente: '{{ $asistente->id }}',
                         id_paciente: bono_id_paciente,
                         id_tipo_bono: bono_id_tipo_bono,
                         id_clase_bono: bono_id_clase_bono,
@@ -968,9 +971,9 @@
                             $('#recepcion_programa').val('');
                             $('#bono_sn_sesiones').val('');
                             $('#bono_hora_medica').val('');
-                            $('#bono_id_profesional').val('');
-                            $('#bono_id_paciente').val('');
-                            $('#bono_id_tipo_bono').val('');
+                            {{--  $('#bono_id_profesional').val('');  --}}
+                            {{--  $('#bono_id_paciente').val('');  --}}
+                            {{--  $('#bono_id_tipo_bono').val('');  --}}
 
                         }
                         else

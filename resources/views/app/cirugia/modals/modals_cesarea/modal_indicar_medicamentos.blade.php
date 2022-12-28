@@ -1,5 +1,4 @@
-<div id="indicar_medicamentos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="indicar_medicamentos"
-    aria-hidden="true">
+<div id="indicar_medicamentos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="indicar_medicamentos" aria-hidden="true">
 
     <!-- For defining autocomplete -->
 

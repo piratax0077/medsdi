@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class RendicionCaja extends Model
+{
+    use HasFactory;
+    protected $table = 'rendicion_caja';
+
+    // public function ScopeBonos(){
+    //     return $this->hasOne(Prevision::class, 'id', 'id_prevision');
+    // }
+    public function Asistente(){
+        return $this->hasOne(Asistente::class, 'id', 'id_asistente');
+    }
+    public function AsistenteReceptor(){
+        return $this->hasOne(Asistente::class, 'id', 'id_asistente_receptor');
+    }
+}

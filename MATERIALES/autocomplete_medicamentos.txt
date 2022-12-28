@@ -1,0 +1,47 @@
+{{-- autocomplete --}}
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+
+/** autocomplete de medicamentos antecedentes */
+$("#nombre_medicamento_ficha_dental").autocomplete({
+    source: function(request, response) {
+        // Fetch data
+        $.ajax({
+            url: "{{ route('dental.getArticulo') }}",
+            type: 'post',
+            dataType: "json",
+            data: {
+                _token: CSRF_TOKEN,
+                search: request.term
+            },
+            success: function(data) {
+                console.log(data.length);
+                if( data.length == 0 )
+                {
+                    $('.medicamento_activo').hide();
+                    $('.medicamento_inactivo').show();
+                    $('#dosis_medicamento_ficha_dental_2').val('');
+                    $('#frecuencia_medicamento_ficha_dental_2').val('');
+                    $('#id_medicamento_ficha_dental').val('');
+                }
+                else
+                {
+                    $('.medicamento_activo').show();
+                    $('.medicamento_inactivo').hide();
+                    $('#dosis_medicamento_ficha_dental_2').val('');
+                    $('#frecuencia_medicamento_ficha_dental_2').val('');
+                    $('#id_medicamento_ficha_dental').val('');
+                }
+                response(data);
+            }
+        });
+    },
+    select: function(event, ui) {
+        // Set selection
+        $('#nombre_medicamento_ficha_dental').val(ui.item.label); // display the selected text
+        $('#id_medicamento_ficha_dental').val(ui.item.value); // save selected id to input
+        $('#nombre_composicion_farmaco').html(ui.item.droga); // save selected id to input
+
+        return false;
+    }
+});

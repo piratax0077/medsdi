@@ -6,10 +6,10 @@
         </div>
         <div class="row bg-white shadow-sm rounded mx-3 mt-4">
             <div class="col-md-4 mx-auto py-5">
-                <!--Ingreso a Ficha Médica Única-->   
+                <!--Ingreso a Ficha Médica Única-->
                 <div class="row">
                     <div class="col-sm-12 text-center">
-                        <img src="../assets/images/iconos/candado.svg" alt="" class="img-fluid mb-3 wid-70">
+                        <img src="{{ asset('images/iconos/candado.svg') }}" alt="" class="img-fluid mb-4 wid-50">
                         <p class="f-w-400 mb-3">Ingrese uno de los códigos de seguridad que se le ha enviado por correo electrónico</p>
                     </div>
                 </div>

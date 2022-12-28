@@ -2528,23 +2528,11 @@
         <div class="boton-formularios">
             <input type="checkbox" id="btn-mas">
             <div class="redes">
-                <a id="boton_1" class="fas fa-user fa-2x" data-toggle="canvas" data-target="#antecedentes_paciente" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left" style="cursor:pointer;"> </a>
-                <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left" style="cursor:pointer;"></a>
 
-                @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Otorrinolaringología' )
-                    <a id="boton_3" class="fas fa-deaf fa-2x" data-toggle="canvas" data-target="#formularios_orl" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Otorrinolaringología" data-placement="left"></a>
-                @endif
 
-                @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Oftalmología' )
-                    <a id="boton_3" class="fas fa-eye-slash fa-2x" data-toggle="canvas" data-target="#formularios_ojo" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Oftalmología" data-placement="left"></a>
-                @endif
 
-                @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía Gástrica' )
-					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_cirugia" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugia" data-placement="left"></a>
-				@endif
-				 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía Coloproctológica' )
-					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_cdb"" aria-expanded="false" aria-controls="bs-canvas-right" title="coloproctología" data-placement="left"></a>
-				@endif
+
+
             </div>
             <div class="btn-mas">
                 <label for="btn-mas" class="fa fa-plus"></label>
@@ -2554,8 +2542,8 @@
 </div>
 
 
-@include('atencion_medica.sidebars.antecedentes_paciente')
-@include('atencion_medica.sidebars.formularios_atencion')
+@include('atencion_pediatrica.sidebars.antecedentes_paciente_p')
+@include('atencion_pediatrica.modales')
 
 @section('js-sidebar')
     <script>

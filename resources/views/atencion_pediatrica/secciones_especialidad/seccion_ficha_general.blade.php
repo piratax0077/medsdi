@@ -10,7 +10,7 @@
             </div>
             <div class="row">
                 <!--Formulario / Menor de edad-->
-                @include('atencion_medica.generales.seccion_menor')
+                @include('atencion_pediatrica.generales.seccion_menor')
                 <!--Cierre: Formulario / Menor de edad-->
 
                 <!--Formulario / Motivo de la Consulta-->

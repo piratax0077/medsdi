@@ -53,6 +53,7 @@
                                                             <label class="floating-label-activo-sm">
                                                             Previsión
                                                             </label>
+                                                            <imput value="{{ $paciente->rut }}">
                                                             <select class="form-control form-control-sm" name="prevision" id="prevision">
                                                                 <option>Seleccione</option>
                                                                 <option>..</option>
@@ -60,7 +61,8 @@
                                                         </div>
                                                         <div class="form-group col-md-4">
                                                             <label class="floating-label">Rut</label>
-                                                            <input type="text" class="form-control form-control-sm" name="rut" id="rut">
+                                                            <input type="text" class="form-control form-control-sm" name="rut_paciente_fc" id="rut_paciente_fc"value="{{ $paciente->rut }}">
+
                                                         </div>
                                                         <div class="form-group col-md-4">
                                                             <button type="button" class="btn btn-sm btn-success btn-block">Verificar</button>
@@ -85,30 +87,49 @@
                                             <div class="card-body-aten shadow-none">
                                                 <div class="form-row">
                                                     <div class="form-group col-md-3">
-                                                        <label class="floating-label-activo-sm">Fecha</label>
-                                                        <input type="date" name="fecha" id="fecha" class="form-control form-control-sm"/>
+                                                        <label class="floating-label-activo-sm">N° días</label>
+                                                        <input type="text" name="num_dias_reposo" id="num_dias_reposo" class="form-control form-control-sm"/>
                                                     </div>
                                                     <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Desde</label>
-                                                        <input type="date" name="fecha_des" id="fecha_des" class="form-control form-control-sm"/>
+                                                        <input type="date" name="fecha" id="fecha" class="form-control form-control-sm"/>
                                                     </div>
                                                     <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Hasta</label>
-                                                        <input type="date" name="fecha_hast" id="fecha_hast" class="form-control form-control-sm"/>
+                                                        <input type="text" name="hasta" id="hasta" class="form-control form-control-sm" value=""/>
                                                     </div>
                                                     <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">
                                                         Tipo de reposo
                                                         </label>
                                                         <select class="form-control form-control-sm" name="tipo_reposo" id="tipo_reposo">
-                                                            <option>Seleccione una opción</option>
-                                                            <option>Total</option>
+                                                            <option selected>Total</option>
                                                             <option>Mañana</option>
                                                             <option>Tarde</option>
                                                             <option>Otro</option>
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <script>
+                                                    // Función que suma o resta días a la fecha indicada
+                                                    sumaFecha = function(d, fecha)
+                                                    {
+                                                    var Fecha = new Date();
+                                                    var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
+                                                    var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
+                                                    var aFecha = sFecha.split(sep);
+                                                    var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];
+                                                    fecha= new Date(fecha);
+                                                    fecha.setDate(fecha.getDate()+parseInt(d));
+                                                    var anno=fecha.getFullYear();
+                                                    var mes= fecha.getMonth()+1;
+                                                    var dia= fecha.getDate();
+                                                    mes = (mes < 10) ? ("0" + mes) : mes;
+                                                    dia = (dia < 10) ? ("0" + dia) : dia;
+                                                    var fechaFinal = dia+sep+mes+sep+anno;
+                                                    return (fechaFinal);
+                                                    }
+                                                </script>
                                             </div>
                                         </div>
                                     </div>

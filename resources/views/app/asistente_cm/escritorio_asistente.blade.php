@@ -173,6 +173,7 @@
 @section('page-script')
     <script>
 
+        var CalendarEl = null;
         $(document).ready(function()
         {
             $('#agenda_profesional_asistente').select2();
@@ -231,7 +232,7 @@
         {
             let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
             let id_profesional = $('#agenda_profesional_asistente').val();
-            let url = "{{ route('agenda.buscar_info_profesional') }}";
+            let url = "{{ route('asistentecm.buscar_info_profesional') }}";
             $.ajax({
                 url: url,
                 type: "GET",
@@ -270,7 +271,7 @@
         }
 
         {{--  CARGA AGENDE DEL PROFESIONAL  --}}
-        function cargarAgendaProfesional()
+        function cargarAgendaProfesional(fecha)
         {
 
             var evaluacion = false;
@@ -321,10 +322,12 @@
                             if(evaluacion)
                             {
                                 var calendarEl = document.getElementById('agenda');
-                                var CalendarEl = new FullCalendar.Calendar(calendarEl, {
+                                CalendarEl = new FullCalendar.Calendar(calendarEl, {
                                     droppable: false,
                                     editable: false,
                                     locale: "es",
+                                    timeZone: 'local',
+                                    initialDate: '2022-12-27',
                                     initialView: 'timeGridWeek',
                                     themeSystem: 'bootstrap',
                                     slotDuration: '00:15:00',
@@ -371,48 +374,61 @@
                                     },
 
                                     events: function(start, end, callback){
-                                            var arrayTemp = [];
-                                            let url = "{{ route('hora_medica.ver') }}";
-                                            $.ajax({
-                                                url: url,
-                                                type: "GET",
-                                                data: {
-                                                    id_profesional: id_profesional,
-                                                    id_lugar_atencion: id_lugar_atencion,
-                                                },
-                                                success:function(data){
-                                                            if (data !== 'null')
+                                        var arrayTemp = [];
+                                        let url = "{{ route('hora_medica.ver') }}";
+
+                                        $.ajax({
+                                            url: url,
+                                            type: "GET",
+                                            data: {
+                                                id_profesional: id_profesional
+                                            },
+                                            success:function(data){
+                                                        if (data !== 'null')
+                                                        {
+                                                            //data = JSON.parse(data);
+                                                            console.log('-----------------------');
+                                                            console.log(data);
+                                                            console.log('-----------------------');
+                                                            if(data.estado == 1)
                                                             {
-                                                                //data = JSON.parse(data);
-                                                                {{--  console.log('-----------------------');  --}}
-                                                                {{--  console.log(data);  --}}
-                                                                {{--  console.log('-----------------------');  --}}
-                                                                if(data.estado == 1)
-                                                                {
-                                                                    // var arraytemp = [];
-                                                                    // arraytemp.push([id=>'11']);
-                                                                    {{--  // console.log(arraytemp)  --}}
-                                                                    var arrayTemp = [];
-                                                                    data.registros.forEach(element => {
-                                                                        arrayTemp.push({
-                                                                                        id: element.id,
-                                                                                        title: element.descripcion,
-                                                                                        description: element.descripcion+'\n',
-                                                                                        start: element.fecha_consulta + 'T' + element.hora_inicio,
-                                                                                        end: element.fecha_consulta + 'T' + element.hora_termino,
-                                                                                        backgroundColor: element.estado.color
-                                                                        });
+                                                                // var arraytemp = [];
+                                                                // arraytemp.push([id=>'11']);
+                                                                // console.log(arraytemp)
+                                                                var arrayTemp = [];
+                                                                data.registros.forEach(element => {
+                                                                    var rut = element.paciente.rut+' | '
+                                                                    var valor = element.estado.valor+' | '
+                                                                    var comentarios_confirmacion = '';
+                                                                    if(comentarios_confirmacion != 'null')
+                                                                        comentarios_confirmacion = element.comentarios_confirmacion+' | '
+                                                                    var nombre = element.paciente.prevision.nombre
+                                                                    var descripcion = '';
+                                                                    descripcion += rut;
+                                                                    descripcion += valor;
+                                                                    descripcion += comentarios_confirmacion;
+                                                                    descripcion += nombre;
+
+                                                                    arrayTemp.push({
+                                                                                    id: element.id,
+                                                                                    title: element.descripcion,
+                                                                                    {{--  description: '{{ $hm->Paciente->rut }} | {{ $hm->Estado()->first()->valor }} | {{ $hm->comentarios_confirmacion }} | {{ $hm->Paciente->Prevision->nombre }}',  --}}
+                                                                                    description: descripcion ,
+                                                                                    start: element.fecha_consulta + 'T' + element.hora_inicio,
+                                                                                    end: element.fecha_consulta + 'T' + element.hora_termino,
+                                                                                    backgroundColor: element.estado.color
                                                                     });
-                                                                    {{--  console.log(arrayTemp);  --}}
-                                                                }
-                                                                else
-                                                                {
-                                                                    {{--  console.log('falla en carga');  --}}
-                                                                }
+                                                                });
+                                                                console.log(arrayTemp);
                                                             }
-                                                            end(arrayTemp);
+                                                            else
+                                                            {
+                                                                console.log('falla en carga');
+                                                            }
                                                         }
-                                            });
+                                                        end(arrayTemp);
+                                                    }
+                                        });
                                     },
 
                                     eventClick: function(info) {
@@ -464,7 +480,7 @@
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
                                                         // $('#id_hora_medica').val(id_hora_medica);
-                                                        {{--  // console.log(data);  --}}
+                                                        // console.log(data);
                                                         // $('#reservar_hora').modal('hide');
                                                         //location.reload();
                                                     }
@@ -507,7 +523,7 @@
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
                                                         // $('#id_hora_medica').val(id_hora_medica);
-                                                        {{--  // console.log(data);  --}}
+                                                        // console.log(data);
                                                         // $('#reservar_hora').modal('hide');
                                                         //location.reload();
                                                     }
@@ -528,7 +544,7 @@
                                                         {{--  $('#cabecera_hora_medica').text('Datos Del Paciente');  --}}
                                                         {{--  $('#consulta').modal('show');  --}}
                                                         // $('#id_hora_medica').val(id_hora_medica);
-                                                        {{--  // console.log(data);  --}}
+                                                        // console.log(data);
                                                         // $('#reservar_hora').modal('hide');
                                                         //location.reload();
                                                     }
@@ -537,18 +553,18 @@
                                                     else if (data.estado_hora == 5) //else if (info.event.backgroundColor == '#EDBB99')
                                                     {
                                                         //'Realizando')
-                                                        {{--  $('#hm_anular_hora').hide();  --}}
-                                                        {{--  $('#hm_atender_hora').show();  --}}
-                                                        {{--  $('#hm_confirmar_hora').hide();  --}}
+                                                        $('#hm_anular_hora').hide();
+                                                        $('#hm_atender_hora').show();
+                                                        $('#hm_confirmar_hora').hide();
                                                         $('#hm_ver_hora').hide();
-                                                        {{--  $('#hm_espera_paciente_hora').hide();  --}}
-                                                        {{--  $('#confirmar_anulacion_hora').hide();  --}}
-                                                        {{--  $('#confirmacion_hora').hide();  --}}
+                                                        $('#hm_espera_paciente_hora').hide();
+                                                        $('#confirmar_anulacion_hora').hide();
+                                                        $('#confirmacion_hora').hide();
 
-                                                        {{--  $('#cabecera_hora_medica').text('Datos Del Paciente');  --}}
-                                                        {{--  $('#consulta').modal('show');  --}}
+                                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                                        $('#consulta').modal('show');
                                                         // $('#id_hora_medica').val(id_hora_medica);
-                                                        {{--  // console.log(data);  --}}
+                                                        // console.log(data);
                                                         // $('#reservar_hora').modal('hide');
                                                         //location.reload();
                                                     }
@@ -561,14 +577,14 @@
                                                         $('#hm_atender_hora').hide();
                                                         $('#hm_confirmar_hora').hide();
                                                         $('#hm_espera_paciente_hora').hide();
-                                                        $('#hm_ver_hora').hide();
+                                                        $('#hm_ver_hora').show();
                                                         $('#confirmar_anulacion_hora').hide();
                                                         $('#confirmacion_hora').hide();
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
                                                         // $('#id_hora_medica').val(id_hora_medica);
-                                                        {{--  // console.log(data);  --}}
+                                                        // console.log(data);
                                                         // $('#reservar_hora').modal('hide');
                                                         //location.reload();
                                                     }
@@ -588,17 +604,16 @@
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
                                                         // $('#id_hora_medica').val(id_hora_medica);
-                                                        {{--  // console.log(data);  --}}
+                                                        // console.log(data);
                                                         // $('#reservar_hora').modal('hide');
                                                         //location.reload();
 
                                                     }
 
-
                                                     // $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                     // $('#consulta').modal('show');
                                                     // $('#id_hora_medica').val(id_hora_medica);
-                                                    {{--  // // console.log(data);  --}}
+                                                    // // console.log(data);
                                                     // // $('#reservar_hora').modal('hide');
                                                     // //location.reload();
 
@@ -636,6 +651,7 @@
                                     dateClick: function(date, jsEvent, view) {
 
                                         var valido = 1;
+                                        var valido_fecha = 1;
                                         $.each(date.jsEvent.path, function(index, value)
                                         {
                                             if(value.className == 'fc-non-business')
@@ -654,8 +670,9 @@
 
                                         if(valido == 1)
                                         {
-                                            {{--  // console.log(date.date);  --}}
-                                            {{--  // console.log(date.dateStr);  --}}
+
+                                            {{--  console.log(date.date);  --}}
+                                            {{--  console.log(date.dateStr);  --}}
                                             var date_str = date.dateStr.replace('T',' ');
                                             var date_DD = new Date(date_str);
                                             var curr_date = date_DD.getDate();
@@ -675,20 +692,51 @@
                                                 var curr_mint2 = date_DD2.getMinutes();
                                                 var fecha_evento = curr_year2+"-"+curr_month2+"-"+curr_date2+" "+curr_hour2+":"+curr_mint2;
 
-
                                                 if($.trim(fecha_seleccionada) == $.trim(fecha_evento))
                                                 {
                                                     valido = 0;
                                                 }
                                             });
+
+                                            /** validar  dias pasados */
+                                            var diaActual = '{{ date('d') }}';
+                                            var mesActual = '{{ date('m')-1 }}';
+                                            var anioActual = '{{ date('Y') }}';
+
+                                            var fecha_actual = new Date(anioActual, mesActual, diaActual);
+                                            var fecha_seleccion = new Date(curr_year, curr_month, curr_date);
+
+                                            if(fecha_actual > fecha_seleccion){
+                                                console.log("fecha_actual > fecha_seleccion");
+                                                valido_fecha = 0;
+                                            }
+                                            if(fecha_actual <= fecha_seleccion){
+                                                console.log("fecha_actual < fecha_seleccion");
+                                                valido_fecha = 1;
+                                            }
+
+
                                             if(valido == 1)
                                             {
-                                                $('.div_rut_buscar').show();
-                                                $('#agenda_agregar_paciente').modal('show');
-                                                $('#reserva_datos_paciente').hide();
-                                                $('#rut_paciente_reserva').val('');
-                                                $('#reserva_agregar_paciente_hora').hide();
-                                                $('#fecha_consulta').val(date.dateStr);
+                                                if(valido_fecha == 1)
+                                                {
+                                                    $('.div_rut_buscar').show();
+                                                    $('#agenda_agregar_paciente').modal('show');
+                                                    $('#reserva_datos_paciente').hide();
+                                                    $('#rut_paciente_reserva').val('');
+                                                    $('#reserva_agregar_paciente_hora').hide();
+                                                    $('#fecha_consulta').val(date.dateStr);
+                                                }
+                                                else
+                                                {
+                                                    swal({
+                                                        title: "Seleccion Fecha",
+                                                        text: "No Puede tomar Hora en Fechas Anterior a la actual",
+                                                        icon: "error",
+                                                        buttons: "Aceptar",
+                                                        DangerMode: true,
+                                                    })
+                                                }
                                             }
                                             else
                                             {
@@ -737,13 +785,16 @@
 
                                 CalendarEl.render();
 
+                                if(fecha != '' && fecha != null)
+                                    CalendarEl.gotoDate(fecha);
 
-                                {{--  // console.log(calendarEl);  --}}
+
+                                {{--   console.log(calendarEl);  --}}
 
                                 // var event = calendarEl.getEventById('107');
-                                {{--  // console.log(event);  --}}
+                                {{--   console.log(event);  --}}
                                 // var start = event.start;
-                                {{--  // console.log(start.toISOString());  --}}
+                                {{--   console.log(start.toISOString());  --}}
                             }
                             else
                             {
@@ -818,7 +869,7 @@
                         confirmButtonText: "Cool"
                     });
 
-                    cargarAgendaProfesional($('#id_lugar_atencion').val(), $('#id_profesional').val());
+                    cargarAgendaProfesional('');
 
 
                 } else {
@@ -875,7 +926,7 @@
                             // DangerMode: true,
                             confirmButtonText: "Cool"
                         });
-                        cargarAgendaProfesional($('#id_lugar_atencion').val(), $('#id_profesional').val());
+                        cargarAgendaProfesional(data.fecha_consulta);
                         $('#consulta').modal('hide');
 
                     } else {
@@ -939,10 +990,13 @@
                 mensaje += 'Campo requerido RUT DEL PROFESIONAL\n';
                 valido = 0;
             }
-            if(bono_numero == '')
+            if(bono_id_clase_bono != 6)
             {
-                mensaje += 'Campo requerido NUMERO DEL BONO O PROGRAMA\n';
-                valido = 0;
+                if(bono_numero == '')
+                {
+                    mensaje += 'Campo requerido NUMERO DEL BONO O PROGRAMA\n';
+                    valido = 0;
+                }
             }
             if(bono_valor_consulta == '')
             {
@@ -970,7 +1024,7 @@
                         valor_atencion: bono_valor_consulta,
                         glosa: '1',
                         id_profesional: bono_id_profesional,
-                        id_asistente: '{{ Auth::user()->id }}',
+                        id_asistente: '{{ $asistente->id }}',
                         id_paciente: bono_id_paciente,
                         id_tipo_bono: bono_id_tipo_bono,
                         id_clase_bono: bono_id_clase_bono,
@@ -995,7 +1049,7 @@
                                 // buttons: "Aceptar",
                                 //SuccessMode: true,
                             });
-                            cargarAgendaProfesional(bono_id_profesional);
+                            cargarAgendaProfesional(data.hora_medica.fecha_consulta);
                             $('#modal_recepcion_bonos_api').modal('hide');
                             $('#bono_paciente_rut').val('');
                             $('#bono_paciente_nombre').val('');
@@ -1007,9 +1061,9 @@
                             $('#recepcion_programa').val('');
                             $('#bono_sn_sesiones').val('');
                             $('#bono_hora_medica').val('');
-                            $('#bono_id_profesional').val('');
-                            $('#bono_id_paciente').val('');
-                            $('#bono_id_tipo_bono').val('');
+                            {{--  $('#bono_id_profesional').val('');  --}}
+                            {{--  $('#bono_id_paciente').val('');  --}}
+                            {{--  $('#bono_id_tipo_bono').val('');  --}}
 
                         }
                         else
@@ -1415,7 +1469,7 @@
                         });
                         $('#reservar_hora').modal('hide');
                         $('#agenda_agregar_paciente').modal('hide');
-                        cargarAgendaProfesional($('#id_lugar_atencion').val(), $('#id_profesional').val());
+                        cargarAgendaProfesional(fecha_consulta);
                         // location.reload();
 
                     } else {
@@ -1460,17 +1514,31 @@
                 .done(function(data) {
                     if (data != null) {
                         data = JSON.parse(data);
+                        if(data.estado == 'error') {
 
+                            swal({
+                                title: "Error!",
+                                text: data.msj,
+                                type: "error",
+                                icon: "error",
+                                confirmButtonText: "Cool"
+                            });
 
-                        swal({
-                            title: "Hora Agendada Correctamente",
-                            icon: "success",
-                            buttons: "Aceptar",
-                            // DangerMode: true,
-                        })
-                        $('#reservar_hora').modal('hide');
-                        $('#agenda_agregar_paciente').modal('hide');
-                        cargarAgendaProfesional($('#id_lugar_atencion').val(), $('#id_profesional').val());
+                            $('#agenda_agregar_paciente').modal('hide');
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Hora Agendada Correctamente",
+                                icon: "success",
+                                buttons: "Aceptar",
+                                // DangerMode: true,
+                            })
+                            $('#reservar_hora').modal('hide');
+                            $('#agenda_agregar_paciente').modal('hide');
+                        }
+                        cargarAgendaProfesional(fecha_consulta);
+
 
                     } else {
 
@@ -1564,5 +1632,6 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         };
+
     </script>
 @endsection

@@ -2539,7 +2539,7 @@
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Oftalmología' )
                     <a id="boton_3" class="fas fa-eye-slash fa-2x" data-toggle="canvas" data-target="#formularios_ojo" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Oftalmología" data-placement="left"></a>
                 @endif
-				
+
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía Gástrica' )
 					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_cirugia" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugia" data-placement="left"></a>
 				@endif

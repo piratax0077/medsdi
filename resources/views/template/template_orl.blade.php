@@ -80,9 +80,7 @@
     @include('atencion_medica.secciones_especialidad.ficha_orl_tipo')
 
     <!-- Modal de la vista fin -->
-    <footer>
-        {{--  @include('template.include.footer')  --}}
-    </footer>
+
 
 
     <!-- Required Js -->

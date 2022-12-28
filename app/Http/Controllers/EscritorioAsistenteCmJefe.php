@@ -41,30 +41,38 @@ class EscritorioAsistenteCmJefe extends Controller
 
         $filtro = array();
         // $filtro[] = array('tipo_empleado',$asistente_tipo->nombre);
-        $filtro[] = array('estado',1) ;
+        $filtro[] = array('estado',2) ;// contrato activo
         $filtro[] = array('id_empleado',$asistente->id) ;
         $contrato = ContratoDependiente::where($filtro)->first();
-        $id_lugar_atencion = $contrato->id_lugar_atencion;
+        if($contrato)
+        {
+            $id_lugar_atencion = $contrato->id_lugar_atencion;
 
-        $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
-        $profesionales = $lugares_atencion->profesionales()->get();
-        $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
+            $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
+            $profesionales = $lugares_atencion->profesionales()->get();
+            $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
 
-        $url = 'app.asistente_cm.escritorio_asistente'; // institucion
-        $array_data = array(
-            'asistente' => $asistente,
-            'prevision' => $prevision,
-            'profesionales' => $profesionales,
-            'lugares_atencion' => $lugares_atencion,
-            'reg_confirmacion_hora' => $reg_confirmacion_hora,
-        );
+            $url = 'app.asistente_cm.escritorio_asistente'; // institucion
+            $array_data = array(
+                'asistente' => $asistente,
+                'prevision' => $prevision,
+                'profesionales' => $profesionales,
+                'lugares_atencion' => $lugares_atencion,
+                'reg_confirmacion_hora' => $reg_confirmacion_hora,
+            );
 
 
-        if (isset($asistente)) {
-            return view($url)->with($array_data);
+            if (isset($asistente)) {
+                return view($url)->with($array_data);
+            }
+
+            return view('auth.Registros.registro_asistente')->with(['region' => $region, 'prevision' => $prevision]);
+        }
+        else
+        {
+            return back()->with('error','Contrato de usuario no encontado');
         }
 
-        return view('auth.Registros.registro_asistente')->with(['region' => $region, 'prevision' => $prevision]);
     }
 
     public function registroPaciente()

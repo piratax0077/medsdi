@@ -1,0 +1,24 @@
+function agregar_medicamento_cronico()
+{
+    var cantidad = $('.medicamento_cronico_row').length;
+    var siguiente = cantidad + 1;
+    var ultimo = $('#medicamento_cronico_row_'+cantidad).data('valor');
+    var ultimo_nuevo = ultimo +2 ;
+    var html ='';
+    html += '<div class="row medicamento_cronico_row "  id="medicamento_cronico_row_'+siguiente+'" data-valor="'+ultimo_nuevo+'">';
+    for (let index = (ultimo+1); index <= ultimo_nuevo; index++) {
+        html += '    <div class="form-group col-sm-12 col-md-3">';
+        html += '        <label class="floating-label-activo-sm">Nombre medicamento-'+index+'</label>';
+        html += '        <input type="text" class="form-control form-control-sm" name="nombre_medicamentocron_'+index+'"id="nombre_medicamentocron_'+index+'">';
+        html += '    </div>';
+        html += '    <div class="form-group col-sm-12 col-md-3">';
+        html += '        <label class="floating-label-activo-sm">Cantidad mensual-'+index+'</label>';
+        html += '        <input type="text" class="form-control form-control-sm" name="med_cronicomes_'+index+'"id="med_cronicomes_'+index+'">';
+        html += '    </div>';
+    }
+
+    html += '</div>';
+
+    $('.div_contenedor_medicamento_cronico').append(html);
+
+}

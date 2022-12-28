@@ -47,7 +47,10 @@
                             <a href="{{ ROUTE('asistentecm.mis_profesionales') }}">Profesionales</a>
                         </li>
                         <li>
-                            <a href="{{ ROUTE('asistentecm.home') }}">Rendir Caja</a>
+                            <a href="{{ ROUTE('asistentecm.rendir') }}">Rendir Caja</a>
+                        </li>
+                        <li>
+                            <a href="{{ ROUTE('asistentecm.historico_caja') }}">Historico de Caja</a>
                         </li>
                     </ul>
                 </li>

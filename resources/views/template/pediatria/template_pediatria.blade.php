@@ -69,7 +69,8 @@
 </head>
 <body>
     @include('template.pediatria.header')
-    @include('template.menuProfesional')
+    @include('template.profesional.menu')
+
     @yield('Content')
 
     <!-- Modal de la vista -->
@@ -78,11 +79,9 @@
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
     @include('atencion_pediatrica.secciones_especialidad.ficha_pediatria_tipo')
-
+    @include('atencion_pediatrica.sidebars.antecedentes_paciente_p')
     <!-- Modal de la vista fin -->
-    <footer>
-        {{--  @include('template.include.footer')  --}}
-    </footer>
+
 
 
     <!-- Required Js -->
@@ -160,14 +159,48 @@
 
     <!--Modals Sidebar derecho-->
     <script src="{{ asset('js/modals_sidebar_esp.js') }}?upd={{ random_int(1111,9999) }}"></script>
+    <!--Tablas y Toggle atención PEDIATRIA-->
 
-    <!--Tablas y Toggle atención ginecobstetrica-->
-    <script src="{{ asset('js/atencion_especialidades.js') }}?upd={{ random_int(1111,9999) }}"></script>
+    <script src="{{ asset('js/atencion_pediatria.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     </script>
+    <script>
+        $('#btn_recien_nacido').click(function () {
+            $('#recien_nacido').toggle();
+        });
 
+        /** Datos recien nacido **/
+        $('#btn_vac_part_puerp').click(function () {
+            $('#vac_part_puerp').toggle();
+        });
+
+        /** Datos recien nacido **/
+        $('#btn_extamiz').click(function () {
+            $('#extamiz').toggle();
+        });
+         /** examen fisico pediatria **/
+        function ant_parto (){
+            $('#neonat_modal').modal('show');
+        }
+        function tunner (){
+            $('#tunner_modal').modal('show');
+        }
+        function tunner_m (){
+            $('#tunner_modal_m').modal('show');
+            }
+
+        function calcular_imc(){
+            $('#modal_calcimc').modal('show');
+            }
+        function ipostparto(){
+            $('#modal_iposparto').modal('show');
+        }
+        function ilactan(){
+            $('#modal_ilactancia').modal('show');
+        }
+    </script>
     @yield('js_inferior')
     @yield('page-script')
     @yield('page-script-ficha-atencion'){{-- ficha_orl.blade --}}

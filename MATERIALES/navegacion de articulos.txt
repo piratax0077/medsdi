@@ -1,0 +1,5 @@
+articulos
+    nombre producto
+receta_dosis
+    posologia (cantidad y tiempo de ingesta)
+

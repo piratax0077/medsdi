@@ -21,3 +21,11 @@
 * otro = comodin
 * estado = 1|0
 
+# BONOS 
+## TIPO DE PAGO (ID CLASE BONO)
+* 1->Bono Fisico
+* 2->Sencillito
+* 3->Caja Vecina
+* 4->Bono Web
+* 5->Bono Web Pre-Pago
+* 6->Particular

@@ -130,16 +130,17 @@
         <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
         <script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
 
-         {{-- autocomplete --}}
-         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        {{-- autocomplete --}}
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
-         @include('template.templateAutorizacion')
+        @include('template.templateAutorizacion')
 
 
         <script>
+            var CalendarEl = null;
             document.addEventListener('DOMContentLoaded', function() {
                 var calendarEl = document.getElementById('agenda');
-                var calendarEl = new FullCalendar.Calendar(calendarEl, {
+                CalendarEl = new FullCalendar.Calendar(calendarEl, {
 
 					// defaultView: 'month',
                     selectable: true,
@@ -491,7 +492,7 @@
                             var curr_hour = date_DD.getHours();
                             var curr_mint = date_DD.getMinutes();
                             var fecha_seleccionada = curr_year+"-"+curr_month+"-"+curr_date+" "+curr_hour+":"+curr_mint;
-                            $.each(calendarEl.getEvents(), function( index, value ) {
+                            $.each(CalendarEl.getEvents(), function( index, value ) {
                                 var date_str2 = value.startStr.replace('T',' ');
                                 var date_DD2 = new Date(date_str2);
                                 var curr_date2 = date_DD2.getDate();
@@ -536,7 +537,7 @@
                 });
 
 
-                calendarEl.render();
+                CalendarEl.render();
             });
         </script>
 
@@ -3295,7 +3296,7 @@
                                 $('#agenda_agregar_paciente').modal('hide');
                                 // location.reload();
                             }
-                            cargarAgendaProfesional( data.id_profesional );
+                            cargarAgendaProfesional( data.id_profesional,fecha_consulta );
 
                         }
                         else
@@ -3620,9 +3621,8 @@
                                 type: "success",
                                 confirmButtonText: "Cool"
                             });
-                            setTimeout(function() {
-                                location.reload()
-                            }, 5000);
+
+                            cargarAgendaProfesional('');
 
                             // location.reload();
 
@@ -3718,7 +3718,7 @@
                                 // DangerMode: true,
                                 confirmButtonText: "Cool"
                             });
-                            cargarAgendaProfesional( id_profesional );
+                            cargarAgendaProfesional( id_profesional, data.fecha_consulta );
                             // setTimeout(function() {
                             //     location.reload()
                             // }, 5000);
@@ -5779,7 +5779,6 @@
                     valido = 0;
                 }
             }
-
             if(bono_valor_consulta == '')
             {
                 mensaje += 'Campo requerido VALOR TOTAL\n';
@@ -5806,7 +5805,7 @@
                         valor_atencion: bono_valor_consulta,
                         glosa: '1',
                         id_profesional: bono_id_profesional,
-                        id_asistente: '{{ Auth::user()->id }}',
+                        id_asistente: '-1',
                         id_paciente: bono_id_paciente,
                         id_tipo_bono: bono_id_tipo_bono,
                         id_clase_bono: bono_id_clase_bono,
@@ -5831,7 +5830,7 @@
                                 // buttons: "Aceptar",
                                 //SuccessMode: true,
                             });
-                            cargarAgendaProfesional(bono_id_profesional);
+                            cargarAgendaProfesional(bono_id_profesional, data.hora_medica.fecha_consulta);
                             $('#modal_recepcion_bonos_api').modal('hide');
                             $('#bono_paciente_rut').val('');
                             $('#bono_paciente_nombre').val('');
@@ -5843,9 +5842,9 @@
                             $('#recepcion_programa').val('');
                             $('#bono_sn_sesiones').val('');
                             $('#bono_hora_medica').val('');
-                            $('#bono_id_profesional').val('');
-                            $('#bono_id_paciente').val('');
-                            $('#bono_id_tipo_bono').val('');
+                            {{--  $('#bono_id_profesional').val('');  --}}
+                            {{--  $('#bono_id_paciente').val('');  --}}
+                            {{--  $('#bono_id_tipo_bono').val('');  --}}
 
                         }
                         else
@@ -5897,10 +5896,10 @@
 
         }
 
-        function cargarAgendaProfesional(id_profesional)
+        function cargarAgendaProfesional(id_profesional, fecha)
         {
             var calendarEl = document.getElementById('agenda');
-            var calendarEl = new FullCalendar.Calendar(calendarEl, {
+            CalendarEl = new FullCalendar.Calendar(calendarEl, {
                 droppable: false,
                 editable: false,
                 locale: "es",
@@ -6238,7 +6237,7 @@
                 },
 
                 selectOverlap: function(event) {
-                    console.log(event);
+                    {{--  console.log(event);  --}}
                     return event.rendering === 'background';
                 },
 
@@ -6273,7 +6272,7 @@
                         var curr_hour = date_DD.getHours();
                         var curr_mint = date_DD.getMinutes();
                         var fecha_seleccionada = curr_year+"-"+curr_month+"-"+curr_date+" "+curr_hour+":"+curr_mint;
-                        $.each(calendarEl.getEvents(), function( index, value ) {
+                        $.each(CalendarEl.getEvents(), function( index, value ) {
                             var date_str2 = value.startStr.replace('T',' ');
                             var date_DD2 = new Date(date_str2);
                             var curr_date2 = date_DD2.getDate();
@@ -6289,14 +6288,45 @@
                                 valido = 0;
                             }
                         });
+
+                        /** validar  dias pasados */
+                        var diaActual = '{{ date('d') }}';
+                        var mesActual = '{{ date('m')-1 }}';
+                        var anioActual = '{{ date('Y') }}';
+
+                        var fecha_actual = new Date(anioActual, mesActual, diaActual);
+                        var fecha_seleccion = new Date(curr_year, curr_month, curr_date);
+
+                        if(fecha_actual > fecha_seleccion){
+                            console.log("fecha_actual > fecha_seleccion");
+                            valido_fecha = 0;
+                        }
+                        if(fecha_actual <= fecha_seleccion){
+                            console.log("fecha_actual < fecha_seleccion");
+                            valido_fecha = 1;
+                        }
+
                         if(valido == 1)
                         {
-                            $('.div_rut_buscar').show();
-                            $('#agenda_agregar_paciente').modal('show');
-                            $('#reserva_datos_paciente').hide();
-                            $('#rut_paciente_reserva').val('');
-                            $('#reserva_agregar_paciente_hora').hide();
-                            $('#fecha_consulta').val(date.dateStr);
+                            if(valido_fecha == 1)
+                            {
+                                $('.div_rut_buscar').show();
+                                $('#agenda_agregar_paciente').modal('show');
+                                $('#reserva_datos_paciente').hide();
+                                $('#rut_paciente_reserva').val('');
+                                $('#reserva_agregar_paciente_hora').hide();
+                                $('#fecha_consulta').val(date.dateStr);
+                            }
+                            else
+                            {
+                                swal({
+                                    title: "Seleccion Fecha",
+                                    text: "No Puede tomar Hora en Fechas Anterior a la actual",
+                                    icon: "error",
+                                    buttons: "Aceptar",
+                                    DangerMode: true,
+                                })
+                            }
                         }
                         else
                         {
@@ -6319,7 +6349,10 @@
 
 
 
-            calendarEl.render();
+            CalendarEl.render();
+
+            if(fecha != '' && fecha != null)
+                CalendarEl.gotoDate(fecha);
 
             // console.log(calendarEl);
 

@@ -7,11 +7,11 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">	
-				<form> 
+			<div class="modal-body">
+				<form>
 					<div class="row"><!--autocompletar-->
 						<div class="col-md-11 text-center mx-auto">
-							<!--autorización responsabilidad-->    
+							<!--autorización responsabilidad-->
 							<div class="row">
 								<div class="col-sm-12 text-center">
 									<div class="alert alert-danger pt-1 pb-1 px-1 p-13" role="alert">
@@ -19,7 +19,7 @@
 									</div>
 								</div>
 								<div class="col-sm-12 text-center">
-									<img src="../assets/images/iconos/candado.svg" alt="" class="img-fluid mb-4 wid-50">
+									<img src="{{ asset('images/iconos/candado.svg') }}" alt="" class="img-fluid mb-4 wid-50">
 									<p class="f-w-400 mb-4">Ingrese el código de seguridad que se le ha enviado a su correo electrónico</p>
 								</div>
 							</div>
@@ -36,7 +36,7 @@
 									<p class="mb-2 text-muted text-center">¿No has recibido los códigos de seguridad?<br> podemos <a href="#" class="f-w-400 text-dark"> volver a enviarlos</a></p>
 								</div>
 							</div>
-							<!-- Cierre: autorización responsabilidad-->         
+							<!-- Cierre: autorización responsabilidad-->
 						</div>
 					</div>
 				</form>

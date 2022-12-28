@@ -38,7 +38,7 @@
                                 <div class="form-group col-md-6 font-weight-bolder">
                                     <script>
                                         var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-                           
+
                                         var f=new Date();
                                         document.write( f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
                                     </script>
@@ -151,7 +151,7 @@
                                 <div class="form-group col-md-12">
                                     <label class="font-weight-bolder" for="subir_imagen">Subir imagen</label>
                                     <input type="file" class="form-control-file" id="subir_imagen">
-                                </div>  
+                                </div>
                             </div>
                             <div class="form-row">
                                 <hr>
@@ -184,7 +184,7 @@
                                 <div class="form-group col-md-6 font-weight-bolder">
                                     <script>
                                         var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-                           
+
                                         var f=new Date();
                                         document.write( f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
                                     </script>
@@ -248,8 +248,8 @@
                                 <div class="form-group col-md-3">
                                     <label class="floating-label">Nº de gestación</label>
                                     <input type="number" class="form-control form-control-sm" name="num_gest" id="num_gest">
-                                </div>  
-                            </div>  
+                                </div>
+                            </div>
                             <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <label class="floating-label">Longitud cráneo caudal</label>
@@ -296,7 +296,7 @@
                                 <div class="form-group col-md-12">
                                     <label class="font-weight-bolder" for="subir_imagen">Subir imagen</label>
                                     <input type="file" class="form-control-file" id="subir_imagen">
-                                </div>  
+                                </div>
                             </div>
                             <div class="form-row">
                                 <hr>
@@ -329,7 +329,7 @@
                                 <div class="form-group col-md-6 font-weight-bolder">
                                     <script>
                                         var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-                           
+
                                         var f=new Date();
                                         document.write( f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
                                     </script>
@@ -442,7 +442,7 @@
                                 <div class="form-group col-md-12">
                                     <label class="font-weight-bolder" for="subir_imagen">Subir imagen</label>
                                     <input type="file" class="form-control-file" id="subir_imagen">
-                                </div>  
+                                </div>
                             </div>
                             <div class="form-row">
                                 <hr>
@@ -452,7 +452,7 @@
                                     <button type="button" class="btn btn-primary btn-sm">Ver en PDF</button>
                                 </div>
                             </div>
-                        </form>                    
+                        </form>
                     </div>
                 </div>
             </div>
@@ -475,7 +475,7 @@
                                 <div class="form-group col-md-6 font-weight-bolder">
                                     <script>
                                         var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-                           
+
                                         var f=new Date();
                                         document.write( f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
                                     </script>
@@ -588,7 +588,7 @@
                                 <div class="form-group col-md-12">
                                     <label class="font-weight-bolder" for="subir_imagen">Subir imagen</label>
                                     <input type="file" class="form-control-file" id="subir_imagen">
-                                </div>  
+                                </div>
                             </div>
                             <div class="form-row">
                                 <hr>

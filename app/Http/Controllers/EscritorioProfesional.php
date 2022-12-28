@@ -1920,7 +1920,7 @@ class EscritorioProfesional extends Controller
             return 'error';
         }
 
-        $details = [
+        $detalle = [
             'title' => 'Hora medica Confirmada',
             'body' => 'Estimado/a ' . $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos . ',<br>
                     Junto con saludar, por medio de este correo le informamos que se ha Confirmado su hora médica <br>' .
@@ -1931,7 +1931,7 @@ class EscritorioProfesional extends Controller
                 'Saludos.',
         ];
 
-        //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
+        //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($detalle));
 
         return json_encode($hora_medica);
     }
@@ -2031,6 +2031,7 @@ class EscritorioProfesional extends Controller
                                 $datos['msj'] = 'Bono registrado';
                                 $datos['hora_medica']['estado'] = 1;
                                 $datos['hora_medica']['msj'] = 'Hora medica actualizada';
+                                $datos['hora_medica']['fecha_consulta'] = $hora_medica->fecha_consulta;
                             }
                             else
                             {

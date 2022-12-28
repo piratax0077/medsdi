@@ -1,9 +1,9 @@
 <div class="row">
     <div class="col-md-4 mx-auto m-ingreso-ficha">
-        <!--Ingreso a Ficha Médica Única-->   
+        <!--Ingreso a Ficha Médica Única-->
         <div class="row">
             <div class="col-sm-12 text-center">
-                <img src="../assets/images/iconos/candado.svg" alt="" class="img-fluid mb-4 wid-80">
+            <img src="{{ asset('images/iconos/candado.svg') }}" alt="" class="img-fluid mb-4 wid-50">
                 <p class="f-w-400 mb-4">Ingrese uno de los códigos de seguridad que se le ha enviado por correo electrónico</p>
             </div>
         </div>
