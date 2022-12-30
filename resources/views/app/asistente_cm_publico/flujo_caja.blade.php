@@ -166,6 +166,8 @@
 @section('page-script')
     <script>
         let clase_bono = ['Bono Fisico' ,'Sencillito' ,'Caja Vecina' ,'Bono Web' ,'Bono Web Pre-Pago' ,'Particular'];
+        var tiempo = 0; // CANTIDAD MINUTOS A ESPERAR PARA APROBACION
+        var conteo_activo = 0; // valida si conteo esta activo
 
         $(document).ready(function(){
             $('#tabla_rendir_caja').DataTable({
@@ -273,6 +275,7 @@
                     console.log(data);
                     if (data.estado == 1)
                     {
+                        $('#numero_rendicion_hidde').val(data.last_id);
                         $('#numero_rendicion').html(data.last_id);
                         $('#nombre_receptor').html(data.registro.asistente_receptor.nombres+' '+data.registro.asistente_receptor.apellido_uno+' '+data.registro.asistente_receptor.apellido_dos);
                         $('#total_documento').html(data.registro.total_documentos);
@@ -283,6 +286,10 @@
                         $('#aprobacion').html('En espera de recepción.');
 
                         $('#rendicion_caja_diaria').modal('show',{backdrop: 'static', keyboard: false});
+
+                        tiempo = data.autorizacion.tiempo;
+                        conteo_activo = 1;
+                        validar_rendicion();
                     }
                     else
                     {
@@ -319,7 +326,108 @@
             })
         }
 
-        {{--  function actualizar_registros  --}}
+        /** actualizar pagina */
+        function actualizar_registros()
+        {
+            let url = "{{ route('asistentecm.rendir') }}";
+            document.reload(url);
+        }
+
+
+        // var tiempo = 10;
+        // var conteo_activo = 1;
+        function validar_rendicion()
+        {
+            $('#aprobacion_tiempo').html(''+tiempo+' minutos');
+            if(tiempo > 0 && conteo_activo == 1)
+            {
+                setTimeout(function(){
+                    tiempo = tiempo-1;
+                    if(tiempo == 1)
+                    {
+                        swal({
+                            title: "Solicitud de Rendicion Desistida",
+                            text: 'Se Desistido la rendición de forma automática, Desea continuar presione el botón "Más Tiempo", si "Acepta" la Rendición quedará Desistida',
+                            icon: "warning",
+                            buttons: ["Aceptar", 'Más Tiempo'],
+                        }).then((result) => {
+                            if (result == true)
+                            {
+                                reiniciar_rendicion(id_rendicion);
+                            }
+                        });
+                    }
+                    $('#aprobacion_tiempo').html(''+tiempo+' minutos');
+                    validar_rendicion(tiempo);
+                }, 600);// 600 = 1seg |  60000 = 1 minutos
+            }
+            else
+            {
+                conteo_activo = 0;
+                $('#aprobacion').html('Se a finalizado el tiempo para la aprobación, debe realizar la rendicion nuevamente');
+                desistir_rendicion();
+            }
+        }
+        // validar_rendicion();
+
+        /** dar de baja rendicion */
+        function desistir_rendicion()
+        {
+            var id_rendicion = $('#numero_rendicion_hidde').val();
+
+            let url = "{{ route('asistentecm.rendicion_caja_desistir') }}";
+
+            $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        id_rendicion : id_rendicion
+                    },
+                })
+                .done(function(data) {
+
+                    console.log(data);
+                    if (data.estado == 1)
+                    {
+                        $('#numero_rendicion_hidde').val('');
+                        $('#numero_rendicion').html('');
+                        $('#nombre_receptor').html('');
+                        $('#total_documento').html('');
+                        $('#total_bonos').html('');
+                        $('#total_efectivo').html('');
+                        $('#total_otros').html('');
+
+                        $('#aprobacion').html('En Espera de Aprobación <span id="aprobacion_tiempo"></span>');
+
+                        $('#rendicion_caja_diaria').modal('hide');
+
+                        tiempo = 0;
+                        conteo_activo = 0;
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Falla Solicitud de Rendicion Desistida",
+                            text: data.msj,
+                            icon: "error",
+                            buttons: "Aceptar",
+                            // DangerMode: true,
+                        });
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
+
+        function reiniciar_rendicion(id_rendicion)
+        {
+
+        }
+
+
     </script>
 
 @endsection

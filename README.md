@@ -29,3 +29,16 @@
 * 4->Bono Web
 * 5->Bono Web Pre-Pago
 * 6->Particular
+
+# ESTADO DE RENDICIONES 
+0. NUEVO
+1. EN PROCEO
+2. APROBADA
+3. RECHAZADA
+4. DESISTIDA
+
+
+# TIPO MENSAJE APP
+1. rendicion -> Recibe conforme Rendición de Caja N°{id_rendicion} de la Asistente {nombre_asistente} de fecha {fecha_rendicion}
+
+
