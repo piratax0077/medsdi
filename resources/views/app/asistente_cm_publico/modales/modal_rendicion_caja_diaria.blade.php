@@ -10,7 +10,7 @@
                 <div class="row info-basica">
                     <div class="col-md-12" id="div_horario">
                         <h6>Usted esta Rindiendo a <span id="nombre_receptor"></span> lo siguiente: </h6><br/>
-
+                        <input type="hidden" name="numero_rendicion_hidde" id="numero_rendicion_hidde" value="">
                         <table id="rendicion_caja_diaria_table" class="display table-bordered table table-striped dt-responsive nowrap table-xs text-wrap" style="width:100%">
                             <tbody>
                                 <tr>
@@ -37,9 +37,9 @@
                             <tbody>
                         </table>
                     </div>
-                    <div class="col-md-12">
-                        <div id="aprobacion"> En Espera de Aprobación</div>
-                        {{--  espera de aprobacion  --}}
+                    <div class="col-md-12" style="display: flex;flex-wrap: wrap;flex-direction: column;align-items: center;">
+                        <div id="aprobacion">En Espera de Aprobación <span id="aprobacion_tiempo"></span></div>
+                        <img src="{{ asset('images/spinner.svg') }}" class="img-fluid" alt="cargando">
                     </div>
                 </div>
             </div>
