@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //login
-Route::get('user/login',[LoginController::class, 'login']);
+Route::post('user/login',[LoginController::class, 'login']);
 
 //USER DEVICES - CRUD
 Route::post('/user_devices/registrar',    [UsersDevicesController::class, 'registrar']);
