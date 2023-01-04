@@ -26,7 +26,7 @@ class UsersDevicesController extends Controller
 
 
         /* CANTIDAD REGISTROS X PAG */
-        $cant_reg = UsersDevices::count();
+        $cant_reg = UsersDevices::where($filtros)->count();
 
         if($cant_reg >0){
             $datos['estado'] = 1;
