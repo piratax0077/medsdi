@@ -139,9 +139,9 @@ class RendicionCajaController extends Controller
 
                 /** SOLICITAR AUTORIZACION POR APP */
                 $msj = array(
-                    'id_rendicion' => $rendicionCaja->id,
-                    'nombre_asistente' => $asistenteRendicion->nombres.' '.$asistenteRendicion->apellido_uno.' '.$asistenteRendicion->apellido_dos,
-                    'fecha_rendicion' => $fecha_rendicion,
+                    'id' => $rendicionCaja->id,
+                    'nombre' => $asistenteRendicion->nombres.' '.$asistenteRendicion->apellido_uno.' '.$asistenteRendicion->apellido_dos,
+                    'fecha' => $fecha_rendicion,
                     'tipo' => 'rendicion',
                     // 'mensaje' => 'Recibe conforme Rendición de Caja N°{id_rendicion} de la Asistente {nombre_asistente} de fecha {fecha_rendicion}'
                 );

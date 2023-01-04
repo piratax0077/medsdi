@@ -761,6 +761,93 @@ class FlujoCajaController extends Controller
         }
     }
 
+    public function cargaBonosAsistenteDia(Request $request)
+    {
+        $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
+        $contrato = ContratoDependiente::where('id_empleado',$asistente->id)->first();
+
+        if($contrato)
+        {
+            $filtro = array();
+            $filtro[] = array('id_asistente',$asistente->id);
+
+            /** bono  */
+            $bonos = Bono::where($filtro)
+                ->where('numero_sesiones','=','0')
+                ->where('rendido','0')
+                ->whereDay('fecha_atencion', date('d'))
+                ->whereMonth('fecha_atencion',  date('m'))
+                ->whereYear('fecha_atencion', date('Y'))
+                ->where('id_asistente', $asistente->id)
+                ->with(['TipoBono' => function($query){
+                    $query->select('id', 'nombre');
+                }])
+                ->with(['Convenio' => function($query){
+                    $query->select('id', 'nombre');
+                }])
+                ->with(['Paciente' => function($query){
+                    $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos', 'rut');
+                }])
+                ->with(['Profesional' => function($query){
+                    $query->select('id', 'nombre', 'apellido_uno', 'apellido_dos', 'rut');
+                }])
+                ->get();
+
+            /** programa */
+            // $bonos_programa = Bono::where($filtro)
+            //     ->where('numero_sesiones','>','0')
+            //     ->where('rendido','0')
+            //     ->get();
+
+            $total = 0;
+            $total_bonos = 0;
+            $total_efectivo = 0;
+            $total_otros = 0;
+            $lista_bonos = array();
+
+            foreach ($bonos as $bono){
+                $lista_bonos[] = $bono->id;
+
+                $total++;
+                // 1->Bono Fisico
+                if($bono->id_clase_bono == 1)
+                    $total_bonos++;
+                // 2->Sencillito
+                else if($bono->id_clase_bono == 2)
+                    $total_bonos++;
+                // 3->Caja Vecina
+                else if($bono->id_clase_bono == 3)
+                    $total_bonos++;
+                // 4->Bono Web
+                else if($bono->id_clase_bono == 4)
+                    $total_bonos++;
+                // 5->Bono Web Pre-Pago
+                else if($bono->id_clase_bono == 5)
+                    $total_bonos++;
+                // 6->Particular
+                else if($bono->id_clase_bono == 6)
+                    $total_efectivo += $bono->valor_atencion;
+                else
+                    $total_otros++;
+
+            }
+
+            return array(
+                'estado' => 1,
+                'lista_bonos' => implode('|',$lista_bonos),
+                'bono' => $bonos,
+                'total' => $total,
+                'total_bonos' => $total_bonos,
+                'total_efectivo' => $total_efectivo,
+                'total_otros' => $total_otros,
+            );
+        }
+        else
+        {
+            return back()->with('mensaje','Contrato no encontrado');
+        }
+    }
+
     public function historicoCajaDiaria(Request $request)
     {
 
