@@ -33,7 +33,7 @@ class LogUsersDevicesController extends Controller
 
 
         /* CANTIDAD REGISTROS X PAG */
-        $cant_reg = LogUsersDevices::count();
+        $cant_reg = LogUsersDevices::where($filtros)->count();
 
         if($cant_reg >0){
             $datos['estado'] = 1;
@@ -41,7 +41,47 @@ class LogUsersDevicesController extends Controller
             $datos['request'] = $request->all();
 
             // Generamos la consulta
-            $datos['registros'] = $registros = LogUsersDevices::where($filtros)->get();
+             $registros = LogUsersDevices::where($filtros)->get();
+
+             foreach($registros as $key => $value)
+             {
+                $msg_html_estructura = '';
+
+                switch($value['tipo'])
+                {
+                    case 1: // rendicion
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id;
+                        $nombre = $data->nombre;
+                        $fecha = $data->fecha;
+                        $value['msg_estado'] = "<span class='color-azul txt_bold'>{$data->nombre}</span> - Rendición de Caja <span class='color-azul txt_bold'>N°{$id}</span>";
+                        if($value['estado'] == 1)
+                        $msg_html_estructura = "<span class='color-verde txt_bold'>Solicitud Autorizada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}";
+                        elseif($value['estado'] == 2)
+                        $msg_html_estructura = "<span class='color-rojo txt_bold'>Solicitud Rechazada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}";
+                        else
+                        $msg_html_estructura = "<span class='color-rojo txt_bold'>Solicitud Cacelada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}";
+                    break;
+                    case 2: // ficha única
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id;
+                        $nombre = $data->nombre;
+                        $fecha = $data->fecha;
+                        $value['msg_estado'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";       
+                        if($value['estado'] == 1)                 
+                        $msg_html_estructura = "<span class='color-verde txt_bold'>Solicitud Autorizada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}";
+                        elseif($value['estado'] == 2)
+                        $msg_html_estructura = "<span class='color-rojo txt_bold'>Solicitud Rechazada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}";
+                        else
+                        $msg_html_estructura = "<span class='color-rojo txt_bold'>Solicitud Cacelada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}";
+                    break;        
+                }
+
+
+                $value['msg_html'] = $msg_html_estructura;
+             }
+
+             $datos['registros'] = $registros;
 
         }else{
             $datos['estado'] = 0;
@@ -330,9 +370,9 @@ class LogUsersDevicesController extends Controller
         if($campos_requeridos==0)
         {
 
-            $registro = LogUsersDevices::find($request->id);
+            $registro = LogUsersDevices::find($request->id);            
 
-            if(count($registro)>0)
+            if($registro->count()>0)
             {
                 $registro->estado = $request->estado;
 
