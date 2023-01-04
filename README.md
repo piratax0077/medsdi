@@ -29,3 +29,26 @@
 * 4->Bono Web
 * 5->Bono Web Pre-Pago
 * 6->Particular
+
+# ESTADO DE RENDICIONES 
+0. NUEVO
+1. EN PROCESO
+2. APROBADA
+3. RECHAZADA
+4. DESISTIDA
+
+
+# TIPO MENSAJE APP
+1. rendicion -> Recibe conforme Rendición de Caja N°{id_rendicion} de la Asistente {nombre_asistente} de fecha {fecha_rendicion}
+
+
+# APP log_users_devices
+## ESTADOS log_users_devices
+0. ESPERA
+1. VALIDO
+2. VENCIDO
+3. RECHAZADO
+
+## tipo
+1. rendicion
+

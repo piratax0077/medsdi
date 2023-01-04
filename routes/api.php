@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UsersDevicesController;
 use App\Http\Controllers\LogUsersDevicesController;
+use App\Http\Controllers\Auth\LoginController;
 
 
 /*
@@ -22,6 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//login
+Route::post('user/login',[LoginController::class, 'login']);
+
 //USER DEVICES - CRUD
 Route::post('/user_devices/registrar',    [UsersDevicesController::class, 'registrar']);
 Route::post('/user_devices/modificar',    [UsersDevicesController::class, 'modificar']);
@@ -34,6 +38,8 @@ Route::post('/log_user_devices/modificar',    [LogUsersDevicesController::class,
 Route::get('/log_user_devices/ver_registros',[LogUsersDevicesController::class, 'verRegistros']);
 Route::get('/log_user_devices/ver_registro', [LogUsersDevicesController::class, 'verRegistro']);
 Route::post('/log_user_devices/estado',       [LogUsersDevicesController::class, 'estado']);
+
+
 
 //  Escritorio Paciente
 //Route::get('/paciente/mis_profesionales', [App\Http\Controllers\PacienteController::class, 'getMisProfesionales']);

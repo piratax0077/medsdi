@@ -71,7 +71,7 @@
             margin: 0px;
         }
         .fc .fc-toolbar-title {
-            font-size: 1.5em;
+            font-size: 1.0em;
         }
     </style>
 </head>

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -36,5 +39,57 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function login(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->user)) {
+            $error['user'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->pass)) {
+            $error['pass'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $user = User::where('email', $request->user)->first();
+
+            if($user)
+            {
+                if (Auth::attempt(['email' => $request->user, 'password' => $request->pass]))
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'registro';
+                    $datos['user'] = $user;
+                    $datos['roles'] = $user->roles()->get();
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'usuario no valido';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'usuario no encotnrado';
+            }
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requerido';
+            $datos['error'] = $error;
+        }
+
+
+        return $datos;
     }
 }

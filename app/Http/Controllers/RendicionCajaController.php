@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Asistente;
 use App\Models\Bono;
 use App\Models\RendicionCaja;
+use App\Models\LogUsersDevices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -137,12 +138,52 @@ class RendicionCajaController extends Controller
                 $datos['registro'] = $registro;
 
                 /** SOLICITAR AUTORIZACION POR APP */
-                if(1==1){
-                    $datos['msj_autorizacion'] = 'Solicitud de aprobacion enviada';
+                $msj = array(
+                    'id_rendicion' => $rendicionCaja->id,
+                    'nombre_asistente' => $asistenteRendicion->nombres.' '.$asistenteRendicion->apellido_uno.' '.$asistenteRendicion->apellido_dos,
+                    'fecha_rendicion' => $fecha_rendicion,
+                    'tipo' => 'rendicion',
+                    // 'mensaje' => 'Recibe conforme Rendición de Caja N°{id_rendicion} de la Asistente {nombre_asistente} de fecha {fecha_rendicion}'
+                );
+
+                /** calculo de periodo de vigencia para aprobacion */
+                $fecha_actual  = date('Y-m-d H:i:s');
+                $fecha_vencimiento  = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.env('TIEMPO_ESPERA').' minute' , strtotime ($fecha_actual) ) );
+
+                $log_users_devices = new LogUsersDevices();
+                $log_users_devices->id_user_create = $asistenteRendicion->id_usuario;
+                $log_users_devices->id_user_recept = $asistenteReceptor->id_usuario;
+                $log_users_devices->msg = json_encode($msj);
+                $log_users_devices->estado = 0;
+                $log_users_devices->fecha_ingreso = $fecha_actual;
+                $log_users_devices->fecha_termino = $fecha_vencimiento;
+                $log_users_devices->tipo = 1; // rendicion
+
+                if($log_users_devices->save())
+                {
+                    $datos['autorizacion']['estado'] = 1;
+                    $datos['autorizacion']['msj'] = 'Solicitud de aprobacion enviada';
+                    $datos['autorizacion']['fecha_inicio'] = $fecha_actual;
+                    $datos['autorizacion']['fecha_termino'] = $fecha_vencimiento;
+                    $datos['autorizacion']['tiempo'] = env('TIEMPO_ESPERA');
+                    $datos['autorizacion']['last_id'] = $log_users_devices->id;
+
+                    $rendicionCaja->id_log_users_devices = $log_users_devices->id;
+                    if($rendicionCaja->save())
+                    {
+                        $datos['update_log_users_devices']['estado'] = 1;
+                        $datos['update_log_users_devices']['msj'] = 'Registro de id_log_users_devices';
+                    }
+                    else
+                    {
+                        $datos['update_log_users_devices']['estado'] = 1;
+                        $datos['update_log_users_devices']['msj'] = 'Falla registro de id_log_users_devices';
+                    }
                 }
                 else
                 {
-                    $datos['msj_autorizacion'] = 'Solicitud de aprobacion con falla';
+                    $datos['autorizacion']['estado'] = 0;
+                    $datos['autorizacion']['msj'] = 'Solicitud de aprobacion con falla';
                 }
             }
         }
@@ -152,6 +193,311 @@ class RendicionCajaController extends Controller
             $datos['msj'] = 'Campos requeridos';
             $datos['error'] = $error;
         }
+        return $datos;
+    }
+
+    static public function rendirCajaDiariaInstitucionDesistir(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_rendicion))
+        {
+            $error['id_rendicion'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = RendicionCaja::find($request->id_rendicion);
+            $lista_bonos = $registro->bonos;
+            $array_bonos = explode('|',$lista_bonos);
+
+            /** liberar bonos */
+            foreach ( $array_bonos as $key_bono => $value_bono)
+            {
+                $bono = Bono::find($value_bono);
+                $bono->rendido = 0;// no rendidos
+
+                if($bono->save())
+                {
+                    $datos['update_bonos'][$bono->id]['estado'] = 1;
+                    $datos['update_bonos'][$bono->id]['maj'] = 'registro actualizado';
+                }
+                else
+                {
+                    $datos['update_bonos'][$bono->id]['estado'] = 0;
+                    $datos['update_bonos'][$bono->id]['maj'] = 'registro NO actualizado';
+                }
+            }
+
+            /** elimino(cambio estado) rendicion */
+            $registro->estado = 4;// DESISTIDA
+            if($registro->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'Solicitud de rendicion desistida';
+
+                $id_log_users_devices_actual = $registro->id_log_users_devices;
+
+                $log_users_devices_registro = LogUsersDevices::find($id_log_users_devices_actual);
+                $log_users_devices_registro->estado = 2;
+                if($log_users_devices_registro->save())
+                {
+                    $datos['log_users_devices_update']['estado'] = 1;
+                    $datos['log_users_devices_update']['msj'] = 'actualizado';
+                }
+                else
+                {
+                    $datos['log_users_devices_update']['estado'] = 0;
+                    $datos['log_users_devices_update']['msj'] = 'problema al actualizado';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Falla al desistir rendicion';
+            }
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+
+        return $datos;
+
+    }
+
+    // public function rendirCajaDiariaInstitucionReiniciar(Request $request)
+    // {
+    //     $datos = array();
+    //     $error = array();
+    //     $valido = 1;
+
+    //     if(empty($request->id_rendicion))
+    //     {
+    //         $error['id_rendicion'] = 'campo requerido';
+    //         $valido = 0;
+    //     }
+
+    //     if($valido)
+    //     {
+    //         $registro = RendicionCaja::find($request->id_rendicion);
+    //         $lista_bonos = $registro->bonos;
+    //         $array_bonos = explode('|',$lista_bonos);
+
+    //         /** liberar bonos */
+    //         foreach ( $array_bonos as $key_bono => $value_bono)
+    //         {
+    //             $bono = Bono::find($value_bono);
+    //             $bono->rendido = 0;// no rendidos
+
+    //             if($bono->save())
+    //             {
+    //                 $datos['update_bonos'][$bono->id]['estado'] = 1;
+    //                 $datos['update_bonos'][$bono->id]['maj'] = 'registro actualizado';
+    //             }
+    //             else
+    //             {
+    //                 $datos['update_bonos'][$bono->id]['estado'] = 0;
+    //                 $datos['update_bonos'][$bono->id]['maj'] = 'registro NO actualizado';
+    //             }
+    //         }
+
+    //         /** elimino(cambio estado) rendicion */
+    //         $registro->estado = 4;// DESISTIDA
+    //         if($registro->save())
+    //         {
+    //             $datos['estado'] = 1;
+    //             $datos['msj'] = 'Solicitud de rendicion desistida';
+    //         }
+    //         else
+    //         {
+    //             $datos['estado'] = 0;
+    //             $datos['msj'] = 'Falla al desistir rendicion';
+    //         }
+    //     }
+    //     else
+    //     {
+    //         $datos['estado'] = 0;
+    //         $datos['error'] = $error;
+    //     }
+
+    //     return $datos;
+    // }
+
+    public function rendirCajaDiariaInstitucionExtenderValidacion(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_rendicion))
+        {
+            $error['id_rendicion'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $rendicionCaja = RendicionCaja::find($request->id_rendicion);
+            $asistenteRendicion = Asistente::where('id', $rendicionCaja->id_asistente)->first();
+            $fecha_rendicion = date('Y-m-d H:i:s');
+            $asistenteReceptor = Asistente::where('id', $rendicionCaja->id_asistente_receptor)->first();
+
+            /** id LogUsersDevices actual */
+            $id_log_users_devices_actual = $rendicionCaja->id_log_users_devices;
+
+            $lista_bonos = $rendicionCaja->bonos;
+            $array_bonos = explode('|',$lista_bonos);
+
+            /** SOLICITAR AUTORIZACION POR APP */
+            $msj = array(
+                'id_rendicion' => $rendicionCaja->id,
+                'nombre_asistente' => $asistenteRendicion->nombres.' '.$asistenteRendicion->apellido_uno.' '.$asistenteRendicion->apellido_dos,
+                'fecha_rendicion' => $fecha_rendicion,
+                'tipo' => 'rendicion',
+                // 'mensaje' => 'Recibe conforme Rendición de Caja N°{id_rendicion} de la Asistente {nombre_asistente} de fecha {fecha_rendicion}'
+            );
+
+            /** calculo de periodo de vigencia para aprobacion */
+            $fecha_actual  = date('Y-m-d H:i:s');
+            $datos['TIEMPO_ESPERA'] = env('TIEMPO_ESPERA');
+            $fecha_vencimiento  = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.env('TIEMPO_ESPERA').' minute' , strtotime ($fecha_actual) ) );
+
+            $log_users_devices = new LogUsersDevices();
+            $log_users_devices->id_user_create = $asistenteRendicion->id_usuario;
+            $log_users_devices->id_user_recept = $asistenteReceptor->id_usuario;
+            $log_users_devices->msg = json_encode($msj);
+            $log_users_devices->estado = 0;
+            $log_users_devices->fecha_ingreso = $fecha_actual;
+            $log_users_devices->fecha_termino = $fecha_vencimiento;
+            $log_users_devices->tipo = 1; // rendicion
+
+            if($log_users_devices->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'renovacion de autorizacion realizada';
+
+                $datos['autorizacion']['estado'] = 1;
+                $datos['autorizacion']['msj'] = 'Solicitud de aprobacion enviada';
+                $datos['autorizacion']['fecha_inicio'] = $fecha_actual;
+                $datos['autorizacion']['fecha_termino'] = $fecha_vencimiento;
+                $datos['autorizacion']['tiempo'] = env('TIEMPO_ESPERA');
+                $datos['autorizacion']['last_id'] = $log_users_devices->id;
+
+                $rendicionCaja->id_log_users_devices = $log_users_devices->id;
+                if($rendicionCaja->save())
+                {
+                    $datos['update_log_users_devices']['estado'] = 1;
+                    $datos['update_log_users_devices']['msj'] = 'Registro de id_log_users_devices';
+
+                    $log_users_devices_registro = LogUsersDevices::find($id_log_users_devices_actual);
+                    $log_users_devices_registro->estado = 2;
+                    if($log_users_devices_registro->save())
+                    {
+                        $datos['log_users_devices_update']['estado'] = 1;
+                        $datos['log_users_devices_update']['msj'] = 'actualizado';
+                    }
+                    else
+                    {
+                        $datos['log_users_devices_update']['estado'] = 0;
+                        $datos['log_users_devices_update']['msj'] = 'problema al actualizado';
+                    }
+                }
+                else
+                {
+                    $datos['update_log_users_devices']['estado'] = 1;
+                    $datos['update_log_users_devices']['msj'] = 'Falla registro de id_log_users_devices';
+                }
+            }
+            else
+            {
+                $datos['autorizacion']['estado'] = 0;
+                $datos['autorizacion']['msj'] = 'Falla al renovar autorizacion';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function rendirCajaDiariaInstitucionValidarAutorizacion(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_rendicion))
+        {
+            $error['id_rendicion'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $rendicionCaja = RendicionCaja::find($request->id_rendicion);
+            if($rendicionCaja)
+            {
+                $log_users_devices = LogUsersDevices::select('id', 'estado')->find($rendicionCaja->id_log_users_devices);
+                if($log_users_devices)
+                {
+                    $datos['estado'] = 1;
+                    $datos['registro'] = $log_users_devices;
+
+                    if($log_users_devices->estado == 0)//ESPERA
+                    {
+                        // $rendicionCaja->estado =
+                    }
+                    if($log_users_devices->estado == 1)//VALIDO
+                    {
+                        $rendicionCaja->estado = 2;
+                    }
+                    if($log_users_devices->estado == 2)//VENCIDO
+                    {
+                        $requestDesistir = new Request(array(
+                            'id_rendicion' => $rendicionCaja->id,
+                        ));
+                        $result_desistida = static::rendirCajaDiariaInstitucionDesistir($requestDesistir);
+                        $datos['result_vencida'] = $result_desistida;
+                    }
+                    if($log_users_devices->estado == 3)//RECHAZADO
+                    {
+                        $requestDesistir = new Request(array(
+                            'id_rendicion' => $rendicionCaja->id,
+                        ));
+                        $result_desistida = static::rendirCajaDiariaInstitucionDesistir($requestDesistir);
+                        $datos['result_rechazada'] = $result_desistida;
+                    }
+
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Autorizacion no encontrada';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Rendicion no encontrada';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['error'] = $error;
+        }
+
         return $datos;
     }
 }

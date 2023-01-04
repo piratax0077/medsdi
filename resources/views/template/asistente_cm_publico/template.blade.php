@@ -145,6 +145,7 @@
 
 
     <script>
+
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var info_profesional_seleccionado = [];
 
