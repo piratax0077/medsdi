@@ -169,6 +169,7 @@ class RendicionCajaController extends Controller
                     $datos['autorizacion']['last_id'] = $log_users_devices->id;
 
                     $rendicionCaja->id_log_users_devices = $log_users_devices->id;
+                    $rendicionCaja->estado = 1;
                     if($rendicionCaja->save())
                     {
                         $datos['update_log_users_devices']['estado'] = 1;
@@ -392,6 +393,7 @@ class RendicionCajaController extends Controller
                 $datos['autorizacion']['last_id'] = $log_users_devices->id;
 
                 $rendicionCaja->id_log_users_devices = $log_users_devices->id;
+                $rendicionCaja->estado = 1;
                 if($rendicionCaja->save())
                 {
                     $datos['update_log_users_devices']['estado'] = 1;
@@ -456,7 +458,7 @@ class RendicionCajaController extends Controller
 
                     if($log_users_devices->estado == 0)//ESPERA
                     {
-                        // $rendicionCaja->estado =
+                        $rendicionCaja->estado = 1;
                     }
                     if($log_users_devices->estado == 1)//VALIDO
                     {

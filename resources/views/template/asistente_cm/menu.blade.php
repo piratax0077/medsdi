@@ -50,7 +50,7 @@
                             <a href="{{ ROUTE('asistentejcm.mis_profesionales') }}">Profesionales</a>
                         </li>
                         <li>
-                            <a href="{{ ROUTE('asistentejcm.home') }}">Rendir  Caja</a>
+                            <a href="{{ ROUTE('asistentejcm.rendir') }}">Manejo de Caja</a>
                         </li>
                     </ul>
                 </li>

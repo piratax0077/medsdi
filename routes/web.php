@@ -508,14 +508,6 @@ Route::group([
     Route::get('perfil/contacto/editar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'editar_contacto_emergencia'])->name('asistentecm.editar_contacto');
     Route::get('perfil/contacto/eliminar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'eliminar_contacto_asistente'])->name('asistentecm.eliminar_contacto_asistente');
     Route::get('perfil/contacto/buscar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscar_contacto'])->name('asistentecm.buscar_contacto');
-
-    /** rendicion caja */
-    Route::post('caja/crear/rendicion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucion'])->name('asistentecm.solicitar_rendir_caja');
-    Route::post('caja/desistir/rendicion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucionDesistir'])->name('asistentecm.rendicion_caja_desistir');
-    Route::post('caja/extencion/validacion/rendicion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucionExtenderValidacion'])->name('asistentecm.rendicion_caja_extender_validacion');
-    Route::post('caja/rendicion/autorizacion/validacion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucionValidarAutorizacion'])->name('asistentecm.rendir_caja_validar_autorizacion');
-
-
 });
 
 /* ASISTENTE JEFE Centro Medico*/
@@ -528,7 +520,10 @@ Route::group([
     Route::get('Paciente/buscar', [App\Http\Controllers\EscritorioAsistenteCmJefe::class, 'buscar_paciente'])->name('asistentejcm.buscar_paciente');
     Route::get('Reservar_Hora', [App\Http\Controllers\EscritorioAsistenteCmJefe::class, 'reservar_hora'])->name('asistentejcm.reservar_hora');
     Route::get('Mis_Profesionales', [App\Http\Controllers\EscritorioAsistenteCmJefe::class, 'mis_profesionales'])->name('asistentejcm.mis_profesionales');
-    Route::get('Flujo_Caja', [App\Http\Controllers\FlujoCajaController::class, 'index'])->name('asistentejcm.flujo_caja');
+    // Route::get('Flujo_Caja', [App\Http\Controllers\FlujoCajaController::class, 'index'])->name('asistentejcm.flujo_caja');
+    Route::get('caja/rendir', [App\Http\Controllers\FlujoCajaController::class, 'rendirCajaDiariaJefe'])->name('asistentejcm.rendir');
+    Route::get('caja/rendir/bonos', [App\Http\Controllers\FlujoCajaController::class, 'cargaBonosAsistenteDia'])->name('asistentejcm.rendicion_carga_bonos');
+    Route::get('caja/historico', [App\Http\Controllers\FlujoCajaController::class, 'historicoCajaDiaria'])->name('asistentejcm.historico_caja');
 
     Route::get('Administracion_asistente', [App\Http\Controllers\EscritorioAsistenteCmJefe::class, 'administracion_asistente'])->name('asistentejcm.administracion_asistente');
 
@@ -555,6 +550,20 @@ Route::group([
     Route::get('perfil/contacto/eliminar', [App\Http\Controllers\EscritorioAsistenteCmJefe::class, 'eliminar_contacto_asistente'])->name('asistentejcm.eliminar_contacto_asistente');
     Route::get('perfil/contacto/buscar', [App\Http\Controllers\EscritorioAsistenteCmJefe::class, 'buscar_contacto'])->name('asistentejcm.buscar_contacto');
 
+});
+
+/** procesos de rendicion */
+/* ASISTENTE caja Centro Medico*/
+/* ASISTENTE JEFE Centro Medico*/
+Route::group([
+    'middleware' => ['role:AsistenteCaja|AsistenteJefaCaja|Admin'],
+    'prefix' => 'Asistente/cm/',
+], function () {
+    /** rendicion caja */
+    Route::post('caja/crear/rendicion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucion'])->name('asistentecm.solicitar_rendir_caja');
+    Route::post('caja/desistir/rendicion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucionDesistir'])->name('asistentecm.rendicion_caja_desistir');
+    Route::post('caja/extencion/validacion/rendicion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucionExtenderValidacion'])->name('asistentecm.rendicion_caja_extender_validacion');
+    Route::post('caja/rendicion/autorizacion/validacion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucionValidarAutorizacion'])->name('asistentecm.rendir_caja_validar_autorizacion');
 });
 
 

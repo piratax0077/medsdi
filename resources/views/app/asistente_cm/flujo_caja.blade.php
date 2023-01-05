@@ -1,4 +1,4 @@
-@extends('template.templateFlujoCaja')
+@extends('template.asistente_cm.template')
 @section('content')
 
     <!--Container Completo-->
@@ -10,34 +10,13 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Flujo de Caja</h5>
+                                <h5 class="m-b-10 font-weight-bold">Rendir Caja Diaria</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    @if(Auth::user()->hasRole('Profesional'))
-                                        <a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                            <i class="feather icon-home"></i>
-                                        </a>
-                                    @elseif(Auth::user()->hasRole('Asistente'))
-                                        <a href="{{ route('asistente.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                            <i class="feather icon-home"></i>
-                                        </a>
-                                    @elseif(Auth::user()->hasRole('Institucion'))
-                                        <a href="{{ route('institucion.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                            <i class="feather icon-home"></i>
-                                        </a>
-                                    @elseif(Auth::user()->hasRole('Servicio'))
-                                        <a href="{{ route('servicio.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                            <i class="feather icon-home"></i>
-                                        </a>
-                                    {{--  @elseif(Auth::user()->hasRole('AsistenCaja'))
-                                        <a href="{{ route('asistente_adm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                            <i class="feather icon-home"></i>
-                                        </a>  --}}
-                                    @endif
-                                    {{--  <a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
+                                    <a href="{{ route('asistentejcm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
                                         <i class="feather icon-home"></i>
-                                    </a>  --}}
+                                    </a>
                                 </li>
                                 <li class="breadcrumb-item"><a href="#">Flujo de Caja</a></li>
                             </ul>
@@ -46,184 +25,89 @@
                 </div>
             </div>
             <!--Cierre: Header-->
-            <!--Pills-->
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="card bg-light">
-                        <div class="card-body">
-                            <ul class="nav nav-pills" id="pills-tab" role="tablist">
-                                {{-- ENTREGA DE BONOS DE ASISTENTE AL PROFESIONAL O ENCARGADO - TIPO NO PROGRAMA--}}
-                                <li class="nav-item">
-                                    <a class="btn btn-sm btn-outline-info mr-1 active" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="true">
-                                        Rendiciones de caja Diaria
-                                    </a>
-                                </li>
 
-                                <li class="nav-item">
-                                    <a class="btn btn-sm btn-outline-info mr-1 active" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="true">
-                                        Rendiciones de caja Historico
-                                    </a>
-                                </li>
-
-                                {{-- ENTREGA DE BONOS DE ASISTENTE AL PROFESIONAL O ENCARGADO - TIPO PROGRAMA --}}
-                                <li class="nav-item">
-                                    <a class="btn btn-sm btn-outline-info mr-1 " id="pills-programas-tab" data-toggle="pill" href="#pills-programas" role="tab" aria-controls="pills-programas" aria-selected="false">
-                                        Recepción de programas
-                                    </a>
-                                </li>
-
-                                {{--  Bonos rendidos   --}}
-                                <li class="nav-item">
-                                    <a class="btn btn-sm btn-outline-info mr-1 " id="pills-gestion_bonos-tab" data-toggle="pill" href="#pills-gestion_bonos" role="tab" aria-controls="pills-gestion_bonos" aria-selected="false">
-                                        Gestión de bonos
-                                    </a>
-                                </li>
-
-                                {{-- Bonos rendidos progama --}}
-                                <li class="nav-item">
-                                    <a class="btn btn-sm btn-outline-info mr-1 " id="pills-gestion_bonos_programa-tab" data-toggle="pill" href="#pills-gestion_bonos_programa" role="tab" aria-controls="pills-gestion_bonos_programa" aria-selected="false">
-                                        Gestión de bonos Programas
-                                    </a>
-                                </li>
-								<li class="nav-item">
-                                    <a class="btn btn-sm btn-outline-info mr-1 " id="pills-gestion_bonos_programa-tab" data-toggle="pill" href="#pills-venta_bonos" role="tab" aria-controls="pills-venta_bonos" aria-selected="false">
-                                        Venta de bonos
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-sm-6 col-md-12">
+                                <div class="col-md-12 mt-md-2">
+                                    <ul class="nav nav-tabs justify-content-left" id="myTab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="btn btn-outline-info btn-sm mb-2 mx-2 active" id="rendicion-tab" data-toggle="tab" href="#rendicion_caja" role="tab" aria-controls="rendicion_caja" aria-selected="true">Rendición de Caja Diaria</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="btn btn-outline-info btn-sm mb-2 mx-2" id="rendicion_rendicion-tab" data-toggle="tab" href="#rendicion_rendicion" role="tab" aria-controls="rendicion_rendicion" aria-selected="false">Cierres de Cajas</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-12 col-md-12">
                                     <div class="tab-content" id="pills-tabContent">
 
                                         {{-- PESTAÑA RENDICION DE CAJA --}}
-                                        <div class="tab-pane fade show active " id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                        <div class="tab-pane fade show active " role="tabpanel" aria-labelledby="pills-profile-tab" id="rendicion_caja">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Rendiciones de Caja</h5>
-
-
-                                                    @if(Auth::user()->hasRole('Profesional'))
-														{{--<button id="iniciar_procesocobro_rendicion" type="button" class="btn btn-outline-primary btn-sm float-right d-inline iniciar_procesocobro_rendicion" onclick="">Iniciar Proceso de Cobro</button>--}}
-                                                        <button id="busqueda_avanzada_1" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_prof_1').toggle();">Búsqueda avanzada</button>
-                                                    @elseif(Auth::user()->hasRole('Asistente'))
-                                                        <button id="busqueda_avanzada_1" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_asis_1').toggle();">Búsqueda avanzada</button>
-                                                    @elseif(Auth::user()->hasRole('Institucion'))
-                                                        <button id="busqueda_avanzada_1" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_inst_1').toggle();">Búsqueda avanzada</button>
-                                                    @elseif(Auth::user()->hasRole('Servicio'))
-                                                        <button id="busqueda_avanzada_1" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_serv_1').toggle();">Búsqueda avanzada</button>
-                                                    @elseif(Auth::user()->hasRole('AsistenCaja'))
-                                                        <a href="{{ route('asistente_adm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                                            <i class="feather icon-home"></i>
-                                                        </a>
-                                                    @endif
-
-                                                    {{--  <button id="busqueda_avanzada_1" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_1').toggle();">Búsqueda avanzada</button>  --}}
+                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Rendir Caja del {{ date('d-m-Y') }}</h5>
                                                 </div>
                                             </div>
                                             <hr>
-                                            @if(Auth::user()->hasRole('Profesional'))
-                                                <div id="busqueda_avanzada_aparecer_prof_1" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">
-                                            @elseif(Auth::user()->hasRole('Asistente'))
-                                                <div id="busqueda_avanzada_aparecer_asis_1" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">
-                                            @elseif(Auth::user()->hasRole('Institucion'))
-                                                <div id="busqueda_avanzada_aparecer_inst_1" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">
-                                            @elseif(Auth::user()->hasRole('Servicio'))
-                                                <div id="busqueda_avanzada_aparecer_serv_1" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">
-                                            @elseif(Auth::user()->hasRole('AsistenCaja'))
-                                                <a href="{{ route('asistente_adm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                                    <i class="feather icon-home"></i>
-                                                </a>
-                                            @endif
-                                            {{--  <div id="busqueda_avanzada_aparecer_2" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">  --}}
-                                                     <div class="form-row">
-                                                        <div class="col-sm-12 col-md-2">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Fecha de atención</label>
-                                                                <input type="date" class="form-control form-control-sm" name="rinde_fecha" id="rinde_fecha">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-2">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Asistente</label>
-                                                                <select id="rinde_asistente" name="rinde_asistente" class="form-control form-control-sm">
-                                                                    <option value="">Seleccione</option>
-                                                                    @if($lista_asistente)
-                                                                        @foreach($lista_asistente as $key_asistente => $value_asistente)
-                                                                            <option value="{{ $value_asistente->id }}">{{ $value_asistente->nombres }} {{ $value_asistente->apellido_uno }} {{ $value_asistente->apellido_dos }} </option>
-                                                                        @endforeach
-                                                                    @endif
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-2">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Convenio</label>
-                                                                <select id="rinde_convenio" name="rinde_convenio" class="form-control form-control-sm">
-                                                                    <option value="">Seleccione</option>
-                                                                    @if($lista_prevision)
-                                                                        @foreach($lista_prevision as $key_prevision => $value_prevision)
-                                                                            <option value="{{ $value_prevision->id }}">{{ $value_prevision->nombre }} </option>
-                                                                        @endforeach
-                                                                    @endif
-
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-2">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Estado Consulta</label>
-                                                                <select id="rinde_estado_consulta" name="rinde_estado_consulta" class="form-control form-control-sm">
-                                                                    <option value="">Seleccione</option>
-                                                                    @if($lista_estado_consulta)
-                                                                        @foreach($lista_estado_consulta as $key_estado_consulta => $value_estado_consulta)
-                                                                            <option value="{{ $value_estado_consulta->id }}">{{ $value_estado_consulta->valor }} </option>
-                                                                        @endforeach
-                                                                    @endif
-
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-2">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm"> Lugar de Atención :</label>
-                                                                <select name="lugares_atencion_agenda" id="lugares_atencion_agenda" class="form-control form-control-sm" onchange="buscar_hora_medica();">
-																	<option value="0">Seleccione Lugar</option>
-																	<option value="11">LA LIGUA</option>
-																	<option value="12">INSI</option>
-																	<option value="13">Los Andes Kriman</option>
-																	<option value="19">CENTRO PRUEBA</option>
-																</select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-2 text-center">
-                                                            <button class="btn btn-block btn-sm btn-info" onclick="cargar_flujo_caja();">Buscar</button>
-                                                        </div>
+                                            <div class="form-row">
+                                                <input type="hidden" name="lista_bonos" id="lista_bonos" value="{{ $lista_bonos }}">
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Número de Bonos</label>
+                                                        <input type="number" class="form-control form-control-sm" id="numero_bonos" name="numero_bonos" value="{{ $total_bonos }}" readonly="readonly">
                                                     </div>
+                                                </div>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Efectivo</label>
+                                                        <input type="number" class="form-control form-control-sm" id="efectivo" name="efectivo" value="{{ $total_efectivo }}" readonly="readonly">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Otros</label>
+                                                        <input type="number" class="form-control form-control-sm" id="otros" name="otros" value="{{ $total_otros }}" readonly="readonly">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Total Documentos</label>
+                                                        <input type="number" class="form-control form-control-sm" id="total" name="total" value="{{ $total }}" readonly="readonly">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Recibe Caja :</label>
+                                                        <select name="id_asistente_receptor" id="id_asistente_receptor" class="form-control form-control-sm">
+                                                            @if($listado_recibe)
+                                                                @foreach ( $listado_recibe as $recibe )
+                                                                    <option value="{{ $recibe->id }}">{{ strtoupper($recibe->nombres.' '.$recibe->apellido_uno.' '.$recibe->apellido_dos) }}</option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-2 text-center">
+                                                    <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja();" id="btn_rendicion_caja_diaria">Rendir Caja</button>
+                                                </div>
                                             </div>
-                                            <!-- en este ejemplo esta seleccionado todos los medios de pago-->
+
                                             <div class="row">
-                                                <div class="col-sm-6 col-md-12">
+                                                <div class="col-sm-12 col-md-12">
                                                     <table id="tabla_rendir_caja" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
                                                         <thead>
                                                             <tr>
                                                                 <th class="text-center align-middle">Tipo</th>
                                                                 <th class="text-center align-middle">Código</th>
+                                                                <th class="text-center align-middle">Clase de Pago</th>
                                                                 <th class="text-center align-middle">Convenio</th>
                                                                 <th class="text-center align-middle">F/Atención</th>
                                                                 <th class="text-center align-middle">Paciente</th>
                                                                 <th class="text-center align-middle">Valor total</th>
-                                                                <th class="text-center align-middle">Estado Consulta</th>
                                                                 <th class="text-center align-middle">Profesional</th>
-                                                                <th class="text-center align-middle">Recepción</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -232,6 +116,23 @@
                                                                     <tr >
                                                                         <td class="align-middle text-center">{{ $value_b->TipoBono()->first()->nombre }}</td>
                                                                         <td class="align-middle text-center">{{ $value_b->numero_bono }}</td>
+                                                                        <td class="align-middle text-center">
+                                                                            @if($value_b->id_clase_bono == 1)
+                                                                                Bono Fisico
+                                                                            @elseif($value_b->id_clase_bono == 2)
+                                                                                Sencillito
+                                                                            @elseif($value_b->id_clase_bono == 3)
+                                                                                Caja Vecina
+                                                                            @elseif($value_b->id_clase_bono == 4)
+                                                                                Bono Web
+                                                                            @elseif($value_b->id_clase_bono == 5)
+                                                                                Bono Web Pre-Pago
+                                                                            @elseif($value_b->id_clase_bono == 6)
+                                                                                Particular
+                                                                            @else
+                                                                                Otro
+                                                                            @endif
+                                                                        </td>
                                                                         <td class="align-middle text-center">{{ $value_b->Convenio()->first()->nombre }}</td>
                                                                         <td class="align-middle text-center">{{ $value_b->fecha_atencion }}</td>
                                                                         <td class="align-middle text-center">
@@ -239,24 +140,9 @@
                                                                             <span>{{ $value_b->Paciente()->first()->rut }}</span>
                                                                         </td>
                                                                         <td class="align-middle text-center">${{ number_format($value_b->valor_atencion, 2, ",", ".") }}</td>
-                                                                        <td class="align-middle text-center">{{ $value_b->Parametro()->first()->valor }}</td>
                                                                         <td class="align-middle text-center">
-                                                                            <span>{{ $value_b->Paciente()->first()->nombres }} {{ $value_b->Paciente()->first()->apellido_uno }} {{ $value_b->Paciente()->first()->apellido_dos }}</span><br>
-                                                                            <span>{{ $value_b->Paciente()->first()->rut }}</span>
-                                                                        </td>
-                                                                        <td class="align-middle text-center">
-                                                                            <div class="form-group">
-                                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                                    @if($value_b->estado_consulta == 6 || $value_b->estado_consulta == 8)
-                                                                                        <input type="checkbox" id="rendir_caja_{{ $value_b->id }}" >
-                                                                                    @else
-                                                                                        <input type="checkbox" id="rendir_caja_{{ $value_b->id }}" disabled="disabled">
-                                                                                    @endif
-
-                                                                                    <label for="rendir_caja_{{ $value_b->id }}"
-                                                                                        class="cr"></label>
-                                                                                </div>
-                                                                            </div>
+                                                                            <span>{{ $value_b->Profesional()->first()->nombres }} {{ $value_b->Profesional()->first()->apellido_uno }} {{ $value_b->Profesional()->first()->apellido_dos }}</span><br>
+                                                                            <span>{{ $value_b->Profesional()->first()->rut }}</span>
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
@@ -266,526 +152,102 @@
                                                     </table>
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        {{-- PESTAÑA RENDICION DE RENDICION --}}
+                                        <div class="tab-pane fade" role="tabpanel" aria-labelledby="pills-profile-tab" id="rendicion_rendicion">
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-12">
+                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Cierres de Cajas {{ date('d-m-Y') }}</h5>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="form-row">
+                                                <input type="hidden" name="lista_bonos" id="lista_bonos" value="{{ $lista_rendiciones }}">
+                                                <div class="col-sm-6 col-md-2">
                                                     <div class="form-group">
-                                                        <div class="switch switch-success d-inline m-r-10">
-                                                            <input type="checkbox" id="enviar_todos" onchange="seleccionar_bonos_rendicion();">
-                                                            <label for="enviar_todos"class="cr"></label>
-                                                        </div>
-                                                        <label>Recepción total</label>
-                                                        {{--  (Este switch selecciona todas las recepciones del profesional y envia mensaje (correo electrónico) de validación (código) al profesional de recepción conforme)  --}}
+                                                        <label class="floating-label-activo-sm">Número de Bonos</label>
+                                                        <input type="number" class="form-control form-control-sm" id="numero_bonos_rendiciones" name="numero_bonos_rendiciones" value="{{ $total_bonos_rendiciones  }}" readonly="readonly">
                                                     </div>
                                                 </div>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Efectivo</label>
+                                                        <input type="number" class="form-control form-control-sm" id="efectivo_rendiciones" name="efectivo_rendiciones" value="{{ $total_efectivo_rendicion  }}" readonly="readonly">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Otros</label>
+                                                        <input type="number" class="form-control form-control-sm" id="otros_rendiciones" name="otros_rendiciones" value="{{ $total_otros_rendicion  }}" readonly="readonly">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Total Documentos</label>
+                                                        <input type="number" class="form-control form-control-sm" id="total_rendiciones" name="total_rendiciones" value="{{ $total_rendiciones  }}" readonly="readonly">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Recibe Caja :</label>
+                                                        <select name="id_asistente_receptor" id="id_asistente_receptor" class="form-control form-control-sm">
+                                                            @if($listado_recibe)
+                                                                @foreach ( $listado_recibe as $recibe )
+                                                                    <option value="{{ $recibe->id }}">{{ strtoupper($recibe->nombres.' '.$recibe->apellido_uno.' '.$recibe->apellido_dos) }}</option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-2 text-center">
+                                                    <button class="btn btn-block btn-sm btn-info" onclick="rendir_rendicion();" id="btn_rendicion_caja_diaria">Cierres de Cajas</button>
+                                                </div>
                                             </div>
+
                                             <div class="row">
-
-												<div class="col-md-12">
-                                                    <button id="iniciar_procesocobro_rendicion_2" type="button" class="btn btn-outline-primary btn-sm float-right d-inline iniciar_procesocobro_rendicion" onclick="">Iniciar Proceso de Cobro</button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {{-- PESTAÑA GESTION RECEPCION DE PROGRAMAS --}}
-                                        <div class="tab-pane fade show " id="pills-programas" role="tabpanel" aria-labelledby="pills-programas-tab">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Rendición de programas</h5>
-
-                                                    @if(Auth::user()->hasRole('Profesional'))
-                                                        <button id="busqueda_avanzada_2" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_prof_2').toggle();">Búsqueda avanzada</button>
-                                                    @elseif(Auth::user()->hasRole('Asistente'))
-                                                        <button id="busqueda_avanzada_2" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_asis_2').toggle();">Búsqueda avanzada</button>
-                                                    @elseif(Auth::user()->hasRole('Institucion'))
-                                                        <button id="busqueda_avanzada_2" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_inst_2').toggle();">Búsqueda avanzada</button>
-                                                    @elseif(Auth::user()->hasRole('Servicio'))
-                                                        <button id="busqueda_avanzada_2" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_serv_2').toggle();">Búsqueda avanzada</button>
-                                                    {{--  @elseif(Auth::user()->hasRole('AsistenCaja'))
-                                                        <a href="{{ route('asistente_adm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                                            <i class="feather icon-home"></i>
-                                                        </a>  --}}
-                                                    @endif
-                                                    {{--  <button id="busqueda_avanzada_2" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_2').toggle();">Búsqueda avanzada</button>  --}}
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            @if(Auth::user()->hasRole('Profesional'))
-                                                <div id="busqueda_avanzada_aparecer_prof_2" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">
-                                            @elseif(Auth::user()->hasRole('Asistente'))
-                                                <div id="busqueda_avanzada_aparecer_asis_2" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">
-                                            @elseif(Auth::user()->hasRole('Institucion'))
-                                                <div id="busqueda_avanzada_aparecer_inst_2" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">
-                                            @elseif(Auth::user()->hasRole('Servicio'))
-                                                <div id="busqueda_avanzada_aparecer_serv_2" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">
-                                            {{--  @elseif(Auth::user()->hasRole('AsistenCaja'))
-                                                <a href="{{ route('asistente_adm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                                    <i class="feather icon-home"></i>
-                                                </a>  --}}
-                                            @endif
-                                            {{--  <div id="busqueda_avanzada_aparecer_2" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">  --}}
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Fecha de atención</label>
-                                                            <input type="date" class="form-control form-control-sm" name="rinde_progr_fecha" id="rinde_progr_fecha">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Asistente</label>
-                                                            <select id="rinde_progr_asistente" name="rinde_progr_asistente" class="form-control form-control-sm">
-                                                                <option value="">Seleccione</option>
-                                                                @if($lista_asistente)
-                                                                    @foreach($lista_asistente as $key_asistente => $value_asistente)
-                                                                        <option value="{{ $value_asistente->id }}">{{ $value_asistente->nombres }} {{ $value_asistente->apellido_uno }} {{ $value_asistente->apellido_dos }} </option>
-                                                                    @endforeach
-                                                                @endif
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Convenio</label>
-                                                            <select id="rinde_progr_convenio" name="rinde_progr_convenio" class="form-control form-control-sm">
-                                                                <option value="">Seleccione</option>
-                                                                @if($lista_prevision)
-                                                                    @foreach($lista_prevision as $key_prevision => $value_prevision)
-                                                                        <option value="{{ $value_prevision->id }}">{{ $value_prevision->nombre }} </option>
-                                                                    @endforeach
-                                                                @endif
-
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Estado Consulta</label>
-                                                            <select id="rinde_progr_estado_consulta" name="rinde_progr_estado_consulta" class="form-control form-control-sm">
-                                                                <option value="">Seleccione</option>
-                                                                @if($lista_estado_consulta)
-                                                                    @foreach($lista_estado_consulta as $key_estado_consulta => $value_estado_consulta)
-                                                                        <option value="{{ $value_estado_consulta->id }}">{{ $value_estado_consulta->valor }} </option>
-                                                                    @endforeach
-                                                                @endif
-
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-3 text-center">
-                                                        <button class="btn btn-block btn-sm btn-info" onclick="cargar_flujo_caja_programa();">Buscar</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <table id="tabla_programas" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="text-wrap text-center align-middle">Convenio</th>
-                                                            <th class="text-center align-middle">Nº de Programa</th>
-                                                            <th class="text-center align-middle">Codigo</th>
-                                                            <th class="text-center align-middle">Tipo</th>
-                                                            <th class="text-center align-middle">Fecha de Atención</th>
-                                                            <th class="text-center align-middle">Paciente</th>
-                                                            <th class="text-center align-middle">Valor </th>
-                                                            <th class="text-center align-middle">Estado Consulta</th>
-                                                            <th class="text-center align-middle">Recepción</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @if( isset($bonos_programa) )
-                                                            @foreach($bonos_programa as $key_bp => $value_bp)
-                                                                <tr >
-                                                                    <td class="align-middle text-center">{{ $value_bp->Convenio()->first()->nombre }}</td>
-                                                                    <td class="align-middle text-center">{{ $value_bp->numero_sesiones }}</td>
-                                                                    <td class="align-middle text-center">{{ $value_bp->numero_bono }}</td>
-                                                                    <td class="align-middle text-center">{{ $value_bp->TipoBono()->first()->nombre }}</td>
-                                                                    <td class="align-middle text-center">{{ $value_bp->fecha_atencion }}</td>
-                                                                    <td class="align-middle text-center">
-                                                                        <span>{{ $value_bp->Paciente()->first()->nombres }} {{ $value_bp->Paciente()->first()->apellido_uno }} {{ $value_bp->Paciente()->first()->apellido_dos }}</span><br>
-                                                                        <span>{{ $value_bp->Paciente()->first()->rut }}</span>
-                                                                    </td>
-                                                                    <td class="align-middle text-center">${{ number_format($value_bp->valor_atencion, 2, ",", ".") }}</td>
-                                                                    <td class="align-middle text-center">{{ $value_bp->estado_consulta }}</td>
-                                                                    <td class="align-middle text-center">
-                                                                        <div class="form-group">
-                                                                            <div class="switch switch-success d-inline m-r-10">
-                                                                                <input type="checkbox" id="rendir_caja_programa_{{ $value_bp->id }}">
-                                                                                <label for="rendir_caja_{{ $value_bp->id }}"
-                                                                                    class="cr"></label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        @endif
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                        {{-- PESTAÑA DE GESTION DE BONOS --}}
-                                        <div class="tab-pane fade show " id="pills-gestion_bonos" role="tabpanel" aria-labelledby="pills-gestion_bonos-tab">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Gestión de Bonos</h5>
-                                                    @if(Auth::user()->hasRole('Profesional'))
-                                                        <button id="busqueda_avanzada_3" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_prof_3').toggle();">Búsqueda avanzada</button>
-                                                    @elseif(Auth::user()->hasRole('Asistente'))
-                                                        <button id="busqueda_avanzada_3" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_asis_3').toggle();">Búsqueda avanzada</button>
-                                                    @elseif(Auth::user()->hasRole('Institucion'))
-                                                        <button id="busqueda_avanzada_3" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_inst_3').toggle();">Búsqueda avanzada</button>
-                                                    @elseif(Auth::user()->hasRole('Servicio'))
-                                                        <button id="busqueda_avanzada_3" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_serv_3').toggle();">Búsqueda avanzada</button>
-                                                    {{--  @elseif(Auth::user()->hasRole('AsistenCaja'))
-                                                        <a href="{{ route('asistente_adm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                                            <i class="feather icon-home"></i>
-                                                        </a>  --}}
-                                                    @endif
-                                                    {{--  <button id="busqueda_avanzada_3" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_3').toggle();">Búsqueda avanzada</button>  --}}
-                                                </div>
-                                            </div>
-                                            <hr>
-
-                                            @if(Auth::user()->hasRole('Profesional'))
-                                                <div id="busqueda_avanzada_aparecer_prof_3" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">
-                                            @elseif(Auth::user()->hasRole('Asistente'))
-                                                <div id="busqueda_avanzada_aparecer_asis_3" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">
-                                            @elseif(Auth::user()->hasRole('Institucion'))
-                                                <div id="busqueda_avanzada_aparecer_inst_3" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">
-                                            @elseif(Auth::user()->hasRole('Servicio'))
-                                                <div id="busqueda_avanzada_aparecer_serv_3" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">
-                                            {{--  @elseif(Auth::user()->hasRole('AsistenCaja'))
-                                                <a href="{{ route('asistente_adm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                                    <i class="feather icon-home"></i>
-                                                </a>  --}}
-                                            @endif
-                                            {{--  <div id="busqueda_avanzada_aparecer_3" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">  --}}
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Fecha de atención</label>
-                                                            <input type="date" class="form-control form-control-sm" name="gestion_fecha" id="gestion_fecha">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Asistente</label>
-                                                            <select id="gestion_asistente" name="gestion_asistente" class="form-control form-control-sm">
-                                                                <option value="">Seleccione</option>
-                                                                @if($lista_asistente)
-                                                                    @foreach($lista_asistente as $key_asistente => $value_asistente)
-                                                                        <option value="{{ $value_asistente->id }}">{{ $value_asistente->nombres }} {{ $value_asistente->apellido_uno }} {{ $value_asistente->apellido_dos }} </option>
-                                                                    @endforeach
-                                                                @endif
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Convenio</label>
-                                                            <select id="gestion_convenio" name="gestion_convenio" class="form-control form-control-sm">
-                                                                <option value="">Seleccione</option>
-                                                                @if($lista_prevision)
-                                                                    @foreach($lista_prevision as $key_prevision => $value_prevision)
-                                                                        <option value="{{ $value_prevision->id }}">{{ $value_prevision->nombre }} </option>
-                                                                    @endforeach
-                                                                @endif
-
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Estado Consulta</label>
-                                                            <select id="gestion_estado_consulta" name="gestion_estado_consulta" class="form-control form-control-sm">
-                                                                <option value="">Seleccione</option>
-                                                                @if($lista_estado_consulta)
-                                                                    @foreach($lista_estado_consulta as $key_estado_consulta => $value_estado_consulta)
-                                                                        <option value="{{ $value_estado_consulta->id }}">{{ $value_estado_consulta->valor }} </option>
-                                                                    @endforeach
-                                                                @endif
-
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-3 text-center">
-                                                        <button class="btn btn-block btn-sm btn-info" onclick="cargar_flujo_caja_rendicion();">Buscar</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <table id="tabla_gestion_bonos" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-wrap text-center align-middle">Convenio</th>
-                                                        <th class="text-center align-middle">Codigo</th>
-                                                        <th class="text-center align-middle">Tipo</th>
-                                                        <th class="text-center align-middle">Fecha de Atención</th>
-                                                        <th class="text-center align-middle">Paciente</th>
-                                                        <th class="text-center align-middle">Valor Total</th>
-                                                        <th class="text-center align-middle">Estado Consulta</th>
-                                                        <th class="text-center align-middle">Accion</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @if( isset($bonos_rendidos) )
-                                                        @foreach($bonos_rendidos as $key_br => $value_br)
-                                                            <tr >
-                                                                <td class="align-middle text-center">{{ $value_br->Convenio()->first()->nombre }}</td>
-                                                                <td class="align-middle text-center">{{ $value_br->numero_bono }}</td>
-                                                                <td class="align-middle text-center">{{ $value_br->TipoBono()->first()->nombre }}</td>
-                                                                <td class="align-middle text-center">{{ $value_br->fecha_atencion }}</td>
-                                                                <td class="align-middle text-center">
-                                                                    <span>{{ $value_br->Paciente()->first()->nombres }} {{ $value_br->Paciente()->first()->apellido_uno }} {{ $value_br->Paciente()->first()->apellido_dos }}</span><br>
-                                                                    <span>{{ $value_br->Paciente()->first()->rut }}</span>
-                                                                </td>
-                                                                <td class="align-middle text-center">${{ number_format($value_br->valor_atencion, 2, ",", ".") }}</td>
-                                                                <td class="align-middle text-center">{{ $value_br->estado_consulta }}</td>
-                                                                <td class="align-middle text-center">
-                                                                    <div class="form-group">
-                                                                        <div class="switch switch-success d-inline m-r-10">
-                                                                            <input type="checkbox" id="rendir_caja_programa_{{ $value_br->id }}">
-                                                                            <label for="rendir_caja_{{ $value_br->id }}"
-                                                                                class="cr"></label>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
+                                                <div class="col-sm-12 col-md-12">
+                                                    <table id="tabla_rendir_rendiciones" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center align-middle">ID Rendición</th>
+                                                                <th class="text-center align-middle">Asistene</th>
+                                                                <th class="text-center align-middle">Receptor</th>
+                                                                <th class="text-center align-middle">F/Recepción</th>
+                                                                <th class="text-center align-middle">Bonos</th>
+                                                                <th class="text-center align-middle">Efecto</th>
+                                                                <th class="text-center align-middle">Otros</th>
+                                                                <th class="text-center align-middle">Total Documentos</th>
                                                             </tr>
-                                                        @endforeach
-                                                    @endif
+                                                        </thead>
+                                                        <tbody>
+                                                            @if( isset($rendiciones) )
+                                                                @foreach($rendiciones as $key_r => $value_r)
+                                                                    <tr >
+                                                                        <td class="align-middle text-center">{{ $value_r->id }}</td>
+                                                                        <td class="align-middle text-center">
+                                                                            <span>{{ $value_r->Asistente()->first()->nombres }} {{ $value_r->Asistente()->first()->apellido_uno }} {{ $value_r->Asistente()->first()->apellido_dos }}</span><br>
+                                                                            <span>{{ $value_r->Asistente()->first()->rut }}</span>
+                                                                        </td>
+                                                                        <td class="align-middle text-center">
+                                                                            <span>{{ $value_r->AsistenteReceptor()->first()->nombres }} {{ $value_r->AsistenteReceptor()->first()->apellido_uno }} {{ $value_r->AsistenteReceptor()->first()->apellido_dos }}</span><br>
+                                                                            <span>{{ $value_r->AsistenteReceptor()->first()->rut }}</span>
+                                                                        </td>
+                                                                        <td class="align-middle text-center">{{ $value_r->fecha_rendicion }}</td>
+                                                                        <td class="align-middle text-center">{{ $value_r->total_bono }}</td>
+                                                                        <td class="align-middle text-center">${{ number_format($value_r->total_efectivo, 2, ",", ".") }}</td>
+                                                                        <td class="align-middle text-center">{{ $value_r->total_otros }}</td>
+                                                                        <td class="align-middle text-center">{{ $value_r->total_documentos_rendiciones }}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @endif
+                                                        </tbody>
 
-                                                </tbody>
-                                            </table>
-											<div class="row">
-												<div class="col-md-4">
-
+                                                    </table>
                                                 </div>
-												<div class="col-md-4">
-                                                    <button id="arch_csv" type="button" class="btn btn-outline-primary btn-sm float-right d-inline iniciar_procesocobro" onclick="">Generar archivo csv</button>
-                                                </div>
-												<div class="col-md-4">
-
-                                                </div>
-											</div>
+                                            </div>
                                         </div>
 
-                                        {{-- PESTAÑA DE GESTION DE BONOS PROGRAMAS --}}
-                                        <div class="tab-pane fade show " id="pills-gestion_bonos_programa" role="tabpanel" aria-labelledby="pills-gestion_bonos_programa-tab">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Gestión de Bonos Programa</h5>
-                                                    <button id="busqueda_avanzada_4" type="button" class="btn btn-outline-primary btn-sm float-right d-inline" onclick="$('#busqueda_avanzada_aparecer_4').toggle();">Búsqueda avanzada</button>
-                                                </div>
-                                            </div>
-                                            <hr>
-
-                                            <div id="busqueda_avanzada_aparecer_4" style="display:none" class="bg-light pt-4 pb-2 px-3 mb-3">
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Fecha de atención</label>
-                                                            <input type="date" class="form-control form-control-sm" name="gestion_progr_fecha" id="gestion_progr_fecha">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Asistente</label>
-                                                            <select id="gestion_progr_asistente" name="gestion_progr_asistente" class="form-control form-control-sm">
-                                                                <option value="">Seleccione</option>
-                                                                @if($lista_asistente)
-                                                                    @foreach($lista_asistente as $key_asistente => $value_asistente)
-                                                                        <option value="{{ $value_asistente->id }}">{{ $value_asistente->nombres }} {{ $value_asistente->apellido_uno }} {{ $value_asistente->apellido_dos }} </option>
-                                                                    @endforeach
-                                                                @endif
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Convenio</label>
-                                                            <select id="gestion_progr_convenio" name="gestion_progr_convenio" class="form-control form-control-sm">
-                                                                <option value="">Seleccione</option>
-                                                                @if($lista_prevision)
-                                                                    @foreach($lista_prevision as $key_prevision => $value_prevision)
-                                                                        <option value="{{ $value_prevision->id }}">{{ $value_prevision->nombre }} </option>
-                                                                    @endforeach
-                                                                @endif
-
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Estado Consulta</label>
-                                                            <select id="gestion_progr_estado_consulta" name="gestion_progr_estado_consulta" class="form-control form-control-sm">
-                                                                <option value="">Seleccione</option>
-                                                                @if($lista_estado_consulta)
-                                                                    @foreach($lista_estado_consulta as $key_estado_consulta => $value_estado_consulta)
-                                                                        <option value="{{ $value_estado_consulta->id }}">{{ $value_estado_consulta->valor }} </option>
-                                                                    @endforeach
-                                                                @endif
-
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-3 text-center">
-                                                        <button class="btn btn-block btn-sm btn-info" onclick="cargar_flujo_caja_rendicion_programa();">Buscar</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <table id="tabla_gestion_bonos_programa" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-wrap text-center align-middle">Convenio</th>
-                                                        <th class="text-center align-middle">Nº de Programa</th>
-                                                        <th class="text-center align-middle">Codigo</th>
-                                                        <th class="text-center align-middle">Tipo</th>
-                                                        <th class="text-center align-middle">Fecha de Atención</th>
-                                                        <th class="text-center align-middle">Paciente</th>
-                                                        <th class="text-center align-middle">Valor Total</th>
-                                                        <th class="text-center align-middle">Estado consulta</th>
-                                                        <th class="text-center align-middle">Accion</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @if( isset($bonos_rendidos) )
-                                                        @foreach($bonos_rendidos as $key_br => $value_br)
-                                                            <tr >
-                                                                <td class="align-middle text-center">{{ $value_br->Convenio()->first()->nombre }}</td>
-                                                                <td class="align-middle text-center">{{ $value_br->numero_sesiones }}</td>
-                                                                <td class="align-middle text-center">{{ $value_br->numero_bono }}</td>
-                                                                <td class="align-middle text-center">{{ $value_br->TipoBono()->first()->nombre }}</td>
-                                                                <td class="align-middle text-center">{{ $value_br->fecha_atencion }}</td>
-                                                                <td class="align-middle text-center">
-                                                                    <span>{{ $value_br->Paciente()->first()->nombres }} {{ $value_br->Paciente()->first()->apellido_uno }} {{ $value_br->Paciente()->first()->apellido_dos }}</span><br>
-                                                                    <span>{{ $value_br->Paciente()->first()->rut }}</span>
-                                                                </td>
-                                                                <td class="align-middle text-center">${{ number_format($value_br->valor_atencion, 2, ",", ".") }}</td>
-                                                                <td class="align-middle text-center">{{ $value_br->estado_consulta }}</td>
-                                                                <td class="align-middle text-center">
-                                                                    <div class="form-group">
-                                                                        <div class="switch switch-success d-inline m-r-10">
-                                                                            <input type="checkbox" id="rendir_caja_programa_{{ $value_br->id }}">
-                                                                            <label for="rendir_caja_{{ $value_br->id }}"
-                                                                                class="cr"></label>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    @endif
-
-                                                </tbody>
-                                            </table>
-
-                                        </div>
-
-										{{-- PESTAÑA DE VENTA DE BONOS PROGRAMAS --}}
-                                        <div class="tab-pane fade show " id="pills-venta_bonos" role="tabpanel" aria-labelledby="pills-venta_bonos-tab">
-											<div class="row">
-                                                <div class="col-md-12">
-                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Venta de Bonos</h5>
-                                                </div>
-                                            </div>
-                                            <hr>
-											<div class="form-row">
-												<div class="col-sm-12 col-md-2">
-													<div class="form-group">
-														<label class="floating-label-activo-sm">Fecha de Rendición</label>
-														<input type="date" class="form-control form-control-sm" name="gestion_progr_fecha" id="gestion_progr_fecha">
-													</div>
-												</div>
-												<div class="col-sm-12 col-md-2">
-													<div class="form-group">
-														<label class="floating-label-activo-sm">Rendir a:</label>
-														<select id="gestion_progr_asistente" name="gestion_progr_asistente" class="form-control form-control-sm">
-															<option value="">Seleccione</option>
-															@if($lista_asistente)
-																@foreach($lista_asistente as $key_asistente => $value_asistente)
-																	<option value="{{ $value_asistente->id }}">{{ $value_asistente->nombres }} {{ $value_asistente->apellido_uno }} {{ $value_asistente->apellido_dos }} </option>
-																@endforeach
-															@endif
-														</select>
-													</div>
-												</div>
-												<div class="col-sm-12 col-md-2">
-													<div class="form-group">
-														<label class="floating-label-activo-sm">Convenio</label>
-														<select id="gestion_progr_convenio" name="gestion_progr_convenio" class="form-control form-control-sm">
-															<option value="">Seleccione</option>
-															@if($lista_prevision)
-																@foreach($lista_prevision as $key_prevision => $value_prevision)
-																	<option value="{{ $value_prevision->id }}">{{ $value_prevision->nombre }} </option>
-
-																@endforeach
-															@endif
-															<option value="0000">Todos</option>
-														</select>
-													</div>
-												</div>
-												<div class="col-sm-12 col-md-2 text-center">
-													<button class="btn btn-block btn-sm btn-primary" onclick="cargar_flujo_caja_rendicion_programa();">Solicitar Código</button>
-												</div>
-												<div class="col-sm-12 col-md-2">
-													<div class="form-group">
-														<label class="floating-label-activo-sm">Código Aceptación</label>
-													   <input type="text" class="form-control form-control-sm" name="cod_acept_rendicion" id="cod_acept_rendicion"value="">
-													</div>
-												</div>
-												<div class="col-sm-12 col-md-2 text-center">
-													<button class="btn btn-block btn-sm btn-info" onclick="cargar_flujo_caja_rendicion_programa();">Rendir Venta Diaria</button>
-												</div>
-											</div>
-											<div>
-                                                <table id="tabla_venta_bonos" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="text-wrap text-center align-middle">Folio Bono</th>
-                                                            <th class="text-center align-middle">Estado</th>
-                                                            <th class="text-center align-middle">Fecha</th>
-                                                            <th class="text-center align-middle">Valor</th>
-                                                            <th class="text-center align-middle">Ap.Seguro</th>
-                                                            <th class="text-center align-middle">T.Copago</th>
-                                                            <th class="text-center align-middle"><label>Rut Prestador</label><br><label>Nombre</label></th>
-                                                            <th class="text-center align-middle">Convenio</th>
-                                                            <th class="text-center align-middle">Asegurador</th>
-                                                            <th class="text-center align-middle">Accion</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @if( isset($bonos_rendidos) )
-                                                            @foreach($bonos_rendidos as $key_br => $value_br)
-                                                                <tr >
-                                                                    <td class="align-middle text-center">{{ $value_br->Convenio()->first()->nombre }}</td>
-                                                                    <td class="align-middle text-center">{{ $value_br->numero_sesiones }}</td>
-                                                                    <td class="align-middle text-center">{{ $value_br->numero_bono }}</td>
-                                                                    <td class="align-middle text-center">{{ $value_br->TipoBono()->first()->nombre }}</td>
-                                                                    <td class="align-middle text-center">{{ $value_br->fecha_atencion }}</td>
-                                                                    <td class="align-middle text-center">
-                                                                        <span>{{ $value_br->Paciente()->first()->nombres }} {{ $value_br->Paciente()->first()->apellido_uno }} {{ $value_br->Paciente()->first()->apellido_dos }}</span><br>
-                                                                        <span>{{ $value_br->Paciente()->first()->rut }}</span>
-                                                                    </td>
-                                                                    <td class="align-middle text-center">${{ number_format($value_br->valor_atencion, 2, ",", ".") }}</td>
-                                                                    <td class="align-middle text-center">{{ $value_br->estado_consulta }}</td>
-                                                                    <td class="align-middle text-center">
-                                                                        <div class="form-group">
-                                                                            <div class="switch switch-success d-inline m-r-10">
-                                                                                <input type="checkbox" id="rendir_caja_programa_{{ $value_br->id }}">
-                                                                                <label for="rendir_caja_{{ $value_br->id }}"
-                                                                                    class="cr"></label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        @endif
-                                                    </tbody>
-                                                </table>
-                                            </div>
-
-
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -795,38 +257,573 @@
             </div>
         </div>
     </div>
+</div>
 
     <!--Cierre: Container Completo-->
 
 @endsection
 
+@section('modales')
+    @include('app.asistente_cm_publico.modales.modal_rendicion_caja_diaria')
+@endsection
+
 @section('page-script')
     <script>
+        let clase_bono = ['Bono Fisico' ,'Sencillito' ,'Caja Vecina' ,'Bono Web' ,'Bono Web Pre-Pago' ,'Particular'];
+        var tiempo = 0; // CANTIDAD MINUTOS A ESPERAR PARA APROBACION
+        var conteo_activo = 0; // valida si conteo esta activo
+
         $(document).ready(function(){
             $('#tabla_rendir_caja').DataTable({
                 responsive: true,
             });
         });
-        $(document).ready(function(){
-            $('#tabla_programas').DataTable({
-                responsive: true,
+
+        function seleccionar_bonos_rendicion(){
+            var estado  = $('#enviar_todos').is(':checked')
+            $("input:checkbox").each(function() {
+                if($(this).attr('id') != 'enviar_todos')
+                {
+                    if(estado != $(this).is(':checked'))
+                    {
+                        $(this).trigger('click');
+                    }
+                }
             });
-        });
-        $(document).ready(function(){
-            $('#tabla_gestion_bonos').DataTable({
-                responsive: true,
-            });
-        });
-        $(document).ready(function(){
-            $('#tabla_gestion_bonos_programa').DataTable({
-                responsive: true,
-            });
-        });
-        $(document).ready(function(){
-            $('#tabla_venta_bonos').DataTable({
-                responsive: true,
-            });
-        });
+        }
+
+        function cargar_flujo_caja() {
+            var fecha = {{ date('Y-m-d') }};
+            var convenio = $('#rinde_convenio').val();
+            var estado_consulta = $('#rinde_estado_consulta').val();
+
+            let url = "{{ route('flujo_caja.data_flujo_caja') }}";
+
+            $.ajax({
+                    url: url,
+                    type: "GET",
+                    data: {
+                        fecha : fecha,
+                        convenio : convenio,
+                        estado_consulta : estado_consulta,
+                    },
+                })
+                .done(function(data) {
+
+                    console.log(data);
+                    if (data.estado == 1)
+                    {
+                        $('#tabla_rendir_caja tbody').html('');
+                        for (i = 0; i < data.registros.length; i++) {
+
+                            var j = 1; //contador para asignar id al boton que borrara la fila
+                            var fila = '';
+                            fila += '<tr >';
+                            fila += '    <td class="align-middle text-center">'+ data.registros[i].tipo_bono.nombre+'</td>';
+                            fila += '    <td class="align-middle text-center">'+ data.registros[i].numero_bono+'</td>';
+                            fila += '    <td class="align-middle text-center">'+ data.registros[i].numero_bono+'</td>';
+                            fila += '    <td class="align-middle text-center">'+ data.registros[i].convenio.nombre+'</td>';
+                            fila += '    <td class="align-middle text-center">'+ data.registros[i].fecha_atencion+'</td>';
+                            fila += '    <td class="align-middle text-center">';
+                            fila += '        <span>'+ data.registros[i].paciente.nombres+' '+ data.registros[i].paciente.apellido_uno+' '+ data.registros[i].paciente.apellido_dos+'</span><br>';
+                            fila += '        <span>'+ data.registros[i].paciente.rut +'</span>';
+                            fila += '    </td>';
+                            fila += '    <td class="align-middle text-center">$'+ data.registros[i].valor_atencion +'</td>';
+                            fila += '    <td class="align-middle text-center">'+ data.registros[i].parametro.valor +'</td>';
+                            fila += '    <td class="align-middle text-center">'+ data.registros[i].profesional.nombre+' '+ data.registros[i].profesional.apellido_uno+' '+ data.registros[i].profesional.apellido_dos+'</td>';
+                            fila += '    {{--  <td class="align-middle text-center">{{ $value_b->observaciones }}</td>  --}}';
+                            fila += '    <td class="align-middle text-center">';
+                            fila += '        <div class="form-group">';
+                            fila += '            <div class="switch switch-success d-inline m-r-10">';
+                            fila += '                <input type="checkbox" id="rendir_caja_'+ data.registros[i].id +'">';
+                            fila += '                <label for="rendir_caja_'+ data.registros[i].id +'"';
+                            fila += '                    class="cr"></label>';
+                            fila += '            </div>';
+                            fila += '        </div>';
+                            fila += '    </td>';
+                            fila += '</tr>';
+                            j++;
+
+                            $('#tabla_rendir_caja tbody').append(fila);
+
+                        }
+                    }
+                    else
+                    {
+                        $('#tabla_rendir_caja tbody').html('');
+                        $('#tabla_rendir_caja tbody').append('<tr><td colspan="8"> Sin registros</td></tr>');
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
+
+        function rendir_caja()
+        {
+            let url = "{{ route('asistentecm.solicitar_rendir_caja') }}";
+
+            $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        bonos : $('#lista_bonos').val(),
+                        id_asistente_receptor : $('#id_asistente_receptor').val(),
+                    },
+                })
+                .done(function(data) {
+
+                    console.log(data);
+                    if (data.estado == 1)
+                    {
+                        $('#numero_rendicion_hidde').val(data.last_id);
+                        $('#numero_rendicion').html(data.last_id);
+                        $('#nombre_receptor').html(data.registro.asistente_receptor.nombres+' '+data.registro.asistente_receptor.apellido_uno+' '+data.registro.asistente_receptor.apellido_dos);
+                        $('#total_documento').html(data.registro.total_documentos);
+                        $('#total_bonos').html(data.registro.total_bono);
+                        $('#total_efectivo').html(data.registro.total_efectivo);
+                        $('#total_otros').html(data.registro.total_otros);
+
+                        $('#aprobacion').html('En Espera de Aprobación <span id="aprobacion_tiempo"></span>');
+
+                        $('#rendicion_caja_diaria').modal('show',{backdrop: 'static', keyboard: false});
+
+                        tiempo = data.autorizacion.tiempo;
+                        conteo_activo = 1;
+                        validar_rendicion();
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Solicitud de Rendicion con Problema",
+                            text: data.msj,
+                            icon: "error",
+                            buttons: "Aceptar",
+                            // DangerMode: true,
+                        });
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
+
+        function cerrarModalRendicion()
+        {
+            swal({
+                title: "Rendición Diaria.",
+                text: 'Al "Aceptar" cierra la ventana sin Esperar Aprobación del receptor.',
+                icon: "warning",
+                buttons: ["Aceptar", 'Cancelar'],
+            }).then((result) => {
+                if (result == true)
+                {
+                    console.log('regresar');
+                } else {
+
+                    $('#rendicion_caja_diaria').modal('hide');
+                }
+            })
+        }
+
+        /** actualizar pagina */
+        function actualizar_registros()
+        {
+            let url = "{{ route('asistentecm.rendir') }}";
+            document.reload(url);
+        }
+
+
+        function validar_rendicion()
+        {
+            $('#aprobacion_tiempo').html(''+tiempo+' minutos');
+            if(tiempo > 0 && conteo_activo == 1)
+            {
+                setTimeout(function(){
+                    tiempo = tiempo-1;
+                    $('#aprobacion_tiempo').html(''+tiempo+' minutos');
+                    var value_validacion = 0;
+
+                    var id_rendicion = $('#numero_rendicion_hidde').val()
+                    let url = "{{ route('asistentecm.rendir_caja_validar_autorizacion') }}";
+
+                    $.ajax({
+                            url: url,
+                            type: "POST",
+                            data: {
+                                _token: CSRF_TOKEN,
+                                id_rendicion : id_rendicion,
+                            },
+                        })
+                        .done(function(data) {
+
+                            console.log(data);
+                            if (data.estado == 1)
+                            {
+                                if(data.registro.estado == 0)
+                                {
+                                    console.log('espera aprobacion');
+                                }
+                                else
+                                {
+                                    $('#numero_rendicion_hidde').val('');
+                                    $('#numero_rendicion').html('');
+                                    $('#nombre_receptor').html('');
+                                    $('#total_documento').html('');
+                                    $('#total_bonos').html('');
+                                    $('#total_efectivo').html('');
+                                    $('#total_otros').html('');
+
+                                    $('#aprobacion').html('En Espera de Aprobación <span id="aprobacion_tiempo"></span>');
+                                    $('#rendicion_caja_diaria').modal('hide');
+
+                                    tiempo = 0;
+                                    conteo_activo = 0;
+
+                                    if(data.registro.estado == 1)
+                                    {
+                                        swal({
+                                            title: "Solicitud de Rendicion.",
+                                            text: "Rendicion Aceptada conforme",
+                                            icon: "success",
+                                            buttons: "Aceptar",
+                                            // DangerMode: true,
+                                        });
+
+                                        console.log('confirmado');
+                                        value_validacion = 1;
+                                        cargar_registros();
+                                        return false;
+                                    }
+                                    else if(data.registro.estado == 2)
+                                    {
+                                        swal({
+                                            title: "Solicitud de Rendicion.",
+                                            text: "Autorizaión Vencida",
+                                            icon: "success",
+                                            buttons: "Aceptar",
+                                            // DangerMode: true,
+                                        });
+                                    }
+                                    else if(data.registro.estado == 3)
+                                    {
+                                        swal({
+                                            title: "Solicitud de Rendicion.",
+                                            text: "Autorizaión Rechazada",
+                                            icon: "error",
+                                            buttons: "Aceptar",
+                                            // DangerMode: true,
+                                        });
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                swal({
+                                    title: "Solicitud de Rendicion con Problema",
+                                    text: data.msj,
+                                    icon: "error",
+                                    buttons: "Aceptar",
+                                    // DangerMode: true,
+                                });
+                            }
+
+                            validar_rendicion(tiempo);
+                            if(tiempo == 8)
+                            {
+                                swal({
+                                    title: "Solicitud de Rendicion",
+                                    text: 'El tiempo para Autorizar Rendición esta por finalizar, Desea continuar presione el botón "Más Tiempo", si "Acepta" la Rendición quedará Anulada y debera realizarla de nuevo.',
+                                    icon: "warning",
+                                    buttons: ["Aceptar", 'Más Tiempo'],
+                                }).then((result) => {
+                                    if (result == true)
+                                    {
+                                        reiniciar_rendicion( $('#numero_rendicion_hidde').val());
+                                    }
+                                });
+                            }
+
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            console.log(jqXHR, ajaxOptions, thrownError)
+                        });
+                }, 10000);// 600 = 1seg |  60000 = 1 minutos | 10000 = 10 seg | 600000 = 10 minutos
+            }
+            else
+            {
+                conteo_activo = 0;
+                $('#aprobacion').html('Se a finalizado el tiempo para la aprobación, debe realizar la rendicion nuevamente');
+                console.log('desistir rendicion');
+                desistir_rendicion();
+            }
+        }
+
+
+        function desistir_rendicion()
+        {
+            var id_rendicion = $('#numero_rendicion_hidde').val();
+
+            let url = "{{ route('asistentecm.rendicion_caja_desistir') }}";
+
+            $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        id_rendicion : id_rendicion
+                    },
+                })
+                .done(function(data) {
+
+                    console.log(data);
+                    if (data.estado == 1)
+                    {
+                        $('#numero_rendicion_hidde').val('');
+                        $('#numero_rendicion').html('');
+                        $('#nombre_receptor').html('');
+                        $('#total_documento').html('');
+                        $('#total_bonos').html('');
+                        $('#total_efectivo').html('');
+                        $('#total_otros').html('');
+
+                        $('#aprobacion').html('En Espera de Aprobación <span id="aprobacion_tiempo"></span>');
+
+                        $('#rendicion_caja_diaria').modal('hide');
+
+                        tiempo = 0;
+                        conteo_activo = 0;
+
+                        swal({
+                            title: "Solicitud de Rendicion.",
+                            text: "Codigo no recibido a tiempo",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            // DangerMode: true,
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Falla Solicitud de Rendicion, Autorizacion no recibido a tiempo",
+                            text: data.msj,
+                            icon: "error",
+                            buttons: "Aceptar",
+                            // DangerMode: true,
+                        });
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
+
+        function reiniciar_rendicion(id_rendicion)
+        {
+            let url = "{{ route('asistentecm.rendicion_caja_extender_validacion') }}";
+
+            $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        id_rendicion : id_rendicion
+                    },
+                })
+                .done(function(data) {
+
+                    console.log(data);
+                    if (data.estado == 1)
+                    {
+                        tiempo = data.autorizacion.tiempo;
+                        conteo_activo = 1;
+                        validar_rendicion();
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Falla Solicitud de Rendicion Desistida",
+                            text: data.msj,
+                            icon: "error",
+                            buttons: "Aceptar",
+                            // DangerMode: true,
+                        });
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
+
+        function cargar_registros()
+        {
+                let url = "{{ route('asistentejcm.rendicion_carga_bonos') }}";
+
+                $.ajax({
+                        url: url,
+                        type: "GET",
+                        data: {},
+                    })
+                    .done(function(data) {
+
+                        console.log(data);
+                        if (data.estado == 1)
+                        {
+
+                            $('#numero_bonos').val(data.total_bonos);
+                            $('#efectivo').val(data.total_efectivo);
+                            $('#otros').val(data.total_otros);
+                            $('#total').val(data.total);
+
+                            var lista_bonos = '';
+                            $('#tabla_rendir_caja tbody').html('');
+                            $(data.lista_bonos).each(function(index, value) { // indice, valor
+                                var html = '';
+                                let clase_bono = ['','Bono Fisico','Sencillito','Caja Vecina','Bono Web','Bono Web Pre-Pago','Particular','Otro'];
+                                html +='<tr >';
+                                html +='    <td class="align-middle text-center">'+value.TipoBono.nombre+'</td>';
+                                html +='    <td class="align-middle text-center">'+value.numero_bono+'</td>';
+                                html +='    <td class="align-middle text-center">'+clase_bono[value.id_clase_bono]+'</td>';
+                                html +='    <td class="align-middle text-center">'+value.Convenio.nombre+'</td>';
+                                html +='    <td class="align-middle text-center">'+value.fecha_atencion+'</td>';
+                                html +='    <td class="align-middle text-center">';
+                                html +='        <span>'+value.Paciente.nombres+' '+value.Paciente.apellido_uno+' '+value.Paciente.apellido_dos+'</span><br>';
+                                html +='        <span>'+value.Paciente.rut+'</span>';
+                                html +='    </td>';
+                                html +='    <td class="align-middle text-center">'+$.number( value.valor_atencion, 2, ',' )+'</td>';
+                                html +='    <td class="align-middle text-center">';
+                                html +='        <span>'+value.Profesional.nombres+' '+value.Profesional.apellido_uno+' '+value.Profesional.apellido_dos+'</span><br>';
+                                html +='        <span>'+value.Profesional.rut+'</span>';
+                                html +='    </td>';
+                                html +='</tr>';
+                                $('#tabla_rendir_caja tbody').append(html);
+                                lista_bonos +='|'+value.id+'' ;
+                            });
+
+                            $('#lista_bonos').val(data.lista_bonos)
+
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Problemas al cargar bonos del día",
+                                text: data.msj,
+                                icon: "error",
+                                buttons: "Aceptar",
+                                // DangerMode: true,
+                            });
+                            return '0';
+                        }
+
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        console.log(jqXHR, ajaxOptions, thrownError)
+                    });
+        }
+
+        // function validar_autorizacion()
+        // {
+        //     console.log('-----------------validar_autorizacion-------------------');
+
+        //     var id_rendicion = $('#numero_rendicion_hidde').val()
+        //     let url = "{{ route('asistentecm.rendir_caja_validar_autorizacion') }}";
+
+        //     $.ajax({
+        //             url: url,
+        //             type: "POST",
+        //             data: {
+        //                 _token: CSRF_TOKEN,
+        //                 id_rendicion : id_rendicion,
+        //             },
+        //         })
+        //         .done(function(data) {
+
+        //             console.log(data);
+        //             if (data.estado == 1)
+        //             {
+        //                 if(data.registro.estado == 0)
+        //                 {
+        //                     console.log('espera aprobacion');
+        //                     return '0';
+        //                 }
+        //                 else
+        //                 {
+        //                     $('#numero_rendicion_hidde').val('');
+        //                     $('#numero_rendicion').html('');
+        //                     $('#nombre_receptor').html('');
+        //                     $('#total_documento').html('');
+        //                     $('#total_bonos').html('');
+        //                     $('#total_efectivo').html('');
+        //                     $('#total_otros').html('');
+
+        //                     $('#aprobacion').html('En Espera de Aprobación <span id="aprobacion_tiempo"></span>');
+
+        //                     $('#rendicion_caja_diaria').modal('hide');
+
+        //                     tiempo = 0;
+        //                     conteo_activo = 0;
+
+
+        //                     if(data.registro.estado == 1)
+        //                     {
+        //                         swal({
+        //                             title: "Solicitud de Rendicion.",
+        //                             text: "Rendicion Aceptada conforme",
+        //                             icon: "success",
+        //                             buttons: "Aceptar",
+        //                             // DangerMode: true,
+        //                         });
+        //                         return '1';
+        //                     }
+        //                     else if(data.registro.estado == 2)
+        //                     {
+        //                         swal({
+        //                             title: "Solicitud de Rendicion.",
+        //                             text: "Autorizaión Vencida",
+        //                             icon: "success",
+        //                             buttons: "Aceptar",
+        //                             // DangerMode: true,
+        //                         });
+        //                     }
+        //                     else if(data.registro.estado == 3)
+        //                     {
+        //                         swal({
+        //                             title: "Solicitud de Rendicion.",
+        //                             text: "Autorizaión Rechazada",
+        //                             icon: "error",
+        //                             buttons: "Aceptar",
+        //                             // DangerMode: true,
+        //                         });
+        //                     }
+
+        //                     return '0';
+        //                 }
+        //             }
+        //             else
+        //             {
+        //                 swal({
+        //                     title: "Solicitud de Rendicion con Problema",
+        //                     text: data.msj,
+        //                     icon: "error",
+        //                     buttons: "Aceptar",
+        //                     // DangerMode: true,
+        //                 });
+        //                 return '0';
+        //             }
+
+        //         })
+        //         .fail(function(jqXHR, ajaxOptions, thrownError) {
+        //             console.log(jqXHR, ajaxOptions, thrownError)
+        //         });
+        // }
+
     </script>
+
 @endsection
 
