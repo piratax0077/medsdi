@@ -163,7 +163,8 @@
                                             </div>
                                             <hr>
                                             <div class="form-row">
-                                                <input type="hidden" name="lista_bonos" id="lista_bonos" value="{{ $lista_rendiciones }}">
+                                                <input type="hidden" name="lista_rendiciones" id="lista_rendiciones" value="{{ $lista_rendiciones }}">
+                                                <input type="hidden" name="total_rendiciones" id="total_rendiciones" value="{{ $total_rendiciones }}">
                                                 <div class="col-sm-6 col-md-2">
                                                     <div class="form-group">
                                                         <label class="floating-label-activo-sm">Número de Bonos</label>
@@ -185,13 +186,13 @@
                                                 <div class="col-sm-6 col-md-2">
                                                     <div class="form-group">
                                                         <label class="floating-label-activo-sm">Total Documentos</label>
-                                                        <input type="number" class="form-control form-control-sm" id="total_rendiciones" name="total_rendiciones" value="{{ $total_rendiciones  }}" readonly="readonly">
+                                                        <input type="number" class="form-control form-control-sm" id="total_documentos_rendiciones" name="total_documentos_rendiciones" value="{{ $total_documentos_rendiciones  }}" readonly="readonly">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-2">
                                                     <div class="form-group">
                                                         <label class="floating-label-activo-sm">Recibe Caja :</label>
-                                                        <select name="id_asistente_receptor" id="id_asistente_receptor" class="form-control form-control-sm">
+                                                        <select name="id_asistente_receptor_rendiciones" id="id_asistente_receptor_rendiciones" class="form-control form-control-sm">
                                                             @if($listado_recibe)
                                                                 @foreach ( $listado_recibe as $recibe )
                                                                     <option value="{{ $recibe->id }}">{{ strtoupper($recibe->nombres.' '.$recibe->apellido_uno.' '.$recibe->apellido_dos) }}</option>
@@ -201,7 +202,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12 col-md-2 text-center">
-                                                    <button class="btn btn-block btn-sm btn-info" onclick="rendir_rendicion();" id="btn_rendicion_caja_diaria">Cierres de Cajas</button>
+                                                    <button class="btn btn-block btn-sm btn-info" onclick="rendir_cierre();" id="btn_rendicion_cierre_dia">Cierres de Cajas</button>
                                                 </div>
                                             </div>
 
@@ -210,7 +211,7 @@
                                                     <table id="tabla_rendir_rendiciones" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
                                                         <thead>
                                                             <tr>
-                                                                <th class="text-center align-middle">ID Rendición</th>
+                                                                <th class="text-center align-middle">ID Rendicion</th>
                                                                 <th class="text-center align-middle">Asistene</th>
                                                                 <th class="text-center align-middle">Receptor</th>
                                                                 <th class="text-center align-middle">F/Recepción</th>
@@ -235,9 +236,9 @@
                                                                         </td>
                                                                         <td class="align-middle text-center">{{ $value_r->fecha_rendicion }}</td>
                                                                         <td class="align-middle text-center">{{ $value_r->total_bono }}</td>
-                                                                        <td class="align-middle text-center">${{ number_format($value_r->total_efectivo, 2, ",", ".") }}</td>
+                                                                        <td class="align-middle text-center">${{ number_format($value_r->total_efectivo, 0, ",", ".") }}</td>
                                                                         <td class="align-middle text-center">{{ $value_r->total_otros }}</td>
-                                                                        <td class="align-middle text-center">{{ $value_r->total_documentos_rendiciones }}</td>
+                                                                        <td class="align-middle text-center">{{ $value_r->total_documentos }}</td>
                                                                     </tr>
                                                                 @endforeach
                                                             @endif
@@ -264,7 +265,8 @@
 @endsection
 
 @section('modales')
-    @include('app.asistente_cm_publico.modales.modal_rendicion_caja_diaria')
+    @include('app.asistente_cm.modales.modal_rendicion_caja_diaria')
+    @include('app.asistente_cm.modales.modal_rendicion_cierre_dia')
 @endsection
 
 @section('page-script')
@@ -277,23 +279,27 @@
             $('#tabla_rendir_caja').DataTable({
                 responsive: true,
             });
+            $('#tabla_rendir_rendiciones').DataTable({
+                responsive: true,
+            });
         });
 
-        function seleccionar_bonos_rendicion(){
-            var estado  = $('#enviar_todos').is(':checked')
-            $("input:checkbox").each(function() {
-                if($(this).attr('id') != 'enviar_todos')
-                {
-                    if(estado != $(this).is(':checked'))
-                    {
-                        $(this).trigger('click');
-                    }
-                }
-            });
-        }
+        // function seleccionar_bonos_rendicion(){
+        //     var estado  = $('#enviar_todos').is(':checked')
+        //     $("input:checkbox").each(function() {
+        //         if($(this).attr('id') != 'enviar_todos')
+        //         {
+        //             if(estado != $(this).is(':checked'))
+        //             {
+        //                 $(this).trigger('click');
+        //             }
+        //         }
+        //     });
+        // }
 
-        function cargar_flujo_caja() {
-            var fecha = {{ date('Y-m-d') }};
+        function cargar_flujo_caja()
+        {
+            var fecha = '{{ date("Y-m-d") }}';
             var convenio = $('#rinde_convenio').val();
             var estado_consulta = $('#rinde_estado_consulta').val();
 
@@ -727,101 +733,370 @@
                     });
         }
 
-        // function validar_autorizacion()
-        // {
-        //     console.log('-----------------validar_autorizacion-------------------');
+        /** cierre de dia */
+        function cargar_registros_cierre()
+        {
+                let url = "{{ route('asistentejcm.rendicion_carga_rendiciones') }}";
 
-        //     var id_rendicion = $('#numero_rendicion_hidde').val()
-        //     let url = "{{ route('asistentecm.rendir_caja_validar_autorizacion') }}";
+                $.ajax({
+                        url: url,
+                        type: "GET",
+                        data: {},
+                    })
+                    .done(function(data) {
 
-        //     $.ajax({
-        //             url: url,
-        //             type: "POST",
-        //             data: {
-        //                 _token: CSRF_TOKEN,
-        //                 id_rendicion : id_rendicion,
-        //             },
-        //         })
-        //         .done(function(data) {
-
-        //             console.log(data);
-        //             if (data.estado == 1)
-        //             {
-        //                 if(data.registro.estado == 0)
-        //                 {
-        //                     console.log('espera aprobacion');
-        //                     return '0';
-        //                 }
-        //                 else
-        //                 {
-        //                     $('#numero_rendicion_hidde').val('');
-        //                     $('#numero_rendicion').html('');
-        //                     $('#nombre_receptor').html('');
-        //                     $('#total_documento').html('');
-        //                     $('#total_bonos').html('');
-        //                     $('#total_efectivo').html('');
-        //                     $('#total_otros').html('');
-
-        //                     $('#aprobacion').html('En Espera de Aprobación <span id="aprobacion_tiempo"></span>');
-
-        //                     $('#rendicion_caja_diaria').modal('hide');
-
-        //                     tiempo = 0;
-        //                     conteo_activo = 0;
+                        console.log(data);
+                        if (data.estado == 1)
+                        {
+                            // $('#lista_rendiciones').val(data.lista_rendiciones);
+                            $('#total_rendiciones').val(data.total_rendiciones);
+                            $('#numero_bonos_rendiciones').val(data.total_bonos);
+                            $('#efectivo_rendiciones').val(data.total_efectivo);
+                            $('#otros_rendiciones').val(data.total_otros);
+                            $('#total_documentos_rendiciones').val(data.total_documentos);
 
 
-        //                     if(data.registro.estado == 1)
-        //                     {
-        //                         swal({
-        //                             title: "Solicitud de Rendicion.",
-        //                             text: "Rendicion Aceptada conforme",
-        //                             icon: "success",
-        //                             buttons: "Aceptar",
-        //                             // DangerMode: true,
-        //                         });
-        //                         return '1';
-        //                     }
-        //                     else if(data.registro.estado == 2)
-        //                     {
-        //                         swal({
-        //                             title: "Solicitud de Rendicion.",
-        //                             text: "Autorizaión Vencida",
-        //                             icon: "success",
-        //                             buttons: "Aceptar",
-        //                             // DangerMode: true,
-        //                         });
-        //                     }
-        //                     else if(data.registro.estado == 3)
-        //                     {
-        //                         swal({
-        //                             title: "Solicitud de Rendicion.",
-        //                             text: "Autorizaión Rechazada",
-        //                             icon: "error",
-        //                             buttons: "Aceptar",
-        //                             // DangerMode: true,
-        //                         });
-        //                     }
+                            var lista_rendiciones = '';
+                            var lista_rendiciones = '';
+                            $('#tabla_rendir_rendiciones tbody').html('');
+                            $(data.rendiciones).each(function(index, value) { // indice, valor
+                                var html = '';
+                                html +='<tr >';
+                                html +='    <td class="align-middle text-center">'+value.id+'</td>';
+                                html +='    <td class="align-middle text-center">';
+                                html +='        <span>'+value.asistente.nombres+' '+value.asistente.apellido_uno+' '+value.asistente.apellido_dos+'</span><br>';
+                                html +='        <span>'+value.asistente.rut+'</span>';
+                                html +='    </td>';
+                                html +='    <td class="align-middle text-center">';
+                                html +='        <span>'+value.asistente_receptor.nombres+' '+value.asistente_receptor.apellido_uno+' '+value.asistente_receptor.apellido_dos+'</span><br>';
+                                html +='        <span>'+value.asistente_receptor.rut+'</span>';
+                                html +='    </td>';
+                                html +='    <td class="align-middle text-center">'+value.fecha_rendicion+'</td>';
+                                html +='    <td class="align-middle text-center">'+value.total_bono+'</td>';
+                                html +='    <td class="align-middle text-center">$'+value.total_efectivo+'</td>';
+                                html +='    <td class="align-middle text-center">'+value.total_otros+'</td>';
+                                html +='    <td class="align-middle text-center">'+value.total_documentos+'</td>';
+                                html +='</tr>';
 
-        //                     return '0';
-        //                 }
-        //             }
-        //             else
-        //             {
-        //                 swal({
-        //                     title: "Solicitud de Rendicion con Problema",
-        //                     text: data.msj,
-        //                     icon: "error",
-        //                     buttons: "Aceptar",
-        //                     // DangerMode: true,
-        //                 });
-        //                 return '0';
-        //             }
+                                $('#tabla_rendir_rendiciones tbody').append(html);
+                                lista_rendiciones +='|'+value.id+'' ;
+                            });
 
-        //         })
-        //         .fail(function(jqXHR, ajaxOptions, thrownError) {
-        //             console.log(jqXHR, ajaxOptions, thrownError)
-        //         });
-        // }
+                            $('#lista_rendiciones').val(data.lista_rendiciones)
+
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Problemas al cargar rendiciones del día",
+                                text: data.msj,
+                                icon: "error",
+                                buttons: "Aceptar",
+                                // DangerMode: true,
+                            });
+                            return '0';
+                        }
+
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        console.log(jqXHR, ajaxOptions, thrownError)
+                    });
+        }
+
+        function rendir_cierre()
+        {
+            let url = "{{ route('asistentejcm.solicitar_rendir_cierre_dia') }}";
+
+            $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        rendiciones : $('#lista_rendiciones').val(),
+                        id_asistente_receptor : $('#id_asistente_receptor_rendiciones').val(),
+                    },
+                })
+                .done(function(data) {
+
+                    console.log(data);
+                    if (data.estado == 1)
+                    {
+                        $('#cierre_numero_cierre_hidde').val(data.last_id);
+                        $('#cierre_numero_cierre').html(data.last_id);
+                        $('#cierre_total_rendiciones').html(data.registro.total_rendiciones);
+                        $('#cierre_total_documento').html(data.registro.total_documentos);
+                        $('#cierre_total_bonos').html(data.registro.total_bono);
+                        $('#cierre_total_efectivo').html(data.registro.total_efectivo);
+                        $('#cierre_total_otros').html(data.registro.total_otros);
+
+                        $('#aprobacion_cierre_dia').html('En Espera de Aprobación <span id="aprobacion_tiempo"></span>');
+
+                        $('#rendicion_cierre_dia').modal('show',{backdrop: 'static', keyboard: false});
+
+                        tiempo = data.autorizacion.tiempo;
+                        conteo_activo = 1;
+                        validar_cierre();
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Solicitud de Rendicion de Cierres de Cajas con Problema",
+                            text: data.msj,
+                            icon: "error",
+                            buttons: "Aceptar",
+                            // DangerMode: true,
+                        });
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
+
+        function cerrarModalCierreDia()
+        {
+            swal({
+                title: "Rendición Cierre de Caja.",
+                text: 'Al "Aceptar" cierra la ventana sin Esperar Aprobación del receptor.',
+                icon: "warning",
+                buttons: ["Aceptar", 'Cancelar'],
+            }).then((result) => {
+                if (result == true)
+                {
+                    console.log('regresar');
+                } else {
+
+                    $('#rendicion_cierre_dia').modal('hide');
+                }
+            });
+        }
+
+        function validar_cierre()
+        {
+            console.log('------------------------------------');
+            console.log('validar_cierre');
+            console.log('------------------------------------');
+            $('#cierre_aprobacion_tiempo').html(''+tiempo+' minutos');
+            if(tiempo > 0 && conteo_activo == 1)
+            {
+                setTimeout(function(){
+                    tiempo = tiempo-1;
+                    $('#cierre_aprobacion_tiempo').html(''+tiempo+' minutos');
+                    var value_validacion = 0;
+
+                    var id_cierre = $('#cierre_numero_cierre_hidde').val()
+                    let url = "{{ route('asistentejcm.cierre_dia_validar_autorizacion') }}";
+
+                    $.ajax({
+                            url: url,
+                            type: "POST",
+                            data: {
+                                _token: CSRF_TOKEN,
+                                id_cierre : id_cierre,
+                            },
+                        })
+                        .done(function(data) {
+
+                            console.log(data);
+                            if (data.estado == 1)
+                            {
+                                if(data.registro.estado == 0)
+                                {
+                                    console.log('espera aprobacion');
+                                }
+                                else
+                                {
+                                    $('#cierre_numero_cierre_hidde').val('');
+                                    $('#cierre_numero_cierre').val('');
+                                    $('#cierre_total_rendiciones').val('');
+                                    $('#cierre_total_documento').val('');
+                                    $('#cierre_total_bonos').val('');
+                                    $('#cierre_total_efectivo').val('');
+                                    $('#cierre_total_otros').val('');
+
+                                    $('#aprobacion_cierre_dia').html('En Espera de Aprobación <span id="cierre_aprobacion_tiempo"></span>');
+                                    $('#rendicion_cierre_dia').modal('hide');
+
+                                    tiempo = 0;
+                                    conteo_activo = 0;
+
+                                    if(data.registro.estado == 1)
+                                    {
+                                        swal({
+                                            title: "Solicitud de Cierres de Cajas.",
+                                            text: "Cierre Aceptada conforme",
+                                            icon: "success",
+                                            buttons: "Aceptar",
+                                            // DangerMode: true,
+                                        });
+
+                                        console.log('confirmado');
+                                        value_validacion = 1;
+                                        cargar_registros_cierre();
+                                        return false;
+                                    }
+                                    else if(data.registro.estado == 2)
+                                    {
+                                        swal({
+                                            title: "Solicitud de Cierres de Cajas.",
+                                            text: "Autorizaión Vencida",
+                                            icon: "success",
+                                            buttons: "Aceptar",
+                                            // DangerMode: true,
+                                        });
+                                    }
+                                    else if(data.registro.estado == 3)
+                                    {
+                                        swal({
+                                            title: "Solicitud de Cierres de Cajas.",
+                                            text: "Autorizaión Rechazada",
+                                            icon: "error",
+                                            buttons: "Aceptar",
+                                            // DangerMode: true,
+                                        });
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                swal({
+                                    title: "Solicitud de Cierres de Caja con Problema",
+                                    text: data.msj,
+                                    icon: "error",
+                                    buttons: "Aceptar",
+                                    // DangerMode: true,
+                                });
+                            }
+
+                            validar_cierre(tiempo);
+                            if(tiempo == 8)
+                            {
+                                swal({
+                                    title: "Solicitud de Cierres de Caja",
+                                    text: 'El tiempo para Autorizar Cierres de Cajas esta por finalizar, Desea continuar presione el botón "Más Tiempo", si "Acepta" el Cierre de Cajas quedará Anulada y debera realizarla de nuevo.',
+                                    icon: "warning",
+                                    buttons: ["Aceptar", 'Más Tiempo'],
+                                }).then((result) => {
+                                    if (result == true)
+                                    {
+                                        reiniciar_cierre_dia( $('#cierre_numero_cierre_hidde').val());
+                                    }
+                                });
+                            }
+
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            console.log(jqXHR, ajaxOptions, thrownError)
+                        });
+                }, 10000);// 600 = 1seg |  60000 = 1 minutos | 10000 = 10 seg | 600000 = 10 minutos
+            }
+            else
+            {
+                conteo_activo = 0;
+                $('#aprobacion').html('Se a finalizado el tiempo para la aprobación, debe realizar la rendicion nuevamente');
+                console.log('desistir rendicion');
+                desistir_cierre_dia();
+            }
+        }
+
+        function reiniciar_cierre_dia(id_cierre)
+        {
+            let url = "{{ route('asistentejcm.cierre_dia_extender_validacion') }}";
+
+            $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        id_cierre : id_cierre
+                    },
+                })
+                .done(function(data) {
+
+                    console.log(data);
+                    if (data.estado == 1)
+                    {
+                        tiempo = data.autorizacion.tiempo;
+                        conteo_activo = 1;
+                        validar_cierre();
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Falla Solicitud de Cierres de Caja Desistida",
+                            text: data.msj,
+                            icon: "error",
+                            buttons: "Aceptar",
+                            // DangerMode: true,
+                        });
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
+
+        function desistir_cierre_dia()
+        {
+            var id_cierre = $('#cierre_numero_cierre_hidde').val();
+
+            let url = "{{ route('asistentejcm.cierre_dia_desistir') }}";
+
+            $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        id_cierre : id_cierre
+                    },
+                })
+                .done(function(data) {
+
+                    console.log(data);
+                    if (data.estado == 1)
+                    {
+                        $('#cierre_numero_cierre_hidde').val('');
+                        $('#cierre_numero_cierre').val('');
+                        $('#cierre_total_rendiciones').val('');
+                        $('#cierre_total_documento').val('');
+                        $('#cierre_total_bonos').val('');
+                        $('#cierre_total_efectivo').val('');
+                        $('#cierre_total_otros').val('');
+
+
+                        $('#aprobacion_cierre_dia').html('En Espera de Aprobación <span id="cierre_aprobacion_tiempo"></span>');
+                        $('#rendicion_cierre_dia').modal('hide');
+
+                        tiempo = 0;
+                        conteo_activo = 0;
+
+                        swal({
+                            title: "Solicitud de Cierres de Caja.",
+                            text: "Codigo no recibido a tiempo",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            // DangerMode: true,
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Falla Solicitud de Cierres de Cajas, Autorizacion no recibido a tiempo",
+                            text: data.msj,
+                            icon: "error",
+                            buttons: "Aceptar",
+                            // DangerMode: true,
+                        });
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
+
 
     </script>
 

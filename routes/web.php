@@ -523,6 +523,7 @@ Route::group([
     // Route::get('Flujo_Caja', [App\Http\Controllers\FlujoCajaController::class, 'index'])->name('asistentejcm.flujo_caja');
     Route::get('caja/rendir', [App\Http\Controllers\FlujoCajaController::class, 'rendirCajaDiariaJefe'])->name('asistentejcm.rendir');
     Route::get('caja/rendir/bonos', [App\Http\Controllers\FlujoCajaController::class, 'cargaBonosAsistenteDia'])->name('asistentejcm.rendicion_carga_bonos');
+    Route::get('caja/cerrar/rendiciones', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionesAsistenteDia'])->name('asistentejcm.rendicion_carga_rendiciones');
     Route::get('caja/historico', [App\Http\Controllers\FlujoCajaController::class, 'historicoCajaDiaria'])->name('asistentejcm.historico_caja');
 
     Route::get('Administracion_asistente', [App\Http\Controllers\EscritorioAsistenteCmJefe::class, 'administracion_asistente'])->name('asistentejcm.administracion_asistente');
@@ -549,6 +550,12 @@ Route::group([
     Route::get('perfil/contacto/editar', [App\Http\Controllers\EscritorioAsistenteCmJefe::class, 'editar_contacto_emergencia'])->name('asistentejcm.editar_contacto');
     Route::get('perfil/contacto/eliminar', [App\Http\Controllers\EscritorioAsistenteCmJefe::class, 'eliminar_contacto_asistente'])->name('asistentejcm.eliminar_contacto_asistente');
     Route::get('perfil/contacto/buscar', [App\Http\Controllers\EscritorioAsistenteCmJefe::class, 'buscar_contacto'])->name('asistentejcm.buscar_contacto');
+
+    /** rendicion cierre dia */
+    Route::post('cierre/crear/rendicion', [App\Http\Controllers\CierreDiarioController::class, 'cierreDiarioIntitucion'])->name('asistentejcm.solicitar_rendir_cierre_dia');
+    Route::post('cierre/desistir/rendicion', [App\Http\Controllers\CierreDiarioController::class, 'cierreCajaDiariaInstitucionDesistir'])->name('asistentejcm.cierre_dia_desistir');
+    Route::post('cierre/extencion/validacion/rendicion', [App\Http\Controllers\CierreDiarioController::class, 'cierreCajaDiariaInstitucionExtenderValidacion'])->name('asistentejcm.cierre_dia_extender_validacion');
+    Route::post('cierre/rendicion/autorizacion/validacion', [App\Http\Controllers\CierreDiarioController::class, 'cierreDiarioInstitucionValidarAutorizacion'])->name('asistentejcm.cierre_dia_validar_autorizacion');
 
 });
 

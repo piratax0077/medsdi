@@ -459,10 +459,30 @@ class RendicionCajaController extends Controller
                     if($log_users_devices->estado == 0)//ESPERA
                     {
                         $rendicionCaja->estado = 1;
+                        if($rendicionCaja->save())
+                        {
+                            $datos['update_rendicion']['estado'] = 1;
+                            $datos['update_rendicion']['msj'] = 'Rendicion Actualizada en Espaera';
+                        }
+                        else
+                        {
+                            $datos['update_rendicion']['estado'] = 0;
+                            $datos['update_rendicion']['msj'] = 'Falla Actualizando Rendicion en Espaera';
+                        }
                     }
                     if($log_users_devices->estado == 1)//VALIDO
                     {
                         $rendicionCaja->estado = 2;
+                        if($rendicionCaja->save())
+                        {
+                            $datos['update_rendicion']['estado'] = 1;
+                            $datos['update_rendicion']['msj'] = 'Rendicion Actualizada valida';
+                        }
+                        else
+                        {
+                            $datos['update_rendicion']['estado'] = 0;
+                            $datos['update_rendicion']['msj'] = 'Falla Actualizando Rendicion valida';
+                        }
                     }
                     if($log_users_devices->estado == 2)//VENCIDO
                     {

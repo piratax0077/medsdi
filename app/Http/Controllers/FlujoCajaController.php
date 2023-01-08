@@ -833,7 +833,7 @@ class FlujoCajaController extends Controller
                                             ->get();
 
             /** RENDICION */
-            $rendiciones = RendicionCaja::where('id_asistente_receptor', $asistente->id)->get();
+            $rendiciones = RendicionCaja::where('id_asistente_receptor', $asistente->id)->where('rendicion','0')->where('estado',2)->get();
 
             $total_rendiciones = 0;
             $total_documentos_rendiciones = 0;
@@ -977,6 +977,66 @@ class FlujoCajaController extends Controller
     public function recibirCaja(Request $request)
     {
 
+    }
+
+    public function cargaRendicionesAsistenteDia(Request $request)
+    {
+        $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
+        $contrato = ContratoDependiente::where('id_empleado',$asistente->id)->first();
+
+        if($contrato)
+        {
+            $filtro = array();
+            $filtro[] = array('id_asistente',$asistente->id);
+
+            /** rendiciones  */
+            $rendiciones = RendicionCaja::where('id_asistente_receptor', $asistente->id)
+                                ->with(['Asistente' => function($query){
+                                    $query->select('id','nombres','apellido_uno','apellido_dos', 'rut');
+                                }])
+                                ->with(['AsistenteReceptor' => function($query){
+                                    $query->select('id','nombres','apellido_uno','apellido_dos', 'rut');
+                                }])
+                                ->where('rendicion','0')
+                                ->where('estado',2)
+                                ->get();
+
+            $total_rendiciones = 0;
+            $total_documentos_rendiciones = 0;
+            $total_bonos_rendiciones = 0;
+            $total_efectivo_rendicion = 0;
+            $total_otros_rendicion = 0;
+            $lista_rendiciones = array();
+
+            if($rendiciones)
+            {
+                foreach ($rendiciones as $rendicion){
+                    $lista_rendiciones[] = $rendicion->id;
+
+                    $total_rendiciones++;
+                    $total_documentos_rendiciones += $rendicion->total_documentos;
+                    $total_bonos_rendiciones += $rendicion->total_bono;
+                    $total_efectivo_rendicion += $rendicion->total_efectivo;
+                    $total_otros_rendicion += $rendicion->total_otros;
+                }
+            }
+
+
+            return array(
+                'estado' => 1,
+                'lista_rendiciones' => implode('|',$lista_rendiciones),
+                'total_rendiciones' => $total_rendiciones,
+                'total_documentos' => $total_documentos_rendiciones,
+                'total_bonos' => $total_bonos_rendiciones,
+                'total_efectivo' => $total_efectivo_rendicion,
+                'total_otros' => $total_otros_rendicion,
+                'rendiciones' => $rendiciones,
+            );
+        }
+        else
+        {
+            return back()->with('mensaje','Contrato no encontrado');
+        }
     }
 
 
