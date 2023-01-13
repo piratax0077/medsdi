@@ -139,9 +139,9 @@ class RendicionCajaController extends Controller
 
                 /** SOLICITAR AUTORIZACION POR APP */
                 $msj = array(
-                    'id_rendicion' => $rendicionCaja->id,
-                    'nombre_asistente' => $asistenteRendicion->nombres.' '.$asistenteRendicion->apellido_uno.' '.$asistenteRendicion->apellido_dos,
-                    'fecha_rendicion' => $fecha_rendicion,
+                    'id' => $rendicionCaja->id,
+                    'nombre' => $asistenteRendicion->nombres.' '.$asistenteRendicion->apellido_uno.' '.$asistenteRendicion->apellido_dos,
+                    'fecha' => $fecha_rendicion,
                     'tipo' => 'rendicion',
                     // 'mensaje' => 'Recibe conforme Rendición de Caja N°{id_rendicion} de la Asistente {nombre_asistente} de fecha {fecha_rendicion}'
                 );
@@ -169,6 +169,7 @@ class RendicionCajaController extends Controller
                     $datos['autorizacion']['last_id'] = $log_users_devices->id;
 
                     $rendicionCaja->id_log_users_devices = $log_users_devices->id;
+                    $rendicionCaja->estado = 1;
                     if($rendicionCaja->save())
                     {
                         $datos['update_log_users_devices']['estado'] = 1;
@@ -392,6 +393,7 @@ class RendicionCajaController extends Controller
                 $datos['autorizacion']['last_id'] = $log_users_devices->id;
 
                 $rendicionCaja->id_log_users_devices = $log_users_devices->id;
+                $rendicionCaja->estado = 1;
                 if($rendicionCaja->save())
                 {
                     $datos['update_log_users_devices']['estado'] = 1;
@@ -456,11 +458,31 @@ class RendicionCajaController extends Controller
 
                     if($log_users_devices->estado == 0)//ESPERA
                     {
-                        // $rendicionCaja->estado =
+                        $rendicionCaja->estado = 1;
+                        if($rendicionCaja->save())
+                        {
+                            $datos['update_rendicion']['estado'] = 1;
+                            $datos['update_rendicion']['msj'] = 'Rendicion Actualizada en Espaera';
+                        }
+                        else
+                        {
+                            $datos['update_rendicion']['estado'] = 0;
+                            $datos['update_rendicion']['msj'] = 'Falla Actualizando Rendicion en Espaera';
+                        }
                     }
                     if($log_users_devices->estado == 1)//VALIDO
                     {
                         $rendicionCaja->estado = 2;
+                        if($rendicionCaja->save())
+                        {
+                            $datos['update_rendicion']['estado'] = 1;
+                            $datos['update_rendicion']['msj'] = 'Rendicion Actualizada valida';
+                        }
+                        else
+                        {
+                            $datos['update_rendicion']['estado'] = 0;
+                            $datos['update_rendicion']['msj'] = 'Falla Actualizando Rendicion valida';
+                        }
                     }
                     if($log_users_devices->estado == 2)//VENCIDO
                     {

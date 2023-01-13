@@ -137,7 +137,7 @@
                         </a>
                     </div>
 					<div class="card subir py-auto">
-                        <a href="{{ ROUTE('asistentejcm.flujo_caja') }}">
+                        <a href="{{ ROUTE('asistentejcm.rendir') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
                                 <h5 class="mt-1 mb-0">Manejo de Caja</h5>
