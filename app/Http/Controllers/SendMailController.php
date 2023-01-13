@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Mail\CorreoGenerico;
+use App\Models\RegistroCorreo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class SendMailController extends Controller
@@ -66,17 +68,78 @@ class SendMailController extends Controller
                     ->bcc($bcc)
                     ->send($correo);
 
+            var_dump(Auth::user());
 
+            $id_usuario = '1';
+            if(!empty(Auth::user()))
+                $id_usuario = Auth::user()->id;
 
             if (Mail::failures())
             {
                 $datos['estado'] = 0;
                 $datos['msj'] = 'falla en envio de correo';
+
+                $registro_correo = new RegistroCorreo();
+                $data_correo = array(
+                    'blade' => $blade,
+                    'to' => $to,
+                    'cc' => $cc,
+                    'bcc' => $bcc,
+                    'asunto' => $asunto,
+                    'body' => $body,
+                    'archivo' => $archivo,
+                    'id_institucion' => $id_institucion
+                );
+
+                $registro_correo->id_user = $id_usuario;
+                $registro_correo->data = json_encode($data_correo);
+                $registro_correo->fecha_envio = date('Y-m-d H:i:s');
+                $registro_correo->estado = 0;
+
+                if($registro_correo->save())
+                {
+                    $datos['registro_correo']['estado'] = 1;
+                    $datos['registro_correo']['msj'] = 'registro exitoso';
+                }
+                else
+                {
+                    $datos['registro_correo']['estado'] = 0;
+                    $datos['registro_correo']['msj'] = 'falla en el registro';
+                }
             }
             else
             {
                 $datos['estado'] = 1;
                 $datos['msj'] = 'email enviado';
+
+                $registro_correo = new RegistroCorreo();
+                $data_correo = array(
+                    'blade' => $blade,
+                    'to' => $to,
+                    'cc' => $cc,
+                    'bcc' => $bcc,
+                    'asunto' => $asunto,
+                    'body' => $body,
+                    'archivo' => $archivo,
+                    'id_institucion' => $id_institucion
+                );
+
+                $registro_correo->id_user = $id_usuario;
+                $registro_correo->data = json_encode($data_correo);
+                $registro_correo->fecha_envio = date('Y-m-d H:i:s');
+                $registro_correo->estado = 1;
+
+                if($registro_correo->save())
+                {
+                    $datos['registro_correo']['estado'] = 1;
+                    $datos['registro_correo']['msj'] = 'registro exitoso';
+                }
+                else
+                {
+                    $datos['registro_correo']['estado'] = 0;
+                    $datos['registro_correo']['msj'] = 'falla en el registro';
+                }
+
             }
         }
         else
