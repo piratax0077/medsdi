@@ -19,7 +19,7 @@
                             </tr>
                             <tr>
                                 <td style="text-align: center;">
-                                    <img style="width: 95px; margin-bottom: 20px; margin-top: 20px;" src="https://med-sdi.cl/images/logos/logo_pais_vertical.svg" alt="Medichile">
+                                    <img style="width: 95px; margin-bottom: 20px; margin-top: 20px;" src="https://www.med-sdi.cl/images/logos/logo_pais_vertical.svg" alt="Medichile">
                                 </td>
                             </tr>
                             <tr>
@@ -39,8 +39,8 @@
                             </tr>
                             <tr>
                                 <td inline-block style="text-align: center;">
-                                    <img style="width: 50px; margin-bottom: 5px; margin-top: 50px; margin-right: 10px;" src="https://med-sdi.cl/images/logos/logo_pais_vertical.svg" alt="Medichile">
-                                    <img style="width: 90px; margin-bottom: 5px; margin-top: 50px;" src="https://med-sdi.cl/images/logos/logo.svg" alt="Medichile">
+                                    <img style="width: 50px; margin-bottom: 5px; margin-top: 50px; margin-right: 10px;" src="https://www.med-sdi.cl/images/logos/logo_pais_vertical.svg" alt="Medichile">
+                                    <img style="width: 90px; margin-bottom: 5px; margin-top: 50px;" src="https://www.med-sdi.cl/images/logos/logo.svg" alt="Medichile">
                                 </td>
                             </tr>
                             <tr>

@@ -29,6 +29,10 @@ class CorreoGenerico extends Mailable
      */
     public function build()
     {
-        return $this->view('app.mail.'.$this->detalle['blade'])->subject($this->detalle['asunto']);
+        var_dump(env('MAIL_FROM_ADDRESS'));
+        var_dump(env('MAIL_FROM_NAME'));
+        return $this->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
+                    ->view('app.mail.'.$this->detalle['blade'])
+                    ->subject($this->detalle['asunto']);
     }
 }

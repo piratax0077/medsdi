@@ -57,6 +57,10 @@ class SendMailController extends Controller
             );
 
             $correo = new CorreoGenerico($data);
+
+            // desarrollo
+            $to = array(['email'=>'contacto@med-sdi.cl','name'=>'Contacto MED-SDI']);
+
             Mail::to($to)
                     ->cc($cc)
                     ->bcc($bcc)
@@ -92,11 +96,12 @@ class SendMailController extends Controller
         $to = array(
                 array('email' => 'jkriman@gmail.com','name' => 'jaime'),
                 array('email' => 'j2edavila@gmail.com','name' => 'johan'),
+                array('email' => 'contacto@med-sdi.cl','name' => 'Contacto MED-sdi'),
                 // array('email' => 'paul_baeza@hotmail.com','name' => 'paul')
             );
         $cc = array();
         $bcc = array();
-        $asunto = 'Codigo Registro APP';
+        $asunto = 'MED-SDI - Codigo Registro APP';
         $body = array('CODIGO'=>'12345', 'nombre_cliente'=> 'demo demo');
         $archivo = '';/** pendiente */
         $id_institucion = '';
