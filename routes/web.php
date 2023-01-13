@@ -292,6 +292,10 @@ Route::group([
     Route::post('Perfil/editcontacto', [App\Http\Controllers\EscritorioPaciente::class, 'editcontacto'])->name('paciente.perfil.editcontacto');
     Route::post('Perfil/editdirec', [App\Http\Controllers\EscritorioPaciente::class, 'editdirec'])->name('paciente.perfil.editdirec');
     Route::get('Perfil/crearContacto', [App\Http\Controllers\EscritorioPaciente::class, 'crearcontacto'])->name('paciente.perfil.crearcontacto');
+
+
+    Route::get('get/informacion', [App\Http\Controllers\EscritorioPaciente::class, 'getPacienteUser'])->name('paciente.get.informacion');
+    Route::post('Reservar_Hora/generar_reserva', [App\Http\Controllers\EscritorioPaciente::class, 'agendar_horas'])->name('paciente.solicitar.hora');
 });
 
 Route::group(

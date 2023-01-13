@@ -79,16 +79,13 @@
             </div>
             <div class="modal-body">
 
-                <div class="row">
+                {{--  BUSCADOR DE RUT  --}}
+                <div class="row div_rut_buscar">
                     <div class="col-sm-12 col-md-12">
                         <div class="form-group">
                             <h6 class="text-c-blue ml-2 mb-3">Ingrese el rut del paciente</h6>
                         </div>
                     </div>
-                </div>
-
-                {{--  BUSCADOR DE RUT  --}}
-                <div class="row div_rut_buscar">
                     <div class="col-sm-8 col-md-8 mb-3">
                         <form id="validacion_rut_form">
                             <div class="form-group" id="validacion_rut_div">
@@ -107,10 +104,13 @@
 
                 <form id="form_reseva_de_horas">
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-                    <input type="hidden" id="fecha_consulta" name="fecha_consulta" value="">
+                    <input type="hidden" id="reserva_hora_id_profesional" name="reserva_hora_id_profesional" value="">
                     <input type="hidden" id="reserva_hora_id_paciente" name="reserva_hora_id_paciente" value="">
-                    <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="$('#agenda_lugar_atencion_asistente').val();">
-                    <input type="hidden" name="fecha" id="fecha">
+                    <input type="hidden" id="reserva_hora_id_lugar_atencion" name="reserva_hora_id_lugar_atencion" value="">
+                    <input type="hidden" id="reserva_hora_fecha_consulta" name="reserva_hora_fecha_consulta" value="">
+                    <input type="hidden" id="reserva_hora_hora_consulta" name="reserva_hora_hora_consulta" value="">
+                    <input type="hidden" id="reserva_hora_origen" name="reserva_hora_origen" value="escritorio_paciente">
+                    <input type="hidden" id="reserva_hora_id_asistente" name="reserva_hora_id_asistente" value="escritorio_paciente">
 
                     {{--  VISUALIZACION DE DATOS DEL PACIENTE  --}}
                     <div id="reserva_datos_paciente" class="row mx-3">
