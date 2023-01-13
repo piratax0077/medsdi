@@ -1,7 +1,6 @@
 @extends('template.pediatria.template_pediatria')
+
 @section('Content')
-
-
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -100,7 +99,7 @@
         </div>
 
         <!--Botón flotane del sidebar derecho PEDIATRIA-->
-         <div class="row">
+        <div class="row">
             <div class="col-sm-12">
                 <div class="boton-formularios">
                     <input type="checkbox" id="btn-mas">
@@ -135,7 +134,7 @@
     </div>
     @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.calculo_imc")
     @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.modal_tunner_m")
-    @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.modal_antec_neonat")
+    @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.modal_tunner_f")
     @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.modal_antec_neonat")
     <!-- SIDE BAR PEDIATRIA -->
         @include("atencion_pediatrica.include.sidebar_derecho_pediatria")

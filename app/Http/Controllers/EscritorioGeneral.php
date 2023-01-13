@@ -260,7 +260,13 @@ class EscritorioGeneral extends Controller
     {
         $datos = array();
 
-        $profesional_horarios = ProfesionalHorario::where('id_profesional',$id_profesional)->orderBy('id_lugar_atencion', 'ASC')->orderBy('dia', 'ASC')->get();
+        $lugar_atencion_activo = ProfesionalesLugaresAtencion::where('id_profesional',$id_profesional)->where('estado','1')->pluck('id_lugar_atencion')->toArray();
+
+        $profesional_horarios = ProfesionalHorario::where('id_profesional',$id_profesional)
+                                                    ->whereIn('id_lugar_atencion',$lugar_atencion_activo)
+                                                    ->orderBy('id_lugar_atencion', 'ASC')
+                                                    ->orderBy('dia', 'ASC')
+                                                    ->get();
         $mes_inicio = date('m');
         $anio_inicio = date('Y');
         $dia_hoy = date('Y-m-d');
@@ -511,7 +517,7 @@ class EscritorioGeneral extends Controller
         $datos = array();
 
         $profesional = Profesional::where('id', $request->id_profesional)->first();
-        $lugares_atencion = $profesional->LugaresAtencion()->get();
+        $lugares_atencion = $profesional->LugaresAtencion()->where('estado',1)->get();
 
         if($lugares_atencion)
         {
@@ -539,7 +545,7 @@ class EscritorioGeneral extends Controller
     public function diasLaboralesProfesionaLugarAtencionBuscador(Request $request){
         $datos = array();
 
-        $horario = ProfesionalHorario::where('id_profesional', $request->id_profesional)->where('id_lugar_atencion', $request->lugar_atencion)->get();
+        $horario = ProfesionalHorario::where('id_profesional', $request->id_profesional)->where('id_lugar_atencion', $request->lugar_atencion)->orderBy('dia', 'ASC')->get();
 
         $horario_agenda_no_laboral = '1,2,3,4,5,6,7';
         $horario_agenda_laboral = '';
@@ -547,8 +553,8 @@ class EscritorioGeneral extends Controller
         foreach ($horario as $hor) {
             $ho = explode(',', $hor->dia);
             // dd($ho);
-            foreach ($ho as $h) {
-                if ($h == '1') {
+            foreach ($ho as $key => $h) {
+                if ($h == 0) {
                     $horario_agenda_no_laboral = str_replace($h, '', $horario_agenda_no_laboral);
                     $horario_agenda_laboral .= $h;
                 } else {
@@ -623,14 +629,13 @@ class EscritorioGeneral extends Controller
                                             'hora' => date('H:i:s',$hora),
                                             'fecha_hora' => date('Y-m-d H:i:s',$hora)
                                         );
-
                 }
             }
 
             $datos['estado'] = 1;
             $datos['msj'] = 'registros';
             $datos['registros'] = $array_bloques;
-            $datos['text_fecha'] = $texto_dia[$dia_semana].' '. date('d',strtotime($request->dia)).' '.$texto_mes[date('m',strtotime($request->dia))];
+            $datos['text_fecha'] = $texto_dia[(int)$dia_semana].' '. date('d',strtotime($request->dia)).' '.$texto_mes[(int)date('m',strtotime($request->dia))];
 
         }
         else

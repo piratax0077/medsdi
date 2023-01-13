@@ -227,6 +227,10 @@
         /*-Agendar hora medica-*/
         function hora_medica (id_profesional, id_lugar_atencion){
 
+            $('#modal_reserva_hora_lugar_atencion').val('');
+            $('#modal_reserva_dias_atencion').val('');
+            $('#modal_reserva_fecha').val('');
+            $('#modal_reserva_hora_lista_horas').html('');
             // asigno id profesioanl
             $('#modal_reserva_hora_id_profesional').val(id_profesional);
 
@@ -590,10 +594,36 @@
                     },
                 })
                 .done(function(data) {
-                    if (data.estado == 1) {
-                        console.log(data);
+                    if (data.estado == 1)
+                    {
+                        {{--  calendario(data.registros.horario_agenda_laboral, data.registros.horario_agenda_no_laboral);  --}}
 
-                        calendario(data.registros.horario_agenda_laboral, data.registros.horario_agenda_no_laboral);
+                        if(data.registros.horario_agenda_laboral != '')
+                        {
+                            console.log(data);
+                            let dias = ['','LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO'];
+                            var dias_activos = data.registros.horario_agenda_laboral.split(',');
+                            var dias_texto = '';
+                            var cant = 0;
+
+                            $.each(dias_activos, function(index, value)
+                            {
+                                if(cant>0)
+                                    dias_texto += ' - '+dias[value];
+                                else
+                                    dias_texto += dias[value];
+
+                                cant++;
+                            });
+
+                            $('#modal_reserva_dias_atencion').html(dias_texto);
+
+                        }
+                        else
+                        {
+                            $('#modal_reserva_dias_atencion').html('NO INFORMADOS');
+                        }
+
                     } else {
                         // alert('No se pudo Cargar las ciudades');
                     }
@@ -701,7 +731,6 @@
                                     DangerMode: true,
                                 });
                             }
-
                         }
                         else
                         {
@@ -730,6 +759,7 @@
             let id_profesional = $('#modal_reserva_hora_id_profesional').val();
             let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
             console.log('cargar_horas_disponibles_calendario_profesion');
+            console.log(dia);
 
             let url = "{{ route('profesional.HorasDisponiblesProfesionalLugarAtencionBuscador') }}";
             $.ajax({
@@ -743,16 +773,16 @@
                 },
             })
             .done(function(data) {
+                console.log(data);
                 if (data.estado == 1) {
-                    console.log(data);
-                    $('#modal_reserva_fecha_seleccionada').html(data.text_fecha);
+                    $('#modal_reserva_fecha_seleccionada').html('Horas disponibles para el dia: '+data.text_fecha);
 
                     $('#modal_reserva_hora_lista_horas').html('');
                     $.each(data.registros, function(index, value)
                     {
                         var hr1 = moment(value.hora,'HH:mm:ss').format('HH:mm');
                         var html = '';
-                        html += '<div class="col-md-2 btn btn-outline-primary btn-sm my-1 mx-1" data-hora="'+value.hora+'">';
+                        html += '<div class="col-md-2 btn btn-outline-primary btn-sm my-1 mx-1" data-hora="'+value.hora+'" onclick="generar_reserva_cita(\''+value.hora+'\');">';
                         html += ''+hr1;
                         html += '</div>';
 
@@ -761,13 +791,36 @@
 
                 } else {
                     // alert('No se pudo Cargar las ciudades');
-                    $('#modal_reserva_hora_lista_horas').html('No se encontraron Horas Disponibles para el día seleccionado');
+                    $('#modal_reserva_hora_lista_horas').html('<span style="font-weight: bold; text-align: center;">"Sin disponibilidad de Horas"</span>');
                 }
 
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
+
+        }
+
+        function generar_reserva_cita()
+        {
+
+            $('.div_rut_buscar').hide();
+            $('#form_reseva_de_horas').show();
+            $('#reserva_datos_paciente').show();
+            $('#reserva_agregar_paciente_hora').show();
+
+            $('#reservar_hora').modal('hide');
+            $('#agenda_agregar_paciente').modal('show');
+
+
+
+            $('#estado_id_profesional').val($('#modal_reserva_hora_id_profesional').val());
+            {{--  $('#estado_id_paciente').val();  --}}
+            $('#id_hora_medica').val();
+
+            $('#datos_consulta_rut').val();
+            $('#datos_consulta_nombre').val();
+            $('#datos_consulta_sexo').val();
 
         }
 

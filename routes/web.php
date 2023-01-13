@@ -1002,6 +1002,11 @@ Route::get('/profesional/sub_tipo_especialidad', [App\Http\Controllers\Escritori
 Route::get('/profesional/buscador', [App\Http\Controllers\EscritorioGeneral::class, 'buscarProfesionalBuscador'])->name('web.profesionales.buscador');
 
 
+/** envio de correo prueba */
+Route::get('/correo/envio', [App\Http\Controllers\SendMailController::class, 'envioCorreoR'])->name('correo.envio');
+Route::get('/correo/envio_test', [App\Http\Controllers\SendMailController::class, 'envioCorreoTest'])->name('correo.envio.test');
+
+
 // require_once __DIR__ . './jetstream.php';
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

@@ -4,3 +4,5 @@ storage/framework/cache/
 storage/framework/views/
 
 .idea/
+
+.vs/

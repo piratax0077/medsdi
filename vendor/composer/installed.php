@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'fa588610a66674fefbd3d424dd0bd1e8f4d4a96c',
+    'reference' => '8ab42e74aa7e5513f95f194c5ddbbfed31863108',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -234,12 +234,12 @@
     ),
     'guzzlehttp/guzzle' => 
     array (
-      'pretty_version' => '7.4.5',
-      'version' => '7.4.5.0',
+      'pretty_version' => '7.5.0',
+      'version' => '7.5.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '1dd98b0564cb3f6bd16ce683cb755f94c10fbd82',
+      'reference' => 'b50a2a1251152e43f6a37f0fa053e730a67d25ba',
     ),
     'guzzlehttp/promises' => 
     array (
@@ -544,7 +544,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'fa588610a66674fefbd3d424dd0bd1e8f4d4a96c',
+      'reference' => '8ab42e74aa7e5513f95f194c5ddbbfed31863108',
     ),
     'laravel/sail' => 
     array (

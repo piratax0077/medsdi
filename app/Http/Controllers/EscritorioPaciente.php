@@ -22,6 +22,7 @@ use App\Models\Profesional;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalHorario;
 use App\Models\Region;
+use App\Models\RegistroConfirmacionHoraAgenda;
 use App\Models\SolicitudPabellonQuirurgico;
 use App\Models\SubTipoEspecialidad;
 use App\Models\TipoEspecialidad;
@@ -110,6 +111,7 @@ class EscritorioPaciente extends Controller
         $ciudades = Ciudad::all();
         $previsiones = Prevision::all();
 
+        $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
 
         if(Auth::user()->hasRole('Paciente'))
         {
@@ -124,7 +126,8 @@ class EscritorioPaciente extends Controller
                     'previsiones' => $previsiones,
                     'paciente' => $paciente,
                     'regiones' => $regiones,
-                    'ciudades' => $ciudades
+                    'ciudades' => $ciudades,
+                    'reg_confirmacion_hora' => $reg_confirmacion_hora,
 
                 ]
             );
