@@ -1034,8 +1034,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 
-Route::get('/registro/equipo', [UsersDevicesController::class, 'enlazarEquipo']);
+/** AUTORIZACION PARA ENLACE DE APP */
+Route::get('/registro/equipo', [App\Http\Controllers\UsersDevicesController::class, 'enlazarEquipo']);
 
-Route::get('/mail/registrar_app', function () {
-    return view('app/mail/registrar_app');
-});
+/** PARA VISUALIZAR DEMOS */
+// Route::get('/autorizacion/enlace', function () {
+//     return view('app/autorizacion/enlace_equipo_app');
+// });

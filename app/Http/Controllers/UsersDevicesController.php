@@ -451,9 +451,98 @@ class UsersDevicesController extends Controller
     /** METODO NO API */
     public function enlazarEquipo(Request $request)
     {
-        // return view('app.autorizacion.enlace_equipo_app')->with([
-        //     'region' => $region,
-        //     'tipo_servicio' => $tipo_servicio,
-        // ]);
+        $nombre_cliente = '';
+        $mensaje_resultado = '';
+        if(empty($request->t))
+        {
+            $nombre_cliente = 'Cliente';
+            $mensaje_resultado = 'Se presento un problema encontrando la solicitud de Enlace de Equipo, intente de nuevo.1';
+        }
+        else
+        {
+            $id = $request->t;
+            $registro = UsersDevices::find($id);
+            if($registro)
+            {
+
+                /** buscar usuario */
+                $usuario = User::find($registro->id_user);
+                if($usuario)
+                {
+                    /** buscar informacion de usuario */
+                    $persona = Asistente::where('id_usuario',$usuario->id)->first();
+                    if($persona == null)
+                    {
+                        $persona = Profesional::where('id_usuario',$usuario->id)->first();
+                        if($persona == null)
+                        {
+                            $persona = Paciente::where('id_usuario',$usuario->id)->first();
+                            if($persona == null)
+                            {
+                                $persona = AdminInstServ::where('id_usuario',$usuario->id)->first();
+                                $nombre = $persona->nombres.' '.$persona->apellido_uno.' '.$persona->apellido_dos;
+                                $rut = $persona->rut;
+                                $correo = $persona->email;
+                            }
+                            else
+                            {
+                                $nombre = $persona->nombres.' '.$persona->apellido_uno.' '.$persona->apellido_dos;
+                                $rut = $persona->rut;
+                                $correo = $persona->email;
+                            }
+                        }
+                        else
+                        {
+                            $nombre = $persona->nombre.' '.$persona->apellido_uno.' '.$persona->apellido_dos;
+                            $rut = $persona->rut;
+                            $correo = $persona->email;
+                        }
+                    }
+                    else
+                    {
+                        $nombre = $persona->nombres.' '.$persona->apellido_uno.' '.$persona->apellido_dos;
+                        $rut = $persona->rut;
+                        $correo = $persona->email;
+                    }
+
+                    $nombre_cliente = $nombre;
+
+                    if($registro->estado == 1)
+                    {
+                        $mensaje_resultado = 'Su Equipo ya se encuentra Enlazado.';
+                    }
+                    else
+                    {
+                        $registro->estado = 1;
+                        $registro->code = date('YmdHis');
+                        if($registro->save())
+                        {
+                            $mensaje_resultado = 'Su Equipo ha sido registrado con exito.';
+                        }
+                        else
+                        {
+                            $mensaje_resultado = 'Se presento un problema al enlazar el Equipo, intente de nuevo.';
+                        }
+                    }
+
+
+                }
+                else
+                {
+                    $nombre_cliente = 'Cliente';
+                    $mensaje_resultado = 'Se presento un problema encontrando información del Usuario, intente de nuevo.';
+                }
+            }
+            else
+            {
+                $nombre_cliente = 'Cliente';
+                $mensaje_resultado = 'Se presento un problema encontrando la solicitud de Enlace de Equipo, intente de nuevo.3';
+            }
+        }
+
+        return view('app.autorizacion.enlace_equipo_app')->with([
+            'nombre_cliente' => $nombre_cliente,
+            'mensaje_resultado' => $mensaje_resultado,
+        ]);
     }
 }

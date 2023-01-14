@@ -13,7 +13,7 @@ class CreateTableVentaBonos extends Migration
      */
     public function up()
     {
-        Schema::create('Venta_bonos', function (Blueprint $table) {
+        Schema::create('venta_bonos', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_usuario_venta')->nullable(); // profesional, asistente, institucion,
             $table->bigInteger('id_usuario_paciente')->nullable(); // paciente,

@@ -88,6 +88,7 @@ return array(
     'App\\Http\\Middleware\\TrustHosts' => $baseDir . '/app/Http/Middleware/TrustHosts.php',
     'App\\Http\\Middleware\\TrustProxies' => $baseDir . '/app/Http/Middleware/TrustProxies.php',
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
+    'App\\Mail\\CorreoGenerico' => $baseDir . '/app/Mail/CorreoGenerico.php',
     'App\\Mail\\RegistroPacienteMail' => $baseDir . '/app/Mail/RegistroPacienteMail.php',
     'App\\Models\\AdminInstServ' => $baseDir . '/app/Models/AdminInstServ.php',
     'App\\Models\\Alergia' => $baseDir . '/app/Models/Alergia.php',

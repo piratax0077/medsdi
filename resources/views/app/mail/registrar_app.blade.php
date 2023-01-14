@@ -19,7 +19,7 @@
                             </tr>
                             <tr>
                                 <td style="text-align: center;">
-                                    <img style="width: 95px; margin-bottom: 20px; margin-top: 20px;" src="https://www.med-sdi.cl/images/logos/logo_pais_vertical.svg" alt="Medichile">
+                                    <img style="width: 95px; margin-bottom: 20px; margin-top: 20px;" src="https://www.med-sdi.cl/images/logo_pais_vertical.png" alt="Medichile">
                                 </td>
                             </tr>
                             <tr>
@@ -32,7 +32,7 @@
                                     </p>
                                     <br>
                                     <p style="font-family: Helvetica, Arial, sans-serif; font-size: 17px; line-height: 20px; color: #424242; text-align: center;">
-                                        En caso que el boton no funcione puede hacer click en la siguiente dirección<br>
+                                        En caso que el boton no funcione puede hacer click en la siguiente dirección:
                                     </p>
                                     <p style="font-family: Helvetica, Arial, sans-serif; font-size: 17px; line-height: 20px; color: #424242; text-align: center;">
                                         <a href="{{ $detalle['body']['URL'] }}" style="padding: 6px; color: #000; font-weight: bold; background-color: #cbc5c5; text-decoration: none;">{{ $detalle['body']['URL'] }}</a>
@@ -49,8 +49,8 @@
                             </tr>
                             <tr>
                                 <td inline-block style="text-align: center;">
-                                    <img style="width: 50px; margin-bottom: 5px; margin-top: 50px; margin-right: 10px;" src="https://www.med-sdi.cl/images/logos/logo_pais_vertical.svg" alt="Medichile">
-                                    <img style="width: 90px; margin-bottom: 5px; margin-top: 50px;" src="https://www.med-sdi.cl/images/logos/logo.svg" alt="Medichile">
+                                    <img style="width: 50px; margin-bottom: 5px; margin-top: 50px; margin-right: 10px;" src="https://www.med-sdi.cl/images/logo_pais_vertical.png" alt="Medichile">
+                                    <img style="width: 90px; margin-bottom: 5px; margin-top: 50px;" src="https://www.med-sdi.cl/images/logo.png" alt="Medichile">
                                 </td>
                             </tr>
                             <tr>
