@@ -8,6 +8,7 @@ use App\Models\Paciente;
 use App\Models\Profesional;
 use App\Models\User;
 use App\Models\UsersDevices;
+use Exception;
 use Illuminate\Http\Request;
 
 class UsersDevicesController extends Controller
@@ -408,7 +409,8 @@ class UsersDevicesController extends Controller
                         $correo = $persona->email;
                     }
 
-                    $url = env('APP_URL').'/registro/equipo?t='.$user_divices->id;
+                    $token_id = encrypt($user_divices->id);
+                    $url = env('APP_URL').'/registro/equipo?t='.$token_id;
 
                     /** envio de correo */
                     $blade = 'registrar_app';
@@ -460,7 +462,14 @@ class UsersDevicesController extends Controller
         }
         else
         {
-            $id = $request->t;
+            try{
+                $id = decrypt($request->t);
+            }
+            catch(Exception $e)
+            {
+                $id = $request->t;
+            }
+
             $registro = UsersDevices::find($id);
             if($registro)
             {

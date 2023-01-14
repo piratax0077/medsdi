@@ -68,8 +68,6 @@ class SendMailController extends Controller
                     ->bcc($bcc)
                     ->send($correo);
 
-            var_dump(Auth::user());
-
             $id_usuario = '1';
             if(!empty(Auth::user()))
                 $id_usuario = Auth::user()->id;
