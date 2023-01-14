@@ -2717,7 +2717,7 @@
             Fancybox.show(
                 [
                     {
-                    src: '{{ route('pdf.certificado_reposo') }}?id_ficha_atencion='+id_ficha_atencion,
+                    src: '{{ route("pdf.certificado_reposo") }}?id_ficha_atencion='+id_ficha_atencion,
                     type: "iframe",
                     preload: false,
                     },
@@ -2750,20 +2750,20 @@
                 mensaje += 'Debe ingresar Especialidad\n';
                 valido = 0;
             }
-            {{--
-            if(sub_tipo_especialidad == '') {
-                mensaje += 'Debe ingresar Sub Tipo Especialidad\n';
-                valido = 0;
-            }
-            if(profesional_inter == '') {
-                mensaje += 'Debe ingresar profesional_inter\n';
-                valido = 0;
-            }
-            if(nombre_profesional_inter == '') {
-                mensaje += 'Debe ingresar nombre_profesional_inter\n';
-                valido = 0;
-            }
-            --}}
+
+            // if(sub_tipo_especialidad == '') {
+            //     mensaje += 'Debe ingresar Sub Tipo Especialidad\n';
+            //     valido = 0;
+            // }
+            // if(profesional_inter == '') {
+            //     mensaje += 'Debe ingresar profesional_inter\n';
+            //     valido = 0;
+            // }
+            // if(nombre_profesional_inter == '') {
+            //     mensaje += 'Debe ingresar nombre_profesional_inter\n';
+            //     valido = 0;
+            // }
+
             if(hipotesis_interconsulta == '') {
                 mensaje += 'Debe ingresar Hipótesis diagnóstica\n';
                 valido = 0;
@@ -2909,7 +2909,7 @@
             Fancybox.show(
                 [
                     {
-                    src: '{{ route('pdf.interconsulta') }}?id_interconsulta='+id_interconsulta,
+                    src: '{{ route("pdf.interconsulta") }}?id_interconsulta='+id_interconsulta,
                     type: "iframe",
                     preload: false,
                     },
@@ -2920,7 +2920,7 @@
 
         function registrar_informe_medico() {
 
-            {{--  let fecha_informe_medico = $('#fecha_informe_medico').val();  --}}
+            {{-- let fecha_informe_medico = $('#fecha_informe_medico').val(); --}}
             let comentarios_informe_medico = $('textarea#comentarios_informe_medico').val();
             let hora_medica = $('#hora_medica').val();
             let id_lugar_atencion = $('#id_lugar_atencion').val();
@@ -2983,7 +2983,7 @@
             Fancybox.show(
                 [
                     {
-                    src: '{{ route('pdf.informe_medico') }}?id_ficha_atencion='+id_ficha_atencion,
+                    src: '{{ route("pdf.informe_medico") }}?id_ficha_atencion='+id_ficha_atencion,
                     type: "iframe",
                     preload: false,
                     },
@@ -3060,7 +3060,7 @@
             Fancybox.show(
                 [
                     {
-                    src: '{{ route('pdf.uso_personal') }}?id_ficha_atencion='+id_ficha_atencion,
+                    src: '{{ route("pdf.uso_personal") }}?id_ficha_atencion='+id_ficha_atencion,
                     type: "iframe",
                     preload: false,
                     },

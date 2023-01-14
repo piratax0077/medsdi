@@ -299,6 +299,30 @@ class HomeController extends Controller
                 }
 
                 /** envio de correo de confirmacion  */
+                $blade = 'bienvenida_paciente';
+                $to = array(
+                        array('email' => @Auth::user()->email,'name' => $request->nombre_registro.' '.$request->primer_apellido_registro.' '.$request->segundo_apellido_registro),
+                    );
+                $cc = array();
+                $bcc = array();
+                $asunto = 'MED-SDI - Bienvenido!';
+                $body = array('nombre'=>$request->nombre_registro.' '.$request->primer_apellido_registro.' '.$request->segundo_apellido_registro);
+                $archivo = '';/** pendiente */
+                $id_institucion = '';
+
+                $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                if($result_mail['estado'])
+                {
+                    $datos['mail']['estado'] = 1;
+                    $datos['mail']['msj'] = 'Notificacion de bienvenida enviado';
+                }
+                else
+                {
+                    $datos['mail']['estado'] = 0;
+                    $datos['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                }
+
 
                 $datos['estado'] = 1;
                 $datos['msj'] = 'registro exitoso';

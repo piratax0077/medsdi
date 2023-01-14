@@ -893,7 +893,6 @@
 
 
             $.ajax({
-
                     url: url,
                     type: "post",
                     data: {
