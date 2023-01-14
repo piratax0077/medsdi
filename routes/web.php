@@ -1032,3 +1032,10 @@ Route::get('/correo/envio_test', [App\Http\Controllers\SendMailController::class
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+
+Route::get('/registro/equipo', [UsersDevicesController::class, 'enlazarEquipo']);
+
+Route::get('/mail/registrar_app', function () {
+    return view('app/mail/registrar_app');
+});

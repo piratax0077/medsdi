@@ -25,15 +25,25 @@
                             <tr>
                                 <td style="background-color: #f2f2f2; padding-top: 15px;" align="center">
                                     <p style="font-family: Helvetica, Arial, sans-serif; font-size: 17px; line-height: 20px; color: #424242; text-align: center;">
-                                        Su Código de activación es:
-                                    </p><br>
+                                        Sr./Sra {{ $detalle['body']['NOMBRE_CLIENTE'] }}
+                                    </p>
+                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 17px; line-height: 20px; color: #424242; text-align: center;">
+                                        Para poder registrar su nuevo equipo debe ingresar <a href="{{ $detalle['body']['URL'] }}" style=" margin-left: 15px; padding: 8px 15px; border: solid 1px; color: #fff; background-color: #1CBEBE; border-color: #1CBEBE; text-decoration: none;border-radius: 6px;">Aquí</a>
+                                    </p>
+                                    <br>
+                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 17px; line-height: 20px; color: #424242; text-align: center;">
+                                        En caso que el boton no funcione puede hacer click en la siguiente dirección<br>
+                                    </p>
+                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 17px; line-height: 20px; color: #424242; text-align: center;">
+                                        <a href="{{ $detalle['body']['URL'] }}" style="padding: 6px; color: #000; font-weight: bold; background-color: #cbc5c5; text-decoration: none;">{{ $detalle['body']['URL'] }}</a>
+                                    </p>
                                 </td>
                             </tr>
 
                             <tr>
                                 <td height="10" style="background-color: #f2f2f2;" align="center">
                                     <p style="padding-bottom:10px; font-family: Helvetica, Arial, sans-serif; font-size: 14px;">
-                                        <a style="color: #424242;" href="#">{{ $detalle['body']['CODIGO'] }}</a>
+                                        <a style="color: #424242;" href="#"></a>
                                     </p>
                                 </td>
                             </tr>

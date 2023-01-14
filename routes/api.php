@@ -32,6 +32,9 @@ Route::post('/user_devices/modificar',    [UsersDevicesController::class, 'modif
 Route::get('/user_devices/ver_registros',[UsersDevicesController::class, 'verRegistros']);
 Route::get('/user_devices/ver_registro', [UsersDevicesController::class, 'verRegistro']);
 Route::post('/user_devices/estado',       [UsersDevicesController::class, 'estado']);
+Route::get('/user_devices/solicitud_registro_equipo', [UsersDevicesController::class, 'solicitarAutorizacion']);
+
+
 //LOG USER DEVICES - CRUD
 Route::post('/log_user_devices/registrar',    [LogUsersDevicesController::class, 'registrar']);
 Route::post('/log_user_devices/modificar',    [LogUsersDevicesController::class, 'modificar']);

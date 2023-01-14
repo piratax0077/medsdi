@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminInstServ;
+use App\Models\Asistente;
+use App\Models\Paciente;
+use App\Models\Profesional;
+use App\Models\User;
 use App\Models\UsersDevices;
 use Illuminate\Http\Request;
 
@@ -221,7 +226,7 @@ class UsersDevicesController extends Controller
             $error['uuid'] = 'campo requerido';
             $campos_requeridos = 1;
         }
-    
+
 
         if($request->estado=='')
         {
@@ -339,5 +344,116 @@ class UsersDevicesController extends Controller
         }
 
         return response($datos)->header('Content-Type', 'application/json');
+    }
+
+    public function solicitarAutorizacion(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $campos_requeridos = 0;
+        $persona = '';
+
+        /* VALIDACION CAMPOS */
+        if(empty($request->uuid))
+        {
+            $error['uuid'] = 'campo requerido';
+            $campos_requeridos = 1;
+        }
+
+
+        if($campos_requeridos==0)
+        {
+            /** buscar user divices */
+            $user_divices = UsersDevices::where('uuid', $request->uuid)->first();
+
+            if($user_divices)
+            {
+                /** buscar usuario */
+                $usuario = User::find($user_divices->id_user);
+                if($usuario)
+                {
+                    /** buscar informacion de usuario */
+                    $persona = Asistente::where('id_usuario',$usuario->id)->first();
+                    if($persona == null)
+                    {
+                        $persona = Profesional::where('id_usuario',$usuario->id)->first();
+                        if($persona == null)
+                        {
+                            $persona = Paciente::where('id_usuario',$usuario->id)->first();
+                            if($persona == null)
+                            {
+                                $persona = AdminInstServ::where('id_usuario',$usuario->id)->first();
+                                $nombre = $persona->nombres.' '.$persona->apellido_uno.' '.$persona->apellido_dos;
+                                $rut = $persona->rut;
+                                $correo = $persona->email;
+                            }
+                            else
+                            {
+                                $nombre = $persona->nombres.' '.$persona->apellido_uno.' '.$persona->apellido_dos;
+                                $rut = $persona->rut;
+                                $correo = $persona->email;
+                            }
+                        }
+                        else
+                        {
+                            $nombre = $persona->nombre.' '.$persona->apellido_uno.' '.$persona->apellido_dos;
+                            $rut = $persona->rut;
+                            $correo = $persona->email;
+                        }
+                    }
+                    else
+                    {
+                        $nombre = $persona->nombres.' '.$persona->apellido_uno.' '.$persona->apellido_dos;
+                        $rut = $persona->rut;
+                        $correo = $persona->email;
+                    }
+
+                    $url = env('APP_URL').'/registro/equipo?t='.$user_divices->id;
+
+                    /** envio de correo */
+                    $blade = 'registrar_app';
+                    $to = array(array('email' => $correo,'name' => $nombre));
+                    $cc = array();
+                    $bcc = array();
+                    $asunto = 'MED-SDI - Solicitud de Registro de Equipo';
+                    $body = array('URL'=>$url, 'NOMBRE_CLIENTE'=> $nombre);
+                    $archivo = '';/** pendiente */
+                    $id_institucion = '';
+
+                    $datos['envio_correo'] = SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msg'] = 'Usuario no encontrado';
+                    $datos['request'] = $request->all();
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msg'] = 'Dispositivo no encontrado';
+                $datos['request'] = $request->all();
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msg'] = 'Campos Requeridos';
+            $datos['request'] = $request->all();
+            $datos['error'] = $error;
+        }
+
+        return response($datos)->header('Content-Type', 'application/json');
+    }
+
+    /** METODO NO API */
+    public function enlazarEquipo(Request $request)
+    {
+        // return view('app.autorizacion.enlace_equipo_app')->with([
+        //     'region' => $region,
+        //     'tipo_servicio' => $tipo_servicio,
+        // ]);
     }
 }
