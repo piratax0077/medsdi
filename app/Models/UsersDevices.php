@@ -10,6 +10,13 @@ class UsersDevices extends Model
 {
     use HasFactory;
 
+    protected $hidden = [
+
+        'password'
+
+    ];
+
+
     protected $table = 'users_devices';
 
     public function user_create()

@@ -20,6 +20,8 @@ class CreateTableUsersDevices extends Migration
             $table->bigInteger('id_user');
             $table->string('alias');
             $table->string('uuid');
+            $table->string('code')->nullable();
+            $table->string('password');
             $table->integer('estado');
 
             $table->dateTime('fecha_ingreso')->nullable();

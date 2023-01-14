@@ -56,11 +56,11 @@ class LogUsersDevicesController extends Controller
                         $fecha = $data->fecha;
                         $value['msg_estado'] = "<span class='color-azul txt_bold'>{$data->nombre}</span> - Rendición de Caja <span class='color-azul txt_bold'>N°{$id}</span>";
                         if($value['estado'] == 1)
-                        $msg_html_estructura = "<span class='color-verde txt_bold'>Solicitud Autorizada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}";
+                        $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}</p><br>";
                         elseif($value['estado'] == 2)
-                        $msg_html_estructura = "<span class='color-rojo txt_bold'>Solicitud Rechazada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}";
+                        $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Rechazada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}</p><br>";
                         else
-                        $msg_html_estructura = "<span class='color-rojo txt_bold'>Solicitud Cacelada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}";
+                        $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cacelada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}</p><br>";
                     break;
                     case 2: // ficha única
                         $data = json_decode($value['msg'],false);
@@ -69,11 +69,11 @@ class LogUsersDevicesController extends Controller
                         $fecha = $data->fecha;
                         $value['msg_estado'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";       
                         if($value['estado'] == 1)                 
-                        $msg_html_estructura = "<span class='color-verde txt_bold'>Solicitud Autorizada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}";
+                        $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
                         elseif($value['estado'] == 2)
-                        $msg_html_estructura = "<span class='color-rojo txt_bold'>Solicitud Rechazada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}";
+                        $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Rechazada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
                         else
-                        $msg_html_estructura = "<span class='color-rojo txt_bold'>Solicitud Cacelada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}";
+                        $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cacelada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
                     break;        
                 }
 
@@ -374,18 +374,26 @@ class LogUsersDevicesController extends Controller
 
             if($registro->count()>0)
             {
-                $registro->estado = $request->estado;
-
-                if($registro->save())
+                if($registro->estado == 0)
                 {
-                    $datos['estado'] = 1;
-                    $datos['msg'] = 'Registro Actualizado';
-                    $datos['request'] = $request->all();
+                    $registro->estado = $request->estado;
+                    if($registro->save())
+                    {
+                        $datos['estado'] = 1;
+                        $datos['msg'] = 'Registro Actualizado';
+                        $datos['request'] = $request->all();
+                    }else{
+                        $datos['estado'] = 0;
+                        $datos['msg'] = 'Problemas al actualizar el registro';
+                        $datos['request'] = $request->all();
+                    }
                 }else{
-                    $datos['estado'] = 0;
-                    $datos['msg'] = 'Problemas al actualizar el registro';
+                    $datos['estado'] = 2;
+                    $datos['estado_registro'] = $registro->estado;
+                    $datos['msg'] = 'Registro ya actualizado';
                     $datos['request'] = $request->all();
                 }
+                
             }else{
                 $datos['estado'] = 0;
                 $datos['msg'] = 'Registro no existe';

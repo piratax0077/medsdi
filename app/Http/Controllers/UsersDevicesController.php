@@ -13,16 +13,17 @@ class UsersDevicesController extends Controller
         $cant_x_pagina = 10;
         $filtros = array();
 
-        if(!empty($request->id))
+        if($request->id!='')
             $filtros[] = array('id',$request->id);
-        if(!empty($request->id_user))
+        if($request->id_user!='')
             $filtros[] = array('id_user',$request->id_user);
-        if(!empty($request->alias))
+        if($request->alias!='')
             $filtros[] = array('alias',$request->alias);
-        if(!empty($request->uuid))
+        if($request->uuid!='')
             $filtros[] = array('uuid',$request->uuid);
-        if(!empty($request->estado))
+        if($request->estado!='')
             $filtros[] = array('estado',$request->estado);
+
 
 
         /* CANTIDAD REGISTROS X PAG */
@@ -35,6 +36,7 @@ class UsersDevicesController extends Controller
 
             // Generamos la consulta
             $datos['registros'] = $registros = UsersDevices::where($filtros)->get();
+            $datos['password'] = $registros[0]->password;
 
         }else{
             $datos['estado'] = 0;
@@ -62,15 +64,15 @@ class UsersDevicesController extends Controller
 
 
         /* CAMPOS FILTRO */
-        if(!empty($request->id))
+        if($request->id!='')
             $filtros[] = array('id',$request->id);
-        if(!empty($request->id_user))
+        if($request->id_user!='')
             $filtros[] = array('id_user',$request->id_user);
-        if(!empty($request->alias))
+        if($request->alias!='')
             $filtros[] = array('alias',$request->alias);
-        if(!empty($request->uuid))
+        if($request->uuid!='')
             $filtros[] = array('uuid',$request->uuid);
-        if(!empty($request->estado))
+        if($request->estado!='')
             $filtros[] = array('estado',$request->estado);
 
         if($campos_requeridos==0)
@@ -137,6 +139,12 @@ class UsersDevicesController extends Controller
             $campos_requeridos = 1;
         }
 
+        if($request->password=='')
+        {
+            $error['password'] = 'campo requerido';
+            $campos_requeridos = 1;
+        }
+
         if($request->estado=='')
         {
             $error['estado'] = 'campo requerido';
@@ -160,6 +168,7 @@ class UsersDevicesController extends Controller
             $registro->id_user = $request->id_user;
             $registro->alias = $request->alias;
             $registro->uuid = $request->uuid;
+            $registro->password = $request->password;
 
             $registro->estado = $request->estado;
             $registro->fecha_ingreso = $request->fecha_ingreso;
@@ -212,6 +221,7 @@ class UsersDevicesController extends Controller
             $error['uuid'] = 'campo requerido';
             $campos_requeridos = 1;
         }
+    
 
         if($request->estado=='')
         {
@@ -244,6 +254,9 @@ class UsersDevicesController extends Controller
                     $registro->alias = $request->alias;
                 if(!empty($request->uuid))
                     $registro->uuid = $request->uuid;
+
+                    if(!empty($request->password))
+                    $registro->password = $request->password;
 
                 if(!empty($request->estado))
                     $registro->estado = $request->estado;
