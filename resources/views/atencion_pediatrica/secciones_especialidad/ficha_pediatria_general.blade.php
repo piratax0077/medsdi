@@ -2,15 +2,24 @@
     <div class="col-md-12 py-0 px-2 shadow-none">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
-                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
-                    <li class="nav-item-secciones">
+                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="pediatria_general" role="tablist">
+                    <!--<li class="nav-item-secciones">
                         <a class="nav-secciones active text-uppercase" id="atencion_ped_gen-tab" data-toggle="tab" href="#atencion_ped_gen" role="tab" aria-controls="atencion_ped_gen" aria-selected="true">Atención Especialidad</a>
+                    </li>-->
+                    <li class="nav-item-secciones">
+                        <a class="nav-secciones active text-uppercase" id="fcc-tab" data-toggle="tab" href="#fcc" role="tab" aria-controls="fcc" aria-selected="false">Ficha Atención</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="fcc-tab" data-toggle="tab" href="#fcc" role="tab" aria-controls="fcc" aria-selected="false">Ficha Tradicional</a>
+                        <a class="nav-secciones text-uppercase" id="ns-tab" data-toggle="tab" href="#ns" role="tab" aria-controls="ns" aria-selected="false">Control Niño Sano RN-1 Mes</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="ns-tab" data-toggle="tab" href="#ns" role="tab" aria-controls="ns" aria-selected="false">Control Niño Sano</a>
+                        <a class="nav-secciones text-uppercase" id="ns-tab" data-toggle="tab" href="#ns" role="tab" aria-controls="ns" aria-selected="false">Control Niño Sano Lactantes</a>
+                    </li>
+                    <li class="nav-item-secciones">
+                        <a class="nav-secciones text-uppercase" id="ns-tab" data-toggle="tab" href="#ns" role="tab" aria-controls="ns" aria-selected="false">Control Niño Sano Pre-Escolar</a>
+                    </li>
+                    <li class="nav-item-secciones">
+                        <a class="nav-secciones text-uppercase" id="ns-tab" data-toggle="tab" href="#ns" role="tab" aria-controls="ns" aria-selected="false">Control Niño Sano Escolar</a>
                     </li>
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="vac-tab" data-toggle="tab" href="#vac" role="tab" aria-controls="vac" aria-selected="false">vacunas</a>
@@ -18,7 +27,7 @@
                 </ul>
             </div>
             <div class="col-sm-12 col-md-12">
-                <form action="{{ route('fichaAtencion.registrar_ficha_orl') }}" method="POST">
+
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
                     <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
@@ -59,7 +68,7 @@
                                                         <div class="form-row">
                                                             <div class="form-group col-md-6">
                                                                 <label class="floating-label-activo-sm">Motivo de Consulta</label>
-                                                                <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_consulta" name="descripcion_consulta_ped" id="descripcion_consulta_ped" onchange="cargarIgual('descripcion_consulta_orl');">
+                                                                <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_consulta" name="descripcion_consulta_ped" id="descripcion_consulta_ped" onchange="cargarIgual('descripcion_consulta_ped');">
                                                             </div>
                                                             <div class="form-group col-md-6">
                                                                 <label class="floating-label-activo-sm">Antecedentes Especialidad</label>
@@ -83,30 +92,32 @@
 
                                                     <div class="card-body-aten shadow-none">
 
-                                                        <div id="form-otorrino">
-                                                            <div class="form-row mb-2">
+                                                        <div id="form-pediatria">
+                                                            <div class="form-row">
                                                                 <div class="col-md-12">
                                                                     <h6 class="f-16 text-c-blue"> Crecimiento y Desarrollo</h6>
                                                                 </div>
                                                             </div>
                                                             <hr>
+
                                                             <div class="form-row">
-                                                                <div class="form-group col-md-6">
+                                                                <div class="form-group col-md-5">
                                                                     <label class="floating-label-activo-sm">Descripción Crecimiento y Desarrollo</label>
                                                                     <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="antec_ped" id="antec_ped"></textarea>
                                                                 </div>
-                                                                <div class="form-group col-md-6">
+
+                                                                <div class="form-group col-md-7">
                                                                     <form>
-                                                                        <button type="button" class="btn btn-outline-primary btn-sm mb-4" onclick="ant_parto ();"></i>Antecedentes Embarazo y Parto</button>
-                                                                        <button type="button" class="btn btn-outline-primary btn-sm mb-4" onclick="tunner();"></i>Grado de Tunner Femenino</button>
-                                                                        <button type="button" class="btn btn-outline-primary btn-sm mb-4" onclick="tunner_m();"></i>Grado de Tunner Masculino</button>
+                                                                        <button type="button" class="btn btn-outline-primary btn-sm mb-4" onclick="ant_parto ();"></i>Antec. Embarazo y Parto</button>
+                                                                        <button type="button" class="btn btn-outline-primary btn-sm mb-4" onclick="tunner();"></i>G. de Tunner Femenino</button>
+                                                                        <button type="button" class="btn btn-outline-primary btn-sm mb-4" onclick="tunner_m();"></i>G. de Tunner Masculino</button>
                                                                     </form>
                                                                 </div>
                                                             </div>
-                                                            <hr>
                                                             <div class="form-row">
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group col-md-12">
+                                                                <div class="col-sm-12 col-md-6">
+                                                                    <div class="form-group">
+
                                                                         <label class="floating-label-activo-sm">Carga Ficha Tipo</label>
                                                                         <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad" onchange="cargar_info_ficha_tipo_ped('select_ficha_tipo_especialidad','descripcion_ficha_tipo_especialidad');">
                                                                             <option value="">Seleccione</option>
@@ -122,160 +133,138 @@
                                                                     <span id="descripcion_ficha_tipo_especialidad"></span>
                                                                 </div>
                                                             </div>
-                                                            <hr>
-                                                            <div class="form-row mb-2">
+
+                                                            <div class="form-row">
                                                                 <div class="col-md-12">
                                                                     <h6 class="f-16 text-c-blue">Estado Nutricional</h6>
                                                                 </div>
                                                             </div>
+                                                            <hr>
                                                             <div class="form-row">
-                                                                <div class="form-group col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Estado Nutricional</label>
-                                                                            <select name="e_nutricional" data-titulo="Examen_nutricional" id="e_nutricional" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_nutricional','div_examen_nutricional','obs_obs_e_nutricional',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal</option>
-                                                                                <option value="3">No Realizada</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_examen_nutricional" style="display:none;">
-                                                                            <label class="floating-label-activo-sm">Estado Nutricional(describir)</label>
-                                                                            <textarea class="form-control form-control-sm" data-titulo="Examen_nutricional" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_nutricional" id="obs_obs_e_nutricional"></textarea>
-                                                                        </div>
+                                                                <div class="col-sm-12 col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Estado Nutricional</label>
+                                                                        <select name="e_nutricional" data-titulo="Examen_nutricional" id="e_nutricional" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_nutricional','div_examen_nutricional','obs_obs_e_nutricional',2);">
+                                                                            <option selected  value="1">Normal</option>
+                                                                            <option value="2">Anormal</option>
+                                                                            <option value="3">Ex. No Realizado</option>
+                                                                        </select>
                                                                     </div>
+                                                                    <div class="form-group" id="div_examen_nutricional" style="display:none;">
+                                                                        <label class="floating-label-activo-sm">Estado Nutricional(describir)</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Examen_nutricional" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_nutricional" id="obs_obs_e_nutricional"></textarea>
+                                                                    </div>
+
                                                                 </div>
                                                                 <div class="form-group col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Vacunas</label>
-                                                                            <select name="e_vacunas" id="e_vacunas" data-titulo="Vacunas"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_vacunas','div_e_vacunas','obs_e_vacunas',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Al día</option>
-                                                                                <option value="2">Atrasadas</option>
-                                                                                <option value="3">No Informadas</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_e_vacunas" style="display:none;">
-                                                                            <label class="floating-label-activo-sm">Vacunas(describir)</label>
-                                                                            <textarea class="form-control form-control-sm"  data-titulo="Vacunas" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_vacunas" id="obs_e_vacunas"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group ">
+                                                                        <label class="floating-label-activo-sm">Vacunas</label>
+                                                                        <select name="e_vacunas" id="e_vacunas" data-titulo="Vacunas"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_vacunas','div_e_vacunas','obs_e_vacunas',2);">
+                                                                            <option selected value="1">Al día</option>
+                                                                            <option value="2">Atrasadas</option>
+                                                                            <option value="3">No Informadas</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_e_vacunas" style="display:none;">
+                                                                        <label class="floating-label-activo-sm">Vacunas(describir)</label>
+                                                                        <textarea class="form-control form-control-sm"  data-titulo="Vacunas" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_vacunas" id="obs_e_vacunas"></textarea>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div class="form-row">
-                                                                <div class="form-group col-md-12">
-                                                                    <label class="floating-label-activo-sm">Obs. Estado nutricional y vacunas</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Biomicroscópico" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_biom" id="obs_ex_biom"></textarea>
+                                                                <div class="col-sm-12 col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Obs. Estado nutricional y vacunas</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Biomicroscópico" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_biom" id="obs_ex_biom"></textarea>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <hr>
-															<!--Vestibular-->
-                                                            <div class="form-row mb-2">
+                                                            <div class="form-row">
                                                                 <div class="col-md-12">
                                                                     <h6 class="f-16 text-c-blue">Examen Segmentario</h6>
                                                                 </div>
                                                             </div>
                                                             <hr>
                                                             <div class="form-row">
-                                                                <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Piel</label>
-                                                                            <select name="e_piel" id="e_piel" data-titulo="Piel" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_piel','div_e_piel','obs_e_piel',2)">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal Describir</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_e_piel" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Describir Examen de piel</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Piel" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_piel" id="obs_e_piel"></textarea>
-                                                                        </div>
+                                                                <div class="col-sm-12 col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Piel</label>
+                                                                        <select name="e_piel" id="e_piel" data-titulo="Piel" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_piel','div_e_piel','obs_e_piel',2)">
+                                                                            <option selected value="1">Normal</option>
+                                                                            <option value="2">Anormal Describir</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_e_piel" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Describir Examen de piel</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Piel" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_piel" id="obs_e_piel"></textarea>
                                                                     </div>
 
                                                                 </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Cabeza y Cuello</label>
-                                                                            <select name="e_cabcuello" id="e_cabcuello" data-titulo="Cabeza y Cuello" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_cabcuello','div_e_cabcuello','detalle_e_cabcuello',3)">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">No Examinado</option>
-                                                                                <option value="3">Otro Describir</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_e_cabcuello" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Describir Examen de Cuello</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Cabeza y Cuello" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="detalle_e_cabcuello" id="detalle_e_cabcuello"></textarea>
-                                                                        </div>
+                                                                <div class="col-sm-12 col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Cabeza y Cuello</label>
+                                                                        <select name="e_cabcuello" id="e_cabcuello" data-titulo="Cabeza y Cuello" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_cabcuello','div_e_cabcuello','detalle_e_cabcuello',3)">
+                                                                            <option selected value="1">Normal</option>
+                                                                            <option value="2">No Examinado</option>
+                                                                            <option value="3">Otro Describir</option>
+                                                                        </select>
                                                                     </div>
-
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Torax</label>
-                                                                            <select name="e_torax" id="e_torax" data-titulo="Torax" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_torax','div_e_torax','det_e_torax',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Alterado Describir</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_e_torax" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Describir Examen de Torax</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Torax" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_e_torax" id="det_e_torax"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group" id="div_e_cabcuello" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Describir Examen de Cuello</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Cabeza y Cuello" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="detalle_e_cabcuello" id="detalle_e_cabcuello"></textarea>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Abdomen</label>
-                                                                            <select name="e_abdomen" id="e_abdomen" data-titulo="Abdomen" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_abdomen','div_e_abdomen','det_e_abdomen',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal(describir)</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_e_abdomen" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Examen de Abdomen</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Abdomen" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_e_abdomen" id="det_e_abdomen"></textarea>
-                                                                        </div>
+                                                                <div class="col-sm-12 col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Torax</label>
+                                                                        <select name="e_torax" id="e_torax" data-titulo="Torax" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_torax','div_e_torax','det_e_torax',2);">
+                                                                            <option selected value="1">Normal</option>
+                                                                            <option value="2">Alterado Describir</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_e_torax" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Describir Examen de Torax</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Torax" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_e_torax" id="det_e_torax"></textarea>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Musculo-Esquelético</label>
-                                                                            <select name="e_muscesq" id="e_muscesq" data-titulo="Musculo-Esquelético" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_muscesq','div_e_muscesq','det_e_muscesq',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_e_muscesq" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Examen Musculo-Esquelético</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Musculo-Esquelético" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_e_muscesq" id="det_e_muscesq"></textarea>
-                                                                        </div>
+                                                                <div class="col-sm-12 col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Abdomen</label>
+                                                                        <select name="e_abdomen" id="e_abdomen" data-titulo="Abdomen" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_abdomen','div_e_abdomen','det_e_abdomen',2);">
+                                                                            <option selected value="1">Normal</option>
+                                                                            <option value="2">Anormal(describir)</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_e_abdomen" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Examen de Abdomen</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Abdomen" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_e_abdomen" id="det_e_abdomen"></textarea>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Organos de los Sentidos</label>
-                                                                            <select name="e_o_sent" id="e_o_sent" data-titulo="O-Sentidos" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_o_sent','div_e_o_sent','det_e_o_sent',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_e_o_sent" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Examen Organos de los Sentidos</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Musculo-Esquelético" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_e_o_sent" id="det_e_o_sent"></textarea>
-                                                                        </div>
+                                                                <div class="col-sm-12 col-md-4">
+                                                                <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Musculo-Esquelético</label>
+                                                                        <select name="e_muscesq" id="e_muscesq" data-titulo="Musculo-Esquelético" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_muscesq','div_e_muscesq','det_e_muscesq',2);">
+                                                                            <option selected value="1">Normal</option>
+                                                                            <option value="2">Anormal</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_e_muscesq" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Examen Musculo-Esquelético</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Musculo-Esquelético" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_e_muscesq" id="det_e_muscesq"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Organos de los Sentidos</label>
+                                                                        <select name="e_o_sent" id="e_o_sent" data-titulo="O-Sentidos" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_o_sent','div_e_o_sent','det_e_o_sent',2);">
+                                                                            <option selected value="1">Normal</option>
+                                                                            <option value="2">Anormal</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_e_o_sent" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Examen Organos de los Sentidos</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Musculo-Esquelético" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_e_o_sent" id="det_e_o_sent"></textarea>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -289,7 +278,7 @@
                                                             <div class="form-row">
                                                                 <div class="form-group col-md-9" style="margin-bottom: 0;">
                                                                     <label class="floating-label-activo-sm">Observaciones Examen Especialidad</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Especialidad" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="bs_ex_orl" id="obs_ex_orl"></textarea>
+                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Especialidad" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_ex_pedgen" id="obs_ex_pedgen"></textarea>
                                                                 </div>
                                                                 <div class="form-group col-md-3 align-middle" style="margin:auto">
                                                                     <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo();"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
@@ -498,7 +487,7 @@
                                                             </div>
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Indicaciones</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ind_orl" id="ind_orl">
+                                                                <input type="text" class="form-control form-control-sm" name="ind_pedgen" id="ind_pedgen">
                                                             </div>
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
@@ -517,7 +506,7 @@
                         <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
 
 
-                        @include('atencion_medica.secciones_especialidad.seccion_ficha_general')
+                        @include('atencion_pediatrica.secciones_especialidad.seccion_ficha_general')
 
                         <!--ATENCIÓN NIÑO SANO-->
                         <div class="tab-pane fade" id="ns" role="tabpanel" aria-labelledby="ns-tab">
@@ -630,19 +619,19 @@
                                                                                 </div>
                                                                                 <div class="form-group col-sm-6 col-md-6">
                                                                                     <label class="floating-label">Medicamentos</label>
-                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="p_uso_medicamento" id="p_uso_medicamento"></textarea>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="p_uso_medicamento" id="p_uso_medicamento"></textarea>
                                                                                 </div>
                                                                                 <div class="form-group col-md-4">
                                                                                     <label class="floating-label">Diagnóstico</label>
-                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="p_n_diag" id="p_n_diag"></textarea>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="p_n_diag" id="p_n_diag"></textarea>
                                                                                 </div>
                                                                                 <div class="form-group col-md-4">
                                                                                     <label class="floating-label">Pronóstico</label>
-                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="p_n_pronostico" id="p_n_pronostico"></textarea>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="p_n_pronostico" id="p_n_pronostico"></textarea>
                                                                                 </div>
                                                                                 <div class="form-group col-md-4">
                                                                                     <label class="floating-label">Observaciones</label>
-                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="p_n_obs" id="p_n_obs"></textarea>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="p_n_obs" id="p_n_obs"></textarea>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="form-row mb-2">
@@ -710,7 +699,7 @@
                                                     <ul class="nav nav-pills mt-1 mb-4" id="pills-tab-crec-desarrollo" role="tablist">
 
                                                         <li class="nav-item">
-                                                            <a class="nav-link-modal" id="pills-0-7-dias-tab" data-toggle="pill" href="#pills-0-7-dias" role="tab" aria-controls="pills-0-7-dias" aria-selected="false">RN (0 y 7 días)</a>
+                                                            <a class="nav-link-modal active" id="pills-0-7-dias-tab" data-toggle="pill" href="#pills-0-7-dias" role="tab" aria-controls="pills-0-7-dias" aria-selected="false">RN (0 y 7 días)</a>
                                                         </li>
                                                         <li class="nav-item">
                                                             <a class="nav-link-modal" id="pills-1-mes-tab" data-toggle="pill" href="#pills-1-mes" role="tab" aria-controls="pills-1-mes" aria-selected="false">Control 1 mes</a>
@@ -732,17 +721,15 @@
                                                         </li>
                                                     </ul>
                                                     <div class="tab-content" id="pills-tabContent-crec-desarrollo">
-                                                        <!--Info del acompañante, parto y puerperio-->
-                                                        <div class="tab-pane fade show active" id="pills-parto-perpu" role="tabpanel" aria-labelledby="pills-tab-parto-perpu">
-
-                                                        </div>
-                                                        <!--Recién nacido (0 y 7 días)-->
-                                                        <div class="tab-pane fade" id="pills-0-7-dias" role="tabpanel" aria-labelledby="pills-0-7-dias-tab">
-                                                            <div class="row">
+                                                        <!--Lactante menor (2 a 5 meses)-->
+                                                        <div class="tab-pane fade show active" id="pills-0-7-dias" role="tabpanel" aria-labelledby="pills-0-7-dias-tab">
+                                                            <div class="form-row">
                                                                 <div class="col-md-12 mt-1">
                                                                     <h6 class="text-c-blue f-16">Recién nacido (0 y 7 días)</h6>
                                                                 </div>
+
                                                             </div>
+
                                                             <hr>
                                                             <div class="form-row">
                                                                 <div class="col-md-12">
@@ -756,11 +743,11 @@
                                                                     <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=4" onblur="this.rows=1;" id="p_07anamnesis" name="p_07anamnesis" ></textarea>
                                                                 </div>
                                                             </div>
-                                                            </br>
+                                                            <br>
                                                             <div class="form-row">
                                                                 <div class="col-sm-12 col-md-3">
                                                                     <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Exper.Embarazo parto y puerperio</label>
+                                                                        <label class="floating-label-activo-sm">Exper.Embarazo gral.</label>
                                                                         <select name="p_07_p_puerp" data-titulo="Experiencia_parto" id="p_07_p_puerp" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_puerp','div_p_07_p_puerp','obs_p_07_p_puerp',2);">
                                                                             <option selected value="1">Normal y Felíz</option>
                                                                             <option value="2">Anormal</option>
@@ -774,7 +761,7 @@
                                                                 </div>
                                                                 <div class="col-sm-12 col-md-2">
                                                                     <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Est. Emoc. familiar y redes </label>
+                                                                        <label class="floating-label-activo-sm">Est. Emoc.redes </label>
                                                                         <select name="p_07_p" id="p_07_p" data-titulo="Emoción"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p','div_p_07_p','obs_p_07_p',2);">
                                                                             <option selected value="1">Normal</option>
                                                                             <option value="2">Alterado</option>
@@ -802,7 +789,7 @@
                                                                 </div>
                                                                 <div class="col-sm-12 col-md-2">
                                                                     <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Antecedentes heredo-fam. Maternos</label>
+                                                                        <label class="floating-label-activo-sm">Ant. heredo-fam. Mat.</label>
                                                                         <select name="p_07_p_ant_mat" id="p_07_p_ant_mat" data-titulo="Antec_mat"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_ant_mat','div_p_07_p_ant_mat','obs_p_07_p_ant_mat',2);">
                                                                             <option selected value="1">No</option>
                                                                             <option value="2">Si</option>
@@ -810,13 +797,13 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="form-group" id="div_p_07_p_ant_mat" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Estado emocional familiar(describir)</label>
+                                                                        <label class="floating-label-activo-sm">Ant. heredo-fam. Mat.</label>
                                                                         <textarea class="form-control form-control-sm"  data-titulo="Antec_mat" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_ant_mat" id="obs_p_07_p_ant_mat"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-12 col-md-2">
                                                                     <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Antecedentes heredo-fam. Paternos</label>
+                                                                        <label class="floating-label-activo-sm">Ant. heredo-fam. Pat.</label>
                                                                         <select name="p_07_p_ant_pat" id="p_07_p_ant_pat" data-titulo="Antec_pat"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_ant_pat','div_p_07_p_ant_pat','obs_p_07_p_ant_pat',2);">
                                                                             <option selected value="1">No</option>
                                                                             <option value="2">Si</option>
@@ -824,496 +811,425 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="form-group" id="div_p_07_p_ant_pat" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Estado emocional familiar(describir)</label>
+                                                                        <label class="floating-label-activo-sm">Ant. heredo-fam. Pat.</label>
                                                                         <textarea class="form-control form-control-sm"  data-titulo="Antec_mat" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_ant_pat" id="obs_p_07_p_ant_pat"></textarea>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-md-12 mt-1">
-                                                                    <h6 class="text-c-blue f-16">Recién nacido (0 y 7 días)</h6>
                                                                 </div>
                                                             </div>
                                                             <hr>
                                                             <div class="form-row">
                                                                 <div class="col-md-12">
-                                                                    <h6>Control parámetros Generales</h6>
+
+                                                                    <div class="form-row mb-2">
+                                                                        <div class="col-md-12">
+                                                                            <h6>Examen físico del menor</h6>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                                <hr>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="form-row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-12">
+                                                                            <label class="floating-label-activo-sm">Inspección general</label>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=4" onblur="this.rows=1;" id="p_07insp" name="p_07insp" ></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Actividad</label>
+                                                                                <select name="p_07_p_rnact" data-titulo="Actividad" id="p_07_p_rnact" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_rnact','div_p_07_p_rnact','obs_p_07_p_rnact',2);">
+                                                                                    <option value="0">Seleccione</option>
+                                                                                    <option selected value="1">Normal y Felíz</option>
+                                                                                    <option value="2">Anormal</option>
+                                                                                    <option value="3">No Realizada</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_p_rnact" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Actividad</label>
+                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Experiencia_parto" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_rnact" id="obs_p_07_p_rnact"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Malformaciones</label>
+                                                                                <select name="p_07_malf" id="p_07_malf" data-titulo="Malf"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_malf','div_p_07_malf','obs_p_07_malf',2);">
+                                                                                    <option selected value="1">No</option>
+                                                                                    <option value="2">Si</option>
+                                                                                    <option value="3">No Informadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_malf" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Malformaciones</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Malf" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_malf" id="obs_p_07_malf"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Tono y Postura </label>
+                                                                                <select name="p_07_p_tp" id="p_07_p_tp" data-titulo="Tono"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_tp','div_p_07_p_tp','obs_p_07_p_tp',2);">
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Informada</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_p_tp" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Tono y Postura</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Tono" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_tp" id="obs_p_07_p_tp"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Piél</label>
+                                                                                <select name="p_07_p_piel" id="p_07_p_piel" data-titulo="Piel"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_piel','div_p_07_p_piel','obs_p_07_p_piel',2);">
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Informadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_p_piel" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Examen de Piél </label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Piel" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_piel" id="obs_p_07_p_piel"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Ex Oftalmológico</label>
+                                                                                <select name="p_07_p_ojo" id="p_07_p_ojo" data-titulo="Ojos"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_ojo','div_p_07_p_ojo','obs_p_07_p_ojo',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterado</option>
+                                                                                    <option value="3">No Informadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_p_ojo" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Ex Oftalmológico</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Ojos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_ojo" id="obs_p_07_p_ojo"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Ex Buco-dental</label>
+                                                                                <select name="p_07_p_dental" id="p_07_p_dental" data-titulo="Dental"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_dental','div_p_07_p_dental','obs_p_07_p_dental',2);">
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Informadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_p_dental" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Ex Buco-dental</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Dental" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_dental" id="obs_p_07_p_dental"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label">Cabeza y Cuello</label>
+                                                                                <select name="p_07_p_ccuello" data-titulo="Cab_cuello" id="p_07_p_ccuello" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_ccuello','div_p_07_p_ccuello','obs_p_07_p_ccuello',2);">
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Anormal</option>
+                                                                                    <option value="3">No Realizada</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_p_ccuello" style="display:none">
+                                                                                <label class="floating-label">Cabeza y Cuello</label>
+                                                                                <textarea class="form-control form-control-sm" data-titulo="Cab_cuello" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_ccuello" id="obs_p_07_p_ccuello"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Cordón</label>
+                                                                                <select name="p_07_pcordon" id="p_07_pcordon" data-titulo="Cordon"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_pcordon','div_p_07_pcordon','obs_p_07_pcordon',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterado</option>
+                                                                                    <option value="3">No Informadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_pcordon" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Cordón</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Cordon" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_pcordon" id="obs_p_07_pcordon"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Abdomen</label>
+                                                                                <select name="p_07_p_abd" id="p_07_p_abd" data-titulo="Abdomen"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_abd','div_p_07_p_abd','obs_p_07_p_abd',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Informadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_p_abd" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Abdomen</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Abdomen" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_abda" id="obs_p_07_p_abd"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Tórax</label>
+                                                                                <select name="p_07_p_torax" id="p_07_p_torax" data-titulo="Torax"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_torax','div_p_07_p_torax','obs_p_07_p_torax',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Informadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_p_torax" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Tórax</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Torax" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_torax" id="obs_p_07_p_torax"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Columna</label>
+                                                                                <select name="p_07_p_col" id="p_07_p_col" data-titulo="Columna"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_col','div_p_07_p_col','obs_p_07_p_col',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Informadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_p_col" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Columna</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Columna" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_col" id="obs_p_07_p_col"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Extremidades</label>
+                                                                                <select name="p_07_p_ext" id="p_07_p_ext" data-titulo="Extrem"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_ext','div_p_07_p_ext','obs_p_07_p_ext',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Informadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_p_ext" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Extremidades</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Extrem" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_ext" id="obs_p_07_p_ext"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-3">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Genitales-ano</label>
+                                                                                <select name="p_07_p_gen" id="p_07_p_gen" data-titulo="Genitales"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_gen','div_p_07_p_gen','obs_p_07_p_gen',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Informadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_p_gen" style="display:none;">
+                                                                                <label class="floating-label-activo-sm">Genitales</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Genitales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_gen" id="obs_p_07_p_gen"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-3">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Ex. Neurológico (reflejos)</label>
+                                                                                <select name="p_07_p_neuro" id="p_07_p_neuro" data-titulo="Neuro"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_neuro','div_p_07_p_neuro','obs_p_07_p_neuro',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterado</option>
+                                                                                    <option value="3">No Examinado</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_p_neuro" style="display:none;">
+                                                                                <label class="floating-label-activo-sm">Ex Neurológico</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Neuro" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_neuro" id="obs_p_07_p_neuro"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <div class="form-row">
-                                                                <div class="col-sm-12 col-md-12">
-                                                                    <label class="floating-label-activo-sm">Inspección general</label>
-                                                                    <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=4" onblur="this.rows=1;" id="p_07insp" name="p_07insp" ></textarea>
+                                                                <div class="col-md-12">
+                                                                    <div class="form-row">
+                                                                            <div class="col-md-12">
+                                                                                <h6>Antropometría</h6>
+                                                                            </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+
+                                                                        <div class="form-group col-md-3">
+                                                                            <label class="floating-label">Peso (kg.)</label>
+                                                                            <input type="number" class="form-control form-control-sm" name="p_07_matpeso" id="p_07_matpeso">
+                                                                        </div>
+                                                                        <div class="form-group col-md-3">
+                                                                            <label class="floating-label">Longitud</label>
+                                                                            <input type="number" class="form-control form-control-sm" name="p_07_matlong_var" id="p_07_matlong_var">
+                                                                        </div>
+                                                                        <div class="form-group col-md-3">
+                                                                            <label class="floating-label">Perímetro Cefálico</label>
+                                                                            <input type="number" class="form-control form-control-sm" name="p_07_perim" id="p_07_perim">
+                                                                        </div>
+                                                                        <div class="form-group col-md-3">
+                                                                            <label class="floating-label">Otros</label>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" id="p_07_otros" name="p_07_otros" ></textarea>
+                                                                        </div>
+
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            </br>
-
-
-
+                                                            <!--Estado de salud materno-->
                                                             <div class="form-row">
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Actividad</label>
-                                                                        <select name="p_07_p_rnact" data-titulo="Actividad" id="p_07_p_rnact" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_rnact','div_p_07_p_rnact','obs_p_07_p_rnact',2);">
-                                                                            <option value="0">Seleccione</option>
-                                                                            <option selected value="1">Normal y Felíz</option>
-                                                                            <option value="2">Anormal</option>
-                                                                            <option value="3">No Realizada</option>
-                                                                        </select>
+                                                                <div class="col-md-12">
+                                                                    <div class="form-row">
+                                                                        <div class="col-md-12">
+                                                                            <h6>Estado de salud materno</h6>
+                                                                        </div>
+                                                                        <hr>
                                                                     </div>
-                                                                    <div class="form-group" id="div_p_07_p_rnact" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Actividad</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Experiencia_parto" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_rnact" id="obs_p_07_p_rnact"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Malformaciones</label>
-                                                                        <select name="p_07_malf" id="p_07_malf" data-titulo="Malf"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_malf','div_p_07_malf','obs_p_07_malf',2);">
-                                                                            <option selected value="1">No</option>
-                                                                            <option value="2">Si</option>
-                                                                            <option value="3">No Informadas</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_p_07_malf" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Malformaciones</label>
-                                                                        <textarea class="form-control form-control-sm"  data-titulo="Malf" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_malf" id="obs_p_07_malf"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Tono y Postura </label>
-                                                                        <select name="p_07_p_tp" id="p_07_p_tp" data-titulo="Tono"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_tp','div_p_07_p_tp','obs_p_07_p_tp',2);">
-                                                                            <option selected value="1">Normal </option>
-                                                                            <option value="2">Alterada</option>
-                                                                            <option value="3">No Informada</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_p_07_p_tp" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Tono y Postura</label>
-                                                                        <textarea class="form-control form-control-sm"  data-titulo="Tono" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_tp" id="obs_p_07_p_tp"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Piél</label>
-                                                                        <select name="p_07_p_piel" id="p_07_p_piel" data-titulo="Piel"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_piel','div_p_07_p_piel','obs_p_07_p_piel',2);">
-                                                                            <option selected value="1">Normal </option>
-                                                                            <option value="2">Alterada</option>
-                                                                            <option value="3">No Informadas</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_p_07_p_piel" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Examen de Piél </label>
-                                                                        <textarea class="form-control form-control-sm"  data-titulo="Piel" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_piel" id="obs_p_07_p_piel"></textarea>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Ex Oftalmológico</label>
-                                                                        <select name="p_07_p_ojo" id="p_07_p_ojo" data-titulo="Ojos"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_ojo','div_p_07_p_ojo','obs_p_07_p_ojo',2);">
-                                                                            <option selected value="1">Normal</option>
-                                                                            <option value="2">Alterado</option>
-                                                                            <option value="3">No Informadas</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_p_07_p_ojo" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Ex Oftalmológico</label>
-                                                                        <textarea class="form-control form-control-sm"  data-titulo="Ojos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_ojo" id="obs_p_07_p_ojo"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Ex Buco-dental</label>
-                                                                        <select name="p_07_p_dental" id="p_07_p_dental" data-titulo="Dental"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_dental','div_p_07_p_dental','obs_p_07_p_dental',2);">
-                                                                            <option selected value="1">Normal </option>
-                                                                            <option value="2">Alterada</option>
-                                                                            <option value="3">No Informadas</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_p_07_p_dental" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Ex Buco-dental</label>
-                                                                        <textarea class="form-control form-control-sm"  data-titulo="Dental" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_dental" id="obs_p_07_p_dental"></textarea>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Signos vitales</label>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" id="p_07_sv" name="p_07_sv"></textarea>
+                                                                        </div>
+                                                                        <div class="form-group col-md-2">
+                                                                            <label class="floating-label">Peso (kg.)</label>
+                                                                            <input type="number" class="form-control form-control-sm" name="p_07_matpeso" id="p_07_matpeso">
+                                                                        </div>
+                                                                        <div class="form-group col-md-2">
+                                                                            <label class="floating-label">Variación (kg.)</label>
+                                                                            <input type="number" class="form-control form-control-sm" name="p_07_matpeso_var" id="p_07_matpeso_var">
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Involución uterina</label>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" id="p_07_mat_utero" name="p_07_mat_utero" ></textarea>
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Hda. Operatoria</label>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" id="p_07_mat_heridaop" name="p_07_mat_heridaop" ></textarea>
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Zona genito-anal</label>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" id="p_07_mat_ga" name="p_07_mat_ga" ></textarea>
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Extremidades inferiores (edemas)</label>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" id="p_07_mat_ext" name="p_07_mat_ext" ></textarea>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-
-<!---->
                                                             <div class="form-row">
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label">Cabeza y Cuello</label>
-                                                                        <select name="p_07_p_ccuello" data-titulo="Cab_cuello" id="p_07_p_ccuello" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_ccuello','div_p_07_p_ccuello','obs_p_07_p_ccuello',2);">
-                                                                            <option selected value="1">Normal </option>
-                                                                            <option value="2">Anormal</option>
-                                                                            <option value="3">No Realizada</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_p_07_p_ccuello" style="display:none">
-                                                                        <label class="floating-label">Cabeza y Cuello</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Cab_cuello" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_ccuello" id="obs_p_07_p_ccuello"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Cordón</label>
-                                                                        <select name="p_07_pcordon" id="p_07_pcordon" data-titulo="Cordon"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_pcordon','div_p_07_pcordon','obs_p_07_pcordon',2);">
-                                                                            <option selected value="1">Normal</option>
-                                                                            <option value="2">Alterado</option>
-                                                                            <option value="3">No Informadas</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_p_07_pcordon" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Cordón</label>
-                                                                        <textarea class="form-control form-control-sm"  data-titulo="Cordon" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_pcordon" id="obs_p_07_pcordon"></textarea>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Abdomen</label>
-                                                                        <select name="p_07_p_abd" id="p_07_p_abd" data-titulo="Abdomen"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_abd','div_p_07_p_abd','obs_p_07_p_abd',2);">
-                                                                            <option selected value="1">Normal</option>
-                                                                            <option value="2">Alterada</option>
-                                                                            <option value="3">No Informadas</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_p_07_p_abd" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Abdomen</label>
-                                                                        <textarea class="form-control form-control-sm"  data-titulo="Abdomen" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_abda" id="obs_p_07_p_abd"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Tórax</label>
-                                                                        <select name="p_07_p_torax" id="p_07_p_torax" data-titulo="Torax"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_torax','div_p_07_p_torax','obs_p_07_p_torax',2);">
-                                                                            <option selected value="1">Normal</option>
-                                                                            <option value="2">Alterada</option>
-                                                                            <option value="3">No Informadas</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_p_07_p_torax" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Tórax</label>
-                                                                        <textarea class="form-control form-control-sm"  data-titulo="Torax" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_torax" id="obs_p_07_p_torax"></textarea>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Columna</label>
-                                                                        <select name="p_07_p_col" id="p_07_p_col" data-titulo="Columna"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_col','div_p_07_p_col','obs_p_07_p_col',2);">
-                                                                            <option selected value="1">Normal</option>
-                                                                            <option value="2">Alterada</option>
-                                                                            <option value="3">No Informadas</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_p_07_p_col" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Columna</label>
-                                                                        <textarea class="form-control form-control-sm"  data-titulo="Columna" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_col" id="obs_p_07_p_col"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Extremidades</label>
-                                                                        <select name="p_07_p_ext" id="p_07_p_ext" data-titulo="Extrem"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_ext','div_p_07_p_ext','obs_p_07_p_ext',2);">
-                                                                            <option selected value="1">Normal</option>
-                                                                            <option value="2">Alterada</option>
-                                                                            <option value="3">No Informadas</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_p_07_p_ext" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Extremidades<</label>
-                                                                        <textarea class="form-control form-control-sm"  data-titulo="Extrem" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_ext" id="obs_p_07_p_ext"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-row">
-                                                                <div class="col-sm-12 col-md-3">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label">Cabeza y Cuello</label>
-                                                                        <select name="p_07_p_ccuello" data-titulo="Cab_cuello" id="p_07_p_ccuello" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_ccuello','div_p_07_p_ccuello','obs_p_07_p_ccuello',2);">
-                                                                            <option selected value="1">Normal </option>
-                                                                            <option value="2">Anormal</option>
-                                                                            <option value="3">No Realizada</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_p_07_p_ccuello" style="display:none">
-                                                                        <label class="floating-label">Cabeza y Cuello</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Cab_cuello" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_ccuello" id="obs_p_07_p_ccuello"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-3">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Cordón</label>
-                                                                        <select name="p_07_pcordon" id="p_07_pcordon" data-titulo="Cordon"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_pcordon','div_p_07_pcordon','obs_p_07_pcordon',2);">
-                                                                            <option selected value="1">Normal</option>
-                                                                            <option value="2">Alterado</option>
-                                                                            <option value="3">No Informadas</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_p_07_pcordon" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Cordón</label>
-                                                                        <textarea class="form-control form-control-sm"  data-titulo="Cordon" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_pcordon" id="obs_p_07_pcordon"></textarea>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-sm-12 col-md-3">
-                                                                    <div class="form-group">
-                                                                        <div class="form-group col-md-12">
-                                                                            <button type="button" class="btn btn-info btn-block btn-sm" onclick="cimc();" >Val referencial</button>
+                                                                <div class="col-md-12">
+                                                                    <!--Lactancia materna-->
+                                                                    <div class="form-row">
+                                                                        <div class="col-md-12">
+                                                                            <h6>Lactancia materna</h6>
                                                                         </div>
+                                                                        <hr>
                                                                     </div>
-                                                                <div class="col-sm-12 col-md-3">
-                                                                    <div class="form-group">
-                                                                        <div class="form-group col-md-12">
-                                                                            <button type="button" class="btn btn-info btn-block btn-sm" onclick="cimc();" >Val referencial</button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-
-
-                                                            </div>
-
-                                                            <div class="form-row">
-
-
-
-
-                                                                </div>
-
-
-
-
-
-
-
-
-
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Genitales</label>
-                                                                            <select name="p_07_p_gen" id="p_07_p_gen" data-titulo="Genitales"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_gen','div_p_07_p_gen','obs_p_07_p_gen',2);">
-
-                                                                                <option selected value="1">Normal</option>
-                                                                                <option value="2">Alterada</option>
-                                                                                <option value="3">No Informadas</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_p_07_p_gen" style="display:none;">
-                                                                            <label class="floating-label-activo-sm">Genitales</label>
-                                                                            <textarea class="form-control form-control-sm"  data-titulo="Genitales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_gen" id="obs_p_07_p_gen"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Ex Neurológico</label>
-                                                                            <select name="p_07_p_neuro" id="p_07_p_neuro" data-titulo="Neuro"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_neuro','div_p_07_p_neuro','obs_p_07_p_neuro',2);">
-
-                                                                                <option selected value="1">Normal</option>
-                                                                                <option value="2">Alterada</option>
-                                                                                <option value="3">No Informadas</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_p_07_p_neuro" style="display:none;">
-                                                                            <label class="floating-label-activo-sm">Ex Neurológico</label>
-                                                                            <textarea class="form-control form-control-sm"  data-titulo="Neuro" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_neuro" id="obs_p_07_p_neuro"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <div class="form-group col-md-12">
-                                                                            <button type="button" class="btn btn-info btn-block btn-sm" onclick="cimc();" >Val referencial</button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <div class="form-group col-md-12">
-                                                                            <button type="button" class="btn btn-info btn-block btn-sm" onclick="cimc();" >Tablas</button>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!--Antropometría-->
-                                                            <div class="form-row">
-                                                                <div class="col-md-12 mb-3 mt-2">
-                                                                    <h6>Antropometría</h6>
-                                                                </div>
-                                                                <div class="form-group col-md-2">
-                                                                    <label class="floating-label">Peso (gr.)</label>
-                                                                    <input type="number" class="form-control form-control-sm" name="p_07peso" id="p_07peso">
-                                                                </div>
-                                                                <div class="form-group col-md-2">
-                                                                    <label class="floating-label">Longitud (cm.)</label>
-                                                                    <input type="number" class="form-control form-control-sm" name="p_07longitud" id="p_07longitud">
-                                                                </div>
-                                                                <div class="form-group col-md-2">
-                                                                    <label class="floating-label">Perímetro cefálico (cm.)</label>
-                                                                    <input type="number" class="form-control form-control-sm" name="p_07peri_cef" id="p_07peri_cef">
-                                                                </div>
-
-
-                                                                <div class="form-group col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <button type="button" class="btn btn-info btn-block btn-sm" onclick="cimc();" >Val referencial</button>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <button type="button" class="btn btn-info btn-block btn-sm" onclick="cimc();" >Val referencial</button>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-
-
-
-
-
-
-                                                                        <!--Estado de salud materno-->
-                                                                        <div class="form-row">
-                                                                            <div class="col-md-12 mb-3 mt-2">
-                                                                                <h6>Estado de salud materno</h6>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Lactancia en general</label>
+                                                                                <select name="p_07_mat_lact" id="p_07_mat_lact" data-titulo="Lactancia"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_mat_lact','div_p_07_mat_lact','obs_p_07_mat_lact',2);">
+                                                                                    <option selected value="1">Normal e Informada</option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Examinada</option>
+                                                                                </select>
                                                                             </div>
-                                                                            <div class="form-group col-md-4">
-                                                                                <label class="floating-label">Signos vitales</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" id="p_07descripcion_mat" name="p_07descripcion_mat" ></textarea>
-                                                                            </div>
-                                                                            <div class="form-group col-md-2">
-                                                                                <label class="floating-label">Peso (kg.)</label>
-                                                                                <input type="number" class="form-control form-control-sm" name="p_07_matpeso" id="p_07_matpeso">
-                                                                            </div>
-                                                                            <div class="form-group col-md-2">
-                                                                                <label class="floating-label">Variación (kg.)</label>
-                                                                                <input type="number" class="form-control form-control-sm" name="p_07_matpeso" id="p_07_matpeso">
-                                                                            </div>
-                                                                            <div class="form-group col-md-4">
-                                                                                <label class="floating-label">Involución uterina</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" id="p_07_mat_utero" name="p_07_mat_utero" ></textarea>
-                                                                            </div>
-                                                                            <div class="form-group col-md-4">
-                                                                                <label class="floating-label">Hda. Operatoria</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" id="p_07_mat_heridaop" name="p_07_mat_heridaop" ></textarea>
-                                                                            </div>
-                                                                            <div class="form-group col-md-4">
-                                                                                <label class="floating-label">Zona genito-anal</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" id="p_07_mat_ga" name="p_07_mat_ga" ></textarea>
-                                                                            </div>
-                                                                            <div class="form-group col-md-4">
-                                                                                <label class="floating-label">Extremidades inferiores (edemas)</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" id="p_07_mat_ext" name="p_07_mat_ext" ></textarea>
+                                                                            <div class="form-group" id="div_p_07_mat_lact" style="display:none;">
+                                                                                <label class="floating-label-activo-sm">Ex. mamas</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Lactancia" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_mat_lact" id="obs_p_07_mat_lact"></textarea>
                                                                             </div>
                                                                         </div>
-                                                                        <!--Lactancia materna-->
-                                                                        <div class="form-row">
-                                                                            <div class="col-md-12 mb-3 mt-2">
-                                                                                <h6>Lactancia materna</h6>
+                                                                        <div class="col-sm-12 col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Técnica</label>
+                                                                                <select name="p_07_p_tlactancia" id="p_07_p_tlactancia" data-titulo="TLactancia"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_tlactancia','div_p_07_p_tlactancia','obs_p_07_p_tlactancia',2);">
+                                                                                    <option selected value="1">Informada</option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Examinada</option>
+                                                                                </select>
                                                                             </div>
-                                                                            <div class="form-group col-md-4">
-                                                                                <div class="row">
-                                                                                    <div class="form-group col-md-12">
-                                                                                        <label class="floating-label-activo-sm">Lactancia en general</label>
-                                                                                        <select name="p_07_mat_lact" id="p_07_mat_lact" data-titulo="Lactancia"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_mat_lact','div_p_07_mat_lact','obs_p_07_mat_lact',2);">
-                                                                                            <option value="0">Seleccione</option>
-                                                                                            <option value="1">Normal e Informada</option>
-                                                                                            <option value="2">Alterada</option>
-                                                                                            <option value="3">No Informada</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                    <div class="form-group col-md-12" id="div_p_07_mat_lact" style="display:none;">
-                                                                                        <label class="floating-label-activo-sm">Ex. mamas</label>
-                                                                                        <textarea class="form-control form-control-sm"  data-titulo="Lactancia" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_mat_lact" id="obs_p_07_mat_lact"></textarea>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                            </div>
-                                                                            <div class="form-group col-md-4">
-                                                                                <div class="row">
-                                                                                    <div class="form-group col-md-12">
-                                                                                        <label class="floating-label-activo-sm">Técnica</label>
-                                                                                        <select name="p_07_p_tlactancia" id="p_07_p_tlactancia" data-titulo="TLactancia"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_p_tlactancia','div_p_07_p_tlactancia','obs_p_07_p_tlactancia',2);">
-                                                                                            <option value="0">Seleccione</option>
-                                                                                            <option value="1">Normal e Informada</option>
-                                                                                            <option value="2">Alterada</option>
-                                                                                            <option value="3">No Informadas</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                    <div class="form-group col-md-12" id="div_p_07_p_tlactancia" style="display:none;">
-                                                                                        <label class="floating-label-activo-sm">Técnica</label>
-                                                                                        <textarea class="form-control form-control-sm"  data-titulo="TLactancia" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_tlactancia" id="obs_p_07_p_tlactancia"></textarea>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group col-md-4">
-                                                                                <div class="row">
-                                                                                    <div class="form-group col-md-12">
-                                                                                        <label class="floating-label-activo-sm">Ex. mamas</label>
-                                                                                        <select name="p_07_mat_lactmamas" id="p_07_mat_lactmamas" data-titulo="ex_mamas"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_mat_lactmamas','div_p_07_mat_lactmamas','obs_p_07_mat_lactmamas',2);">
-                                                                                            <option value="0">Seleccione</option>
-                                                                                            <option value="1">Normal e Informada</option>
-                                                                                            <option value="2">Alterada</option>
-                                                                                            <option value="3">No Informadas</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                    <div class="form-group col-md-12" id="div_p_07_mat_lactmamas" style="display:none;">
-                                                                                        <label class="floating-label-activo-sm">Ex. mamas</label>
-                                                                                        <textarea class="form-control form-control-sm"  data-titulo="ex_mamas" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_mat_lactmamas" id="obs_p_07_mat_lactmamas"></textarea>
-                                                                                    </div>
-                                                                                </div>
+                                                                            <div class="form-group" id="div_p_07_p_tlactancia" style="display:none;">
+                                                                                <label class="floating-label-activo-sm">Técnica</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="TLactancia" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_p_tlactancia" id="obs_p_07_p_tlactancia"></textarea>
                                                                             </div>
 
                                                                         </div>
-                                                                        <!--Diagnósticos-->
-                                                                        <div class="form-row">
-                                                                            <div class="col-md-12 mb-3 mt-2">
+                                                                        <div class="col-sm-12 col-md-4">
+                                                                            <div class="form-group">
+                                                                            <label class="floating-label-activo-sm">Ex. mamas</label>
+                                                                                <select name="p_07_mat_lactmamas" id="p_07_mat_lactmamas" data-titulo="ex_mamas"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_07_mat_lactmamas','div_p_07_mat_lactmamas','obs_p_07_mat_lactmamas',2);">
+                                                                                    <option selected value="1">Normales</option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Examinadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_07_mat_lactmamas" style="display:none;">
+                                                                                <label class="floating-label-activo-sm">Ex. mamas</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="ex_mamas" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_07_mat_lactmamas" id="obs_p_07_mat_lactmamas"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <div class="form-row mb-2">
+
+                                                                            <div class="col-md-12">
                                                                                 <h6>Diagnósticos</h6>
                                                                             </div>
-                                                                            <div class="form-group col-md-4">
-                                                                                <label class="floating-label">General</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="p_07_dg_gen" name="p_07_dg_gen" ></textarea>
-                                                                            </div>
-                                                                            <div class="form-group col-md-4">
-                                                                                <label class="floating-label">Incremento ponderal</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="p_07_in_pon" name="p_07_in_pon" ></textarea>
-                                                                            </div>
-                                                                            <div class="form-group col-md-4">
-                                                                                <label class="floating-label">Lactancia</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="p_07_idg_lac" name="p_07_idg_lac" ></textarea>
-                                                                            </div>
-                                                                            <div class="form-group col-md-4">
-                                                                                <label class="floating-label">Salud del lactante</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="p_07_dg_sallac" name="p_07_dg_sallac" ></textarea>
-                                                                            </div>
-                                                                            <div class="form-group col-md-4">
-                                                                                <label class="floating-label">Salud de la madre</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="p_07_dg_salmaterna" name="p_07_dg_salmaterna" ></textarea>
-                                                                            </div>
-                                                                            <div class="form-group col-md-4">
-                                                                                <label class="floating-label">Salud sico-social</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="p_07_dg_salsicoso" name="p_07_dg_salsicoso" ></textarea>
+
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">General</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="dg_gen" id="dg_gen"></textarea>
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Incremento ponderal</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="inc_pon" id="inc_pon"></textarea>
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Lactancia</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="nutricional" id="nutricional"></textarea>
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Salud del lactante</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="sal_lact" id="sal_lact"></textarea>
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Otros</label>
+                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="otros" id="otros"></textarea>
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Salud psicosocial</label>
+                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="sal_sicosocial" id="sal_sicosocial"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-12">
+                                                                                <div class="form-group">
+                                                                                    <h6>Indicaciones y Próximo Control</h6>
                                                                             </div>
                                                                         </div>
-                                                                    </form>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-2">
+                                                                            <label class="floating-label-activo-sm">Fecha</label>
+                                                                            <input type="date" class="form-control form-control-sm" name="p_07_fecha_proxcontrol" id="p_07_fecha_proxcontrol">
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Control con:</label>
+                                                                            <input type="text" class="form-control form-control-sm" name="p_07_control_con" id="p_07_control_con">
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label class="floating-label">Indicaciones</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_07_ind" id="p_07_ind"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <label class="floating-label">Sugerencias</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_07_sugerencias" id="p_07_sugerencias"></textarea>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
+
+
                                                         <!--Recién nacido (1 mes)-->
                                                         <div class="tab-pane fade" id="pills-1-mes" role="tabpanel" aria-labelledby="pills-1-mes-tab">
                                                             <div class="row">
@@ -1322,87 +1238,254 @@
                                                                 </div>
                                                             </div>
                                                             <hr>
+                                                            <div class="form-row">
+                                                                <div class="col-sm-12 col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Anamnesis</label>
+                                                                        <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=4" onblur="this.rows=1;" id="p_1anamnesis" name="p_1anamnesis" ></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Relaciones Fam</label>
+                                                                        <select name="p_1_p_relfam" data-titulo="Relaciones_fam" id="p_1_p_relfam" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_p_relfam','div_p_1_relfam','obs_p_1_prelfam',2);">
+                                                                            <option selected value="1">Normal y Felíz</option>
+                                                                            <option value="2">Anormal</option>
+                                                                            <option value="3">No Realizada</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_p_1_relfam" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Relaciones Fam</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Relaciones_fam" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_p_relfam" id="obs_p_1_prelfam"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                             <div class="row">
                                                                 <div class="col-md-12">
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
-                                                                            <label class="floating-label">Anamnesis</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=9" onblur="this.rows=1;" id="anamnesis" name="anamnesis" ></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-md-6">
-                                                                            <label class="floating-label">Evaluación relación-familiares</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=9" onblur="this.rows=1;" id="ant_mat" name="ant_mat" ></textarea>
-                                                                        </div>
-                                                                    </div>
+
                                                                     <div class="form-row mb-2">
                                                                         <div class="col-md-12">
                                                                             <h6>Examen físico del menor</h6>
                                                                         </div>
                                                                     </div>
+
                                                                     <div class="form-row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label">Inspección general</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="insp_gral" name="insp_gral"></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Piél</label>
+                                                                                <select name="p_1_p_piel" id="p_1_p_piel" data-titulo="Piel"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_p_piel','div_p_1_p_piel','obs_p_1_p_piel',2);">
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Examinada</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_p_piel" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Examen de Piél </label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Piel" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_p_piel" id="obs_p_1_p_piel"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Piel</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="piel" name="piel" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Ganglios</label>
+                                                                                <select name="p_1_ganglios" id="p_1_ganglios" data-titulo="Ganglios"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_ganglios','div_p_1_ganglios','obs_p_1_ganglios',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Anormales</option>
+                                                                                    <option value="3">No Examinados</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_ganglios" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Ganglios</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Ganglios" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_ganglios" id="obs_p_1_ganglios"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Ganglios</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ganglios" name="ganglios" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Cardio_pulmonar</label>
+                                                                                <select name="p_1_p_cpulm" data-titulo="Cardio_pulm" id="p_1_p_cpulm" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_p_cpulm','div_p_1_p_cpulm','obs_p_1_p_cpulm',2);">
+                                                                                    <option value="0">Seleccione</option>
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterado</option>
+                                                                                    <option value="3">No Realizado</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_p_cpulm" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Cardio_pulmonar</label>
+                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Cardio_pulm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_p_cpulm" id="obs_p_1_p_cpulm"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Cardio pulmonar</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ex_cardiopulm" name="ex_cardiopulmf" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Abdomen</label>
+                                                                                <select name="p_1_p_abd" id="p_1_p_abd" data-titulo="Abdomen"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_p_abd','div_p_1_p_abd','obs_p_1_p_abd',2);">
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterado</option>
+                                                                                    <option value="3">No Realizado</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_p_abd" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Abdomen</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Abdomen" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_p_abd" id="obs_p_1_p_abd"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Abdomen</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="abdomen" name="abdomen" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Ex.Genito-anal</label>
+                                                                                <select name="p_1_exganal" id="p_1_exganal" data-titulo="Ex.Genito-anal"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_exganal','div_p_1_exganal','obs_p_1_exganal',2);">
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterado</option>
+                                                                                    <option value="3">No Realizado</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_exganal" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Ex.Genito-anal</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Ex.Genito-anal" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_exganal" id="obs_p_1_exganal"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Ex genito-anal</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="genito_anal" name="genito_anal" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Reflejos </label>
+                                                                                <select name="p_1_p_ref" id="p_1_p_ref" data-titulo="Reflejos"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_p_ref','div_p_1_p_ref','obs_p_1_p_ref',2);">
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterados</option>
+                                                                                    <option value="3">No Realizados</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_p_ref" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Reflejos</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Reflejos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_p_ref" id="obs_p_1_p_ref"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Reflejos</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="reflejos" name="reflejos" ></textarea>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Motilidad</label>
+                                                                                <select name="p_1_p_mot" id="p_1_p_mot" data-titulo="Motilidad"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_p_mot','div_p_1_p_mot','obs_p_1_p_mot',2);">
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Examinada</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_p_mot" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Examen de Motilidad </label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Motilidad" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_p_mot" id="obs_p_1_p_mot"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Motilidad</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="motilidad" name="motilidad" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Tono Axilar</label>
+                                                                                <select name="p_1_tonoaxil" id="p_1_tonoaxil" data-titulo="Tono Axilar"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_tonoaxil','div_p_1_tonoaxil','obs_p_1_tonoaxil',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Anormales</option>
+                                                                                    <option value="3">No Examinados</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_tonoaxil" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Tono Axilar</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Tono Axilar" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_tonoaxil" id="obs_p_1_tonoaxil"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Tono axilar</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="abdomen" name="abdomen" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Signos Par.Cer</label>
+                                                                                <select name="p_1_p_paralisis" data-titulo="Signos Par.Cer" id="p_1_p_paralisis" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_p_paralisis','div_p_1_p_paralisis','obs_p_1_p_paralisis',2);">
+                                                                                    <option value="0">Seleccione</option>
+                                                                                    <option selected value="1">No</option>
+                                                                                    <option value="2">Si</option>
+                                                                                    <option value="3">No Evaluado</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_p_paralisis" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Signos Par.Cer</label>
+                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Signos Par.Cer" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_p_paralisis" id="obs_p_1_p_paralisis"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Signos sug. parálisis cerebral</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="s_paralisis" name="s_paralisis" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Columna</label>
+                                                                                <select name="p_1_p_col" id="p_1_p_col" data-titulo="Columna"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_p_col','div_p_1_p_col','obs_p_1_p_col',2);">
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterado</option>
+                                                                                    <option value="3">No Realizado</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_p_col" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Columna</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Columna" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_p_col" id="obs_p_1_p_col"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Columna</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="columna" name="columna" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Caderas</label>
+                                                                                <select name="p_1_cadera" id="p_1_cadera" data-titulo="Caderas"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_cadera','div_p_1_cadera','obs_p_1_cadera',2);">
+                                                                                    <option selected value="1">Normales </option>
+                                                                                    <option value="2">Alteradas</option>
+                                                                                    <option value="3">No Realizado</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_cadera" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Caderas</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Caderas" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_cadera" id="obs_p_1_cadera"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Caderas</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="caderas" name="caderas" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Extremidades</label>
+                                                                                <select name="p_1_p_ext" id="p_1_p_ext" data-titulo="Extremidades"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_p_ext','div_p_1_p_ext','obs_p_1_p_ext',2);">
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterados</option>
+                                                                                    <option value="3">No Realizados</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_p_ext" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Extremidades</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Extremidades" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_p_ext" id="obs_p_1_p_ext"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Extremidades</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="extremidades" name="extremidades" ></textarea>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Oftalmología</label>
+                                                                                <select name="p_1_p_ojo" id="p_1_p_ojo" data-titulo="Oftalmología"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_p_ojo','div_p_1_p_ojo','obs_p_1_p_ojo',2);">
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Examinada</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_p_ojo" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Oftalmología</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Oftalmología" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_p_ojo" id="obs_p_1_p_ojo"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-4">
-                                                                            <label class="floating-label">Ex. Oftalmológico</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="oft" name="oft" ></textarea>
+                                                                        <div class="col-sm-12 col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Audición</label>
+                                                                                <select name="p_1_audio" id="p_1_audio" data-titulo="Audición"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_audio','div_p_1_audio','obs_p_1_audio',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Anormal</option>
+                                                                                    <option value="3">No Examinada</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_audio" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Audición</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Audición" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_audio" id="obs_p_1_audio"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-4">
-                                                                            <label class="floating-label">Ex. Auditivo</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="audit" name="audit" ></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-md-4">
-                                                                            <label class="floating-label">Ex. Buco dental</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="bucoden" name="bucoden" ></textarea>
+                                                                        <div class="col-sm-12 col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Buco-Dental</label>
+                                                                                <select name="p_1_p_bd" data-titulo="Buco-Dental" id="p_1_p_bd" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1_p_bd','div_p_1_p_bd','obs_p_1_p_bd',2);">
+                                                                                    <option value="0">Seleccione</option>
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterado</option>
+                                                                                    <option value="3">No Realizado</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_1_p_bd" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Buco-Dental</label>
+                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Buco-Dental" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_p_bd" id="obs_p_1_p_bd"></textarea>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -1425,7 +1508,7 @@
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Cefalohematomas Fontanella ant</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="otros_font" name="otros_font" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="otros_font" name="otros_font" ></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -1436,19 +1519,19 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">General</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="lac_general" name="lac_general" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="lac_general" name="lac_general" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Técnica</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="tec" name="tec" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="tec" name="tec" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Ex. Mamas</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="mamas" name="mamas" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="mamas" name="mamas" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label-activo-sm">Señales de maltrato</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="maltrato" name="maltrato" ></textarea>
+                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="maltrato" name="maltrato" ></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -1459,27 +1542,54 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">General</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="general" id="general"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="general" id="general"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Incremento ponderal</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="inc_pon" id="inc_pon"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="inc_pon" id="inc_pon"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Nutricional</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="nutricional" id="nutricional"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="nutricional" id="nutricional"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Salud del lactante</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sal_lact" id="sal_lact"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="sal_lact" id="sal_lact"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Salud de la madre</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sal_madre" id="sal_madre"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="sal_madre" id="sal_madre"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Salud psicosocial</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sal_psico" id="sal_psico"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="sal_psico" id="sal_psico"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-12">
+                                                                            <div class="form-group">
+                                                                                    <h6>Indicaciones y Próximo Control</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-2">
+                                                                            <label class="floating-label-activo-sm">Fecha</label>
+                                                                            <input type="date" class="form-control form-control-sm" name="p_07_fecha_proxcontrol" id="p_07_fecha_proxcontrol">
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Control con:</label>
+                                                                            <input type="text" class="form-control form-control-sm" name="p_07_control_con" id="p_07_control_con">
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label class="floating-label">Indicaciones</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_07_ind" id="p_07_ind"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <label class="floating-label">Sugerencias</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_07_sugerencias" id="p_07_sugerencias"></textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1493,34 +1603,101 @@
                                                                 </div>
                                                             </div>
                                                             <hr>
-                                                            <div class="row">
+
+                                                            <div class="form-row">
                                                                 <div class="col-md-12">
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-4">
-                                                                            <label class="floating-label">Anamnesis</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="anamnesis" name="anamnesis" ></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-md-4">
-                                                                            <label class="floating-label">Antecedentes heredofamiliares maternos</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ant_mat" name="ant_mat" ></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-md-4">
-                                                                            <label class="floating-label">Antecedentes heredofamiliares paternos</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ant_pat" name="ant_pat" ></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-md-4">
-                                                                            <label class="floating-label">Test de Edimburgo</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="edimburgo" name="edimburgo" ></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-md-4">
-                                                                            <label class="floating-label">Rx. Caderas</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="rx_cadera" name="rx_cadera" ></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-md-4">
-                                                                            <label class="floating-label">Evaluación DSM</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="rx_cadera" name="rx_cadera" ></textarea>
-                                                                        </div>
+                                                                    <h6>Control parámetros Generales</h6>
+                                                                </div>
+                                                                <hr>
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <div class="col-sm-12 col-md-12">
+                                                                    <label class="floating-label-activo-sm">Anamnesis</label>
+                                                                    <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=4" onblur="this.rows=1;" id="p_25anamnesis" name="p_25anamnesis" ></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="form-row">
+                                                                <div class="col-sm-12 col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Ant. heredo-fam. Mat.</label>
+                                                                        <select name="p_25_p_ant_mat" id="p_25_p_ant_mat" data-titulo="Antec_mat"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_p_ant_mat','div_p_25_p_ant_mat','obs_p_25_p_ant_mat',2);">
+                                                                            <option selected value="1">No</option>
+                                                                            <option value="2">Si</option>
+                                                                            <option value="3">No Informada</option>
+                                                                        </select>
                                                                     </div>
+                                                                    <div class="form-group" id="div_p_25_p_ant_mat" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Ant. heredo-fam. Mat.</label>
+                                                                        <textarea class="form-control form-control-sm"  data-titulo="Antec_mat" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_p_ant_mat" id="obs_p_25_p_ant_mat"></textarea>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-sm-12 col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Ant. heredo-fam. Pat.</label>
+                                                                        <select name="p_25_p_ant_pat" id="p_25_p_ant_pat" data-titulo="Antec_pat"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_p_ant_pat','div_p_25_p_ant_pat','obs_p_25_p_ant_pat',2);">
+                                                                            <option selected value="1">No</option>
+                                                                            <option value="2">Si</option>
+                                                                            <option value="3">No Informada</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_p_25_p_ant_pat" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Ant. heredo-fam. Pat.</label>
+                                                                        <textarea class="form-control form-control-sm"  data-titulo="Antec_mat" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_p_ant_pat" id="obs_p_25_p_ant_pat"></textarea>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-sm-12 col-md-3">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Test de Edimburgo</label>
+                                                                        <select name="p25_p_edim" data-titulo="Edimburgo" id="p25_p_edim" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p25_p_edim','div_p25_p_edim','obs_p25_p_edim',2);">
+                                                                            <option selected value="1">Negativo</option>
+                                                                            <option value="2">Positivo</option>
+                                                                            <option value="3">No Realizado</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_p25_p_edim" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Test de Edimburgo</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Edimburgo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p25_p_edim" id="obs_p25_p_edim"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Rx. Caderas </label>
+                                                                        <select name="p_25_rxcad" id="p_25_rxcad" data-titulo="Rx_caderas"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_rxcad','div_p_25_rxcad','obs_p_25_rxcad',2);">
+                                                                            <option selected value="1">Normal</option>
+                                                                            <option value="2">Alterada</option>
+                                                                            <option value="3">No Examinada</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_p_25_rxcad" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Rx. Caderas</label>
+                                                                        <textarea class="form-control form-control-sm"  data-titulo="Rx_caderas" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_rxcad" id="obs_p_25_rxcad"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-3">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Evaluación DSM </label>
+                                                                        <select name="p_25_p_dsm" id="p_25_p_dsm" data-titulo="DSM"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_p_dsm','div_p_25_p_dsm','obs_p_25_p_dsm',2);">
+                                                                            <option selected value="1">Normal </option>
+                                                                            <option value="2">Alterada</option>
+                                                                            <option value="3">No Examinada</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_p_25_p_dsm" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Evaluación DSM </label>
+                                                                        <textarea class="form-control form-control-sm"  data-titulo="DSM" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_p_dsm" id="obs_p_25_p_dsm"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+
+
+                                                            <div class="form-row">
+                                                                <div class="col-md-12">
+
                                                                     <div class="form-row mb-2">
                                                                         <div class="col-md-12">
                                                                             <h6>Examen físico del menor</h6>
@@ -1529,52 +1706,165 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-12">
                                                                             <label class="floating-label">Inspección general y relación parental</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="insp_gral" name="insp_gral" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="" onblur="this.rows=1;" id="insp_25_gral" name="insp_25_gral" ></textarea>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Piel</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="piel" name="piel" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Piél</label>
+                                                                                <select name="p_25_p_piel" id="p_25_p_piel" data-titulo="Piel"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_p_piel','div_p_25_p_piel','obs_p_25_p_piel',2);">
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Informadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_25_p_piel" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Examen de Piél </label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Piel" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_p_piel" id="obs_p_25_p_piel"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Ganglios</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ganglios" name="ganglios" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Ganglios</label>
+                                                                                <select name="p_25_p_gang" id="p_25_p_gang" data-titulo="Ganglios"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_p_gang','div_p_25_p_gang','obs_p_25_p_gang',2);">
+                                                                                    <option selected value="1">Normal </option>
+                                                                                    <option value="2">Alterado</option>
+                                                                                    <option value="3">No Informados</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_25_p_gang" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Examen de Ganglios </label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Ganglios" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_p_gang" id="obs_p_25_p_gang"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Cardiopulmonar</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ex_cv" name="ex_cv" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Abdomen</label>
+                                                                                <select name="p_25_p_abd" id="p_25_p_abd" data-titulo="Abdomen"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_p_abd','div_p_25_p_abd','obs_p_25_p_abd',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterado</option>
+                                                                                    <option value="3">No Informado</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_25_p_abd" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Abdomen</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Abdomen" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_p_abda" id="obs_p_25_p_abd"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Abdomen</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="abdomen" name="abdomen" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Cardio-Pulmonar</label>
+                                                                                <select name="p_25_p_carpul" id="p_25_p_carpul" data-titulo="Torax"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_p_carpul','div_p_25_p_carpul','obs_p_25_p_carpul',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterado</option>
+                                                                                    <option value="3">No Informado</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_25_p_carpul" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Cardio-Pulmonar</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Torax" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_p_carpul" id="obs_p_25_p_carpul"></textarea>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-4">
-                                                                            <label class="floating-label">Ex. Genitoanal</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="genito_anal" name="genito_anal" ></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-md-4">
-                                                                            <label class="floating-label">Reflejos</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="reflejos" name="reflejos" ></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-md-4">
-                                                                            <label class="floating-label">Tono y motilidad</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="t_motilidad" name="t_motilidad" ></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Caderas</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="caderas" name="caderas" ></textarea>
-                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Genito-Anal</label>
+                                                                                <select name="p_25_p_gen" id="p_25_p_gen" data-titulo="Genitales"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_p_gen','div_p_25_p_gen','obs_p_25_p_gen',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterada</option>
+                                                                                    <option value="3">No Informadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group " id="div_p_25_p_gen" style="display:none;">
+                                                                                <label class="floating-label-activo-sm">Genito-Anal</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Genitales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_p_gen" id="obs_p_25_p_gen"></textarea>
+                                                                            </div>
 
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Extremidades</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="extr" name="extr" ></textarea>
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Examen oftalmológico</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="oft" name="oft" ></textarea>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Reflejos</label>
+                                                                                <select name="p_25_p_reflex" id="p_25_p_reflex" data-titulo="Reflejos"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_p_reflex','div_p_25_p_reflex','obs_p_25_p_reflex',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterados</option>
+                                                                                    <option value="3">No Informados</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_25_p_reflex" style="display:none;">
+                                                                                <label class="floating-label-activo-sm">Reflejos</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Reflejos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_p_reflex" id="obs_p_25_p_reflex"></textarea>
+                                                                            </div>
+
                                                                         </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label">Examen auditívo</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="audit" name="audit" ></textarea>
+                                                                        <div class="col-sm-12 col-md-3">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Tono y Motilidad</label>
+                                                                                <select name="p_25_p_tono" id="p_25_p_tono" data-titulo="Tono y Motilidad"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_p_tono','div_p_25_p_tono','obs_p_25_p_tono',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterados</option>
+                                                                                    <option value="3">No Informados</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_25_p_tono" style="display:none;">
+                                                                                <label class="floating-label-activo-sm">Tono y Motilidad</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Tono y Motilidad" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_p_tono" id="obs_p_25_p_tono"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-3">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Caderas</label>
+                                                                                <select name="p_25_p_cad" id="p_25_p_cad" data-titulo="Caderas"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_p_cad','div_p_25_p_cad','obs_p_25_p_cad',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alteradas</option>
+                                                                                    <option value="3">No Informadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_25_p_cad" style="display:none;">
+                                                                                <label class="floating-label-activo-sm">Caderas</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Caderas" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_p_cad" id="obs_p_25_p_cad"></textarea>
+                                                                            </div>
+
+                                                                        </div>
+                                                                         <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Extremidades</label>
+                                                                                <select name="p_25_p_ext" id="p_25_p_ext" data-titulo="Extremidades"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_p_ext','div_p_25_p_ext','obs_p_25_p_ext',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alteradas</option>
+                                                                                    <option value="3">No Informadas</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_25_p_ext" style="display:none;">
+                                                                                <label class="floating-label-activo-sm">Extremidades</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Extremidades" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_p_ext" id="obs_p_25_p_ext"></textarea>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Ex Oftalmológico</label>
+                                                                                <select name="p_25_p_ojo" id="p_25_p_ojo" data-titulo="Ojos"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_p_ojo','div_p_25_p_ojo','obs_p_25_p_ojo',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterado</option>
+                                                                                    <option value="3">No Informados</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_25_p_ojo" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Ex Oftalmológico</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Ojos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_p_ojo" id="obs_p_25_p_ojo"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Ex Auditívo</label>
+                                                                                <select name="p_25_p_oido" id="p_25_p_oido" data-titulo="Oidos"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_25_p_oido','div_p_25_p_oido','obs_p_25_p_oido',2);">
+                                                                                    <option selected value="1">Normal</option>
+                                                                                    <option value="2">Alterados</option>
+                                                                                    <option value="3">No Informados</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group" id="div_p_25_p_oido" style="display:none">
+                                                                                <label class="floating-label-activo-sm">Ex Auditívo</label>
+                                                                                <textarea class="form-control form-control-sm"  data-titulo="Oidos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_25_p_oido" id="obs_p_25_p_oido"></textarea>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -1597,11 +1887,11 @@
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Otros (lesiones)</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="otros_font" name="otros_font"></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="otros_font" name="otros_font"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-12">
                                                                             <label class="floating-label">Señales de maltrato</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="maltrato" name="maltrato" ></textarea>
+                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="maltrato" name="maltrato" ></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -1612,27 +1902,54 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">General</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="dg_gen" id="dg_gen"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="dg_gen" id="dg_gen"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Incremento ponderal</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="inc_pon" id="inc_pon"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="inc_pon" id="inc_pon"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Lactancia</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="nutricional" id="nutricional"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="nutricional" id="nutricional"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Salud del lactante</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sal_lact" id="sal_lact"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="sal_lact" id="sal_lact"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Otros</label>
-                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="otros" id="otros"></textarea>
+                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="otros" id="otros"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Salud psicosocial</label>
-                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sal_sicosocial" id="sal_sicosocial"></textarea>
+                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="sal_sicosocial" id="sal_sicosocial"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-12">
+                                                                             <div class="form-group">
+                                                                                    <h6>Indicaciones y Próximo Control</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-2">
+                                                                            <label class="floating-label-activo-sm">Fecha</label>
+                                                                            <input type="date" class="form-control form-control-sm" name="p_07_fecha_proxcontrol" id="p_07_fecha_proxcontrol">
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Control con:</label>
+                                                                            <input type="text" class="form-control form-control-sm" name="p_07_control_con" id="p_07_control_con">
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label class="floating-label">Indicaciones</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_07_ind" id="p_07_ind"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <label class="floating-label">Sugerencias</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_07_sugerencias" id="p_07_sugerencias"></textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1651,19 +1968,19 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-12">
                                                                             <label class="floating-label">Anamnesis</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="anamnesis" name="anamnesis"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="anamnesis" name="anamnesis"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Test de Edimburgo</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="edimburgo" name="edimburgo"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="edimburgo" name="edimburgo"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Pautas prevención accidentes</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="prev_accident" name="prev_accident"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="prev_accident" name="prev_accident"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Otros</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="otros" name="otros"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="otros" name="otros"></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -1674,52 +1991,52 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-12">
                                                                             <label class="floating-label">Inspección general y relación parental</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="insp_gral" name="insp_gral" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="insp_gral" name="insp_gral" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Piel</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="piel" name="piel" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="piel" name="piel" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Ganglios</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ganglios" name="ganglios" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="ganglios" name="ganglios" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Cardiopulmonar</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ex_cv" name="ex_cv" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="ex_cv" name="ex_cv" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Abdomen</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="abdomen" name="abdomen" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="abdomen" name="abdomen" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Ex. Genitoanal</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="genito_anal" name="genito_anal" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="genito_anal" name="genito_anal" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Reflejos</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="reflejos" name="reflejos" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="reflejos" name="reflejos" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Tono y motilidad</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="t_motilidad" name="t_motilidad" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="t_motilidad" name="t_motilidad" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Caderas</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="caderas" name="caderas" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="caderas" name="caderas" ></textarea>
                                                                         </div>
 
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Extremidades</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="extr" name="extr" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="extr" name="extr" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Examen oftalmológico</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="oft" name="oft" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="oft" name="oft" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Examen auditívo</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="audit" name="audit" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="audit" name="audit" ></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -1742,11 +2059,11 @@
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Otros (lesiones)</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="otros_font" name="otros_font" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="otros_font" name="otros_font" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-12">
                                                                             <label class="floating-label">Señales de maltrato</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="maltrato" name="maltrato" ></textarea>
+                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="maltrato" name="maltrato" ></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -1757,27 +2074,54 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">General</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="dg_gen" id="dg_gen"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="dg_gen" id="dg_gen"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Incremento ponderal</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="inc_pon" id="inc_pon"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="inc_pon" id="inc_pon"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Lactancia</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="nutricional" id="nutricional"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="nutricional" id="nutricional"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Salud del lactante</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sal_lact" id="sal_lact"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="sal_lact" id="sal_lact"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Otros</label>
-                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="otros" id="otros"></textarea>
+                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="otros" id="otros"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Salud psicosocial</label>
-                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sal_sicosocial" id="sal_sicosocial"></textarea>
+                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="sal_sicosocial" id="sal_sicosocial"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-12">
+                                                                             <div class="form-group">
+                                                                                    <h6>Indicaciones y Próximo Control</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-2">
+                                                                            <label class="floating-label-activo-sm">Fecha</label>
+                                                                            <input type="date" class="form-control form-control-sm" name="p_07_fecha_proxcontrol" id="p_07_fecha_proxcontrol">
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Control con:</label>
+                                                                            <input type="text" class="form-control form-control-sm" name="p_07_control_con" id="p_07_control_con">
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label class="floating-label">Indicaciones</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_07_ind" id="p_07_ind"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <label class="floating-label">Sugerencias</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_07_sugerencias" id="p_07_sugerencias"></textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1796,31 +2140,31 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-12">
                                                                             <label class="floating-label">Anamnesis</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="anamnesis" name="anamnesis" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="anamnesis" name="anamnesis" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Evaluaciones indicaciones anteriores</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ev_anter" name="ev_anter" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="ev_anter" name="ev_anter" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Dieta</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="dieta" name="dieta" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="dieta" name="dieta" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Hábitos</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="habitos" name="habitos" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="habitos" name="habitos" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Rutinas de sueño alimentación</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="sueno_alim" name="sueno_alim" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="sueno_alim" name="sueno_alim" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Prevención de accidentes</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="accidentes" name="accidentes" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="accidentes" name="accidentes" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Cuidadores</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="cuidadores" name="cuidadores" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="cuidadores" name="cuidadores" ></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -1831,52 +2175,52 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-12">
                                                                             <label class="floating-label">Inspección general y relación parental</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="insp_gral" name="insp_gral" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="insp_gral" name="insp_gral" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Piel</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="piel" name="piel" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="piel" name="piel" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Ganglios</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ganglios" name="ganglios" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="ganglios" name="ganglios" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Cardiopulmonar</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ex_cv" name="ex_cv" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="ex_cv" name="ex_cv" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Abdomen</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="abdomen" name="abdomen" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="abdomen" name="abdomen" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Ex. Genitoanal</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="genito_anal" name="genito_anal" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="genito_anal" name="genito_anal" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Reflejos</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="reflejos" name="reflejos" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="reflejos" name="reflejos" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Tono y motilidad</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="t_motilidad" name="t_motilidad" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="t_motilidad" name="t_motilidad" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Caderas</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="caderas" name="caderas" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="caderas" name="caderas" ></textarea>
                                                                         </div>
 
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Extremidades</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="extr" name="extr" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="extr" name="extr" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Examen oftalmológico</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="oft" name="oft" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="oft" name="oft" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Examen auditívo</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="audit" name="audit" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="audit" name="audit" ></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -1899,11 +2243,11 @@
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Otros (lesiones)</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="otros_font" name="otros_font" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="otros_font" name="otros_font" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-12">
                                                                             <label class="floating-label">Señales de maltrato</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="maltrato" name="maltrato" ></textarea>
+                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="maltrato" name="maltrato" ></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -1914,27 +2258,54 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">General</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="general" id="general"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="general" id="general"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Incremento ponderal</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="inscr_ponderal" id="inscr_ponderal"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="inscr_ponderal" id="inscr_ponderal"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Lactancia</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="lactancia" id="lactancia"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="lactancia" id="lactancia"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Salud del lactante</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="salud_lactante" id="salud_lactante"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="salud_lactante" id="salud_lactante"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Salud de la madre</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="salud_madre" id="salud_madre"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="salud_madre" id="salud_madre"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Salud psicosocial</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sal_psico" id="sal_psico"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="sal_psico" id="sal_psico"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-12">
+                                                                             <div class="form-group">
+                                                                                    <h6>Indicaciones y Próximo Control</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-2">
+                                                                            <label class="floating-label-activo-sm">Fecha</label>
+                                                                            <input type="date" class="form-control form-control-sm" name="p_07_fecha_proxcontrol" id="p_07_fecha_proxcontrol">
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Control con:</label>
+                                                                            <input type="text" class="form-control form-control-sm" name="p_07_control_con" id="p_07_control_con">
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label class="floating-label">Indicaciones</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_07_ind" id="p_07_ind"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <label class="floating-label">Sugerencias</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_07_sugerencias" id="p_07_sugerencias"></textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1953,31 +2324,31 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-12">
                                                                             <label class="floating-label">Anamnesis</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="anamnesis" name="anamnesis" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="anamnesis" name="anamnesis" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Evaluaciones indicaciones anteriores</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ev_anter" name="ev_anter" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="ev_anter" name="ev_anter" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Dieta</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="dieta" name="dieta" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="dieta" name="dieta" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Hábitos</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="habitos" name="habitos" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="habitos" name="habitos" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Rutinas de sueño alimentación</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="sueno_alim" name="sueno_alim" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="sueno_alim" name="sueno_alim" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Prevención de accidentes</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="accidentes" name="accidentes" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="accidentes" name="accidentes" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Cuidadores</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="cuidadores" name="cuidadores" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="cuidadores" name="cuidadores" ></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -1988,59 +2359,59 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-12">
                                                                             <label class="floating-label">Inspección general y relación parental</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="insp_gral" name="insp_gral" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="insp_gral" name="insp_gral" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Piel</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="piel" name="piel" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="piel" name="piel" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Ganglios</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ganglios" name="ganglios" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="ganglios" name="ganglios" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Cardiopulmonar</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ex_cv" name="ex_cv" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="ex_cv" name="ex_cv" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-3">
                                                                             <label class="floating-label">Abdomen</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="abdomen" name="abdomen" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="abdomen" name="abdomen" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Ex. Genitoanal</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="genito_anal" name="genito_anal" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="genito_anal" name="genito_anal" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Presión arterial</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="p_arterial" name="p_arterial" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="p_arterial" name="p_arterial" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Ex. Neurológico</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="neurl" name="neurl" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="neurl" name="neurl" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Marcha</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="marcha" name="marcha" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="marcha" name="marcha" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Pié plano flexible</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="p_planof" name="p_planof" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="p_planof" name="p_planof" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Pié plano doloroso</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="p_planod" name="p_planod" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="p_planod" name="p_planod" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Genu valgo</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="genu" name="genu" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="genu" name="genu" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Examen oftalmológico</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="oft" name="oft" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="oft" name="oft" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Examen auditívo</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="audit" name="audit" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="audit" name="audit" ></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -2063,11 +2434,11 @@
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Ex. Bucodental</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="bucodental" name="bucodental" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="bucodental" name="bucodental" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-12">
                                                                             <label class="floating-label">Señales de maltrato</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="maltrato" name="maltrato" ></textarea>
+                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="maltrato" name="maltrato" ></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -2078,19 +2449,46 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
                                                                             <label class="floating-label">General</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="dg_gen" id="dg_gen"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="dg_gen" id="dg_gen"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label class="floating-label">Incremento ponderal</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="inc_pon" id="inc_pon"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="inc_pon" id="inc_pon"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label class="floating-label">Otros</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="otros" id="otros"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="otros" id="otros"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label class="floating-label">Salud psicosocial</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sal_sicosocial" id="sal_sicosocial"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="sal_sicosocial" id="sal_sicosocial"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-12">
+                                                                             <div class="form-group">
+                                                                                    <h6>Indicaciones y Próximo Control</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-2">
+                                                                            <label class="floating-label-activo-sm">Fecha</label>
+                                                                            <input type="date" class="form-control form-control-sm" name="p_07_fecha_proxcontrol" id="p_07_fecha_proxcontrol">
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Control con:</label>
+                                                                            <input type="text" class="form-control form-control-sm" name="p_07_control_con" id="p_07_control_con">
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label class="floating-label">Indicaciones</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_07_ind" id="p_07_ind"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <label class="floating-label">Sugerencias</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_07_sugerencias" id="p_07_sugerencias"></textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -2109,15 +2507,15 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Anamnesis</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=8" onblur="this.rows=1;" id="anamnesis" name="anamnesis" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" id="anamnesis" name="anamnesis" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Evaluaciones psicoafectivas</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=8" onblur="this.rows=1;" id="ev_psicoa" name="ev_psicoa" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" id="ev_psicoa" name="ev_psicoa" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Otros</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=8" onblur="this.rows=1;" id="sueno_alim" name="sueno_alim" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" id="sueno_alim" name="sueno_alim" ></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -2128,7 +2526,7 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-12">
                                                                             <label class="floating-label">Inspección general y relación parental</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="insp_gral" name="insp_gral" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="insp_gral" name="insp_gral" ></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-1">
@@ -2181,74 +2579,74 @@
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label class="floating-label">Piel</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="piel" name="piel" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="piel" name="piel" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label class="floating-label">Ganglios</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ganglios" name="ganglios" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="ganglios" name="ganglios" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-12 mb-0">
                                                                             <p class="text-danger">Este examen se debe desarrollar con la presencia del adulto responsable del menor y con el consentimiento escolar*</p>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label text-danger">Desarrollo puberal *</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="2" onfocus="this.rows=6" onblur="this.rows=2;" id="desarr_pub" name="desarr_pub" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="2" onfocus="this.rows=2" onblur="this.rows=2;" id="desarr_pub" name="desarr_pub" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label text-danger">Desarrollo puberal *</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="2" onfocus="this.rows=6" onblur="this.rows=2;" id="abdomen" name="abdomen" placeholder="REVISAR RESPUESTAS DEL CUESTIONARIO (COMPLETADO POR PADRES)" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="2" onfocus="this.rows=2" onblur="this.rows=2;" id="abdomen" name="abdomen" placeholder="REVISAR RESPUESTAS DEL CUESTIONARIO (COMPLETADO POR PADRES)" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label text-danger">Ex. Genitoanal *</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="2" onfocus="this.rows=6" onblur="this.rows=2;" id="genito_anal" name="genito_anal" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="2" onfocus="this.rows=2" onblur="this.rows=2;" id="genito_anal" name="genito_anal" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Presión arterial</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="p_arterial" name="p_arterial" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="p_arterial" name="p_arterial" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Test de Adams</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="adams" name="adams" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="adams" name="adams" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                                 <label class="floating-label">Ex. Tórax</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="torax" name="torax" ></textarea>
+                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="torax" name="torax" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Abdomen</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="abdomen" name="abdomen" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="abdomen" name="abdomen" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Ex. Bucodental</label>
-                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="buco_dent" name="buco_dent" ></textarea>
+                                                                            <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="buco_dent" name="buco_dent" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Marcha</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="marcha" name="marcha" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="marcha" name="marcha" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Pié plano flexible</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="p_planof" name="p_planof" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="p_planof" name="p_planof" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Pié plano doloroso</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="p_planod" name="p_planod" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="p_planod" name="p_planod" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Genu valgo</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="genu" name="genu" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="genu" name="genu" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Examen oftalmológico</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="oft" name="oft" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="oft" name="oft" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Examen auditívo</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="audit" name="audit" ></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="audit" name="audit" ></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-4">
                                                                             <label class="floating-label">Señales de maltrato</label>
-                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="maltrato" name="maltrato" ></textarea>
+                                                                                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=2" onblur="this.rows=1;" id="maltrato" name="maltrato" ></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row mb-2">
@@ -2259,19 +2657,46 @@
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
                                                                             <label class="floating-label">General</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="general" id="general"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="general" id="general"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label class="floating-label">Nutricional</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="nutricional" id="nutricional"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="nutricional" id="nutricional"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label class="floating-label">Salud (General)</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sal_gnal" id="sal_gnal"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="sal_gnal" id="sal_gnal"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label class="floating-label">Salud psicosocial</label>
-                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="s_psicosocial" id="s_psicosocial"></textarea>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="s_psicosocial" id="s_psicosocial"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-12">
+                                                                             <div class="form-group">
+                                                                                    <h6>Indicaciones y Próximo Control</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-2">
+                                                                            <label class="floating-label-activo-sm">Fecha</label>
+                                                                            <input type="date" class="form-control form-control-sm" name="p_07_fecha_proxcontrol" id="p_07_fecha_proxcontrol">
+                                                                        </div>
+                                                                        <div class="form-group col-md-4">
+                                                                            <label class="floating-label">Control con:</label>
+                                                                            <input type="text" class="form-control form-control-sm" name="p_07_control_con" id="p_07_control_con">
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label class="floating-label">Indicaciones</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_07_ind" id="p_07_ind"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <label class="floating-label">Sugerencias</label>
+                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_07_sugerencias" id="p_07_sugerencias"></textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -2283,7 +2708,7 @@
                                             <!--Próximo control-->
 
                                                 <hr>
-
+                                             <!--
                                             <div class="col-md-12">
                                                 <div class="card">
                                                     <div class="card-header bg-info align-middle">
@@ -2314,7 +2739,7 @@
                                                         </form>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>-->
 
                                             <!--Botones carnet vacunas
                                             <div class="row">
@@ -2533,7 +2958,6 @@
     </div>
 </div>
 
-@section('page-script-ficha-atencion')
     <script>
         $('#btn_recien_nacido').click(function () {
             $('#recien_nacido').toggle();
@@ -2618,18 +3042,18 @@
 
         function cargarIgual(input){
 
-            let actual = $('#'+input);
+            var actual = $('#'+input);
             let equivalentes = $('#'+input).attr('data-input_igual').split(',');
             $.each(equivalentes, function( index, value ) {
                 var equivalente = $('#'+value);
                 equivalente.val(actual.val());
             });
-            {{--
-            let actual = $('#'+input);
+
+            {{--  let actual = $('#'+input);
             let equivalente = $('#'+$('#'+input).attr('data-input_igual'));
 
-            equivalente.val(actual.val());
-            --}}
+            equivalente.val(actual.val());  --}}
+
         }
 
         function evaluar_para_carga_detalle(select, div, input, valor)
@@ -2670,7 +3094,7 @@
                 {
                     html +='<div class="col-md-4">Detalle</div>';
                     html +='<div class="col-md-6">';
-                    html +='    <textarea class="form-control caja-texto form-control-sm '+$(elemento).attr('id')+'_editar" style="display:none;" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_'+$(elemento).attr('id')+'" id="observaciones_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</textarea>';
+                    html +='    <textarea class="form-control caja-texto form-control-sm '+$(elemento).attr('id')+'_editar" style="display:none;" rows="1"  onfocus="2" onblur="this.rows=1;" name="observaciones_'+$(elemento).attr('id')+'" id="observaciones_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</textarea>';
                     html +='    <label class="'+$(elemento).attr('id')+'_mostrar" id="label_observacion_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</label>';
                     html +='</div>';
                     html +='<div class="col-md-2">';
@@ -2692,10 +3116,10 @@
 
         function guardar_tipo_ficha_ped()
         {
-            var registro_f_t_orl_nombre = $('#registro_f_t_orl_nombre').val();
-            var registro_f_t_orl_descripcion = $('#registro_f_t_orl_descripcion').val();
+            var registro_f_t_pedgen_nombre = $('#registro_f_t_pedgen_nombre').val();
+            var registro_f_t_pedgen_descripcion = $('#registro_f_t_pedgen_descripcion').val();
             var _token = CSRF_TOKEN;
-            if(registro_f_t_orl_nombre == ''){
+            if(registro_f_t_pedgen_nombre == ''){
                 swal({
                         title: "Problema al Registrar Tipo Ficha.\n Campo requedido Nombre",
                         icon: "warning",
@@ -2704,7 +3128,7 @@
                     });
                     return false;
             }
-            if(registro_f_t_orl_descripcion == ''){
+            if(registro_f_t_pedgen_descripcion == ''){
                 swal({
                         title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
                         icon: "warning",
@@ -2716,10 +3140,10 @@
 
 
             var data = [];
-            data.registro_f_t_orl_nombre = registro_f_t_orl_nombre;
-            data.registro_f_t_orl_descripcion = registro_f_t_orl_descripcion;
+            data.registro_f_t_pedgen_nombre = registro_f_t_pedgen_nombre;
+            data.registro_f_t_pedgen_descripcion = registro_f_t_pedgen_descripcion;
 
-            $('#registro_f_t_orl_detalle').find('input,textarea').each(function(key, elemento){
+            $('#registro_f_t_pedgen_detalle').find('input,textarea').each(function(key, elemento){
                 {{--  console.log($(elemento).attr('id'));  --}}
                 {{--  console.log($(elemento).val());  --}}
                 {{--  console.log($(elemento).prop('nodeName'));  --}}
@@ -2730,7 +3154,7 @@
             });
 
             {{--  console.log(data);  --}}
-            url = "{{ route('profesional.ficha_tipo_otorrino') }}";
+            url = "{{ route('profesional.buscar_ficha_tipo_otorrino') }}";
             $.ajax({
 
                 url: url,
@@ -2767,11 +3191,11 @@
                     observaciones_obs_ex_biom :  data.observaciones_obs_ex_biom,
                     observaciones_obs_ex_nasal :  data.observaciones_obs_ex_nasal,
                     observaciones_obs_ex_oidos :  data.observaciones_obs_ex_oidos,
-                    observaciones_obs_ex_orl :  data.observaciones_obs_ex_orl,
+                    observaciones_obs_ex_pedgen:  data.observaciones_obs_ex_pedgen,
                     observaciones_obs_examen_bio_od :  data.observaciones_obs_examen_bio_od,
                     observaciones_obs_examen_bio_oi :  data.observaciones_obs_examen_bio_oi,
-                    registro_f_t_orl_descripcion :  data.registro_f_t_orl_descripcion,
-                    registro_f_t_orl_nombre :  data.registro_f_t_orl_nombre,
+                    registro_f_t_pedgen_descripcion :  data.registro_f_t_pedgen_descripcion,
+                    registro_f_t_pedgen_nombre :  data.registro_f_t_pedgen_nombre,
                 },
             })
             .done(function(data)
@@ -2781,7 +3205,7 @@
                 {{--  console.log('-----------------------');  --}}
                 if(data.estado == 1)
                 {
-                    $('#modal_registrar_ficha_tipo_orl').modal('hide');
+                    $('#modal_registrar_ficha_tipo_pedgen').modal('hide');
                     swal({
                         title: "Tipo Ficha Registrado",
                         icon: "success",
@@ -2806,7 +3230,7 @@
 
         }
 
-        function cargar_info_ficha_tipo_orl(select, div_descripcion)
+        function cargar_info_ficha_tipo_pedgen(select, div_descripcion)
         {
             let id_ft = $('#'+select).val();
             if(id_ft == '')
@@ -2945,6 +3369,6 @@
 
 
     </script>
-@endsection
+
 
 

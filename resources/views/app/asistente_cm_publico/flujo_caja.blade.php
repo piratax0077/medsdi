@@ -337,37 +337,118 @@
         function validar_rendicion()
         {
             $('#aprobacion_tiempo').html(''+tiempo+' minutos');
-            console.log(tiempo);
-            console.log(conteo_activo);
             if(tiempo > 0 && conteo_activo == 1)
             {
                 setTimeout(function(){
                     tiempo = tiempo-1;
                     $('#aprobacion_tiempo').html(''+tiempo+' minutos');
-                    if(validar_autorizacion())
-                    {
-                        console.log('confirmado');
-                    }
-                    else
-                    {
-                        validar_rendicion(tiempo);
-                        if(tiempo == 9)
-                        {
-                            swal({
-                                title: "Solicitud de Rendicion",
-                                text: 'El tiempo para Autorizar Rendición esta por finalizar, Desea continuar presione el botón "Más Tiempo", si "Acepta" la Rendición quedará Anulada y debera realizarla de nuevo.',
-                                icon: "warning",
-                                buttons: ["Aceptar", 'Más Tiempo'],
-                            }).then((result) => {
-                                if (result == true)
-                                {
-                                    reiniciar_rendicion( $('#numero_rendicion_hidde').val());
-                                }
-                            });
-                        }
-                    }
+                    var value_validacion = 0;
 
-                }, 3000);// 600 = 1seg |  60000 = 1 minutos | 10000 = 10 seg
+                    var id_rendicion = $('#numero_rendicion_hidde').val()
+                    let url = "{{ route('asistentecm.rendir_caja_validar_autorizacion') }}";
+
+                    $.ajax({
+                            url: url,
+                            type: "POST",
+                            data: {
+                                _token: CSRF_TOKEN,
+                                id_rendicion : id_rendicion,
+                            },
+                        })
+                        .done(function(data) {
+
+                            console.log(data);
+                            if (data.estado == 1)
+                            {
+                                if(data.registro.estado == 0)
+                                {
+                                    console.log('espera aprobacion');
+                                }
+                                else
+                                {
+                                    $('#numero_rendicion_hidde').val('');
+                                    $('#numero_rendicion').html('');
+                                    $('#nombre_receptor').html('');
+                                    $('#total_documento').html('');
+                                    $('#total_bonos').html('');
+                                    $('#total_efectivo').html('');
+                                    $('#total_otros').html('');
+
+                                    $('#aprobacion').html('En Espera de Aprobación <span id="aprobacion_tiempo"></span>');
+                                    $('#rendicion_caja_diaria').modal('hide');
+
+                                    tiempo = 0;
+                                    conteo_activo = 0;
+
+                                    if(data.registro.estado == 1)
+                                    {
+                                        swal({
+                                            title: "Solicitud de Rendicion.",
+                                            text: "Rendicion Aceptada conforme",
+                                            icon: "success",
+                                            buttons: "Aceptar",
+                                            // DangerMode: true,
+                                        });
+
+                                        console.log('confirmado');
+                                        value_validacion = 1;
+                                        cargar_registros();
+                                        return false;
+                                    }
+                                    else if(data.registro.estado == 2)
+                                    {
+                                        swal({
+                                            title: "Solicitud de Rendicion.",
+                                            text: "Autorizaión Vencida",
+                                            icon: "success",
+                                            buttons: "Aceptar",
+                                            // DangerMode: true,
+                                        });
+                                    }
+                                    else if(data.registro.estado == 3)
+                                    {
+                                        swal({
+                                            title: "Solicitud de Rendicion.",
+                                            text: "Autorizaión Rechazada",
+                                            icon: "error",
+                                            buttons: "Aceptar",
+                                            // DangerMode: true,
+                                        });
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                swal({
+                                    title: "Solicitud de Rendicion con Problema",
+                                    text: data.msj,
+                                    icon: "error",
+                                    buttons: "Aceptar",
+                                    // DangerMode: true,
+                                });
+                            }
+
+                            validar_rendicion(tiempo);
+                            if(tiempo == 8)
+                            {
+                                swal({
+                                    title: "Solicitud de Rendicion",
+                                    text: 'El tiempo para Autorizar Rendición esta por finalizar, Desea continuar presione el botón "Más Tiempo", si "Acepta" la Rendición quedará Anulada y debera realizarla de nuevo.',
+                                    icon: "warning",
+                                    buttons: ["Aceptar", 'Más Tiempo'],
+                                }).then((result) => {
+                                    if (result == true)
+                                    {
+                                        reiniciar_rendicion( $('#numero_rendicion_hidde').val());
+                                    }
+                                });
+                            }
+
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            console.log(jqXHR, ajaxOptions, thrownError)
+                        });
+                }, 10000);// 600 = 1seg |  60000 = 1 minutos | 10000 = 10 seg | 600000 = 10 minutos
             }
             else
             {
@@ -378,7 +459,7 @@
             }
         }
 
-        /** dar de baja rendicion */
+
         function desistir_rendicion()
         {
             var id_rendicion = $('#numero_rendicion_hidde').val();
@@ -476,98 +557,167 @@
                 });
         }
 
-        function validar_autorizacion()
+        function cargar_registros()
         {
-            var id_rendicion = $('#numero_rendicion_hidde').val()
-            let url = "{{ route('asistentecm.rendir_caja_validar_autorizacion') }}";
+                let url = "{{ route('asistentecm.rendicion_carga_bonos') }}";
 
-            $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        id_rendicion : id_rendicion,
-                    },
-                })
-                .done(function(data) {
+                $.ajax({
+                        url: url,
+                        type: "GET",
+                        data: {},
+                    })
+                    .done(function(data) {
 
-                    console.log(data);
-                    if (data.estado == 1)
-                    {
-                        if(data.registro.estado == 0)
+                        console.log(data);
+                        if (data.estado == 1)
                         {
-                            console.log('espera aprobacion');
-                            return 1;
+
+                            $('#numero_bonos').val(data.total_bonos);
+                            $('#efectivo').val(data.total_efectivo);
+                            $('#otros').val(data.total_otros);
+                            $('#total').val(data.total);
+
+                            var lista_bonos = '';
+                            $('#tabla_rendir_caja tbody').html('');
+                            $(data.lista_bonos).each(function(index, value) { // indice, valor
+                                var html = '';
+                                let clase_bono = ['','Bono Fisico','Sencillito','Caja Vecina','Bono Web','Bono Web Pre-Pago','Particular','Otro'];
+                                html +='<tr >';
+                                html +='    <td class="align-middle text-center">'+value.TipoBono.nombre+'</td>';
+                                html +='    <td class="align-middle text-center">'+value.numero_bono+'</td>';
+                                html +='    <td class="align-middle text-center">'+clase_bono[value.id_clase_bono]+'</td>';
+                                html +='    <td class="align-middle text-center">'+value.Convenio.nombre+'</td>';
+                                html +='    <td class="align-middle text-center">'+value.fecha_atencion+'</td>';
+                                html +='    <td class="align-middle text-center">';
+                                html +='        <span>'+value.Paciente.nombres+' '+value.Paciente.apellido_uno+' '+value.Paciente.apellido_dos+'</span><br>';
+                                html +='        <span>'+value.Paciente.rut+'</span>';
+                                html +='    </td>';
+                                html +='    <td class="align-middle text-center">'+$.number( value.valor_atencion, 2, ',' )+'</td>';
+                                html +='    <td class="align-middle text-center">';
+                                html +='        <span>'+value.Profesional.nombres+' '+value.Profesional.apellido_uno+' '+value.Profesional.apellido_dos+'</span><br>';
+                                html +='        <span>'+value.Profesional.rut+'</span>';
+                                html +='    </td>';
+                                html +='</tr>';
+                                $('#tabla_rendir_caja tbody').append(html);
+                                lista_bonos +='|'+value.id+'' ;
+                            });
+
+                            $('#lista_bonos').val(data.lista_bonos)
+
                         }
                         else
                         {
-                            $('#numero_rendicion_hidde').val('');
-                            $('#numero_rendicion').html('');
-                            $('#nombre_receptor').html('');
-                            $('#total_documento').html('');
-                            $('#total_bonos').html('');
-                            $('#total_efectivo').html('');
-                            $('#total_otros').html('');
-
-                            $('#aprobacion').html('En Espera de Aprobación <span id="aprobacion_tiempo"></span>');
-
-                            $('#rendicion_caja_diaria').modal('hide');
-
-                            tiempo = 0;
-                            conteo_activo = 0;
-
-                            if(data.registro.estado == 1)
-                            {
-                                swal({
-                                    title: "Solicitud de Rendicion.",
-                                    text: "Rendicion Aceptada conforme",
-                                    icon: "success",
-                                    buttons: "Aceptar",
-                                    // DangerMode: true,
-                                });
-                            }
-                            else if(data.registro.estado == 2)
-                            {
-                                swal({
-                                    title: "Solicitud de Rendicion.",
-                                    text: "Autorizaión Vencida",
-                                    icon: "success",
-                                    buttons: "Aceptar",
-                                    // DangerMode: true,
-                                });
-                            }
-                            else if(data.registro.estado == 3)
-                            {
-                                swal({
-                                    title: "Solicitud de Rendicion.",
-                                    text: "Autorizaión Rechazada",
-                                    icon: "error",
-                                    buttons: "Aceptar",
-                                    // DangerMode: true,
-                                });
-                            }
-
-                            return 0;
+                            swal({
+                                title: "Problemas al cargar bonos del día",
+                                text: data.msj,
+                                icon: "error",
+                                buttons: "Aceptar",
+                                // DangerMode: true,
+                            });
+                            return '0';
                         }
-                    }
-                    else
-                    {
-                        swal({
-                            title: "Solicitud de Rendicion con Problema",
-                            text: data.msj,
-                            icon: "error",
-                            buttons: "Aceptar",
-                            // DangerMode: true,
-                        });
-                        return 0;
-                    }
 
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        console.log(jqXHR, ajaxOptions, thrownError)
+                    });
         }
 
+        // function validar_autorizacion()
+        // {
+        //     console.log('-----------------validar_autorizacion-------------------');
+
+        //     var id_rendicion = $('#numero_rendicion_hidde').val()
+        //     let url = "{{ route('asistentecm.rendir_caja_validar_autorizacion') }}";
+
+        //     $.ajax({
+        //             url: url,
+        //             type: "POST",
+        //             data: {
+        //                 _token: CSRF_TOKEN,
+        //                 id_rendicion : id_rendicion,
+        //             },
+        //         })
+        //         .done(function(data) {
+
+        //             console.log(data);
+        //             if (data.estado == 1)
+        //             {
+        //                 if(data.registro.estado == 0)
+        //                 {
+        //                     console.log('espera aprobacion');
+        //                     return '0';
+        //                 }
+        //                 else
+        //                 {
+        //                     $('#numero_rendicion_hidde').val('');
+        //                     $('#numero_rendicion').html('');
+        //                     $('#nombre_receptor').html('');
+        //                     $('#total_documento').html('');
+        //                     $('#total_bonos').html('');
+        //                     $('#total_efectivo').html('');
+        //                     $('#total_otros').html('');
+
+        //                     $('#aprobacion').html('En Espera de Aprobación <span id="aprobacion_tiempo"></span>');
+
+        //                     $('#rendicion_caja_diaria').modal('hide');
+
+        //                     tiempo = 0;
+        //                     conteo_activo = 0;
+
+
+        //                     if(data.registro.estado == 1)
+        //                     {
+        //                         swal({
+        //                             title: "Solicitud de Rendicion.",
+        //                             text: "Rendicion Aceptada conforme",
+        //                             icon: "success",
+        //                             buttons: "Aceptar",
+        //                             // DangerMode: true,
+        //                         });
+        //                         return '1';
+        //                     }
+        //                     else if(data.registro.estado == 2)
+        //                     {
+        //                         swal({
+        //                             title: "Solicitud de Rendicion.",
+        //                             text: "Autorizaión Vencida",
+        //                             icon: "success",
+        //                             buttons: "Aceptar",
+        //                             // DangerMode: true,
+        //                         });
+        //                     }
+        //                     else if(data.registro.estado == 3)
+        //                     {
+        //                         swal({
+        //                             title: "Solicitud de Rendicion.",
+        //                             text: "Autorizaión Rechazada",
+        //                             icon: "error",
+        //                             buttons: "Aceptar",
+        //                             // DangerMode: true,
+        //                         });
+        //                     }
+
+        //                     return '0';
+        //                 }
+        //             }
+        //             else
+        //             {
+        //                 swal({
+        //                     title: "Solicitud de Rendicion con Problema",
+        //                     text: data.msj,
+        //                     icon: "error",
+        //                     buttons: "Aceptar",
+        //                     // DangerMode: true,
+        //                 });
+        //                 return '0';
+        //             }
+
+        //         })
+        //         .fail(function(jqXHR, ajaxOptions, thrownError) {
+        //             console.log(jqXHR, ajaxOptions, thrownError)
+        //         });
+        // }
 
     </script>
 

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Hora Agendada</title>
+</head>
+
+<body>
+    <table border="0" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td style="background-color: #ffffff;" align="center" valign="top" bgcolor="#ffffff"><br>
+                    <table style="width: 100%px; max-width: 600px;" border="0" width="100%" cellspacing="0" cellpadding="0">
+                        <tbody>
+                            <tr>
+                                <td style="height: 11px; background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);
+                                        background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);
+                                        background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">
+                                    <img style="width: 95px; margin-bottom: 20px; margin-top: 20px;" src="https://www.med-sdi.cl/images/logos/logo_pais_vertical.svg" alt="Medichile">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="background-color: #fff; padding: 0px 24px 0px 24px;" align="center">
+                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 600; color: #0071bc;">Estimado/a Paciente: <br><br>{{ $detalle['body']['NOMBRE_PACIENTE'] }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);
+                                        background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);
+                                        background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); padding: 0px 24px 0px 24px;" align="center">
+                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 500; color: #ffffff;">Su hora ha sido agendada con éxito
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 1.2rem; color: #3366CC; line-height: 10px;">
+                                    <span style="display: inline-block; margin-top: 30px;"><img style="width: 2.5rem;" src="https://www.med-sdi.cl/images/iconos/calendario_1.svg" alt="Día">
+                                        <p><b>{{ $detalle['body']['FECHA_RESERVA'] }}</b></p>
+                                    </span>
+                                    <br>
+                                    <span style="display: inline-block; margin-top: 20px;"><img style="width: 2.5rem;" src="https://www.med-sdi.cl/images/iconos/reloj_1.svg" alt="Día">
+                                        <p><b>{{ $detalle['body']['HORA_RESERVA'] }}</b></p>
+                                    </span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                <td style="background-color: #f2f2f2; padding: 0px 11px 0px 0px;" align="center">
+                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 18px; line-height: 25px; text-align: left; color: #424242; margin-left: 20px;">
+                        <b>Profesional:</b> {{ $detalle['body']['PROFESIONAL_NOMBRE'] }}<br>
+                        <b>Especialidad:</b> {{ $detalle['body']['PROFESIONAL_ESPECIALIDAD'] }} <br>
+                        <b>Sub Especialidad:</b> {{ $detalle['body']['PROFESIONAL_SUB_ESPECIALIDAD'] }}<br>
+                        <b>Lugar de Atención:</b> {{ $detalle['body']['LUGAR_ATENCION_NOMBRE'] }}<br>
+                        <b>Dirección:</b> {{ $detalle['body']['LUGAR_ATENCION_DIRECCION'] }}<br>
+                        <b>Comuna:</b> {{ $detalle['body']['LUGAR_ATENCION_COMUNA'] }}<br>
+                        {{--  <b>Fono:</b> {{ $detalle['body']['LUGAR_ATENCION_DIRECCION'] }}<br>  --}}
+                        <b>Asistente:</b>{{ $detalle['body']['ASISTENTE_NOMBRE'] }}</p>
+                </td>
+            <tr>
+            </tr>
+            <tr>
+                <td>
+                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 20px; line-height: 25px; text-align: center; color: #3366CC;"><b>¡RECUERDE LLEGAR 15 MINUTOS ANTES A SU CITA!</b></p>
+                </td>
+            </tr>
+            <tr>
+                <td height="20"> </td>
+            </tr>
+            <tr>
+            <tr>
+                <td inline-block style="text-align: center;">
+                    <img style="width: 50px; margin-bottom: 5px; margin-top: 50px; margin-right: 10px;" src="https://www.med-sdi.cl/images/logos/logo_pais_vertical.svg" alt="Medichile">
+                    <img style="width: 90px; margin-bottom: 5px; margin-top: 50px;" src="https://www.med-sdi.cl/images/logos/logo.svg" alt="Medichile">
+                </td>
+            </tr>
+            <tr>
+                <td style="height: 11px; background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);
+                                        background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);
+                                        background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);">
+                </td>
+            </tr>
+            <td style="text-align: center;" align="center">
+                <table border="0" width="95%" cellspacing="0" cellpadding="0" align="center">
+                    <tbody>
+                        <tr>
+                            <td style="font-family: Helvetica, Arial, sans-serif;" align="center" valign="top">
+                                <p style="text-align: center; color: #999999; font-size: 12px; font-weight: normal; line-height: 20px;">Este correo electrónico fue enviado por <a style="color: #000;" href="https://www.medichile.cl">Salud Digital Integrada</a> <br> Salud Digital Integrada <b>Todos los Derechos Reservados. ©2021</b></p>
+                            </td>
+                            <td width="30"> </td>
+                            <td width="16"> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+</body>
+
+</html>

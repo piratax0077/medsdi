@@ -15,6 +15,7 @@ use App\Models\Especialidad;
 use App\Models\EspecialidadMedica;
 use App\Models\FichaAtencion;
 use App\Models\GrupoSanguineo;
+use App\Models\HoraMedica;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\Prevision;
@@ -22,6 +23,7 @@ use App\Models\Profesional;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalHorario;
 use App\Models\Region;
+use App\Models\RegistroConfirmacionHoraAgenda;
 use App\Models\SolicitudPabellonQuirurgico;
 use App\Models\SubTipoEspecialidad;
 use App\Models\TipoEspecialidad;
@@ -110,6 +112,7 @@ class EscritorioPaciente extends Controller
         $ciudades = Ciudad::all();
         $previsiones = Prevision::all();
 
+        $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
 
         if(Auth::user()->hasRole('Paciente'))
         {
@@ -124,7 +127,8 @@ class EscritorioPaciente extends Controller
                     'previsiones' => $previsiones,
                     'paciente' => $paciente,
                     'regiones' => $regiones,
-                    'ciudades' => $ciudades
+                    'ciudades' => $ciudades,
+                    'reg_confirmacion_hora' => $reg_confirmacion_hora,
 
                 ]
             );
@@ -566,5 +570,119 @@ class EscritorioPaciente extends Controller
         $paciente->Contacto_emergencia()->attach($contacto);
 
         return redirect()->route('paciente.perfil');
+    }
+
+    public function getPacienteUser()
+    {
+        $datos = array();
+
+        $paciente = Paciente::where('id_usuario', Auth::user()->id)
+                        ->with(['Prevision' => function($query){
+                            $query->select('id', 'nombre');
+                        }])
+                        ->with(['Direccion' => function($query){
+                            $query->with('Ciudad')->first();
+                        }])
+                        ->first();
+
+        if($paciente)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'Registros';
+            $datos['registro'] = $paciente;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registros no encontrados';
+        }
+
+        return $datos;
+    }
+
+    public function agendar_horas(Request $request)
+    {
+        $datos = array();
+        $valido = 1;
+
+        $paciente = paciente::where('id', $request->reserva_hora_id)->first();
+        $profesional = Profesional::where('id', $request->id_profesional)->first();
+        $lugar_atencion = LugarAtencion::where('id', $request->id_lugar_atencion)->first();
+
+        // validar si paciente tiene otra consulta
+        $validar = HoraMedica::where('id_paciente', $paciente->id)
+                ->where('id_profesional',$profesional->id)
+                ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
+                ->first();
+        if($validar)
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Paciente ya tiene Hora para este dia';
+            $valido = 0;
+            return json_encode(array(
+                'estado' => 'error',
+                'id_profesional' => $profesional->id,
+                'msj' => 'Paciente ya tiene Hora para este dia'
+            ));
+        }
+
+        if($valido)
+        {
+            /** buscar tiempo de la consult */
+            $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
+            $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
+                                                        ->where('id_profesional', $profesional->id)
+                                                        ->where('id_lugar_atencion',$request->id_lugar_atencion)
+                                                        ->where('dia','like','%'.$dia_de_semana.'%')
+                                                        ->first();
+
+            // $profesional_horarios = '00:30:00';
+            // $tiempo_consulta = 30;
+            $horas = date('H',strtotime($profesional_horarios->duracion_consulta));
+            $minutos = date('i',strtotime($profesional_horarios->duracion_consulta));
+            $totales = ($horas*60) + $minutos;
+            $tiempo_consulta = $totales;
+
+            $hora_medica = new HoraMedica();
+
+            $hora_medica->id_paciente = $request->reserva_hora_id;
+            $hora_medica->id_profesional = $profesional->id;
+            $hora_medica->id_asistente = $request->id_asistente;
+            $hora_medica->id_estado = '1';
+            $hora_medica->fecha_consulta = \Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d');
+
+            $hora_medica->hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
+            $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->format('H:i:s');
+            $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
+            $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
+            // $hora_medica->origen = $request->origen;
+
+            if ($hora_medica->save()) {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'Hora Reservada';
+                $datos['registro'] = array(
+                    'fecha' => \Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'),
+                    'hora' => \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s'),
+                    'profesional' => $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos ,
+                    'lugar_atencion' => $lugar_atencion->nombre,
+                );
+            }
+        }
+
+
+        // $details = [
+        //     'title' => 'Hora medica Reservada',
+        //     'body' => 'Estimado/a ' . $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos . ',<br>
+        //             Junto con saludar, por medio de este correo le informamos que se ha reservado su hora con exito <br>' .
+        //         'Fecha: ' . $hora_medica->fecha_consulta . '<br>' .
+        //         'Hora : ' . $hora_medica->hora_inicio . '<br>' .
+        //         'Profesional: <b>' . $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos . '<b> <br><br>' .
+        //         'Que tenga un excelente día. </br></br>' .
+        //         'Saludos.',
+        // ];
+
+        //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
+
+        return json_encode($hora_medica);
     }
 }

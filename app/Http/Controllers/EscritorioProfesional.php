@@ -198,7 +198,7 @@ class EscritorioProfesional extends Controller
                 return response()->json(
                     [
                         'success' => false,
-                        'message' => 'proble a al actualziar direcion del Profesional.',
+                        'message' => 'problema a al actualziar direcion del Profesional.',
                         'profesional' => $profesional
                     ]
                 );
@@ -413,7 +413,7 @@ class EscritorioProfesional extends Controller
             ];
             //dd($details);
 
-            Mail::to('crisescobar233@gmail.com')->send(new \App\Mail\RegistroPacienteMail($details));
+            Mail::to('jkriman@gmail.com')->send(new \App\Mail\RegistroPacienteMail($details));
             //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
 
             return 'success';
@@ -921,7 +921,7 @@ class EscritorioProfesional extends Controller
                         ' Saludos.',
                 ];
 
-                //Mail::to('crisescobar233@gmail.com')->send(new \App\Mail\RegistroPacienteMail($details));
+                //Mail::to('jkriman@gmail.com')->send(new \App\Mail\RegistroPacienteMail($details));
             }
         }
 
@@ -1616,7 +1616,7 @@ class EscritorioProfesional extends Controller
                             ' Saludos.',
                     ];
 
-                    //Mail::to('crisescobar233@gmail.com')->send(new \App\Mail\RegistroPacienteMail($details));
+                    //Mail::to('jkriman@gmail.com')->send(new \App\Mail\RegistroPacienteMail($details));
                 }
             }
 
@@ -2104,7 +2104,7 @@ class EscritorioProfesional extends Controller
         ];
 
         ////Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
-        Mail::to('crisescobar233@gmail.com')->send(new \App\Mail\RegistroPacienteMail($details));
+        Mail::to('jkriman@gmail.com')->send(new \App\Mail\RegistroPacienteMail($details));
 
         return 'ok';
     }
@@ -2574,6 +2574,7 @@ class EscritorioProfesional extends Controller
 
         return $datos;
     }
+
 
 
     public function agregarAudifono(Request $request)
