@@ -610,8 +610,18 @@ class EscritorioAsistente extends Controller
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
         $profesional = Profesional::where('id', $request->id_profesional)->first();
 
+        # ESTADOS DE HORA DE ATENCION
+        // 1.  Reservada -> celeste
+        // 2.  CONFIRMADO -> verde
+        // 3.  Rechazada -> Rojo
+        // 4.  Espera -> morado
+        // 5.  Realizando-> rosa
+        // 6.  Realizada -> Azul
+        // 7.  Inasistida -> naranjo
+        // 8.  Llamando -> morado (monitor sala espera)
         // validar si paciente tiene otra consulta
         $validar = HoraMedica::where('id_paciente', $paciente->id)
+                ->whereIn('id_estado',[1,2,4,5,6,8])
                 ->where('id_profesional',$profesional->id)
                 ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
                 ->first();

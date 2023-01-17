@@ -357,12 +357,15 @@
                         if(data.estado == 1)
                         {
                             $('#email_envio').html(data.email);
+                            setTimeout(function() {
+                                location.reload()
+                            }, 4000);
                             return true;
                         }
                         else
                         {
                             swal({
-                                title: "Registro de Prfesional.",
+                                title: "Registro de Asistente.",
                                 text:"Problemas al realizar el registro.",
                                 icon: "warning",
                                 // buttons: "Aceptar",
@@ -510,7 +513,7 @@
                     },
                     telefono: {
                         required: false,
-                        telefono: true,
+                        // telefono: true,
                         minlength:12,
                         maxlength:12
                     }
@@ -564,11 +567,11 @@
                     return re.test(value);
                 },"Numero no valido. Ejemplo: +56912341234"
             );
-            $.validator.addMethod( "telefono",function(value, element, pattern) {
-                    var re = new RegExp(/^\x2b56[2-99][0-9]{8}$/i);//+565112341234
-                    return re.test(value);
-                },"Numero no valido. Ejemplo: +56212341234"
-            );
+            // $.validator.addMethod( "telefono",function(value, element, pattern) {
+            //         var re = new RegExp(/^\x2b56[2-99][0-9]{8}$/i);//+565112341234
+            //         return re.test(value);
+            //     },"Numero no valido. Ejemplo: +56212341234"
+            // );
             $.validator.addMethod( "region",function(value, element, pattern) {
                     if(value == 0)
                     return false;

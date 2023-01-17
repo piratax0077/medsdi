@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Bienvenido Paciente</title>
+    <title>Bienvenido Profesional</title>
 </head>
 
 <body>
@@ -31,7 +31,7 @@
 
                             <tr>
                                 <td style="text-align: center;">
-                                    <img style="width: auto; margin-bottom: 20px; margin-top: 20px; margin-left: 15px; margin-right: 15px;" src="https://www.med-sdi.cl/images/email/beneficio_paciente.png" alt="Beneficios">
+                                    <img style="width: auto; margin-bottom: 20px; margin-top: 20px; margin-left: 15px; margin-right: 15px;" src="https://www.med-sdi.cl/images/email/beneficio_profesional.png" alt="Beneficios">
                                 </td>
                             </tr>
                             <tr>
@@ -41,7 +41,7 @@
                                             <td height="30"> </td>
                                             <tr>
                                                 <td style="background: rgb(0,147,147); background: -moz-linear-gradient(148deg, rgba(0,147,147,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(148deg, rgba(0,147,147,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(148deg, rgba(0,147,147,1) 0%, rgba(28,190,190,1) 100%); padding: 15px 18px; -webkit-border-radius: 30px; font-family: Helvetica, Arial, sans-serif;" align="center" bgcolor="#289CDC">
-                                                    <a target="_blank" href="{{ env('APP_URL') }}" style="color: #ffffff; text-decoration: none; font-size: 18px; ">Ingresar a Medichile</a>
+                                                <a target="_blank" href="{{ env('APP_URL') }}" style="color: #ffffff; text-decoration: none; font-size: 18px; ">Ingresar a Medichile</a>
                                                 </td>
                                             </tr>
                                             <tr>

@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Bienvenido Paciente</title>
+    <title>Bienvenido Asistente</title>
 </head>
 
 <body>
@@ -24,6 +24,33 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td style="background-color: #fff; padding: 0px 24px 0px 24px;" align="center">
+                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 600; color: #0071bc;">Usted es el administrador de la Institución: {{ $detalle['body']['nombre_institucion'] }} </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="background-color: #fff; padding: 0px 24px 0px 24px;" align="center">
+                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 600; color: #0071bc;">Datos de ingreso:</p>
+                                    <p>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Usuario</th>
+                                                    <th>Contraseña<span style="color: red;">*</span></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{ $detalle['body']['usuario'] }}</td>
+                                                    <td>{{ $detalle['body']['contrasena'] }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </p>
+                                    <p style="font-size: 12px; text-align: center;"><span style="color: red;">*</span>Medichile recomienda hacer uso correcto de su Contraseña y por su seguridad cambiarla periodicamente</p>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td style="background: rgb(51,102,204); background: -moz-linear-gradient(148deg, rgba(51,102,204,1) 0%, rgba(47,177,177,1) 100%); background: -webkit-linear-gradient(148deg, rgba(51,102,204,1) 0%, rgba(47,177,177,1) 100%); background: linear-gradient(148deg, rgba(51,102,204,1) 0%, rgba(47,177,177,1) 100%); padding: 0px 24px 0px 24px;" align="center">
                                     <p style="font-family: Helvetica, Arial, sans-serif; font-size: 19px; font-weight: 500; color: #ffffff;">Ya eres parte de Medichile, <br>ahora podrás disfrutar de sus beneficios
                                 </td>
@@ -31,7 +58,7 @@
 
                             <tr>
                                 <td style="text-align: center;">
-                                    <img style="width: auto; margin-bottom: 20px; margin-top: 20px; margin-left: 15px; margin-right: 15px;" src="https://www.med-sdi.cl/images/email/beneficio_paciente.png" alt="Beneficios">
+                                    <img style="width: auto; margin-bottom: 20px; margin-top: 20px; margin-left: 15px; margin-right: 15px;" src="https://www.med-sdi.cl/images/email/beneficio_asistente.png" alt="Beneficios">
                                 </td>
                             </tr>
                             <tr>
@@ -41,7 +68,7 @@
                                             <td height="30"> </td>
                                             <tr>
                                                 <td style="background: rgb(0,147,147); background: -moz-linear-gradient(148deg, rgba(0,147,147,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(148deg, rgba(0,147,147,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(148deg, rgba(0,147,147,1) 0%, rgba(28,190,190,1) 100%); padding: 15px 18px; -webkit-border-radius: 30px; font-family: Helvetica, Arial, sans-serif;" align="center" bgcolor="#289CDC">
-                                                    <a target="_blank" href="{{ env('APP_URL') }}" style="color: #ffffff; text-decoration: none; font-size: 18px; ">Ingresar a Medichile</a>
+                                                <a target="_blank" href="{{ env('APP_URL') }}" style="color: #ffffff; text-decoration: none; font-size: 18px; ">Ingresar a Medichile</a>
                                                 </td>
                                             </tr>
                                             <tr>

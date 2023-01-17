@@ -371,8 +371,8 @@
                         {
                             $('#email_envio').html(data.email);
                             setTimeout(function() {
-                        location.reload()
-                    }, 4000);
+                                location.reload()
+                            }, 4000);
                             return true;
                         }
                         else
@@ -386,13 +386,10 @@
                             });
                             return false
                         }
-
-
                     } else {
                         return false
                         // alert('No se pudo Cargar las ciudades');
                     }
-
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     console.log(jqXHR, ajaxOptions, thrownError)

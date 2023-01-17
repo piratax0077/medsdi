@@ -150,7 +150,6 @@
                         console.log(moment().diff(select.start, 'days') <= 0);
                         return moment().diff(select.start, 'days') <= 0
                     },
-                    {{--  disableDragging: true,  --}}
 
 					droppable: false,
                     editable: false,
@@ -172,21 +171,21 @@
                     },
                     // timeGrid: 60,
                     //navLinks: true,
+                    weekends: false,
                     hiddenDays: [
-                        @if (isset($horario_agenda))
+                        @if(isset($horario_agenda))
                             {{ $horario_agenda }}
                         @endif
                     ],
-                    weekends: false,
                     nowIndicator: true,
                     selectable: true,
                     //dayMaxEvents: true,
                     titleFormat: {
                         year: 'numeric',
-                        {{--  month: 'long',  --}}
                         month: 'numeric',
                         day: 'numeric'
                     },
+                    initialDate: '{{ date("Y-m-d") }}',
                     allDaySlot: false,
                     slotMinTime: @if(isset($hora_inicio_agenda)) '{{ $hora_inicio_agenda }}' @else "08:00:00" @endif,
                     slotMaxTime: @if(isset($hora_termino_agenda)) '{{ $hora_termino_agenda }}' @else "20:00:00" @endif,
@@ -211,7 +210,6 @@
                         meridiem: 'medium'
                     },
                     eventDidMount: function(info) {
-                        // console.log(info.el);
                         $(info.el).tooltip({
                             title: info.event.extendedProps.description,
                             placement: "top",
@@ -227,9 +225,7 @@
                             @foreach ($horas_medicas as $hm)
                                 {
                                     id: '{{ $hm->id }}',
-                                    // title: "Paciente: {{ $hm->descripcion }}    \n||   Tipo Confirmación: {{ $hm->comentarios_confirmacion }}    ||   Previsión: {{ $hm->Paciente->Prevision->nombre }}    ||   Estado Hora: {{ $hm->Estado()->first()->valor }}",
                                     title: "{{ $hm->descripcion }}",
-                                    {{--  description: '{{ $hm->descripcion }}\n{{ $hm->Estado()->first()->valor }}',  --}}
                                     @if ( !empty($hm->comentarios_confirmacion) )
                                         description: '{{ $hm->Paciente->rut }} | {{ $hm->Estado()->first()->valor }} | {{ $hm->comentarios_confirmacion }} | {{ $hm->Paciente->Prevision->nombre }}',
                                     @else
@@ -277,9 +273,29 @@
                                     $('#estado_id_paciente').val(data.paciente.id);
                                     $('#id_hora_medica').val(id_hora_medica);
 
+                                    //celeste
+                                    //Reservada
+                                    if (data.estado_hora == 1) //else if (info.event.backgroundColor == '#FEAA32')
+                                    {
+                                        //'Reservada') //Hora pendiente
+                                        $('#hm_anular_hora').show();
+                                        $('#hm_atender_hora').hide();
+                                        $('#hm_confirmar_hora').show();
+                                        $('#hm_ver_hora').hide();
+                                        $('#hm_espera_paciente_hora').hide();
+                                        $('#confirmar_anulacion_hora').hide();
+                                        $('#confirmacion_hora').hide();
+
+                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                        $('#consulta').modal('show');
+                                        // $('#id_hora_medica').val(id_hora_medica);
+                                        // console.log(data);
+                                        // $('#reservar_hora').modal('hide');
+                                        //location.reload();
+                                    }
                                     //verde
                                     // CONFIRMADO
-                                    if(data.estado_hora == 2)//if (info.event.backgroundColor == '#94BF61')
+                                    else if(data.estado_hora == 2)//if (info.event.backgroundColor == '#94BF61')
                                     {
                                         //'Confirmada')//Hora confirmada
                                         // $('#hm_confirmar_hora').hide();
@@ -310,67 +326,6 @@
                                         $('#hm_confirmar_hora').hide();
                                         $('#hm_espera_paciente_hora').hide();
                                         $('#hm_ver_hora').hide();
-                                        $('#confirmar_anulacion_hora').hide();
-                                        $('#confirmacion_hora').hide();
-
-                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
-                                        $('#consulta').modal('show');
-                                        // $('#id_hora_medica').val(id_hora_medica);
-                                        // console.log(data);
-                                        // $('#reservar_hora').modal('hide');
-                                        //location.reload();
-                                    }
-                                    //azul
-                                    // Realizada
-                                    else if (data.estado_hora == 6)//else if (info.event.backgroundColor == '#17C1C1')
-                                    {
-                                        //'Realizada')//Paciente atendido
-                                        $('#hm_anular_hora').hide();
-                                        $('#hm_atender_hora').hide();
-                                        $('#hm_confirmar_hora').hide();
-                                        $('#hm_espera_paciente_hora').hide();
-                                        $('#hm_ver_hora').show();
-                                        $('#confirmar_anulacion_hora').hide();
-                                        $('#confirmacion_hora').hide();
-
-                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
-                                        $('#consulta').modal('show');
-                                        // $('#id_hora_medica').val(id_hora_medica);
-                                        // console.log(data);
-                                        // $('#reservar_hora').modal('hide');
-                                        //location.reload();
-                                    }
-                                    //naranjo
-                                    //Inasistida
-                                    else if (data.estado_hora == 7)//else if (info.event.backgroundColor == '#F9A825')
-                                    {
-                                        //'Inasistida')
-                                        $('#hm_anular_hora').show();
-                                        $('#hm_atender_hora').show();
-                                        $('#hm_confirmar_hora').show();
-                                        $('#hm_ver_hora').hide();
-                                        $('#hm_espera_paciente_hora').hide();
-                                        $('#confirmar_anulacion_hora').hide();
-                                        $('#confirmacion_hora').hide();
-
-                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
-                                        $('#consulta').modal('show');
-                                        // $('#id_hora_medica').val(id_hora_medica);
-                                        // console.log(data);
-                                        // $('#reservar_hora').modal('hide');
-                                        //location.reload();
-
-                                    }
-                                    //celeste
-                                    //Reservada
-                                    else if (data.estado_hora == 1) //else if (info.event.backgroundColor == '#FEAA32')
-                                    {
-                                        //'Reservada') //Hora pendiente
-                                        $('#hm_anular_hora').show();
-                                        $('#hm_atender_hora').hide();
-                                        $('#hm_confirmar_hora').show();
-                                        $('#hm_ver_hora').hide();
-                                        $('#hm_espera_paciente_hora').hide();
                                         $('#confirmar_anulacion_hora').hide();
                                         $('#confirmacion_hora').hide();
 
@@ -422,6 +377,49 @@
                                         // $('#reservar_hora').modal('hide');
                                         //location.reload();
                                     }
+                                    //azul
+                                    // Realizada
+                                    else if (data.estado_hora == 6)//else if (info.event.backgroundColor == '#17C1C1')
+                                    {
+                                        //'Realizada')//Paciente atendido
+                                        $('#hm_anular_hora').hide();
+                                        $('#hm_atender_hora').hide();
+                                        $('#hm_confirmar_hora').hide();
+                                        $('#hm_espera_paciente_hora').hide();
+                                        $('#hm_ver_hora').show();
+                                        $('#confirmar_anulacion_hora').hide();
+                                        $('#confirmacion_hora').hide();
+
+                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                        $('#consulta').modal('show');
+                                        // $('#id_hora_medica').val(id_hora_medica);
+                                        // console.log(data);
+                                        // $('#reservar_hora').modal('hide');
+                                        //location.reload();
+                                    }
+                                    //naranjo
+                                    //Inasistida
+                                    else if (data.estado_hora == 7)//else if (info.event.backgroundColor == '#F9A825')
+                                    {
+                                        //'Inasistida')
+                                        $('#hm_anular_hora').hide();
+                                        $('#hm_atender_hora').hide();
+                                        $('#hm_confirmar_hora').hide();
+                                        $('#hm_ver_hora').show();
+                                        $('#hm_espera_paciente_hora').hide();
+                                        $('#confirmar_anulacion_hora').hide();
+                                        $('#confirmacion_hora').hide();
+
+                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                        $('#consulta').modal('show');
+                                        // $('#id_hora_medica').val(id_hora_medica);
+                                        // console.log(data);
+                                        // $('#reservar_hora').modal('hide');
+                                        //location.reload();
+
+                                    }
+
+
 
                                     // $('#cabecera_hora_medica').text('Datos Del Paciente');
                                     // $('#consulta').modal('show');
@@ -508,6 +506,24 @@
                                     valido = 0;
                                 }
                             });
+
+                            /** validar  dias pasados */
+                            var diaActual = '{{ date('d') }}';
+                            var mesActual = '{{ date('m')-1 }}';
+                            var anioActual = '{{ date('Y') }}';
+
+                            var fecha_actual = new Date(anioActual, mesActual, diaActual);
+                            var fecha_seleccion = new Date(curr_year, curr_month, curr_date);
+
+                            if(fecha_actual > fecha_seleccion){
+                                console.log("fecha_actual > fecha_seleccion");
+                                valido_fecha = 0;
+                            }
+                            if(fecha_actual <= fecha_seleccion){
+                                console.log("fecha_actual < fecha_seleccion");
+                                valido_fecha = 1;
+                            }
+
                             if(valido == 1)
                             {
                                 $('.div_rut_buscar').show();
@@ -3622,7 +3638,7 @@
                                 confirmButtonText: "Cool"
                             });
 
-                            cargarAgendaProfesional('');
+                            cargarAgendaProfesional($('#estado_id_profesional').val(),data.fecha_consulta);
 
                             // location.reload();
 
@@ -5898,11 +5914,24 @@
 
         function cargarAgendaProfesional(id_profesional, fecha)
         {
+            if(fecha != undefined)
+            {
+                var res = fecha.split('T')[0];
+                console.log(res);
+                fecha = res;
+            }
+            else
+            {
+                fecha = '{{ date("Y-m-d") }}';
+            }
+
             var calendarEl = document.getElementById('agenda');
             CalendarEl = new FullCalendar.Calendar(calendarEl, {
                 droppable: false,
                 editable: false,
                 locale: "es",
+                timeZone: 'local',
+                initialDate: fecha,
                 initialView: 'timeGridWeek',
                 themeSystem: 'bootstrap',
                 slotDuration: '00:15:00',
@@ -5928,9 +5957,8 @@
                 selectable: true,
                 //dayMaxEvents: true,
                 titleFormat: {
-
                     year: 'numeric',
-                    month: 'long',
+                    month: 'numeric',
                     day: 'numeric'
                 },
                 allDaySlot: false,
@@ -6057,9 +6085,29 @@
                                 $('#estado_id_paciente').val(data.paciente.id);
                                 $('#id_hora_medica').val(id_hora_medica);
 
+                                //celeste
+                                //Reservada
+                                if (data.estado_hora == 1) //else if (info.event.backgroundColor == '#FEAA32')
+                                {
+                                    //'Reservada') //Hora pendiente
+                                    $('#hm_anular_hora').show();
+                                    $('#hm_atender_hora').hide();
+                                    $('#hm_confirmar_hora').show();
+                                    $('#hm_ver_hora').hide();
+                                    $('#hm_espera_paciente_hora').hide();
+                                    $('#confirmar_anulacion_hora').hide();
+                                    $('#confirmacion_hora').hide();
+
+                                    $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                    $('#consulta').modal('show');
+                                    // $('#id_hora_medica').val(id_hora_medica);
+                                    // console.log(data);
+                                    // $('#reservar_hora').modal('hide');
+                                    //location.reload();
+                                }
                                 //verde
                                 // CONFIRMADO
-                                if(data.estado_hora == 2)//if (info.event.backgroundColor == '#94BF61')
+                                else if(data.estado_hora == 2)//if (info.event.backgroundColor == '#94BF61')
                                 {
                                     //'Confirmada')//Hora confirmada
                                     // $('#hm_confirmar_hora').hide();
@@ -6090,67 +6138,6 @@
                                     $('#hm_confirmar_hora').hide();
                                     $('#hm_espera_paciente_hora').hide();
                                     $('#hm_ver_hora').hide();
-                                    $('#confirmar_anulacion_hora').hide();
-                                    $('#confirmacion_hora').hide();
-
-                                    $('#cabecera_hora_medica').text('Datos Del Paciente');
-                                    $('#consulta').modal('show');
-                                    // $('#id_hora_medica').val(id_hora_medica);
-                                    // console.log(data);
-                                    // $('#reservar_hora').modal('hide');
-                                    //location.reload();
-                                }
-                                //azul
-                                // Realizada
-                                else if (data.estado_hora == 6)//else if (info.event.backgroundColor == '#17C1C1')
-                                {
-                                    //'Realizada')//Paciente atendido
-                                    $('#hm_anular_hora').hide();
-                                    $('#hm_atender_hora').hide();
-                                    $('#hm_confirmar_hora').hide();
-                                    $('#hm_espera_paciente_hora').hide();
-                                    $('#hm_ver_hora').show();
-                                    $('#confirmar_anulacion_hora').hide();
-                                    $('#confirmacion_hora').hide();
-
-                                    $('#cabecera_hora_medica').text('Datos Del Paciente');
-                                    $('#consulta').modal('show');
-                                    // $('#id_hora_medica').val(id_hora_medica);
-                                    // console.log(data);
-                                    // $('#reservar_hora').modal('hide');
-                                    //location.reload();
-                                }
-                                //naranjo
-                                //Inasistida
-                                else if (data.estado_hora == 7)//else if (info.event.backgroundColor == '#F9A825')
-                                {
-                                    //'Inasistida')
-                                    $('#hm_anular_hora').show();
-                                    $('#hm_atender_hora').show();
-                                    $('#hm_confirmar_hora').show();
-                                    $('#hm_ver_hora').hide();
-                                    $('#hm_espera_paciente_hora').hide();
-                                    $('#confirmar_anulacion_hora').hide();
-                                    $('#confirmacion_hora').hide();
-
-                                    $('#cabecera_hora_medica').text('Datos Del Paciente');
-                                    $('#consulta').modal('show');
-                                    // $('#id_hora_medica').val(id_hora_medica);
-                                    // console.log(data);
-                                    // $('#reservar_hora').modal('hide');
-                                    //location.reload();
-
-                                }
-                                //celeste
-                                //Reservada
-                                else if (data.estado_hora == 1) //else if (info.event.backgroundColor == '#FEAA32')
-                                {
-                                    //'Reservada') //Hora pendiente
-                                    $('#hm_anular_hora').show();
-                                    $('#hm_atender_hora').hide();
-                                    $('#hm_confirmar_hora').show();
-                                    $('#hm_ver_hora').hide();
-                                    $('#hm_espera_paciente_hora').hide();
                                     $('#confirmar_anulacion_hora').hide();
                                     $('#confirmacion_hora').hide();
 
@@ -6201,6 +6188,47 @@
                                     // console.log(data);
                                     // $('#reservar_hora').modal('hide');
                                     //location.reload();
+                                }
+                                //azul
+                                // Realizada
+                                else if (data.estado_hora == 6)//else if (info.event.backgroundColor == '#17C1C1')
+                                {
+                                    //'Realizada')//Paciente atendido
+                                    $('#hm_anular_hora').hide();
+                                    $('#hm_atender_hora').hide();
+                                    $('#hm_confirmar_hora').hide();
+                                    $('#hm_espera_paciente_hora').hide();
+                                    $('#hm_ver_hora').show();
+                                    $('#confirmar_anulacion_hora').hide();
+                                    $('#confirmacion_hora').hide();
+
+                                    $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                    $('#consulta').modal('show');
+                                    // $('#id_hora_medica').val(id_hora_medica);
+                                    // console.log(data);
+                                    // $('#reservar_hora').modal('hide');
+                                    //location.reload();
+                                }
+                                //naranjo
+                                //Inasistida
+                                else if (data.estado_hora == 7)//else if (info.event.backgroundColor == '#F9A825')
+                                {
+                                    //'Inasistida')
+                                    $('#hm_anular_hora').show();
+                                    $('#hm_atender_hora').show();
+                                    $('#hm_confirmar_hora').show();
+                                    $('#hm_ver_hora').hide();
+                                    $('#hm_espera_paciente_hora').hide();
+                                    $('#confirmar_anulacion_hora').hide();
+                                    $('#confirmacion_hora').hide();
+
+                                    $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                    $('#consulta').modal('show');
+                                    // $('#id_hora_medica').val(id_hora_medica);
+                                    // console.log(data);
+                                    // $('#reservar_hora').modal('hide');
+                                    //location.reload();
+
                                 }
 
                                 // $('#cabecera_hora_medica').text('Datos Del Paciente');

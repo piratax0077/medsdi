@@ -54,6 +54,18 @@
 1. rendicion
 
 
-#LISTA DE BLADE PARA CORREOS
+# LISTA DE BLADE PARA CORREOS
 1.  CORREO PACIENTE AUTORIZACION DE DISPOSITIVO APP -> registrar_app
 2.  CORREO PACIENTE HORA AGENDADA -> hora_agendada
+
+
+# ESTADOS DE HORA DE ATENCION
+1.  Reservada -> celeste
+2.  CONFIRMADO -> verde
+3.  Rechazada -> Rojo
+4.  Espera -> morado
+5.  Realizando-> rosa
+6.  Realizada -> Azul
+7.  Inasistida -> naranjo
+8.  Llamando -> morado (monitor sala espera)
+
