@@ -5914,7 +5914,7 @@
 
         function cargarAgendaProfesional(id_profesional, fecha)
         {
-            if(fecha != undefined)
+            if(fecha != undefined && fecha != '')
             {
                 var res = fecha.split('T')[0];
                 console.log(res);

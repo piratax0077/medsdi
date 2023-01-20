@@ -60,21 +60,38 @@ class LogUsersDevicesController extends Controller
                         elseif($value['estado'] == 2)
                         $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Rechazada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}</p><br>";
                         else
-                        $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cacelada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}</p><br>";
+                        $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cancelada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}</p><br>";
                     break;
                     case 2: // ficha única
                         $data = json_decode($value['msg'],false);
                         $id = $data->id;
                         $nombre = $data->nombre;
                         $fecha = $data->fecha;
-                        $value['msg_estado'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";       
-                        if($value['estado'] == 1)                 
+                        $value['msg_estado'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        if($value['estado'] == 1)
                         $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
                         elseif($value['estado'] == 2)
                         $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Rechazada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
                         else
-                        $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cacelada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
-                    break;        
+                        $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cancelada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
+                    break;
+                    case 3: // reserva de hora
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id;
+                        $nombre = $data->nombre;
+                        $evento = $data->evento;
+                        $fecha = $data->fecha;
+                        $hora = $data->hora;
+                        $lugar_atencion = $data->lugar_atencion;
+                        $profesional = $data->profesional;
+                        $value['msg_estado'] = "Usted tiene una Reserva <span class='color-azul txt_bold'>{$evento}</span> por Confirmar, con el Dr. {$profesional}, en <span class='color-azul txt_bold'>{$lugar_atencion}</span> en fecha <span class='color-azul txt_bold'>{$fecha} {$hora}</span>";
+                        if($value['estado'] == 1)
+                        $msg_html_estructura = "<p><span class='color-verde txt_bold'>Reserva Confirmada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
+                        elseif($value['estado'] == 2)
+                        $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Reserva Rechazada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
+                        else
+                        $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Reserva Cancelada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
+                    break;
                 }
 
 
@@ -370,7 +387,7 @@ class LogUsersDevicesController extends Controller
         if($campos_requeridos==0)
         {
 
-            $registro = LogUsersDevices::find($request->id);            
+            $registro = LogUsersDevices::find($request->id);
 
             if($registro->count()>0)
             {
@@ -393,7 +410,7 @@ class LogUsersDevicesController extends Controller
                     $datos['msg'] = 'Registro ya actualizado';
                     $datos['request'] = $request->all();
                 }
-                
+
             }else{
                 $datos['estado'] = 0;
                 $datos['msg'] = 'Registro no existe';

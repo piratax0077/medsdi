@@ -272,10 +272,9 @@
         function cargarAgendaProfesional(fecha)
         {
 
-            if(fecha != undefined)
+            if(fecha != undefined && fecha != '')
             {
                 var res = fecha.split('T')[0];
-                console.log(res);
                 fecha = res;
             }
             else

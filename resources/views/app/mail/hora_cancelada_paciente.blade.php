@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Hora Agendada</title>
+    <title>Hora Cancelada</title>
 </head>
 
 <body>
@@ -14,8 +14,7 @@
                     <table style="width: 100%px; max-width: 600px;" border="0" width="100%" cellspacing="0" cellpadding="0">
                         <tbody>
                             <tr>
-                                <td style="height: 11px; background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);">
-                                </td>
+                                <td style="height: 11px; background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);"></td>
                             </tr>
                             <tr>
                                 <td style="text-align: center;">
@@ -28,8 +27,8 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); padding: 0px 24px 0px 24px;" align="center">
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 500; color: #ffffff;">Su hora ha sido agendada con éxito</p>
+                                <td style="background: rgb(212,106,106); background: -moz-linear-gradient(148deg, rgba(212,106,106,1) 0%, rgba(208,0,0,1) 100%); background: -webkit-linear-gradient(148deg, rgba(212,106,106,1) 0%, rgba(208,0,0,1) 100%); background: linear-gradient(148deg, rgba(212,106,106,1) 0%, rgba(208,0,0,1) 100%); padding: 0px 24px 0px 24px;" align="center">
+                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 30px; font-weight: 500; color: #ffffff;">Su hora médica ha sido Concelada con Exito!
                                 </td>
                             </tr>
                             <tr>
@@ -46,27 +45,18 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="background-color: #f2f2f2; padding: 0px 11px 0px 0px;" align="center">
+                                <td style="background-color: #f2f2f2; padding: 0px 11px 0px 0px; margin-bottom: 20px;" align="center">
                                     <p style="font-family: Helvetica, Arial, sans-serif; font-size: 18px; line-height: 25px; text-align: left; color: #424242; margin-left: 20px;">
                                         <b>Profesional:</b> {{ $detalle['body']['profesional_nombre'] }}<br>
                                         <b>Profesión:</b> {{ $detalle['body']['profesional_especialidad'] }} <br>
                                         <b>Especialidad:</b> {{ $detalle['body']['profesional_tipo_especialidad'] }} <br>
                                         @if(isset($detalle['body']['profesional_sub_tipo_especialidad']))
-                                            <b>Tipo Especialidad:</b> {{ $detalle['body']['profesional_sub_tipo_especialidad'] }}<br>
+                                        <b>Tipo Especialidad:</b> {{ $detalle['body']['profesional_sub_tipo_especialidad'] }}<br>
                                         @endif
                                         <b>Lugar de Atención:</b> {{ $detalle['body']['lugar_atencion'] }}<br>
                                         <b>Dirección:</b> {{ $detalle['body']['direccion'] }}
                                     </p>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 20px; line-height: 25px; text-align: center; color: #3366CC;"><b>¡RECUERDE CONFIRMAR SU HORA PREVIAMENTE!</b></p>
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 20px; line-height: 25px; text-align: center; color: #3366CC;"><b>¡RECUERDE LLEGAR 15 MINUTOS ANTES A SU CITA!</b></p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="20"> </td>
                             </tr>
                             <tr>
                                 <td inline-block style="text-align: center;">
@@ -75,9 +65,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="height: 11px; background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);
-                                        background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);
-                                        background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);">
+                                <td style="height: 11px; background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);">
                                 </td>
                             </tr>
                             <tr>

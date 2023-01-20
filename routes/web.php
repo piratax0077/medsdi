@@ -1037,6 +1037,12 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 /** AUTORIZACION PARA ENLACE DE APP */
 Route::get('/registro/equipo', [App\Http\Controllers\UsersDevicesController::class, 'enlazarEquipo']);
 
+/** confirmacion de hora medica */
+Route::get('/hora/atencion/solicitud/confirmacion', [App\Http\Controllers\ConfirmacionHoraController::class, 'EnviarPrimeraSolicitudConfirmarHora']);
+Route::get('/hora/atencion/solicitud/confirmacion/segundo', [App\Http\Controllers\ConfirmacionHoraController::class, 'EnviarSegundaSolicitudConfirmarHora']);
+Route::get('/hora/atencion/confirmacion', [App\Http\Controllers\ConfirmacionHoraController::class, 'Confirmacion'])->name('solicitud.comfirmacion.hora.confirmacion');
+Route::get('/hora/atencion/cancelacion', [App\Http\Controllers\ConfirmacionHoraController::class, 'Cancelacion'])->name('solicitud.comfirmacion.hora.cancelacion');
+
 /** PARA VISUALIZAR DEMOS */
 // Route::get('/autorizacion/enlace', function () {
 //     return view('app/autorizacion/enlace_equipo_app');
