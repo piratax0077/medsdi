@@ -40,6 +40,7 @@ class EscritorioAsistenteCmPublico extends Controller
         $region = Region::all();
         $prevision = Prevision::all();
         $asistente_tipo = AsistenteTipo::where('id',$asistente->id_asistente_tipo)->first();
+        $profesion_oficio = ProfesionOficio::all();
 
         $filtro = array();
         // $filtro[] = array('tipo_empleado',$asistente_tipo->nombre);
@@ -61,6 +62,8 @@ class EscritorioAsistenteCmPublico extends Controller
                 'profesionales' => $profesionales,
                 'lugares_atencion' => $lugares_atencion,
                 'reg_confirmacion_hora' => $reg_confirmacion_hora,
+                'region' => $region,
+                'profesion_oficio' => $profesion_oficio,
             );
 
 
