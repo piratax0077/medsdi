@@ -103,6 +103,14 @@
                 <div class="card-deck">
                     <!--Cierre de Card-->
                     <div class="card  subir py-auto">
+                        <a href="{{ ROUTE('asistentecm.confirmar_hora') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                <h5 class="mt-1 mb-0">Confirmar Hora</h5>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="card  subir py-auto">
                         <a href="{{ ROUTE('asistentecm.buscar_paciente') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
@@ -144,7 +152,7 @@
                     </div>
                     {{--
                     <div class="card py-auto subir">
-                        <!--<a href="{{ ROUTE('asistente.venta_productos') }}">
+                        <a href="{{ ROUTE('asistente.venta_productos') }}">
                         <a href="{{ ROUTE('asistente.registro_paciente') }}" class="btn" type="button">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/otros_servicios_1.svg') }}">

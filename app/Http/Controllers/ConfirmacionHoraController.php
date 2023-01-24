@@ -22,7 +22,7 @@ class ConfirmacionHoraController extends Controller
         $datos['metodo'] = 'EnviarPrimeraSolicitudConfirmarHora';
 
         // $dia_actual_busqueda =  date ( 'Y-m-d H:i:s' ,strtotime ( '+1 day' , strtotime (date('Y-m-d')) ) );
-        $dia_actual_busqueda =  date ( 'Y-m-d H:i:s' ,strtotime ( '+0 day' , strtotime (date('Y-m-d')) ) );
+        $dia_actual_busqueda =  date ( 'Y-m-d H:i:s' ,strtotime ( '+1 day' , strtotime (date('Y-m-d')) ) );
 
         $anio = date('Y', strtotime($dia_actual_busqueda));
         $mes = date('m', strtotime($dia_actual_busqueda));

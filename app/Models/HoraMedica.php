@@ -36,4 +36,9 @@ class HoraMedica extends Model
         if(count($array) > 0)
             return $query->whereNotIn('id',$array);
     }
+
+    public function Notificacionesconfirmacion()
+    {
+        return $this->hasOne(NotificacionConfirmacion::class, 'id_evento', 'id')->where('tipo_notificacion',1);
+    }
 }
