@@ -1,3 +1,11 @@
+# USUARIOS DE PRUEBAS
+profesionales
+jkriman@gmail.com 12345678
+jaimekriman@gmail.com 12345678
+
+Paciente
+paciente@gmail.com 123
+
 # ESTADOS DE CONTRATOS DEPENDIENTES
 1. Nuevo
 2. Activo

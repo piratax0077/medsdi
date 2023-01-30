@@ -1,0 +1,6 @@
+ - updated to angular 11
+ - upgrade all third-party modules
+ - remove ng2-toasty and add new ng-snotify third party module for notification
+ - bug-fixed : helpdesk customer list
+ - bug fixed : datatable options like, colrecorder, searcihing, responsive
+ - bug fixed : advance range slider variable

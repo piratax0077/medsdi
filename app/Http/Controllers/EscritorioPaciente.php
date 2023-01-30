@@ -18,6 +18,9 @@ use App\Models\GrupoSanguineo;
 use App\Models\HoraMedica;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
+use App\Models\PacienteContactoEmergencia;
+use App\Models\ContactosEmergencia;
+
 use App\Models\Prevision;
 use App\Models\Profesional;
 use App\Models\ProfesionalesLugaresAtencion;
@@ -165,10 +168,119 @@ class EscritorioPaciente extends Controller
 
     public function miFichaMedica()
     {
+        $id_usuario = Auth::user()->id;
+
+        /* PACIENTE */
+        $paciente = Paciente::where('id_usuario', $id_usuario)->first();
+        
+        list($ano,$mes,$dia) = explode("-",$paciente->fecha_nac);
+        $ano_diferencia  = date("Y") - $ano;
+        $mes_diferencia = date("m") - $mes;
+        $dia_diferencia   = date("d") - $dia;
+        if ($dia_diferencia < 0 || $mes_diferencia < 0)
+          $ano_diferencia--;
+        
+        $edad = $ano_diferencia;
+        $paciente->fecha_nac = $dia.'-'.$mes.'-'.$ano;
+        $paciente->edad = $edad;
+
+        /* CONTACTO EMERGENCIA */
+        $pacientes_contacto_emergencia = PacienteContactoEmergencia::where('id_paciente',$paciente->id)->first();
+        
+        if(is_object($pacientes_contacto_emergencia))
+        {
+            $contacto_emergencia = ContactosEmergencia::where('id',$pacientes_contacto_emergencia->id_contacto);
+
+            list($ano,$mes,$dia) = explode("-",$paciente->fecha_nac);
+            $ano_diferencia  = date("Y") - $ano;
+            $mes_diferencia = date("m") - $mes;
+            $dia_diferencia   = date("d") - $dia;
+            if ($dia_diferencia < 0 || $mes_diferencia < 0)
+            $ano_diferencia--;
+            
+            $edad = $ano_diferencia;
+            $contacto_emergencia->fecha_nac = $dia.'-'.$mes.'-'.$ano;
+            $contacto_emergencia->edad = $edad;
+
+        }else{
+            $contacto_emergencia = (object) array(
+                'nombre'=>'N/A',
+                'apellido_uno'=>'N/A',
+                'apellido_dos'=>'N/A',
+                'rut'=>'N/A',
+                'edad'=>'N/A',
+                'email'=>'N/A',
+                'fecha_nac'=>'N/A',
+                'telefono'=>'N/A',
+                'parentezco'=>'N/A'
+            );
+        }
+
+        /* ANTECEDENTES */
+
+        $id_antecedente = $paciente->id_antecedente;
+
+        if($id_antecedente!=null)
+        {
+            $antecedentes_paciente = AntecedentesPaciente::find($id_antecedente);
+        }else{
+            $antecedentes_paciente = (object) array(
+                'id'=>'',
+                'transfusion'=>'N/A',
+                'dona_organos'=>'N/A',
+                'dona_organos_parcial'=>'N/A',
+                'dona_sangre'=>'N/A',
+                'impedimento_donar'=>'N/A',
+                'comentario_gs'=>'N/A',
+                'comentarios'=>'N/A',
+                'hepatitis'=>'N/A',
+                'comentario_hepa'=>'N/A',
+                'id_grupo_sanguineo '=>0,
+            );
+        }
+
+        /* SANGUINEO */ 
+
+        $id_grupo_sanguineo = $antecedentes_paciente->id_grupo_sanguineo;
+        if($id_grupo_sanguineo!=0)
+        {
+            $grupo_sanguineo = GrupoSanguineo::find($id_grupo_sanguineo);
+        }else{
+            $grupo_sanguineo = (object) array(
+                'id'=> 0,
+                'nombre_gs'=> 'N/A',
+                'descripcion_gs'=> 'N/A'
+            );
+        }
+        
+        
+
+        return view('ficha_medica', [
+            'id_usuario' => $id_usuario,
+            'paciente' => $paciente,
+            'contacto_emergencia' => $contacto_emergencia,
+            'antecedentes_paciente' => $antecedentes_paciente,
+            'grupo_sanguineo' => $grupo_sanguineo
+
+        ]);
+    }
+
+    function obtener_edad_segun_fecha($fecha_nacimiento)
+    {
+        $nacimiento = new DateTime($fecha_nacimiento);
+        $ahora = new DateTime(date("Y-m-d"));
+        $diferencia = $ahora->diff($nacimiento);
+        return $diferencia->format("%y");
+    }
+
+    public function miFichaMedica2()
+    {
         $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
 
         return view('app.paciente.ficha_medica', ['paciente' => $paciente]);
+
     }
+
 
     public function recetaOnline()
     {
