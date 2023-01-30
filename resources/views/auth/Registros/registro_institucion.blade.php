@@ -448,6 +448,9 @@
                         if(data.estado == 1)
                         {
                             $('#email_envio').html(data.email);
+                            setTimeout(function() {
+                                location.reload()
+                            }, 4000);
                             return true;
                         }
                         else

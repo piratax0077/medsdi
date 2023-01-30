@@ -40,6 +40,7 @@ class EscritorioAsistenteCmPublico extends Controller
         $region = Region::all();
         $prevision = Prevision::all();
         $asistente_tipo = AsistenteTipo::where('id',$asistente->id_asistente_tipo)->first();
+        $profesion_oficio = ProfesionOficio::all();
 
         $filtro = array();
         // $filtro[] = array('tipo_empleado',$asistente_tipo->nombre);
@@ -61,6 +62,8 @@ class EscritorioAsistenteCmPublico extends Controller
                 'profesionales' => $profesionales,
                 'lugares_atencion' => $lugares_atencion,
                 'reg_confirmacion_hora' => $reg_confirmacion_hora,
+                'region' => $region,
+                'profesion_oficio' => $profesion_oficio,
             );
 
 
@@ -935,5 +938,113 @@ class EscritorioAsistenteCmPublico extends Controller
         return $datos;
     }
 
+    public function confirmarHora(Request $request)
+    {
+        $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
+        $filtro = array();
+        // $filtro[] = array('tipo_empleado',$asistente_tipo->nombre);
+        $filtro[] = array('estado',2) ;// contrato activo
+        $filtro[] = array('id_empleado',$asistente->id) ;
+        $contrato = ContratoDependiente::where($filtro)->first();
+        if($contrato)
+        {
+            $id_lugar_atencion = $contrato->id_lugar_atencion;
+            $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
+
+            $filtro_hora = array();
+            $filtro_hora[] = array('id_lugar_atencion', $lugares_atencion->id);
+            $filtro_hora[] = array('id_estado', 1);
+            $fecha_incio = date('Y-m-d');
+            $fecha_termino = date('Y-m-d', strtotime(date('Y-m-d').'+1 days'));
+            $horas = HoraMedica::where($filtro_hora)
+                                ->with(['Notificacionesconfirmacion' => function($query){
+                                    // $query->whereIn('estado_confirmacion', [0,1]);
+                                }])
+                                ->with(['Profesional' => function($query){
+                                    $query->select('id', 'nombre', 'apellido_uno', 'apellido_dos');
+                                }])
+                                ->with(['Paciente' => function($query){
+                                    $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'telefono_dos');
+                                }])
+                                ->whereBetween('fecha_consulta', [$fecha_incio, $fecha_termino])
+                                ->orderBy('fecha_consulta', 'ASC')
+                                ->get();
+
+            // echo json_encode($horas);
+
+            return view('app.asistente_cm_publico.confirmar_hora', [
+                'horas' => $horas,
+                'fecha_incio' => $fecha_incio,
+                'fecha_termino' => $fecha_termino,
+                'lugares_atencion' => $lugares_atencion,
+            ]);
+
+        }
+        else
+        {
+            return back()->with('error','Contrato de usuario no encontado');
+        }
+    }
+
+    public function cargarConfirmarHora(Request $request)
+    {
+        $data = array();
+
+        $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
+        $filtro = array();
+        // $filtro[] = array('tipo_empleado',$asistente_tipo->nombre);
+        $filtro[] = array('estado',2) ;// contrato activo
+        $filtro[] = array('id_empleado',$asistente->id) ;
+        $contrato = ContratoDependiente::where($filtro)->first();
+        if($contrato)
+        {
+            $id_lugar_atencion = $contrato->id_lugar_atencion;
+            $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
+
+            $filtro_hora = array();
+            $filtro_hora[] = array('id_lugar_atencion', $lugares_atencion->id);
+            $filtro_hora[] = array('id_estado', 1);
+            $fecha_incio = date('Y-m-d');
+            $fecha_termino = date('Y-m-d', strtotime(date('Y-m-d').'+1 days'));
+            $horas = HoraMedica::where($filtro_hora)
+                                ->with(['Notificacionesconfirmacion' => function($query){
+                                    // $query->whereIn('estado_confirmacion', [0,1]);
+                                }])
+                                ->with(['Profesional' => function($query){
+                                    $query->select('id', 'nombre', 'apellido_uno', 'apellido_dos');
+                                }])
+                                ->with(['Paciente' => function($query){
+                                    $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'telefono_dos');
+                                }])
+                                ->whereBetween('fecha_consulta', [$fecha_incio, $fecha_termino])
+                                ->orderBy('fecha_consulta', 'ASC')
+                                ->get();
+
+
+            if($horas)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $horas;
+                $datos['fecha_incio'] = $fecha_incio;
+                $datos['fecha_termino'] = $fecha_termino;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+                $datos['fecha_incio'] = $fecha_incio;
+                $datos['fecha_termino'] = $fecha_termino;
+            }
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Usuario son acceso a registros.';
+        }
+
+        return $datos;
+    }
 
 }

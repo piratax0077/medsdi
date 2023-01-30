@@ -110,7 +110,7 @@
                     <input type="hidden" id="reserva_hora_fecha_consulta" name="reserva_hora_fecha_consulta" value="">
                     <input type="hidden" id="reserva_hora_hora_consulta" name="reserva_hora_hora_consulta" value="">
                     <input type="hidden" id="reserva_hora_origen" name="reserva_hora_origen" value="escritorio_paciente">
-                    <input type="hidden" id="reserva_hora_id_asistente" name="reserva_hora_id_asistente" value="escritorio_paciente">
+                    <input type="hidden" id="reserva_hora_id_asistente" name="reserva_hora_id_asistente" value="2">
 
                     {{--  VISUALIZACION DE DATOS DEL PACIENTE  --}}
                     <div id="reserva_datos_paciente" class="row mx-3">

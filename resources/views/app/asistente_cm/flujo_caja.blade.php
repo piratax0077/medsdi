@@ -37,7 +37,7 @@
                                             <a class="btn btn-outline-info btn-sm mb-2 mx-2 active" id="rendicion-tab" data-toggle="tab" href="#rendicion_caja" role="tab" aria-controls="rendicion_caja" aria-selected="true">Rendición de Caja Diaria</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="btn btn-outline-info btn-sm mb-2 mx-2" id="rendicion_rendicion-tab" data-toggle="tab" href="#rendicion_rendicion" role="tab" aria-controls="rendicion_rendicion" aria-selected="false">Cierres de Cajas</a>
+                                            <a class="btn btn-outline-info btn-sm mb-2 mx-2" id="rendicion_rendicion-tab" data-toggle="tab" href="#rendicion_rendicion" role="tab" aria-controls="rendicion_rendicion" aria-selected="false" onclick="cargar_registros_cierre();">Cierres de Cajas</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -219,6 +219,7 @@
                                                                 <th class="text-center align-middle">Efecto</th>
                                                                 <th class="text-center align-middle">Otros</th>
                                                                 <th class="text-center align-middle">Total Documentos</th>
+                                                                <th class="text-center align-middle">Detalle</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -239,6 +240,7 @@
                                                                         <td class="align-middle text-center">${{ number_format($value_r->total_efectivo, 0, ",", ".") }}</td>
                                                                         <td class="align-middle text-center">{{ $value_r->total_otros }}</td>
                                                                         <td class="align-middle text-center">{{ $value_r->total_documentos }}</td>
+                                                                        <td class="align-middle text-center"><button  class="btn btn-block btn-sm btn-info" onclick="ver_datalle_rendicion('{{ $value_r->id }}');">Ver</button></td>
                                                                     </tr>
                                                                 @endforeach
                                                             @endif
@@ -267,6 +269,7 @@
 @section('modales')
     @include('app.asistente_cm.modales.modal_rendicion_caja_diaria')
     @include('app.asistente_cm.modales.modal_rendicion_cierre_dia')
+    @include('app.asistente_cm.modales.modal_detalle_rendicion')
 @endsection
 
 @section('page-script')
@@ -776,6 +779,7 @@
                                 html +='    <td class="align-middle text-center">$'+value.total_efectivo+'</td>';
                                 html +='    <td class="align-middle text-center">'+value.total_otros+'</td>';
                                 html +='    <td class="align-middle text-center">'+value.total_documentos+'</td>';
+                                html +='    <td class="align-middle text-center"><button  class="btn btn-block btn-sm btn-info" onclick="ver_datalle_rendicion(\''+value.id+'\');">Ver</button></td></td>';
                                 html +='</tr>';
 
                                 $('#tabla_rendir_rendiciones tbody').append(html);
@@ -1096,6 +1100,12 @@
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
         }
+
+        function ver_datalle_rendicion(id_rendicion)
+        {
+            $('#detalle_rendicion').modal('show');
+        }
+
 
 
     </script>

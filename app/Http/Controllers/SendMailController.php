@@ -61,7 +61,11 @@ class SendMailController extends Controller
             $correo = new CorreoGenerico($data);
 
             // desarrollo
-            $to = array(['email'=>'contacto@med-sdi.cl','name'=>'Contacto MED-SDI']);
+            $to = array(
+				['email'=>'contacto@med-sdi.cl','name'=>'Contacto MED-SDI'],
+				['email'=>'jkriman@gmail.com','name'=>'Jaime']
+				//['email'=>'johan.e.davilap@gmail.com','name'=>'Johan']
+			);
 
             Mail::to($to)
                     ->cc($cc)

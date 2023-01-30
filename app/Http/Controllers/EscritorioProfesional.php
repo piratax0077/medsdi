@@ -30,6 +30,8 @@ use App\Models\InformeMedico;
 use App\Models\Interconsulta;
 use App\Models\LugarAtencion;
 use App\Models\LiquidacionRecibo;
+use App\Models\LogUsersDevices;
+use App\Models\NotificacionConfirmacion;
 use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
 use App\Models\Prevision;
@@ -1753,8 +1755,18 @@ class EscritorioProfesional extends Controller
         $paciente = paciente::where('id', $request->reserva_hora_id)->first();
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
+        # ESTADOS DE HORA DE ATENCION
+        // 1.  Reservada -> celeste
+        // 2.  CONFIRMADO -> verde
+        // 3.  Rechazada -> Rojo
+        // 4.  Espera -> morado
+        // 5.  Realizando-> rosa
+        // 6.  Realizada -> Azul
+        // 7.  Inasistida -> naranjo
+        // 8.  Llamando -> morado (monitor sala espera)
         // validar si paciente tiene otra consulta
         $validar = HoraMedica::where('id_paciente', $paciente->id)
+                                ->whereIn('id_estado',[1,2,4,5,6,8])
                                 ->where('id_profesional',$profesional->id)
                                 ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
                                 ->first();
@@ -1920,18 +1932,91 @@ class EscritorioProfesional extends Controller
             return 'error';
         }
 
-        $detalle = [
-            'title' => 'Hora medica Confirmada',
-            'body' => 'Estimado/a ' . $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos . ',<br>
-                    Junto con saludar, por medio de este correo le informamos que se ha Confirmado su hora médica <br>' .
-                'Fecha: ' . $hora_medica->fecha_consulta . '<br>' .
-                'Hora : ' . $hora_medica->hora_inicio . '<br>' .
-                'Profesional: <b>' . $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos . '<b> <br><br>' .
-                'Que tenga un excelente día. </br></br>' .
-                'Saludos.',
-        ];
+        /** actualizacion de notificacion confirmacion */
+        $notificacion = NotificacionConfirmacion::where('tipo_notificacion', 1)
+                                                ->where('id_evento', $hora_medica->id)
+                                                ->first();
+        $datos['notificacion'] = $notificacion;
+        if($notificacion)
+        {
+            /** cambiar estado notificacion */
+            $notificacion->medio_confirmacion = $request->medio_confirmacion;
+            $notificacion->fecha_confirmacion = date('Y-m-d H:m:s');
+            $notificacion->estado_confirmacion = 2; //CONFIRMADA
+            if($notificacion->save())
+            {
+                /** notificacion actualizada */
+                // echo 'notificacion actualizada';
+                $datos['notificacion']['update'] = 'notificacion Actualzada';
+            }
+            else
+            {
+                $datos['notificacion']['update'] = 'falla al actualizar notificacion';
+            }
 
-        //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($detalle));
+            /** actualizacion de notificacion confirmacion */
+            $id_log_users_devices = $notificacion->id_log_users_devices;
+            if(!empty($id_log_users_devices))
+            {
+                $log_users_devices = LogUsersDevices::find($id_log_users_devices);
+                $log_users_devices->estado = 1;
+                if($log_users_devices->save())
+                {
+                    /** log_users_devices */
+                    $datos['log_users_devices']['update'] = 'log_users_devices Actualzada';
+                }
+                else
+                {
+                    $datos['log_users_devices']['update'] = 'falla al actualizar log_users_devices';
+                }
+            }
+            else
+            {
+                $datos['log_users_devices']['update'] = 'no posee log_users_devices';
+            }
+        }
+
+
+
+
+        $lugar_atencion = LugarAtencion::find($hora_medica->id_lugar_atencion);
+
+        /** envio correo */
+        /** envio de correo de confirmacion INSTITUCION */
+        $blade = 'hora_confirmada_paciente';
+        $to = array(
+                array('email' => $paciente->email,'name' =>  $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+            );
+        $cc = array();
+        $bcc = array();
+        $asunto = 'MED-SDI - Reserva de Hora Confirmada';
+        $body = array(
+            'nombre_paciente'=> mb_strtoupper($paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+            'fecha'=> $hora_medica->fecha_consulta,
+            'hora'=> $hora_medica->hora_inicio,
+            'profesional_nombre'=> mb_strtoupper($profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos),
+            'profesional_especialidad'=> mb_strtoupper($profesional->Especialidad()->first()->nombre),
+            'profesional_tipo_especialidad'=> mb_strtoupper($profesional->TipoEspecialidad()->first()->nombre),
+            'profesional_sub_tipo_especialidad'=> mb_strtoupper($profesional->SubTipoEspecialidad()->first()->nombre),
+            // 'institucion'=> $nombre_institucion,
+            'lugar_atencion'=> mb_strtoupper($lugar_atencion->nombre),
+            'direccion'=> mb_strtoupper($lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre),
+        );
+        $archivo = '';/** pendiente */
+        $id_institucion = '';
+
+        $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+        if($result_mail['estado'])
+        {
+            $datos['registros'][$hora_medica->id]['mail']['estado'] = 1;
+            $datos['registros'][$hora_medica->id]['mail']['msj'] = 'Notificacion de bienvenida enviado';
+        }
+        else
+        {
+            $datos['registros'][$hora_medica->id]['mail']['estado'] = 0;
+            $datos['registros'][$hora_medica->id]['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+        }
 
         return json_encode($hora_medica);
     }
@@ -2123,18 +2208,87 @@ class EscritorioProfesional extends Controller
             return 'error';
         }
 
-        $details = [
-            'title' => 'Hora medica Cancelada',
-            'body' => 'Estimado/a ' . $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos . ',<br>
-                    Junto con saludar, por medio de este correo le informamos que se ha Cancelado su hora medida <br>' .
-                'Fecha: ' . $hora_medica->fecha_consulta . '<br>' .
-                'Hora : ' . $hora_medica->hora_inicio . '<br>' .
-                'Profesional: <b>' . $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos . '<b> <br><br>' .
-                'Que tenga un excelente día. </br></br>' .
-                'Saludos.',
-        ];
 
-        //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
+        $notificacion = NotificacionConfirmacion::where('tipo_notificacion',1)
+                                                ->where('id_evento',$hora_medica->id)
+                                                ->first();
+        $datos['notificacion'] = $notificacion;
+        if($notificacion)
+        {
+            /** cambiar estado notificacion */
+            $notificacion->medio_confirmacion = $request->medio_confirmacion;
+            $notificacion->fecha_confirmacion = date('Y-m-d H:m:s');
+            $notificacion->estado_confirmacion = 3; // RECHAZADA
+            if($notificacion->save())
+            {
+                /** notificacion actualizada */
+                $datos['notificacion']['update'] = 'notificacion Actualzada';
+            }
+            else
+            {
+                $datos['notificacion']['update'] = 'falla al actualizar notificacion';
+            }
+
+            /** cambiar estado de log */
+            $id_log_users_devices = $notificacion->id_log_users_devices;
+            if(!empty($id_log_users_devices))
+            {
+                $log_users_devices = LogUsersDevices::find($id_log_users_devices);
+                $log_users_devices->estado = 3; //RECHAZADA
+                if($log_users_devices->save())
+                {
+                    /** log_users_devices */
+                    $datos['log_users_devices']['update'] = 'log_users_devices Actualzada';
+                }
+                else
+                {
+                    $datos['log_users_devices']['update'] = 'falla al actualizar log_users_devices';
+                }
+            }
+            else
+            {
+                $datos['log_users_devices']['update'] = 'no posee log_users_devices';
+            }
+        }
+
+        /** enviar correo de confirmada */
+        $paciente = $hora_medica->Paciente()->first();
+        $profesional = $hora_medica->Profesional()->first();
+        $lugar_atencion = $hora_medica->LugarAtencion()->first();
+
+        $blade = 'hora_cancelada_paciente';
+        $to = array(
+                array('email' => $paciente->email,'name' =>  $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+            );
+        $cc = array();
+        $bcc = array();
+        $asunto = 'MED-SDI - Reserva de Hora Cancelada';
+        $body = array(
+            'nombre_paciente'=> mb_strtoupper($paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+            'fecha'=> $hora_medica->fecha_evento,
+            'hora'=> $hora_medica->hora_evento,
+            'profesional_nombre'=> mb_strtoupper($profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos),
+            'profesional_especialidad'=> mb_strtoupper($profesional->Especialidad()->first()->nombre),
+            'profesional_tipo_especialidad'=> mb_strtoupper($profesional->TipoEspecialidad()->first()->nombre),
+            'profesional_sub_tipo_especialidad'=> mb_strtoupper($profesional->SubTipoEspecialidad()->first()->nombre),
+            // 'institucion'=> $nombre_institucion,
+            'lugar_atencion'=> mb_strtoupper($lugar_atencion->nombre),
+            'direccion'=> mb_strtoupper($lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre),
+
+        );
+        $archivo = '';/** pendiente */
+        $id_institucion = '';
+
+        $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+        if($result_mail['estado'])
+        {
+            $datos['mail'] = 'Notificacion de cancelacion enviado';
+        }
+        else
+        {
+            $datos['mail'] = 'Falle en envio de Notificacion de cancelada';
+        }
 
         return json_encode($hora_medica);
     }

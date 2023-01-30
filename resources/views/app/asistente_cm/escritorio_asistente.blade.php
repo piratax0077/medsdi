@@ -274,6 +274,16 @@
         function cargarAgendaProfesional(fecha)
         {
 
+            if(fecha != undefined && fecha != '')
+            {
+                var res = fecha.split('T')[0];
+                fecha = res;
+            }
+            else
+            {
+                fecha = '{{ date("Y-m-d") }}';
+            }
+
             var evaluacion = false;
 
             var id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
@@ -291,9 +301,9 @@
                     {
 
                         //data = JSON.parse(data);
-                        console.log('-----------------------');
-                        console.log(data);
-                        console.log('-----------------------');
+                        // console.log('-----------------------');
+                        // console.log(data);
+                        // console.log('-----------------------');
                         if(data.estado == 1)
                         {
                             $('#tabla_info_profesional tbody').show();
@@ -327,7 +337,7 @@
                                     editable: false,
                                     locale: "es",
                                     timeZone: 'local',
-                                    initialDate: '2022-12-27',
+                                    initialDate: fecha,
                                     initialView: 'timeGridWeek',
                                     themeSystem: 'bootstrap',
                                     slotDuration: '00:15:00',
@@ -349,7 +359,7 @@
                                     //dayMaxEvents: true,
                                     titleFormat: {
                                         year: 'numeric',
-                                        month: 'long',
+                                        month: 'numeric',
                                         day: 'numeric'
                                     },
                                     allDaySlot: false,
@@ -364,7 +374,6 @@
                                         meridiem: 'medium'
                                     },
                                     eventDidMount: function(info) {
-                                        {{--  // console.log(info.el);  --}}
                                         $(info.el).tooltip({
                                             title: info.event.extendedProps.description,
                                             placement: "top",
@@ -533,16 +542,16 @@
                                                     {
                                                         // 'Espera')//Esperando atención
                                                         // 'Llamando')//Esperando atención
-                                                        {{--  $('#hm_anular_hora').hide();  --}}
-                                                        {{--  $('#hm_atender_hora').show();  --}}
-                                                        {{--  $('#hm_confirmar_hora').hide();  --}}
-                                                        {{--  $('#hm_ver_hora').hide();  --}}
-                                                        {{--  $('#hm_espera_paciente_hora').hide();  --}}
-                                                        {{--  $('#confirmar_anulacion_hora').hide();  --}}
-                                                        {{--  $('#confirmacion_hora').hide();  --}}
+                                                        $('#hm_anular_hora').hide();
+                                                        $('#hm_atender_hora').hide();
+                                                        $('#hm_confirmar_hora').hide();
+                                                        $('#hm_ver_hora').hide();
+                                                        $('#hm_espera_paciente_hora').hide();
+                                                        $('#confirmar_anulacion_hora').hide();
+                                                        $('#confirmacion_hora').hide();
 
-                                                        {{--  $('#cabecera_hora_medica').text('Datos Del Paciente');  --}}
-                                                        {{--  $('#consulta').modal('show');  --}}
+                                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                                        $('#consulta').modal('show');
                                                         // $('#id_hora_medica').val(id_hora_medica);
                                                         // console.log(data);
                                                         // $('#reservar_hora').modal('hide');
@@ -554,7 +563,7 @@
                                                     {
                                                         //'Realizando')
                                                         $('#hm_anular_hora').hide();
-                                                        $('#hm_atender_hora').show();
+                                                        $('#hm_atender_hora').hide();
                                                         $('#hm_confirmar_hora').hide();
                                                         $('#hm_ver_hora').hide();
                                                         $('#hm_espera_paciente_hora').hide();
@@ -576,8 +585,8 @@
                                                         $('#hm_anular_hora').hide();
                                                         $('#hm_atender_hora').hide();
                                                         $('#hm_confirmar_hora').hide();
+                                                        $('#hm_ver_hora').hide();
                                                         $('#hm_espera_paciente_hora').hide();
-                                                        $('#hm_ver_hora').show();
                                                         $('#confirmar_anulacion_hora').hide();
                                                         $('#confirmacion_hora').hide();
 
@@ -593,9 +602,9 @@
                                                     else if (data.estado_hora == 7)//else if (info.event.backgroundColor == '#F9A825')
                                                     {
                                                         //'Inasistida')
-                                                        $('#hm_anular_hora').show();
-                                                        $('#hm_atender_hora').show();
-                                                        $('#hm_confirmar_hora').show();
+                                                        $('#hm_anular_hora').hide();
+                                                        $('#hm_atender_hora').hide();
+                                                        $('#hm_confirmar_hora').hide();
                                                         $('#hm_ver_hora').hide();
                                                         $('#hm_espera_paciente_hora').hide();
                                                         $('#confirmar_anulacion_hora').hide();
@@ -617,7 +626,9 @@
                                                     // // $('#reservar_hora').modal('hide');
                                                     // //location.reload();
 
-                                                } else {
+                                                }
+                                                else
+                                                {
 
                                                     swal({
                                                         title: "Paciente no encontrado en el sistema",
@@ -630,7 +641,7 @@
 
                                             })
                                             .fail(function(jqXHR, ajaxOptions, thrownError) {
-                                                {{--  console.log(jqXHR, ajaxOptions, thrownError)  --}}
+                                                console.log(jqXHR, ajaxOptions, thrownError)
                                             });
 
 

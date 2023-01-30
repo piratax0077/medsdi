@@ -7,6 +7,7 @@ use App\Models\Asistente;
 use App\Models\Ciudad;
 use App\Models\Direccion;
 use App\Models\Instituciones;
+use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\Profesional;
 use App\Models\ProfesionalEspecialidad;
@@ -27,11 +28,13 @@ class HomeController extends Controller
         }
         $usuario = User::where('id', Auth::user()->id)->first();
         $roles = $usuario->roles()->get();
+
         if (count($roles) > 1) {
             return redirect('/Acceso');
         }
 
-        switch ($usuario->roles()->first()) {
+
+        switch ($usuario->roles()->first()->name) {
             case 'Admin':
                 return redirect('/Acceso');
                 break;
@@ -61,6 +64,9 @@ class HomeController extends Controller
                 break;
             case 'Institucion':
                 return redirect()->route('institucion.home');
+                break;
+            case 'Adm_Institucion':
+                return redirect()->route('adm_cm.home');
                 break;
             default:
                 return redirect('/Acceso');
@@ -230,6 +236,29 @@ class HomeController extends Controller
                 }
 
                 /** envio de correo de confirmacion  */
+                $blade = 'bienvenida_asistente';
+                $to = array(
+                        array('email' => @Auth::user()->email,'name' => $request->nombre_registro.' '.$request->primer_apellido_registro.' '.$request->segundo_apellido_registro),
+                    );
+                $cc = array();
+                $bcc = array();
+                $asunto = 'MED-SDI - Bienvenido!';
+                $body = array('nombre'=>$request->nombre_registro.' '.$request->primer_apellido_registro.' '.$request->segundo_apellido_registro);
+                $archivo = '';/** pendiente */
+                $id_institucion = '';
+
+                $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                if($result_mail['estado'])
+                {
+                    $datos['mail']['estado'] = 1;
+                    $datos['mail']['msj'] = 'Notificacion de bienvenida enviado';
+                }
+                else
+                {
+                    $datos['mail']['estado'] = 0;
+                    $datos['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                }
 
                 $datos['estado'] = 1;
                 $datos['msj'] = 'registro exitoso';
@@ -299,6 +328,30 @@ class HomeController extends Controller
                 }
 
                 /** envio de correo de confirmacion  */
+                $blade = 'bienvenida_paciente';
+                $to = array(
+                        array('email' => @Auth::user()->email,'name' => $request->nombre_registro.' '.$request->primer_apellido_registro.' '.$request->segundo_apellido_registro),
+                    );
+                $cc = array();
+                $bcc = array();
+                $asunto = 'MED-SDI - Bienvenido!';
+                $body = array('nombre'=>$request->nombre_registro.' '.$request->primer_apellido_registro.' '.$request->segundo_apellido_registro);
+                $archivo = '';/** pendiente */
+                $id_institucion = '';
+
+                $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                if($result_mail['estado'])
+                {
+                    $datos['mail']['estado'] = 1;
+                    $datos['mail']['msj'] = 'Notificacion de bienvenida enviado';
+                }
+                else
+                {
+                    $datos['mail']['estado'] = 0;
+                    $datos['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                }
+
 
                 $datos['estado'] = 1;
                 $datos['msj'] = 'registro exitoso';
@@ -370,6 +423,29 @@ class HomeController extends Controller
                 }
 
                 /** envio de correo de confirmacion  */
+                $blade = 'bienvenida_profesional';
+                $to = array(
+                        array('email' => @Auth::user()->email,'name' => $request->nombre_registro.' '.$request->primer_apellido_registro.' '.$request->segundo_apellido_registro),
+                    );
+                $cc = array();
+                $bcc = array();
+                $asunto = 'MED-SDI - Bienvenido!';
+                $body = array('nombre'=>$request->nombre_registro.' '.$request->primer_apellido_registro.' '.$request->segundo_apellido_registro);
+                $archivo = '';/** pendiente */
+                $id_institucion = '';
+
+                $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                if($result_mail['estado'])
+                {
+                    $datos['mail']['estado'] = 1;
+                    $datos['mail']['msj'] = 'Notificacion de bienvenida enviado';
+                }
+                else
+                {
+                    $datos['mail']['estado'] = 0;
+                    $datos['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                }
 
                 $datos['estado'] = 1;
                 $datos['msj'] = 'registro exitoso';
@@ -583,41 +659,40 @@ class HomeController extends Controller
                 $user_responsable->assignRole('Adm_Institucion');
             }
 
-            /** crear administrador institucion o servicio */
-            $adminInstserv = new AdminInstServ();
-
-            $adminInstserv->rut = $request->responsable_rut;
-            $adminInstserv->nombres = $request->responsable_nombre;
-            $adminInstserv->apellido_uno = $request->responsable_apellido_uno;
-            $adminInstserv->apellido_dos = $request->responsable_apellido_dos;
-            $adminInstserv->telefono_uno = $request->responsable_celular;
-            $adminInstserv->telefono_dos = $request->responsable_telefono;
-            $adminInstserv->email = $request->responsable_email_registro;
-            $adminInstserv->id_tipo_administrador = 1; /** administrador de CM */
-            $adminInstserv->id_admin = $user_responsable->id;
-            $adminInstserv->estado = 1;
-
-            /** crear direccion */
-            $responsable_direccion = new Direccion();
-            $responsable_direccion->direccion = $request->responsable_direccion;
-            $responsable_direccion->numero_dir = $request->responsable_numero;
-            $responsable_direccion->id_ciudad = $request->responsable_ciudad;
-            if (!$responsable_direccion->save()) {
-                // return 'error';
-                $adminInstserv->id_direccion = 0;
-                $datos['responsable']['direccion']['estado'] = 0;
-                $datos['responsable']['direccion']['msj'] = 'falla al registrar';
-            } else {
-                $adminInstserv->id_direccion = $responsable_direccion->id;
-                $datos['responsable']['direccion']['estado'] = 1;
-                $datos['responsable']['direccion']['msj'] = 'registro exitoso';
-            }
-
-            if($adminInstserv->save())
+            $busqueda_admInsSer = AdminInstServ::where('rut', $request->responsable_rut)->get()->first();
+            if($busqueda_admInsSer)
             {
-                $datos['responsable']['registro']['estado'] = 1;
-                $datos['responsable']['registro']['msj'] = 'registro exitoso';
-                $institucion->id_responsable = $adminInstserv->id;
+                $institucion->id_responsable = $busqueda_admInsSer->id;
+
+                /** crear lugar de atencion (casa matriz) */
+                $lugar_atencion = new LugarAtencion();
+
+                $lugar_atencion->nombre = $request->institucion_nombre;
+                $lugar_atencion->rut = $request->institucion_rut;
+                $lugar_atencion->email = @Auth::user()->email;
+                $lugar_atencion->telefono = $request->institucion_telefono;
+                $lugar_atencion->id_direccion = $direccion->id;
+                $lugar_atencion->tipo = 1;
+
+                $id_lugar_atencion_casa_matriz = 0;
+                if($lugar_atencion->save())
+                {
+                    $datos['lugar_atencion']['estado'] = 1;
+                    $datos['lugar_atencion']['msj'] = 'lugar atencion casa matriz creado';
+
+                    $id_lugar_atencion_casa_matriz = $lugar_atencion->id;
+                }
+                else
+                {
+                    $datos['lugar_atencion']['estado'] = 0;
+                    $datos['lugar_atencion']['msj'] = 'fallo al crear lugar atencion casa matriz';
+
+                    $id_lugar_atencion_casa_matriz = 0;
+                }
+
+                if(!empty($id_lugar_atencion_casa_matriz))
+                    $institucion->id_lugar_atencion = $id_lugar_atencion_casa_matriz;
+
                 if (!$institucion->save())
                 {
                     $datos['estado'] = 0;
@@ -633,7 +708,31 @@ class HomeController extends Controller
                         $datos['user']['msj'] = 'registro exitoso';
                     }
 
-                    /** envio de correo de confirmacion  */
+                    /** envio de correo de confirmacion INSTITUCION */
+                    $blade = 'bienvenida_institucion';
+                    $to = array(
+                            array('email' => @Auth::user()->email,'name' => $request->institucion_nombre),
+                        );
+                    $cc = array();
+                    $bcc = array();
+                    $asunto = 'MED-SDI - Bienvenido!';
+                    $body = array('nombre'=>$request->institucion_nombre);
+                    $archivo = '';/** pendiente */
+                    $id_institucion = '';
+
+                    $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                    if($result_mail['estado'])
+                    {
+                        $datos['mail']['institucion']['estado'] = 1;
+                        $datos['mail']['institucion']['msj'] = 'Notificacion de bienvenida enviado';
+                    }
+                    else
+                    {
+                        $datos['mail']['institucion']['estado'] = 0;
+                        $datos['mail']['institucion']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                    }
+
                     $datos['estado'] = 1;
                     $datos['msj'] = 'registro exitoso';
                     $datos['email'] = @Auth::user()->email;
@@ -642,9 +741,156 @@ class HomeController extends Controller
             }
             else
             {
-                $datos['responsable']['registro']['estado'] = 0;
-                $datos['responsable']['registro']['msj'] = 'registro con falla';
+
+                /** crear administrador institucion o servicio */
+                $adminInstserv = new AdminInstServ();
+
+                $adminInstserv->rut = $request->responsable_rut;
+                $adminInstserv->nombres = $request->responsable_nombre;
+                $adminInstserv->apellido_uno = $request->responsable_apellido_uno;
+                $adminInstserv->apellido_dos = $request->responsable_apellido_dos;
+                $adminInstserv->telefono_uno = $request->responsable_celular;
+                $adminInstserv->telefono_dos = $request->responsable_telefono;
+                $adminInstserv->email = $request->responsable_email_registro;
+                $adminInstserv->id_tipo_administrador = 1; /** administrador de CM */
+                $adminInstserv->id_admin = $user_responsable->id;
+                $adminInstserv->estado = 1;
+
+                /** crear direccion */
+                $responsable_direccion = new Direccion();
+                $responsable_direccion->direccion = $request->responsable_direccion;
+                $responsable_direccion->numero_dir = $request->responsable_numero;
+                $responsable_direccion->id_ciudad = $request->responsable_ciudad;
+                if (!$responsable_direccion->save()) {
+                    // return 'error';
+                    $adminInstserv->id_direccion = 0;
+                    $datos['responsable']['direccion']['estado'] = 0;
+                    $datos['responsable']['direccion']['msj'] = 'falla al registrar';
+                } else {
+                    $adminInstserv->id_direccion = $responsable_direccion->id;
+                    $datos['responsable']['direccion']['estado'] = 1;
+                    $datos['responsable']['direccion']['msj'] = 'registro exitoso';
+                }
+
+                if($adminInstserv->save())
+                {
+                    /** envio de correo de confirmacion  ADMINISTRADOR INSTITUCION*/
+                    $blade = 'bienvenida_admin_institucion';
+                    $to = array(
+                            array('email' => $request->responsable_email_registro,'name' => $request->responsable_nombre.' '.$request->responsable_apellido_uno.' '.$request->responsable_apellido_dos),
+                        );
+                    $cc = array();
+                    $bcc = array();
+                    $asunto = 'MED-SDI - Bienvenido!';
+                    $body = array(
+                            'nombre'=> $request->responsable_nombre.' '.$request->responsable_apellido_uno.' '.$request->responsable_apellido_dos,
+                            'nombre_institucion'=> $request->institucion_nombre,
+                            'usuario' => $request->responsable_email_registro,
+                            'contrasena'=> $request->responsable_password_registro,
+                        );
+                    $archivo = '';/** pendiente */
+                    $id_institucion = '';
+
+                    $result_mail_amdin =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                    if($result_mail_amdin['estado'])
+                    {
+                        $datos['mail']['admin_institucion']['estado'] = 1;
+                        $datos['mail']['admin_institucion']['msj'] = 'Notificacion de bienvenida enviado';
+                    }
+                    else
+                    {
+                        $datos['mail']['admin_institucion']['estado'] = 0;
+                        $datos['mail']['admin_institucion']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                    }
+
+                    $datos['responsable']['registro']['estado'] = 1;
+                    $datos['responsable']['registro']['msj'] = 'registro exitoso';
+
+
+                    /** crear lugar de atencion (casa matriz) */
+                    $lugar_atencion = new LugarAtencion();
+
+                    $lugar_atencion->nombre = $request->institucion_nombre;
+                    $lugar_atencion->rut = $request->institucion_rut;
+                    $lugar_atencion->email = @Auth::user()->email;
+                    $lugar_atencion->telefono = $request->institucion_telefono;
+                    $lugar_atencion->id_direccion = $direccion->id;
+                    $lugar_atencion->tipo = 1;
+
+                    $id_lugar_atencion_casa_matriz = 0;
+                    if($lugar_atencion->save())
+                    {
+                        $datos['lugar_atencion']['estado'] = 1;
+                        $datos['lugar_atencion']['msj'] = 'lugar atencion casa matriz creado';
+
+                        $id_lugar_atencion_casa_matriz = $lugar_atencion->id;
+                    }
+                    else
+                    {
+                        $datos['lugar_atencion']['estado'] = 0;
+                        $datos['lugar_atencion']['msj'] = 'fallo al crear lugar atencion casa matriz';
+
+                        $id_lugar_atencion_casa_matriz = 0;
+                    }
+
+                    if(!empty($id_lugar_atencion_casa_matriz))
+                        $institucion->id_lugar_atencion = $id_lugar_atencion_casa_matriz;
+
+                    $institucion->id_responsable = $adminInstserv->id;
+                    if (!$institucion->save())
+                    {
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'falla al registrar institucion';
+                    }
+                    else
+                    {
+                        $user = User::find( @Auth::user()->id );
+                        $user->name = $request->institucion_nombre;
+                        if($user->save())
+                        {
+                            $datos['user']['estado'] = 1;
+                            $datos['user']['msj'] = 'registro exitoso';
+                        }
+
+                        /** envio de correo de confirmacion INSTITUCION */
+                        $blade = 'bienvenida_institucion';
+                        $to = array(
+                                array('email' => @Auth::user()->email,'name' => $request->institucion_nombre),
+                            );
+                        $cc = array();
+                        $bcc = array();
+                        $asunto = 'MED-SDI - Bienvenido!';
+                        $body = array('nombre'=>$request->institucion_nombre);
+                        $archivo = '';/** pendiente */
+                        $id_institucion = '';
+
+                        $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                        if($result_mail['estado'])
+                        {
+                            $datos['mail']['institucion']['estado'] = 1;
+                            $datos['mail']['institucion']['msj'] = 'Notificacion de bienvenida enviado';
+                        }
+                        else
+                        {
+                            $datos['mail']['institucion']['estado'] = 0;
+                            $datos['mail']['institucion']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                        }
+
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'registro exitoso';
+                        $datos['email'] = @Auth::user()->email;
+
+                    }
+                }
+                else
+                {
+                    $datos['responsable']['registro']['estado'] = 0;
+                    $datos['responsable']['registro']['msj'] = 'registro con falla';
+                }
             }
+
         }
         else
         {

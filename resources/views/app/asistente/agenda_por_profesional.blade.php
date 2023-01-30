@@ -1,7 +1,10 @@
 @extends('template.asistente.template')
+
+{{--
 @section('page-styles')
-    <link href='{{ asset('js/fullcalendar-5.10.1/lib/main.css') }}' rel='stylesheet' />
+    <link href='{{ asset("js/fullcalendar-5.10.1/lib/main.css") }}' rel='stylesheet' />
 @endsection
+--}}
 
 @section('content')
 
@@ -99,7 +102,6 @@
     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#reservar_hora">
         Launch
     </button>
-
 
     @include('app.asistente.modales.modal_consulta_agenda')
 @endsection
