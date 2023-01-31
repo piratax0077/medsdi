@@ -269,6 +269,7 @@ Route::group([
     Route::get('Reservar_Hora', [App\Http\Controllers\EscritorioPaciente::class, 'agendarHora'])->name('paciente.agendar_hora');
     Route::get('Mi_Profesionales', [App\Http\Controllers\EscritorioPaciente::class, 'miProfesionales'])->name('paciente.mis_profesionales');
     Route::get('Mi_Ficha_Medica', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('paciente.mi_ficha');
+    Route::get('Mi_Ficha_Medica2', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica2'])->name('paciente.mi_ficha2');
     Route::get('Receta_Online', [App\Http\Controllers\EscritorioPaciente::class, 'recetaOnline'])->name('paciente.receta');
     Route::get('Acceso_Profesional_NI', [App\Http\Controllers\EscritorioPaciente::class, 'acceso_pni'])->name('paciente.acceso_pni');
 
@@ -512,6 +513,9 @@ Route::group([
     Route::get('perfil/contacto/editar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'editar_contacto_emergencia'])->name('asistentecm.editar_contacto');
     Route::get('perfil/contacto/eliminar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'eliminar_contacto_asistente'])->name('asistentecm.eliminar_contacto_asistente');
     Route::get('perfil/contacto/buscar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscar_contacto'])->name('asistentecm.buscar_contacto');
+
+    Route::get('hora/confirmar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'confirmarHora'])->name('asistentecm.confirmar_hora');
+    Route::get('hora/por/confirmar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'cargarConfirmarHora'])->name('asistentecm.cargar_hora_por_confirmar');
 });
 
 /* ASISTENTE JEFE Centro Medico*/
@@ -983,7 +987,7 @@ Route::group([
 
 /** BUSCADOR DE PROFESIONAL */
 Route::group([
-    'middleware' => ['role:Paciente|Asistente|Adm_Institucion'],
+    'middleware' => ['role:Paciente|Asistente|Adm_Institucion|profesional'],
     'prefix' => 'buscador',
 ], function () {
 
@@ -1036,6 +1040,12 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 /** AUTORIZACION PARA ENLACE DE APP */
 Route::get('/registro/equipo', [App\Http\Controllers\UsersDevicesController::class, 'enlazarEquipo']);
+
+/** confirmacion de hora medica */
+Route::get('/hora/atencion/solicitud/confirmacion', [App\Http\Controllers\ConfirmacionHoraController::class, 'EnviarPrimeraSolicitudConfirmarHora']);
+Route::get('/hora/atencion/solicitud/confirmacion/segundo', [App\Http\Controllers\ConfirmacionHoraController::class, 'EnviarSegundaSolicitudConfirmarHora']);
+Route::get('/hora/atencion/confirmacion', [App\Http\Controllers\ConfirmacionHoraController::class, 'Confirmacion'])->name('solicitud.comfirmacion.hora.confirmacion');
+Route::get('/hora/atencion/cancelacion', [App\Http\Controllers\ConfirmacionHoraController::class, 'Cancelacion'])->name('solicitud.comfirmacion.hora.cancelacion');
 
 /** PARA VISUALIZAR DEMOS */
 // Route::get('/autorizacion/enlace', function () {

@@ -113,6 +113,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+        // envio de primera notificacion de confirmacion de hora
+        'notificacion_confirmacion_hora' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/notificacion_confirmacion_hora_'.date('YmdH').'.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
     ],
 
 ];

@@ -1546,7 +1546,6 @@
         function agregar_medicamento_cronico()
         {
 
-            {{--  let url = "https://www.med-sdi.cl/medicamento_cronico/registrar";  --}}
             let url = "{{ route('medicamento_cronico.registrar') }}";
 
 
@@ -1617,11 +1616,9 @@
             });
         }
 
-
         function ver_medicamento_cronico()
         {
 
-            {{--  let url = "https://www.med-sdi.cl/medicamento_cronico/getRegsitros";  --}}
             let url = "{{ route('medicamento_cronico.getRegsitros') }}";
 
 
@@ -1697,7 +1694,7 @@
 
         function eliminar_med_cronico(id)
         {
-            let url = "https://www.med-sdi.cl/medicamento_cronico/deleteRegsitro";
+            let url = "{{ route('medicamento_cronico.deleteRegsitro') }}";
 
 
             var _token = CSRF_TOKEN;
@@ -1761,7 +1758,7 @@
         function agregar_medicamento_cronico_patologia(tipo)
         {
 
-            let url = "https://www.med-sdi.cl/medicamento_cronico/registrar";
+            let url = "{{ route('medicamento_cronico.registrar') }}";
 
 
             var _token = CSRF_TOKEN;
@@ -1831,7 +1828,7 @@
         function ver_medicamento_cronico_patologia()
         {
 
-            let url = "https://www.med-sdi.cl/medicamento_cronico/getRegsitros";
+            let url = "{{ route('medicamento_cronico.getRegsitros') }}";
 
 
             var _token = CSRF_TOKEN;
@@ -1908,7 +1905,7 @@
 
         function eliminar_med_cronico_patologia(id)
         {
-            let url = "https://www.med-sdi.cl/medicamento_cronico/deleteRegsitro";
+            let url = "{{ route('medicamento_cronico.deleteRegsitro') }}";
 
 
             var _token = CSRF_TOKEN;
@@ -1989,7 +1986,7 @@
         function ver_control_hipertension()
         {
 
-            let url = "https://www.med-sdi.cl/hipertension/getHipertension";
+            let url = "{{ route('hipertension.getHipertension') }}";
 
 
             var _token = CSRF_TOKEN;
@@ -2066,7 +2063,6 @@
         function ver_control_obesidad()
         {
 
-            {{--  let url = "https://www.med-sdi.cl/control_obesidad/getControlObesidad";  --}}
             let url = "{{ route('control_obesidad.getControlObesidad') }}";
 
 
@@ -2198,8 +2194,7 @@
         function ver_control_hipertension()
         {
 
-            let url = "https://www.med-sdi.cl/hipertension/getHipertension";
-
+            let url = "{{ route('hipertension.getHipertension') }}";
 
             var _token = CSRF_TOKEN;
             var id_paciente = $('#id_paciente_fc').val();

@@ -52,7 +52,7 @@
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="examenes-tab" data-toggle="tab" href="#examenes" role="tab" aria-controls="examenes" aria-selected="false">Exámenes</a>
+                                        <a class="nav-link text-reset" id="examenes-tab" data-toggle="tab" href="#examenes_tab" role="tab" aria-controls="examenes" aria-selected="false">Exámenes</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="hospitalizacion" aria-selected="false">Hospitalización</a>
@@ -86,7 +86,7 @@
                             @include('atencion_medica.formularios.atenciones_previas_form')
                         </div>
                         <!--Exámenes-->
-                        <div class="tab-pane fade show" id="examenes" role="tabpanel" aria-labelledby="examenes-tab">
+                        <div class="tab-pane fade show" id="examenes_tab" role="tabpanel" aria-labelledby="examenes-tab">
                             @include('atencion_medica.secciones_ficha.examenes')
                         </div>
                         <!--Hospitalización-->
