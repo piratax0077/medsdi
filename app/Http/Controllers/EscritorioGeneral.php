@@ -43,6 +43,10 @@ class EscritorioGeneral extends Controller
             $filtro[] = array('apellido_uno','like',$request->apellido_uno.'%');
         if(!empty($request->apellido_dos))
             $filtro[] = array('apellido_dos','like',$request->apellido_dos.'%');
+
+        if(!empty($request->rut))
+            $filtro[] = array('rut',$request->rut);
+
         // if(!empty($request->id_direccion))
         //     $filtro[] = array('id_direccion',request->id_direccion);
         if(!empty($request->id_especialidad))

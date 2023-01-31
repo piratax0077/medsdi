@@ -84,13 +84,25 @@ class LogUsersDevicesController extends Controller
                         $hora = $data->hora;
                         $lugar_atencion = $data->lugar_atencion;
                         $profesional = $data->profesional;
+
+                        /** peticion */
                         $value['msg_estado'] = "Usted tiene una Reserva <span class='color-azul txt_bold'>{$evento}</span> por Confirmar, con el Dr. {$profesional}, en <span class='color-azul txt_bold'>{$lugar_atencion}</span> en fecha <span class='color-azul txt_bold'>{$fecha} {$hora}</span>";
+
+                        /** resultado */
                         if($value['estado'] == 1)
-                        $msg_html_estructura = "<p><span class='color-verde txt_bold'>Reserva Confirmada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
+                            $value['msg_body'] = "Usted ha Confirmado la Reserva <span class='color-azul txt_bold'>{$evento}</span>, con el Dr. {$profesional}, en <span class='color-azul txt_bold'>{$lugar_atencion}</span> en fecha <span class='color-azul txt_bold'>{$fecha} {$hora}</span>";
                         elseif($value['estado'] == 2)
-                        $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Reserva Rechazada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
+                            $value['msg_body'] = "Usted ha Rechazado la Reserva <span class='color-azul txt_bold'>{$evento}</span>, con el Dr. {$profesional}, en <span class='color-azul txt_bold'>{$lugar_atencion}</span> en fecha <span class='color-azul txt_bold'>{$fecha} {$hora}</span>";
                         else
-                        $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Reserva Cancelada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
+                            $value['msg_body'] = "Se ha cancelado la Reserva <span class='color-azul txt_bold'>{$evento}</span>, con el Dr. {$profesional}, en <span class='color-azul txt_bold'>{$lugar_atencion}</span> en fecha <span class='color-azul txt_bold'>{$fecha} {$hora}</span>";
+
+                        /** lista log */
+                        if($value['estado'] == 1)
+                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Reserva Confirmada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
+                        elseif($value['estado'] == 2)
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Reserva Rechazada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
+                        else
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Reserva Cancelada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
                     break;
                 }
 

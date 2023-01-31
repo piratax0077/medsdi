@@ -22,6 +22,7 @@ use App\Models\ExamenPPF;
 use App\Models\ficha_atencion;
 use App\Models\FichaAtencion;
 use App\Models\FichaOtorrino;
+use App\Models\FichaOtorrinoRinof;
 use App\Models\FichaOtorrinoTipo;
 use App\Models\GesDiagnostico;
 use App\Models\GesRegistros;
@@ -1305,8 +1306,50 @@ class ficha_atencionController extends Controller
 
     public function store_orl(Request $request)
     {
+        $campos_requeridos = 0;
+        $mensaje = '';
+        if(empty( trim($request->descripcion_hipotesis)))
+        {
+            $campos_requeridos = 1;
+            $mensaje = 'El Diagnóstico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
+        }
+        else
+        {
+            if(empty($request->diag_endos))
+            {
+                // $campos_requeridos = 1;
+                // $mensaje = 'El Diagnóstico Endoscópico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún.\n';
+            }
+            else
+            {
+                if(empty($request->id_profesional_solicitado_por))
+                {
+                    if(empty($request->solicitado_por_rut_rfl))
+                    {
+                        $campos_requeridos = 1;
+                        $mensaje = 'Rinofibrolaringoscopía - Campo requerido RUT del Solicitante.\n';
+                    }
+                    if(empty($request->solicitado_por_nombre_rfl))
+                    {
+                        $campos_requeridos = 1;
+                        $mensaje = 'Rinofibrolaringoscopía - Campo requerido NOMBRE del Solicitante.\n';
+                    }
+                    if(empty($request->solicitado_por_apellido_rfl))
+                    {
+                        $campos_requeridos = 1;
+                        $mensaje = 'Rinofibrolaringoscopía - Campo requerido APELLIDO del Solicitante.\n';
+                    }
+                    if(empty($request->solicitado_por_telefono_rfl) || empty($request->solicitado_por_email_rfl))
+                    {
+                        $campos_requeridos = 1;
+                        $mensaje = 'Rinofibrolaringoscopía - Campo requerido TELÉFONO o EMAIL del Solicitante.\n';
+                    }
+                }
+            }
+        }
 
-        if(!empty( trim($request->descripcion_hipotesis)))
+
+        if($campos_requeridos == 0)
         {
             $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
 
@@ -1335,9 +1378,9 @@ class ficha_atencionController extends Controller
                 $confidencial = 0;
             }
 
-            $ficha->motivo = $request->descripcion_consulta;
-            $ficha->antecedentes = $request->descripcion_antecedentes;
-            $ficha->examen_fisico = $request->descripcion_examen_fisico;
+            $ficha->motivo = $request->descripcion_consulta_orl;
+            $ficha->antecedentes = $request->antec_especialidad;
+            // $ficha->examen_fisico = $request->descripcion_examen_fisico;
 
             //Signos vitales
             if ($request->temperatura != '') {
@@ -1429,19 +1472,21 @@ class ficha_atencionController extends Controller
             $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
 
-            $ficha->cronico = $cronico;
-            $ficha->ges = $ges;
-            $ficha->confidencial = $confidencial;
+            // $ficha->cronico = $cronico;
+            // $ficha->ges = $ges;
+            // $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
             $ficha->finalizada = 1;
 
-            if (!$ficha->save()) {
-                // return 'error';
+            if (!$ficha->save())
+            {
                 return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
             }
             else
             {
+                $tipo_mensaje = 'success';
+                $mensaje = 'Ficha Clínica guardada de forma correcta\n';
 
 
                 /** registro ficha especialidad */
@@ -1462,6 +1507,19 @@ class ficha_atencionController extends Controller
                 $ficha_orl->examen_bio_od = $request->examen_bio_od;
                 $ficha_orl->obs_examen_bio_od = $request->obs_examen_bio_od;
                 $ficha_orl->obs_ex_biom = $request->obs_ex_biom;
+
+                $ficha_orl->id_tipo_episodios = $request->episodios;
+                $ficha_orl->obs_episodios = $request->detalle_episodios;
+                $ficha_orl->id_tipo_equilibrio = $request->equilibrio;
+                $ficha_orl->obs_equilibrio = $request->detalle_equilibrio;
+                $ficha_orl->id_tipo_ng = $request->ng;
+                $ficha_orl->obs_ng = $request->detalle_ng;
+                $ficha_orl->id_tipo_sint_acomp = $request->sint_acomp;
+                $ficha_orl->obs_sint_acomp = $request->detalle_sint_acompanantes;
+                $ficha_orl->id_tipo_vertigo = $request->tipo_vertigo;
+                $ficha_orl->obs_tipo_vertigo = $request->detalle_tipo_vertigo;
+                $ficha_orl->obs_vestibular = $request->obs_vestibular;
+
                 $ficha_orl->nariz_general = $request->nariz_general;
                 $ficha_orl->det_nariz_general = $request->det_nariz_general;
                 $ficha_orl->apreciacion_resp = $request->apreciacion_resp;
@@ -1478,8 +1536,11 @@ class ficha_atencionController extends Controller
 
                 $ficha_orl->examen_faringe =$request->examen_faringe;
                 $ficha_orl->ex_farige_anormal = $request->ex_farige_anormal;
-                $ficha_orl->examen_laringe =$request->ex_larige_anormal;
+                $ficha_orl->examen_laringe =$request->examen_laringe;
                 $ficha_orl->ex_larige_anormal = $request->ex_larige_anormal;
+
+                $ficha_orl->obs_examen_laringe = $request->obs_examen_laringe;
+
                 $ficha_orl->obs_ex_orl = $request->bs_ex_orl;
                 $ficha_orl->hip_diag_orl = $request->diag_spec;
                 $ficha_orl->ind_orl = $request->ind_orl;
@@ -1489,34 +1550,82 @@ class ficha_atencionController extends Controller
                 {
                     $datos['ficha_orl']['estado'] = 1;
                     $datos['ficha_orl']['msj'] = 'registro exitoso';
+                    $mensaje .= '\n'.'Ficha Otorrino guardada de forma correcta';
 
                 }
                 else
                 {
                     $datos['ficha_orl']['estado'] = 0;
                     $datos['ficha_orl']['msj'] = 'registro NO exitoso';
+                    $mensaje .= '\n'.'Ficha Otorrino No guardada ';
                 }
-
-                /** registro ficha rinofibrolaringoscopía */
-
-
-                $tipo_mensaje = 'success';
-                $mensaje = 'Ficha Clínica guardada de forma correcta';
 
                 //  finalizar hora medica
                 $hora_medica->id_estado = 6;
                 $mensaje_estado_hora_medica = '';
                 if (!$hora_medica->save()) {
-                    $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.';
+                    $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
                 }
                 else
                 {
-                    $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.';
+                    $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.\n';
                 }
-                $mensaje .= '\n' . $mensaje_estado_hora_medica;
+                $mensaje .= $mensaje_estado_hora_medica;
 
 
+                /** registro de ficha rfl */
+                $registro_rfl = new FichaOtorrinoRinof();
+                $registro_rfl->id_fichas_atenciones =  $ficha->id;
 
+                if(isset($ficha_orl->id))
+                    $registro_rfl->id_ficha_otorrino = $ficha_orl->id;
+                else
+                    $registro_rfl->id_ficha_otorrino = 0;
+
+                $registro_rfl->solicitado_id_profesional = $request->id_profesional_solicitado_por;
+                $registro_rfl->solicitado_nombre = $request->solicitado_por_nombre_rfl;
+                $registro_rfl->solicitado_apellido = $request->solicitado_por_apellido_rfl;
+                $registro_rfl->solicitado_rut = $request->solicitado_por_rut_rfl;
+                $registro_rfl->solicitado_email = $request->solicitado_por_telefono_rfl;
+                $registro_rfl->solicitado_telefono = $request->solicitado_por_email_rfl;
+                $registro_rfl->motivo = $request->descripcion_examen_rfl;
+                $registro_rfl->antecedentes = $request->antec_especialidad_rfl;
+                $registro_rfl->id_paciente = $id_paciente;
+                $registro_rfl->muc_nasal_permeab = $request->muc_nasal_permeab;
+                $registro_rfl->cornetes = $request->cornetes;
+                $registro_rfl->tabique = $request->tabique;
+                $registro_rfl->tumor = $request->tumor;
+                $registro_rfl->rinofaringe = $request->rinofaringe;
+                $registro_rfl->orofaringe = $request->orofaringe;
+                $registro_rfl->laringe = $request->laringe;
+                $registro_rfl->cuerdas = $request->cuerdas;
+                $registro_rfl->movilidad = $request->movilidad;
+                $registro_rfl->cierre_glotico = $request->cierre_glotico;
+                // $registro_rfl->img_1 = ;
+                // $registro_rfl->img_2 = ;
+                // $registro_rfl->img_3 = ;
+                // $registro_rfl->img_4 = ;
+                // $registro_rfl->img_5 = ;
+                // $registro_rfl->img_6 = ;
+                $registro_rfl->diag_endos = $request->diag_endos;
+                $registro_rfl->observaciones_endos = $request->observaciones;
+                $registro_rfl->estado = 1;
+
+                if($registro_rfl->save())
+                {
+                    $datos['registro_rfl']['estado'] = 1;
+                    $datos['registro_rfl']['msj'] = 'registro exitoso';
+                    $mensaje .= 'Ficha Otorrino Rinofibrolaringoscopía guardada de forma correcta\n';
+
+                    /** registro de porfesional provisorio */
+
+                }
+                else
+                {
+                    $datos['registro_rfl']['estado'] = 0;
+                    $datos['registro_rfl']['msj'] = 'registro NO exitoso';
+                    $mensaje .= 'Ficha Otorrino Rinofibrolaringoscopía No guardada \n';
+                }
 
                 if($request->cerrarsession == 0 || $request->cerrarsession =='')
                 {
@@ -1535,7 +1644,7 @@ class ficha_atencionController extends Controller
         }
         else
         {
-            return back()->with('error', 'El Diagnóstico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.')->withInput();;
+            return back()->with('error', $mensaje)->withInput();
         }
 
     }
