@@ -1,6 +1,6 @@
 @extends('template/pediatria/template')
 @section('Content')
-
+    <!--Esta ficha puede ser abierta por neonatologos-->
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -117,7 +117,7 @@
         <!--Cierre: Botón flotante-->
 
         <!-- SIDE BAR ORL -->
-        @include("atencion_medica.include.sidebar_derecho_orl")
+        @include("atencion_pediatrica.include.sidebar_derecho_pediatria")
 
         <!--Modals de especialidad -->
         {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}

@@ -140,7 +140,7 @@
     @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.carne_otras_vacunas")
     @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.indicar_vacunas")
     @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.otras_vacunas")
-    @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.modal_prev_accidentes")
+    @include("atencion_pediatrica\sidebars\modals_especialidad\pediatria\modal_prev_accidentes")
 
 
     <!-- SIDE BAR PEDIATRIA -->
