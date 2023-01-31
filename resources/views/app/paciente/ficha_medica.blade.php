@@ -21,7 +21,8 @@
                     <div id="accordion">
                         <!--Antecedentes básicos del paciente-->
                         <div class="card">
-                            <div class="card-header" id="headingUno">
+                            <div class="card-header" id="headingUno" data-toggle="collapse" data-target="#collapseUno"
+                                        aria-expanded="true" aria-controls="collapseUno">
                                 <h5 class="mb-0">
                                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapseUno"
                                         aria-expanded="true" aria-controls="collapseUno">
@@ -224,7 +225,8 @@
                         </div>
                         <!--Resumen-->
                         <div class="card">
-                            <div class="card-header bg-info" id="headingDos">
+                            <div class="card-header bg-info" id="headingDos" data-toggle="collapse"
+                                        data-target="#collapseDos" aria-expanded="false" aria-controls="collapseDos">
                                 <h5 class="mb-0">
                                     <button class="btn btn-link collapse show panel-title" data-toggle="collapse"
                                         data-target="#collapseDos" aria-expanded="false" aria-controls="collapseDos">
@@ -385,7 +387,8 @@
                         </div>
                         <!--Transfusiones y donación de órganos-->
                         <div class="card">
-                            <div class="card-header" id="headingTres">
+                            <div class="card-header" id="headingTres" data-toggle="collapse"
+                                        data-target="#collapseTres" aria-expanded="false" aria-controls="collapseTres">
                                 <h5 class="mb-0">
                                     <button class="btn btn-link collapsed" data-toggle="collapse"
                                         data-target="#collapseTres" aria-expanded="false" aria-controls="collapseTres">
