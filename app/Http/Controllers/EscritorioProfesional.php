@@ -2672,6 +2672,17 @@ class EscritorioProfesional extends Controller
         $ficha_tipo->examen_bio_od = $request->modal_agregar_tipo_examen_bio_od;
         $ficha_tipo->obs_examen_bio_od = $request->observaciones_obs_examen_bio_od;
         $ficha_tipo->obs_ex_biom = $request->observaciones_obs_ex_biom;
+        $ficha_tipo->id_tipo_episodios = $request->modal_agregar_tipo_episodios;
+        $ficha_tipo->obs_episodios = $request->observaciones_detalle_episodios;
+        $ficha_tipo->id_tipo_equilibrio = $request->modal_agregar_tipo_equilibrio;
+        $ficha_tipo->obs_equilibrio = $request->observaciones_detalle_equilibrio;
+        $ficha_tipo->id_tipo_ng = $request->modal_agregar_tipo_ng;
+        $ficha_tipo->obs_ng = $request->observaciones_detalle_ng;
+        $ficha_tipo->id_tipo_sint_acomp = $request->modal_agregar_tipo_sint_acomp;
+        $ficha_tipo->obs_sint_acomp = $request->observaciones_detalle_sint_acompanantes;
+        $ficha_tipo->id_tipo_vertigo = $request->modal_agregar_tipo_vertigo;
+        $ficha_tipo->obs_tipo_vertigo = $request->observaciones_detalle_tipo_vertigo;
+        $ficha_tipo->obs_vestibular = $request->observaciones_vestibular;
         $ficha_tipo->nariz_general = $request->modal_agregar_tipo_nariz_general;
         $ficha_tipo->det_nariz_general = $request->observaciones_det_nariz_general;
         $ficha_tipo->apreciacion_resp = $request->modal_agregar_tipo_apreciacion_resp;
@@ -2689,6 +2700,7 @@ class EscritorioProfesional extends Controller
         $ficha_tipo->ex_farige_anormal = $request->observaciones_ex_farige_anormal;
         $ficha_tipo->examen_laringe =$request->modal_agregar_tipo_examen_laringe;
         $ficha_tipo->ex_larige_anormal = $request->observaciones_ex_larige_anormal;
+        $ficha_tipo->obs_examen_laringe =$request->observaciones_obs_examen_laringe;
         $ficha_tipo->obs_ex_orl = $request->observaciones_obs_ex_orl;
         $ficha_tipo->hip_diag_orl = '';
         $ficha_tipo->ind_orl = '';

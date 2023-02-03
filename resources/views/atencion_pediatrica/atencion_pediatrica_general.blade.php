@@ -136,7 +136,14 @@
     @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.modal_tunner_m")
     @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.modal_tunner_f")
     @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.modal_antec_neonat")
+    @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.carne_vacuna")
+    @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.carne_otras_vacunas")
+    @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.indicar_vacunas")
+    @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.otras_vacunas")
+    @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.modal_prev_accidentes")
+
+
     <!-- SIDE BAR PEDIATRIA -->
-        @include("atencion_pediatrica.include.sidebar_derecho_pediatria")
-        @include('atencion_pediatrica.sidebars.antecedentes_paciente_p')
+    @include("atencion_pediatrica.include.sidebar_derecho_pediatria")
+    @include('atencion_pediatrica.sidebars.antecedentes_paciente_p')
 @endsection
