@@ -9,7 +9,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Panel de Configuración</h5>
+                                <h5 class="m-b-10 font-weight-bold">Panel de configuración</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip"
@@ -28,48 +28,45 @@
             <div class="row m-b-30">
                 <div class="col-md-12">
                     <div class="card-deck">
-                        <div class="card subir py-3">
+                        <div class="card subir py-1">
                             <a href="{{ ROUTE('profesional.lugares_atencion') }}">
                                 <div class="card-body text-center" style="cursor:pointer">
                                     <img class="wid-90 text-center mb-3" src="{{ asset('images/iconos/lugar.svg') }}"
                                         alt="Mis Lugares de Atención">
                                     <h5>
-                                        Mis Lugares de Atención
+                                        Mis lugares de atención
                                     </h5>
                                 </div>
                             </a>
                         </div>
-                        <div class="card subir py-3">
+                        <div class="card subir py-1">
                             <a href="{{ route('profesional.mis_asistentes') }}">
                                 <div class="card-body text-center" style="cursor:pointer">
                                     <img class="wid-90 text-center mb-3"
                                         src="{{ asset('images/iconos/mis_asistentes.svg') }}" alt="Mis Asistentes">
                                     <h5>
-                                        Mis Asistentes
+                                        Mis asistentes
                                     </h5>
                                 </div>
                             </a>
                         </div>
-
-                        <div class="card subir py-3">
+                        <div class="card subir">
                             <a href="{{ route('profesional.diagnosticos_cie10') }}">
                                 <div class="card-body text-center" style="cursor:pointer">
                                     <img class="wid-90 text-center mb-3"
-                                        src="{{ asset('images/iconos/diagnosticos_cie10.svg') }}"
+                                        src="{{ asset('images/iconos/diagnosticos-frecuentes.svg') }}"
                                         alt="Diagnósticos Frecuentes CIE 10">
                                     <h5>
-                                        Diagnósticos Frecuentes CIE 10
+                                        Diagnósticos frecuentes CIE 10
                                     </h5>
                                 </div>
                             </a>
                         </div>
-						<div class="card subir py-3">
+						<div class="card subir py-1">
                             <a href="busq_secretaria.php">
                                 <div class="card-body text-center" style="cursor:pointer">
                                     <img class="wid-90 text-center mb-3" 
-									src="{{ asset('images/iconos/usuario_asistente.svg') }}"
-									
-									alt="Profesional">
+									src="{{ asset('images/iconos/asistente-online.svg') }}" alt="Profesional">
                                     <h5 class="f-16">
                                        Contratar asistente Online
                                     </h5>
@@ -85,7 +82,6 @@
             <div class="row m-b-10">
                 <div class="col-md-12">
                     <div class="card-deck">
-
                         {{--  <div class="card subir py-4">
                             <a href="{{ route('profesional.diagnosticos_frecuentes') }}">
                                 <div class="card-body text-center" style="cursor:pointer">
