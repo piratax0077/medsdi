@@ -55,7 +55,8 @@
                 -->
                 </ul>
                 <form class="d-flex">                
-                <button class="btn btn-outline-success" type="submit">IMPRIMIR FICHA</button>
+                <button class="btn btn-outline-success mr-1" onclick="window.open('Mi_Ficha_Medica_Pdf?funcionalidad=D')">DOWNLOAD FICHA</button>
+                <button class="btn btn-outline-success" onclick="window.open('Mi_Ficha_Medica_Pdf?funcionalidad=V')">IMPRIMIR FICHA</button>
                 </form>
             </div>
         </nav>

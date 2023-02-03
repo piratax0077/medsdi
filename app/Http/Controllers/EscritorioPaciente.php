@@ -265,7 +265,7 @@ class EscritorioPaciente extends Controller
         ]);
     }
 
-    public function miFichaMedicaPdfView()
+    public function miFichaMedicaPdfView(Request $request)
     {
         $id_usuario = Auth::user()->id;
 
@@ -363,7 +363,7 @@ class EscritorioPaciente extends Controller
         $nombre = 'ficha_medica_'.$id_usuario;
         $template = 'pdf_mi_ficha_medica';
 
-        PdfController::generarPDF($titulo,$detalle,$nombre,$template);
+        return PdfController::generarPDF($titulo,$detalle,$nombre,$template,$request->funcionalidad);
     }
 
     function obtener_edad_segun_fecha($fecha_nacimiento)
