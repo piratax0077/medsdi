@@ -70,7 +70,6 @@
         @yield('Modals-med-exa-esp')
         @yield('modal-ficha-general-espc')
         @include('atencion_pediatrica.secciones_especialidad.ficha_pediatria_tipo')
-        @include('atencion_pediatrica.sidebars.antecedentes_paciente_p')
         <!-- Modal de la vista fin -->
 
 

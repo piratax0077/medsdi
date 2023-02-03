@@ -294,34 +294,28 @@ class ficha_atencionController extends Controller
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
             }
-            else if($profesional->id_tipo_especialidad == 45 && empty($profesional->id_sub_tipo_especialidad))
+            else if($profesional->id_sub_tipo_especialidad == 72)
             {
-                // ATENCIÓN TENS EN GENERAL
-                $ruta_blade = 'atencion_medica.atencion_medica_dermatologia';
+                //NEONATOLOGIA
+                $ruta_blade = 'atencion_pediatrica.atencion_pediatrica_neonatologia';
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
             }
-            else if($profesional->id_tipo_especialidad == 46 && empty($profesional->id_sub_tipo_especialidad))
+            else if($profesional->id_tipo_especialidad == 108 && empty($profesional->id_sub_tipo_especialidad))
             {
-                // ATENCIÓN TENS ESPECIALIZADA
-                $ruta_blade = 'atencion_medica.atencion_medica_dermatologia';
+                // ATENCIÓN ENFERMERA CONTROL NIÑO SANO
+                $ruta_blade = 'atencion_pediatrica.control_nino_sano';
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
             }
-            else if($profesional->id_tipo_especialidad == 41)
+            else if($profesional->id_tipo_especialidad == 51 && empty($profesional->id_sub_tipo_especialidad))
             {
-                // ENFERMERÍA GENERAL
-                $ruta_blade = 'atencion_medica.atencion_medica_dermatologia';
+                // MATRONA CONTROL NIÑO SANO
+                $ruta_blade = 'atencion_pediatrica.atencion_matrona_control_nino_sano';
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
             }
-            else if($profesional->id_tipo_especialidad == 41 && empty($profesional->id_sub_tipo_especialidad))
-            {
-                // ENFERMERÍA ESPECIALIZADA
-                $ruta_blade = 'atencion_medica.atencion_medica_dermatologia';
-                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
-                $fichaTipo = '';
-            }
+
             else if($profesional->id_sub_tipo_especialidad == 12 || $profesional->id_sub_tipo_especialidad == 11)
             {
                 // Cirugía Gástrica

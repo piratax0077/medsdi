@@ -1,4 +1,4 @@
-@extends('template/template_cdb')
+@extends('template.template_cdb')
 @section('Content')
 
     <!--Container Completo-->
@@ -98,11 +98,11 @@
             </div>
         </div>
 
-       
-        <!--Cierre: Botón flotante-->
 
-        <!-- SIDE BAR cdb -->
-        @include("atencion_medica.include.sidebar_derecho_cdb")
+        <!-- SIDE BAR ORL -->
+        @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
+        @include("atencion_medica.include.sidebar_derecho_cda"){{-- modales y data de sidebar especialidad --}}
+
 
         <!--Modals de especialidad -->
         {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}

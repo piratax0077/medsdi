@@ -1,4 +1,4 @@
-@extends('template/template_urologia')
+@extends('template.template_urologia')
 @section('Content')
 
     <!--Container Completo-->
@@ -98,25 +98,10 @@
             </div>
         </div>
 
-               {{--  <div class="row">
-            <div class="col-sm-12">
-                <div class="boton-formularios">
-                    <input type="checkbox" id="btn-mas">
-                    <div class="redes">
-                        <a id="boton_1" class="fas fa-user fa-2x" data-toggle="canvas" data-target="#antecedentes_paciente" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left"></a>
-                        <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left"></a>
-                        <a id="boton_3" class="fas fa-deaf fa-2x" data-toggle="canvas" data-target="#formularios_orl" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Otorrinolaringología" data-placement="left"></a>
-                    </div>
-                    <div class="btn-mas">
-                        <label for="btn-mas" class="fa fa-plus"></label>
-                    </div>
-                </div>
-            </div>
-        </div>  --}}
-        <!--Cierre: Botón flotante-->
-
         <!-- SIDE BAR URO -->
-        @include("atencion_medica.include.sidebar_derecho_uro")
+        @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
+        @include("atencion_medica.include.sidebar_derecho_uro"){{-- modales y data de sidebar especialidad --}}
+
 
         <!--Modals de especialidad -->
         {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}

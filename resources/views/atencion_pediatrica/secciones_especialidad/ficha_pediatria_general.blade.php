@@ -12,9 +12,9 @@
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="vac-tab" data-toggle="tab" href="#vac" role="tab" aria-controls="vac" aria-selected="false">vacunas</a>
                     </li>
-                    <li class="nav-item-secciones">
+                    {{--  <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="neo-tab" data-toggle="tab" href="#neo" role="tab" aria-controls="neo" aria-selected="false">Neonatología</a>
-                    </li>
+                    </li>  --}}
                 </ul>
             </div>
             <div class="col-sm-12 col-md-12">
@@ -508,9 +508,9 @@
                         <!--CIERRE: ATENCIÓN NIÑO SANO-->
                         <!--ATENCIÓN VACUNAS-->
 
-                        <div class="tab-pane fade" id="neo" role="tabpanel" aria-labelledby="neo-tab">
-                            @include('atencion_pediatrica.secciones_especialidad.neonatologia')
-                        </div>
+                        {{--  <div class="tab-pane fade" id="neo" role="tabpanel" aria-labelledby="neo-tab">  --}}
+                            {{--  @include('atencion_pediatrica.secciones_especialidad.neonatologia')  --}}
+                        {{--  </div>  --}}
                         <!--CIERRE: ATENCIÓN VACUNAS-->
                         {{--  div de botones  --}}
                         <div class="bg-white shadow-none rounded mx-1 p-15">

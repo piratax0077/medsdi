@@ -98,28 +98,9 @@
             </div>
         </div>
 
-        <!--Botón flotane del sidebar derecho PEDIATRIA-->
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="boton-formularios">
-                    <input type="checkbox" id="btn-mas">
-                    <div class="redes">
-                        <a id="boton_1" class="fas fa-user fa-2x" data-toggle="canvas" data-target="#antecedentes_paciente" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left" style="cursor:pointer;"> </a>
-                        <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left" style="cursor:pointer;"></a>
-                        @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Pediatría General' )
-                        <a id="boton_3" class="fas fa-child fa-2x" data-toggle="canvas" data-target="#formularios_pediatria" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Pediatría" data-placement="left" style="cursor:pointer;"></a>
-                        @endif
-
-                    </div>
-                    <div class="btn-mas">
-                        <label for="btn-mas" class="fa fa-plus"></label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--Cierre: Botón flotante-->
-        <!--Botón Flotante-->
-
+        <!-- SIDE BAR ORL -->
+        @include("atencion_pediatrica.modales"){{-- base de botones de sidebar --}}
+        @include("atencion_pediatrica.include.sidebar_derecho_pediatria"){{-- modales y data de sidebar especialidad --}}
 
 
         <!--Modals de especialidad -->
@@ -142,8 +123,4 @@
     @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.otras_vacunas")
     @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.modal_prev_accidentes")
 
-
-    <!-- SIDE BAR PEDIATRIA -->
-    @include("atencion_pediatrica.include.sidebar_derecho_pediatria")
-    @include('atencion_pediatrica.sidebars.antecedentes_paciente_p')
 @endsection
