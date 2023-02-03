@@ -147,10 +147,11 @@
                                                             <label class="floating-label-activo-sm"> Tipo de licencia</label>
                                                             <select class="form-control d-inline form-control-sm" name="" id="">
                                                                 <option>Seleccione una opción</option>
-                                                                <option>Tipo 1: enfermedad o accidente común.</option>
-                                                                <option>Tipo 2: medicina preventiva.</option>
-                                                                <option>Tipo 3: pre y postnatal.</option>
-                                                                <option>Tipo 4: enfermedad grave del niño menor del año</option>
+                                                                <option selected value= "1"> Tipo 1: enfermedad o accidente común.</option>
+                                                                <option value= "2" >Tipo 2: medicina preventiva.</option>
+                                                                <option value= "3" >Tipo 3: pre y postnatal.</option>
+                                                                <option value= "4">Tipo 4: enfermedad grave del niño menor del año</option>
+                                                                <option value= "5">Tipo 5: Patología del Embarazo</option>
                                                             </select>
                                                         </div>
                                                         <div class="form-group col-md-4">

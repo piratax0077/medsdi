@@ -316,20 +316,39 @@ class ficha_atencionController extends Controller
                 $fichaTipo = '';
             }
 
-            else if($profesional->id_sub_tipo_especialidad == 12 || $profesional->id_sub_tipo_especialidad == 11)
+            // 1 Cirugía Abdominal General -> atencion_medica_cirugia_digestiva_general
+            // 7 Cirugía Coloproctológica -> atencion_medica_cirugia_digestiva_baja
+            // 11 Cirugía digestiva -> atencion_medica_cirugia_digestiva_general
+            // 12 Cirugía Gástrica -> atencion_medica_cirugia_digestiva_alta
+
+            else if($profesional->id_sub_tipo_especialidad == 1)
             {
-                // Cirugía Gástrica
-                $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_alta';
+                // Cirugía Coloproctológica
+                $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_general';
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
-            }
-            else if($profesional->id_sub_tipo_especialidad == 7)
+            }else if($profesional->id_sub_tipo_especialidad == 7)
             {
                 // Cirugía Coloproctológica
                 $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_baja';
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
             }
+            else if($profesional->id_sub_tipo_especialidad == 11 )
+            {
+                // Cirugía Gástrica
+                $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_general';
+                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $fichaTipo = '';
+            }
+            else if($profesional->id_sub_tipo_especialidad == 12 )
+            {
+                // Cirugía Gástrica
+                $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_alta';
+                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $fichaTipo = '';
+            }
+
             else
             {
                 $ruta_blade = 'atencion_medica.atencion_medica';
