@@ -22,6 +22,12 @@
 
 <!-- CONTENT -->
 @section('content')
+    @php
+    $paciente = (object) $cuerpo['paciente'];
+    $contacto_emergencia = (object) $cuerpo['contacto_emergencia'];
+    $grupo_sanguineo = (object) $cuerpo['grupo_sanguineo'];
+    $antecedentes_paciente = (object) $cuerpo['antecedentes_paciente'];
+    @endphp
     <div class="container-fluid">
         <!-- MENU -->
         <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
@@ -55,8 +61,7 @@
                 -->
                 </ul>
                 <form class="d-flex">                
-                <button class="btn btn-outline-success mr-1" onclick="window.open('Mi_Ficha_Medica_Pdf?funcionalidad=D')">DOWNLOAD FICHA</button>
-                <button class="btn btn-outline-success" onclick="window.open('Mi_Ficha_Medica_Pdf?funcionalidad=V')">IMPRIMIR FICHA</button>
+                <button class="btn btn-outline-success" type="submit">IMPRIMIR FICHA</button>
                 </form>
             </div>
         </nav>

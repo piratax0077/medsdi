@@ -20,7 +20,7 @@ class PdfController extends Controller
      * @param STRING $template
      * @return PFD VISTA
      */
-    static function generarPDF($titulo, $detalle, $nombre, $template)
+    static function generarPDF($titulo, $detalle, $nombre, $template, $funcionalida = 'V')
     {
 
         // return response($detalle)->header('Content-Type', 'application/json');
@@ -39,8 +39,21 @@ class PdfController extends Controller
         /** guardar */
         // $pdf->save('../pdf/' . $nombre_pdf . '.pdf');
         /** descarga */
-        // return $pdf->download($nombre_pdf.'.pdf');
+        //return $pdf->download($nombre_pdf.'.pdf');
         /** ver */
-        return $pdf->stream($nombre_pdf.'.pdf');
+        //return $pdf->stream($nombre_pdf.'.pdf');
+
+        switch ($funcionalida) {
+            case 'V':
+                return $pdf->stream($nombre_pdf.'.pdf');
+            break;
+            case 'G':
+                $pdf->save('../pdf/' . $nombre_pdf . '.pdf');
+            break;
+            case 'D':
+                return $pdf->download($nombre_pdf.'.pdf');
+            break;            
+            
+        }
     }
 }
