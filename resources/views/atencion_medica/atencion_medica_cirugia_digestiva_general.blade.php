@@ -1,4 +1,4 @@
-@extends('template.template_cdb')
+@extends('template.template_cir_digest')
 @section('Content')
     <!--Container Completo-->
     <div class="pcoded-main-container">
@@ -99,7 +99,7 @@
 
         <!-- SIDE BAR ORL -->
         @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
-        @include("atencion_medica.include.sidebar_derecho_cda"){{-- modales y data de sidebar especialidad --}}
+        @include("atencion_medica.include.sidebar_derecho_cirugia_digest"){{-- modales y data de sidebar especialidad --}}
 
         <!--Modals de especialidad -->
         {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}

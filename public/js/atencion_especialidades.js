@@ -27,9 +27,10 @@ $(document).ready(function() {
 
 /** MODALS **/
 /** MODALS FORMULARIOS GENERALES **/
-/** Indicar vacunas MINSAL **/
+function ind_endoscopia() {
+    $('#ind_endoscopia_modal').modal('show');
+}
 
-/** Indicar otras vacunas **/
 function ingreso() {
     $('#ingreso_modal').modal('show');
 }

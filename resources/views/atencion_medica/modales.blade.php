@@ -2549,6 +2549,9 @@
 				@if($profesional->SubTipoEspecialidad()->first()->nombre == 'Urología' )
 					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_uro" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Urología" data-placement="left"></a>
 				@endif
+                @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía digestiva' )
+					<a id="boton_3" class="fas fa-user-md fa-2x" data-toggle="canvas" data-target="#formularios_cir_digest" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugía Digestiva" data-placement="left"></a>
+				@endif
             </div>
             <div class="btn-mas">
                 <label for="btn-mas" class="fa fa-plus"></label>

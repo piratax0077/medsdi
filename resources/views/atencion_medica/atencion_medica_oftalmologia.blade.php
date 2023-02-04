@@ -82,7 +82,7 @@
                         </div>
                         <!--Atenciones previas-->
                         <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
-                            @include('atencion_medica.secciones_ficha.atenciones_previas')
+                            @include('atencion_medica.formularios.atenciones_previas_form')
                         </div>
                         <!--Exámenes-->
                         <div class="tab-pane fade show" id="examenes" role="tabpanel" aria-labelledby="examenes-tab">

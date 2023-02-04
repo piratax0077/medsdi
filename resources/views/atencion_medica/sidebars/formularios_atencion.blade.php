@@ -22,8 +22,6 @@
                     data-parent="#accordion_formularios_atencion">
                     <div class="card-body-sidebar">
                         <!--Boton Modal Formulario certificado de reposo-->
-
-                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="i_examen_esporl()";>+ Exámenes Otorrinolaringológicos</button>
                         @if (auth()->user()->can('profesional.premium.pacientes.reposo_medico'))
                             <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_certificado_reposo">
                                 + Certificado de reposo
@@ -117,7 +115,7 @@
                         <!--Boton Modal Formulario Enfermedades de Declaración Obligatoria -->
                         <button type="button"
                             class="btn btn-sm btn-info btn-block text-left accion_modal_enfermedades_declaracion_obligatoria">+ Enf.Notificación.Obligatoria (ENO)</button>
-                            
+
 
                         <!--Boton Modal Formulario Reembolso Médico-->
                         <button type="button"

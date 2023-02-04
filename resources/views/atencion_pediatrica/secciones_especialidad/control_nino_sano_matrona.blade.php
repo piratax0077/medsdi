@@ -14,7 +14,7 @@
                     <div class="row">
                         <div class="col-md-12 mt-3 mb-2">
                             <h6 class="f-18 d-inline float-left">Control de parámetros  en crecimiento y desarrollo</h6>
-                            <h6 class="f-16 d-inline float-right">Viernes, 18 de Marzo de 2022</h6>
+
                         </div>
                     </div>
                     <hr class="mt-1">
