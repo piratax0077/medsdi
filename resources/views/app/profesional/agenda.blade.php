@@ -31,9 +31,43 @@
             margin: 0 !important;
         }
 
-        .fc .fc-timegrid-slot {
-            height: 3.5em;
+       
+
+      
+        @media (min-width: 768px) { 
+            .btn-group > .btn,
+            .btn-group-vertical > .btn {
+            position: relative;
+            flex: 1 1 auto;
+            padding:4px 6px;
+            font-size: 0.9rem;
         }
+        .fc .fc-toolbar-title {
+            font-size: 1.4em;
+            margin: 0;
+        }
+        
+    }
+        @media (max-width: 767.98px) { 
+            .btn-group > .btn,
+            .btn-group-vertical > .btn {
+            position: relative;
+            flex: 1 1 auto;
+            padding:3px 5px;
+            font-size:0.8rem;
+        }
+
+        .fc .fc-toolbar-title {
+            font-size: 1.2em;
+            margin: 0;
+        }
+    }
+
+         
+         
+
+    
+
     </style>
 @endsection
 
@@ -44,9 +78,9 @@
             <!--HEADER-->
             <div class="page-header">
                 <div class="page-block">
-                    <div class="row align-items-center text-center">
+                    <div class="row align-items-center text-center mt-3">
                         <div class="page-header-title">
-                            <h4 class="text-white"><a href="#" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a> <strong>AGENDA</strong><br> {{ strtoupper($lugar_atencion_nombre) }}</h4>
+                            <h5 class="text-white f-20"><a href="#" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a> <strong>AGENDA : </strong> {{ strtoupper($lugar_atencion_nombre) }}</h4>
                         </div>
                     </div>
                 </div>
