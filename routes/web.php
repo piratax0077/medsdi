@@ -436,6 +436,9 @@ Route::group([
 	/** LIQUIDACIONES */
     Route::post('/profesional/liquidacion/agregar', [App\Http\Controllers\EscritorioProfesional::class, 'agregarLiquidacion'])->name('profesional.agregar_liquidacion');
 	Route::post('/profesional/liquidacion/modificar', [App\Http\Controllers\EscritorioProfesional::class, 'modificarLiquidacion'])->name('profesional.modificar_liquidacion');
+
+    /** Proceso de imagenes */
+	Route::post('/imagen/carga', [App\Http\Controllers\CargaImagenController::class, 'cargaImagenTemp'])->name('profesional.imagen.carga');
 });
 
 /* ASISTENTE CONSULTA*/
@@ -1048,6 +1051,11 @@ Route::get('/hora/atencion/solicitud/confirmacion', [App\Http\Controllers\Confir
 Route::get('/hora/atencion/solicitud/confirmacion/segundo', [App\Http\Controllers\ConfirmacionHoraController::class, 'EnviarSegundaSolicitudConfirmarHora']);
 Route::get('/hora/atencion/confirmacion', [App\Http\Controllers\ConfirmacionHoraController::class, 'Confirmacion'])->name('solicitud.comfirmacion.hora.confirmacion');
 Route::get('/hora/atencion/cancelacion', [App\Http\Controllers\ConfirmacionHoraController::class, 'Cancelacion'])->name('solicitud.comfirmacion.hora.cancelacion');
+
+
+Route::get('/img/mover', [App\Http\Controllers\CargaImagenController::class, 'moverImagen_r'])->name('img.mover');
+
+
 
 /** PARA VISUALIZAR DEMOS */
 // Route::get('/autorizacion/enlace', function () {

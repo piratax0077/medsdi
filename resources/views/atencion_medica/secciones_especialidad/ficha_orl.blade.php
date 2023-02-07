@@ -22,6 +22,7 @@
                     <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
                     <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
                     <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
+                    <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
 
                     @csrf
                     <div class="tab-content" id="orl-contenido">
@@ -904,6 +905,8 @@
                                             <hr>
                                         </div>
                                     </div>
+                                    {!! $examen !!}
+                                    {{--
                                     <div class="row">
                                         <!--Motivo examen-->
                                         <div class="col-md-12">
@@ -1040,79 +1043,73 @@
                                         <!--LARINGE-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
-                                                <div class="card-header" id="laring">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#laring-c" aria-expanded="false" aria-controls="laring-c">
-                                                        Laringe
+                                                <div class="card-header" id="laringe">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#laringe-c" aria-expanded="false" aria-controls="laringe-c">
+                                                        Laringe.
                                                     </button>
                                                 </div>
-                                                <div id="laring-c" class="collapse show" aria-labelledby="laring" data-parent="#laring">
+                                                <div id="laringe-c" class="collapse show" aria-labelledby="laringe" data-parent="#laringe">
                                                     <div class="card-body-aten shadow-none">
                                                         <div class="form-row">
-                                                            <div class="form-group col-sm-12 col-md-12">
-                                                                <label class="floating-label-activo-sm">Descripción</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="laringe" id="laringe"></textarea>
+                                                            <div class="form-group col-md-4">
+                                                                <label class="floating-label-activo-sm">Cuerdas</label>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" placeholder="Aspecto general comisuras" name="cuerdas" id="cuerdas"></textarea>
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label class="floating-label-activo-sm">Movilidad, hiatos, otros</label>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="movilidad" id="movilidad"></textarea>
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label class="floating-label-activo-sm">Cierre glótico</label>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="cierre_glotico" id="cierre_glotico"></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                         <!--IMAGENES-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
-                                                <div class="card-header" id="menor-edad">
+                                                <div class="card-header" id="img">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_rfl" aria-expanded="false" aria-controls="imagenes_rfl">
                                                         Imagenes.
                                                     </button>
                                                 </div>
-                                                <div id="imagenes_rfl" class="collapse show" aria-labelledby="menor-edad" data-parent="#menor-edad">
+                                                <div id="imagenes_rfl" class="collapse show" aria-labelledby="img" data-parent="#img">
                                                     <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">Cuerdas</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" placeholder="Aspecto general comisuras" name="cuerdas" id="cuerdas"></textarea>
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">Movilidad, hiatos, otros</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="movilidad" id="movilidad"></textarea>
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">Cierre glótico</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="cierre_glotico" id="cierre_glotico"></textarea>
-                                                            </div>
+                                                        <!-- [ Main Content ] start -->
+                                                        <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
+                                                        <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
                                                         </div>
+                                                        <!-- [ file-upload ] end -->
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--NARIZ Y FOSAS NASALES-->
+
+                                        <!--INFO-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
-                                                <div class="card-header" id="menor-edad">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#menor-edad-c" aria-expanded="false" aria-controls="menor-edad-c">
+                                                <div class="card-header" id="info">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#info-c" aria-expanded="false" aria-controls="info-c">
                                                         Info.
                                                     </button>
                                                 </div>
-                                                <div id="menor-edad-c" class="collapse show" aria-labelledby="menor-edad" data-parent="#menor-edad">
+                                                <div id="info-c" class="collapse show" aria-labelledby="info" data-parent="#info">
                                                     <div class="card-body-aten shadow-none">
                                                         <div class="form-row">
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">Cuerdas</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" placeholder="Aspecto general comisuras" name="cuerdas" id="cuerdas"></textarea>
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">Movilidad, hiatos, otros</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="movilidad" id="movilidad"></textarea>
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">Cierre glótico</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="cierre_glotico" id="cierre_glotico"></textarea>
+                                                            <div class="form-group col-sm-12 col-md-12">
+                                                                <label class="floating-label-activo-sm">Descripción</label>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="info" id="info"></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                         <!--DIAGNÓSTICO-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
@@ -1137,7 +1134,15 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
+                                    --}}
+                                </div>
+                                <hr>
+
+                                <!--GUARDAR EXAMEN-->
+                                <div class="col-md-12 text-center mb-3">
+                                    <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
                                 </div>
                             </div>
                         </div>
@@ -1323,7 +1328,142 @@
                 }
             });
 
+
         })
+
+        /** MANEJO DE IMAGENES */
+        var myDropzone ;
+        Dropzone.options.misImagenes = {
+            init:function()
+            {
+                myDropzone = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes();
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes();
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes();
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+
+
+        var lista_imagenes = [];
+        function cargar_lista_imagenes()
+        {
+            // console.log('--------------cargar_lista_imagenes----------------------');
+            lista_imagenes = [];
+            let temp  = myDropzone.getAcceptedFiles();
+            $.each(temp, function( index, value )
+            {
+                if(value.status == "success")
+                {
+                    if(value.xhr !== undefined)
+                    {
+                        var img_temp = JSON.parse(value.xhr.response);
+                        lista_imagenes[index] = [
+                            url=img_temp.img.url,
+                            nombre_origian= img_temp.img.original_file_name,
+                            nombre_img = img_temp.img.nombre_img,
+                            file_extension = img_temp.img.file_extension,
+                        ];
+                        $('#input_lista_imagenes').val('');
+                        $('#input_lista_imagenes').val(JSON.stringify(lista_imagenes));
+                    }
+                }
+            });
+
+
+        }
+
+        /** MANEJO DE IMAGENES */
 
         /** REGISTO ANTECEDENTES */
         function carga_campos_antecedente_nuevo()

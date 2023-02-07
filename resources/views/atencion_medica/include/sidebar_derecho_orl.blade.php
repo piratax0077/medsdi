@@ -97,8 +97,8 @@
     </div>
     <!--SIDEBAR 3 (Otorrino)-->
 
-    <!--MODALS SIDE BAR GENERALES--> {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
-   {{--   @include('atencion_medica.modales')--}}
+    <!--MODALS SIDE BAR GENERALES-->
+    {{-- @include('atencion_medica.modales') --}}
 
 
     @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_exbiopsia_orl")
