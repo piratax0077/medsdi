@@ -9,7 +9,7 @@
                     <div class="row align-items-center pb-2">
                         <div class="col-md-6">
                             <div class="page-header-title">
-                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN FICHA CIRUGIA DIGESTIVA ALTA</strong></h5>
+                                <h5 class="text-white d-inline f-16 mt-1"><strong>FICHA CIRUGIA PEDIÁTRICA</strong></h5>
                                 <p class="font-italic mt-0 mb-0 text-white">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -116,7 +116,7 @@
         <!--Cierre: Botón flotante-->
 
         <!-- SIDE BAR ORL -->
-        @include("atencion_medica.include.sidebar_derecho_cda")
+        @include("atencion_pediatrica.include.sidebar_derecho_cirugia_pediatrica")
 
         <!--Modals de especialidad -->
         {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
@@ -124,9 +124,9 @@
         <!--Modals formularios generales-->
         {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")--}}
-       
-	
+
+
     </div>
     <!--Cierre: Container Completo-->
-	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")  
+	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
 @endsection

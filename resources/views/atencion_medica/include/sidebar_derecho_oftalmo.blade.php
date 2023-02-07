@@ -17,13 +17,11 @@
                     </div>
                     <div id="collapse_solicitud_examenes" class="collapse" aria-labelledby="heading_solicitud_examenes" data-parent="#accordion_gineco_obst">
                          <div class="card-body-sidebar">
-
-
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ex_orina()";>+ Exámenes de orina</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="est_hormo()";>+ Exámenes hormonales</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="rx_uro ()";>+ Orden radiología</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="biopsia()";>+ Biopsias</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="i_examen_rx() ;">+ Orden radiología</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="i_biopsia()";>+ Biopsias </button>
                          </div>
+                         @include("atencion_medica.formularios.modal_atencion_general.modal_examen_rx")
+                         @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
                     </div>
                 </div>
 
@@ -68,7 +66,7 @@
                     @include("atencion_medica.sidebars.modals_generales.m_ucodigofonasa")
                     @include("atencion_medica.sidebars.modals_generales.m_uimc")
 
-                </div>
+                </div>{{--
 				<div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_recom">
                         <h2 class="mb-0">
@@ -97,7 +95,7 @@
                     @include("atencion_medica.sidebars.modals_especialidad.oftalmologia.recom_parpados")
                     @include("atencion_medica.sidebars.modals_especialidad.oftalmologia.recom_vitreo")
 
-                </div>
+                </div>  --}}
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_recom">
                         <h2 class="mb-0">

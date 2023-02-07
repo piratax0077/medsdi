@@ -7,7 +7,7 @@
     </header>
     <div class="bs-canvas-content">
         <div class="accordion" id="accordion_ped">
-            <div class="card-sidebar">
+             {{-- <div class="card-sidebar">
                 <div class="card-header-sidebar" id="heading_solicitud_examenes">
                     <h2 class="mb-0">
                         <button class="btn btn-light btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse_solicitud_examenes" aria-expanded="true" aria-controls="collapse_solicitud_examenes"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
@@ -23,7 +23,7 @@
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="interped()";>+ Interconsultas</button>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="card-sidebar">
                 <div class="card-header-sidebar" id="heading_test">
                     <h2 class="mb-0">
@@ -84,11 +84,11 @@
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="presion_f();"><i class="fa fa-plus"></i> Presión Arterial mujer</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="imc_519f();"><i class="fa fa-plus"></i> IMC 5 a 19 años mujer</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="per_cef_f();"><i class="fa fa-plus"></i> Perimetro Cefálico mujer</button>
-                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="talla_edad_f();"><i class="fa fa-plus"></i> Talla edad mujer 5 a 19 años</button>
+                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="talla_edad_f519();"><i class="fa fa-plus"></i> Talla edad mujer 5 a 19 años</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="talla_25_f();"><i class="fa fa-plus"></i> Talla edad mujer 2 a 5 años</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="talla_02_f();"><i class="fa fa-plus"></i> Talla edad mujer 0 a 2 años</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="percint_f();"><i class="fa fa-plus"></i> Perimetro cintura mujer 5-19 años</button>
-                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="pesoedad_f();"><i class="fa fa-plus"></i> Peso Edad mujer 0 a 2 años</button>
+                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="pesoedad_f02();"><i class="fa fa-plus"></i> Peso Edad mujer 0 a 2 años</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="pesoedad_25_f();"><i class="fa fa-plus"></i> Peso Edad mujer 2 a 5 años</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="pesoedad_510_f() ;"><i class="fa fa-plus"></i> Peso Edad mujer 5 a 10 años</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="pesotalla_02_f();"><i class="fa fa-plus"></i> Peso Talla mujer 0 a 2 años</button>
@@ -145,13 +145,15 @@
                     <div class="card-body-sidebar">
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="prev_acc()";>+ Prevension de Accidentes</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ipostparto()";>+ Cuidados Post Parto</button>
-                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ilactan()";>+ Indicaciones lactancia</button>
+                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ilactan()";>+ Indicaciones  acerca de lactancia</button>
+                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="tlactan()";>+ Técnica de lactancia</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="i_ingreso()";>+ Requisitos de ingreso</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="icirugia()";>+ Indicaciones post cirugía</button>
                     </div>
                     @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.m_ipostparto")
                     {{--@include("atencion_pediatrica\sidebars\modals_especialidad\pediatria\modal_prev_accidentes")--}}
                     @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.m_ilactancia")
+                    @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.m_tlactancia")
                     @include("atencion_pediatrica.sidebars.modals_generales.m_cuidados_cirugia")
                     @include("atencion_pediatrica.sidebars.modals_generales.m_req_ingreso")
 
@@ -186,6 +188,7 @@
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.talla_edad_f25")
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.talla_edad_f024")
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.per_cintura_f519")
+@include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.peso_edad_f24_meses")
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.peso_edad_f25")
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.peso_edad_f510")
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.peso_talla_f024")

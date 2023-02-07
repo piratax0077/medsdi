@@ -174,6 +174,9 @@
 	function abrir_modal_clasificacion_colon(){
         $('#m_clasificacion').modal('show');
     }
+    function mostrar_modal_ex_rx_cirugia(){
+        $('#modal_indicar_examen_rx').modal('show');
+    }
 	</script>
     @yield('js_inferior')
     @yield('page-script')

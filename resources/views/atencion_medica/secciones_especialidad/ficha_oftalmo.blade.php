@@ -39,7 +39,6 @@
                                         <!--Formulario / Menor de edad-->
                                         @include('atencion_medica.generales.seccion_menor')
                                         <!--Cierre: Formulario / Menor de edad-->
-
                                         <!--Motivo consulta-->
                                         <div class="col-md-12">
                                             <div class="card">
@@ -65,7 +64,6 @@
                                             </div>
                                         </div>
                                         <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
-
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
                                                 <div class="card-header" id="examen_oft_general">
@@ -737,8 +735,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
                                         <!--Diagnóstico-->
                                         <div class="col-sm-12">
                                             <div class="card">
@@ -942,7 +938,8 @@
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
 
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
-                            @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')
+                            @include('atencion_medica.secciones_especialidad.seccion_receta_examenes_esp_oftalmo')
+
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD FIN  -->
 
                             <hr>

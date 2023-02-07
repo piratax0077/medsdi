@@ -17,12 +17,13 @@
                     </div>
                     <div id="collapse_solicitud_examenes" class="collapse" aria-labelledby="heading_solicitud_examenes" data-parent="#accordion_cirugia_alta">
                         <div class="card-body-sidebar">
-
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="i_examen_esporl()";>+ Exámenes Específicos</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="i_examen_rxorl()";>+ Orden radiología</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="i_biopsiaorl()";>+ Biopsias </button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="mostrar_modal_ex_rx_cirugia();">+ Orden radiología</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="i_biopsia()";>+ Biopsias </button>
                         </div>
                     </div>
+                    @include("atencion_medica.formularios.modal_atencion_general.modal_examen_rx")
+                    @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
+
                 </div>
 
                 <div class="card-sidebar">

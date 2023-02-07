@@ -1,4 +1,4 @@
-<div id="peso_edad_f" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="peso_edad_f" aria-hidden="true">
+<div id="peso_edad_f024" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="peso_edad_f024" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">

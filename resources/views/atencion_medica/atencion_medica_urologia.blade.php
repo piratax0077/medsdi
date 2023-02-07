@@ -104,7 +104,7 @@
 
 
         <!--Modals de especialidad -->
-        {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
+        @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
 
         <!--Modals formularios generales-->
         {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.urologia.indicar_examen_esp.")
@@ -113,5 +113,6 @@
 
 
     </div>
+
     <!--Cierre: Container Completo-->
 @endsection

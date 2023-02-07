@@ -287,6 +287,13 @@ class ficha_atencionController extends Controller
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
             }
+            else if($profesional->id_sub_tipo_especialidad == 27)
+            {
+                //gineco obstetricia
+                $ruta_blade = 'atencion_gine_obstetricia.atencion_gine_obst_general';
+                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $fichaTipo = '';
+            }
             else if($profesional->id_sub_tipo_especialidad == 78)
             {
                 //pediatria general
