@@ -42,6 +42,20 @@ return [
             'visibility' => 'public',
         ],
 
+        'img_temp' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/imagenes/temp'),
+            'url' => env('APP_URL').'/storage/imagenes/temp',
+            'visibility' => 'public',
+        ],
+
+        'img_examen' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/imagenes/examen'),
+            'url' => env('APP_URL').'/storage/imagenes/examen',
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

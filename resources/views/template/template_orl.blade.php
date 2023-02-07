@@ -28,7 +28,10 @@
 
 
     <!-- fileupload-custom css -->
-    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}?t={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
+    <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
+
+
 
     <!--Accordion-->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
@@ -134,7 +137,8 @@
     <script src="{{ asset('js/check_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!-- file-upload Js -->
-    <script src="{{ asset('js/plugins/dropzone-amd-module.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
+    <!-- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script> -->
 
     <!-- mensajes -->
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
