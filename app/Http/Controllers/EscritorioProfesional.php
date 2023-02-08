@@ -22,6 +22,9 @@ use App\Models\Direccion;
 use App\Models\Especialidad;
 use App\Models\ExamenPPF;
 use App\Models\FichaAtencion;
+use App\Models\FichaCirugiaDigestivaTipo;
+use App\Models\FichaCirugiaGeneral;
+use App\Models\FichaCirugiaGeneralTipo;
 use App\Models\FichaOtorrinoTipo;
 use App\Models\GrupoSanguineo;
 use App\Models\Hipertension;
@@ -2854,4 +2857,129 @@ class EscritorioProfesional extends Controller
         $result = LiquidacionReciboController::edit($request->id, Auth::user()->id, $request->rut, $request->nombre, $request->banco, $request->cuenta, $request->email, $request->principal, $request->tipo_cuenta,1);
         return $result;
     }
+
+    /** FICHA CIRUGIA DIGESTIVA TIPO */
+    public function agregarFichaTipoCDG(Request $request)
+    {
+        $datos = array();
+        $ficha_tipo = new FichaCirugiaDigestivaTipo();
+        $ficha_tipo->nombre = $request->nombre;
+        $ficha_tipo->descripcion = $request->descripcion;
+        $ficha_tipo->id_profesional = $request->id_profesional;
+        $ficha_tipo->ind_esp_cirugia = $request->ind_esp_cirugia;
+        $ficha_tipo->dolor_cdg = $request->dolor_cdg;
+        $ficha_tipo->obs_dolor_cdg = $request->obs_dolor_cdg;
+        $ficha_tipo->otros_sintomas_cdg = $request->otros_sintomas_cdg;
+        $ficha_tipo->obs_otros_sintomas_cdg = $request->obs_otros_sintomas_cdg;
+        $ficha_tipo->ceg_cdg = $request->ceg_cdg;
+        $ficha_tipo->obs_ceg_cdg = $request->obs_ceg_cdg;
+        $ficha_tipo->masa_cdg = $request->masa_cdg;
+        $ficha_tipo->obs_masa_cdg = $request->obs_masa_cdg;
+        $ficha_tipo->urgencia_cdg = $request->urgencia_cdg;
+        $ficha_tipo->obs_urgencia_cdg = $request->obs_urgencia_cdg;
+        $ficha_tipo->so_cdg = $request->so_cdg;
+        $ficha_tipo->obs_so_cdg = $request->obs_so_cdg;
+        $ficha_tipo->obs_egp_cdg = $request->obs_egp_cdg;
+        $ficha_tipo->obs_gen_ex_esp_cdg = $request->obs_gen_ex_esp_cdg;
+        // $ficha_tipo->otro = $request->otro;
+        // $ficha_tipo->estado = $request->estado;
+
+        if($ficha_tipo->save())
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro exitoso';
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro NO exitoso';
+        }
+        return $datos;
+    }
+
+    public function buscarFichaTipoCDG(Request $request)
+    {
+        $datos = array();
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $registro = FichaCirugiaDigestivaTipo::where('id_profesional',$profesional->id)->where('id',$request->id_ficha_tipo)->first();
+
+        if($registro)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registro;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
+        }
+
+        return $datos;
+    }
+    /** CIERRE FICHA CIRUGIA DIGESTIVA TIPO */
+
+    /** FICHA CIRUGIA GENERAL TIPO */
+    public function agregarFichaTipoCG(Request $request)
+    {
+        $datos = array();
+        $ficha_tipo = new FichaCirugiaGeneralTipo();
+        $ficha_tipo->nombre = $request->nombre;
+        $ficha_tipo->descripcion = $request->descripcion;
+        $ficha_tipo->id_profesional = $request->id_profesional;
+        $ficha_tipo->ind_esp_cirugia = $request->ind_esp_cirugia;
+        $ficha_tipo->organo_cg = $request->organo_cg;
+        $ficha_tipo->obs_organo_cg = $request->obs_organo_cg;
+        $ficha_tipo->ceg_cg = $request->ceg_cg;
+        $ficha_tipo->obs_ceg_cg = $request->obs_ceg_cg;
+        $ficha_tipo->masa_cg = $request->masa_cg;
+        $ficha_tipo->obs_masas_cg = $request->obs_masas_cg;
+        $ficha_tipo->urgencia_cg = $request->urgencia_cg;
+        $ficha_tipo->obs_urgencia_cg = $request->obs_urgencia_cg;
+        $ficha_tipo->so_cg = $request->so_cg;
+        $ficha_tipo->obs_so_cg = $request->obs_so_cg;
+        $ficha_tipo->obs_egp_cg = $request->obs_egp_cg;
+        $ficha_tipo->obs_gen_ex_esp_cg = $request->obs_gen_ex_esp_cg;
+        $ficha_tipo->otro = $request->otro;
+        $ficha_tipo->estado = 1;
+
+
+        if($ficha_tipo->save())
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro exitoso';
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro NO exitoso';
+        }
+        return $datos;
+    }
+
+    public function buscarFichaTipoCG(Request $request)
+    {
+        $datos = array();
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $registro = FichaCirugiaGeneralTipo::where('id_profesional',$profesional->id)->where('id',$request->id_ficha_tipo)->first();
+
+        if($registro)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registro;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
+        }
+
+        return $datos;
+    }
+    /** CIERRE FICHA CIRUGIA GENERAL TIPO */
 }

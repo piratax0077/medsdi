@@ -429,6 +429,14 @@ Route::group([
     Route::post('/profesional/agregar_ficha_tipo_otorrino', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoOtorrino'])->name('profesional.ficha_tipo_otorrino');
 	Route::get('/profesional/buscar_ficha_tipo_otorrino', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoOtorrino'])->name('profesional.buscar_ficha_tipo_otorrino');
 
+    /** REGISTRO DE FICHA TIPO CDG CIRUGIA DIGESTIVA GENERAL */
+    Route::post('/profesional/agregar_ficha_tipo_cdg', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoCDG'])->name('profesional.ficha_tipo_cdg');
+	Route::get('/profesional/buscar_ficha_tipo_cdg', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoCDG'])->name('profesional.buscar_ficha_tipo_cdg');
+
+    /** REGISTRO DE FICHA TIPO CDG CIRUGIA GENERAL */
+    Route::post('/profesional/agregar_ficha_tipo_cg', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoCG'])->name('profesional.ficha_tipo_cg');
+	Route::get('/profesional/buscar_ficha_tipo_cg', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoCG'])->name('profesional.buscar_ficha_tipo_cg');
+
 	/** RECETA AUDIFONOS */
     Route::post('/profesional/audifono/agregar', [App\Http\Controllers\EscritorioProfesional::class, 'agregarAudifono'])->name('profesional.registrar_audifono');
     Route::get('/profesional/audifono/ver', [App\Http\Controllers\EscritorioProfesional::class, 'verAudifono'])->name('profesional.ver_audifono');
