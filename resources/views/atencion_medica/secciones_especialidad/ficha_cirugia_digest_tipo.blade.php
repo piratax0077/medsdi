@@ -13,17 +13,17 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label class="floating-label-activo-sm">Nombre Ficha</label>
-                            <input class="form-control form-control-sm "name="registro_f_t_cd_nombre" id="registro_f_t_cd_nombre">
+                            <input class="form-control form-control-sm "name="registro_f_t_cg_nombre" id="registro_f_t_cg_nombre">
                         </div>
 
                         <div class="form-group col-md-6">
                             <label class="floating-label-activo-sm">Descripción</label>
-                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="registro_f_t_cd_descripcion" id="registro_f_t_orl_descripcion"></textarea>
+                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="registro_f_t_cg_descripcion" id="registro_f_t_cg_descripcion"></textarea>
                         </div>
 
                     </div>
                     <div class="form-row">
-                        <div class="col-md-12" id ="registro_f_t_cd_detalle" >
+                        <div class="col-md-12" id ="registro_f_t_cg_detalle" >
                             {{--  visualizar detalle de seccion detallado  --}}
                         </div>
                     </div>
@@ -35,7 +35,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-danger">Cancelar</button>
-                        <button type="button" class="btn btn-primary" onclick="guardar_tipo_ficha_cd();">Registrar</button>
+                        <!-- <button type="button" class="btn btn-primary" id="btn_modal_registrar_ficha_tipo_dg" onclick="guardar_tipo_ficha_cg();">Registrar</button> -->
+                        <button type="button" class="btn btn-primary" id="btn_modal_registrar_ficha_tipo_dg" >Registrar</button>
                     </div>
                 </div>
             </div>

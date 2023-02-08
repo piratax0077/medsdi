@@ -24,6 +24,8 @@ use App\Models\ExamenMedico;
 use App\Models\ExamenPPF;
 use App\Models\ficha_atencion;
 use App\Models\FichaAtencion;
+use App\Models\FichaCirugiaDigestivaTipo;
+use App\Models\FichaCirugiaGeneralTipo;
 use App\Models\FichaOtorrino;
 use App\Models\FichaOtorrinoRinof;
 use App\Models\FichaOtorrinoTipo;
@@ -237,9 +239,12 @@ class ficha_atencionController extends Controller
         $prevision = Prevision::all();
         $medicamento = Producto::all();
         $tipoExamen = TipoExamen::all();
-        $control_peso = ControlObesidad::where('id_paciente', $paciente->id)->where('id_profesional', $profesional->id)->get();
-        $hipertension = Hipertension::where('id_paciente', $paciente->id)->where('id_profesional', $profesional->id)->get();
-        $diabetes = Diabete::where('id_paciente', $paciente->id)->where('id_profesional', $profesional->id)->get();
+        // $control_peso = ControlObesidad::where('id_paciente', $paciente->id)->where('id_profesional', $profesional->id)->get();
+        $control_peso = ControlObesidad::where('id_paciente', $paciente->id)->get();
+        // $hipertension = Hipertension::where('id_paciente', $paciente->id)->where('id_profesional', $profesional->id)->get();
+        $hipertension = Hipertension::where('id_paciente', $paciente->id)->get();
+        // $diabetes = Diabete::where('id_paciente', $paciente->id)->where('id_profesional', $profesional->id)->get();
+        $diabetes = Diabete::where('id_paciente', $paciente->id)->get();
         $direccion = $paciente->Direccion()->first();
         if (!$direccion == null) {
             $ciudad = $direccion->Ciudad()->first();
@@ -347,8 +352,11 @@ class ficha_atencionController extends Controller
             {
                 // Cirugía digestiva general
                 $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_general';
-                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
-                $fichaTipo = '';
+                // $fichaTipo = FichaCirugiaDigestivaTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                // $fichaTipo = FichaCirugiaDigestivaTipo::get();
+                // var_dump($profesional->id);
+                // var_dump($fichaTipo);
+                // die();
                 $examen = '';
             }
             else if($profesional->id_sub_tipo_especialidad == 7)
@@ -363,8 +371,13 @@ class ficha_atencionController extends Controller
             {
                 // Cirugía digestiva
                 $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_general';
-                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
-                $fichaTipo = '';
+                $fichaTipo['cdg'] = FichaCirugiaDigestivaTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $fichaTipo['cg'] = FichaCirugiaGeneralTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                // $fichaTipo = '';
+                // $fichaTipo = FichaCirugiaDigestivaTipo::get();
+                // var_dump($profesional->id);
+                // var_dump($fichaTipo);
+                // die();
                 $examen = '';
             }
             else if($profesional->id_sub_tipo_especialidad == 12 )

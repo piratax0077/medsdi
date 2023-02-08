@@ -84,12 +84,12 @@
                                                     <div class="card-body-aten shadow-none">
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <div class="form-group col-md-12">
+                                                                <div class="form-group">
                                                                     <label class="floating-label-activo-sm">Carga Ficha Tipo</label>
-                                                                    <select class="form-control form-control-sm" id="select_ficha_tipo_ex_especialidad_cdg" onchange="cargar_info_ficha_tipo_orl('select_ficha_tipo_ex_especialidad_cdg','descripcion_ficha_tipo_ex_especialidad_cdg');">
+                                                                    <select class="form-control form-control-sm" id="select_ficha_tipo_ex_especialidad_cdg" onchange="cargar_info_ficha_tipo_cdg('select_ficha_tipo_ex_especialidad_cdg','descripcion_ficha_tipo_ex_especialidad_cdg');">
                                                                         <option value="">Seleccione</option>
-                                                                        @if(!empty($fichaTipo_ex_especialidad_cdg))
-                                                                            @foreach ($fichaTipo_ex_especialidad_cdg as $ft )
+                                                                        @if(!empty($fichaTipo['cdg']))
+                                                                            @foreach ($fichaTipo['cdg'] as $ft )
                                                                                 <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
                                                                             @endforeach
                                                                         @endif
@@ -100,17 +100,16 @@
                                                                 <span id="descripcion_ficha_tipo_ex_especialidad_cdg"></span>
                                                             </div>
                                                         </div>
-                                                        <div id="form-cda">
+                                                        <div id="form-cdg">
                                                             <div class="form-row mb-2">
                                                                 <div class="col-md-12">
                                                                     <h5 style="text-align:center;">Cirugía Digestiva</h5>
                                                                 </div>
                                                             </div>
                                                             <hr>
-                                                            <div class="form-row">
+                                                            <div class="row">
                                                                 <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
+                                                                        <div class="form-group">
                                                                             <label class="floating-label-activo-sm">Dolor</label>
                                                                             <select name="dolor_cdg" id="dolor_cdg" placeholder="Dolor" data-titulo="Dolor"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2)">
                                                                                 <option value="1" selected>No</option>
@@ -121,102 +120,89 @@
                                                                             <label class="floating-label-activo-sm">Dolor</label>
                                                                             <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Dolor" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_dolor_cdg" id="obs_dolor_cdg"></textarea>
                                                                         </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Otros Síntomas</label>
+                                                                        <select name="otros_sintomas_cdg" id="otros_sintomas_cdg" data-titulo="Otros Síntomas" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('otros_sintomas_cdg','div_detalle_cd_otros_sintomas','obs_otros_sintomas_cdg',2)">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_cd_otros_sintomas" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Otros Síntomas</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="obs. Otros Síntomas" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_otros_sintomas_cdg" id="obs_otros_sintomas_cdg"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Otros Síntomas</label>
-                                                                            <select name="otros_sintomas_cdg" id="otros_sintomas_cdg" data-titulo="Otros Síntomas" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('otros_sintomas_cdg','div_detalle_cd_otros_sintomas','obs_otros_sintomas_cdg',2)">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_cd_otros_sintomas" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Otros Síntomas</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="obs. Otros Síntomas" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_otros_sintomas_cdg" id="obs_otros_sintomas_cdg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Compromiso estado General</label>
+                                                                        <select name="ceg_cdg" id="ceg_cdg" data-titulo="Compromiso estado General" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ceg_cdg','div_detalle_ceg_cdg','obs_ceg_cdg',2)">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_ceg_cdg" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Compromiso estado General</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="obs. Compromiso estado General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ceg_cdg" id="obs_ceg_cdg"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Compromiso estado General</label>
-                                                                            <select name="ceg_cdg" id="ceg_cdg" data-titulo="Compromiso estado General" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ceg_cdg','div_detalle_ceg_cdg','obs_ceg_cdg',2)">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_ceg_cdg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Compromiso estado General</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="obs. Compromiso estado General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ceg_cdg" id="obs_ceg_cdg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Masas Palpables</label>
+                                                                        <select name="masa_cdg" id="masa_cdg" data-titulo="Masas Palpables" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('masa_cdg','div_detalle_masa_cdg','obs_masa_cdg',2);">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_masa_cdg" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Masas Palpables</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Masas Palpables" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_masa_cdg" id="obs_masa_cdg"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Masas Palpables</label>
-                                                                            <select name="masa_cdg" id="masa_cdg" data-titulo="Masas Palpables" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('masa_cdg','div_detalle_masa_cdg','obs_masa_cdg',2);">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_masa_cdg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Masas Palpables</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Masas Palpables" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_masa_cdg" id="obs_masa_cdg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Es Urgencia Qx.?</label>
+                                                                        <select name="urgencia_cdg" id="urgencia_cdg" data-titulo="Es Urgencia Qx" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cdg','div_detalle_urgencia_cdg','obs_urgencia_cdg',2);">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
                                                                     </div>
-
+                                                                    <div class="form-group col-md-12" id="div_detalle_urgencia_cdg" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Es Urgencia Qx</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Es Urgencia Qx" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_urgencia_cdg" id="obs_urgencia_cdg"></textarea>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Es Urgencia Qx.?</label>
-                                                                            <select name="urgencia_cdg" id="urgencia_cdg" data-titulo="Es Urgencia Qx" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cdg','div_detalle_urgencia_cdg','obs_urgencia_cdg',2);">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_urgencia_cdg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Es Urgencia Qx</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Es Urgencia Qx" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_urgencia_cdg" id="obs_urgencia_cdg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Sospecha de Organo</label>
+                                                                        <select name="so_cdg" id="so_cdg" data-titulo="Sospecha de Organo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('so_cdg','div_detale_sospecha__organo_cdg','obs_so_cdg',2);">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
                                                                     </div>
-
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Sospecha de Organo</label>
-                                                                            <select name="so_cdg" id="so_cdg" data-titulo="Sospecha de Organo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('so_cdg','div_detale_sospecha__organo_cdg','obs_so_cdg',2);">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detale_sospecha__organo_cdg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Sospecha de Organo</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Sospecha de Organo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_so_cdg" id="obs_so_cdg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group col-md-12" id="div_detale_sospecha__organo_cdg" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Sospecha de Organo</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Sospecha de Organo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_so_cdg" id="obs_so_cdg"></textarea>
                                                                     </div>
-
                                                                 </div>
                                                             </div>
-
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-12">
+                                                            <div class=" col-md-12">
+                                                                <div class="row">
                                                                     <label class="floating-label-activo-sm">Observaciones Estado General Paciente</label>
                                                                     <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Estado General Paciente" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_cdg" id="obs_egp_cdg"></textarea>
                                                                 </div>
                                                             </div>
                                                             <hr>
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-9" style="margin-bottom: 0;">
-                                                                    <label class="floating-label-activo-sm">Observaciones Examen Especialidad</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Especialidad" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_gen_ex_esp_cdg" id="obs_gen_ex_esp_cdg"></textarea>
+                                                            <div class="row">
+                                                                <div class="col-md-9">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Observaciones Examen Especialidad</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Especialidad" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_gen_ex_esp_cdg" id="obs_gen_ex_esp_cdg"></textarea>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="form-group col-md-3 align-middle" style="margin:auto">
-                                                                    <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo();"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
+                                                                <div class="col-md-3 align-middle" style="margin:auto">
+                                                                    <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo('form-cdg','registro_f_t_cg_detalle','cdg');"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -237,12 +223,12 @@
                                                     <div class="card-body-aten shadow-none">
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <div class="form-group col-md-12">
+                                                                <div class="form-group">
                                                                     <label class="floating-label-activo-sm">Carga Ficha Tipo</label>
-                                                                    <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad_cirugia" onchange="cargar_info_ficha_tipo_orl('select_ficha_tipo_especialidad_cirugia','descripcion_ficha_tipo_especialidad_cirugia');">
+                                                                    <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad_cirugia" onchange="cargar_info_ficha_tipo_cg('select_ficha_tipo_especialidad_cirugia','descripcion_ficha_tipo_especialidad_cirugia');">
                                                                         <option value="">Seleccione</option>
-                                                                        @if(!empty($fichaTipo_cg))
-                                                                            @foreach ($fichaTipo_cg as $ft )
+                                                                        @if(!empty($fichaTipo['cg']))
+                                                                            @foreach ($fichaTipo['cg'] as $ft )
                                                                                 <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
                                                                             @endforeach
                                                                         @endif
@@ -254,17 +240,16 @@
                                                             </div>
                                                         </div>
 
-                                                        <div id="form-cir_digest">
+                                                        <div id="form-cg">
                                                             <div class="form-row mb-2">
                                                                 <div class="col-md-12">
                                                                     <h5 style="text-align:center;">Cirugía General</h5>
                                                                 </div>
                                                             </div>
                                                             <hr>
-                                                            <div class="form-row">
+                                                            <div class="row">
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
+                                                                        <div class="form-group">
                                                                             <label class="floating-label-activo-sm">Organo</label>
                                                                             <select name="organo_cg" id="organo_cg" data-titulo="Organo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('organo_cg','div_detalle_organo','obs_organo_cg',2)">
                                                                                 <option value="1" selected>No</option>
@@ -275,11 +260,9 @@
                                                                             <label class="floating-label-activo-sm">Organo</label>
                                                                             <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Organo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_organo_cg" id="obs_organo_cg"></textarea>
                                                                         </div>
-                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
+                                                                        <div class="form-group">
                                                                             <label class="floating-label-activo-sm">Compromiso estado General</label>
                                                                             <select name="ceg_cg" id="ceg_cg" data-titulo="Compromiso estado General" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ceg_cg','div_detalle_ceg_cg','obs_ceg_cg',2)">
                                                                                 <option value="1" selected>No</option>
@@ -290,11 +273,9 @@
                                                                             <label class="floating-label-activo-sm">Compromiso estado General</label>
                                                                             <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Compromiso estado General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ceg_cg" id="obs_ceg_cg"></textarea>
                                                                         </div>
-                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
+                                                                        <div class="form-group">
                                                                             <label class="floating-label-activo-sm">Masas Palpables</label>
                                                                             <select name="masa_cg" id="masa_cg" data-titulo="Masas Palpables" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('masa_cg','div_detalle_masa_cg','obs_masas_cg',2);">
                                                                                 <option value="1" selected>No</option>
@@ -305,58 +286,53 @@
                                                                             <label class="floating-label-activo-sm">Masas Palpables</label>
                                                                             <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Masas Palpables" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_masas_cg" id="obs_masas_cg"></textarea>
                                                                         </div>
-                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
+                                                                        <div class="form-group">
                                                                             <label class="floating-label-activo-sm">Es Urgencia Qx.?</label>
-                                                                            <select name="urgencia_cdg" id="urgencia_cdg" data-titulo="Es Urgencia Qx.?" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cdg','div_detalle_urgencia_cdg','obs_urgencia_cdg',2);">
+                                                                            <select name="urgencia_cg" id="urgencia_cg" data-titulo="Es Urgencia Qx.?" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cg','div_detalle_urgencia_cg','obs_urgencia_cg',2);">
                                                                                 <option value="1" selected>No</option>
                                                                                 <option value="2">Si</option>
                                                                             </select>
                                                                         </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_urgencia_cdg" style="display:none">
+                                                                        <div class="form-group col-md-12" id="div_detalle_urgencia_cg" style="display:none">
                                                                             <label class="floating-label-activo-sm">Es Urgencia Qx</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Es Urgencia Qx.?" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_urgencia_cdg" id="obs_urgencia_cdg"></textarea>
+                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Es Urgencia Qx.?" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_urgencia_cg" id="obs_urgencia_cg"></textarea>
                                                                         </div>
-                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Sospecha de Organo</label>
-                                                                            <select name="so_cg" id="so_cg" data-titulo="Sospecha de Organo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('so_cg','div_detalle_so_cg','obs_so_cg',2);">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_so_cg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Sospecha de Organo</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Sospecha de Organo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_so_cg" id="obs_so_cg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Sospecha de Organo</label>
+                                                                        <select name="so_cg" id="so_cg" data-titulo="Sospecha de Organo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('so_cg','div_detalle_so_cg','obs_so_cg',2);">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_so_cg" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Sospecha de Organo</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Sospecha de Organo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_so_cg" id="obs_so_cg"></textarea>
                                                                     </div>
                                                                 </div>
                                                             </div>
-
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-12">
+                                                            <div class=" col-md-12">
+                                                                <div class="row">
                                                                     <label class="floating-label-activo-sm">Observaciones Estado General Paciente</label>
                                                                     <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Estado General Paciente" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_cg" id="obs_egp_cg"></textarea>
                                                                 </div>
                                                             </div>
                                                             <hr>
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-9" style="margin-bottom: 0;">
-                                                                    <label class="floating-label-activo-sm">Observaciones Examen Especialidad</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Especialidad" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_gen_ex_esp_cg" id="obs_gen_ex_esp_cg"></textarea>
+                                                            <div class="row">
+                                                                <div class="col-md-9">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Observaciones Examen Especialidad</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Especialidad" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_gen_ex_esp_cg" id="obs_gen_ex_esp_cg"></textarea>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="form-group col-md-3 align-middle" style="margin:auto">
-                                                                    <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo();"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
+                                                                <div class="col-md-3 align-middle" style="margin:auto">
+                                                                <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo('form-cg','registro_f_t_cg_detalle','cg');"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -540,7 +516,9 @@
                                             </div>
                                         </div>
                                         <!--Cierre: Formulario / Signos vitales y otros-->
-										<div class="col-sm-12 col-md-12">
+
+                                        <!-- control post qx -->
+                                        <div class="col-sm-12 col-md-12">
                                             <div class="card">
                                                 <div class="card-header" id="Control_cirugia">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#cirugia_general_pc" aria-expanded="false" aria-controls="cirugia_general_pc">
@@ -556,33 +534,26 @@
                                                                 </div>
                                                             </div>
                                                             <hr>
-                                                            <div class="form-row">
+                                                            <div class="row">
                                                                 <!-- Estado General -->
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12" >
-                                                                            <label class="floating-label-activo-sm">Estado General</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Estado General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="eg_cpq_cg" id="eg_cpq_cg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group" >
+                                                                        <label class="floating-label-activo-sm">Estado General</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Estado General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="eg_cpq_cg" id="eg_cpq_cg"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <!-- Herida Operatoria Curación -->
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Herida Operatoria Curación</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="ceg_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="hoc_cpa_cg" id="hoc_cpa_cg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Herida Operatoria Curación</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="ceg_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="hoc_cpa_cg" id="hoc_cpa_cg"></textarea>
                                                                     </div>
-
                                                                 </div>
                                                                 <!-- Masas Palpables -->
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Masas Palpables</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="masas_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="masas_cpq_cg" id="masas_cpq_cg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Masas Palpables</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="masas_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="masas_cpq_cg" id="masas_cpq_cg"></textarea>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -595,118 +566,13 @@
                                                             </div>
                                                             <hr>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- cierre control post qx -->
 
-                                        <!--ENFERMO CRÓNICO O GES-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="row">
-                                                {{-- CRONICO --}}
-                                                <div class="col-md-4 mx-auto">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="form-group">
-                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                    <input type="checkbox" onchange="es_cronico();" id="enf_cronico" name="enf_cronico" data-toggle="modal" data-target="#form_enfermo_cronico" value="{!! old('enf_cronico') !!}">
-                                                                    <label for="enf_cronico" class="cr"></label>
-                                                                </div>
-                                                                <label>¿Es enfermo crónico?</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row " hidden>
-                                                        <div class="col-sm-12">
-                                                            <div class="alert alert-warning mx-auto" role="alert">
-                                                                <table class="table table-borderless mt-0 mb-0">
-                                                                    <tbody>
-                                                                        <tr id="tr_obesidad">
-                                                                            <td class="align-middle pb-1 pt-1">Obesidad</td>
-                                                                            <td class="align-middle pb-1 pt-1">
-                                                                                <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                                                                    <i class="feather icon-x"></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr id="tr_diabetes">
-                                                                            <td class="align-middle pb-1 pt-1">Diabetes</td>
-                                                                            <td class="align-middle pb-1 pt-1">
-                                                                                <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                                                                    <i class="feather icon-x"></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr id="tr_hipertesion">
-                                                                            <td class="align-middle pb-1 pt-1">Hipertensión</td>
-                                                                            <td class="align-middle pb-1 pt-1">
-                                                                                <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                                                                    <i class="feather icon-x"></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                {{-- GES --}}
-                                                <div class="col-md-4">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="form-group">
-                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                    <input type="checkbox" id="modal_ges" name="modal_ges" value="{!! old('modal_ges') !!}">
-                                                                    {{-- <label for="modal_ges" class="cr" data-toggle="modal"
-                                                                            data-target="#form_ges"></label> --}}
-                                                                    <label for="modal_ges" class="cr"></label>
-                                                                </div>
-                                                                <label>Ges</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row" hidden>
-                                                        <div class="alert alert-warning mx-auto my-0" role="alert">
-                                                            <table class="table table-borderless mt-0 mb-0">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="align-middle pb-1 pt-1">Paciente GES<br>PS.02
-                                                                        </td>
-                                                                        <td class="align-middle pb-1 pt-1">
-                                                                            <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                                                                <i class="feather icon-x"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="row">
-                                                        <div class="form-group">
-                                                            <div class="switch switch-success d-inline m-r-10">
-                                                                <input type="checkbox" id="confidencial" name="confidencial" value="{!! old('confidencial') !!}" />
-                                                                <label for="confidencial" class="cr"></label>
-                                                            </div>
-                                                            <label>Confidencial</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row" id="confidencial_descripcion" style="display: none">
-                                                        <div class="col-sm-12">
-                                                            <div class="alert alert-warning mx-auto" role="alert">
-                                                                <p class="text-dark f-14 pb-1 pt-1 mt-0 mb-0">Este registro
-                                                                    de atención médica es confidencial
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
                                         <hr>
 
                                         <!--Diagnóstico-->
@@ -1307,12 +1173,6 @@
                 var equivalente = $('#'+value);
                 equivalente.val(actual.val());
             });
-            {{--
-            let actual = $('#'+input);
-            let equivalente = $('#'+$('#'+input).attr('data-input_igual'));
-
-            equivalente.val(actual.val());
-            --}}
         }
 
         function evaluar_para_carga_detalle(select, div, input, valor)
@@ -1325,17 +1185,30 @@
             }
         }
 
-        function abrir_modal_guardar_tipo()
+        function abrir_modal_guardar_tipo(div_id_data, div_id_detalle,tipo)
         {
-            $('#modal_registrar_ficha_tipo_orl').modal('show');
-            cargarSeccion('registro_f_t_orl_detalle');
+            if(tipo == 'cdg')
+            {
+                $('#btn_modal_registrar_ficha_tipo_dg').click(function(){
+                    guardar_tipo_ficha_cdg();
+                });
+            }
+            else if(tipo == 'cg')
+            {
+                $('#btn_modal_registrar_ficha_tipo_dg').click(function(){
+                    guardar_tipo_ficha_cg();
+                });
+            }
+            $('#modal_registrar_ficha_tipo_dg').modal('show');
+
+            cargarSeccion(div_id_detalle,div_id_data);
         }
 
-        function cargarSeccion(div_destino)
+        function cargarSeccion(div_destino, div_data)
         {
-            {{--  var tipo = $('#'+select+'').val();  --}}
+            // var tipo = $('#'+select+'').val();
             $('#'+div_destino).html('');
-            $('#form-otorrino').find('select,textarea').each(function(key, elemento){
+            $('#'+div_data).find('select,textarea').each(function(key, elemento){
                 html ='';
                 html +='<div class="row" style="margin-top:10px;">';
                 if($(elemento).prop('nodeName') == 'SELECT')
@@ -1351,7 +1224,7 @@
                 }
                 else if($(elemento).prop('nodeName') == 'TEXTAREA')
                 {
-                    html +='<div class="col-md-4">Detalle</div>';
+                    html +='<div class="col-md-4">'+$(elemento).data('titulo')+'</div>';
                     html +='<div class="col-md-6">';
                     html +='    <textarea class="form-control caja-texto form-control-sm '+$(elemento).attr('id')+'_editar" style="display:none;" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_'+$(elemento).attr('id')+'" id="observaciones_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</textarea>';
                     html +='    <label class="'+$(elemento).attr('id')+'_mostrar" id="label_observacion_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</label>';
@@ -1373,12 +1246,12 @@
             $('#'+label).html( $('#'+textarea).val() );
         }
 
-        function guardar_tipo_ficha_otorrino()
+        function guardar_tipo_ficha_cdg()
         {
-            var registro_f_t_orl_nombre = $('#registro_f_t_orl_nombre').val();
-            var registro_f_t_orl_descripcion = $('#registro_f_t_orl_descripcion').val();
+            var registro_f_t_cg_nombre = $('#registro_f_t_cg_nombre').val();
+            var registro_f_t_cg_descripcion = $('#registro_f_t_cg_descripcion').val();
             var _token = CSRF_TOKEN;
-            if(registro_f_t_orl_nombre == ''){
+            if(registro_f_t_cg_nombre == ''){
                 swal({
                         title: "Problema al Registrar Tipo Ficha.\n Campo requedido Nombre",
                         icon: "warning",
@@ -1387,7 +1260,7 @@
                     });
                     return false;
             }
-            if(registro_f_t_orl_descripcion == ''){
+            if(registro_f_t_cg_descripcion == ''){
                 swal({
                         title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
                         icon: "warning",
@@ -1399,10 +1272,10 @@
 
 
             var data = [];
-            data.registro_f_t_orl_nombre = registro_f_t_orl_nombre;
-            data.registro_f_t_orl_descripcion = registro_f_t_orl_descripcion;
+            data.registro_f_t_cg_nombre = registro_f_t_cg_nombre;
+            data.registro_f_t_cg_descripcion = registro_f_t_cg_descripcion;
 
-            $('#registro_f_t_orl_detalle').find('input,textarea').each(function(key, elemento){
+            $('#registro_f_t_cg_detalle').find('input,textarea').each(function(key, elemento){
                 {{--  console.log($(elemento).attr('id'));  --}}
                 {{--  console.log($(elemento).val());  --}}
                 {{--  console.log($(elemento).prop('nodeName'));  --}}
@@ -1413,48 +1286,33 @@
             });
 
             {{--  console.log(data);  --}}
-            url = "{{ route('profesional.ficha_tipo_otorrino') }}";
+            url = "{{ route('profesional.ficha_tipo_cdg') }}";
             $.ajax({
 
                 url: url,
                 type: "POST",
                 data: {
                     _token: _token,
-                    id_profesional : $('#id_profesional').val(),
-                    modal_agregar_tipo_apreciacion_auditiva :  data.modal_agregar_tipo_apreciacion_auditiva,
-                    modal_agregar_tipo_apreciacion_resp :  data.modal_agregar_tipo_apreciacion_resp,
-                    modal_agregar_tipo_disfonia :  data.modal_agregar_tipo_disfonia,
-                    modal_agregar_tipo_ex_boca :  data.modal_agregar_tipo_ex_boca,
-                    modal_agregar_tipo_examen_bio_od :  data.modal_agregar_tipo_examen_bio_od,
-                    modal_agregar_tipo_examen_bio_oi :  data.modal_agregar_tipo_examen_bio_oi,
-                    modal_agregar_tipo_examen_faringe :  data.modal_agregar_tipo_examen_faringe,
-                    modal_agregar_tipo_examen_fnd :  data.modal_agregar_tipo_examen_fnd,
-                    modal_agregar_tipo_examen_fni :  data.modal_agregar_tipo_examen_fni,
-                    modal_agregar_tipo_examen_laringe :  data.modal_agregar_tipo_examen_laringe,
-                    modal_agregar_tipo_examen_od :  data.modal_agregar_tipo_examen_od,
-                    modal_agregar_tipo_examen_oi :  data.modal_agregar_tipo_examen_oi,
-                    modal_agregar_tipo_nariz_general :  data.modal_agregar_tipo_nariz_general,
-                    modal_agregar_tipo_usa_audifono :  data.modal_agregar_tipo_usa_audifono,
-                    observaciones_aprec_auditiva_def :  data.observaciones_aprec_auditiva_def,
-                    observaciones_aprec_resp_def :  data.observaciones_aprec_resp_def,
-                    observaciones_audifono :  data.observaciones_audifono,
-                    observaciones_det_disfonia :  data.observaciones_det_disfonia,
-                    observaciones_det_nariz_general :  data.observaciones_det_nariz_general,
-                    observaciones_detalle_ex_boca :  data.observaciones_detalle_ex_boca,
-                    observaciones_ex_farige_anormal :  data.observaciones_ex_farige_anormal,
-                    observaciones_ex_fnd_anormal :  data.observaciones_ex_fnd_anormal,
-                    observaciones_ex_fni_anormal :  data.observaciones_ex_fni_anormal,
-                    observaciones_ex_larige_anormal :  data.observaciones_ex_larige_anormal,
-                    observaciones_ex_od_anormal :  data.observaciones_ex_od_anormal,
-                    observaciones_ex_oi_anormal :  data.observaciones_ex_oi_anormal,
-                    observaciones_obs_ex_biom :  data.observaciones_obs_ex_biom,
-                    observaciones_obs_ex_nasal :  data.observaciones_obs_ex_nasal,
-                    observaciones_obs_ex_oidos :  data.observaciones_obs_ex_oidos,
-                    observaciones_obs_ex_orl :  data.observaciones_obs_ex_orl,
-                    observaciones_obs_examen_bio_od :  data.observaciones_obs_examen_bio_od,
-                    observaciones_obs_examen_bio_oi :  data.observaciones_obs_examen_bio_oi,
-                    registro_f_t_orl_descripcion :  data.registro_f_t_orl_descripcion,
-                    registro_f_t_orl_nombre :  data.registro_f_t_orl_nombre,
+                    id_profesional : $('#id_profesional_fc').val(),
+                    ind_esp_cirugia : '',
+                    nombre : data.registro_f_t_cg_nombre,
+                    descripcion : data.registro_f_t_cg_descripcion,
+                    dolor_cdg : data.modal_agregar_tipo_dolor_cdg,
+                    obs_dolor_cdg : data.observaciones_obs_dolor_cdg,
+                    dolor_cdg : data.modal_agregar_tipo_dolor_cdg,
+                    obs_dolor_cdg : data.observaciones_obs_dolor_cdg,
+                    otros_sintomas_cdg : data.modal_agregar_tipo_otros_sintomas_cdg,
+                    obs_otros_sintomas_cdg : data.observaciones_obs_otros_sintomas_cdg,
+                    ceg_cdg : data.modal_agregar_tipo_ceg_cdg,
+                    obs_ceg_cdg : data.observaciones_obs_ceg_cdg,
+                    masa_cdg : data.modal_agregar_tipo_masa_cdg,
+                    obs_masa_cdg : data.observaciones_obs_masa_cdg,
+                    urgencia_cdg : data.modal_agregar_tipo_urgencia_cdg,
+                    obs_urgencia_cdg : data.observaciones_obs_urgencia_cdg,
+                    so_cdg : data.modal_agregar_tipo_so_cdg,
+                    obs_so_cdg : data.observaciones_obs_so_cdg,
+                    obs_egp_cdg : data.observaciones_obs_egp_cdg,
+                    obs_gen_ex_esp_cdg : data.observaciones_obs_gen_ex_esp_cdg,
                 },
             })
             .done(function(data)
@@ -1464,7 +1322,7 @@
                 {{--  console.log('-----------------------');  --}}
                 if(data.estado == 1)
                 {
-                    $('#modal_registrar_ficha_tipo_orl').modal('hide');
+                    $('#modal_registrar_ficha_tipo_dg').modal('hide');
                     swal({
                         title: "Tipo Ficha Registrado",
                         icon: "success",
@@ -1489,13 +1347,110 @@
 
         }
 
-        function cargar_info_ficha_tipo_orl(select, div_descripcion)
+        function guardar_tipo_ficha_cg()
+        {
+            var registro_f_t_cg_nombre = $('#registro_f_t_cg_nombre').val();
+            var registro_f_t_cg_descripcion = $('#registro_f_t_cg_descripcion').val();
+            var _token = CSRF_TOKEN;
+            if(registro_f_t_cg_nombre == ''){
+                swal({
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Nombre",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+            }
+            if(registro_f_t_cg_descripcion == ''){
+                swal({
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+            }
+
+
+            var data = [];
+            data.registro_f_t_cg_nombre = registro_f_t_cg_nombre;
+            data.registro_f_t_cg_descripcion = registro_f_t_cg_descripcion;
+
+            $('#registro_f_t_cg_detalle').find('input,textarea').each(function(key, elemento){
+                {{--  console.log($(elemento).attr('id'));  --}}
+                {{--  console.log($(elemento).val());  --}}
+                {{--  console.log($(elemento).prop('nodeName'));  --}}
+                {{--  console.log('*******');  --}}
+
+                data[$(elemento).attr('id')] = $(elemento).val();
+
+            });
+
+            {{--  console.log(data);  --}}
+            url = "{{ route('profesional.ficha_tipo_cg') }}";
+            $.ajax({
+
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id_profesional : $('#id_profesional_fc').val(),
+                    ind_esp_cirugia : '',
+                    nombre : data.registro_f_t_cg_nombre,
+                    descripcion : data.registro_f_t_cg_descripcion,
+                    organo_cg : data.modal_agregar_tipo_organo_cg,
+                    obs_organo_cg : data.observaciones_obs_organo_cg,
+                    ceg_cg : data.modal_agregar_tipo_ceg_cg,
+                    obs_ceg_cg : data.observaciones_obs_ceg_cg,
+                    masa_cg : data.modal_agregar_tipo_masa_cg,
+                    obs_masas_cg : data.observaciones_obs_masas_cg,
+                    urgencia_cg : data.modal_agregar_tipo_urgencia_cg,
+                    obs_urgencia_cg : data.observaciones_obs_urgencia_cg,
+                    so_cg : data.modal_agregar_tipo_so_cg,
+                    obs_so_cg : data.observaciones_obs_so_cg,
+                    obs_egp_cg : data.observaciones_obs_egp_cg,
+                    obs_gen_ex_esp_cg : data.observaciones_obs_gen_ex_esp_cg,
+                },
+            })
+            .done(function(data)
+            {
+                {{--  console.log('-----------------------');  --}}
+                {{--  console.log(data);  --}}
+                {{--  console.log('-----------------------');  --}}
+                if(data.estado == 1)
+                {
+                    $('#modal_registrar_ficha_tipo_dg').modal('hide');
+                    swal({
+                        title: "Tipo Ficha Registrado",
+                        icon: "success",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Registrar Tipo Ficha.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+        function cargar_info_ficha_tipo_cdg(select, div_descripcion)
         {
             let id_ft = $('#'+select).val();
             if(id_ft == '')
             {
                 $('#'+div_descripcion).html('');
-                $('#form-otorrino').find('select,textarea').each(function(key, elemento){
+                $('#form-cdg').find('select,textarea').each(function(key, elemento){
                     if($(elemento).prop('nodeName') == 'SELECT')
                     {
                         $(elemento).val(0);
@@ -1506,31 +1461,24 @@
                     }
                 });
 
-                evaluar_para_carga_detalle('usa_audifono','div_detalle_usa_audifono','audifono',5);
-                evaluar_para_carga_detalle('apreciacion_auditiva','div_detalle_apreciacion_auditiva','aprec_auditiva_def',2);
-                evaluar_para_carga_detalle('examen_oi','div_detalle_examen_oi','ex_oi_anormal',2);
-                evaluar_para_carga_detalle('examen_od','div_detalle_examen_od','ex_od_anormal',2);
-                evaluar_para_carga_detalle('examen_bio_oi','div_obs_examen_bio_oi','obs_examen_bio_oi',2);
-                evaluar_para_carga_detalle('examen_bio_od','div_obs_examen_bio_od','obs_examen_bio_od',2);
-                evaluar_para_carga_detalle('nariz_general','div_detalle_nariz_gen','det_nariz_general',2);
-                evaluar_para_carga_detalle('apreciacion_resp','div_detalle_nariz_resp','aprec_resp_def',2);
-                evaluar_para_carga_detalle('examen_fni','div_detalle_examen_fni','ex_fni_anormal',2);
-                evaluar_para_carga_detalle('examen_fnd','div_detalle_examen_fnd','ex_fnd_anormal',2);
-                evaluar_para_carga_detalle('disfonia','div_disfonia','det_disfonia',2);
-                evaluar_para_carga_detalle('ex_boca','div_detalle_ex_boca','detalle_ex_boca',2);
-                evaluar_para_carga_detalle('examen_faringe','div_detalle_examen_faringe','ex_farige_anormal',2);
-                evaluar_para_carga_detalle('examen_laringe','div_detalle_examen_laringe','ex_larige_anormal',2);
+                evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2);
+                evaluar_para_carga_detalle('otros_sintomas_cdg','div_detalle_cd_otros_sintomas','obs_otros_sintomas_cdg',2);
+                evaluar_para_carga_detalle('ceg_cdg','div_detalle_ceg_cdg','obs_ceg_cdg',2);
+                evaluar_para_carga_detalle('masa_cdg','div_detalle_masa_cdg','obs_masa_cdg',2);
+                evaluar_para_carga_detalle('urgencia_cdg','div_detalle_urgencia_cdg','obs_urgencia_cdg',2);
+                evaluar_para_carga_detalle('so_cdg','div_detale_sospecha__organo_cdg','obs_so_cdg',2);
+
                 return false;
             }
             $('#'+div_descripcion).html($('#'+select+' option:selected').attr('data-descripcion'));
 
-            url = "{{ route('profesional.buscar_ficha_tipo_otorrino') }}";
+            url = "{{ route('profesional.buscar_ficha_tipo_cdg') }}";
             $.ajax({
 
                 url: url,
                 type: "GET",
                 data: {
-                    id_profesional : $('#id_profesional').val(),
+                    id_profesional : $('#id_profesional_fc').val(),
                     id_ficha_tipo :  id_ft,
                 },
             })
@@ -1546,25 +1494,90 @@
                         {{--  console.log(index);  --}}
                         {{--  console.log(value);  --}}
                         {{--  console.log($('#'+index));  --}}
-                        if(index == 'id_usa_audifono')
-                            index = 'usa_audifono';
 
                         $('#'+index).val(value);
                     });
-                    evaluar_para_carga_detalle('usa_audifono','div_detalle_usa_audifono','audifono',5);
-                    evaluar_para_carga_detalle('apreciacion_auditiva','div_detalle_apreciacion_auditiva','aprec_auditiva_def',2);
-                    evaluar_para_carga_detalle('examen_oi','div_detalle_examen_oi','ex_oi_anormal',2);
-                    evaluar_para_carga_detalle('examen_od','div_detalle_examen_od','ex_od_anormal',2);
-                    evaluar_para_carga_detalle('examen_bio_oi','div_obs_examen_bio_oi','obs_examen_bio_oi',2);
-                    evaluar_para_carga_detalle('examen_bio_od','div_obs_examen_bio_od','obs_examen_bio_od',2);
-                    evaluar_para_carga_detalle('nariz_general','div_detalle_nariz_gen','det_nariz_general',2);
-                    evaluar_para_carga_detalle('apreciacion_resp','div_detalle_nariz_resp','aprec_resp_def',2);
-                    evaluar_para_carga_detalle('examen_fni','div_detalle_examen_fni','ex_fni_anormal',2);
-                    evaluar_para_carga_detalle('examen_fnd','div_detalle_examen_fnd','ex_fnd_anormal',2);
-                    evaluar_para_carga_detalle('disfonia','div_disfonia','det_disfonia',2);
-                    evaluar_para_carga_detalle('ex_boca','div_detalle_ex_boca','detalle_ex_boca',2);
-                    evaluar_para_carga_detalle('examen_faringe','div_detalle_examen_faringe','ex_farige_anormal',2);
-                    evaluar_para_carga_detalle('examen_laringe','div_detalle_examen_laringe','ex_larige_anormal',2);
+                    evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2);
+                    evaluar_para_carga_detalle('otros_sintomas_cdg','div_detalle_cd_otros_sintomas','obs_otros_sintomas_cdg',2);
+                    evaluar_para_carga_detalle('ceg_cdg','div_detalle_ceg_cdg','obs_ceg_cdg',2);
+                    evaluar_para_carga_detalle('masa_cdg','div_detalle_masa_cdg','obs_masa_cdg',2);
+                    evaluar_para_carga_detalle('urgencia_cdg','div_detalle_urgencia_cdg','obs_urgencia_cdg',2);
+                    evaluar_para_carga_detalle('so_cdg','div_detale_sospecha__organo_cdg','obs_so_cdg',2);
+
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Cargar Tipo Ficha.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        function cargar_info_ficha_tipo_cg(select, div_descripcion)
+        {
+            let id_ft = $('#'+select).val();
+            if(id_ft == '')
+            {
+                $('#'+div_descripcion).html('');
+                $('#form-cg').find('select,textarea').each(function(key, elemento){
+                    if($(elemento).prop('nodeName') == 'SELECT')
+                    {
+                        $(elemento).val(1);
+                    }
+                    else
+                    {
+                        $(elemento).val('');
+                    }
+                });
+
+                evaluar_para_carga_detalle('organo_cg','div_detalle_organo','obs_organo_cg',2);
+                evaluar_para_carga_detalle('ceg_cg','div_detalle_ceg_cg','obs_ceg_cg',2);
+                evaluar_para_carga_detalle('masa_cg','div_detalle_masa_cg','obs_masas_cg',2);
+                evaluar_para_carga_detalle('urgencia_cg','div_detalle_urgencia_cg','obs_urgencia_cg',2);
+                evaluar_para_carga_detalle('so_cg','div_detalle_so_cg','obs_so_cg',2);
+
+                return false;
+            }
+            $('#'+div_descripcion).html($('#'+select+' option:selected').attr('data-descripcion'));
+
+            url = "{{ route('profesional.buscar_ficha_tipo_cg') }}";
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {
+                    id_profesional : $('#id_profesional_fc').val(),
+                    id_ficha_tipo :  id_ft,
+                },
+            })
+            .done(function(data)
+            {
+                {{--  console.log('-----------------------');  --}}
+                {{--  console.log(data);  --}}
+                {{--  console.log('-----------------------');  --}}
+                if(data.estado == 1)
+                {
+                    $.each(data.registros, function(index, value)
+                    {
+                        {{--  console.log(index);  --}}
+                        {{--  console.log(value);  --}}
+                        {{--  console.log($('#'+index));  --}}
+
+                        $('#'+index).val(value);
+                    });
+                    evaluar_para_carga_detalle('organo_cg','div_detalle_organo','obs_organo_cg',2);
+                    evaluar_para_carga_detalle('ceg_cg','div_detalle_ceg_cg','obs_ceg_cg',2);
+                    evaluar_para_carga_detalle('masa_cg','div_detalle_masa_cg','obs_masas_cg',2);
+                    evaluar_para_carga_detalle('urgencia_cg','div_detalle_urgencia_cg','obs_urgencia_cg',2);
+                    evaluar_para_carga_detalle('so_cg','div_detalle_so_cg','obs_so_cg',2);
 
                 }
                 else{
@@ -1633,12 +1646,14 @@
 				$('#m_biopsia_cir').modal('show');
 			}
         }
+
         function biopsia_endo_colon() {
             if($('#biopsia_colon').prop('checked'))
 			{
 				$('#m_biopsia_cir').modal('show');
 			}
         }
+
 		function muestra_hp_abrir_div()
 		{
 			if($('#muestra_hp').prop('checked'))
@@ -1755,8 +1770,6 @@
             },
         };
 
-
-
         var lista_imagenes = [];
         function cargar_lista_imagenes()
         {
@@ -1784,8 +1797,7 @@
 
 
         }
-
-        /** MANEJO DE IMAGENES */
+        /** CIERRE MANEJO DE IMAGENES */
 
         function cargar_profesional(rut, input_nombre, input_id, div_solicitar)
         {
@@ -1884,6 +1896,8 @@
                 $('#'+input_solitado_por).val();
             }
         }
+
+
     </script>
 @endsection
 
