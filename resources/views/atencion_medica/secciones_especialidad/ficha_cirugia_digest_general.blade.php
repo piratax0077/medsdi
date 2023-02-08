@@ -71,7 +71,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
@@ -84,9 +83,9 @@
                                                     <div class="card-body-aten shadow-none">
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <div class="form-group col-md-12">
+                                                                <div class="form-group">
                                                                     <label class="floating-label-activo-sm">Carga Ficha Tipo</label>
-                                                                    <select class="form-control form-control-sm" id="select_ficha_tipo_ex_especialidad_cdg" onchange="cargar_info_ficha_tipo_orl('select_ficha_tipo_ex_especialidad_cdg','descripcion_ficha_tipo_ex_especialidad_cdg');">
+                                                                    <select class="form-control form-control-sm" id="select_ficha_tipo_ex_especialidad_cdg" onchange="cargar_info_ficha_tipo_cdg('select_ficha_tipo_ex_especialidad_cdg','descripcion_ficha_tipo_ex_especialidad_cdg');">
                                                                         <option value="">Seleccione</option>
                                                                         @if(!empty($fichaTipo_ex_especialidad_cdg))
                                                                             @foreach ($fichaTipo_ex_especialidad_cdg as $ft )
@@ -107,116 +106,102 @@
                                                                 </div>
                                                             </div>
                                                             <hr>
-                                                            <div class="form-row">
+                                                            <div class="row">
                                                                 <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Dolor</label>
-                                                                            <select name="dolor_cdg" id="dolor_cdg" placeholder="Dolor" data-titulo="Dolor"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2)">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_dolor" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Dolor</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Dolor" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_dolor_cdg" id="obs_dolor_cdg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Dolor</label>
+                                                                        <select name="dolor_cdg" id="dolor_cdg" placeholder="Dolor" data-titulo="Dolor"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2)">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_dolor" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Dolor</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Dolor" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_dolor_cdg" id="obs_dolor_cdg"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Otros Síntomas</label>
-                                                                            <select name="otros_sintomas_cdg" id="otros_sintomas_cdg" data-titulo="Otros Síntomas" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('otros_sintomas_cdg','div_detalle_cd_otros_sintomas','obs_otros_sintomas_cdg',2)">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_cd_otros_sintomas" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Otros Síntomas</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="obs. Otros Síntomas" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_otros_sintomas_cdg" id="obs_otros_sintomas_cdg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Otros Síntomas</label>
+                                                                        <select name="otros_sintomas_cdg" id="otros_sintomas_cdg" data-titulo="Otros Síntomas" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('otros_sintomas_cdg','div_detalle_cd_otros_sintomas','obs_otros_sintomas_cdg',2)">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_cd_otros_sintomas" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Otros Síntomas</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="obs. Otros Síntomas" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_otros_sintomas_cdg" id="obs_otros_sintomas_cdg"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Compromiso estado General</label>
-                                                                            <select name="ceg_cdg" id="ceg_cdg" data-titulo="Compromiso estado General" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ceg_cdg','div_detalle_ceg_cdg','obs_ceg_cdg',2)">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_ceg_cdg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Compromiso estado General</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="obs. Compromiso estado General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ceg_cdg" id="obs_ceg_cdg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Compromiso estado General</label>
+                                                                        <select name="ceg_cdg" id="ceg_cdg" data-titulo="Compromiso estado General" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ceg_cdg','div_detalle_ceg_cdg','obs_ceg_cdg',2)">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_ceg_cdg" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Compromiso estado General</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="obs. Compromiso estado General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ceg_cdg" id="obs_ceg_cdg"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Masas Palpables</label>
-                                                                            <select name="masa_cdg" id="masa_cdg" data-titulo="Masas Palpables" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('masa_cdg','div_detalle_masa_cdg','obs_masa_cdg',2);">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_masa_cdg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Masas Palpables</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Masas Palpables" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_masa_cdg" id="obs_masa_cdg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Masas Palpables</label>
+                                                                        <select name="masa_cdg" id="masa_cdg" data-titulo="Masas Palpables" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('masa_cdg','div_detalle_masa_cdg','obs_masa_cdg',2);">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
                                                                     </div>
-
+                                                                    <div class="form-group col-md-12" id="div_detalle_masa_cdg" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Masas Palpables</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Masas Palpables" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_masa_cdg" id="obs_masa_cdg"></textarea>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Es Urgencia Qx.?</label>
-                                                                            <select name="urgencia_cdg" id="urgencia_cdg" data-titulo="Es Urgencia Qx" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cdg','div_detalle_urgencia_cdg','obs_urgencia_cdg',2);">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_urgencia_cdg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Es Urgencia Qx</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Es Urgencia Qx" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_urgencia_cdg" id="obs_urgencia_cdg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Es Urgencia Qx.?</label>
+                                                                        <select name="urgencia_cdg" id="urgencia_cdg" data-titulo="Es Urgencia Qx" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cdg','div_detalle_urgencia_cdg','obs_urgencia_cdg',2);">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
                                                                     </div>
-
+                                                                    <div class="form-group col-md-12" id="div_detalle_urgencia_cdg" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Es Urgencia Qx</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Es Urgencia Qx" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_urgencia_cdg" id="obs_urgencia_cdg"></textarea>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Sospecha de Organo</label>
-                                                                            <select name="so_cdg" id="so_cdg" data-titulo="Sospecha de Organo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('so_cdg','div_detale_sospecha__organo_cdg','obs_so_cdg',2);">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detale_sospecha__organo_cdg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Sospecha de Organo</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Sospecha de Organo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_so_cdg" id="obs_so_cdg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Sospecha de Organo</label>
+                                                                        <select name="so_cdg" id="so_cdg" data-titulo="Sospecha de Organo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('so_cdg','div_detale_sospecha__organo_cdg','obs_so_cdg',2);">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
                                                                     </div>
-
+                                                                    <div class="form-group col-md-12" id="div_detale_sospecha__organo_cdg" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Sospecha de Organo</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Sospecha de Organo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_so_cdg" id="obs_so_cdg"></textarea>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-12">
+                                                            <div class=" col-md-12">
+                                                                <div class="row">
                                                                     <label class="floating-label-activo-sm">Observaciones Estado General Paciente</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Estado General Paciente" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_cdg" id="obs_egp_cdg"></textarea>
+                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Estado General Paciente" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_cg" id="obs_egp_cg"></textarea>
                                                                 </div>
                                                             </div>
                                                             <hr>
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-9" style="margin-bottom: 0;">
-                                                                    <label class="floating-label-activo-sm">Observaciones Examen Especialidad</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Especialidad" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_gen_ex_esp_cdg" id="obs_gen_ex_esp_cdg"></textarea>
+                                                            <div class="row">
+                                                                <div class="col-md-9">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Observaciones Examen Especialidad</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Especialidad" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_gen_ex_esp_cg" id="obs_gen_ex_esp_cg"></textarea>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="form-group col-md-3 align-middle" style="margin:auto">
-                                                                    <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo();"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
+                                                                <div class="col-md-3 align-middle" style="margin:auto">
+                                                                    <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo('form-cda','registro_f_t_cg_detalle');"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -224,7 +209,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
 										<!--cirugia general-->
 										<div class="col-sm-12 col-md-12">
                                             <div class="card">
@@ -237,7 +221,7 @@
                                                     <div class="card-body-aten shadow-none">
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <div class="form-group col-md-12">
+                                                                <div class="form-group">
                                                                     <label class="floating-label-activo-sm">Carga Ficha Tipo</label>
                                                                     <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad_cirugia" onchange="cargar_info_ficha_tipo_orl('select_ficha_tipo_especialidad_cirugia','descripcion_ficha_tipo_especialidad_cirugia');">
                                                                         <option value="">Seleccione</option>
@@ -261,10 +245,9 @@
                                                                 </div>
                                                             </div>
                                                             <hr>
-                                                            <div class="form-row">
+                                                            <div class="row">
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
+                                                                        <div class="form-group">
                                                                             <label class="floating-label-activo-sm">Organo</label>
                                                                             <select name="organo_cg" id="organo_cg" data-titulo="Organo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('organo_cg','div_detalle_organo','obs_organo_cg',2)">
                                                                                 <option value="1" selected>No</option>
@@ -275,11 +258,9 @@
                                                                             <label class="floating-label-activo-sm">Organo</label>
                                                                             <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Organo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_organo_cg" id="obs_organo_cg"></textarea>
                                                                         </div>
-                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
+                                                                        <div class="form-group">
                                                                             <label class="floating-label-activo-sm">Compromiso estado General</label>
                                                                             <select name="ceg_cg" id="ceg_cg" data-titulo="Compromiso estado General" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ceg_cg','div_detalle_ceg_cg','obs_ceg_cg',2)">
                                                                                 <option value="1" selected>No</option>
@@ -290,11 +271,9 @@
                                                                             <label class="floating-label-activo-sm">Compromiso estado General</label>
                                                                             <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Compromiso estado General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ceg_cg" id="obs_ceg_cg"></textarea>
                                                                         </div>
-                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
+                                                                        <div class="form-group">
                                                                             <label class="floating-label-activo-sm">Masas Palpables</label>
                                                                             <select name="masa_cg" id="masa_cg" data-titulo="Masas Palpables" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('masa_cg','div_detalle_masa_cg','obs_masas_cg',2);">
                                                                                 <option value="1" selected>No</option>
@@ -305,11 +284,9 @@
                                                                             <label class="floating-label-activo-sm">Masas Palpables</label>
                                                                             <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Masas Palpables" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_masas_cg" id="obs_masas_cg"></textarea>
                                                                         </div>
-                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
+                                                                        <div class="form-group">
                                                                             <label class="floating-label-activo-sm">Es Urgencia Qx.?</label>
                                                                             <select name="urgencia_cdg" id="urgencia_cdg" data-titulo="Es Urgencia Qx.?" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cdg','div_detalle_urgencia_cdg','obs_urgencia_cdg',2);">
                                                                                 <option value="1" selected>No</option>
@@ -320,11 +297,10 @@
                                                                             <label class="floating-label-activo-sm">Es Urgencia Qx</label>
                                                                             <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Es Urgencia Qx.?" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_urgencia_cdg" id="obs_urgencia_cdg"></textarea>
                                                                         </div>
-                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
+
+                                                                        <div class="form-group">
                                                                             <label class="floating-label-activo-sm">Sospecha de Organo</label>
                                                                             <select name="so_cg" id="so_cg" data-titulo="Sospecha de Organo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('so_cg','div_detalle_so_cg','obs_so_cg',2);">
                                                                                 <option value="1" selected>No</option>
@@ -335,33 +311,32 @@
                                                                             <label class="floating-label-activo-sm">Sospecha de Organo</label>
                                                                             <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Sospecha de Organo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_so_cg" id="obs_so_cg"></textarea>
                                                                         </div>
-                                                                    </div>
+
                                                                 </div>
                                                             </div>
-
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-12">
+                                                            <div class=" col-md-12">
+                                                                <div class="row">
                                                                     <label class="floating-label-activo-sm">Observaciones Estado General Paciente</label>
                                                                     <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Estado General Paciente" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_cg" id="obs_egp_cg"></textarea>
                                                                 </div>
                                                             </div>
                                                             <hr>
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-9" style="margin-bottom: 0;">
-                                                                    <label class="floating-label-activo-sm">Observaciones Examen Especialidad</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Especialidad" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_gen_ex_esp_cg" id="obs_gen_ex_esp_cg"></textarea>
+                                                            <div class="row">
+                                                                <div class="col-md-9">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Observaciones Examen Especialidad</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Especialidad" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_gen_ex_esp_cg" id="obs_gen_ex_esp_cg"></textarea>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="form-group col-md-3 align-middle" style="margin:auto">
+                                                                <div class="col-md-3 align-middle" style="margin:auto">
                                                                     <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo();"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!--Formulario / Signos vitales y otros-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
@@ -540,7 +515,9 @@
                                             </div>
                                         </div>
                                         <!--Cierre: Formulario / Signos vitales y otros-->
-										<div class="col-sm-12 col-md-12">
+
+                                        <!-- control post qx -->
+                                        <div class="col-sm-12 col-md-12">
                                             <div class="card">
                                                 <div class="card-header" id="Control_cirugia">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#cirugia_general_pc" aria-expanded="false" aria-controls="cirugia_general_pc">
@@ -556,33 +533,26 @@
                                                                 </div>
                                                             </div>
                                                             <hr>
-                                                            <div class="form-row">
+                                                            <div class="row">
                                                                 <!-- Estado General -->
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12" >
-                                                                            <label class="floating-label-activo-sm">Estado General</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Estado General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="eg_cpq_cg" id="eg_cpq_cg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group" >
+                                                                        <label class="floating-label-activo-sm">Estado General</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Estado General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="eg_cpq_cg" id="eg_cpq_cg"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <!-- Herida Operatoria Curación -->
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Herida Operatoria Curación</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="ceg_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="hoc_cpa_cg" id="hoc_cpa_cg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Herida Operatoria Curación</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="ceg_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="hoc_cpa_cg" id="hoc_cpa_cg"></textarea>
                                                                     </div>
-
                                                                 </div>
                                                                 <!-- Masas Palpables -->
                                                                 <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Masas Palpables</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="masas_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="masas_cpq_cg" id="masas_cpq_cg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Masas Palpables</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="masas_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="masas_cpq_cg" id="masas_cpq_cg"></textarea>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -595,11 +565,11 @@
                                                             </div>
                                                             <hr>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- cierre control post qx -->
 
                                         <!--ENFERMO CRÓNICO O GES-->
                                         <div class="col-sm-12 col-md-12">
