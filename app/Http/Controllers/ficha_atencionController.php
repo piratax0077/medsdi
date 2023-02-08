@@ -345,7 +345,7 @@ class ficha_atencionController extends Controller
 
             else if($profesional->id_sub_tipo_especialidad == 1)
             {
-                // Cirugía Coloproctológica
+                // Cirugía digestiva general
                 $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_general';
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
@@ -365,6 +365,7 @@ class ficha_atencionController extends Controller
                 $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_general';
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
+                $examen = '';
             }
             else if($profesional->id_sub_tipo_especialidad == 12 )
             {
@@ -372,6 +373,7 @@ class ficha_atencionController extends Controller
                 $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_alta';
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
+                $examen = '';
             }
 
             else
