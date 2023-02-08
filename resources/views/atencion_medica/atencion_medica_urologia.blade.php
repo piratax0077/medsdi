@@ -70,7 +70,7 @@
                     <div class="tab-content" id="at-oftalmo">
                         <!--Atender paciente-->
                         <div class="tab-pane fade show active" id="atender" role="tabpanel" aria-labelledby="atender-tab">
-                            @include('atencion_medica.secciones_especialidad.ficha_uro')
+                            @include('atencion_medica.secciones_especialidad.ficha_urologia')
                         </div>
                         <!--Licencia-->
                         <div class="tab-pane fade show" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
