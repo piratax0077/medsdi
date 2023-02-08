@@ -5,6 +5,6 @@ storage/framework/views/
 
 .idea/
 
-
+.htaccess
 .vs/
 vendor/
