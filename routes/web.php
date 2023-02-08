@@ -992,7 +992,7 @@ Route::group([
 
 /** BUSCADOR DE PROFESIONAL */
 Route::group([
-    'middleware' => ['role:Paciente|Asistente|Adm_Institucion|profesional'],
+    'middleware' => ['role:Paciente|Asistente|Adm_Institucion|Profesional'],
     'prefix' => 'buscador',
 ], function () {
 
