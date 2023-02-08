@@ -33,7 +33,7 @@ function i_vacunas() {
 }
 /** Indicar otras vacunas **/
 function i_vacunas_otras() {
-    $('#indicar_ot_vacunas').modal('show');
+    $('#otras_vacunas').modal('show');
 }
 /** Indicar medicamento **/
 function i_medicamento() {
@@ -42,6 +42,182 @@ function i_medicamento() {
 
 function rx_ped() {
     $('#modal_ex_radiologicoped').modal('show');
+}
+$('#btn_recien_nacido').click(function() {
+    $('#recien_nacido').toggle();
+});
+
+/** Datos recien nacido **/
+$('#btn_vac_part_puerp').click(function() {
+    $('#vac_part_puerp').toggle();
+});
+
+/** Datos recien nacido **/
+$('#btn_extamiz').click(function() {
+    $('#extamiz').toggle();
+});
+/** examen fisico pediatria **/
+function ant_parto() {
+    $('#neonat_modal').modal('show');
+}
+/** pautas varones **/
+function tunner() {
+    $('#tunner_modal').modal('show');
+}
+
+function tunner_m() {
+    $('#tunner_modal_m').modal('show');
+}
+
+function per_cef_v() {
+    $('#per_cef_ninos').modal('show');
+}
+
+function talla_edad_v() {
+    $('#talla_edad_ninos519').modal('show');
+}
+
+function talla_25_v() {
+    $('#talla_edad_ninos25').modal('show');
+}
+
+function talla_02_v() {
+    $('#talla_edad_ninos02').modal('show');
+}
+
+function pesotalla_25_v() {
+    $('#peso_talla_ninos25').modal('show');
+}
+
+function pesotalla_02_v() {
+    $('#peso_talla_v02').modal('show');
+}
+
+function pesoedad_510_v() {
+    $('#peso_edad_v510').modal('show');
+}
+
+function pesoedad_25_v() {
+    $('#peso_edad_v510').modal('show');
+}
+
+function pesoedad_v() {
+    $('#peso_edad_v').modal('show');
+}
+
+function percint_v() {
+    $('#per_cint519v').modal('show');
+}
+
+function presion_v() {
+    $('#presion_v').modal('show');
+}
+/** pautas mujeres **/
+function tunner() {
+    $('#tunner_modal').modal('show');
+}
+
+function tunner_m() {
+    $('#tunner_modal_m').modal('show');
+}
+
+function per_cef_f() {
+    $('#per_cef_f').modal('show');
+}
+
+function talla_edad_f519() {
+    $('#talla_edad_f519').modal('show');
+}
+
+function talla_25_f() {
+    $('#talla_edad_f25').modal('show');
+}
+
+function talla_02_f() {
+    $('#talla_edad_f024').modal('show');
+}
+
+function pesotalla_25_f() {
+    $('#peso_talla_f25').modal('show');
+}
+
+function pesotalla_02_f() {
+    $('#peso_talla_f024').modal('show');
+}
+
+function pesoedad_510_f() {
+    $('#peso_edad_f510').modal('show');
+}
+
+function pesoedad_25_f() {
+    $('#peso_edad_f25').modal('show');
+}
+
+function pesoedad_f02() {
+    $('#peso_edad_f024').modal('show');
+}
+
+function percint_f() {
+    $('#per_cint519f').modal('show');
+}
+
+function presion_f() {
+    $('#presion_f').modal('show');
+}
+
+function eval_dent() {
+    $('#eval_dent').modal('show');
+}
+
+function perimetro() {
+    $('#perimetro').modal('show');
+}
+
+function adams() {
+    $('#adams').modal('show');
+}
+
+
+
+
+function prev_acc() {
+    $('#modal_prev_acc').modal('show');
+}
+
+function calcular_imc() {
+    $('#modal_calcimc').modal('show');
+}
+
+function ipostparto() {
+    $('#modal_iposparto').modal('show');
+}
+
+function ilactan() {
+    $('#modal_ilactancia').modal('show');
+}
+
+function tlactan() {
+    $('#modal_tlactancia').modal('show');
+}
+
+function test_edimburgo() {
+    $('#modal_edimburgo').modal('show');
+}
+
+function apgar() {
+    $('#apgar_modal').modal('show');
+}
+
+function imc519() {
+    $('#imc_519v').modal('show');
+}
+
+function imc_519f() {
+    $('#imc_519f').modal('show');
+}
+
+function inst_eval() {
+    $('#instrum').modal('show');
 }
 
 

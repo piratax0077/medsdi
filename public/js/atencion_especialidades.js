@@ -27,9 +27,10 @@ $(document).ready(function() {
 
 /** MODALS **/
 /** MODALS FORMULARIOS GENERALES **/
-/** Indicar vacunas MINSAL **/
+function ind_endoscopia() {
+    $('#ind_endoscopia_modal').modal('show');
+}
 
-/** Indicar otras vacunas **/
 function ingreso() {
     $('#ingreso_modal').modal('show');
 }
@@ -51,6 +52,13 @@ function i_lente() {
     $('#indicar_lente').modal('show');
 }
 
+/** biopsia cisto**/
+
+function biopsia_cisto() {
+    if ($('#biopsia_cisto').prop('checked')) {
+        $('#m_biopsia_cir').modal('show');
+    }
+}
 
 /** Indicar examen **/
 function i_examen() {
@@ -67,6 +75,10 @@ function i_examen_rxorl() {
     $('#indicar_examenrx_orl').modal('show');
 }
 
+function i_examen_rx() {
+    $('#modal_indicar_examen_rx').modal('show');
+}
+
 function i_examen_espuro() {
     $('#indicar_examen_uro').modal('show');
 }
@@ -81,6 +93,10 @@ function i_biopsiaderm() {
 
 function i_biopsiaorl() {
     $('#m_biopsia_orl').modal('show');
+}
+
+function i_biopsia() {
+    $('#m_biopsia_cir').modal('show');
 }
 
 function i_exvenereas() {

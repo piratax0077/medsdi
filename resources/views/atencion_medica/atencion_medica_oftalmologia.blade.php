@@ -1,4 +1,4 @@
-@extends('template/template_oftalmologia')
+@extends('template.template_oftalmologia')
 @section('Content')
 
     <!--Container Completo-->
@@ -11,13 +11,22 @@
                         <div class="col-md-6">
                             <div class="page-header-title">
                                 <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN OFTALMOLOGÍA</strong></h5>
-                                <p class="font-italic mt-0 mb-0 text-white">23 de Agosto, 2022</p>
+                                <p class="font-italic mt-0 mb-0 text-white">
+                                    @php
+                                        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                                        $fecha = \Carbon\Carbon::parse(now());
+                                        $mes = $meses[($fecha->format('n')) - 1];
+                                        $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
+                                    @endphp
+                                    {{ $fecha }}
+                                </p>
+
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="page-header-title">
+                            {{--  <div class="page-header-title">
                                 <button type="button" class="btn btn-outline-light btn-sm d-inline float-md-right mr-4 mb-1">Finalizar atención</button>
-                            </div>
+                            </div>  --}}
                         </div>
                     </div>
                 </div>
@@ -73,7 +82,7 @@
                         </div>
                         <!--Atenciones previas-->
                         <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
-                            @include('atencion_medica.secciones_ficha.atenciones_previas')
+                            @include('atencion_medica.formularios.atenciones_previas_form')
                         </div>
                         <!--Exámenes-->
                         <div class="tab-pane fade show" id="examenes" role="tabpanel" aria-labelledby="examenes-tab">
@@ -88,39 +97,20 @@
             </div>
         </div>
 
-        <!--Botón flotane del sidebar derecho oftalmologia-->
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="boton-formularios">
-                    <input type="checkbox" id="btn-mas">
-                    <div class="redes">
-                        <a id="boton_1" class="fas fa-user fa-2x" data-toggle="canvas" data-target="#antecedentes_paciente" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left"></a>
-                        <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left"></a>
-                        <a id="boton_3" href="#" class="fas fa-eye-slash fa-2x" data-toggle="canvas" data-target="#formularios_ojo" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Oftalmología" data-placement="left"></a>
-                    </div>
-                    <div class="btn-mas">
-                        <label for="btn-mas" class="fa fa-plus"></label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--Cierre: Botón flotante-->
+        <!-- SIDE BAR ORL -->
+        @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
+        @include("atencion_medica.include.sidebar_derecho_oftalmo"){{-- modales y data de sidebar especialidad --}}
 
-        <!-- SIDE BAR OFTALMOLOGIA -->
-        @include("atencion_medica.include.sidebar_derecho_oftalmo")
 
         <!--Modals de especialidad -->
         {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
 
         <!--Modals formularios generales-->
-        @include("app.cirugia.modals.modals_cesarea.modal_indicar_examenes")
-        @include("app.cirugia.modals.modals_cesarea.modal_indicar_medicamentos")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.oftalmologia.m_interconsulta")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.oftalmologia.indicar_lentes")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.oftalmologia.indicar_examen_oft")
-		@include('atencion_medica.formularios.modal_atencion_general.modal_autorizacion')
+        {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
+        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
+        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
+
 
     </div>
     <!--Cierre: Container Completo-->
 @endsection
-

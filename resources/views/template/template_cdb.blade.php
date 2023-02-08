@@ -77,11 +77,10 @@
     @yield('Modals-med-exa')
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
-    @include('atencion_medica.secciones_especialidad.ficha_cirugia_digest_baja_tipo')
-	@include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_clasif_colon')
+    @include('atencion_medica.secciones_especialidad.ficha_cirugia_digest_alta_tipo')
+    @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_clasif_colon')
 	@include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia')
-	@include('atencion_medica.include.sidebar_derecho_cdb')
-	
+
 
     <!-- Modal de la vista fin -->
     <footer>

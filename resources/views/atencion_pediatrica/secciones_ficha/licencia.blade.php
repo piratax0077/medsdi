@@ -50,18 +50,12 @@
                                                 <form>
                                                     <div class="form-row">
                                                         <div class="form-group col-md-4">
-                                                            <label class="floating-label-activo-sm">
-                                                            Previsión
-                                                            </label>
-                                                            <imput value="{{ $paciente->rut }}">
-                                                            <select class="form-control form-control-sm" name="prevision" id="prevision">
-                                                                <option>Seleccione</option>
-                                                                <option>..</option>
-                                                            </select>
+                                                            <label class="floating-label-activo-sm">Previsión</label>
+                                                            <input type="text" class="form-control form-control-sm" value="{{ $paciente->prevision->nombre }}">
                                                         </div>
                                                         <div class="form-group col-md-4">
-                                                            <label class="floating-label">Rut</label>
-                                                            <input type="text" class="form-control form-control-sm" name="rut_paciente_fc" id="rut_paciente_fc"value="{{ $paciente->rut }}">
+                                                            <label class="floating-label-activo-sm">Rut</label>
+                                                            <input type="text" class="form-control form-control-sm" name="rut_paciente_fc" id="rut_paciente_fc" value="{{ $paciente->rut }}">
 
                                                         </div>
                                                         <div class="form-group col-md-4">
@@ -88,7 +82,7 @@
                                                 <div class="form-row">
                                                     <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">N° días</label>
-                                                        <input type="text" name="num_dias_reposo" id="num_dias_reposo" class="form-control form-control-sm"/>
+                                                        <input type="text" name="num_dias_reposo" id="num_dias_reposo" class="form-control form-control-sm" onchange="sumaFecha(this.value,$('#fecha').val());"/>
                                                     </div>
                                                     <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Desde</label>
@@ -127,7 +121,8 @@
                                                     mes = (mes < 10) ? ("0" + mes) : mes;
                                                     dia = (dia < 10) ? ("0" + dia) : dia;
                                                     var fechaFinal = dia+sep+mes+sep+anno;
-                                                    return (fechaFinal);
+                                                   // return (fechaFinal);
+                                                    $('#hasta').val(fechaFinal);
                                                     }
                                                 </script>
                                             </div>
@@ -149,12 +144,14 @@
                                                 <form>
                                                     <div class="form-row">
                                                         <div class="form-group col-md-4 mt-2">
-                                                            <label class="floating-label-activo-sm">
-                                                            Tipo de licencia
-                                                            </label>
+                                                            <label class="floating-label-activo-sm"> Tipo de licencia</label>
                                                             <select class="form-control d-inline form-control-sm" name="" id="">
                                                                 <option>Seleccione una opción</option>
-                                                                <option>..</option>
+                                                                <option value= "1" selected>Tipo 1: enfermedad o accidente común.</option>
+                                                                <option value= "2" >Tipo 2: medicina preventiva.</option>
+                                                                <option value= "3" >Tipo 3: pre y postnatal.</option>
+                                                                <option value= "4">Tipo 4: enfermedad grave del niño menor del año</option>
+                                                                <option value= "5">Tipo 5: Patología del Embarazo</option>
                                                             </select>
                                                         </div>
                                                         <div class="form-group col-md-4">

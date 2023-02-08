@@ -2522,17 +2522,39 @@
     </div>
 </div>
 
+
 <!--Botón Flotante-->
 <div class="row">
     <div class="col-sm-12">
         <div class="boton-formularios">
             <input type="checkbox" id="btn-mas">
             <div class="redes">
+                <a id="boton_1" class="fas fa-user fa-2x" data-toggle="canvas" data-target="#antecedentes_paciente" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left" style="cursor:pointer;"> </a>
+                <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left" style="cursor:pointer;"></a>
 
+                @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Otorrinolaringología' )
+                    <a id="boton_3" class="fas fa-deaf fa-2x" data-toggle="canvas" data-target="#formularios_orl" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Otorrinolaringología" data-placement="left"></a>
+                @endif
 
+                @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Oftalmología' )
+                    <a id="boton_3" class="fas fa-eye-slash fa-2x" data-toggle="canvas" data-target="#formularios_ojo" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Oftalmología" data-placement="left"></a>
+                @endif
 
+                @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía Gástrica' )
+					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_cirugia" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugia" data-placement="left"></a>
+				@endif
 
+				@if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía Coloproctológica' )
+					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_colon" aria-expanded="false" aria-controls="bs-canvas-right" title="Coloproctología" data-placement="left"></a>
+				@endif
 
+				@if($profesional->SubTipoEspecialidad()->first()->nombre == 'Urología' )
+					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_uro" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Urología" data-placement="left"></a>
+				@endif
+
+                @if($profesional->TipoEspecialidad()->first()->nombre == 'PEDIATRÍA' )
+					<a id="boton_3" class="fas fa-child fa-2x" data-toggle="canvas" data-target="#formularios_pediatria" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Pediatria" data-placement="left"></a>
+				@endif
             </div>
             <div class="btn-mas">
                 <label for="btn-mas" class="fa fa-plus"></label>
@@ -2542,8 +2564,8 @@
 </div>
 
 
-@include('atencion_pediatrica.sidebars.antecedentes_paciente_p')
-@include('atencion_pediatrica.modales')
+@include('atencion_medica.sidebars.antecedentes_paciente')
+@include('atencion_medica.sidebars.formularios_atencion')
 
 @section('js-sidebar')
     <script>
@@ -2701,7 +2723,7 @@
             Fancybox.show(
                 [
                     {
-                    src: '{{ route('pdf.certificado_reposo') }}?id_ficha_atencion='+id_ficha_atencion,
+                    src: '{{ route("pdf.certificado_reposo") }}?id_ficha_atencion='+id_ficha_atencion,
                     type: "iframe",
                     preload: false,
                     },
@@ -2734,20 +2756,20 @@
                 mensaje += 'Debe ingresar Especialidad\n';
                 valido = 0;
             }
-            {{--
-            if(sub_tipo_especialidad == '') {
-                mensaje += 'Debe ingresar Sub Tipo Especialidad\n';
-                valido = 0;
-            }
-            if(profesional_inter == '') {
-                mensaje += 'Debe ingresar profesional_inter\n';
-                valido = 0;
-            }
-            if(nombre_profesional_inter == '') {
-                mensaje += 'Debe ingresar nombre_profesional_inter\n';
-                valido = 0;
-            }
-            --}}
+
+            // if(sub_tipo_especialidad == '') {
+            //     mensaje += 'Debe ingresar Sub Tipo Especialidad\n';
+            //     valido = 0;
+            // }
+            // if(profesional_inter == '') {
+            //     mensaje += 'Debe ingresar profesional_inter\n';
+            //     valido = 0;
+            // }
+            // if(nombre_profesional_inter == '') {
+            //     mensaje += 'Debe ingresar nombre_profesional_inter\n';
+            //     valido = 0;
+            // }
+
             if(hipotesis_interconsulta == '') {
                 mensaje += 'Debe ingresar Hipótesis diagnóstica\n';
                 valido = 0;
@@ -2893,7 +2915,7 @@
             Fancybox.show(
                 [
                     {
-                    src: '{{ route('pdf.interconsulta') }}?id_interconsulta='+id_interconsulta,
+                    src: '{{ route("pdf.interconsulta") }}?id_interconsulta='+id_interconsulta,
                     type: "iframe",
                     preload: false,
                     },
@@ -2904,7 +2926,7 @@
 
         function registrar_informe_medico() {
 
-            {{--  let fecha_informe_medico = $('#fecha_informe_medico').val();  --}}
+            {{-- let fecha_informe_medico = $('#fecha_informe_medico').val(); --}}
             let comentarios_informe_medico = $('textarea#comentarios_informe_medico').val();
             let hora_medica = $('#hora_medica').val();
             let id_lugar_atencion = $('#id_lugar_atencion').val();
@@ -2967,7 +2989,7 @@
             Fancybox.show(
                 [
                     {
-                    src: '{{ route('pdf.informe_medico') }}?id_ficha_atencion='+id_ficha_atencion,
+                    src: '{{ route("pdf.informe_medico") }}?id_ficha_atencion='+id_ficha_atencion,
                     type: "iframe",
                     preload: false,
                     },
@@ -3044,7 +3066,7 @@
             Fancybox.show(
                 [
                     {
-                    src: '{{ route('pdf.uso_personal') }}?id_ficha_atencion='+id_ficha_atencion,
+                    src: '{{ route("pdf.uso_personal") }}?id_ficha_atencion='+id_ficha_atencion,
                     type: "iframe",
                     preload: false,
                     },

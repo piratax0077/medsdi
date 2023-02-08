@@ -1,6 +1,6 @@
-@extends('template/pediatria/template')
+@extends('template.pediatria.template_pediatria')
 @section('Content')
-
+    <!--Esta ficha puede ser abierta por neonatologos-->
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -70,7 +70,7 @@
                     <div class="tab-content" id="at-oftalmo">
                         <!--Atender paciente-->
                         <div class="tab-pane fade show active" id="atender" role="tabpanel" aria-labelledby="atender-tab">
-                            @include('atencion_pediatrica.secciones_especialidad.neonatologia')
+                            @include('atencion_pediatrica.secciones_especialidad.ficha_pediatria_neonatologia')
                         </div>
                         <!--Licencia-->
                         <div class="tab-pane fade show" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
@@ -98,26 +98,9 @@
             </div>
         </div>
 
-        <!--Botón flotane del sidebar derecho otorrino-->
-        {{--  <div class="row">
-            <div class="col-sm-12">
-                <div class="boton-formularios">
-                    <input type="checkbox" id="btn-mas">
-                    <div class="redes">
-                        <a id="boton_1" class="fas fa-user fa-2x" data-toggle="canvas" data-target="#antecedentes_paciente" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left"></a>
-                        <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left"></a>
-                        <a id="boton_3" class="fas fa-deaf fa-2x" data-toggle="canvas" data-target="#formularios_orl" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Otorrinolaringología" data-placement="left"></a>
-                    </div>
-                    <div class="btn-mas">
-                        <label for="btn-mas" class="fa fa-plus"></label>
-                    </div>
-                </div>
-            </div>
-        </div>  --}}
-        <!--Cierre: Botón flotante-->
-
         <!-- SIDE BAR ORL -->
-        @include("atencion_medica.include.sidebar_derecho_orl")
+        @include("atencion_pediatrica.modales"){{-- base de botones de sidebar --}}
+        @include("atencion_pediatrica.include.sidebar_derecho_pediatria"){{-- modales y data de sidebar especialidad --}}
 
         <!--Modals de especialidad -->
         {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}

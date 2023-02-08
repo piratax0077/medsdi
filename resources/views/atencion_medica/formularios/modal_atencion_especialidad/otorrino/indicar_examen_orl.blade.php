@@ -28,7 +28,7 @@
                                         <option value="8" data-multicodigo="229|243|334">Cultivo y Antibiograma Secreción nasal y Rcto. Eosinófilos</option>
                                     </optgroup>
                                     <optgroup label="FARINGO-LARÍNGE">
-                                        <option value="9">Nasofibrolaringoscopía</option>
+                                        <option value="550">Nasofibrolaringoscopía</option>
                                         <option value="11" data-multicodigo="229|243">Cultivo y Antibiograma Frotis Faríngeo Investigar Hongos</option>
                                         <option value="10" data-multicodigo="229|243">Cultivo y Antibiograma Frotis Faríngeo</option>
                                     </optgroup>

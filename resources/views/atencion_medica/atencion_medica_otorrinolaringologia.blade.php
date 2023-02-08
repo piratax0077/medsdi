@@ -1,4 +1,4 @@
-@extends('template/template_orl')
+@extends('template.template_orl')
 @section('Content')
 
     <!--Container Completo-->
@@ -52,7 +52,7 @@
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="examenes-tab" data-toggle="tab" href="#examenes" role="tab" aria-controls="examenes" aria-selected="false">Exámenes</a>
+                                        <a class="nav-link text-reset" id="examenes-tab" data-toggle="tab" href="#examenes_tab" role="tab" aria-controls="examenes" aria-selected="false">Exámenes</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="hospitalizacion" aria-selected="false">Hospitalización</a>
@@ -86,7 +86,7 @@
                             @include('atencion_medica.formularios.atenciones_previas_form')
                         </div>
                         <!--Exámenes-->
-                        <div class="tab-pane fade show" id="examenes" role="tabpanel" aria-labelledby="examenes-tab">
+                        <div class="tab-pane fade show" id="examenes_tab" role="tabpanel" aria-labelledby="examenes-tab">
                             @include('atencion_medica.secciones_ficha.examenes')
                         </div>
                         <!--Hospitalización-->
@@ -98,26 +98,10 @@
             </div>
         </div>
 
-        <!--Botón flotane del sidebar derecho otorrino-->
-        {{--  <div class="row">
-            <div class="col-sm-12">
-                <div class="boton-formularios">
-                    <input type="checkbox" id="btn-mas">
-                    <div class="redes">
-                        <a id="boton_1" class="fas fa-user fa-2x" data-toggle="canvas" data-target="#antecedentes_paciente" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left"></a>
-                        <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left"></a>
-                        <a id="boton_3" class="fas fa-deaf fa-2x" data-toggle="canvas" data-target="#formularios_orl" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Otorrinolaringología" data-placement="left"></a>
-                    </div>
-                    <div class="btn-mas">
-                        <label for="btn-mas" class="fa fa-plus"></label>
-                    </div>
-                </div>
-            </div>
-        </div>  --}}
-        <!--Cierre: Botón flotante-->
-
         <!-- SIDE BAR ORL -->
-        @include("atencion_medica.include.sidebar_derecho_orl")
+        @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
+        @include("atencion_medica.include.sidebar_derecho_orl"){{-- modales y data de sidebar especialidad --}}
+
 
         <!--Modals de especialidad -->
         {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
