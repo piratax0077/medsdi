@@ -98,7 +98,7 @@
     <!--SIDEBAR 3 (Otorrino)-->
 
     <!--MODALS SIDE BAR GENERALES-->
-    @include('atencion_medica.modales')
+    {{-- @include('atencion_medica.modales') --}}
 
 
     @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_exbiopsia_orl")

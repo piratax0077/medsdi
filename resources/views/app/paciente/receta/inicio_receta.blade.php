@@ -27,28 +27,28 @@
         </div>
         <!--Cierre: Header-->
         <!--Botones-->
-        <div class="row m-b-30">
+        <div class="row m-b-20">
             <div class="col-md-12">
                 <div class="card-deck">
-                    <div class="card subir py-5">
+                    <div class="card subir">
                         <a href="{{ ROUTE('paciente.receta.receta') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/recetas.svg') }}"
-                                    alt="Mis Recetas">
-                                <h4 class="titulos_tarjetas">
-                                    Mis Recetas
-                                </h4>
+                                <img class="wid-70 text-center mb-3" src="{{ asset('images/iconos/recetas-ro.svg') }}"
+                                    alt="Mis ecetas">
+                                <h5 class="f-20">
+                                    Mis recetas
+                                </h5>
                             </div>
                         </a>
                     </div>
-                    <div class="card subir py-5">
+                    <div class="card subir">
                         <a href="{{ ROUTE('paciente.receta.examen') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/examen.svg') }}"
-                                    alt="Mis Examenes">
-                                <h4 class="titulos_tarjetas">
-                                    Mis Exámenes
-                                </h4>
+                                <img class="wid-70 text-center mb-3" src="{{ asset('images/iconos/examenes-ro.svg') }}"
+                                    alt="Mis examenes">
+                                <h5 class="f-20">
+                                    Mis exámenes
+                                </h5>
                             </div>
                         </a>
                     </div>
@@ -57,28 +57,28 @@
         </div>
         <!--CIERRE:Botones-->
         <!--Botones-->
-        <div class="row m-b-10">
+        <div class="row">
             <div class="col-md-12">
                 <div class="card-deck">
-                    <div class="card subir py-5">
+                    <div class="card subir">
                         <a href="{{ ROUTE('paciente.receta.certificado') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/certificado.svg') }}"
-                                    alt="Mis Certificados">
-                                <h4 class="titulos_tarjetas">
-                                    Mis Certificados
-                                </h4>
+                                <img class="wid-70 text-center mb-3" src="{{ asset('images/iconos/certificados-ro.svg') }}"
+                                    alt="Mis certificados">
+                                <h5 class="f-20">
+                                    Mis certificados
+                                </h5>
                             </div>
                         </a>
                     </div>
-                    <div class="card subir py-5">
+                    <div class="card subir">
                         <a href="{{ ROUTE('paciente.receta.licencia') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/licencia.svg') }}"
+                                <img class="wid-70 text-center mb-3" src="{{ asset('images/iconos/documentos-ro.svg') }}"
                                     alt="Mis Licencias">
-                                <h4 class="titulos_tarjetas">
+                                <h5 class="f-20">
                                     Mis Licencias
-                                </h4>
+                                </h5>
                             </div>
                         </a>
                     </div>

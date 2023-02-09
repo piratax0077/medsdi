@@ -19884,12 +19884,13 @@ a{
 .card .card-header {
     border-bottom: 1px solid #e2e5e8;
     position: relative;
+    padding: 14px 20px;
 }
 
 .card .card-header h5 {
     margin-bottom: 0;
     color: #37474f;
-    font-size: 0.9375rem;
+    font-size: 1rem;
     font-weight: 600;
     display: inline-block;
     margin-right: 10px;
@@ -26930,11 +26931,6 @@ body.box-layout .pcoded-navbar.theme-horizontal ~ .pcoded-header {
     position: relative;
 }
 
-.form-group .form-control {
-    padding-left: 2px;
-    padding-right: 2px;
-}
-
 .form-group .floating-label {
     position: absolute;
     top: 11px;
@@ -26946,8 +26942,6 @@ body.box-layout .pcoded-navbar.theme-horizontal ~ .pcoded-header {
     pointer-events: none !important;
 
 }
-
-
 
 .form-group .floating-label + .form-control {
     padding-left: 0.5rem;

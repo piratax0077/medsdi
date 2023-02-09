@@ -31,9 +31,43 @@
             margin: 0 !important;
         }
 
-        .fc .fc-timegrid-slot {
-            height: 3.5em;
+       
+
+      
+        @media (min-width: 768px) { 
+            .btn-group > .btn,
+            .btn-group-vertical > .btn {
+            position: relative;
+            flex: 1 1 auto;
+            padding:4px 6px;
+            font-size: 0.9rem;
         }
+        .fc .fc-toolbar-title {
+            font-size: 1.4em;
+            margin: 0;
+        }
+        
+    }
+        @media (max-width: 767.98px) { 
+            .btn-group > .btn,
+            .btn-group-vertical > .btn {
+            position: relative;
+            flex: 1 1 auto;
+            padding:3px 5px;
+            font-size:0.8rem;
+        }
+
+        .fc .fc-toolbar-title {
+            font-size: 1.2em;
+            margin: 0;
+        }
+    }
+
+         
+         
+
+    
+
     </style>
 @endsection
 
@@ -44,16 +78,14 @@
             <!--HEADER-->
             <div class="page-header">
                 <div class="page-block">
-                    <div class="row align-items-center text-center">
+                    <div class="row align-items-center text-center mt-3">
                         <div class="page-header-title">
-                            <h4 class="text-white"><a href="#" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a> <strong>AGENDA</strong><br> {{ strtoupper($lugar_atencion_nombre) }}</h4>
+                            <h5 class="text-white f-20"><a href="#" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a> <strong>AGENDA : </strong> {{ strtoupper($lugar_atencion_nombre) }}</h4>
                         </div>
                     </div>
                 </div>
             </div>
             <!--CIERRE: HEADER-->
-
-
             <div class="row user-profile user-card  p-3" style="background-color:#ecf0f5;">
                 <div class="col-md-12 card">
                     <div id='agenda'></div>
@@ -70,7 +102,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio Profesional</h5>
+                                <h5 class="m-b-10 font-weight-bold">Escritorio profesional</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -80,7 +112,7 @@
                                     </a>
                                 </li>
                                 <li class="breadcrumb-item">
-                                    <a href="/configurar_lugar_atencion">Configuraci&oacute;n de Mis Lugares de Atención</a>
+                                    <a href="/configurar_lugar_atencion">Configuración de mis lugares de atención</a>
                                 </li>
                             </ul>
                         </div>
@@ -131,22 +163,15 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
                     <input type="hidden" name="id_hora_medica" id="id_hora_medica" val="">
-
                     <div id="opciones_botones" class="form-group row">
-
                         <div class="row col-md-6 ">
                             <button type="button" onclick="opcion_confirmar_hora();" class="btn btn-secondary"
                                 data-dismiss="modal" aria-hidden="true">
                                 Confirmar Hora
                             </button>
                         </div>
-
                         <div class="row col-md-6">
-
-
-
                             <form method="get" action="{{ route('profesional.realizar_consulta') }}">
                                 @csrf
                                 <input type="hidden" name="id_hora_realizar" id="id_hora_realizar" val="">
@@ -154,27 +179,22 @@
                                     Consulta
                                 </button>
                             </form>
-
                         </div>
-
-                        <div class="row col-md-6 ">
+                        <div class="row col-md-6">
                             <button type="button" onclick="opcion_cancelar_hora();" class="btn btn-secondary"
                                 data-dismiss="modal" aria-hidden="true">
-                                Anular Hora
+                                Anular hora
                             </button>
                         </div>
-
                         <div class="row col-md-6">
-                            <button type="button" class="btn btn-primary">No Asiste</button>
+                            <button type="button" class="btn btn-primary">No asiste</button>
                         </div>
-
                     </div>
-
                     <div id="opcion_confirmar_hora_div">
                         <div class="col-sm-12 col-md-12">
                             <div>
                                 <span>
-                                    <h4>Confirmar Hora</h4>
+                                    <h4>Confirmar hora</h4>
                                 </span>
                             </div>
                             <div class="form-group">
@@ -194,7 +214,7 @@
                         <div class="col-sm-12 col-md-12">
                             <div>
                                 <span>
-                                    <h4>Confirmar Hora</h4>
+                                    <h4>Confirmar hora</h4>
                                 </span>
                             </div>
                             <div class="form-group">
@@ -231,14 +251,22 @@
                         aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
-
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <h6 class="text-c-blue ml-2 mb-3">Ingrese el rut del paciente</h6>
-                            </div>
+                            <h6 class="text-c-blue ml-2 mb-3">Ingrese el rut del paciente</h6>
                         </div>
+                        <!--<div class="col-sm-12 col-md-12">
+                            <div class="input-group-prepend">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Rut del paciente" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-info" type="button" id="button-addon2">Buscar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
                     </div>
+
                     <div class="row div_rut_buscar">
                         <div class="col-sm-8 col-md-8 mb-3">
                             <form id="validacion_rut_form">
@@ -254,15 +282,12 @@
                             </form>  --}}
                         </div>
                         <div class="col-sm-4 col-md-4 mb-3">
-
                             <button class="btn btn-info" onclick="buscar_paciente();" type="button"id="button-addon2">
                                 Buscar
                             </button>
 
                         </div>
                     </div>
-
-
 
                     <form id="form_reseva_de_horas">
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
@@ -288,7 +313,7 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">
-                                            <strong>Fecha Nacimiento</strong>
+                                            <strong>Fecha nacimiento</strong>
                                         <td><span id="reserva_fecha_nacimiento"></span></td>
                                         </th>
                                     </tr>
@@ -312,7 +337,7 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">
-                                            <strong>Correo Electrónico</strong>
+                                            <strong>Correo electrónico</strong>
                                         <td id="reserva_hora_email">
 
                                         </td>
@@ -331,15 +356,14 @@
 
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    <label class="floating-label">Descripción Reserva</label>
+                                    <label class="floating-label">Descripción reserva</label>
                                     <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion"
                                         id="reserva_hora_descripcion">
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="button" onclick="agendar_hora();" class="btn btn-info">Agendar Hora</button>
-
+                                <button type="button" onclick="agendar_hora();" class="btn btn-info">Agendar hora</button>
                             </div>
                         </div>
 
@@ -361,21 +385,21 @@
                                 </div>
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Primer Apellido</label>
+                                        <label class="floating-label-activo-sm">Primer apellido</label>
                                         <input type="text" class="form-control form-control-sm"
                                             name="reserva_hora_apellido_uno" id="reserva_hora_apellido_uno">
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Segundo Apellido</label>
+                                        <label class="floating-label-activo-sm">Segundo apellido</label>
                                         <input type="text" class="form-control form-control-sm"
                                             name="reserva_hora_apellido_dos" id="reserva_hora_apellido_dos">
                                     </div>
                                 </div>
                                 <div class="col-sm-6 col-md-6">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">F. Nacimiento</label>
+                                        <label class="floating-label-activo-sm">Fecha de  nacimiento</label>
                                         <input type="date" class="form-control form-control-sm"
                                             name="reserva_hora_fecha_nac" id="reserva_hora_fecha_nac">
                                     </div>
@@ -385,7 +409,7 @@
                                         <label class="floating-label-activo-sm">Sexo</label>
                                         <select id="reserva_hora_sexo" name="reserva_hora_sexo"
                                             class="form-control form-control-sm">
-                                            <option value="0">Selecione una opci&oacute;n</option>
+                                            <option value="0">Seleccione</option>
                                             <option value="F">Femenino</option>
                                             <option value="M">Masculino</option>
                                         </select>
@@ -393,10 +417,10 @@
                                 </div>
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Previsi&oacute;n</label>
+                                        <label class="floating-label-activo-sm">Previsión</label>
                                         <select id="reserva_hora_convenio" name="reserva_hora_convenio"
                                             class="form-control form-control-sm">
-                                            <option value="0">Selecione una opci&oacute;n</option>
+                                            <option value="0">Seleccione</option>
                                             @if (isset($prevision))
                                                 @foreach ($prevision as $p)
                                                     <option value="{{ $p->id }}">{{ $p->nombre }}</option>
@@ -407,7 +431,7 @@
                                 </div>
                                 <div class="col-sm-8 col-md-8">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Direcci&oacute;n</label>
+                                        <label class="floating-label-activo-sm">Dirección</label>
                                         <input type="address" class="form-control form-control-sm"
                                             name="reserva_hora_direccion" id="reserva_hora_direccion">
                                     </div>
@@ -424,10 +448,10 @@
 
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Region</label>
+                                        <label class="floating-label-activo-sm">Región</label>
                                         <select id="region_agregar" onchange="buscar_ciudad();" name="region_agregar"
-                                            class="form-control" required>
-                                            <option value="0">Seleccione Regio&oacute;n</option>
+                                            class="form-control form-control-sm" required>
+                                            <option value="0">Seleccione</option>
                                             @if (isset($region))
                                                 @foreach ($region as $reg)
                                                     <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
@@ -440,15 +464,14 @@
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Ciudad</label>
-                                        <select id="ciudad_agregar" name="ciudad_agregar" class="form-control" required>
-                                            <option value="0">Seleccione Ciudad</option>
-
+                                        <select id="ciudad_agregar" name="ciudad_agregar" class="form-control form-control-sm" required>
+                                            <option value="0">Seleccione</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
+                                        <label class="floating-label-activo-sm">Correo electrónico</label>
                                         <input type="text" class="form-control form-control-sm"
                                             onblur="validar_email_agenda()" name="reserva_hora_correo"
                                             id="reserva_hora_correo">
@@ -457,7 +480,7 @@
                                 </div>
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Tel&eacute;fono</label>
+                                        <label class="floating-label-activo-sm">Teléfono</label>
                                         <input type="tel" class="form-control form-control-sm"
                                             name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno">
                                     </div>
@@ -465,7 +488,7 @@
 
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Descrici&oacute;n Reserva</label>
+                                        <label class="floating-label-activo-sm">Descrición reserva</label>
                                         <input type="text" class="form-control form-control-sm"
                                             name="reserva_hora_descripcion" id="reserva_hora_descripcion">
                                     </div>
@@ -474,7 +497,7 @@
                             <div class="row">
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group">
-                                        <h6 class="text-c-blue ml-2 mb-3">Enviar confirmaci&oacute;n</h6>
+                                        <h6 class="text-c-blue ml-2 mb-3">Enviar confirmación</h6>
                                     </div>
                                 </div>
                             </div>
@@ -504,7 +527,7 @@
                                     data-dismiss="modal">Cancelar</button>
                                 <button type="button" id="guardar_reserva_paciente" onclick="agendar_hora_paciente_nuevo();"
                                     class="btn btn-info">
-                                    Tomar Hora
+                                    Tomar hora
                                 </button>
                             </div>
                         </div>
@@ -523,87 +546,88 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white" id="modal_pago_consulta_title">Recepción de Pago Atención</h5>
+                    <h5 class="modal-title text-white" id="modal_pago_consulta_title">Recepción de pago atención</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#modal_recepcion_bonos_api').modal('hide');"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body pb-0">
-                        <div class="form-row">
-                            <input type="hidden" name="bono_hora_medica" id="bono_hora_medica">
-                            <input type="hidden" name="bono_id_profesional" id="bono_id_profesional">
-                            <input type="hidden" name="bono_id_paciente" id="bono_id_paciente">
-                            <input type="hidden" name="bono_id_tipo_bono" id="bono_id_tipo_bono" value="1">
-                            <div class="col-sm-12 mt-2">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Rut del Paciente</label>
-                                    <input type="person" class="form-control" name="bono_paciente_rut" id="bono_paciente_rut">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Nombre del Paciente</label>
-                                    <input type="text" class="form-control" name="bono_paciente_nombre" id="bono_paciente_nombre">
-                                </div>
-                                <hr>
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm"> Nombre Profesional</label>
-                                    <input type="text" class="form-control" name="bono_profesional_nombre" id="bono_profesional_nombre">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm"> Rut Profesional</label>
-                                    <input type="text" class="form-control" name="bono_profesional_rut" id="bono_profesional_rut">
-                                </div>
-                                <hr>
-                                <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <label class="floating-label-activo-sm">Clase Pago</label>
-                                        <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control">
-                                            <option value="1">Bono Fisico</option>
+                    <div class="form-row">
+                        <input type="hidden" name="bono_hora_medica" id="bono_hora_medica">
+                        <input type="hidden" name="bono_id_profesional" id="bono_id_profesional">
+                        <input type="hidden" name="bono_id_paciente" id="bono_id_paciente">
+                        <input type="hidden" name="bono_id_tipo_bono" id="bono_id_tipo_bono" value="1">
+                        <div class="col-sm-12 mt-2">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Rut del paciente</label>
+                                <input type="person" class="form-control form-control-sm" name="bono_paciente_rut" id="bono_paciente_rut">
+                            </div>
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Nombre del paciente</label>
+                                <input type="text" class="form-control form-control-sm" name="bono_paciente_nombre" id="bono_paciente_nombre">
+                            </div>
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm"> Nombre profesional</label>
+                                <input type="text" class="form-control form-control-sm" name="bono_profesional_nombre" id="bono_profesional_nombre">
+                            </div>
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm"> Rut profesional</label>
+                                <input type="text" class="form-control form-control-sm" name="bono_profesional_rut" id="bono_profesional_rut">
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Clase pago</label>
+                                        <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm">
+                                            <option value="1">Bono fisico</option>
                                             <option value="2">Sencillito</option>
                                             <option value="3">Caja Vecina</option>
                                             <option value="4">Bono Web</option>
                                             <option value="5">Bono Web Pre-Pago</option>
-											<option value="6">Particular</option>
+                                            <option value="6">Particular</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-6">
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
                                         <label class="floating-label-activo-sm">Nº de bono o programa</label>
-                                        <input type="text" class="form-control" name="bono_numero" id="bono_numero" >
+                                        <input type="text" class="form-control form-control-sm" name="bono_numero" id="bono_numero">
                                     </div>
-                                </div>
-                                {{--  <div class="form-group">
-                                    <label class="floating-label-activo-sm">Nº de bono o programa</label>
-                                    <input type="text" class="form-control" name="bono_numero" id="bono_numero" >
-                                </div>  --}}
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Valor total</label>
-                                    <input name="bono_valor_consulta" id="bono_valor_consulta" type="number" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Convenio</label>
-                                    <select id="bono_prevision" name="bono_prevision" class="form-control">
-                                        <option value="0">Selecione una opción</option>
-                                        @foreach ($prevision as $prev)
-                                            <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <div class="switch switch-success d-inline m-r-10">
-                                        <input type="checkbox" id="recepcion_programa">
-                                        <label for="recepcion_programa" class="cr"></label>
-                                    </div>
-                                    <label>Recepción de programa</label>
-                                </div>
-                                <div class="form-group" id="sesiones_programa" style="display:none">
-                                    <label class="floating-label">Nº de Sesiones</label>
-                                    <input name="bono_sn_sesiones" id="bono_sn_sesiones" type="number" class="form-control">
-                                </div>
-                                <hr>
-                                <div class="form-group text-center my-2 pb-2">
-                                    <div onclick="recepcion_pago();" class="btn btn-success">Recepcionar</div>
                                 </div>
                             </div>
+                            {{--  <div class="form-group">
+                                <label class="floating-label-activo-sm">Nº de bono o programa</label>
+                                <input type="text" class="form-control form-control-sm" name="bono_numero" id="bono_numero" >
+                            </div>  --}}
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Valor total</label>
+                                <input name="bono_valor_consulta" id="bono_valor_consulta" type="number" class="form-control form-control-sm">
+                            </div>
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Convenio</label>
+                                <select id="bono_prevision" name="bono_prevision" class="form-control form-control-sm">
+                                    <option value="0">Selecione una opción</option>
+                                    @foreach ($prevision as $prev)
+                                        <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group mb-3">
+                                <div class="switch switch-success d-inline m-r-10">
+                                    <input type="checkbox" id="recepcion_programa">
+                                    <label for="recepcion_programa" class="cr"></label>
+                                </div>
+                                <label>Recepción de programa</label>
+                            </div>
+                            <div class="form-group" id="sesiones_programa" style="display:none">
+                                <label class="floating-label">Nº de sesiones</label>
+                                <input name="bono_sn_sesiones" id="bono_sn_sesiones" type="number" class="form-control form-control-sm">
+                            </div>
                         </div>
-
-
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 text-center">
+                        <div onclick="recepcion_pago();" class="btn btn-info">Recepcionar</div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-@extends('template/template')
+@extends('template.template')
 @section('Content')
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -129,8 +129,9 @@
             </div>
             <!--CIERRE CONTENIDO DE TAB-->
 
-            <!--MODALES-->
-            @include('atencion_medica.modales')
+            <!-- SIDE BAR  -->
+            @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
+
 
         </div>
     </div>

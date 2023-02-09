@@ -271,7 +271,7 @@ Route::group([
     Route::get('Mi_Ficha_Medica', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('ficha_medica');
     Route::get('Mi_Ficha_Medica_Pdf', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedicaPdfView']);
 
-    Route::get('Mi_Ficha_Medica2', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica2'])->name('paciente.mi_ficha');
+    Route::get('Mi_Ficha_Medica2', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica2'])->name('paciente.mi_ficha2');
     Route::get('Receta_Online', [App\Http\Controllers\EscritorioPaciente::class, 'recetaOnline'])->name('paciente.receta');
     Route::get('Acceso_Profesional_NI', [App\Http\Controllers\EscritorioPaciente::class, 'acceso_pni'])->name('paciente.acceso_pni');
 
@@ -429,6 +429,14 @@ Route::group([
     Route::post('/profesional/agregar_ficha_tipo_otorrino', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoOtorrino'])->name('profesional.ficha_tipo_otorrino');
 	Route::get('/profesional/buscar_ficha_tipo_otorrino', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoOtorrino'])->name('profesional.buscar_ficha_tipo_otorrino');
 
+    /** REGISTRO DE FICHA TIPO CDG CIRUGIA DIGESTIVA GENERAL */
+    Route::post('/profesional/agregar_ficha_tipo_cdg', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoCDG'])->name('profesional.ficha_tipo_cdg');
+	Route::get('/profesional/buscar_ficha_tipo_cdg', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoCDG'])->name('profesional.buscar_ficha_tipo_cdg');
+
+    /** REGISTRO DE FICHA TIPO CDG CIRUGIA GENERAL */
+    Route::post('/profesional/agregar_ficha_tipo_cg', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoCG'])->name('profesional.ficha_tipo_cg');
+	Route::get('/profesional/buscar_ficha_tipo_cg', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoCG'])->name('profesional.buscar_ficha_tipo_cg');
+
 	/** RECETA AUDIFONOS */
     Route::post('/profesional/audifono/agregar', [App\Http\Controllers\EscritorioProfesional::class, 'agregarAudifono'])->name('profesional.registrar_audifono');
     Route::get('/profesional/audifono/ver', [App\Http\Controllers\EscritorioProfesional::class, 'verAudifono'])->name('profesional.ver_audifono');
@@ -436,6 +444,9 @@ Route::group([
 	/** LIQUIDACIONES */
     Route::post('/profesional/liquidacion/agregar', [App\Http\Controllers\EscritorioProfesional::class, 'agregarLiquidacion'])->name('profesional.agregar_liquidacion');
 	Route::post('/profesional/liquidacion/modificar', [App\Http\Controllers\EscritorioProfesional::class, 'modificarLiquidacion'])->name('profesional.modificar_liquidacion');
+
+    /** Proceso de imagenes */
+	Route::post('/imagen/carga', [App\Http\Controllers\CargaImagenController::class, 'cargaImagenTemp'])->name('profesional.imagen.carga');
 });
 
 /* ASISTENTE CONSULTA*/
@@ -989,7 +1000,7 @@ Route::group([
 
 /** BUSCADOR DE PROFESIONAL */
 Route::group([
-    'middleware' => ['role:Paciente|Asistente|Adm_Institucion|profesional'],
+    'middleware' => ['role:Paciente|Asistente|Adm_Institucion|Profesional'],
     'prefix' => 'buscador',
 ], function () {
 
@@ -1048,6 +1059,11 @@ Route::get('/hora/atencion/solicitud/confirmacion', [App\Http\Controllers\Confir
 Route::get('/hora/atencion/solicitud/confirmacion/segundo', [App\Http\Controllers\ConfirmacionHoraController::class, 'EnviarSegundaSolicitudConfirmarHora']);
 Route::get('/hora/atencion/confirmacion', [App\Http\Controllers\ConfirmacionHoraController::class, 'Confirmacion'])->name('solicitud.comfirmacion.hora.confirmacion');
 Route::get('/hora/atencion/cancelacion', [App\Http\Controllers\ConfirmacionHoraController::class, 'Cancelacion'])->name('solicitud.comfirmacion.hora.cancelacion');
+
+
+Route::get('/img/mover', [App\Http\Controllers\CargaImagenController::class, 'moverImagen_r'])->name('img.mover');
+
+
 
 /** PARA VISUALIZAR DEMOS */
 // Route::get('/autorizacion/enlace', function () {

@@ -9,7 +9,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio Profesional</h5>
+                                <h5 class="m-b-10 font-weight-bold">Escritorio profesional</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip"
@@ -25,50 +25,54 @@
             </div>
             <!--Cierre: Header-->
             <!--Botones-->
-            <div class="row m-b-30">
-                <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12 m-b-20">
                     <div class="card-deck">
-                        <div class="card subir py-5">
+                        <div class="card subir">
                             <a href="{{ route('profesional.mis_recetas') }}">
                                 <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/recetas.svg') }}"
-                                        alt="Mis Recetas">
-                                    <h4 class="titulos_tarjetas">
-                                        Mis Recetas
+                                    <img class="wid-70 text-center mb-3" src="{{ asset('images/iconos/recetas-ro.svg') }}"
+                                        alt="Mis recetas">
+                                    <h4 class="f-20">
+                                        Mis recetas
                                     </h4>
                                 </div>
                             </a>
                         </div>
-                        <div class="card subir py-5">
+                        <div class="card subir">
                             <a href="{{ route('profesional.mis_examenes') }}">
                                 <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/examen.svg') }}"
-                                        alt="Mis Examenes">
-                                    <h4 class="titulos_tarjetas">
-                                        Mis Exámenes
+                                    <img class="wid-70 text-center mb-3" src="{{ asset('images/iconos/examenes-ro.svg') }}"
+                                        alt="Mis exámenes">
+                                    <h4 class="f-20">
+                                        Mis exámenes
                                     </h4>
                                 </div>
                             </a>
                         </div>
-						<div class="card subir py-5">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card-deck">
+						<div class="card subir">
                             <a href="{{ route('profesional.mis_certificados') }}">
                                 <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-100 text-center mb-3"
-                                        src="{{ asset('images/iconos/certificado.svg') }}" alt="Mis Certificados">
-                                    <h4 class="titulos_tarjetas">
-                                        Mis Certificados
-                                    </h4>
+                                    <img class="wid-70 text-center mb-3"
+                                        src="{{ asset('images/iconos/certificados-ro.svg') }}" alt="Mis certificados">
+                                    <h5 class="f-20">
+                                        Mis certificados
+                                    </h5>
                                 </div>
                             </a>
                         </div>
-                        <div class="card subir py-5">
+                        <div class="card subir">
                             <a href="#">
                                 <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-100 text-center mb-3"
-                                        src="{{ asset('images/iconos/certificado.svg') }}" alt="Mis Certificados">
-                                    <h4 class="titulos_tarjetas">
-                                        Mis Documentos
-                                    </h4>
+                                    <img class="wid-70 text-center mb-3"
+                                        src="{{ asset('images/iconos/documentos-ro.svg') }}" alt="Mis documentos">
+                                    <h5 class="f-20">
+                                        Mis documentos
+                                    </h5>
                                 </div>
                             </a>
                         </div>
