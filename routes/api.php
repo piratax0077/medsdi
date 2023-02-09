@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersDevicesController;
 use App\Http\Controllers\LogUsersDevicesController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\AntecedenteController;
+use App\Http\Controllers\TipoAntecedenteController;
 
 
 /*
@@ -41,6 +43,21 @@ Route::post('/log_user_devices/modificar',    [LogUsersDevicesController::class,
 Route::get('/log_user_devices/ver_registros',[LogUsersDevicesController::class, 'verRegistros']);
 Route::get('/log_user_devices/ver_registro', [LogUsersDevicesController::class, 'verRegistro']);
 Route::post('/log_user_devices/estado',       [LogUsersDevicesController::class, 'estado']);
+
+//ANTECEDENTE - CRUD
+Route::post('/antecendente/registrar',    [AntecedenteController::class, 'registrar']);
+Route::post('/antecendente/modificar',    [AntecedenteController::class, 'modificar']);
+Route::get('/antecendente/ver_registros',[AntecedenteController::class, 'verRegistros']);
+Route::get('/antecendente/ver_registro', [AntecedenteController::class, 'verRegistro']);
+Route::post('/antecendente/estado',       [AntecedenteController::class, 'estado']);
+
+//TIPO ANTECEDENTE - CRUD
+Route::get('/tipo_antecedente/tmp',    [TipoAntecedenteController::class, 'tmp']);
+Route::post('/tipo_antecedente/registrar',    [TipoAntecedenteController::class, 'registrar']);
+Route::post('/tipo_antecedente/modificar',    [TipoAntecedenteController::class, 'modificar']);
+Route::get('/tipo_antecedente/ver_registros',[TipoAntecedenteController::class, 'verRegistros']);
+Route::get('/tipo_antecedente/ver_registro', [TipoAntecedenteController::class, 'verRegistro']);
+Route::post('/tipo_antecedente/estado',       [TipoAntecedenteController::class, 'estado']);
 
 
 
