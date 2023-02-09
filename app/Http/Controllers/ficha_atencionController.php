@@ -1378,24 +1378,24 @@ class ficha_atencionController extends Controller
             }
             else
             {
-                if(empty($request->id_profesional_solicitado_por))
+                if(empty($request->solicitado_id_profesional_rfl))
                 {
-                    if(empty($request->solicitado_por_rut_rfl))
+                    if(empty($request->solicitado_rut_rfl))
                     {
                         $campos_requeridos = 1;
                         $mensaje = 'Rinofibrolaringoscopía - Campo requerido RUT del Solicitante.\n';
                     }
-                    if(empty($request->solicitado_por_nombre_rfl))
+                    if(empty($request->solicitado_nombre_rfl))
                     {
                         $campos_requeridos = 1;
                         $mensaje = 'Rinofibrolaringoscopía - Campo requerido NOMBRE del Solicitante.\n';
                     }
-                    if(empty($request->solicitado_por_apellido_rfl))
+                    if(empty($request->solicitado_apellido_rfl))
                     {
                         $campos_requeridos = 1;
                         $mensaje = 'Rinofibrolaringoscopía - Campo requerido APELLIDO del Solicitante.\n';
                     }
-                    if(empty($request->solicitado_por_telefono_rfl) || empty($request->solicitado_por_email_rfl))
+                    if(empty($request->solicitado_telefono_rfl) || empty($request->solicitado_email_rfl))
                     {
                         $campos_requeridos = 1;
                         $mensaje = 'Rinofibrolaringoscopía - Campo requerido TELÉFONO o EMAIL del Solicitante.\n';
@@ -1629,184 +1629,109 @@ class ficha_atencionController extends Controller
                 $mensaje .= $mensaje_estado_hora_medica;
 
 
-                /** registro de ficha rfl */
-                // $registro_rfl = new FichaOtorrinoRinof();
-                // $registro_rfl->id_fichas_atenciones =  $ficha->id;
+                /** registro examen especialidad Rinofibrolaringoscopía */
+                $parametro = $request->all();
+                $parametro['id_ficha_otorrino'] = $ficha_orl->id;
+                $examen_json = ExamenEspecialidadController::estructuraJson(1,$parametro);
 
-                // if(isset($ficha_orl->id))
-                //     $registro_rfl->id_ficha_otorrino = $ficha_orl->id;
-                // else
-                //     $registro_rfl->id_ficha_otorrino = 0;
-
-                // $registro_rfl->solicitado_id_profesional = $request->id_profesional_solicitado_por;
-                // $registro_rfl->solicitado_nombre = $request->solicitado_por_nombre_rfl;
-                // $registro_rfl->solicitado_apellido = $request->solicitado_por_apellido_rfl;
-                // $registro_rfl->solicitado_rut = $request->solicitado_por_rut_rfl;
-                // $registro_rfl->solicitado_email = $request->solicitado_por_telefono_rfl;
-                // $registro_rfl->solicitado_telefono = $request->solicitado_por_email_rfl;
-                // $registro_rfl->motivo = $request->descripcion_examen_rfl;
-                // $registro_rfl->antecedentes = $request->antec_especialidad_rfl;
-                // $registro_rfl->id_paciente = $id_paciente;
-                // $registro_rfl->muc_nasal_permeab = $request->muc_nasal_permeab;
-                // $registro_rfl->cornetes = $request->cornetes;
-                // $registro_rfl->tabique = $request->tabique;
-                // $registro_rfl->tumor = $request->tumor;
-                // $registro_rfl->rinofaringe = $request->rinofaringe;
-                // $registro_rfl->orofaringe = $request->orofaringe;
-                // $registro_rfl->laringe = $request->laringe;
-                // $registro_rfl->cuerdas = $request->cuerdas;
-                // $registro_rfl->movilidad = $request->movilidad;
-                // $registro_rfl->cierre_glotico = $request->cierre_glotico;
-                // // $registro_rfl->img_1 = ;
-                // // $registro_rfl->img_2 = ;
-                // // $registro_rfl->img_3 = ;
-                // // $registro_rfl->img_4 = ;
-                // // $registro_rfl->img_5 = ;
-                // // $registro_rfl->img_6 = ;
-                // $registro_rfl->diag_endos = $request->diag_endos;
-                // $registro_rfl->observaciones_endos = $request->observaciones;
-                // $registro_rfl->estado = 1;
-
-
-                $cuerpo = array(
-                    'id_fichas_atenciones' =>  $ficha->id,
-                    'id_ficha_otorrino' => $ficha_orl->id,
-                    'solicitado_id_profesional' => $request->id_profesional_solicitado_por,
-                    'solicitado_nombre' => $request->solicitado_por_nombre_rfl,
-                    'solicitado_apellido' => $request->solicitado_por_apellido_rfl,
-                    'solicitado_rut' => $request->solicitado_por_rut_rfl,
-                    'solicitado_email' => $request->solicitado_por_telefono_rfl,
-                    'solicitado_telefono' => $request->solicitado_por_email_rfl,
-                    'motivo' => $request->descripcion_examen_rfl,
-                    'antecedentes' => $request->antec_especialidad_rfl,
-                    'id_paciente' => $id_paciente,
-                    'muc_nasal_permeab' => $request->muc_nasal_permeab,
-                    'cornetes' => $request->cornetes,
-                    'tabique' => $request->tabique,
-                    'tumor' => $request->tumor,
-                    'rinofaringe' => $request->rinofaringe,
-                    'orofaringe' => $request->orofaringe,
-                    'laringe' => $request->laringe,
-                    'cuerdas' => $request->cuerdas,
-                    'movilidad' => $request->movilidad,
-                    'cierre_glotico' => $request->cierre_glotico,
-                    // 'img_1' => ,
-                    // 'img_2' => ,
-                    // 'img_3' => ,
-                    // 'img_4' => ,
-                    // 'img_5' => ,
-                    // 'img_6' => ,
-                    'diag_endos' => $request->diag_endos,
-                    'observaciones_endos' => $request->observaciones,
-                    'estado' => 1,
-                );
-
-                $profesional = Profesional::find($id_profesional);
-
-                $examen = new ExamenEspecialidad();
-                $examen->id_tipo = '1';
-                $examen->id_template = '1';
-                $examen->id_examen_tipo = '1';
-                $examen->id_sub_tipo_especialidad = $profesional->id_sub_tipo_especialidada;
-                $examen->id_ficha_atencion = $ficha->id;
-                $examen->id_ficha_especialidad = $ficha_orl->id;
-                $examen->id_paciente = $id_paciente;
-                $examen->id_profesional = $id_profesional;
-                $examen->nombre = 'Rinofibrolaringoscopía';
-                $examen->cuerpo = json_encode($cuerpo);
-                $examen->estado = '1';
-
-                // if($registro_rfl->save())
-                if($examen->save())
+                if($examen_json['estado'] == 1)
                 {
-                    $datos['examen']['estado'] = 1;
-                    $datos['examen']['msj'] = 'registro exitoso';
-                    $mensaje .= 'Ficha Otorrino Rinofibrolaringoscopía guardada de forma correcta\n';
+                    $profesional = Profesional::find($id_profesional);
 
-                    /** registro de imagenes  */
-                    if(!empty($request->input_lista_imagenes))
+                    $examen = new ExamenEspecialidad();
+                    $examen->id_tipo = '1';
+                    $examen->id_template = '1';
+                    $examen->id_examen_tipo = '1';
+                    $examen->id_sub_tipo_especialidad = $profesional->id_sub_tipo_especialidada;
+                    $examen->id_ficha_atencion = $ficha->id;
+                    $examen->id_ficha_especialidad = $ficha_orl->id;
+                    $examen->id_paciente = $id_paciente;
+                    $examen->id_profesional = $id_profesional;
+                    $examen->nombre = 'Rinofibrolaringoscopía';
+                    $examen->cuerpo = $examen_json['json'];
+                    $examen->estado = '1';
+
+                    // if($registro_rfl->save())
+                    if($examen->save())
                     {
-                        $array_imagenes = json_decode($request->input_lista_imagenes);
+                        $datos['examen']['estado'] = 1;
+                        $datos['examen']['msj'] = 'registro exitoso';
+                        $mensaje .= 'Ficha Otorrino Rinofibrolaringoscopía guardada de forma correcta\n';
 
-                        $resulto_img = array();
-                        foreach ($array_imagenes as $key => $value)
+                        /** registro de imagenes  */
+                        if(!empty($request->input_lista_imagenes))
                         {
-                            $paciente = Paciente::find($id_paciente);
-                            // echo json_encode($value);
-                            $ruta_temp = $value[0];
-                            $nombre_real = $value[1];
-                            $nombre_temp = $value[2];
-                            $file_extension = $value[3];
-                            $nombre_final = $paciente->rut.'_'.$examen->id.'_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+                            $array_imagenes = json_decode($request->input_lista_imagenes);
 
-                            $resulto_img[$key] = CargaImagenController::moverImagen($nombre_temp, 'img_examen', $nombre_final);
-                            var_dump($resulto_img[$key]);
-                            $registro_img = new ExamenEspecialidadImg();
-                            $registro_img->id_examen = $examen->id;
-                            $registro_img->url = $resulto_img[$key]['proceso']['url'];
-                            $registro_img->nombre = $nombre_final;
-                            $registro_img->otro = '';
-                            $registro_img->estado = 1;
-
-                            if($registro_img->save())
+                            $resulto_img = array();
+                            foreach ($array_imagenes as $key => $value)
                             {
-                                $resulto_img[$key]['estado'] = 1;
-                                $resulto_img[$key]['msj'] = 'imagen registrada';
+                                $paciente = Paciente::find($id_paciente);
+                                // echo json_encode($value);
+                                $ruta_temp = $value[0];
+                                $nombre_real = $value[1];
+                                $nombre_temp = $value[2];
+                                $file_extension = $value[3];
+                                $nombre_final = $paciente->rut.'_'.$examen->id.'_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+
+                                $resulto_img[$key] = CargaImagenController::moverImagen($nombre_temp, 'img_examen', $nombre_final);
+                                $registro_img = new ExamenEspecialidadImg();
+                                $registro_img->id_examen = $examen->id;
+                                $registro_img->url = $resulto_img[$key]['proceso']['url'];
+                                $registro_img->nombre = $nombre_final;
+                                $registro_img->otro = '';
+                                $registro_img->estado = 1;
+
+                                if($registro_img->save())
+                                {
+                                    $resulto_img[$key]['estado'] = 1;
+                                    $resulto_img[$key]['msj'] = 'imagen registrada';
+                                }
+                                else
+                                {
+                                    $resulto_img[$key]['estado'] = 0;
+                                    $resulto_img[$key]['msj'] = 'falla en registro de imagen';
+                                }
+
+                            }
+                            $datos['examen']['resulto_img'] = $resulto_img;
+
+                        }
+
+                        /** registro de porfesional provisorio */
+                        if(empty($request->solicitado_id_profesional_rfl))
+                        {
+                            $profesional_provisorio = ProfesionalProvisorioController::registrar( $request->solicitado_nombre_rfl, $request->solicitado_apellido_rfl, '', '', $request->solicitado_rut_rfl, $request->solicitado_email_rfl, $request->solicitado_telefono_rfl, '', '', '', '', '', '', '', '', '', 1);
+
+                            if($profesional_provisorio['estado'] == 1)
+                            {
+                                $datos['registro_prof_provi']['estado'] = 1;
+                                $datos['registro_prof_provi']['msj'] = 'registro exitoso';
+                                $datos['registro_prof_provi']['result'] = $profesional_provisorio;
+
+                                $mensaje .= 'Profesional Prvisorio creado\n';
                             }
                             else
                             {
-                                $resulto_img[$key]['estado'] = 0;
-                                $resulto_img[$key]['msj'] = 'falla en registro de imagen';
+                                $datos['registro_prof_provi']['estado'] = 0;
+                                $datos['registro_prof_provi']['msj'] = 'falla en registro';
+                                $datos['registro_prof_provi']['result'] = $profesional_provisorio;
+                                $mensaje .= 'Profesional Prvisorio creado\n';
                             }
 
                         }
-                        $datos['examen']['resulto_img'] = $resulto_img;
 
                     }
-
-                    /** registro de porfesional provisorio */
-                    if(empty($request->id_profesional_solicitado_por))
+                    else
                     {
-                        $profesional_provisorio = new ProfesionalProvisorio();
-                        $profesional_provisorio->nombre = $request->solicitado_por_nombre_rfl;
-                        $profesional_provisorio->apellido_uno = $request->solicitado_por_apellido_rfl;
-                        // $profesional_provisorio->apellido_dos =
-                        // $profesional_provisorio->sexo =
-                        $profesional_provisorio->rut = $request->solicitado_por_rut_rfl;
-                        $profesional_provisorio->email = $request->solicitado_por_email_rfl;
-                        $profesional_provisorio->telefono_uno = $request->solicitado_por_telefono_rfl;
-                        // $profesional_provisorio->telefono_dos =
-                        // $profesional_provisorio->id_direccion =
-                        // $profesional_provisorio->id_usuario =
-                        // $profesional_provisorio->id_especialidad =
-                        // $profesional_provisorio->id_tipo_especialidad =
-                        // $profesional_provisorio->id_sub_tipo_especialidad =
-                        // $profesional_provisorio->supersalud =
-                        // $profesional_provisorio->contactado =
-                        // $profesional_provisorio->otro =
-                        $profesional_provisorio->estado = 1;
-
-                        if($profesional_provisorio->save())
-                        {
-                            $datos['registro_prof_provi']['estado'] = 1;
-                            $datos['registro_prof_provi']['msj'] = 'registro exitoso';
-                            $mensaje .= 'Profesional Prvisorio creado\n';
-                        }
-                        else
-                        {
-                            $datos['registro_prof_provi']['estado'] = 0;
-                            $datos['registro_prof_provi']['msj'] = 'falla en registro';
-                            $mensaje .= 'Profesional Prvisorio creado\n';
-                        }
-
+                        $datos['examen']['estado'] = 0;
+                        $datos['examen']['msj'] = 'registro NO exitoso';
+                        $mensaje .= 'Ficha Otorrino Rinofibrolaringoscopía No guardada \n';
                     }
-
                 }
                 else
                 {
-                    $datos['examen']['estado'] = 0;
-                    $datos['examen']['msj'] = 'registro NO exitoso';
-                    $mensaje .= 'Ficha Otorrino Rinofibrolaringoscopía No guardada \n';
+                    $mensaje .= 'Problema al registrar Examen Espacial';
                 }
 
                 if($request->cerrarsession == 0 || $request->cerrarsession =='')

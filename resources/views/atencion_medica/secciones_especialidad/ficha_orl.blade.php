@@ -922,7 +922,7 @@
                                                             <div class="form-group col-md-2" >
                                                                 <input type="hidden" name="id_profesional_solicitado_por" id="id_profesional_solicitado_por" value="">
                                                                 <label class="floating-label-activo-sm">RUT</label>
-                                                                <input type="text" class="form-control form-control-sm" name="solicitado_por_rut_rfl" id="solicitado_por_rut_rfl" onblur="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');" onchange="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');" onkeyup="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');">
+                                                                <input type="text" class="form-control form-control-sm" name="solicitado_rut_rfl" id="solicitado_rut_rfl" onblur="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');" onchange="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');" onkeyup="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');">
                                                             </div>
                                                             <div class="form-group col-md-2" >
                                                                 <label class="floating-label-activo-sm">Solicitado por</label>
@@ -1161,7 +1161,7 @@
         $(document).ready(function() {
 
             /* formatear rut */
-            $("#solicitado_por_rut_rfl").rut({
+            $("#solicitado_rut_rfl").rut({
                 formatOn: 'keyup',
                 minimumLength: 2,
                 validateOn: 'change',
