@@ -268,8 +268,8 @@ Route::group([
     Route::get('Inicio', [App\Http\Controllers\EscritorioPaciente::class, 'index'])->name('paciente.home');
     Route::get('Reservar_Hora', [App\Http\Controllers\EscritorioPaciente::class, 'agendarHora'])->name('paciente.agendar_hora');
     Route::get('Mi_Profesionales', [App\Http\Controllers\EscritorioPaciente::class, 'miProfesionales'])->name('paciente.mis_profesionales');
-    Route::get('Mi_Ficha_Medica', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('paciente.mi_ficha');
-    Route::get('Mi_Ficha_Medica_Pdf', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedicaPdfView'])->name('paciente.mi_ficha_pdf');
+    Route::get('Mi_Ficha_Medica', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('ficha_medica');
+    Route::get('Mi_Ficha_Medica_Pdf', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedicaPdfView']);
 
     Route::get('Mi_Ficha_Medica2', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica2'])->name('paciente.mi_ficha2');
     Route::get('Receta_Online', [App\Http\Controllers\EscritorioPaciente::class, 'recetaOnline'])->name('paciente.receta');

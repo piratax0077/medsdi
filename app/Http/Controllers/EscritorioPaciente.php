@@ -8,6 +8,7 @@ use App\Models\AntecedenteEnferCronica;
 use App\Models\AntecedenteMedicamentoCronico;
 use App\Models\AntecedentesCirugias;
 use App\Models\AntecedentesPaciente;
+use App\Models\Antecedente;
 use App\Models\Ciudad;
 use App\Models\ContactoEmergencia;
 use App\Models\Direccion;
@@ -252,15 +253,22 @@ class EscritorioPaciente extends Controller
                 'descripcion_gs'=> 'N/A'
             );
         }
-        
-        
+
+        /* ANTECEDENTES */ 
+        $antecedentes = Antecedente::where('id_users',$id_usuario)->with('users','paciente','tipo_antecendente')->get();
+        //$antecedentes = Antecedente::with('users','paciente','tipo_antecendente')->get();
+
+        foreach ($antecedentes as $valor) {
+            $valor['antecedente_data'] = json_decode($valor['data']);
+        }
 
         return view('ficha_medica', [
             'id_usuario' => $id_usuario,
             'paciente' => $paciente,
             'contacto_emergencia' => $contacto_emergencia,
             'antecedentes_paciente' => $antecedentes_paciente,
-            'grupo_sanguineo' => $grupo_sanguineo
+            'grupo_sanguineo' => $grupo_sanguineo,
+            'antecedentes' => $antecedentes
 
         ]);
     }
@@ -351,6 +359,13 @@ class EscritorioPaciente extends Controller
             );
         }
 
+         /* ANTECEDENTES */ 
+        $antecedentes = Antecedente::where('id_users',$id_usuario)->with('users','paciente','tipo_antecendente')->get();
+        //$antecedentes = Antecedente::with('users','paciente','tipo_antecendente')->get();
+
+        foreach ($antecedentes as $valor) {
+            $valor['antecedente_data'] = json_decode($valor['data']);
+        }
 
         $titulo = 'Ficha Medica';
         $detalle = array(
@@ -358,7 +373,8 @@ class EscritorioPaciente extends Controller
             'paciente' => $paciente,
             'contacto_emergencia' => $contacto_emergencia,
             'antecedentes_paciente' => $antecedentes_paciente,
-            'grupo_sanguineo' => $grupo_sanguineo
+            'grupo_sanguineo' => $grupo_sanguineo,
+            'antecedentes' => $antecedentes
         );
         $nombre = 'ficha_medica_'.$id_usuario;
         $template = 'pdf_mi_ficha_medica';

@@ -9,11 +9,11 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Escritorio Asistente</h5>
+                            <h5 class="m-b-10 font-weight-bold">Escritorio asistente</h5>
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="{{ route('asistente.home') }}">Mi Escritorio </a>
+                                <a href="{{ route('asistente.home') }}">Mi escritorio </a>
                             </li>
                         </ul>
                     </div>
@@ -22,7 +22,7 @@
         </div>
         <!--Cierre: Header-->
         <!--Row Botones-->
-        <div class="row m-b-30">
+        <div class="row">
             <div class="col-md-12">
                 <div class="card-deck">
                     <!--Cierre de Card-->
@@ -30,7 +30,7 @@
                         <a href="{{ ROUTE('asistente.buscar_paciente') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-70 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
-                                <h5 class="mt-1 mb-0">Buscar Pacientes</h5>
+                                <h5 class="mt-1 mb-0">Buscar pacientes</h5>
                             </div>
                         </a>
                     </div>
@@ -47,21 +47,21 @@
                         <a href="{{ ROUTE('asistente.agenda_por_profesional') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-                                <h5 class="mt-1 mb-0">Agenda de Mis Profesionales</h5>
+                                <h5 class="mt-1 mb-0">Agenda de mis profesionales</h5>
                             </div>
                         </a>
                     </div>
                     <div class="card subir py-auto">
                         <a href="{{ ROUTE('asistente.flujo_caja') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                <h5 class="mt-1 mb-0">Flujo de Caja</h5>
+                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja.svg') }}">
+                                <h5 class="mt-1 mb-0">Flujo de caja</h5>
                             </div>
                         </a>
                     </div>
 					<!--
                     <div class="card py-auto subir">
-                        <!--<a href="{{ ROUTE('asistente.venta_productos') }}">
+                        <a href="{{ ROUTE('asistente.venta_productos') }}">
                         <a href="{{ ROUTE('asistente.registro_paciente') }}" class="btn" type="button">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/otros_servicios_1.svg') }}">
@@ -74,14 +74,14 @@
             </div>
         </div>
         <!--CIERRE: Row Botones -->
-        <!--Tabla agenda del día y flujo de caja-->
-        <div class="row m-b-30">
-            <div class="col-md-8">
+        <!--Tabla agenda del día - inscripción-->
+        <div class="row mt-3">
+            <div class="col-md-8 mb-3">
                 <div class="card h-100 pb-0">
                     <div class="card-header bg-c-info">
                         <div class="row">
                             <div class="col-sm-12 d-inline text-center">
-                                <h5 class="text-white my-2" style="font-size: 1.4rem;">Información de mis profesionales</h5>
+                                <h4 class="text-white my-2 f-20">Información de mis profesionales</h4>
                             </div>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center align-middle">Profesional</th>
-										<th class="text-center align-middle">Ver Información</th>
+										<th class="text-center align-middle">Ver información</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -122,7 +122,6 @@
 					<a href="http://www.cronicos.cl/registro.php" target="_blank">
                     <img class="img-fluid card-img-top" src="{{ asset('images/iconos/inscripciones_1.svg') }}" alt="Inscripciones" class="btn  btn-arrastre" type="button">
                     <!--<a href="{{ ROUTE('asistente.registro_paciente') }}" class="btn" type="button">-->
-
 					<div class="card-body">
 						<h4 class="card-title f-20 pt-3">Inscripciones</h4>
 						<p class="card-text">Registre pacientes a Farmacrónicos</p>

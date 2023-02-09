@@ -10,11 +10,11 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio Profesional</h5>
+                                <h5 class="m-b-10 font-weight-bold">Escritorio profesional</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="#">Mi Escritorio </a>
+                                    <a href="#">Mi escritorio </a>
                                 </li>
                             </ul>
                         </div>
@@ -23,7 +23,7 @@
             </div>
             <!--Cierre: Header-->
             <!--Botones superiores-->
-            <div class="row m-b-30">
+            <div class="row m-b-20">
                 <div class="col-md-12">
                     <div class="card-deck">
                         <div class="card subir">
@@ -31,15 +31,15 @@
                             <div class="card-body text-center" onclick="seleccionar_lugar_atencion();"
                                 style="cursor:pointer">
                                 <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-                                <h5 class="mt-2">Mi Agenda</h5>
+                                <h5 class="mt-1">Mi agenda</h5>
                             </div>
                             {{-- </a> --}}
                         </div>
                         <div class="card subir">
                             <a href="{{ route('profesional.pacientes') }}">
                                 <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-80 text-center" src="{{ asset('images/iconos/pacientes.svg') }}">
-                                    <h5 class="mt-2">Mis Pacientes</h5>
+                                    <img class="wid-60 text-center" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                    <h5 class="mt-1">Mis pacientes</h5>
                                 </div>
                             </a>
                         </div>
@@ -48,16 +48,15 @@
                                 <div class="card-body text-center" style="cursor:pointer">
                                     <img class="wid-60 text-center"
                                         src="{{ asset('images/iconos/panel_configuracion.svg') }}">
-                                    <h5 class="mt-2"> Panel de Configuración</h5>
+                                    <h5 class="mt-1"> Panel de configuración</h5>
                                 </div>
                             </a>
                         </div>
                         <div class="card subir">
-                            <a href="{{ route('profesional.index_receta_online') }}">Receta
-                                Online
+                            <a href="{{ route('profesional.index_receta_online') }}">
                                 <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-60 text-center" src="{{ asset('images/iconos/ficha_2.svg') }}">
-                                    <h5 class="mt-2">Receta Online</h5>
+                                    <img class="wid-60 text-center" src="{{ asset('images/iconos/receta_online.svg') }}">
+                                    <h5 class="mt-1">Receta Online</h5>
                                 </div>
                             </a>
                         </div>
@@ -75,7 +74,7 @@
                                 </div>
                                 <div class="col-md-4 d-inline text-right mt-1">
 									<select name="lugares_atencion_agenda" id="lugares_atencion_agenda" class="form-control form-control-sm" onchange="buscar_hora_medica();">
-										<option value="">Seleccione Lugar</option>
+										<option value="">Seleccionar lugar</option>
 									</select>
                                 </div>
                                 <div class="col-sm-4 d-inline text-right mt-1">
@@ -135,7 +134,7 @@
                          <a href="http://cronicos.cl/registro.php" target="_blank" class="btn  btn-arrastre" type="button">
                             <div class="card-body">
                                 <h5 style="font-size: 1.2rem;" class="card-title pt-2">Inscripción en Farmacrónicos</h5>
-                                <p class="card-text">Inscriba a sus Pacientes en crónicos.cl <br> Obtendrá Importantes Novedades en el Manejo de su Patología<br> y en el uso de sus Medicamentos</p>
+                                <p class="card-text">Inscriba a sus pacientes en Crónicos.cl <br> Obtendrá importantes novedades en el manejo de su patología<br> y en el uso de sus medicamentos</p>
                             </div>
                         </a>
                     </div>
@@ -165,15 +164,15 @@
                             <a href="#" class="btn" type="button">
                                 <div class="card-body">
                                     <img class="wid-30 mb-3" src="{{ asset('images/iconos/otros_servicios.svg') }}">
-                                    <h5 class="my-auto text-white">Otros Servicios</h5>
+                                    <h5 class="my-auto text-white">Otros servicios</h5>
                                 </div>
                             </a>
                         </div>
                         <div class="card social-widget-card bg-c-info opacidad px-0">
                             <a href="{{ route('profesional.flujo_caja') }}" class="btn" type="button">
                                 <div class="card-body">
-                                    <img class="wid-30 mb-3" src="{{ asset('images/iconos/flujo_caja_3.svg') }}">
-                                    <h5 class="my-auto text-white">Flujo de Caja</h5>
+                                    <img class="wid-30 mb-3" src="{{ asset('images/iconos/flujo_caja_1.svg') }}">
+                                    <h5 class="my-auto text-white">Flujo de caja</h5>
                                 </div>
                             </a>
                         </div>
