@@ -1,4 +1,4 @@
-@extends('template.template_urologia')
+@extends('template.template_dermato')
 @section('Content')
 
     <!--Container Completo-->
@@ -10,7 +10,7 @@
                     <div class="row align-items-center pb-2">
                         <div class="col-md-6">
                             <div class="page-header-title">
-                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN UROLOGÍA</strong></h5>
+                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN DERMATOLOGÍA</strong></h5>
                                 <p class="font-italic mt-0 mb-0 text-white">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -52,7 +52,7 @@
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="examenes-tab" data-toggle="tab" href="#examenes" role="tab" aria-controls="examenes" aria-selected="false">Exámenes</a>
+                                        <a class="nav-link text-reset" id="examenes-tab" data-toggle="tab" href="#examenes_tab" role="tab" aria-controls="examenes" aria-selected="false">Exámenes</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="hospitalizacion" aria-selected="false">Hospitalización</a>
@@ -70,7 +70,7 @@
                     <div class="tab-content" id="at-oftalmo">
                         <!--Atender paciente-->
                         <div class="tab-pane fade show active" id="atender" role="tabpanel" aria-labelledby="atender-tab">
-                            @include('atencion_medica.secciones_especialidad.ficha_urologia')
+                            @include('atencion_medica.secciones_especialidad.ficha_dermatologia')
                         </div>
                         <!--Licencia-->
                         <div class="tab-pane fade show" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
@@ -86,7 +86,7 @@
                             @include('atencion_medica.formularios.atenciones_previas_form')
                         </div>
                         <!--Exámenes-->
-                        <div class="tab-pane fade show" id="examenes" role="tabpanel" aria-labelledby="examenes-tab">
+                        <div class="tab-pane fade show" id="examenes_tab" role="tabpanel" aria-labelledby="examenes-tab">
                             @include('atencion_medica.secciones_ficha.examenes')
                         </div>
                         <!--Hospitalización-->
@@ -98,22 +98,20 @@
             </div>
         </div>
 
-        <!-- SIDE BAR URO -->
+        <!-- SIDE BAR ORL -->
         @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
-        @include("atencion_medica.include.sidebar_derecho_uro"){{-- modales y data de sidebar especialidad --}}
+        @include("atencion_medica.include.sidebar_derecho_orl"){{-- modales y data de sidebar especialidad --}}
 
 
         <!--Modals de especialidad -->
-        @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
+        {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
 
         <!--Modals formularios generales-->
-
-       {{--   @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
+        {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
 
 
     </div>
-
     <!--Cierre: Container Completo-->
 @endsection

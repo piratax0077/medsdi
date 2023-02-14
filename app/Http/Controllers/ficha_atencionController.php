@@ -389,6 +389,24 @@ class ficha_atencionController extends Controller
                 $examen = '';
             }
 
+
+            else if($profesional->id_sub_tipo_especialidad == 119 )
+            {
+                // Cirugía General
+                $ruta_blade = 'atencion_medica.atencion_medica_cirugia_general';
+                $fichaTipo['cg'] = FichaCirugiaGeneralTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+               // $fichaTipo = '';
+                $examen = '';
+            }
+            else if($profesional->id_sub_tipo_especialidad == 120 )
+            {
+                // Cirugía Pediatrica General
+                $ruta_blade = 'atencion_pediatrica.atencion_pediatrica_cirugia';
+                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $fichaTipo = '';
+                $examen = '';
+            }
+
             else
             {
                 $ruta_blade = 'atencion_medica.atencion_medica';

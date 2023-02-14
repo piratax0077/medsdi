@@ -1,12 +1,12 @@
-    <!--Sidebar 3 (UROLOGICOS)-->
+    <!--Sidebar 3 cda)-->
     <div class="position-fixed w-100 h-100"></div>
-    <div id="formularios_uro" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="370px" data-offset="true">
+    <div id="formularios_cir_gen" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="370px" data-offset="true">
         <header class="bs-canvas-header p-3 bg-info overflow-auto">
             <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true" class="text-white">&times;</span></button>
-            <h5 class="d-inline-block text-light mb-0 float-right">Formularios Urológicos</h5>
+            <h5 class="d-inline-block text-light mb-0 float-right">Formularios Cirugía General</h5>
         </header>
         <div class="bs-canvas-content">
-            <div class="accordion" id="accordion_gineco_obst">
+            <div class="accordion" id="accordion_cirugia_alta">
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_solicitud_examenes">
                         <h2 class="mb-0">
@@ -15,18 +15,15 @@
                             </button>
                         </h2>
                     </div>
-                    <div id="collapse_solicitud_examenes" class="collapse" aria-labelledby="heading_solicitud_examenes" data-parent="#accordion_gineco_obst">
-                         <div class="card-body-sidebar">
-
-
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ex_orina()";>+ Exámenes de orina</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="est_hormo()";>+ Exámenes hormonales</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="rx_uro ()";>+ Orden radiología</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="biopsia()";>+ Biopsias</button>
-                         </div>
+                    <div id="collapse_solicitud_examenes" class="collapse" aria-labelledby="heading_solicitud_examenes" data-parent="#accordion_cirugia_alta">
+                        <div class="card-body-sidebar">
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="mostrar_modal_ex_rx_cirugia();">+ Orden radiología</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="i_biopsia()";>+ Biopsias </button>
+                        </div>
                     </div>
+                    @include("atencion_medica.formularios.modal_atencion_general.modal_examen_rx")
+                    @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
                 </div>
-
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_consentimientos_informados">
                         <h2 class="mb-0">
@@ -35,7 +32,7 @@
                         </button>
                         </h2>
                     </div>
-                    <div id="collapse_consentimientos_informados" class="collapse" aria-labelledby="heading_consentimientos_informados" data-parent="#accordion_gineco_obst">
+                    <div id="collapse_consentimientos_informados" class="collapse" aria-labelledby="heading_consentimientos_informados" data-parent="#accordion_cirugia_alta">
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cons_anest()";>+ Anestesia</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="concir_menor()";>+ Cirugía menor</button>
@@ -47,9 +44,7 @@
                     @include("atencion_medica.sidebars.modals_generales.m_aconsentcirm")
                     @include("atencion_medica.sidebars.modals_generales.m_acprocedimientos")
                     @include("atencion_medica.sidebars.modals_generales.m_acanestesia")
-
                 </div>
-
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_utilidades">
                         <h2 class="mb-0">
@@ -58,7 +53,7 @@
                         </button>
                         </h2>
                     </div>
-                    <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_gineco_obst">
+                    <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_cirugia_alta">
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ufonasa()";>+ Buscador código FONASA</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ucalcimc()";>+ Calculadora de IMC</button>
@@ -67,7 +62,6 @@
                     @include("atencion_medica.sidebars.modals_generales.m_ucodigofonasa")
                     @include("atencion_medica.sidebars.modals_generales.m_uimc")
                 </div>
-
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_recom">
                         <h2 class="mb-0">
@@ -78,27 +72,26 @@
                     </div>
                     <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_formularios_atencion">
                         <div class="card-body-sidebar">
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cuidados_uro ()";>+ Indicaciones Cuidados Sistema genito-Urinario</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="i_cistos ()";>+ Indicaciones Examen Cistocopía</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingreso()";>+ Orden de Hospitalización</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="r_ingreso()";>+ Requisitos de ingreso</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="icirugia()";>+ Indicaciones post cirugía Urológica</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="icirugia()";>+ Indicaciones post cirugía En General</button>
                         </div>
                     </div>
-
-                    @include("atencion_medica.sidebars.modals_especialidad.urologia.m_uro_cuidados")
-                    @include("atencion_medica.sidebars.modals_especialidad.urologia.m_uro_cistoscopia")
                     @include("atencion_medica.sidebars.modals_generales.ingreso")
                     @include("atencion_medica.sidebars.modals_generales.m_cuidados_cirugia")
                     @include("atencion_medica.sidebars.modals_generales.m_req_ingreso")
-
                 </div>
             </div>
         </div>
     </div>
-    <!--FORMULARIOS GENERALES-->
+    <!--SIDEBAR 3 (cda)-->
+
+    <!--MODALS SIDE BAR GENERALES-->
 
 
-    <!--SIDEBAR 3 (GINECO-OBSTÉTRICOS)-->
-        <!--MODALS EXÁMENES ESPECÍFICOS-->
+
+
+
+
+
 

@@ -1,6 +1,5 @@
-@extends('template.template_urologia')
+@extends('template/template_cda')
 @section('Content')
-
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -10,7 +9,7 @@
                     <div class="row align-items-center pb-2">
                         <div class="col-md-6">
                             <div class="page-header-title">
-                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN UROLOGÍA</strong></h5>
+                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN FICHA CIRUGIA DIGESTIVA ALTA</strong></h5>
                                 <p class="font-italic mt-0 mb-0 text-white">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -70,7 +69,7 @@
                     <div class="tab-content" id="at-oftalmo">
                         <!--Atender paciente-->
                         <div class="tab-pane fade show active" id="atender" role="tabpanel" aria-labelledby="atender-tab">
-                            @include('atencion_medica.secciones_especialidad.ficha_urologia')
+                            @include('atencion_medica.secciones_especialidad.ficha_cirugia_digest_alta')
                         </div>
                         <!--Licencia-->
                         <div class="tab-pane fade show" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
@@ -98,22 +97,36 @@
             </div>
         </div>
 
-        <!-- SIDE BAR URO -->
-        @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
-        @include("atencion_medica.include.sidebar_derecho_uro"){{-- modales y data de sidebar especialidad --}}
+        <!--Botón flotane del sidebar derecho cda-->
+        {{--  <div class="row">
+            <div class="col-sm-12">
+                <div class="boton-formularios">
+                    <input type="checkbox" id="btn-mas">
+                    <div class="redes">
+                        <a id="boton_1" class="fas fa-user fa-2x" data-toggle="canvas" data-target="#antecedentes_paciente" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left"></a>
+                        <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left"></a>
+                        <a id="boton_3" class="fas fa-deaf fa-2x" data-toggle="canvas" data-target="#formularios_orl" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Otorrinolaringología" data-placement="left"></a>
+                    </div>
+                    <div class="btn-mas">
+                        <label for="btn-mas" class="fa fa-plus"></label>
+                    </div>
+                </div>
+            </div>
+        </div>  --}}
+        <!--Cierre: Botón flotante-->
 
+        <!-- SIDE BAR ORL -->
+        @include("atencion_medica.include.sidebar_derecho_cda")
 
         <!--Modals de especialidad -->
-        @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
+        {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
 
         <!--Modals formularios generales-->
-
-       {{--   @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
-
-
+        {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
+        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")--}}
+       
+	
     </div>
-
     <!--Cierre: Container Completo-->
+	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")  
 @endsection
