@@ -633,45 +633,45 @@
                                                     <div class="card-body-aten shadow-none">
                                                         <div class="form-row">
                                                             <div class="form-group col-md-2" >
-                                                                <input type="hidden" name="id_profesional_solicitado_por_cda" id="id_profesional_solicitado_por_cda" value="">
+                                                                <input type="hidden" name="id_profesional_solicitado_por_eda" id="id_profesional_solicitado_por_eda" value="">
                                                                 <label class="floating-label-activo-sm">RUT</label>
-                                                                <input type="text" class="form-control form-control-sm" name="solicitado_por_rut_cda" id="solicitado_por_rut_cda" onblur="cargar_profesional(this,'solicitado_por_cda', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');" onchange="cargar_profesional(this,'solicitado_por_cda', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');" onkeyup="cargar_profesional(this,'solicitado_por_cda', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');">
+                                                                <input type="text" class="form-control form-control-sm" name="solicitado_por_rut_eda" id="solicitado_por_rut_eda" onblur="cargar_profesional(this,'solicitado_por_eda', 'id_profesional_solicitado_por_eda', 'div_profesional_no_inscrito_eda');" onchange="cargar_profesional(this,'solicitado_por_eda', 'id_profesional_solicitado_por_eda', 'div_profesional_no_inscrito_eda');" onkeyup="cargar_profesional(this,'solicitado_por_eda', 'id_profesional_solicitado_por_eda', 'div_profesional_no_inscrito_eda');">
                                                             </div>
                                                             <div class="form-group col-md-2" >
                                                                 <label class="floating-label-activo-sm">Solicitado por</label>
-                                                                <input type="text" class="form-control form-control-sm" name="solicitado_por_cda" id="solicitado_por_cda" readonly="readonly">
+                                                                <input type="text" class="form-control form-control-sm" name="solicitado_por_eda" id="solicitado_por_eda" readonly="readonly">
                                                             </div>
 
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">H.Diagnóstica</label>
-                                                                <input type="text" class="form-control form-control-sm" name="dg_sol_endogastrica" id="dg_sol_endogastrica">
+                                                                <input type="text" class="form-control form-control-sm" name="dg_sol_endogastrica_eda" id="dg_sol_endogastrica_eda">
                                                             </div>
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Premedicación</label>
-                                                                <input type="text" class="form-control form-control-sm" name="premed_endogastrica" id="premed_endogastrica">
+                                                                <input type="text" class="form-control form-control-sm" name="premed_endogastrica_eda" id="premed_endogastrica_eda">
                                                             </div>
 
                                                             <div class="form-group col-md-12" id="div_mensaje"  style="display: none;">
-                                                                <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por"></span>
+                                                                <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por_eda"></span>
                                                             </div>
                                                         </div>
                                                         <div class="row" id="div_profesional_no_inscrito" style="display: none;">
 
                                                             <div class="form-group col-md-3">
                                                                 <label class="floating-label-activo-sm">Nombre</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_nombre_cda" id="solicitado_por_nombre_cda" onchange="actualizar_solicitado_por('solicitado_por_cda', 'solicitado_por_nombre_cda', 'solicitado_por_apellido_cda');">
+                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_nombre_eda" id="solicitado_por_nombre_eda" onchange="actualizar_solicitado_por_eda('solicitado_por_eda', 'solicitado_por_nombre_eda', 'solicitado_por_apellido_eda');">
                                                             </div>
                                                             <div class="form-group col-md-3">
                                                                 <label class="floating-label-activo-sm">Apellido</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_apellido_cda" id="solicitado_por_apellido_cda" onchange="actualizar_solicitado_por('solicitado_por_cda', 'solicitado_por_nombre_cda', 'solicitado_por_apellido_cda');">
+                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_apellido_eda" id="solicitado_por_apellido_eda" onchange="actualizar_solicitado_por_eda('solicitado_por_eda', 'solicitado_por_nombre_eda',eda');">
                                                             </div>
                                                             <div class="form-group col-md-3">
                                                                 <label class="floating-label-activo-sm">Telefono</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_telefono_cda" id="solicitado_por_telefono_cda" >
+                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_telefono_eda" id="solicitado_por_telefono_eda" >
                                                             </div>
                                                             <div class="form-group col-md-3">
                                                                 <label class="floating-label-activo-sm">Email</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_email_cda" id="solicitado_por_email_cda" >
+                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_email_eda" id="solicitado_por_email_eda" >
                                                             </div>
 
                                                         </div>
@@ -693,11 +693,11 @@
                                                         <div class="form-row">
                                                             <div class="form-group col-md-12 mx-auto">
                                                                 <label class="floating-label-activo-sm">Antecedentes Generales</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_gastrica_gen" id="antec_endo_gastrica_gen"></textarea>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_gastrica_gen_eda" id="antec_endo_gastrica_gen_eda"></textarea>
                                                             </div>
                                                             <div class="form-group col-md-12 mx-auto">
                                                                 <label class="floating-label-activo-sm">Antecedentes Gastroenterológicos</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_gastrica_go" id="antec_endo_gastrica_go"></textarea>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_gastrica_go_eda" id="antec_endo_gastrica_go_eda"></textarea>
                                                             </div>
                                                         </div>
 													</div>
@@ -717,12 +717,12 @@
                                                         <div class="form-row">
                                                             <div class="form-group col-md-12 mx-auto">
                                                                 <label class="floating-label-activo-sm">Trayecto</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="esof_trayecto" id="esof_trayecto"></textarea>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="esof_trayecto_eda" id="esof_trayecto_eda"></textarea>
                                                             </div>
                                                         </div><div class="form-row">
                                                             <div class="form-group col-md-12 mx-auto">
                                                                 <label class="floating-label-activo-sm">Esófago</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="esof_esofago" id="esof_esofago"></textarea>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="esof_esofago_eda" id="esof_esofago_eda"></textarea>
                                                             </div>
                                                         </div>
 
@@ -745,38 +745,37 @@
 																<div class="col-sm-4">
 																	<div class="form-group fill">
 																		<label class="floating-label" for="name">Cardias</label>
-																		<input id="cardias" name="cardias" type="text" class="form-control form-control-sm">
+																		<input id="cardias_eda" name="cardias_eda" type="text" class="form-control form-control-sm">
 																	</div>
 																</div>
 																<div class="col-sm-4">
 																	<div class="form-group fill">
 																		<label class="floating-label" for="name">Contenido y Pliegues </label>
-																		<input id="cont_pliegues" name="cont_pliegues" type="text" class="form-control form-control-sm">
+																		<input id="cont_pliegues_eda" name="cont_pliegues_eda" type="text" class="form-control form-control-sm">
 																	</div>
 																</div>
 																<div class="col-sm-4">
 																	<div class="form-group fill">
 																		<label class="floating-label" for="name">Mucosa</label>
-																		<input id="mucosa" name="mucosa" type="text" class="form-control form-control-sm">
+																		<input id="mucosa_eda" name="mucosa_eda" type="text" class="form-control form-control-sm">
 																	</div>
 																</div>
 																<div class="col-sm-4">
 																	<div class="form-group fill">
 																		<label class="floating-label" for="name">Ángulo</label>
-																		<input id="angulo" name="angulo" type="text" class="form-control form-control-sm">
+																		<input id="angulo_eda" name="angulo_eda" type="text" class="form-control form-control-sm">
 																	</div>
 																</div>
-
 																<div class="col-sm-4">
 																	<div class="form-group fill">
 																		<label class="floating-label" for="name">Antro</label>
-																		<input id="antro" name="antro" type="text" class="form-control form-control-sm">
+																		<input id="antro_eda" name="antro_eda" type="text" class="form-control form-control-sm">
 																	</div>
 																</div>
 																<div class="col-sm-4">
 																	<div class="form-group fill">
 																		<label class="floating-label" for="name">Píloro</label>
-																		<input id="piloro" name="piloro" type="text" class="form-control form-control-sm">
+																		<input id="piloro_eda" name="piloro_eda" type="text" class="form-control form-control-sm">
 																	</div>
 																</div>
 																<div class="col-md-6">
@@ -800,18 +799,16 @@
 																<div class="col-md-3" id="div_select_muestra_hp" style="display:none;">
 																	<div class="form-group">
 																		<label class="floating-label-activo-sm" for="name">Resultado</label>
-																		<select id="muestra_hp_resultado" name="muestra_hp_resultado" class="form-control control-sm">
+																		<select id="muestra_hp_resultado_eda" name="muestra_hp_resultado_eda" class="form-control control-sm">
 																			<option value="1">Positivo</option>
 																			<option value="0" selected="selected">Negativo</option>
 																		</select>
 																	</div>
 																</div>
 															</div>
-
-
                                                             <div class="form-group col-sm-12 col-md-12">
                                                                 <label class="floating-label-activo-sm">Descripción Examen</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="desc_endo_gast" id="desc_endo_gast"></textarea>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="desc_endo_gast_eda" id="desc_endo_gast_eda"></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -831,7 +828,7 @@
                                                         <div class="form-row">
                                                             <div class="form-group col-sm-12 col-md-12">
                                                                 <label class="floating-label-activo-sm">Descripción</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="duodeno" id="duodeno"></textarea>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="duodeno_eda" id="duodeno_eda"></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -843,11 +840,11 @@
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
                                                 <div class="card-header" id="img_edga">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#img_edga" aria-expanded="false" aria-controls="img_edga">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#img_eda" aria-expanded="false" aria-controls="img_eda">
                                                         Imagenes.
                                                     </button>
                                                 </div>
-                                                <div id="img_edga" class="collapse show" aria-labelledby="img_edga" data-parent="#img_edga">
+                                                <div id="img_edga" class="collapse show" aria-labelledby="img_eda" data-parent="#img_eda">
                                                     <div class="card-body-aten shadow-none">
                                                         <!-- [ Main Content ] start -->
                                                         <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
@@ -872,11 +869,11 @@
                                                         <div class="form-row">
                                                             <div class="form-group col-sm-12 col-md-6">
                                                                 <label class="floating-label-activo-sm">Diagnóstico endoscópico</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="diag_endos" id="diag_endos"></textarea>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="diag_endos_eda" id="diag_endos_eda"></textarea>
                                                             </div>
                                                             <div class="form-group col-sm-12 col-md-6">
                                                                 <label class="floating-label-activo-sm">Observaciones</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones" id="observaciones"></textarea>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_eda" id="observaciones_eda"></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -899,26 +896,65 @@
                                            <hr>
                                        </div>
                                    </div>
-                                   <div class="col-md-12">
-                                       <div class="card">
-                                           <div class="row">
-                                               <div class="col-md-4 mt-3 mb-0">
-                                                   <label class="floating-label-activo-sm">Solicitado por:</label>
-                                                   <input type="text" class="form-control form-control-sm" name="prof_sol_endogastrica" id="prof_sol_endogastrica">
+                                   <div class="row">
+                                        <!-- SOLICITADO POR -->
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-header" id="solicitado_por">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#solicitado_por_c" aria-expanded="false" aria-controls="solicitado_por_c">
+                                                        Solicitado por:
+                                                    </button>
+                                                </div>
+                                                <div id="solicitado_por_c" class="collapse show" aria-labelledby="solicitado_por" data-parent="#solicitado_por">
+                                                    <div class="card-body-aten shadow-none">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-2" >
+                                                                <input type="hidden" name="id_profesional_solicitado_por_edb" id="id_profesional_solicitado_por_edb" value="">
+                                                                <label class="floating-label-activo-sm">RUT</label>
+                                                                <input type="text" class="form-control form-control-sm" name="solicitado_por_rut_edb" id="solicitado_por_rut_edb" onblur="cargar_profesional(this,'solicitado_por_edb', 'id_profesional_solicitado_por_edb', 'div_profesional_no_inscrito_edb');" onchange="cargar_profesional(this,'solicitado_por_edb', 'id_profesional_solicitado_por_edb', 'div_profesional_no_inscrito_edb');" onkeyup="cargar_profesional(this,'solicitado_por_edb', 'id_profesional_solicitado_por_edb', 'div_profesional_no_inscrito_edb');">
+                                                            </div>
+                                                            <div class="form-group col-md-2" >
+                                                                <label class="floating-label-activo-sm">Solicitado por</label>
+                                                                <input type="text" class="form-control form-control-sm" name="solicitado_por_edb" id="solicitado_por_edb" readonly="readonly">
+                                                            </div>
 
-                                               </div>
-                                               <div class="col-md-4 mt-3 mb-0">
-                                                   <label class="floating-label-activo-sm">H.Diagnóstica</label>
-                                                   <input type="text" class="form-control form-control-sm" name="dg_sol_endogastrica" id="dg_sol_endogastrica">
+                                                            <div class="form-group col-md-4">
+                                                                <label class="floating-label-activo-sm">H.Diagnóstica</label>
+                                                                <input type="text" class="form-control form-control-sm" name="dg_sol_endogastrica_edb" id="dg_sol_endogastrica_edb">
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label class="floating-label-activo-sm">Premedicación</label>
+                                                                <input type="text" class="form-control form-control-sm" name="premed_endogastrica_edb" id="premed_endogastrica_edb">
+                                                            </div>
 
-                                               </div>
-                                               <div class="col-md-4 mt-3 mb-0">
-                                                   <label class="floating-label-activo-sm">Premedicación</label>
-                                                   <input type="text" class="form-control form-control-sm" name="premed_endogastrica" id="premed_endogastrica">
+                                                            <div class="form-group col-md-12" id="div_mensaje"  style="display: none;">
+                                                                <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por_edb"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" id="div_profesional_no_inscrito" style="display: none;">
 
-                                               </div>
-                                           </div>
-                                       </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label class="floating-label-activo-sm">Nombre</label>
+                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_nombre_edb" id="solicitado_por_nombre_edb" onchange="actualizar_solicitado_por('solicitado_por_edb', 'solicitado_por_nombre_edb', 'solicitado_por_apellido_edb');">
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label class="floating-label-activo-sm">Apellido</label>
+                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_apellido_edb" id="solicitado_por_apellido_edb" onchange="actualizar_solicitado_por('solicitado_por_edb', 'solicitado_por_nombre_edb', 'solicitado_por_apellido_edb');">
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label class="floating-label-activo-sm">Telefono</label>
+                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_telefono_edb" id="solicitado_por_telefono_edb" >
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label class="floating-label-activo-sm">Email</label>
+                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_email_edb" id"solicitado_por_email_edb" >
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                    </div>
                                    <div class="row">
                                        <!--ANTECEDENTES-->
@@ -933,12 +969,12 @@
                                                    <div class="card-body-aten shadow-none">
                                                        <div class="form-row">
                                                            <div class="form-group col-md-12 mx-auto">
-                                                               <label class="floating-label-activo-sm">Antecedentes Generales</label>
-                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_gastrica_gen" id="antec_endo_gastrica_gen"></textarea>
+                                                               <label class="floating-label-activo-sm">Antecedentes Tránsito Intestinal</label>
+                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_transito_edb" id="antec_endo_transito_edb"></textarea>
                                                            </div>
                                                            <div class="form-group col-md-12 mx-auto">
                                                                <label class="floating-label-activo-sm">Antecedentes Gastroenterológicos y de la Especialidad</label>
-                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_gastrica_go" id="antec_endo_gastrica_go"></textarea>
+                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_gastrica_go_edb" id="antec_endo_gastrica_go_edb"></textarea>
                                                            </div>
                                                        </div>
                                                    </div>
@@ -949,7 +985,7 @@
                                        <div class="col-sm-12 col-md-12">
                                            <div class="card">
                                                <div class="card-header" id="tacto_rectal">
-                                                   <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#tacto_rectal_endo" aria-expanded="false" aria-controls="tacto_rectal_endo">
+                                                   <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#tacto_rectal_endo_edb" aria-expanded="false" aria-controls="tacto_rectal_endo_edb">
                                                    Tacto Rectal y Preparación para el examen
                                                    </button>
                                                </div>
@@ -958,21 +994,21 @@
                                                        <div class="form-row">
                                                            <div class="form-group col-md-12 mx-auto">
                                                                <label class="floating-label-activo-sm">Tacto</label>
-                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="Tacto_endos_rectal" id="Tacto_endos_rectal"></textarea>
+                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="tacto_endos_rectal_edb" id="tacto_endos_rectal_edb"></textarea>
                                                            </div>
                                                        </div>
                                                        <div class="form-row">
                                                            <div class="col-sm-12">
                                                                <div class="form-group fill">
                                                                    <label class="floating-label-activo-sm">Preparación de Boston Comentarios</label>
-                                                                   <input id="cardias" name="cardias" type="text" class="form-control">
+                                                                   <input id="com_prep_boston_cdb" name="com_prep_boston_cdb" type="text" class="form-control">
                                                                </div>
                                                            </div>
                                                        </div>
                                                        <div class="form-row">
                                                            <div class="form-group col-md-4">
                                                                <label id="" name="" class="floating-label-activo-sm">colon derecho</label>
-                                                               <select class="form-control form-control-sm" name="" id="">
+                                                               <select class="form-control form-control-sm" name="colon_derecho_edb" id="colon_derecho_edb">
                                                                    <option value="0">0</option>
                                                                    <option value="1">1</option>
                                                                    <option value="2">2</option>
@@ -981,7 +1017,7 @@
                                                            </div>
                                                            <div class="form-group col-md-4">
                                                                <label id="" name="" class="floating-label-activo-sm">colon transverso</label>
-                                                               <select class="form-control form-control-sm" name="" id="">
+                                                               <select class="form-control form-control-sm" name="colon_transv_edb" id="colon_transv_edb">
                                                                    <option value="0">0</option>
                                                                    <option value="1">1</option>
                                                                    <option value="2">2</option>
@@ -990,7 +1026,7 @@
                                                            </div>
                                                            <div class="form-group col-md-4">
                                                                <label id="" name="" class="floating-label-activo-sm">colon izquierdo</label>
-                                                               <select class="form-control form-control-sm" name="" id="">
+                                                               <select class="form-control form-control-sm" name="colon_izq_edb" id="colon_izq_edb">
                                                                    <option value="0">0</option>
                                                                    <option value="1">1</option>
                                                                    <option value="2">2</option>
@@ -1006,8 +1042,8 @@
                                        <div class="col-sm-12 col-md-12">
                                            <div class="card">
                                                <div class="card-header" id="exploracion">
-                                                   <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#exploracion_endo" aria-expanded="false" aria-controls="exploracion_endo">
-                                                   Exploración
+                                                   <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#exploracion_endo_edb" aria-expanded="false" aria-controls="exploracion_endo_edb">
+                                                    Exploración
                                                    </button>
                                                </div>
                                                <div id="exploracion_endo" class="collapse show" aria-labelledby="exploracion" data-parent="#exploracion">
@@ -1015,7 +1051,7 @@
                                                        <div class="form-row">
                                                            <div class="form-group col-md-12 mx-auto">
                                                                <label class="floating-label-activo-sm">Exploración y Procedimientos </label>
-                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=5" onblur="this.rows=1;" name="Tacto_endos_rectal" id="Tacto_endos_rectal"></textarea>
+                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=5" onblur="this.rows=1;" name="Tacto_endos_rectal_edb" id="Tacto_endos_rectal_edb"></textarea>
                                                            </div>
                                                            <div class="form-group col-md-6 " style="margin:auto">
                                                                <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_clasificacion_colon();"><i class="me-2" data-feather="thumbs-up"></i>Ver Clasificación de Colon<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
@@ -1029,6 +1065,25 @@
                                                                     <label>biopsia</label>
                                                                 </div>
                                                             </div>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                               <!--IMAGENES-->
+                                               <div class="col-sm-12 col-md-12">
+                                                   <div class="card">
+                                                       <div class="card-header" id="img_edb">
+                                                           <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#img_edb" aria-expanded="false" aria-controls="img_edb">
+                                                               Imagenes.
+                                                           </button>
+                                                       </div>
+                                                       <div id="img_edga" class="collapse show" aria-labelledby="img_edb" data-parent="#img_edb">
+                                                           <div class="card-body-aten shadow-none">
+                                                               <!-- [ Main Content ] start -->
+                                                               <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
+                                                               <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                               </div>
+                                                               <!-- [ file-upload ] end -->
+                                                           </div>
                                                        </div>
                                                    </div>
                                                </div>
@@ -1047,15 +1102,11 @@
                                                        <div class="form-row">
                                                            <div class="form-group col-sm-12 col-md-6">
                                                                <label class="floating-label-activo-sm">Diagnóstico endoscópico</label>
-                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="diag_endos" id="diag_endos"></textarea>
+                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="diag_endos_edb" id="diag_endos_edb"></textarea>
                                                            </div>
                                                            <div class="form-group col-sm-12 col-md-6">
                                                                <label class="floating-label-activo-sm">Observaciones</label>
-                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones" id="observaciones"></textarea>
-                                                           </div>
-                                                           <div class="form-group col-sm-12 col-md-6">
-                                                               <label class="floating-label-activo-sm">Test de Ureasa</label>
-                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones" id="observaciones"></textarea>
+                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_edb" id="observaciones_edb"></textarea>
                                                            </div>
                                                        </div>
                                                    </div>
@@ -1098,7 +1149,21 @@
 @section('page-script-ficha-atencion')
     <script>
         $(document).ready(function() {
-
+            /* formatear rut */
+            $("#solicitado_por_rut_eda").rut({
+                formatOn: 'keyup',
+                minimumLength: 2,
+                validateOn: 'change',
+                useThousandsSeparator : false
+            });
+             /* formatear rut */
+             $("#solicitado_por_rut_edb").rut({
+                formatOn: 'keyup',
+                minimumLength: 2,
+                validateOn: 'change',
+                useThousandsSeparator : false
+            });
+            /** fin formulario pestaña 1 */
             $('#hip-diag_spec').keyup(function(){
                 if($.trim(this.value) != ''){
                     $('.btn_agregar_medicamento').removeAttr("disabled");
@@ -1164,7 +1229,87 @@
             });
 
         })
+        function cargar_profesional(rut, input_nombre, input_id, div_solicitar)
+        {
+            rut = $(rut).val();
 
+            // console.log('------------------------------------');
+            // console.log(rut.length);
+            // console.log(rut);
+            // console.log('------------------------------------');
+
+            if(rut.length>5)
+            {
+                url = "{{ route('profesional.buscar') }}";
+                $.ajax({
+
+                    url: url,
+                    type: "GET",
+                    data: {
+                        rut : rut,
+                    },
+                })
+                .done(function(data)
+                {
+                    // console.log('-----------------------');
+                    // console.log(data);
+                    // console.log('-----------------------');
+                    if(data.estado == 1)
+                    {
+
+                        if(data.registros.length>0)
+                        {
+                            var nombre = data.registros[0].nombre+' '+data.registros[0].apellido_uno;
+                            var id = data.registros[0].id;
+                            // $('#'+input_nombre).attr('readonly', true);
+                            $('#'+input_nombre).val(nombre);
+                            $('#'+input_id).val(id);
+                            $('#'+div_solicitar).hide();
+                            mensaje = '';
+                            $('#div_mensaje').hide();
+                            $('#mensaje_solicitado_por').html(mensaje);
+                            $('#solicitado_por_nombre_eda').val('');
+                            $('#solicitado_por_apellido_eda').val('');
+                            $('#solicitado_por_telefono_eda').val('');
+                            $('#solicitado_por_email_eda').val('');
+                        }
+                        else
+                        {
+                            mensaje = 'Profesional no encontrato, debe ingresar datos.';
+                            $('#'+input_nombre).val('');
+                            $('#'+input_id).val('');
+                            $('#'+div_solicitar).show();
+                            $('#div_mensaje').show();
+                            $('#mensaje_solicitado_por').html(mensaje);
+                            $('#solicitado_por_nombre_eda').val('');
+                            $('#solicitado_por_apellido_eda').val('');
+                            $('#solicitado_por_telefono_eda').val('');
+                            $('#solicitado_por_email_eda').val('');
+                            // $('#'+input_nombre).attr('readonly', true);
+                        }
+                    }
+                    else
+                    {
+                        mensaje = 'Se presento un problema en la busqueda intente nuevamente';
+                        $('#div_mensaje').show();
+                        $('#mensaje_solicitado_por').html(mensaje);
+                        // $('#'+input_nombre).attr('readonly', false);
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
+            else if(rut.length==0)
+            {
+                $('#'+input_nombre).val('');
+                // $('#'+input_nombre).attr('readonly', true);
+                $('#'+input_id).val('');
+                $('#'+div_solicitar).hide();
+                $('#div_mensaje').hide();
+                $('#mensaje_solicitado_por').html('');
+            }
+        }
         function cargarIgual(input){
 
             let actual = $('#'+input);

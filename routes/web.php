@@ -1064,6 +1064,9 @@ Route::get('/hora/atencion/cancelacion', [App\Http\Controllers\ConfirmacionHoraC
 Route::get('/img/mover', [App\Http\Controllers\CargaImagenController::class, 'moverImagen_r'])->name('img.mover');
 
 
+Route::get('/examen_especialidad/json', [App\Http\Controllers\ExamenEspecialidadController::class, 'estructurajson_r']);
+
+
 
 /** PARA VISUALIZAR DEMOS */
 // Route::get('/autorizacion/enlace', function () {
