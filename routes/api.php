@@ -43,6 +43,7 @@ Route::post('/log_user_devices/modificar',    [LogUsersDevicesController::class,
 Route::get('/log_user_devices/ver_registros',[LogUsersDevicesController::class, 'verRegistros']);
 Route::get('/log_user_devices/ver_registro', [LogUsersDevicesController::class, 'verRegistro']);
 Route::post('/log_user_devices/estado',       [LogUsersDevicesController::class, 'estado']);
+Route::get('/log_user_devices/gen_solicitud',       [LogUsersDevicesController::class, 'genSolicitud']);
 
 //ANTECEDENTE - CRUD
 Route::post('/antecendente/registrar',    [AntecedenteController::class, 'registrar']);
