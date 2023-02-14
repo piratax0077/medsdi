@@ -162,6 +162,8 @@ class ficha_atencionController extends Controller
         $ciudades = Ciudad::where('id_region', $paciente->Direccion()->first()->Ciudad()->first()->id_region)->get();
         $regiones = Region::all();
         $examenMedico = ExamenMedico::where('cod_parent', 0)->whereBetween('id',[1,362])->get();
+        $user = Auth::user()->id;
+        $profesional = Profesional::where('id_usuario', $user)->first();
 
         // CONSULTAS PREVIAS
         // $fichas = FichaAtencion::where('id_paciente', $hora->id_paciente)->where('confidencial', false)->where('finalizada', 1)->get();
@@ -169,6 +171,7 @@ class ficha_atencionController extends Controller
         $filtro_previas[] = array('id_paciente', $hora->id_paciente);
         $filtro_previas[] = array('confidencial', '0');
         $filtro_previas[] = array('finalizada', 1);
+        $filtro_previas[] = array('id_profesional', $profesional->id);
         $fichas = FichaAtencion::where($filtro_previas)->get();
 
         // LUGAR DE ATENCION
@@ -180,7 +183,7 @@ class ficha_atencionController extends Controller
         $filtro_fichaAtencion = array();
         $filtro_fichaAtencion[] = array('id_paciente', $hora->id_paciente);
         // $filtro_fichaAtencion[] = array('confidencial', false);
-        $filtro_fichaAtencion[] = array('finalizada', 0);
+        // $filtro_fichaAtencion[] = array('finalizada', 0);
         if(!empty($hora->id_ficha_atencion))
             $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
         $fichaAtencion = FichaAtencion::where($filtro_fichaAtencion)->first();
@@ -199,12 +202,6 @@ class ficha_atencionController extends Controller
             $antecedentes_quirurgicos = [];
             $patoligias_cronicas = [];
         }
-
-
-
-        $user = Auth::user()->id;
-        $profesional = Profesional::where('id_usuario', $user)->first();
-
 
         if( !empty($fichaAtencion) )
             $id_ficha_atencion = $fichaAtencion->id;
@@ -277,6 +274,7 @@ class ficha_atencionController extends Controller
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
                 $examen = '';
+                $lista_examen_especial = '';
             }
             else if($profesional->id_sub_tipo_especialidad == 21)
             {
@@ -286,14 +284,16 @@ class ficha_atencionController extends Controller
 
                 $examen_tipo = ExamenEspecialidadTipo::where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)->with('ExamenEspecialidadTemplate')->first();
                 $examen = $examen_tipo->ExamenEspecialidadTemplate->cuerpo;
+                $lista_examen_especial = '';
             }
             else if($profesional->id_sub_tipo_especialidad == 22)
             {
                 //urologia
                 $ruta_blade = 'atencion_medica.atencion_medica_urologia';
-                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                // $fichaTipo = FichaUrologiaTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
                 $examen = '';
+                $lista_examen_especial = '';
             }
             else if($profesional->id_sub_tipo_especialidad == 19)
             {
@@ -302,6 +302,7 @@ class ficha_atencionController extends Controller
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
                 $examen = '';
+                $lista_examen_especial = '';
             }
             else if($profesional->id_sub_tipo_especialidad == 27)
             {
@@ -309,6 +310,7 @@ class ficha_atencionController extends Controller
                 $ruta_blade = 'atencion_gine_obstetricia.atencion_gine_obst_general';
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
+                $lista_examen_especial = '';
             }
             else if($profesional->id_sub_tipo_especialidad == 78)
             {
@@ -317,6 +319,7 @@ class ficha_atencionController extends Controller
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
                 $examen = '';
+                $lista_examen_especial = '';
             }
             else if($profesional->id_sub_tipo_especialidad == 72)
             {
@@ -325,6 +328,7 @@ class ficha_atencionController extends Controller
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
                 $examen = '';
+                $lista_examen_especial = '';
             }
             else if($profesional->id_tipo_especialidad == 108 && empty($profesional->id_sub_tipo_especialidad))
             {
@@ -333,6 +337,7 @@ class ficha_atencionController extends Controller
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
                 $examen = '';
+                $lista_examen_especial = '';
             }
             else if($profesional->id_tipo_especialidad == 51 && empty($profesional->id_sub_tipo_especialidad))
             {
@@ -341,6 +346,7 @@ class ficha_atencionController extends Controller
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
                 $examen = '';
+                $lista_examen_especial = '';
             }
 
             // 1 Cirugía Abdominal General -> atencion_medica_cirugia_digestiva_general
@@ -358,6 +364,7 @@ class ficha_atencionController extends Controller
                 // var_dump($fichaTipo);
                 // die();
                 $examen = '';
+                $lista_examen_especial = '';
             }
             else if($profesional->id_sub_tipo_especialidad == 7)
             {
@@ -366,6 +373,7 @@ class ficha_atencionController extends Controller
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
                 $examen = '';
+                $lista_examen_especial = '';
             }
             else if($profesional->id_sub_tipo_especialidad == 11 )
             {
@@ -373,12 +381,17 @@ class ficha_atencionController extends Controller
                 $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_general';
                 $fichaTipo['cdg'] = FichaCirugiaDigestivaTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo['cg'] = FichaCirugiaGeneralTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
-                // $fichaTipo = '';
-                // $fichaTipo = FichaCirugiaDigestivaTipo::get();
-                // var_dump($profesional->id);
-                // var_dump($fichaTipo);
-                // die();
-                $examen = '';
+
+                $lista_examen_especial = '';
+                $examen_tipo = ExamenEspecialidadTipo::where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)->with('ExamenEspecialidadTemplate')->get();
+                foreach ($examen_tipo as $key => $value)
+                {
+                    $examen[$value->ExamenEspecialidadTemplate->alias] = $value->ExamenEspecialidadTemplate->cuerpo;
+                    $lista_examen_especial .= $value->ExamenEspecialidadTemplate->alias.','.$value->id.','.$value->ExamenEspecialidadTemplate->id.'|';
+                }
+                $lista_examen_especial = substr($lista_examen_especial, 0, -1);
+                // dd($examen);
+
             }
             else if($profesional->id_sub_tipo_especialidad == 12 )
             {
@@ -387,16 +400,16 @@ class ficha_atencionController extends Controller
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
                 $examen = '';
+				$lista_examen_especial = '';
             }
-
-
-            else if($profesional->id_sub_tipo_especialidad == 119 )
+			else if($profesional->id_sub_tipo_especialidad == 119 )
             {
                 // Cirugía General
                 $ruta_blade = 'atencion_medica.atencion_medica_cirugia_general';
                 $fichaTipo['cg'] = FichaCirugiaGeneralTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                // $fichaTipo = '';
                 $examen = '';
+				$lista_examen_especial = '';
             }
             else if($profesional->id_sub_tipo_especialidad == 120 )
             {
@@ -405,13 +418,14 @@ class ficha_atencionController extends Controller
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
                 $examen = '';
+				$lista_examen_especial = '';
             }
-
             else
             {
                 $ruta_blade = 'atencion_medica.atencion_medica';
                 $fichaTipo = '';
                 $examen = '';
+                $lista_examen_especial = '';
             }
         // }
 
@@ -463,6 +477,8 @@ class ficha_atencionController extends Controller
                 'interconsulta' => $interconsulta,
                 'fichaTipo' => $fichaTipo,
                 'examen' => $examen,
+                'lista_examen_especial' => $lista_examen_especial,
+
                 // 'ficha_ges' => $ges,
                 // 'direccion' => $direccion,
                 /*'contacto' => $contacto,
@@ -472,6 +488,7 @@ class ficha_atencionController extends Controller
             ]
         );
     }
+
 
     public function registrar_control_obesidad(Request $request)
     {
