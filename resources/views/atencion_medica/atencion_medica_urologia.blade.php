@@ -107,7 +107,8 @@
         @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
 
         <!--Modals formularios generales-->
-        {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.urologia.indicar_examen_esp.")
+
+       {{--   @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
 

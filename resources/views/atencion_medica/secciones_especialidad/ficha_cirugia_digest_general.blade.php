@@ -573,8 +573,6 @@
                                         </div>
                                         <!--Cierre: Formulario / Signos vitales y otros-->
 
-
-
                                         @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
                                         <hr>
 
@@ -591,7 +589,7 @@
                                                         <div class="form-row">
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
-                                                                <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,sospecha_diagnostica_eda,sospecha_diagnostica_edb" name="hip_diag_spec" id="hip_diag_spec" onchange="cargarIgual('hip_diag_spec')" >
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;"data-input_igual="lic_descripcion_hipotesis,sospecha_diagnostica_eda,sospecha_diagnostica_edb" name="hip_diag_spec" id="hip_diag_spec" onChange="cargarIgual('hip_diag_spec')"></textarea>
                                                             </div>
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Indicaciones</label>
@@ -770,6 +768,19 @@
             $.each(equivalentes, function( index, value ) {
                 var equivalente = $('#'+value);
                 equivalente.val(actual.val());
+            });
+        }
+
+
+        function cargarCompletar(input)
+        {
+            let actual = $('#'+input);
+            let equivalentes = $('#'+input).attr('data-input_igual').split(',');
+            let seccion = $('#'+input).attr('data-input_seccion');
+            $.each(equivalentes, function( index, value ) {
+                var equivalente = $('#'+value);
+                var valor_prev = equivalente.val();
+                equivalente.val(valor_prev + ' - ' + seccion + ': ' + actual.val());
             });
         }
 
@@ -1269,19 +1280,64 @@
 
 		function muestra_hp_abrir_div(alias_examen)
 		{
+            var mensaje = ['Test de ureasa No tomado', 'Test de ureasa Negativo', 'Test de ureasa Positivo'];
+
+            var texto_diag_2 = '';
+
 			if($('#muestra_hp_check_'+alias_examen).prop('checked'))
 			{
 				$('#div_select_muestra_hp_'+alias_examen).show();
                 $('#muestra_hp_'+alias_examen).val(1);
+
+                var input_diagnostico = $('#muestra_hp_check_'+alias_examen).attr('data-diagnostico');
+                var texto_diag = $('#'+input_diagnostico).val();
+
+
+                var input_select = $('#muestra_hp_check_'+alias_examen).attr('data-select');
+                var value_selct = $('#'+input_select).val();
+
+
+                if(value_selct == 0)
+                    texto_diag_2 = texto_diag.replace(mensaje[0], mensaje[1]);
+                else
+                    texto_diag_2 = texto_diag.replace(mensaje[0], mensaje[2]);
+
+                $('#'+input_diagnostico).val(texto_diag_2);
 			}
 			else
 			{
 				$('#div_select_muestra_hp_'+alias_examen).hide();
                 $('#muestra_hp_'+alias_examen).val(0);
 				$('#muestra_hp_resultado_'+alias_examen).val('');
-			}
+                texto_diag_2 = texto_diag.replace('Test de ureasa Negativo', 'Test de ureasa No tomad');
+                texto_diag_2 = texto_diag_2.replace('Test de ureasa Positivo', 'Test de ureasa No tomado');
 
+                var input_diagnostico = $('#muestra_hp_check_'+alias_examen).attr('data-diagnostico');
+                $('#'+input_diagnostico).val(texto_diag_2);
+			}
 		}
+
+        function cambio_muestra_hp_resultado(select, input)
+        {
+            var mensaje = ['Test de ureasa No tomado', 'Test de ureasa Negativo', 'Test de ureasa Positivo'];
+
+            var value_selct = $('#'+select).val();
+            var texto_diag = $('#'+input).val();
+            var texto_diag_2 = '';
+
+            if(value_selct == 0)
+            {
+                texto_diag_2 = texto_diag.replace('Test de ureasa No tomado', 'Test de ureasa Negativo');
+                texto_diag_2 = texto_diag_2.replace('Test de ureasa Positivo', 'Test de ureasa Negativo');
+            }
+            else
+            {
+                texto_diag_2 = texto_diag.replace('Test de ureasa No tomado', 'Test de ureasa Positivo');
+                texto_diag_2 = texto_diag_2.replace('Test de ureasa Negativo', 'Test de ureasa Positivo');
+            }
+
+            $('#'+input).val(texto_diag_2);
+        }
 
         /** MANEJO DE IMAGENES */
         var myDropzone_eda ;
