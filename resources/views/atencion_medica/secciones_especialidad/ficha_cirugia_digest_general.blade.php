@@ -15,7 +15,7 @@
 				</ul>
             </div>
             <div class="col-sm-12 col-md-12">
-                <form action="{{ route('fichaAtencion.registrar_ficha_orl') }}" method="POST">
+                <form action="{{ route('fichaAtencion.registrar_ficha_cdg') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
                     <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
@@ -28,6 +28,7 @@
                     <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
                     <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
                     <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
+                    <input type="hidden" name="tipo_examen_especial" id="tipo_examen_especial" value="{{ $lista_examen_especial }}">
 
                     @csrf
                     <div class="tab-content" id="orl-contenido">
@@ -338,6 +339,61 @@
                                             </div>
                                         </div>
 
+                                        <!-- control post qx -->
+                                        <div class="col-sm-12 col-md-12">
+                                            <div class="card">
+                                                <div class="card-header" id="Control_cirugia">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#cirugia_general_pc" aria-expanded="false" aria-controls="cirugia_general_pc">
+                                                        Control Post Quirúrgico
+                                                    </button>
+                                                </div>
+                                                <div id="cirugia_general_pc" class="collapse" aria-labelledby="cirugia_general" data-parent="#Control_cirugia">
+                                                    <div class="card-body-aten shadow-none">
+                                                        <div id="form-cir_digest">
+                                                            <div class="form-row mb-2">
+                                                                <div class="col-md-12">
+                                                                    <h5 style="text-align:center;">Control</h5>
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row">
+                                                                <!-- Estado General -->
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group" >
+                                                                        <label class="floating-label-activo-sm">Estado General</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Estado General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="eg_cpq_cg" id="eg_cpq_cg"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Herida Operatoria Curación -->
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Herida Operatoria Curación</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="ceg_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="hoc_cpa_cg" id="hoc_cpa_cg"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Masas Palpables -->
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Masas Palpables</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="masas_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="masas_cpq_cg" id="masas_cpq_cg"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Observaciones Estado General Paciente -->
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-12">
+                                                                    <label class="floating-label-activo-sm">Observaciones Estado General Paciente</label>
+                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Estado general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_cpq_cg" id="obs_egp_cpq_cg"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- cierre control post qx -->
+
                                         <!--Formulario / Signos vitales y otros-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
@@ -517,60 +573,7 @@
                                         </div>
                                         <!--Cierre: Formulario / Signos vitales y otros-->
 
-                                        <!-- control post qx -->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="Control_cirugia">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#cirugia_general_pc" aria-expanded="false" aria-controls="cirugia_general_pc">
-                                                        Control Post Quirúrgico
-                                                    </button>
-                                                </div>
-                                                <div id="cirugia_general_pc" class="collapse" aria-labelledby="cirugia_general" data-parent="#Control_cirugia">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div id="form-cir_digest">
-                                                            <div class="form-row mb-2">
-                                                                <div class="col-md-12">
-                                                                    <h5 style="text-align:center;">Control</h5>
-                                                                </div>
-                                                            </div>
-                                                            <hr>
-                                                            <div class="row">
-                                                                <!-- Estado General -->
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group" >
-                                                                        <label class="floating-label-activo-sm">Estado General</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Estado General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="eg_cpq_cg" id="eg_cpq_cg"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- Herida Operatoria Curación -->
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Herida Operatoria Curación</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="ceg_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="hoc_cpa_cg" id="hoc_cpa_cg"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- Masas Palpables -->
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Masas Palpables</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="masas_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="masas_cpq_cg" id="masas_cpq_cg"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!-- Observaciones Estado General Paciente -->
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-12">
-                                                                    <label class="floating-label-activo-sm">Observaciones Estado General Paciente</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Estado general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_cpq_cg" id="obs_egp_cpq_cg"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <hr>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- cierre control post qx -->
+
 
                                         @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
                                         <hr>
@@ -588,7 +591,7 @@
                                                         <div class="form-row">
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
-                                                                <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis" name="hip-diag_spec" id="hip-diag_spec" onchange="cargarIgual('hip-diag_spec')" >
+                                                                <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,sospecha_diagnostica_eda,sospecha_diagnostica_edb" name="hip_diag_spec" id="hip_diag_spec" onchange="cargarIgual('hip_diag_spec')" >
                                                             </div>
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Indicaciones</label>
@@ -621,265 +624,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <!-- SOLICITADO POR -->
-                                        <div class="col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="solicitado_por">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#solicitado_por_c" aria-expanded="false" aria-controls="solicitado_por_c">
-                                                        Solicitado por:
-                                                    </button>
-                                                </div>
-                                                <div id="solicitado_por_c" class="collapse show" aria-labelledby="solicitado_por" data-parent="#solicitado_por">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-2" >
-                                                                <input type="hidden" name="id_profesional_solicitado_por_eda" id="id_profesional_solicitado_por_eda" value="">
-                                                                <label class="floating-label-activo-sm">RUT</label>
-                                                                <input type="text" class="form-control form-control-sm" name="solicitado_por_rut_eda" id="solicitado_por_rut_eda" onblur="cargar_profesional(this,'solicitado_por_eda', 'id_profesional_solicitado_por_eda', 'div_profesional_no_inscrito_eda');" onchange="cargar_profesional(this,'solicitado_por_eda', 'id_profesional_solicitado_por_eda', 'div_profesional_no_inscrito_eda');" onkeyup="cargar_profesional(this,'solicitado_por_eda', 'id_profesional_solicitado_por_eda', 'div_profesional_no_inscrito_eda');">
-                                                            </div>
-                                                            <div class="form-group col-md-2" >
-                                                                <label class="floating-label-activo-sm">Solicitado por</label>
-                                                                <input type="text" class="form-control form-control-sm" name="solicitado_por_eda" id="solicitado_por_eda" readonly="readonly">
-                                                            </div>
-
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">H.Diagnóstica</label>
-                                                                <input type="text" class="form-control form-control-sm" name="dg_sol_endogastrica_eda" id="dg_sol_endogastrica_eda">
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">Premedicación</label>
-                                                                <input type="text" class="form-control form-control-sm" name="premed_endogastrica_eda" id="premed_endogastrica_eda">
-                                                            </div>
-
-                                                            <div class="form-group col-md-12" id="div_mensaje"  style="display: none;">
-                                                                <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por_eda"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row" id="div_profesional_no_inscrito" style="display: none;">
-
-                                                            <div class="form-group col-md-3">
-                                                                <label class="floating-label-activo-sm">Nombre</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_nombre_eda" id="solicitado_por_nombre_eda" onchange="actualizar_solicitado_por_eda('solicitado_por_eda', 'solicitado_por_nombre_eda', 'solicitado_por_apellido_eda');">
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <label class="floating-label-activo-sm">Apellido</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_apellido_eda" id="solicitado_por_apellido_eda" onchange="actualizar_solicitado_por_eda('solicitado_por_eda', 'solicitado_por_nombre_eda',eda');">
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <label class="floating-label-activo-sm">Telefono</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_telefono_eda" id="solicitado_por_telefono_eda" >
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <label class="floating-label-activo-sm">Email</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_email_eda" id="solicitado_por_email_eda" >
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!--ANTECEDENTES-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="antec_gastro">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#antec_endosc_gastro" aria-expanded="false" aria-controls="antec_endosc_gastro">
-                                                        Antecedentes
-                                                    </button>
-                                                </div>
-                                                <div id="antec_endosc_gastro" class="collapse show" aria-labelledby="antec_gastro" data-parent="#antec_gastro">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-12 mx-auto">
-                                                                <label class="floating-label-activo-sm">Antecedentes Generales</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_gastrica_gen_eda" id="antec_endo_gastrica_gen_eda"></textarea>
-                                                            </div>
-                                                            <div class="form-group col-md-12 mx-auto">
-                                                                <label class="floating-label-activo-sm">Antecedentes Gastroenterológicos</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_gastrica_go_eda" id="antec_endo_gastrica_go_eda"></textarea>
-                                                            </div>
-                                                        </div>
-													</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--TRAYECTO ESOFAGO-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="esof_endoscopia">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#esof_endoscopia_c" aria-expanded="false" aria-controls="esof_endoscopia_c"">
-                                                    Trayecto y Esófago
-                                                    </button>
-                                                </div>
-                                                <div  id="esof_endoscopia_c"  class="collapse show" aria-labelledby="esof_endoscopia" data-parent="#esof_endoscopia">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-12 mx-auto">
-                                                                <label class="floating-label-activo-sm">Trayecto</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="esof_trayecto_eda" id="esof_trayecto_eda"></textarea>
-                                                            </div>
-                                                        </div><div class="form-row">
-                                                            <div class="form-group col-md-12 mx-auto">
-                                                                <label class="floating-label-activo-sm">Esófago</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="esof_esofago_eda" id="esof_esofago_eda"></textarea>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--ESTOMAGO-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="orofar">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#orofar-c" aria-expanded="false" aria-controls="orofar-c">
-                                                        Estómago
-                                                    </button>
-                                                </div>
-                                                <div id="orofar-c" class="collapse show" aria-labelledby="orofar" data-parent="#orofar">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-															<div class="form group row">
-																<div class="col-sm-4">
-																	<div class="form-group fill">
-																		<label class="floating-label" for="name">Cardias</label>
-																		<input id="cardias_eda" name="cardias_eda" type="text" class="form-control form-control-sm">
-																	</div>
-																</div>
-																<div class="col-sm-4">
-																	<div class="form-group fill">
-																		<label class="floating-label" for="name">Contenido y Pliegues </label>
-																		<input id="cont_pliegues_eda" name="cont_pliegues_eda" type="text" class="form-control form-control-sm">
-																	</div>
-																</div>
-																<div class="col-sm-4">
-																	<div class="form-group fill">
-																		<label class="floating-label" for="name">Mucosa</label>
-																		<input id="mucosa_eda" name="mucosa_eda" type="text" class="form-control form-control-sm">
-																	</div>
-																</div>
-																<div class="col-sm-4">
-																	<div class="form-group fill">
-																		<label class="floating-label" for="name">Ángulo</label>
-																		<input id="angulo_eda" name="angulo_eda" type="text" class="form-control form-control-sm">
-																	</div>
-																</div>
-																<div class="col-sm-4">
-																	<div class="form-group fill">
-																		<label class="floating-label" for="name">Antro</label>
-																		<input id="antro_eda" name="antro_eda" type="text" class="form-control form-control-sm">
-																	</div>
-																</div>
-																<div class="col-sm-4">
-																	<div class="form-group fill">
-																		<label class="floating-label" for="name">Píloro</label>
-																		<input id="piloro_eda" name="piloro_eda" type="text" class="form-control form-control-sm">
-																	</div>
-																</div>
-																<div class="col-md-6">
-																	<div class="form-group">
-																		<div class="switch switch-success d-inline m-r-10">
-																			<input type="checkbox" onchange="biopsia_endo_gas();" id="biopsia_end_gast" name="biopsia_end_gast" value="">
-                                                                            <label for="biopsia_end_gast" class="cr"></label>
-																		</div>
-																		<label>biopsia</label>
-																	</div>
-																</div>
-																<div class="col-md-3">
-																	<div class="form-group">
-																		<div class="switch switch-success d-inline m-r-10">
-																			<input type="checkbox" onchange="muestra_hp_abrir_div();" id="muestra_hp" name="muestra_hp" value="">
-																			<label for="muestra_hp" class="cr"></label>
-																		</div>
-																		<label>Muestra H.P</label>
-																	</div>
-																</div>
-																<div class="col-md-3" id="div_select_muestra_hp" style="display:none;">
-																	<div class="form-group">
-																		<label class="floating-label-activo-sm" for="name">Resultado</label>
-																		<select id="muestra_hp_resultado_eda" name="muestra_hp_resultado_eda" class="form-control control-sm">
-																			<option value="1">Positivo</option>
-																			<option value="0" selected="selected">Negativo</option>
-																		</select>
-																	</div>
-																</div>
-															</div>
-                                                            <div class="form-group col-sm-12 col-md-12">
-                                                                <label class="floating-label-activo-sm">Descripción Examen</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="desc_endo_gast_eda" id="desc_endo_gast_eda"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--DUODENO-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="duodeno">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#duodeno-c" aria-expanded="false" aria-controls="duodeno-c">
-                                                        Duodéno
-                                                    </button>
-                                                </div>
-                                                <div id="duodeno-c" class="collapse show" aria-labelledby="duodeno" data-parent="#duodeno">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-sm-12 col-md-12">
-                                                                <label class="floating-label-activo-sm">Descripción</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="duodeno_eda" id="duodeno_eda"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!--IMAGENES-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="img_edga">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#img_eda" aria-expanded="false" aria-controls="img_eda">
-                                                        Imagenes.
-                                                    </button>
-                                                </div>
-                                                <div id="img_edga" class="collapse show" aria-labelledby="img_eda" data-parent="#img_eda">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <!-- [ Main Content ] start -->
-                                                        <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                        <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                        </div>
-                                                        <!-- [ file-upload ] end -->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-										<!--DIAGNÓSTICO-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="diag-endosc_alto">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diag-endosc_alto-c" aria-expanded="false" aria-controls="diag-endosc_alto-c">
-                                                        Diagnóstico
-                                                    </button>
-                                                </div>
-                                                <div id="diag-endosc_alto-c" class="collapse show" aria-labelledby="diag-endosc_alto" data-parent="#diag-endosc_alto">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-sm-12 col-md-6">
-                                                                <label class="floating-label-activo-sm">Diagnóstico endoscópico</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="diag_endos_eda" id="diag_endos_eda"></textarea>
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-6">
-                                                                <label class="floating-label-activo-sm">Observaciones</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_eda" id="observaciones_eda"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        {!! $examen['eda'] !!}
                                     </div>
                                 </div>
                             </div>
@@ -897,222 +642,7 @@
                                        </div>
                                    </div>
                                    <div class="row">
-                                        <!-- SOLICITADO POR -->
-                                        <div class="col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="solicitado_por">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#solicitado_por_c" aria-expanded="false" aria-controls="solicitado_por_c">
-                                                        Solicitado por:
-                                                    </button>
-                                                </div>
-                                                <div id="solicitado_por_c" class="collapse show" aria-labelledby="solicitado_por" data-parent="#solicitado_por">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-2" >
-                                                                <input type="hidden" name="id_profesional_solicitado_por_edb" id="id_profesional_solicitado_por_edb" value="">
-                                                                <label class="floating-label-activo-sm">RUT</label>
-                                                                <input type="text" class="form-control form-control-sm" name="solicitado_por_rut_edb" id="solicitado_por_rut_edb" onblur="cargar_profesional(this,'solicitado_por_edb', 'id_profesional_solicitado_por_edb', 'div_profesional_no_inscrito_edb');" onchange="cargar_profesional(this,'solicitado_por_edb', 'id_profesional_solicitado_por_edb', 'div_profesional_no_inscrito_edb');" onkeyup="cargar_profesional(this,'solicitado_por_edb', 'id_profesional_solicitado_por_edb', 'div_profesional_no_inscrito_edb');">
-                                                            </div>
-                                                            <div class="form-group col-md-2" >
-                                                                <label class="floating-label-activo-sm">Solicitado por</label>
-                                                                <input type="text" class="form-control form-control-sm" name="solicitado_por_edb" id="solicitado_por_edb" readonly="readonly">
-                                                            </div>
-
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">H.Diagnóstica</label>
-                                                                <input type="text" class="form-control form-control-sm" name="dg_sol_endogastrica_edb" id="dg_sol_endogastrica_edb">
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">Premedicación</label>
-                                                                <input type="text" class="form-control form-control-sm" name="premed_endogastrica_edb" id="premed_endogastrica_edb">
-                                                            </div>
-
-                                                            <div class="form-group col-md-12" id="div_mensaje"  style="display: none;">
-                                                                <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por_edb"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row" id="div_profesional_no_inscrito" style="display: none;">
-
-                                                            <div class="form-group col-md-3">
-                                                                <label class="floating-label-activo-sm">Nombre</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_nombre_edb" id="solicitado_por_nombre_edb" onchange="actualizar_solicitado_por('solicitado_por_edb', 'solicitado_por_nombre_edb', 'solicitado_por_apellido_edb');">
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <label class="floating-label-activo-sm">Apellido</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_apellido_edb" id="solicitado_por_apellido_edb" onchange="actualizar_solicitado_por('solicitado_por_edb', 'solicitado_por_nombre_edb', 'solicitado_por_apellido_edb');">
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <label class="floating-label-activo-sm">Telefono</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_telefono_edb" id="solicitado_por_telefono_edb" >
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <label class="floating-label-activo-sm">Email</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_email_edb" id"solicitado_por_email_edb" >
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                   </div>
-                                   <div class="row">
-                                       <!--ANTECEDENTES-->
-                                       <div class="col-sm-12 col-md-12">
-                                           <div class="card">
-                                               <div class="card-header" id="antec_coloprocto">
-                                                   <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#antec_endosc_colo" aria-expanded="false" aria-controls="antec_endosc_colo">
-                                                       Antecedentes
-                                                   </button>
-                                               </div>
-                                               <div id="antec_endosc_colo" class="collapse show" aria-labelledby="antec_coloprocto" data-parent="#antec_coloprocto">
-                                                   <div class="card-body-aten shadow-none">
-                                                       <div class="form-row">
-                                                           <div class="form-group col-md-12 mx-auto">
-                                                               <label class="floating-label-activo-sm">Antecedentes Tránsito Intestinal</label>
-                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_transito_edb" id="antec_endo_transito_edb"></textarea>
-                                                           </div>
-                                                           <div class="form-group col-md-12 mx-auto">
-                                                               <label class="floating-label-activo-sm">Antecedentes Gastroenterológicos y de la Especialidad</label>
-                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_gastrica_go_edb" id="antec_endo_gastrica_go_edb"></textarea>
-                                                           </div>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <!--TACTO RECTAL-->
-                                       <div class="col-sm-12 col-md-12">
-                                           <div class="card">
-                                               <div class="card-header" id="tacto_rectal">
-                                                   <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#tacto_rectal_endo_edb" aria-expanded="false" aria-controls="tacto_rectal_endo_edb">
-                                                   Tacto Rectal y Preparación para el examen
-                                                   </button>
-                                               </div>
-                                               <div id="tacto_rectal_endo" class="collapse show" aria-labelledby="tacto_rectal" data-parent="#tacto_rectal">
-                                                   <div class="card-body-aten shadow-none">
-                                                       <div class="form-row">
-                                                           <div class="form-group col-md-12 mx-auto">
-                                                               <label class="floating-label-activo-sm">Tacto</label>
-                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="tacto_endos_rectal_edb" id="tacto_endos_rectal_edb"></textarea>
-                                                           </div>
-                                                       </div>
-                                                       <div class="form-row">
-                                                           <div class="col-sm-12">
-                                                               <div class="form-group fill">
-                                                                   <label class="floating-label-activo-sm">Preparación de Boston Comentarios</label>
-                                                                   <input id="com_prep_boston_cdb" name="com_prep_boston_cdb" type="text" class="form-control">
-                                                               </div>
-                                                           </div>
-                                                       </div>
-                                                       <div class="form-row">
-                                                           <div class="form-group col-md-4">
-                                                               <label id="" name="" class="floating-label-activo-sm">colon derecho</label>
-                                                               <select class="form-control form-control-sm" name="colon_derecho_edb" id="colon_derecho_edb">
-                                                                   <option value="0">0</option>
-                                                                   <option value="1">1</option>
-                                                                   <option value="2">2</option>
-                                                                   <option value="3" selected>3</option>
-                                                               </select>
-                                                           </div>
-                                                           <div class="form-group col-md-4">
-                                                               <label id="" name="" class="floating-label-activo-sm">colon transverso</label>
-                                                               <select class="form-control form-control-sm" name="colon_transv_edb" id="colon_transv_edb">
-                                                                   <option value="0">0</option>
-                                                                   <option value="1">1</option>
-                                                                   <option value="2">2</option>
-                                                                   <option value="3" selected>3</option>
-                                                               </select>
-                                                           </div>
-                                                           <div class="form-group col-md-4">
-                                                               <label id="" name="" class="floating-label-activo-sm">colon izquierdo</label>
-                                                               <select class="form-control form-control-sm" name="colon_izq_edb" id="colon_izq_edb">
-                                                                   <option value="0">0</option>
-                                                                   <option value="1">1</option>
-                                                                   <option value="2">2</option>
-                                                                   <option value="3" selected>3</option>
-                                                               </select>
-                                                           </div>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </div>
-                                       </div>
-
-                                       <div class="col-sm-12 col-md-12">
-                                           <div class="card">
-                                               <div class="card-header" id="exploracion">
-                                                   <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#exploracion_endo_edb" aria-expanded="false" aria-controls="exploracion_endo_edb">
-                                                    Exploración
-                                                   </button>
-                                               </div>
-                                               <div id="exploracion_endo" class="collapse show" aria-labelledby="exploracion" data-parent="#exploracion">
-                                                   <div class="card-body-aten shadow-none">
-                                                       <div class="form-row">
-                                                           <div class="form-group col-md-12 mx-auto">
-                                                               <label class="floating-label-activo-sm">Exploración y Procedimientos </label>
-                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=5" onblur="this.rows=1;" name="Tacto_endos_rectal_edb" id="Tacto_endos_rectal_edb"></textarea>
-                                                           </div>
-                                                           <div class="form-group col-md-6 " style="margin:auto">
-                                                               <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_clasificacion_colon();"><i class="me-2" data-feather="thumbs-up"></i>Ver Clasificación de Colon<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
-                                                           </div>
-                                                           <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <div class="switch switch-success d-inline m-r-10">
-                                                                        <input type="checkbox" onchange="biopsia_endo_colon();" id="biopsia_colon" name="biopsia_colon" value="">
-                                                                        <label for="biopsia_colon" class="cr"></label>
-                                                                    </div>
-                                                                    <label>biopsia</label>
-                                                                </div>
-                                                            </div>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                               <!--IMAGENES-->
-                                               <div class="col-sm-12 col-md-12">
-                                                   <div class="card">
-                                                       <div class="card-header" id="img_edb">
-                                                           <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#img_edb" aria-expanded="false" aria-controls="img_edb">
-                                                               Imagenes.
-                                                           </button>
-                                                       </div>
-                                                       <div id="img_edga" class="collapse show" aria-labelledby="img_edb" data-parent="#img_edb">
-                                                           <div class="card-body-aten shadow-none">
-                                                               <!-- [ Main Content ] start -->
-                                                               <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                               <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                               </div>
-                                                               <!-- [ file-upload ] end -->
-                                                           </div>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <!--DIAGNÓSTICO-->
-                                       <div class="col-sm-12 col-md-12">
-                                           <div class="card">
-                                               <div class="card-header" id="diag-endosc_bajo">
-                                                   <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diag-endosc_bajo-c" aria-expanded="false" aria-controls="diag-endosc_bajo-c">
-                                                       Diagnóstico
-                                                   </button>
-                                               </div>
-                                               <div id="diag-endosc_bajo-c" class="collapse show" aria-labelledby="diag-endosc_bajo" data-parent="#diag-endosc_bajo">
-                                                   <div class="card-body-aten shadow-none">
-                                                       <div class="form-row">
-                                                           <div class="form-group col-sm-12 col-md-6">
-                                                               <label class="floating-label-activo-sm">Diagnóstico endoscópico</label>
-                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="diag_endos_edb" id="diag_endos_edb"></textarea>
-                                                           </div>
-                                                           <div class="form-group col-sm-12 col-md-6">
-                                                               <label class="floating-label-activo-sm">Observaciones</label>
-                                                               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_edb" id="observaciones_edb"></textarea>
-                                                           </div>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </div>
-                                       </div>
+                                        {!! $examen['edb'] !!}
                                    </div>
                                </div>
                            </div>
@@ -1156,15 +686,17 @@
                 validateOn: 'change',
                 useThousandsSeparator : false
             });
+
              /* formatear rut */
-             $("#solicitado_por_rut_edb").rut({
+            $("#solicitado_por_rut_edb").rut({
                 formatOn: 'keyup',
                 minimumLength: 2,
                 validateOn: 'change',
                 useThousandsSeparator : false
             });
             /** fin formulario pestaña 1 */
-            $('#hip-diag_spec').keyup(function(){
+
+            $('#hip_diag_spec').keyup(function(){
                 if($.trim(this.value) != ''){
                     $('.btn_agregar_medicamento').removeAttr("disabled");
                     $('.btn_medicamento_pdf').removeAttr("disabled");
@@ -1229,87 +761,8 @@
             });
 
         })
-        function cargar_profesional(rut, input_nombre, input_id, div_solicitar)
-        {
-            rut = $(rut).val();
 
-            // console.log('------------------------------------');
-            // console.log(rut.length);
-            // console.log(rut);
-            // console.log('------------------------------------');
 
-            if(rut.length>5)
-            {
-                url = "{{ route('profesional.buscar') }}";
-                $.ajax({
-
-                    url: url,
-                    type: "GET",
-                    data: {
-                        rut : rut,
-                    },
-                })
-                .done(function(data)
-                {
-                    // console.log('-----------------------');
-                    // console.log(data);
-                    // console.log('-----------------------');
-                    if(data.estado == 1)
-                    {
-
-                        if(data.registros.length>0)
-                        {
-                            var nombre = data.registros[0].nombre+' '+data.registros[0].apellido_uno;
-                            var id = data.registros[0].id;
-                            // $('#'+input_nombre).attr('readonly', true);
-                            $('#'+input_nombre).val(nombre);
-                            $('#'+input_id).val(id);
-                            $('#'+div_solicitar).hide();
-                            mensaje = '';
-                            $('#div_mensaje').hide();
-                            $('#mensaje_solicitado_por').html(mensaje);
-                            $('#solicitado_por_nombre_eda').val('');
-                            $('#solicitado_por_apellido_eda').val('');
-                            $('#solicitado_por_telefono_eda').val('');
-                            $('#solicitado_por_email_eda').val('');
-                        }
-                        else
-                        {
-                            mensaje = 'Profesional no encontrato, debe ingresar datos.';
-                            $('#'+input_nombre).val('');
-                            $('#'+input_id).val('');
-                            $('#'+div_solicitar).show();
-                            $('#div_mensaje').show();
-                            $('#mensaje_solicitado_por').html(mensaje);
-                            $('#solicitado_por_nombre_eda').val('');
-                            $('#solicitado_por_apellido_eda').val('');
-                            $('#solicitado_por_telefono_eda').val('');
-                            $('#solicitado_por_email_eda').val('');
-                            // $('#'+input_nombre).attr('readonly', true);
-                        }
-                    }
-                    else
-                    {
-                        mensaje = 'Se presento un problema en la busqueda intente nuevamente';
-                        $('#div_mensaje').show();
-                        $('#mensaje_solicitado_por').html(mensaje);
-                        // $('#'+input_nombre).attr('readonly', false);
-                    }
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
-            }
-            else if(rut.length==0)
-            {
-                $('#'+input_nombre).val('');
-                // $('#'+input_nombre).attr('readonly', true);
-                $('#'+input_id).val('');
-                $('#'+div_solicitar).hide();
-                $('#div_mensaje').hide();
-                $('#mensaje_solicitado_por').html('');
-            }
-        }
         function cargarIgual(input){
 
             let actual = $('#'+input);
@@ -1785,40 +1238,57 @@
         }
 
 
-		function biopsia_endo_gas() {
-            if($('#biopsia_end_gast').prop('checked'))
+        function biopsia(alias_examen)
+        {
+            if($('#biopsia_check_'+alias_examen).prop('checked'))
 			{
 				$('#m_biopsia_cir').modal('show');
+                $('#biopsia_'+alias_examen).val(1);
 			}
+            else
+            {
+                $('#biopsia_'+alias_examen).val(0);
+                $('#m_biopsia_cir').modal('hide');
+            }
         }
 
-        function biopsia_endo_colon() {
-            if($('#biopsia_colon').prop('checked'))
-			{
-				$('#m_biopsia_cir').modal('show');
-			}
-        }
+		// function biopsia_endo_gas() {
+        //     if($('#biopsia_end_gast').prop('checked'))
+		// 	{
+		// 		$('#m_biopsia_cir').modal('show');
+        //         $('#biopsia_end_gast_eda').val(1);
+		// 	}
+        // }
 
-		function muestra_hp_abrir_div()
+        // function biopsia_endo_colon() {
+        //     if($('#biopsia_colon').prop('checked'))
+		// 	{
+		// 		$('#m_biopsia_cir').modal('show');
+		// 	}
+        // }
+
+		function muestra_hp_abrir_div(alias_examen)
 		{
-			if($('#muestra_hp').prop('checked'))
+			if($('#muestra_hp_check_'+alias_examen).prop('checked'))
 			{
-				$('#div_select_muestra_hp').show();
+				$('#div_select_muestra_hp_'+alias_examen).show();
+                $('#muestra_hp_'+alias_examen).val(1);
 			}
 			else
 			{
-				$('#div_select_muestra_hp').hide();
-				$('#muestra_hp_resultado').val('');
+				$('#div_select_muestra_hp_'+alias_examen).hide();
+                $('#muestra_hp_'+alias_examen).val(0);
+				$('#muestra_hp_resultado_'+alias_examen).val('');
 			}
 
 		}
 
         /** MANEJO DE IMAGENES */
-        var myDropzone ;
-        Dropzone.options.imgEdga = {
+        var myDropzone_eda ;
+        Dropzone.options.misImagenesEda = {
             init:function()
             {
-                myDropzone = this;
+                myDropzone_eda = this;
             },
             url: "{{ route('profesional.imagen.carga') }}",
             method: 'post',
@@ -1878,7 +1348,7 @@
             // },
             success: function(file, response){
                 // console.log('-------------success-----------------------');
-                cargar_lista_imagenes();
+                cargar_lista_imagenes(myDropzone_eda,'eda');
 
                 if (file.previewElement) {
                     return file.previewElement.classList.add("dz-success");
@@ -1903,24 +1373,126 @@
             },
             removedfile(file) {
                 // console.log('-------------removedfile-----------------------');
-                cargar_lista_imagenes();
+                cargar_lista_imagenes(myDropzone_eda,'eda');
                 if (file.previewElement != null && file.previewElement.parentNode != null) {
                     file.previewElement.parentNode.removeChild(file.previewElement);
                 }
                 return this._updateMaxFilesReachedClass();
             },
             canceled: function canceled(file) {
-                cargar_lista_imagenes();
+                cargar_lista_imagenes(myDropzone_eda,'eda');
                 return this.emit("error", file, this.options.dictUploadCanceled);
             },
         };
 
-        var lista_imagenes = [];
-        function cargar_lista_imagenes()
+        var myDropzone_edb ;
+        Dropzone.options.misImagenesEdb = {
+            init:function()
+            {
+                myDropzone_edb = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzone_edb, 'edb');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzone_edb, 'edb');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzone_edb, 'edb');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+
+        var lista_imagenes = {};
+        function cargar_lista_imagenes(obj_dropzone, alias_examen)
         {
             // console.log('--------------cargar_lista_imagenes----------------------');
-            lista_imagenes = [];
-            let temp  = myDropzone.getAcceptedFiles();
+            lista_imagenes[alias_examen] = [];
+            let temp  = obj_dropzone.getAcceptedFiles();
             $.each(temp, function( index, value )
             {
                 if(value.status == "success")
@@ -1928,7 +1500,7 @@
                     if(value.xhr !== undefined)
                     {
                         var img_temp = JSON.parse(value.xhr.response);
-                        lista_imagenes[index] = [
+                        lista_imagenes[alias_examen][index] = [
                             url=img_temp.img.url,
                             nombre_origian= img_temp.img.original_file_name,
                             nombre_img = img_temp.img.nombre_img,
@@ -1944,7 +1516,7 @@
         }
         /** CIERRE MANEJO DE IMAGENES */
 
-        function cargar_profesional(rut, input_nombre, input_id, div_solicitar)
+        function cargar_profesional(rut, input_nombre_completo, input_id, div_solicitar, input_nombre, input_apellido, input_tel, input_email, div_mensaje, text_mensaje)
         {
             rut = $(rut).val();
 
@@ -1977,37 +1549,37 @@
                             var nombre = data.registros[0].nombre+' '+data.registros[0].apellido_uno;
                             var id = data.registros[0].id;
                             // $('#'+input_nombre).attr('readonly', true);
-                            $('#'+input_nombre).val(nombre);
+                            $('#'+input_nombre_completo).val(nombre);
                             $('#'+input_id).val(id);
                             $('#'+div_solicitar).hide();
                             mensaje = '';
-                            $('#div_mensaje').hide();
-                            $('#mensaje_solicitado_por').html(mensaje);
-                            $('#solicitado_por_nombre_cda').val('');
-                            $('#solicitado_por_apellido_cda').val('');
-                            $('#solicitado_por_telefono_cda').val('');
-                            $('#solicitado_por_email_cda').val('');
+                            $('#'.div_mensaje).hide();
+                            $('#'+text_mensaje).html(mensaje);
+                            $('#'+input_nombre).val('');
+                            $('#'+input_apellido).val('');
+                            $('#'+input_tel).val('');
+                            $('#'+input_email).val('');
                         }
                         else
                         {
                             mensaje = 'Profesional no encontrato, debe ingresar datos.';
-                            $('#'+input_nombre).val('');
+                            $('#'+input_nombre_completo).val('');
                             $('#'+input_id).val('');
                             $('#'+div_solicitar).show();
-                            $('#div_mensaje').show();
-                            $('#mensaje_solicitado_por').html(mensaje);
-                            $('#solicitado_por_nombre_cda').val('');
-                            $('#solicitado_por_apellido_cda').val('');
-                            $('#solicitado_por_telefono_cda').val('');
-                            $('#solicitado_por_email_cda').val('');
+                            $('#'.div_mensaje).show();
+                            $('#'+text_mensaje).html(mensaje);
+                            $('#'.input_nombre).val('');
+                            $('#'.input_apellido).val('');
+                            $('#'.input_tel).val('');
+                            $('#'.input_email).val('');
                             // $('#'+input_nombre).attr('readonly', true);
                         }
                     }
                     else
                     {
                         mensaje = 'Se presento un problema en la busqueda intente nuevamente';
-                        $('#div_mensaje').show();
-                        $('#mensaje_solicitado_por').html(mensaje);
+                        $('#'.div_mensaje).show();
+                        $('#'+text_mensaje).html(mensaje);
                         // $('#'+input_nombre).attr('readonly', false);
                     }
                 })

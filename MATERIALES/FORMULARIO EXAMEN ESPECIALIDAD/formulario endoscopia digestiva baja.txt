@@ -1,0 +1,225 @@
+<!-- SOLICITADO POR -->
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header" id="solicitado_por">
+            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#solicitado_por_c" aria-expanded="false" aria-controls="solicitado_por_c">
+                Solicitado por:
+            </button>
+        </div>
+        <div id="solicitado_por_c" class="collapse show" aria-labelledby="solicitado_por" data-parent="#solicitado_por">
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-md-2" >
+                        <input type="hidden" name="id_profesional_solicitado_por_edb" id="id_profesional_solicitado_por_edb" value="">
+                        <label class="floating-label-activo-sm">RUT</label>
+                        <input type="text" class="form-control form-control-sm" name="solicitado_por_rut_edb" id="solicitado_por_rut_edb"
+                            onblur="cargar_profesional(this,'solicitado_por_edb', 'id_profesional_solicitado_por_edb', 'div_profesional_no_inscrito_edb', 'solicitado_por_nombre_edb', 'solicitado_por_apellido_edb', 'solicitado_por_telefono_edb', 'solicitado_por_email_edb', 'div_mensaje_edb', 'mensaje_solicitado_por_edb');"
+                            onchange="cargar_profesional(this,'solicitado_por_edb', 'id_profesional_solicitado_por_edb', 'div_profesional_no_inscrito_edb', 'solicitado_por_nombre_edb', 'solicitado_por_apellido_edb', 'solicitado_por_telefono_edb', 'solicitado_por_email_edb', 'div_mensaje_edb', 'mensaje_solicitado_por_edb');"
+                            onkeyup="cargar_profesional(this,'solicitado_por_edb', 'id_profesional_solicitado_por_edb', 'div_profesional_no_inscrito_edb', 'solicitado_por_nombre_edb', 'solicitado_por_apellido_edb', 'solicitado_por_telefono_edb', 'solicitado_por_email_edb', 'div_mensaje_edb', 'mensaje_solicitado_por_edb');">
+                    </div>
+                    <div class="form-group col-md-2" >
+                        <label class="floating-label-activo-sm">Solicitado por</label>
+                        <input type="text" class="form-control form-control-sm" name="solicitado_por_edb" id="solicitado_por_edb" readonly="readonly">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label class="floating-label-activo-sm">H.Diagnóstica</label>
+                        <input type="text" class="form-control form-control-sm" name="sospecha_diagnostica_edb" id="sospecha_diagnostica_edb">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="floating-label-activo-sm">Premedicación</label>
+                        <input type="text" class="form-control form-control-sm" name="premed_edb" id="premed_edb">
+                    </div>
+
+                    <div class="form-group col-md-12" id="div_mensaje_edb"  style="display: none;">
+                        <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por_edb"></span>
+                    </div>
+                </div>
+                <div class="row" id="div_profesional_no_inscrito_edb" style="display: none;">
+
+                    <div class="form-group col-md-3">
+                        <label class="floating-label-activo-sm">Nombre</label>
+                        <input type="text" class="form-control form-control-sm"  name="solicitado_por_nombre_edb" id="solicitado_por_nombre_edb" onchange="actualizar_solicitado_por('solicitado_por_edb', 'solicitado_por_nombre_edb', 'solicitado_por_apellido_edb');">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="floating-label-activo-sm">Apellido</label>
+                        <input type="text" class="form-control form-control-sm"  name="solicitado_por_apellido_edb" id="solicitado_por_apellido_edb" onchange="actualizar_solicitado_por('solicitado_por_edb', 'solicitado_por_nombre_edb', 'solicitado_por_apellido_edb');">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="floating-label-activo-sm">Telefono</label>
+                        <input type="text" class="form-control form-control-sm"  name="solicitado_por_telefono_edb" id="solicitado_por_telefono_edb" >
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="floating-label-activo-sm">Email</label>
+                        <input type="text" class="form-control form-control-sm"  name="solicitado_por_email_edb" id="solicitado_por_email_edb" >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--ANTECEDENTES-->
+<div class="col-sm-12 col-md-12">
+    <div class="card">
+        <div class="card-header" id="antec_coloprocto">
+            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#antec_endosc_colo" aria-expanded="false" aria-controls="antec_endosc_colo">
+                Antecedentes
+            </button>
+        </div>
+        <div id="antec_endosc_colo" class="collapse show" aria-labelledby="antec_coloprocto" data-parent="#antec_coloprocto">
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-md-12 mx-auto">
+                        <label class="floating-label-activo-sm">Antecedentes Tránsito Intestinal</label>
+                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_transito_edb" id="antec_endo_transito_edb"></textarea>
+                    </div>
+                    <div class="form-group col-md-12 mx-auto">
+                        <label class="floating-label-activo-sm">Antecedentes Gastroenterológicos y de la Especialidad</label>
+                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_gastrica_go_edb" id="antec_endo_gastrica_go_edb"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--TACTO RECTAL-->
+<div class="col-sm-12 col-md-12">
+    <div class="card">
+        <div class="card-header" id="tacto_rectal">
+            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#tacto_rectal_endo_edb" aria-expanded="false" aria-controls="tacto_rectal_endo_edb">
+            Tacto Rectal y Preparación para el examen
+            </button>
+        </div>
+        <div id="tacto_rectal_endo" class="collapse show" aria-labelledby="tacto_rectal" data-parent="#tacto_rectal">
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-md-12 mx-auto">
+                        <label class="floating-label-activo-sm">Tacto</label>
+                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="tacto_endos_rectal_edb" id="tacto_endos_rectal_edb"></textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-sm-12">
+                        <div class="form-group fill">
+                            <label class="floating-label-activo-sm">Preparación de Boston Comentarios</label>
+                            <input id="com_prep_boston_cdb" name="com_prep_boston_cdb" type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label id="" name="" class="floating-label-activo-sm">colon derecho</label>
+                        <select class="form-control form-control-sm" name="colon_derecho_edb" id="colon_derecho_edb">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label id="" name="" class="floating-label-activo-sm">colon transverso</label>
+                        <select class="form-control form-control-sm" name="colon_transv_edb" id="colon_transv_edb">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label id="" name="" class="floating-label-activo-sm">colon izquierdo</label>
+                        <select class="form-control form-control-sm" name="colon_izq_edb" id="colon_izq_edb">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- EXPLORACION -->
+<div class="col-sm-12 col-md-12">
+    <div class="card">
+        <div class="card-header" id="exploracion">
+            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#exploracion_endo_edb" aria-expanded="false" aria-controls="exploracion_endo_edb">
+                Exploración
+            </button>
+        </div>
+        <div id="exploracion_endo" class="collapse show" aria-labelledby="exploracion" data-parent="#exploracion">
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-md-12 mx-auto">
+                        <label class="floating-label-activo-sm">Exploración y Procedimientos </label>
+                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=5" onblur="this.rows=1;" name="Tacto_endos_rectal_edb" id="Tacto_endos_rectal_edb"></textarea>
+                    </div>
+                    <div class="form-group col-md-6 " style="margin:auto">
+                        <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_clasificacion_colon();"><i class="me-2" data-feather="thumbs-up"></i>Ver Clasificación de Colon<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
+                    </div>
+                    <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="hidden" id="biopsia_edb" name="biopsia_edb" value="0">
+                                <div class="switch switch-success d-inline m-r-10">
+                                    <input type="checkbox" onchange="biopsia('edb');" id="biopsia_check_edb" name="biopsia_check_edb" value="">
+                                    <label for="biopsia_check_edb" class="cr"></label>
+                                </div>
+                                <label>biopsia</label>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--IMAGENES-->
+<div class="col-sm-12 col-md-12">
+    <div class="card">
+        <div class="card-header" id="img_edb">
+            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#img_edb" aria-expanded="false" aria-controls="img_edb">
+                Imagenes.
+            </button>
+        </div>
+        <div id="img_edb-c" class="collapse show" aria-labelledby="img_edb" data-parent="#img_edb">
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-md-12">
+                        <!-- [ Main Content ] start -->
+                        <div class="dropzone" id="mis-imagenes-edb" action="{{ route('profesional.imagen.carga') }}">
+                        <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                        </div>
+                        <!-- [ file-upload ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--DIAGNÓSTICO-->
+<div class="col-sm-12 col-md-12">
+    <div class="card">
+        <div class="card-header" id="diag-endosc_bajo">
+            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diag-endosc_bajo-c" aria-expanded="false" aria-controls="diag-endosc_bajo-c">
+                Diagnóstico
+            </button>
+        </div>
+        <div id="diag-endosc_bajo-c" class="collapse show" aria-labelledby="diag-endosc_bajo" data-parent="#diag-endosc_bajo">
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label class="floating-label-activo-sm">Diagnóstico endoscópico</label>
+                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="diag_endos_edb" id="diag_endos_edb"></textarea>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label class="floating-label-activo-sm">Observaciones</label>
+                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_edb" id="observaciones_edb"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
