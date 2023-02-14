@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\LogLogUsersDevices;
 use App\Models\LogUsersDevices;
 use Illuminate\Http\Request;
-use App\Helpers\Funciones;
 
 class LogUsersDevicesController extends Controller
 {
@@ -457,25 +456,6 @@ class LogUsersDevicesController extends Controller
             $datos['error'] = $error;
             $datos['request'] = $request->all();
         }
-
-        return response($datos)->header('Content-Type', 'application/json');
-    }
-
-    public function genSolicitud(Request $request)
-    {
-        /* params generatePermApp() */ 
-        /* $id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo = 'confirmacion' */
-        $id_user_create = 3;
-        $id_user_recept = 3;
-        $evento = 'Ficha Única';
-        $nombre = 'Paul';
-        $apellido_p = 'Baeza';
-        $apellido_m = 'Del Canto';
-        $lugar = 'Clinica';
-        $profesional = 'Jaime Kriman';
-        $tipo = 'confirmacion';
-
-        $datos = Funciones::generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo);
 
         return response($datos)->header('Content-Type', 'application/json');
     }

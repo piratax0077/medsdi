@@ -60,6 +60,9 @@ function biopsia_cisto() {
     }
 }
 
+function biopsia_prost() {
+    $('#m_biopsia_cirugia').modal('show');
+}
 /** Indicar examen **/
 function i_examen() {
     $('#indicar_examenes').modal('show');

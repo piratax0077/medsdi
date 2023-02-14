@@ -612,7 +612,7 @@
             var med_faltante = $.trim($('#med_faltante').val());
             if(med_faltante != ''){
                 /** registro */
-                let url = "{{ route('medicamentoFaltante.registro') }}";
+                let url = "https://www.med-sdi.cl/MedicamentoFaltante/registrar";
 
 
                 var _token = CSRF_TOKEN;

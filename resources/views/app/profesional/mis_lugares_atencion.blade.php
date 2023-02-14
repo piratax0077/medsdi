@@ -8,7 +8,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis lugares de atención</h5>
+                                <h5 class="m-b-10 font-weight-bold">Mis Lugares de Atención</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip"
@@ -16,9 +16,9 @@
                                             class="feather       icon-home"></i></a></li>
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.configuracion') }}"
                                         data-toggle="tooltip" data-placement="top"
-                                        title="Volver a panel de configuración">Panel de configuración</a></li>
-                                <li class="breadcrumb-item"><a href="#">Mis lugares de
-                                        atención</a></li>
+                                        title="Volver a panel de configuración">Panel de Configuración</a></li>
+                                <li class="breadcrumb-item"><a href="#">Mis Lugares de
+                                        Atención</a></li>
                             </ul>
                         </div>
                     </div>
@@ -32,7 +32,7 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-6 pt-2">
-                                        <h4 class="text-white f-20">Mis lugares de atención</h4>
+                                        <h4 class="text-white f-20">Mis Lugares de Atención</h4>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="float-right">
@@ -58,7 +58,7 @@
 
                             </div>
                             <table id="tabla_lugares_atencion"
-                                class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th class="text-center align-middle">Nombre</th>
@@ -190,31 +190,32 @@
                 <form action="{{ route('profesional.agregar_centro') }}" method="POST">
                     @csrf
                     <div class="modal-body">
+
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <label class="floating-label">Nombre</label>
-                                    <input class="form-control form-control-sm" name="nombre_lugar_atencion" id="nombre_lugar_atencion"
+                                    <input class="form-control" name="nombre_lugar_atencion" id="nombre_lugar_atencion"
                                         type="text">
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <label class="floating-label">Rut</label>
-                                    <input class="form-control form-control-sm" name="rut_lugar_atencion" id="rut_lugar_atencion" type="text" onkeyup="formatoRut(this);">
+                                    <input class="form-control" name="rut_lugar_atencion" id="rut_lugar_atencion" type="text" onkeyup="formatoRut(this);">
                                 </div>
                             </div>
                             <div class="col-sm-8">
                                 <div class="form-group">
                                     <label class="floating-label">Direcci&oacute;n</label>
-                                    <input class="form-control form-control-sm" name="direccion_lugar_atencion"
+                                    <input class="form-control" name="direccion_lugar_atencion"
                                         id="direccion_lugar_atencion" type="text">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="floating-label">Depto. | Ofic.</label>
-                                    <input class="form-control form-control-sm" name="numero_lugar_atencion" id="numero_lugar_atencion"
+                                    <input class="form-control" name="numero_lugar_atencion" id="numero_lugar_atencion"
                                         type="text">
                                 </div>
                             </div>
@@ -223,8 +224,8 @@
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Regi&oacute;n</label>
                                     <select id="region_agregar" onchange="buscar_ciudad();" name="region_agregar"
-                                        class="form-control form-control-sm" required>
-                                        <option value="">Seleccione</option>
+                                        class="form-control" required>
+                                        <option value="">Seleccione una Regi&oacute;n</option>
                                         @foreach ($region as $reg)
                                             @if (isset($region))
                                                 <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
@@ -237,8 +238,9 @@
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Ciudad</label>
-                                    <select id="ciudad_agregar" name="ciudad_agregar" class="form-control form-control-sm" required>
-                                        <option value="">Seleccione</option>
+                                    <select id="ciudad_agregar" name="ciudad_agregar" class="form-control" required>
+                                        <option value=""></option>
+
                                     </select>
                                 </div>
                             </div>
@@ -247,7 +249,7 @@
                                 <div class="form-group ">
                                     <label class="floating-label-activo-sm">Tipo</label>
                                     <select id="tipo_agregar_lugar_atencion" name="tipo_agregar_lugar_atencion"
-                                        class="js-example-basic-single form-control form-control-sm">
+                                        class="js-example-basic-single form-control">
                                         <option value="0">Seleccione</option>
                                         <option value="1">Centro Médico</option>
                                         <option value="2">Consulta Particular</option>
@@ -258,14 +260,14 @@
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <label class="floating-label">Correo Electr&oacute;nico</label>
-                                    <input class="form-control form-control-sm" name="email_lugar_atencion" id="email_lugar_atencion"
+                                    <input class="form-control" name="email_lugar_atencion" id="email_lugar_atencion"
                                         type="email">
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <label class="floating-label">Tel&eacute;fono</label>
-                                    <input class="form-control form-control-sm" name="telefono_lugar_atencion"
+                                    <input class="form-control" name="telefono_lugar_atencion"
                                         id="telefono_lugar_atencion_1" type="text">
                                 </div>
                             </div>
@@ -278,12 +280,12 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>    
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-info">Guardar Cambios</button>
+                        </div>
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-info btn-sm">Guardar cambios</button>
                     </div>
                 </form>
             </div>
@@ -471,7 +473,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-info">
                     <h5 class="modal-title text-white text-center" id="nuevo_horario_atencion_titulo">Configurar
-                        asistentes</h5>
+                        Asistentes</h5>
                     <button type="button" id="cerrar_editar_asistentes" class="close text-white" data-dismiss="modal"
                         aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
@@ -592,16 +594,17 @@
                 </div>
                 <div class="modal-body">
                     <form id="">
+
                         <input type="hidden" name="mi_horario_id_lugar_atencion" id="mi_horario_id_lugar_atencion">
                         <div class="row">
                             <div class="col-sm-12">
-                                <h6 class="text-c-blue mb-3">Duración</h6>
+                                <h6 class="text-c-blue mb-3">Duraci&oacute;n</h6>
                             </div>
                             <div class="col-sm-12 mb-2">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Duración de consultas médicas </label>
-                                    <select name="duracion_horario" id="duracion_horario" class="form-control form-control-sm">
-                                        <option value="0">Seleccionar</option>
+                                    <label class="floating-label">Duraci&oacute;n de Consultas M&eacute;dicas </label>
+                                    <select name="duracion_horario" id="duracion_horario" class=" form-control">
+                                        <option value="0">Seleccione Tiempo</option>
                                         <option value="00:15:00">15 minutos</option>
                                         <option value="00:30:00">30 minutos</option>
                                         <option value="00:45:00">45 minutos</option>
@@ -611,37 +614,37 @@
                                 </div>
                             </div>
                             <div class="col-sm-12">
-                                <h6 class="text-c-blue mb-3">Horario de Atención</h6>
+                                <h6 class="text-c-blue mb-3">Horario de Atenci&oacute;n</h6>
                             </div>
                             <div class="col-sm-6 mb-2">
                                 <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Tipo agenda </label>
-                                    <select name="tipo_agenda_medica" id="tipo_agenda_medica" class="form-control form-control-sm">
-                                        <option value="0">Seleccione tipo Agenda</option>
-                                        <option value="1">Atención general</option>
-                                        <option value="2">Atención dental</option>
+                                    <label class="floating-label-activo-sm">Tipo Agenda </label>
+                                    <select name="tipo_agenda_medica" id="tipo_agenda_medica" class=" form-control">
+                                        <option value="0">Seleccione Tipo Agenda</option>
+                                        <option value="1">Atención General</option>
+                                        <option value="2">Atención Dental</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-sm-6 mb-2">
                                 <div class="form-group fill">
                                     <label class="floating-label">Día </label>
-                                    <select name="dia_horario" id="dia_horario" class=" form-control form-contro-sm">
-                                        <option value="0">Seleccione día de atención</option>
+                                    <select name="dia_horario" id="dia_horario" class=" form-control">
+                                        <option value="0">Seleccione d&iacute;a de atenci&oacute;n</option>
                                         <option value="1">Lunes</option>
                                         <option value="2">Martes</option>
-                                        <option value="3">Miércoles</option>
+                                        <option value="3">Mi&eacute;rcoles</option>
                                         <option value="4">Jueves</option>
                                         <option value="5">Viernes</option>
-                                        <option value="6">Sábado</option>
+                                        <option value="6">S&aacute;bado</option>
                                         <option value="7">Domingo</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-sm-6 mb-2">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Desde</label>
-                                    <select name="hora_inicio_horario" id="hora_inicio_horario" class="form-control form-control-sm">
+                                    <label class="floating-label">Desde </label>
+                                    <select name="hora_inicio_horario" id="hora_inicio_horario" class=" form-control">
                                         <option value="0">Seleccione horario</option>
                                         <option value="08:00">08:00</option>
                                         <option value="08:30">08:30</option>
@@ -677,8 +680,8 @@
                             </div>
                             <div class="col-sm-6 mb-2">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Hasta</label>
-                                    <select name="hora_termino_horario" id="hora_termino_horario" class=" form-control form-control-sm">
+                                    <label class="floating-label">Hasta </label>
+                                    <select name="hora_termino_horario" id="hora_termino_horario" class=" form-control">
                                         <option value="0">Seleccione horario</option>
                                         <option value="08:00">08:00</option>
                                         <option value="08:30">08:30</option>
@@ -722,7 +725,7 @@
                                     class="btn btn-danger btn-sm">Cancelar</button> --}}
                             </div>
                             <div class="col-sm-12 mt-2 mb-2">
-                                <table id="mi_horario_table" class="table table-xs">
+                                <table id="mi_horario_table" class="table table-sm">
                                     <thead>
                                         <tr>
                                             <th class="text-center align-middle">Desde</th>
@@ -740,8 +743,9 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-sm" id="cerrar_modal_horario">Cancelar</button>
-                    <button type="button" class="btn btn-info btn-sm" id="cerrar_modal_horario1">Cerrar</button>
+                    <button type="button" class="btn btn-danger" id="cerrar_modal_horario">Cancelar</button>
+                    <button type="button" class="btn btn-info" id="cerrar_modal_horario1">Cerrar</button>
+
                 </div>
             </div>
         </div>

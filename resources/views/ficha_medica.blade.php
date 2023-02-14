@@ -22,7 +22,7 @@
 
 <!-- CONTENT -->
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <!-- MENU -->
         <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">FICHA MÉDICA ÚNICA</a>
@@ -62,7 +62,7 @@
         </nav>
     </div>
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="mt-4">
             <nav class="nav nav-pills nav-justified">
                 <a class="nav-link active" href="#">RESUMEN</a>
@@ -75,7 +75,7 @@
     </div>    
     
     <!-- ANTECEDENTES BASICOS -->
-    <div class="container">            
+    <div class="container-fluid">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -145,7 +145,7 @@
 
 
     <!-- RESUMEN -->
-    <div class="container">            
+    <div class="container-fluid">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -202,7 +202,7 @@
     </div>
 
     <!-- TRANSFUCIONES -->
-    <div class="container">            
+    <div class="container-fluid">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -264,8 +264,7 @@
         TRATAMIENTO 
         CONTROL DE PATOLOGÍAS CRÓNICAS | HIPERTENSIÓN ARTERIAL | OBESIDAD | DIABETES         
     -->
-    <!--
-    <div class="container">            
+    <div class="container-fluid">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -314,257 +313,25 @@
             </div>
         </div>                              
     </div>
-    -->
+
 
     <!--  
-        anestesias_pacientes
-        antecedentes_cirugias
-        antecedentes_fracturas_pacientes
-        antecedentes_hemorragias_pacientes
+        TRATAMIENTO MÉDICOS
+        TRATAMIENTOS ODONTOLÓGICOS
+        TRATAMIENTO ODONTOLÓGICO POR PIEZA 
+        TRATAMIENTO Y ANTECEDENTES PREVIOS
     -->
-    <div class="container">            
+    <div class="container-fluid">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5>ANESTESIAS PACIENTE</h5>
+                        <h5>TRATAMIENTO MÉDICOS</h5>
                     </div>
                     <div class="card-body">                                             
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-bordered">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Procedimiento</th>
-                                        <th>Detalle</th>
-                                        <th>Rut responsable</th>
-                                        <th>Profesional</th>
-                                        <th>Fecha</th>
-                                    </tr>
-                                    @php
-                                    $cont=0;
-                                    @endphp                               
-                                    @foreach ($antecedentes as $data)      
-                                        @if($data->id_tipo_antecedente==1)      
-                                        @php
-                                        $cont++;
-                                        @endphp                              
-                                        <tr>
-                                        <td>{{ $data->id }}</td>
-                                        <td>{{ $data->antecedente_data->procedimiento }}</td>
-                                        <td>{{ $data->antecedente_data->detalle }}</td>
-                                        <td>{{ $data->antecedente_data->rut_responsable }}</td>
-                                        <td>{{ $data->users->name }}</td>
-                                        <td>{{ $data->create_at}}
-                                        </tr>    
-                                        @endif
-                                        @if($cont==0)
-                                        <tr>
-                                            <td colspan="6" style="text-align: center; vertical-align: middle;"><b>Sin Registros</b></td>
-                                        </tr> 
-                                        @endif
-                                    @endforeach
-                                    
-                                </table>
-                            </div>        
-                        </div>                        
-                    </div>
-                </div>    
-            </div>
-        </div>                              
-    </div>
-    <div class="container">            
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>ANTECEDENTES CIRUGIAS</h5>
-                    </div>
-                    <div class="card-body">                                             
-                        <div class="row">
-                            <div class="col-sm-12">
-                            <table class="table table-bordered">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nombre</th>
-                                        <th>Fecha Cirugía</th>
-                                        <th>Comentario</th>                                        
-                                        <th>Fecha</th>
-                                    </tr>
-                                    @php
-                                    $cont=0;
-                                    @endphp                                 
-                                    @foreach ($antecedentes as $data)                                        
-                                        @if($data->id_tipo_antecedente==2)  
-                                        @php
-                                        $cont++;
-                                        @endphp
-                                        <tr>
-                                        <td>{{ $data->id }}</td>
-                                        <td>{{ $data->antecedente_data->nombre }}</td>
-                                        <td>{{ $data->antecedente_data->fecha }}</td>
-                                        <td>{{ $data->antecedente_data->comentario }}</td>
-                                        <td>{{ $data->create_at}}
-                                        </tr>    
-                                        @endif
-                                        @if($cont==0)
-                                        <tr>
-                                            <td colspan="5" style="text-align: center; vertical-align: middle;"><b>Sin Registros</b></td>
-                                        </tr> 
-                                        @endif
-                                    @endforeach
-                                    
-                                </table>
-                            </div>        
-                        </div>                        
-                    </div>
-                </div>    
-            </div>
-        </div>                              
-    </div>
-    <div class="container">            
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>ANTECEDENTES FRACTURAS PACIENTES</h5>
-                    </div>
-                    <div class="card-body">                                             
-                        <div class="row">
-                            <div class="col-sm-12">
-                            <table class="table table-bordered">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Procedimiento</th>
-                                        <th>Detalle</th>
-                                        <th>Rut responsable</th>
-                                        <th>Profesional</th>
-                                        <th>Fecha</th>
-                                    </tr>
-                                    @php
-                                    $cont=0;
-                                    @endphp                                
-                                    @foreach ($antecedentes as $data)         
-                                        @if($data->id_tipo_antecedente==3)       
-                                        @php
-                                        $cont++;
-                                        @endphp                          
-                                        <tr>
-                                        <td>{{ $data->id }}</td>
-                                        <td>{{ $data->antecedente_data->procedimiento }}</td>
-                                        <td>{{ $data->antecedente_data->detalle }}</td>
-                                        <td>{{ $data->antecedente_data->rut_responsable }}</td>
-                                        <td>{{ $data->users->name }}</td>
-                                        <td>{{ $data->create_at}}
-                                        </tr>    
-                                        @endif
-                                        @if($cont==0)
-                                        <tr>
-                                            <td colspan="6" style="text-align: center; vertical-align: middle;"><b>Sin Registros</b></td>
-                                        </tr> 
-                                        @endif
-                                    @endforeach
-                                    
-                                </table>
-                            </div>        
-                        </div>                        
-                    </div>
-                </div>    
-            </div>
-        </div>                              
-    </div>
-    <div class="container">            
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>ANTECEDENTES HEMORRAGIAS PACIENTE</h5>
-                    </div>
-                    <div class="card-body">                                             
-                        <div class="row">
-                            <div class="col-sm-12">
-                            <table class="table table-bordered">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Procedimiento</th>
-                                        <th>Detalle</th>
-                                        <th>Rut responsable</th>
-                                        <th>Profesional</th>
-                                        <th>Fecha</th>
-                                    </tr>
-                                    @php
-                                    $cont=0;
-                                    @endphp                                  
-                                    @foreach ($antecedentes as $data)           
-                                        @if($data->id_tipo_antecedente==4)        
-                                        @php
-                                        $cont++;
-                                        @endphp                       
-                                        <tr>
-                                        <td>{{ $data->id }}</td>
-                                        <td>{{ $data->antecedente_data->procedimiento }}</td>
-                                        <td>{{ $data->antecedente_data->detalle }}</td>
-                                        <td>{{ $data->antecedente_data->rut_responsable }}</td>
-                                        <td>{{ $data->users->name }}</td>
-                                        <td>{{ $data->create_at}}
-                                        </tr>    
-                                        @endif
-                                        @if($cont==0)
-                                        <tr>
-                                            <td colspan="6" style="text-align: center; vertical-align: middle;"><b>Sin Registros</b></td>
-                                        </tr> 
-                                        @endif
-                                    @endforeach
-                                    
-                                </table>
-                            </div>        
-                        </div>                        
-                    </div>
-                </div>    
-            </div>
-        </div>                              
-    </div>
 
-    <div class="container">            
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>ANTECEDENTE ALERGIAS</h5>
-                    </div>
-                    <div class="card-body">                                             
-                        <div class="row">
-                            <div class="col-sm-12">
-                            <table class="table table-bordered">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nombre Alergia</th> 
-                                        <th>Comentario</th>                                        
-                                        <th>Fecha</th>
-                                    </tr>
-                                    @php
-                                    $cont=0;
-                                    @endphp                                  
-                                    @foreach ($antecedentes as $data)     
-                                        @if($data->id_tipo_antecedente==5)            
-                                        @php
-                                        $cont++;
-                                        @endphp                       
-                                        <tr>
-                                        <td>{{ $data->id }}</td>
-                                        <td>{{ $data->antecedente_data->nombre }}</td>  
-                                        <td>{{ $data->antecedente_data->comentario }}</td>                                       
-                                        <td>{{ $data->create_at}}
-                                        </tr>    
-                                        @endif
-                                        @if($cont==0)
-                                        <tr>
-                                            <td colspan="4" style="text-align: center; vertical-align: middle;"><b>Sin Registros</b></td>
-                                        </tr> 
-                                        @endif
-                                    @endforeach
-                                    
-                                </table>
                             </div>        
                         </div>                        
                     </div>
@@ -572,45 +339,17 @@
             </div>
         </div>                              
     </div>
-
-    <div class="container">            
+    <div class="container-fluid">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5>ANTECEDENTE ENFERMEDADES CRONICAS</h5>
+                        <h5>TRATAMIENTOS ODONTOLÓGICOS</h5>
                     </div>
                     <div class="card-body">                                             
                         <div class="row">
                             <div class="col-sm-12">
-                            <table class="table table-bordered">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nombre Patología Cronica</th>                                        
-                                        <th>Fecha</th>
-                                    </tr>
-                                    @php
-                                    $cont=0;
-                                    @endphp                                    
-                                    @foreach ($antecedentes as $data)     
-                                        @if($data->id_tipo_antecedente==6)   
-                                        @php
-                                        $cont++;
-                                        @endphp                                
-                                        <tr>
-                                        <td>{{ $data->id }}</td>
-                                        <td>{{ $data->antecedente_data->nombre_enfermedad_cronica }}</td>                                        
-                                        <td>{{ $data->create_at}}
-                                        </tr>    
-                                        @endif
-                                        @if($cont==0)
-                                        <tr>
-                                            <td colspan="3" style="text-align: center; vertical-align: middle;"><b>Sin Registros</b></td>
-                                        </tr> 
-                                        @endif
-                                    @endforeach
-                                    
-                                </table>
+                                
                             </div>        
                         </div>                        
                     </div>
@@ -618,46 +357,35 @@
             </div>
         </div>                              
     </div>
-
-    <div class="container">            
+    <div class="container-fluid">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5>ANTECEDENTE ENFERMEDADES CRONICAS</h5>
+                        <h5>TRATAMIENTO ODONTOLÓGICO POR PIEZA </h5>
                     </div>
                     <div class="card-body">                                             
                         <div class="row">
                             <div class="col-sm-12">
-                            <table class="table table-bordered">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nombre Medicamento Cronico</th>                                        
-                                        <th>Dosis</th>                                        
-                                        <th>Fecha</th>
-                                    </tr>
-                                    @php
-                                    $cont=0;
-                                    @endphp
-                                    @foreach ($antecedentes as $data)     
-                                        @if($data->id_tipo_antecedente==7) 
-                                        @php
-                                        $cont++;
-                                        @endphp
-                                        <tr>
-                                            <td>{{ $data->id }}</td>
-                                            <td>{{ $data->antecedente_data->nombre_medicamento_cronico }}</td>  
-                                            <td>{{ $data->antecedente_data->dosis }}</td>                                       
-                                        </tr>  
-                                        @endif
-                                        @if($cont==0)
-                                        <tr>
-                                        <td colspan="4" style="text-align: center; vertical-align: middle;"><b>Sin Registros</b></td>
-                                        </tr> 
-                                        @endif
-                                    @endforeach
-                                    
-                                </table>
+                                
+                            </div>        
+                        </div>                        
+                    </div>
+                </div>    
+            </div>
+        </div>                              
+    </div>
+    <div class="container-fluid">            
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>TRATAMIENTO Y ANTECEDENTES PREVIOS</h5>
+                    </div>
+                    <div class="card-body">                                             
+                        <div class="row">
+                            <div class="col-sm-12">
+                                
                             </div>        
                         </div>                        
                     </div>
