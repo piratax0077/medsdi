@@ -1309,7 +1309,11 @@
 				$('#div_select_muestra_hp_'+alias_examen).hide();
                 $('#muestra_hp_'+alias_examen).val(0);
 				$('#muestra_hp_resultado_'+alias_examen).val('');
-                texto_diag_2 = texto_diag.replace('Test de ureasa Negativo', 'Test de ureasa No tomad');
+
+                var input_diagnostico = $('#muestra_hp_check_'+alias_examen).attr('data-diagnostico');
+                var texto_diag = $('#'+input_diagnostico).val();
+
+                texto_diag_2 = texto_diag.replace('Test de ureasa Negativo', 'Test de ureasa No tomado');
                 texto_diag_2 = texto_diag_2.replace('Test de ureasa Positivo', 'Test de ureasa No tomado');
 
                 var input_diagnostico = $('#muestra_hp_check_'+alias_examen).attr('data-diagnostico');

@@ -2058,95 +2058,98 @@ class ficha_atencionController extends Controller
                             if( !empty( $request['diag_endos_'.$temp_value_examen_tipo[0]] ) )
                             {
 
-                                /** limpiar parametos */
-                                foreach( $parametro as $key => $value )
+                                if($request['diag_endos_'.$temp_value_examen_tipo[0]] != 'Test de ureasa No tomado')
                                 {
-                                    if(!strpos($key, '_'.$temp_value_examen_tipo[0]) && !strpos($key, 'id_fc') && !strpos($key, '_fc') )
-                                    unset($parametro[$key]);
-                                }
-
-                                $parametro['id_ficha_cirugia_digestiva'] = $ficha_cd->id;
-                                $examen_json = ExamenEspecialidadController::estructuraJson($temp_value_examen_tipo[2],$parametro);
-                                if($examen_json['estado'] == 1)
-                                {
-                                    $profesional = Profesional::find($id_profesional);
-                                    $template = ExamenEspecialidadTemplate::find($temp_value_examen_tipo[2]);
-
-                                    $examen = new ExamenEspecialidad();
-                                    $examen->id_tipo = '1';
-                                    $examen->id_template = $temp_value_examen_tipo[2];
-                                    $examen->id_examen_tipo = $temp_value_examen_tipo[1];
-                                    $examen->id_sub_tipo_especialidad = $profesional->id_sub_tipo_especialidad;
-                                    $examen->id_ficha_atencion = $ficha->id;
-                                    $examen->id_ficha_especialidad = $ficha_cd->id;
-                                    $examen->id_paciente = $id_paciente;
-                                    $examen->id_profesional = $id_profesional;
-                                    $examen->nombre = $template->nombre;
-                                    $examen->cuerpo = $examen_json['json'];
-                                    $examen->estado = '1';
-                                    if($examen->save())
+                                    /** limpiar parametos */
+                                    foreach( $parametro as $key => $value )
                                     {
-                                        $datos['examen'][$temp_value_examen_tipo[0]]['estado'] = 1;
-                                        $datos['examen'][$temp_value_examen_tipo[0]]['msj'] = 'registro exitoso';
-                                        $mensaje .= 'Examen '.$template->nombre.' registrado de forma exitosa\n';
+                                        if(!strpos($key, '_'.$temp_value_examen_tipo[0]) && !strpos($key, 'id_fc') && !strpos($key, '_fc') )
+                                        unset($parametro[$key]);
+                                    }
 
-                                        /** carga imagen */
-                                        if(!empty($request->input_lista_imagenes))
+                                    $parametro['id_ficha_cirugia_digestiva'] = $ficha_cd->id;
+                                    $examen_json = ExamenEspecialidadController::estructuraJson($temp_value_examen_tipo[2],$parametro);
+                                    if($examen_json['estado'] == 1)
+                                    {
+                                        $profesional = Profesional::find($id_profesional);
+                                        $template = ExamenEspecialidadTemplate::find($temp_value_examen_tipo[2]);
+
+                                        $examen = new ExamenEspecialidad();
+                                        $examen->id_tipo = '1';
+                                        $examen->id_template = $temp_value_examen_tipo[2];
+                                        $examen->id_examen_tipo = $temp_value_examen_tipo[1];
+                                        $examen->id_sub_tipo_especialidad = $profesional->id_sub_tipo_especialidad;
+                                        $examen->id_ficha_atencion = $ficha->id;
+                                        $examen->id_ficha_especialidad = $ficha_cd->id;
+                                        $examen->id_paciente = $id_paciente;
+                                        $examen->id_profesional = $id_profesional;
+                                        $examen->nombre = $template->nombre;
+                                        $examen->cuerpo = $examen_json['json'];
+                                        $examen->estado = '1';
+                                        if($examen->save())
                                         {
+                                            $datos['examen'][$temp_value_examen_tipo[0]]['estado'] = 1;
+                                            $datos['examen'][$temp_value_examen_tipo[0]]['msj'] = 'registro exitoso';
+                                            $mensaje .= 'Examen '.$template->nombre.' registrado de forma exitosa\n';
 
-                                            $array_imagenes = (array)json_decode($request->input_lista_imagenes);
-
-                                            // var_dump($array_imagenes);
-                                            // var_dump($temp_value_examen_tipo[0]);
-                                            // var_dump($array_imagenes[$temp_value_examen_tipo[0]]);
-
-                                            if(!empty($array_imagenes[$temp_value_examen_tipo[0]]))
+                                            /** carga imagen */
+                                            if(!empty($request->input_lista_imagenes))
                                             {
-                                                $resulto_img = array();
-                                                foreach ($array_imagenes[$temp_value_examen_tipo[0]] as $key => $value)
+
+                                                $array_imagenes = (array)json_decode($request->input_lista_imagenes);
+
+                                                // var_dump($array_imagenes);
+                                                // var_dump($temp_value_examen_tipo[0]);
+                                                // var_dump($array_imagenes[$temp_value_examen_tipo[0]]);
+
+                                                if(!empty($array_imagenes[$temp_value_examen_tipo[0]]))
                                                 {
-                                                    $paciente = Paciente::find($id_paciente);
-                                                    // echo json_encode($value);
-                                                    $ruta_temp = $value[0];
-                                                    $nombre_real = $value[1];
-                                                    $nombre_temp = $value[2];
-                                                    $file_extension = $value[3];
-                                                    $nombre_final = $paciente->rut.'_'.$examen->id.'_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
-
-                                                    $resulto_img[$key] = CargaImagenController::moverImagen($nombre_temp, 'img_examen', $nombre_final);
-                                                    $registro_img = new ExamenEspecialidadImg();
-                                                    $registro_img->id_examen = $examen->id;
-                                                    $registro_img->url = $resulto_img[$key]['proceso']['url'];
-                                                    $registro_img->nombre = $nombre_final;
-                                                    $registro_img->otro = '';
-                                                    $registro_img->estado = 1;
-
-                                                    if($registro_img->save())
+                                                    $resulto_img = array();
+                                                    foreach ($array_imagenes[$temp_value_examen_tipo[0]] as $key => $value)
                                                     {
-                                                        $resulto_img[$key]['estado'] = 1;
-                                                        $resulto_img[$key]['msj'] = 'imagen registrada';
-                                                    }
-                                                    else
-                                                    {
-                                                        $resulto_img[$key]['estado'] = 0;
-                                                        $resulto_img[$key]['msj'] = 'falla en registro de imagen';
-                                                    }
+                                                        $paciente = Paciente::find($id_paciente);
+                                                        // echo json_encode($value);
+                                                        $ruta_temp = $value[0];
+                                                        $nombre_real = $value[1];
+                                                        $nombre_temp = $value[2];
+                                                        $file_extension = $value[3];
+                                                        $nombre_final = $paciente->rut.'_'.$examen->id.'_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
 
+                                                        $resulto_img[$key] = CargaImagenController::moverImagen($nombre_temp, 'img_examen', $nombre_final);
+                                                        $registro_img = new ExamenEspecialidadImg();
+                                                        $registro_img->id_examen = $examen->id;
+                                                        $registro_img->url = $resulto_img[$key]['proceso']['url'];
+                                                        $registro_img->nombre = $nombre_final;
+                                                        $registro_img->otro = '';
+                                                        $registro_img->estado = 1;
+
+                                                        if($registro_img->save())
+                                                        {
+                                                            $resulto_img[$key]['estado'] = 1;
+                                                            $resulto_img[$key]['msj'] = 'imagen registrada';
+                                                        }
+                                                        else
+                                                        {
+                                                            $resulto_img[$key]['estado'] = 0;
+                                                            $resulto_img[$key]['msj'] = 'falla en registro de imagen';
+                                                        }
+
+                                                    }
+                                                    $datos['examen'][$temp_value_examen_tipo[0]]['resulto_img'] = $resulto_img;
                                                 }
-                                                $datos['examen'][$temp_value_examen_tipo[0]]['resulto_img'] = $resulto_img;
                                             }
+                                        }
+                                        else
+                                        {
+                                            $datos['examen'][$temp_value_examen_tipo[0]]['estado'] = 0;
+                                            $datos['examen'][$temp_value_examen_tipo[0]]['msj'] = 'Registro NO exitoso';
+                                            $mensaje .= 'Examen '.$template->nombre.' No guardada \n';
                                         }
                                     }
                                     else
                                     {
-                                        $datos['examen'][$temp_value_examen_tipo[0]]['estado'] = 0;
-                                        $datos['examen'][$temp_value_examen_tipo[0]]['msj'] = 'Registro NO exitoso';
-                                        $mensaje .= 'Examen '.$template->nombre.' No guardada \n';
+                                        $mensaje .= 'Problema al general Estructura de examen '.$temp_value_examen_tipo[0].'\n';
                                     }
-                                }
-                                else
-                                {
-                                    $mensaje .= 'Problema al general Estructura de examen '.$temp_value_examen_tipo[0].'\n';
                                 }
                             }
                             // else
