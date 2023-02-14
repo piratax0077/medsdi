@@ -1790,29 +1790,33 @@ class ficha_atencionController extends Controller
         {
             if(!empty($request->diag_endos_eda))
             {
-                if(empty($request->id_profesional_solicitado_por_eda))
+                if($request->diag_endos_eda != 'Test de ureasa No tomado')
                 {
-                    if(empty($request->solicitado_por_rut_eda))
+                    if(empty($request->id_profesional_solicitado_por_eda))
                     {
-                        $campos_requeridos = 1;
-                        $mensaje = 'Endoscopía Digestiva Alta - Campo requerido RUT del Solicitante.\n';
-                    }
-                    if(empty($request->solicitado_por_nombre_eda))
-                    {
-                        $campos_requeridos = 1;
-                        $mensaje = 'Endoscopía Digestiva Alta - Campo requerido NOMBRE del Solicitante.\n';
-                    }
-                    if(empty($request->solicitado_por_apellido_eda))
-                    {
-                        $campos_requeridos = 1;
-                        $mensaje = 'Endoscopía Digestiva Alta - Campo requerido APELLIDO del Solicitante.\n';
-                    }
-                    if(empty($request->solicitado_por_telefono_eda) || empty($request->solicitado_por_email_eda))
-                    {
-                        $campos_requeridos = 1;
-                        $mensaje = 'Endoscopía Digestiva Alta - Campo requerido TELÉFONO o EMAIL del Solicitante.\n';
+                        if(empty($request->solicitado_por_rut_eda))
+                        {
+                            $campos_requeridos = 1;
+                            $mensaje = 'Endoscopía Digestiva Alta - Campo requerido RUT del Solicitante.\n';
+                        }
+                        if(empty($request->solicitado_por_nombre_eda))
+                        {
+                            $campos_requeridos = 1;
+                            $mensaje = 'Endoscopía Digestiva Alta - Campo requerido NOMBRE del Solicitante.\n';
+                        }
+                        if(empty($request->solicitado_por_apellido_eda))
+                        {
+                            $campos_requeridos = 1;
+                            $mensaje = 'Endoscopía Digestiva Alta - Campo requerido APELLIDO del Solicitante.\n';
+                        }
+                        if(empty($request->solicitado_por_telefono_eda) || empty($request->solicitado_por_email_eda))
+                        {
+                            $campos_requeridos = 1;
+                            $mensaje = 'Endoscopía Digestiva Alta - Campo requerido TELÉFONO o EMAIL del Solicitante.\n';
+                        }
                     }
                 }
+
             }
             else if(!empty($request->diag_endos_edb))
             {
