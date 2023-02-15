@@ -2025,6 +2025,14 @@ class ficha_atencionController extends Controller
                     $ficha_cd->ind_esp_cirugia = $request->ind_esp_cirugia;
                     $ficha_cd->dolor_cdg = $request->dolor_cdg;
                     $ficha_cd->obs_dolor_cdg = $request->obs_dolor_cdg;
+
+                    $ficha_cd->transito_intest = $request->transito_intest;
+                    $ficha_cd->obs_transito_intest = $request->obs_transito_intest;
+                    $ficha_cd->dolor_def = $request->dolor_def;
+                    $ficha_cd->obs_dolor_def = $request->obs_dolor_def;
+                    $ficha_cd->sangre_otros = $request->sangre_otros;
+                    $ficha_cd->obs_sangre_otros = $request->obs_sangre_otros;
+
                     $ficha_cd->otros_sintomas_cdg = $request->otros_sintomas_cdg;
                     $ficha_cd->obs_otros_sintomas_cdg = $request->obs_otros_sintomas_cdg;
                     $ficha_cd->ceg_cdg = $request->ceg_cdg;

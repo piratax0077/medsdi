@@ -2869,6 +2869,14 @@ class EscritorioProfesional extends Controller
         $ficha_tipo->ind_esp_cirugia = $request->ind_esp_cirugia;
         $ficha_tipo->dolor_cdg = $request->dolor_cdg;
         $ficha_tipo->obs_dolor_cdg = $request->obs_dolor_cdg;
+
+        $ficha_tipo->transito_intest = $request->transito_intest;
+        $ficha_tipo->obs_transito_intest = $request->obs_transito_intest;
+        $ficha_tipo->dolor_def = $request->dolor_def;
+        $ficha_tipo->obs_dolor_def = $request->obs_dolor_def;
+        $ficha_tipo->sangre_otros = $request->sangre_otros;
+        $ficha_tipo->obs_sangre_otros = $request->obs_sangre_otros;
+
         $ficha_tipo->otros_sintomas_cdg = $request->otros_sintomas_cdg;
         $ficha_tipo->obs_otros_sintomas_cdg = $request->obs_otros_sintomas_cdg;
         $ficha_tipo->ceg_cdg = $request->ceg_cdg;

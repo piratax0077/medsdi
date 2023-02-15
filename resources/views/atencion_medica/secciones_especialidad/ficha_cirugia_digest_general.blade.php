@@ -109,19 +109,60 @@
                                                             </div>
                                                             <hr>
                                                             <div class="row">
+
                                                                 <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Dolor</label>
-                                                                            <select name="dolor_cdg" id="dolor_cdg" placeholder="Dolor" data-titulo="Dolor"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2)">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_dolor" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Dolor</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Dolor" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_dolor_cdg" id="obs_dolor_cdg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Transito</label>
+                                                                        <select name="transito_intest" id="transito_intest" placeholder="Transito" data-titulo="Transito"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('transito_intest','div_detalle_transito','obs_transito_intest',2)">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_transito" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Transito</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Transito" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_transito_intest" id="obs_transito_intest"></textarea>
+                                                                    </div>
                                                                 </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Dolor Defecación</label>
+                                                                        <select name="dolor_def" id="dolor_def" data-titulo="Dolor Defecación" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('dolor_def','div_detalle_dolor_def','obs_dolor_def',2)">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_dolor_def" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Dolor Defecación</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="obs. Dolor Defecación" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_dolor_def" id="obs_dolor_def"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Presencia de Sangre y Otros</label>
+                                                                        <select name="sangre_otros" id="sangre_otros" data-titulo="Presencia de Sangre y Otros" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('sangre_otros','div_detalle_sangre_otros','obs_sangre_otros',2)">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_sangre_otros" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Presencia de Sangre y Otros</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="obs. Presencia de Sangre y Otros" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_sangre_otros" id="obs_sangre_otros"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Dolor</label>
+                                                                        <select name="dolor_cdg" id="dolor_cdg" placeholder="Dolor" data-titulo="Dolor"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2)">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_dolor" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Dolor</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Dolor" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_dolor_cdg" id="obs_dolor_cdg"></textarea>
+                                                                    </div>
+                                                                </div>
+
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <label class="floating-label-activo-sm">Otros Síntomas</label>
@@ -908,8 +949,14 @@
                     descripcion : data.registro_f_t_cg_descripcion,
                     dolor_cdg : data.modal_agregar_tipo_dolor_cdg,
                     obs_dolor_cdg : data.observaciones_obs_dolor_cdg,
-                    dolor_cdg : data.modal_agregar_tipo_dolor_cdg,
-                    obs_dolor_cdg : data.observaciones_obs_dolor_cdg,
+
+                    transito_intest : data.modal_agregar_tipo_transito_intest,
+                    obs_transito_intest : data.observaciones_obs_transito_intest,
+                    dolor_def : data.modal_agregar_tipo_dolor_def,
+                    obs_dolor_def : data.observaciones_obs_dolor_def,
+                    sangre_otros : data.modal_agregar_tipo_sangre_otros,
+                    obs_sangre_otros : data.observaciones_obs_sangre_otros,
+
                     otros_sintomas_cdg : data.modal_agregar_tipo_otros_sintomas_cdg,
                     obs_otros_sintomas_cdg : data.observaciones_obs_otros_sintomas_cdg,
                     ceg_cdg : data.modal_agregar_tipo_ceg_cdg,
@@ -1071,6 +1118,9 @@
                 });
 
                 evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2);
+                evaluar_para_carga_detalle('transito_intest','div_detalle_transito','obs_transito_intest',2);
+                evaluar_para_carga_detalle('dolor_def','div_detalle_dolor_def','obs_dolor_def',2);
+                evaluar_para_carga_detalle('sangre_otros','div_detalle_sangre_otros','obs_sangre_otros',2);
                 evaluar_para_carga_detalle('otros_sintomas_cdg','div_detalle_cd_otros_sintomas','obs_otros_sintomas_cdg',2);
                 evaluar_para_carga_detalle('ceg_cdg','div_detalle_ceg_cdg','obs_ceg_cdg',2);
                 evaluar_para_carga_detalle('masa_cdg','div_detalle_masa_cdg','obs_masa_cdg',2);
@@ -1107,6 +1157,9 @@
                         $('#'+index).val(value);
                     });
                     evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2);
+                    evaluar_para_carga_detalle('transito_intest','div_detalle_transito','obs_transito_intest',2);
+                    evaluar_para_carga_detalle('dolor_def','div_detalle_dolor_def','obs_dolor_def',2);
+                    evaluar_para_carga_detalle('sangre_otros','div_detalle_sangre_otros','obs_sangre_otros',2);
                     evaluar_para_carga_detalle('otros_sintomas_cdg','div_detalle_cd_otros_sintomas','obs_otros_sintomas_cdg',2);
                     evaluar_para_carga_detalle('ceg_cdg','div_detalle_ceg_cdg','obs_ceg_cdg',2);
                     evaluar_para_carga_detalle('masa_cdg','div_detalle_masa_cdg','obs_masa_cdg',2);
