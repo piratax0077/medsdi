@@ -28,7 +28,8 @@
 
 
     <!-- fileupload-custom css -->
-    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}?t={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
+    <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
 
     <!--Accordion-->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
@@ -77,7 +78,7 @@
     @yield('Modals-med-exa')
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
-    @include('atencion_medica.secciones_especialidad.ficha_cirugia_digest_alta_tipo')
+    @include('atencion_medica.secciones_especialidad.ficha_cirugia_digest_tipo')
     @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_clasif_colon')
 	@include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia')
 
@@ -139,7 +140,8 @@
     <script src="{{ asset('js/check_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!-- file-upload Js -->
-    <script src="{{ asset('js/plugins/dropzone-amd-module.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
+    <!-- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script> -->
 
     <!-- mensajes -->
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
@@ -156,7 +158,7 @@
     {{--  <script src="{{ asset('js/pages/form-advance-custom.js') }}?upd={{ random_int(1111,9999) }}"></script>  --}}
 
     <!--Apgar-->
-    <script src="{{ asset('js//aicalc2.js') }}?upd={{ random_int(1111,9999) }}"></script>
+    <script src="{{ asset('js/aicalc2.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!--Botón cards-->
     <script src="{{ asset('js/btn-cards.js') }}?upd={{ random_int(1111,9999) }}"></script>
@@ -169,7 +171,59 @@
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-    </script>
+
+        $(document).ready(function () {
+            {{--  mensaje de exito al registrar ficha clinica  --}}
+             @if(session('mensaje'))
+                swal({
+                    title: "Registro de Ficha Clínica.",
+                    text:"{{ session('mensaje') }}",
+                    icon: "info",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+            @endif
+            {{--  mensaje de exito al registrar ficha clinica  --}}
+            @if(session('success'))
+                swal({
+                    title: "Registro de Ficha Clínica.",
+                    text:"{{ session('success') }}",
+                    icon: "success",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+            @endif
+
+			{{--  mensaje de erro al registrar ficha clinica  --}}
+			@if(session('error'))
+				swal({
+					title: "Registro de Ficha Clínica.",
+					text:"{{ session('error') }}",
+					icon: "error",
+					// buttons: "Aceptar",
+					//SuccessMode: true,
+				});
+			@endif
+
+			{{--  mensaje de warning al registrar ficha clinica  --}}
+			@if(session('warning'))
+				swal({
+					title: "Registro de Ficha Clínica.",
+					text:"{{ session('warning') }}",
+					icon: "warning",
+					// buttons: "Aceptar",
+					//SuccessMode: true,
+				});
+			@endif
+        });
+
+        function abrir_modal_clasificacion_colon(){
+            $('#m_clasificacion').modal('show');
+        }
+        function mostrar_modal_ex_rx_cirugia(){
+            $('#modal_indicar_examen_rx').modal('show');
+        }
+	</script>
 
     @yield('js_inferior')
     @yield('page-script')

@@ -356,15 +356,23 @@ class ficha_atencionController extends Controller
             }
             else if($profesional->id_sub_tipo_especialidad == 7)
             {
+                $examen = array();
                 // Cirugía Coloproctológica
                 $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_baja';
-                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
-                $fichaTipo = '';
-                $examen = '';
+                $fichaTipo['cdg'] = FichaCirugiaDigestivaTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $fichaTipo['cg'] = FichaCirugiaGeneralTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $lista_examen_especial = '';
+                $examen_tipo = ExamenEspecialidadTipo::where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)->with('ExamenEspecialidadTemplate')->get();
+                foreach ($examen_tipo as $key => $value)
+                {
+                    $examen[$value->ExamenEspecialidadTemplate->alias] = $value->ExamenEspecialidadTemplate->cuerpo;
+                    $lista_examen_especial .= $value->ExamenEspecialidadTemplate->alias.','.$value->id.','.$value->ExamenEspecialidadTemplate->id.'|';
+                }
+                $lista_examen_especial = substr($lista_examen_especial, 0, -1);
             }
             else if($profesional->id_sub_tipo_especialidad == 11 )
             {
+                $examen = array();
                 // Cirugía digestiva
                 $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_general';
                 $fichaTipo['cdg'] = FichaCirugiaDigestivaTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
@@ -378,17 +386,25 @@ class ficha_atencionController extends Controller
                     $lista_examen_especial .= $value->ExamenEspecialidadTemplate->alias.','.$value->id.','.$value->ExamenEspecialidadTemplate->id.'|';
                 }
                 $lista_examen_especial = substr($lista_examen_especial, 0, -1);
-                // dd($examen);
 
             }
             else if($profesional->id_sub_tipo_especialidad == 12 )
             {
+                $examen = array();
+
                 // Cirugía Gástrica
                 $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_alta';
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
-                $fichaTipo = '';
-                $examen = '';
-				$lista_examen_especial = '';
+                $fichaTipo['cdg'] = FichaCirugiaDigestivaTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $fichaTipo['cg'] = FichaCirugiaGeneralTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $lista_examen_especial = '';
+                $examen_tipo = ExamenEspecialidadTipo::where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)->with('ExamenEspecialidadTemplate')->get();
+                foreach ($examen_tipo as $key => $value)
+                {
+                    $examen[$value->ExamenEspecialidadTemplate->alias] = $value->ExamenEspecialidadTemplate->cuerpo;
+                    $lista_examen_especial .= $value->ExamenEspecialidadTemplate->alias.','.$value->id.','.$value->ExamenEspecialidadTemplate->id.'|';
+                }
+                $lista_examen_especial = substr($lista_examen_especial, 0, -1);
             }
 			else if($profesional->id_sub_tipo_especialidad == 119 )
             {

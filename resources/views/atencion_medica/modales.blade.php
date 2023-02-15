@@ -2541,10 +2541,10 @@
                 @endif
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía Gástrica' )
-					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_cirugia" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugia" data-placement="left"></a>
+					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_cir_dalta" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugia Alta" data-placement="left"></a>
 				@endif
 				@if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía Coloproctológica' )
-					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_colon" aria-expanded="false" aria-controls="bs-canvas-right" title="Coloproctología" data-placement="left"></a>
+					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_cir_dbaja" aria-expanded="false" aria-controls="bs-canvas-right" title="Coloproctología" data-placement="left"></a>
 				@endif
 				@if($profesional->SubTipoEspecialidad()->first()->nombre == 'Urología' )
 					<a id="boton_3" class="fas fa-user-cog fa-2x" data-toggle="canvas" data-target="#formularios_uro" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Urología" data-placement="left"></a>
@@ -2553,8 +2553,8 @@
 					<a id="boton_3" class="fas fa-user-md fa-2x" data-toggle="canvas" data-target="#formularios_cir_digest" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugía Digestiva" data-placement="left"></a>
 				@endif
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía General' )
-                <a id="boton_3" class="fas fa-user-md fa-2x" data-toggle="canvas" data-target="#formularios_cir_gen"" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugía" data-placement="left"></a>
-            @endif
+                    <a id="boton_3" class="fas fa-user-md fa-2x" data-toggle="canvas" data-target="#formularios_cir_gen" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugía" data-placement="left"></a>
+                @endif
             </div>
             <div class="btn-mas">
                 <label for="btn-mas" class="fa fa-plus"></label>

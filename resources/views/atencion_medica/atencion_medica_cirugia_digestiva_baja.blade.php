@@ -1,6 +1,5 @@
 @extends('template.template_cdb')
 @section('Content')
-
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -10,7 +9,7 @@
                     <div class="row align-items-center pb-2">
                         <div class="col-md-6">
                             <div class="page-header-title">
-                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN FICHA CIRUGIA COLOPROCTOLÓGICA</strong></h5>
+                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN FICHA CIRUGIA COLOPROCTOLOGICA </strong></h5>
                                 <p class="font-italic mt-0 mb-0 text-white">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -98,21 +97,19 @@
             </div>
         </div>
 
-
         <!-- SIDE BAR ORL -->
         @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
-        @include("atencion_medica.include.sidebar_derecho_cda"){{-- modales y data de sidebar especialidad --}}
-
+        @include("atencion_medica.include.sidebar_derecho_cdb"){{-- modales y data de sidebar especialidad --}}
 
         <!--Modals de especialidad -->
         {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
 
         <!--Modals formularios generales-->
         {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
+        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")--}}
 
 
     </div>
     <!--Cierre: Container Completo-->
+	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
 @endsection
