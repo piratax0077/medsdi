@@ -2535,6 +2535,9 @@
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Otorrinolaringología' )
                     <a id="boton_3" class="fas fa-deaf fa-2x" data-toggle="canvas" data-target="#formularios_orl" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Otorrinolaringología" data-placement="left"></a>
                 @endif
+                @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Dermatología' )
+                <a id="boton_3" class="fas fa-search-minus fa-2x" data-toggle="canvas" data-target="#formularios_dermato" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Dermatología" data-placement="left"></a>
+                @endif
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Oftalmología' )
                     <a id="boton_3" class="fas fa-eye-slash fa-2x" data-toggle="canvas" data-target="#formularios_ojo" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Oftalmología" data-placement="left"></a>

@@ -2,15 +2,9 @@
     <div class="col-md-12 py-0 px-2 shadow-none">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
-                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
+                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="dermato" role="tablist">
                     <li class="nav-item-secciones">
                         <a class="nav-secciones active text-uppercase" id="atencion_derma-tab" data-toggle="tab" href="#atencion_derma" role="tab" aria-controls="atencion_derma" aria-selected="true">Atención Especialidad</a>
-                    </li>
-                    <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="proc_derma-tab" data-toggle="tab" href="#proc_derma" role="tab" aria-controls="proc_derma" aria-selected="false">Procedimientos</a>
-                    </li>
-                    <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="biop_derma-tab" data-toggle="tab" href="#biop_derma" role="tab" aria-controls="biop_derma" aria-selected="false">Examenes y Biópsias</a>
                     </li>
                 </ul>
             </div>
@@ -58,12 +52,12 @@
                                                         <div class="form-row">
                                                             <div class="form-group col-md-6">
                                                                 <label class="floating-label-activo-sm">Motivo de Consulta</label>
-                                                                <input type="text" class="form-control form-control-sm" name="descripcion_consulta_orl" id="descripcion_consulta_orl">
+                                                                <input type="text" class="form-control form-control-sm" name="descripcion_consulta_dermato" id="descripcion_consulta_dermato">
                                                             </div>
                                                             <div class="form-group col-md-3">
                                                                 <label class="floating-label-activo-sm">Antecedentes Especialidad</label>
                                                                 <!-- visualizar antecedentes actuales -->
-                                                                <input type="text" class="form-control form-control-sm" name="antec_especialidad" id="antec_especialidad" readonly="readonly">
+                                                                <input type="text" class="form-control form-control-sm" name="antec_especialidad_dermato" id="antec_especialidad_dermato" readonly="readonly">
                                                             </div>
                                                             <div class="form-group col-md-3">
                                                                 <div class="row">
@@ -82,6 +76,72 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <!--IMAGENES-->
+                                                            <div class="col-sm-12 col-md-12">
+                                                                <div class="card">
+                                                                    <div class="card-header" id="img">
+                                                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#img_cons_dermato" aria-expanded="false" aria-controls="img_cons_dermato">
+                                                                            Imagenes
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-4 mt-2">
+                                                                            <div class="form-group fill">
+
+                                                                                <div id="img_cons_dermato_pre" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                                    <div class="card-body-aten shadow-none">
+                                                                                        <!-- [ Main Content ] start -->
+                                                                                        <div class="col-sm-12 mt-2">
+                                                                                            <h6 class="center">Imagenes Pre</h6>
+                                                                                        </div>
+                                                                                        <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
+                                                                                        <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                                                        </div>
+                                                                                        <!-- [ file-upload ] end -->
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-4 mt-2">
+                                                                            <div class="form-group fill">
+
+                                                                                <div id="img_cons_dermato_post" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                                    <div class="card-body-aten shadow-none">
+                                                                                        <!-- [ Main Content ] start -->
+                                                                                        <div class="col-sm-12 mt-2">
+                                                                                            <h6 class="center">Imagenes Pre</h6>
+                                                                                        </div>
+                                                                                        <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
+                                                                                        <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                                                        </div>
+                                                                                        <!-- [ file-upload ] end -->
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="col-sm-4 mt-2">
+                                                                            <div class="form-group fill">
+                                                                                <div class="switch switch-success d-inline m-r-10">
+                                                                                    <input type="checkbox" onchange="biopsia_dermat();" id="biopsia_dermat" name="biopsia_dermat" value="">
+                                                                                    <label for="biopsia_dermat" class="cr"></label>
+                                                                                </div>
+                                                                                <label>biopsia</label>
+                                                                                <hr>
+                                                                                <div class="form-group fill">
+                                                                                    <label id="" name="" class="floating-label-activo-sm">Zona y Motivo</label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_cons" id="motivo_cons"></textarea>
+                                                                                </div>
+                                                                                <div class="form-group fill">
+                                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones y Resultado</label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_result_biopsia" id="obs_result_biopsia"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -93,455 +153,431 @@
                                             <div class="card">
                                                 <div class="card-header" id="exam_esp">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_c" aria-expanded="false" aria-controls="exam_esp_c">
-                                                        Examen especialidad
+                                                        Examenes y procedimientos de la especialidad
                                                     </button>
                                                 </div>
                                                 <div id="exam_esp_c" class="collapse" aria-labelledby="exam_esp" data-parent="#exam_esp">
                                                     <div class="card-body-aten shadow-none">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group col-md-12">
-                                                                    <label class="floating-label-activo-sm">Carga Ficha Tipo</label>
-                                                                    <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad" onchange="cargar_info_ficha_tipo_orl('select_ficha_tipo_especialidad','descripcion_ficha_tipo_especialidad');">
-                                                                        <option value="">Seleccione</option>
-                                                                        @if(!empty($fichaTipo))
-                                                                            @foreach ($fichaTipo as $ft )
-                                                                                <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
-                                                                            @endforeach
-                                                                        @endif
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <span id="descripcion_ficha_tipo_especialidad"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div id="form-otorrino">
-                                                            <div class="form-row mb-2">
-                                                                <div class="col-md-12">
-                                                                    <h6>Oídos Audición</h6>
-                                                                </div>
-                                                            </div>
-                                                            <hr>
-                                                            <div class="form-row">
-                                                                <div class="col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Usa Audífono</label>
-                                                                            <select name="usa_audifono" id="usa_audifono" data-titulo="Usa Audífono" data-seccion="Oídos Audición" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('usa_audifono','div_detalle_usa_audifono','audifono',5)">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">No</option>
-                                                                                <option value="2">Si OD</option>
-                                                                                <option value="3">Si OI</option>
-                                                                                <option value="4">Si Ambos</option>
-                                                                                <option value="5">Anotar Observaciones</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_usa_audifono" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Usa Audífono</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Usa Audífono" data-seccion="Oídos Audición" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="audifono" id="audifono"></textarea>
-                                                                        </div>
-                                                                    </div>
+                                                        <div id="form-dermato">
+                                                            <div class="col-sm-12">
+                                                                <div class="card">
+                                                                    <div class="card-body shadow-none" id="formulario_tto_dermico">
+                                                                        <form>
+                                                                            <div class="form-row mb-2">
+                                                                                <div class="col-md-12">
+                                                                                    <h6>  ELIMINACIÓN DE CICATRICES </h6>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-row">
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
+                                                                                        <select class="form-control form-control-sm" name="elim_cicat" id="elim_cicat">
+                                                                                            <option>Seleccione una opción</option>
+                                                                                            <option value = "1-1">•	Dermoabrasión</option>
+                                                                                            <option value = "1-2">•	Exfoliacion quimica</option>
+                                                                                            <option value = "1-1">•	Inyecciones de relleno dérmico</option>
+                                                                                            <option value = "1-1">•	Exfoliación por láser y fototerapias</option>
+                                                                                            <option value = "1-2">•	Microinjertos</option>
+                                                                                            <option value = "1-1">•	Incisión subcutánea. </option>
+                                                                                            <option value = "1-2">•	Transferencia de grasa autóloga</option>
+                                                                                            <option value = "1-1">•	Inyecciones  intralesionales</option>
+                                                                                            <option value = "1-1">•	Crioterapia</option>
+                                                                                            <option value = "1-3">•	Cremas tópicas </option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                        <div class="form-group fill">
+                                                                                            <label id="" name="" class="floating-label-activo-sm">Descripción </label>
+                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="desc_elim_cicat" id="desc_elim_cicat"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_elim_cica" id="obs_elim_cica"></textarea>
+                                                                                    </div>
+                                                                                 </div>
+                                                                                 <!--IMAGENES-->
+                                                                                 <div class="col-sm-6 col-md-6">
+                                                                                     <div class="card">
+                                                                                         <div class="card-header" id="img">
+                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_elim_cicat_pre" aria-expanded="false" aria-controls="imagenes_elim_cicat_pre">
+                                                                                                 Imagenes.pre
+                                                                                             </button>
+                                                                                         </div>
+                                                                                         <div id="imagenes_elim_cicat_pre" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                                             <div class="card-body-aten shadow-none">
+                                                                                                 <!-- [ Main Content ] start -->
+                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
+                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                                                                 </div>
+                                                                                                 <!-- [ file-upload ] end -->
+                                                                                             </div>
+                                                                                         </div>
+                                                                                     </div>
+                                                                                 </div>
+                                                                                 <div class="col-sm-6 col-md-6">
+                                                                                     <div class="card">
+                                                                                         <div class="card-header" id="img">
+                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_elim_cicat_post" aria-expanded="false" aria-controls="imagenes_elim_cicat_post">
+                                                                                                 Imagenes.post
+                                                                                             </button>
+                                                                                         </div>
+                                                                                         <div id="imagenes_elim_cicat_post" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                                             <div class="card-body-aten shadow-none">
+                                                                                                 <!-- [ Main Content ] start -->
+                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
+                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                                                                 </div>
+                                                                                                 <!-- [ file-upload ] end -->
+                                                                                             </div>
+                                                                                         </div>
+                                                                                     </div>
+                                                                                 </div>
+                                                                            </div>
 
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Apreciación Auditiva</label>
-                                                                            <select name="apreciacion_auditiva" id="apreciacion_auditiva" data-titulo="Apreciación Auditiva" data-seccion="Oídos Audición" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('apreciacion_auditiva','div_detalle_apreciacion_auditiva','aprec_auditiva_def',2)">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Aceptable</option>
-                                                                                <option value="2">Deficiente</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_apreciacion_auditiva" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Apreciación Auditiva</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Auditiva" data-seccion="Oídos Audición" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="aprec_auditiva_def" id="aprec_auditiva_def"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Examen OI</label>
-                                                                            <select name="examen_oi" id="examen_oi" data-titulo="Examen OI" data-seccion="Oídos Audición" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_oi','div_detalle_examen_oi','ex_oi_anormal',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_examen_oi" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Examen OI</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen OI" data-seccion="Oídos Audición" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_oi_anormal" id="ex_oi_anormal"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Examen OD</label>
-                                                                            <select name="examen_od" id="examen_od" data-titulo="Examen OD" data-seccion="Oídos Audición" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_od','div_detalle_examen_od','ex_od_anormal',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_examen_od" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Examen OD</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen OD" data-seccion="Oídos Audición" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_od_anormal" id="ex_od_anormal"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-12">
-                                                                    <label class="floating-label-activo-sm">Observaciones Examen Auditívo</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Auditívo" data-seccion="Oídos Audición" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oidos" id="obs_ex_oidos"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <hr>
-                                                            <div class="form-row mb-2">
-                                                                <div class="col-md-12">
-                                                                    <h6>Biomicroscopía</h6>
-                                                                </div>
-                                                            </div>
-
-                                                            <hr>
-                                                            <div class="form-row">
-
-                                                                <div class="form-group col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Biomicroscopía OI</label>
-                                                                            <select name="examen_bio_oi" data-titulo="Biomicroscopía OI" id="examen_bio_oi" data-seccion="Oídos Audición" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_bio_oi','div_obs_examen_bio_oi','obs_examen_bio_oi',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal</option>
-                                                                                <option value="3">No Realizada</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_obs_examen_bio_oi" style="display:none;">
-                                                                            <label class="floating-label-activo-sm">Biomicroscopía OI</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Biomicroscopía OI" data-seccion="Oídos Audición" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_examen_bio_oi" id="obs_examen_bio_oi"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="form-group col-md-6">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Biomicroscopía OD</label>
-                                                                            <select name="examen_bio_od" id="examen_bio_od" data-titulo="Biomicroscopía OD" data-seccion="Oídos Audición" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_bio_od','div_obs_examen_bio_od','obs_examen_bio_od',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal</option>
-                                                                                <option value="3">No Realizada</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_obs_examen_bio_od" style="display:none;">
-                                                                            <label class="floating-label-activo-sm">Biomicroscopía OD</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm"  data-titulo="Biomicroscopía OD" data-seccion="Oídos Audición" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_examen_bio_od" id="obs_examen_bio_od"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-
-                                                            </div>
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-12">
-                                                                    <label class="floating-label-activo-sm">Observaciones Examen Biomicroscópico</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Biomicroscópico" data-seccion="Oídos Audición" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_biom" id="obs_ex_biom"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <hr>
-															<!--Vestibular-->
-
-                                                            <div class="form-row mb-2">
-                                                                <div class="col-md-12">
-                                                                    <h6>Sistema Vestibular</h6>
-                                                                </div>
-                                                            </div>
-                                                            <hr>
-                                                            <div class="form-row">
-                                                                <div class="col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Tipo Vertigo</label>
-                                                                            <select name="tipo_vertigo" id="tipo_vertigo" data-titulo="Tipo Vertigo" data-seccion="Sistema Vestibular" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tipo_vertigo','div_detalle_tipo_vertigo','detalle_tipo_vertigo',3)">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Objetivo</option>
-                                                                                <option value="2">Subjetivo</option>
-                                                                                <option value="3">Otro Describir</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_tipo_vertigo" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Tipo Vertigo</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Tipo Vertigo" data-seccion="Sistema Vestibular" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="detalle_tipo_vertigo" id="detalle_tipo_vertigo"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Sintomas Acompañantes</label>
-                                                                            <select name="sint_acomp" id="sint_acomp" data-titulo="Sintomas Acompañantes" data-seccion="Sistema Vestibular" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('sint_acomp','div_detalle_sintomas_acompanantes','detalle_sint_acompanantes',3)">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">No</option>
-                                                                                <option value="2">Si</option>
-                                                                                <option value="3">Otro Describir</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_sintomas_acompanantes" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Sintomas Acompañantes</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Sintomas Acompañantes" data-seccion="Sistema Vestibular" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="detalle_sint_acompanantes" id="detalle_sint_acompanantes"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Nistagmus</label>
-                                                                            <select name="ng" id="ng" data-titulo="Nistagmus" data-seccion="Sistema Vestibular" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ng','div_detalle_ng','detalle_ng',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">No</option>
-                                                                                <option value="2">Si Describir</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_ng" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Nistagmus</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Nistagmus" data-seccion="Sistema Vestibular" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="detalle_ng" id="detalle_ng"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Episodios</label>
-                                                                            <select name="episodios" id="episodios" data-titulo="Episodios" data-seccion="Sistema Vestibular" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('episodios','div_detalle_episodios','detalle_episodios',3);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">No</option>
-                                                                                <option value="2">Primero</option>
-                                                                                <option value="3">Más de uno</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_episodios" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Episodios</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Episodios" data-seccion="Sistema Vestibular" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="detalle_episodios" id="detalle_episodios"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Equilibrio</label>
-                                                                            <select name="equilibrio" id="equilibrio" data-titulo="Equilibrio" data-seccion="Sistema Vestibular" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('equilibrio','div_detalle_equilibrio','detalle_equilibrio',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_equilibrio" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Equilibrio</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Equilibrio" data-seccion="Sistema Vestibular" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="detalle_equilibrio" id="detalle_equilibrio"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-12">
-                                                                    <label class="floating-label-activo-sm">Observaciones Examen Vestibular</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Vestibular" data-seccion="Sistema Vestibular" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_vestibular" id="obs_vestibular"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <hr>
-
-                                                            <div class="form-row mb-2">
-                                                                <div class="col-md-12">
-                                                                    <h6>Naríz</h6>
-                                                                </div>
-                                                            </div>
-                                                            <hr>
-                                                            <div class="form-row">
-                                                                <div class="col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Aspecto General</label>
-                                                                            <select name="nariz_general" id="nariz_general"  data-titulo="Aspecto General" data-seccion="Naríz"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('nariz_general','div_detalle_nariz_gen','det_nariz_general',2)">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_nariz_gen" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Detalle Aspecto General</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Aspecto General" data-seccion="Naríz"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_nariz_general" id="det_nariz_general"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Apreciación Respiratoria</label>
-                                                                            <select name="apreciacion_resp" id="apreciacion_resp" data-titulo="Apreciación Respiratoria" data-seccion="Naríz" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('apreciacion_resp','div_detalle_nariz_resp','aprec_resp_def',2)">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Aceptable</option>
-                                                                                <option value="2">Deficiente</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_nariz_resp" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Apreciación Respiratoria</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="aprec_resp_def" id="aprec_resp_def"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Examen Fosa Nasal Izq.</label>
-                                                                            <select name="examen_fni" id="examen_fni" data-titulo="Examen Fosa Nasal Izq." data-seccion="Naríz" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_fni','div_detalle_examen_fni','ex_fni_anormal',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_examen_fni" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Examen Fosa Nasal Izquierda</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Fosa Nasal Izq." data-seccion="Naríz" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_fni_anormal" id="ex_fni_anormal"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Examen Fosa Nasal Der.</label>
-                                                                            <select name="examen_fnd" id="examen_fnd" data-titulo="Examen Fosa Nasal Der." data-seccion="Naríz" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_fnd','div_detalle_examen_fnd','ex_fnd_anormal',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_examen_fnd" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Examen Fosa Nasal Derecha</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Fosa Nasal Der." data-seccion="Naríz" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_fnd_anormal" id="ex_fnd_anormal"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-12">
-                                                                    <label class="floating-label-activo-sm">Observaciones Examen Nasal</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaciones Examen Nasal" data-seccion="Naríz" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_nasal" id="obs_ex_nasal"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-row mb-2">
-                                                                <div class="col-md-12">
-                                                                    <h6>Faringo-Laringe</h6>
-                                                                </div>
-                                                            </div>
-                                                            <hr>
-
-                                                            <div class="form-row">
-                                                                <div class="col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Disfonía</label>
-                                                                            <select name="disfonia" id="disfonia" class="form-control form-control-sm" data-titulo="Disfonía" data-seccion="Faringo-Laringe" onchange="evaluar_para_carga_detalle('disfonia','div_disfonia','det_disfonia',2)">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">No</option>
-                                                                                <option value="2">Sí</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_disfonia" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Detalle Disfonía</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Disfonía" data-seccion="Faringo-Laringe" onfocus="this.rows=3" onblur="this.rows=1;" name="det_disfonia" id="det_disfonia"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Examen Boca</label>
-                                                                            <select name="ex_boca" id="ex_boca" class="form-control form-control-sm" data-titulo="Examen Boca"  data-seccion="Faringo-Laringe"  onchange="evaluar_para_carga_detalle('ex_boca','div_detalle_ex_boca','detalle_ex_boca',2)">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Alterado</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_ex_boca" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Examen Boca</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Examen Boca"  data-seccion="Faringo-Laringe"   onfocus="this.rows=3" onblur="this.rows=1;" name="detalle_ex_boca" id="detalle_ex_boca"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Examen Faríngeo</label>
-                                                                            <select name="examen_faringe" id="examen_faringe" data-titulo="Examen Faríngeo"  data-seccion="Faringo-Laringe"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_faringe','div_detalle_examen_faringe','ex_farige_anormal',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_examen_faringe" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Examen Faríngeo</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  data-titulo="Examen Faríngeo"  data-seccion="Faringo-Laringe"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_farige_anormal" id="ex_farige_anormal"></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label class="floating-label-activo-sm">Examen Laríngeo</label>
-                                                                            <select name="examen_laringe" id="examen_laringe" data-titulo="Examen Laríngeo"  data-seccion="Faringo-Laringe"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_laringe','div_detalle_examen_laringe','ex_larige_anormal',2);">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">Normal</option>
-                                                                                <option value="2">Anormal</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_examen_laringe" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Examen Laríngeo</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Examen Laríngeo"  data-seccion="Faringo-Laringe"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_larige_anormal" id="ex_larige_anormal"></textarea>
-                                                                        </div>
+                                                                        </form>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-12">
-                                                                    <label class="floating-label-activo-sm">Observaicones Examen Laringe</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaicones Examen Laringe"  data-seccion="Faringo-Laringe" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_examen_laringe" id="obs_examen_laringe"></textarea>
+                                                                <div class="card">
+                                                                    <div class="card-body shadow-none" id="formulario_rinofibro">
+                                                                        <form>
+                                                                            <div class="form-row mb-2">
+                                                                                <div class="col-md-12">
+                                                                                    <h6>TRATAMIENTO DE PIEL DAÑADA</h6>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-row">
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
+                                                                                        <select class="form-control form-control-sm" name="proc_piel_danada" id="proc_piel_danada">
+                                                                                            <option>Seleccione una opción</option>
+                                                                                            <option value = "1-1">•	Toxina botulínica tipo A</option>
+                                                                                            <option value = "1-2">•	Exfoliacion quimica. </option>
+                                                                                            <option value = "1-1">•	Aumento del tejido blando/inyecciones de relleno dérmico</option>
+                                                                                            <option value = "1-1">•	Dermoabrasión</option>
+                                                                                            <option value = "1-2">•	Rejuvenecimiento de la piel con láser. </option>
+                                                                                            <option value = "1-1">•	Luz pulsada intensa</option>
+                                                                                            <option value = "1-2">•	Tratamiento con tretinoína</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label id="" name="" class="floating-label-activo-sm">Descripción </label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="proc_piel_danada_desc" id="proc_piel_danada_desc"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="proc_piel_danada_obs" id="proc_piel_danada_obs"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <!--IMAGENES-->
+                                                                                <div class="col-sm-6 col-md-6">
+                                                                                    <div class="card">
+                                                                                        <div class="card-header" id="img">
+                                                                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#proc_piel_danada_img_pre" aria-expanded="false" aria-controls="proc_piel_danada_desc_img_pre">
+                                                                                                Imagenes.pre
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <div id="proc_piel_danada_obs_img_pre" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                                            <div class="card-body-aten shadow-none">
+                                                                                                <!-- [ Main Content ] start -->
+                                                                                                <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
+                                                                                                <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                                                                </div>
+                                                                                                <!-- [ file-upload ] end -->
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-6 col-md-6">
+                                                                                    <div class="card">
+                                                                                        <div class="card-header" id="img">
+                                                                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#proc_piel_danada_img_post" aria-expanded="false" aria-controls="proc_piel_danada_img_post">
+                                                                                                Imagenes.post
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <div id="proc_piel_danada_img_post" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                                            <div class="card-body-aten shadow-none">
+                                                                                                <!-- [ Main Content ] start -->
+                                                                                                <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
+                                                                                                <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                                                                </div>
+                                                                                                <!-- [ file-upload ] end -->
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                                <div class="card">
+                                                                    <div class="card-body shadow-none" id="formulario_rinofibro">
+                                                                        <form>
+                                                                            <div class="form-row mb-2">
+                                                                                <div class="col-md-12">
+                                                                                    <h6>EXFOLIACIÓN QUÍMICA</h6>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-row">
+                                                                                <div class="col-sm-3 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label class="floating-label-activo-sm">Motivo Procedimiento </label>
+                                                                                        <select class="form-control form-control-sm" name="exfoliacion_proc" id="exfoliacion_proc">
+                                                                                            <option>Seleccione una opción</option>
+                                                                                            <option value = "1-1">Corregir el color (pigmento) desigual de la piel</option>
+                                                                                            <option value = "1-2">Eliminar masas precancerosas de la piel</option>
+                                                                                            <option value = "1-1">Suavizar el acné o tratar las cicatrices que producen</option>
+                                                                                            <option value = "1-1">Tratar las arrugas que producen el sol, así como daños y tejido cicatricial</option>
+                                                                                            <option value = "1-2">Tratar las imperfecciones de la piel que se deben a la edad ya la herencia</option>
+                                                                                            <option value = "1-1">Otro</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-3 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label class="floating-label-activo-sm">Compuesto</label>
+                                                                                        <select class="form-control form-control-sm" name="exfoliacion_comp" id="exfoliacion_comp">
+                                                                                            <option>Seleccione una opción</option>
+                                                                                            <option value = "1-1">Alfahidroxiácidos</option>
+                                                                                            <option value = "1-2">ácido tricloroacético</option>
+                                                                                            <option value = "1-1">fenol</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-3 mt-2">
+                                                                                        <div class="form-group fill">
+                                                                                            <label id="" name="" class="floating-label-activo-sm">Descripción </label>
+                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="exfoliacion_desc" id="exfoliacion_desc"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                <div class="col-sm-3 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="exfoliacion_obs" id="exfoliacion_obs"></textarea>
+                                                                                    </div>
+                                                                                 </div>
+                                                                                 <!--IMAGENES-->
+                                                                                 <div class="col-sm-6 col-md-6">
+                                                                                     <div class="card">
+                                                                                         <div class="card-header" id="img">
+                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_exfoliacion_pre" aria-expanded="false" aria-controls="imagenes_exfoliacion_pre">
+                                                                                                 Imagenes.pre
+                                                                                             </button>
+                                                                                         </div>
+                                                                                         <div id="imagenes_exfoliacion_pre" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                                             <div class="card-body-aten shadow-none">
+                                                                                                 <!-- [ Main Content ] start -->
+                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
+                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                                                                 </div>
+                                                                                                 <!-- [ file-upload ] end -->
+                                                                                             </div>
+                                                                                         </div>
+                                                                                     </div>
+                                                                                 </div>
+                                                                                 <div class="col-sm-6 col-md-6">
+                                                                                     <div class="card">
+                                                                                         <div class="card-header" id="img">
+                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_exfoliacion_post" aria-expanded="false" aria-controls="imagenes_exfoliacion_post">
+                                                                                                 Imagenes.post
+                                                                                             </button>
+                                                                                         </div>
+                                                                                         <div id="imagenes_exfoliacion_post" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                                             <div class="card-body-aten shadow-none">
+                                                                                                 <!-- [ Main Content ] start -->
+                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
+                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                                                                 </div>
+                                                                                                 <!-- [ file-upload ] end -->
+                                                                                             </div>
+                                                                                         </div>
+                                                                                     </div>
+                                                                                 </div>
+                                                                            </div>
 
-
-                                                            <hr>
-
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-9" style="margin-bottom: 0;">
-                                                                    <label class="floating-label-activo-sm">Resumen Examen Especialidad</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Resumen Examen Especialidad"  data-seccion="Resumen Examen Especialidad"  data-tipo="general" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="bs_ex_orl" id="obs_ex_orl"></textarea>
+                                                                        </form>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="form-group col-md-3 align-middle" style="margin:auto">
-                                                                    <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo();"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
+                                                                <div class="card">
+                                                                    <div class="card-body shadow-none" id="formulario_rinofibro">
+                                                                        <form>
+                                                                            <div class="form-row mb-2">
+                                                                                <div class="col-md-12">
+                                                                                    <h6>DERMABRASIÓN / DERMOPLANING</h6>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-row">
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
+                                                                                        <select class="form-control form-control-sm" name="dermabras_proc" id="dermabras_proc">
+                                                                                            <option>Seleccione una opción</option>
+                                                                                            <option value = "1-1">DERMABRASIÓN</option>
+                                                                                            <option value = "1-2">DERMOPLANING</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                        <div class="form-group fill">
+                                                                                            <label id="" name="" class="floating-label-activo-sm">Descripción </label>
+                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="dermabras_desc" id="dermabras_desc"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="dermabras_obs" id="dermabras_obs"></textarea>
+                                                                                    </div>
+                                                                                 </div>
+                                                                                 <!--IMAGENES-->
+                                                                                 <div class="col-sm-6 col-md-6">
+                                                                                     <div class="card">
+                                                                                         <div class="card-header" id="img">
+                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_dermabras_pre" aria-expanded="false" aria-controls="imagenes_dermabras_pre">
+                                                                                                 Imagenes.pre
+                                                                                             </button>
+                                                                                         </div>
+                                                                                         <div id="imagenes_dermabras_pre" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                                             <div class="card-body-aten shadow-none">
+                                                                                                 <!-- [ Main Content ] start -->
+                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
+                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                                                                 </div>
+                                                                                                 <!-- [ file-upload ] end -->
+                                                                                             </div>
+                                                                                         </div>
+                                                                                     </div>
+                                                                                 </div>
+                                                                                 <div class="col-sm-6 col-md-6">
+                                                                                     <div class="card">
+                                                                                         <div class="card-header" id="img">
+                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_dermabras-post" aria-expanded="false" aria-controls="imagenes_dermabras-post">
+                                                                                                 Imagenes.post
+                                                                                             </button>
+                                                                                         </div>
+                                                                                         <div id="imagenes_dermabras-post" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                                             <div class="card-body-aten shadow-none">
+                                                                                                 <!-- [ Main Content ] start -->
+                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
+                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                                                                 </div>
+                                                                                                 <!-- [ file-upload ] end -->
+                                                                                             </div>
+                                                                                         </div>
+                                                                                     </div>
+                                                                                 </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card">
+                                                                    <div class="card-body shadow-none" id="formulario_rinofibro">
+                                                                        <form>
+
+                                                                            <div class="form-row mb-2">
+                                                                                <div class="col-md-12">
+                                                                                    <h6>CIRUGÍA LASER</h6>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-row">
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                         <label class="floating-label">Motivo Procedimiento</label>
+                                                                                        <input type="text" class="form-control form-control-sm" name="laser_motivo" id="laser_motivo">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                        <div class="form-group fill">
+                                                                                            <label id="" name="" class="floating-label-activo-sm">Descripción </label>
+                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="laser_desc" id="laser_desc"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="laser_obs" id="laser_obs"></textarea>
+                                                                                    </div>
+                                                                                 </div>
+                                                                                 <!--IMAGENES-->
+                                                                                 <div class="col-sm-6 col-md-6">
+                                                                                     <div class="card">
+                                                                                         <div class="card-header" id="img">
+                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_laser_post" aria-expanded="false" aria-controls="imagenes_laser_pre">
+                                                                                                 Imagenes.pre
+                                                                                             </button>
+                                                                                         </div>
+                                                                                         <div id="imagenes_laser_pre" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                                             <div class="card-body-aten shadow-none">
+                                                                                                 <!-- [ Main Content ] start -->
+                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
+                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                                                                 </div>
+                                                                                                 <!-- [ file-upload ] end -->
+                                                                                             </div>
+                                                                                         </div>
+                                                                                     </div>
+                                                                                 </div>
+                                                                                 <div class="col-sm-6 col-md-6">
+                                                                                     <div class="card">
+                                                                                         <div class="card-header" id="img">
+                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_laser_post" aria-expanded="false" aria-controls="imagenes_laser_post">
+                                                                                                 Imagenes.post
+                                                                                             </button>
+                                                                                         </div>
+                                                                                         <div id="imagenes_laser_post" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                                             <div class="card-body-aten shadow-none">
+                                                                                                 <!-- [ Main Content ] start -->
+                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
+                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                                                                 </div>
+                                                                                                 <!-- [ file-upload ] end -->
+                                                                                             </div>
+                                                                                         </div>
+                                                                                     </div>
+                                                                                 </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card">
+                                                                    <div class="card-body shadow-none" id="formulario_rinofibro">
+                                                                        <form>
+
+                                                                            <div class="form-row mb-2">
+                                                                                <div class="col-md-12">
+                                                                                    <h6>OTRO PROCEDIMIENTO</h6>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-row">
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label class="floating-label">Procedimiento</label>
+                                                                                        <input type="text" class="form-control form-control-sm" name="nombre_otro proced" id="nombre_otro proced"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                        <div class="form-group fill">
+                                                                                            <label id="" name="" class="floating-label-activo-sm">Descripción </label>
+                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="desc_tro proced" id="desc_otro proced"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                <div class="col-sm-4 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_otro proced" id="obs_otro proced"></textarea>
+                                                                                    </div>
+                                                                                 </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -735,109 +771,8 @@
 
                                         <!-- ENFERMEDADES CRONICAS -->
                                         <!--ENFERMO CRÓNICO O GES-->
-                                        <div class="col-sm-12">
-                                            <div class="row">
-                                                {{-- CRONICO --}}
-                                                <div class="col-md-4 mx-auto">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="form-group">
-                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                    <input type="checkbox" onchange="es_cronico();" id="enf_cronico" name="enf_cronico" data-toggle="modal" data-target="#form_enfermo_cronico" value="{!! old('enf_cronico') !!}">
-                                                                    <label for="enf_cronico" class="cr"></label>
-                                                                </div>
-                                                                <label>¿Es enfermo crónico?</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row " hidden>
-                                                        <div class="col-sm-12">
-                                                            <div class="alert alert-warning mx-auto" role="alert">
-                                                                <table class="table table-borderless mt-0 mb-0">
-                                                                    <tbody>
-                                                                        <tr id="tr_obesidad">
-                                                                            <td class="align-middle pb-1 pt-1">Obesidad</td>
-                                                                            <td class="align-middle pb-1 pt-1">
-                                                                                <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                                                                    <i class="feather icon-x"></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr id="tr_diabetes">
-                                                                            <td class="align-middle pb-1 pt-1">Diabetes</td>
-                                                                            <td class="align-middle pb-1 pt-1">
-                                                                                <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                                                                    <i class="feather icon-x"></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr id="tr_hipertesion">
-                                                                            <td class="align-middle pb-1 pt-1">Hipertensión</td>
-                                                                            <td class="align-middle pb-1 pt-1">
-                                                                                <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                                                                    <i class="feather icon-x"></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                {{-- GES --}}
-                                                <div class="col-md-4">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="form-group">
-                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                    <input type="checkbox" id="modal_ges" name="modal_ges" value="{!! old('modal_ges') !!}">
-                                                                    <label for="modal_ges" class="cr"></label>
-                                                                </div>
-                                                                <label>Ges</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row" hidden>
-                                                        <div class="alert alert-warning mx-auto my-0" role="alert">
-                                                            <table class="table table-borderless mt-0 mb-0">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="align-middle pb-1 pt-1">Paciente GES<br>PS.02
-                                                                        </td>
-                                                                        <td class="align-middle pb-1 pt-1">
-                                                                            <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                                                                <i class="feather icon-x"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="row">
-                                                        <div class="form-group">
-                                                            <div class="switch switch-success d-inline m-r-10">
-                                                                <input type="checkbox" id="confidencial" name="confidencial" value="{!! old('confidencial') !!}" />
-                                                                <label for="confidencial" class="cr"></label>
-                                                            </div>
-                                                            <label>Confidencial</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row" id="confidencial_descripcion" style="display: none">
-                                                        <div class="col-sm-12">
-                                                            <div class="alert alert-warning mx-auto" role="alert">
-                                                                <p class="text-dark f-14 pb-1 pt-1 mt-0 mb-0">Este registro
-                                                                    de atención médica es confidencial
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
+                                        <hr>
 
                                         <!--Diagnóstico-->
                                         <div class="col-sm-12">
@@ -856,7 +791,7 @@
                                                             </div>
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Indicaciones</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ind_orl" id="ind_orl">
+                                                                <input type="text" class="form-control form-control-sm" name="ind_dermato" id="ind_dermato">
                                                             </div>
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
@@ -881,9 +816,7 @@
                                 @include('atencion_medica.generales.seccion_receta_examen_comunes')
                                 <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
 
-                                <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
-                                @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')
-                                <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD FIN  -->
+
 
                                 <hr>
 
@@ -896,515 +829,9 @@
                                 </div>
                             </div>
                         </div>
-                        <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
-                        < <!-- proc-->
-                        <div class="tab-pane fade" id="proc_derma" role="tabpanel" aria-labelledby="proc_derma-tab">
-                            <div class="row bg-white shadow-sm rounded mx-3 mt-4">
-                                <div class="col-md-12">
-
-                                    <hr class="mt-1">
-                                    <div class="row">
-                                        <!--Formulario / Menor de edad-->
-                                        <div class="col-sm-12">
-                                            <div class="card">
-                                                <div class="card-body shadow-none" id="formulario_tto_dermico">
-                                                    <form>
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6>  ELIMINACIÓN DE CICATRICES </h6>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
-                                                                    <select class="form-control form-control-sm" name="" id="">
-                                                                        <option>Seleccione una opción</option>
-                                                                        <option value = "1-1">•	Dermoabrasión</option>
-                                                                        <option value = "1-2">•	Exfoliacion quimica</option>
-                                                                        <option value = "1-1">•	Inyecciones de relleno dérmico</option>
-                                                                        <option value = "1-1">•	Exfoliación por láser y fototerapias</option>
-                                                                        <option value = "1-2">•	Microinjertos</option>
-                                                                        <option value = "1-1">•	Incisión subcutánea. </option>
-                                                                        <option value = "1-2">•	Transferencia de grasa autóloga</option>
-                                                                        <option value = "1-1">•	Inyecciones  intralesionales</option>
-                                                                        <option value = "1-1">•	Crioterapia</option>
-                                                                        <option value = "1-3">•	Cremas tópicas </option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4 mt-2">
-                                                                    <div class="form-group fill">
-                                                                        <label id="" name="" class="floating-label-activo-sm">Descripción </label>
-                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                </div>
-                                                             </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-body shadow-none" id="formulario_rinofibro">
-                                                    <form>
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6>TRATAMIENTO DE PIEL DAÑADA</h6>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
-                                                                    <select class="form-control form-control-sm" name="" id="">
-                                                                        <option>Seleccione una opción</option>
-                                                                        <option value = "1-1">•	Toxina botulínica tipo A</option>
-                                                                        <option value = "1-2">•	Exfoliacion quimica. </option>
-                                                                        <option value = "1-1">•	Aumento del tejido blando/inyecciones de relleno dérmico</option>
-                                                                        <option value = "1-1">•	Dermoabrasión</option>
-                                                                        <option value = "1-2">•	Rejuvenecimiento de la piel con láser. </option>
-                                                                        <option value = "1-1">•	Luz pulsada intensa</option>
-                                                                        <option value = "1-2">•	Tratamiento con tretinoína</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label id="" name="" class="floating-label-activo-sm">Descripción </label>
-                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-body shadow-none" id="formulario_rinofibro">
-                                                    <form>
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6>EXFOLIACIÓN QUÍMICA</h6>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="col-sm-3 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label class="floating-label-activo-sm">Motivo Procedimiento </label>
-                                                                    <select class="form-control form-control-sm" name="" id="">
-                                                                        <option>Seleccione una opción</option>
-                                                                        <option value = "1-1">Corregir el color (pigmento) desigual de la piel</option>
-                                                                        <option value = "1-2">Eliminar masas precancerosas de la piel</option>
-                                                                        <option value = "1-1">Suavizar el acné o tratar las cicatrices que producen</option>
-                                                                        <option value = "1-1">Tratar las arrugas que producen el sol, así como daños y tejido cicatricial</option>
-                                                                        <option value = "1-2">Tratar las imperfecciones de la piel que se deben a la edad ya la herencia</option>
-                                                                        <option value = "1-1">Otro</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label class="floating-label-activo-sm">Compuesto</label>
-                                                                    <select class="form-control form-control-sm" name="" id="">
-                                                                        <option>Seleccione una opción</option>
-                                                                        <option value = "1-1">Alfahidroxiácidos</option>
-                                                                        <option value = "1-2">ácido tricloroacético</option>
-                                                                        <option value = "1-1">fenol</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3 mt-2">
-                                                                    <div class="form-group fill">
-                                                                        <label id="" name="" class="floating-label-activo-sm">Descripción </label>
-                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            <div class="col-sm-3 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                </div>
-                                                             </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-body shadow-none" id="formulario_rinofibro">
-                                                    <form>
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6>DERMABRASIÓN / DERMOPLANING</h6>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
-                                                                    <select class="form-control form-control-sm" name="" id="">
-                                                                        <option>Seleccione una opción</option>
-                                                                        <option value = "1-1">DERMABRASIÓN</option>
-                                                                        <option value = "1-2">DERMOPLANING</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4 mt-2">
-                                                                    <div class="form-group fill">
-                                                                        <label id="" name="" class="floating-label-activo-sm">Descripción </label>
-                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                </div>
-                                                             </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-body shadow-none" id="formulario_rinofibro">
-                                                    <form>
-
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6>CIRUGÍA LASER</h6>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                     <label class="floating-label">Motivo Procedimiento</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="obs_rinofibro" id="obs_rinofibro">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4 mt-2">
-                                                                    <div class="form-group fill">
-                                                                        <label id="" name="" class="floating-label-activo-sm">Descripción </label>
-                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                </div>
-                                                             </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-body shadow-none" id="formulario_rinofibro">
-                                                    <form>
-
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6>OTRO PROCEDIMIENTO</h6>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label class="floating-label">Procedimiento</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="obs_rinofibro" id="obs_rinofibro">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4 mt-2">
-                                                                    <div class="form-group fill">
-                                                                        <label id="" name="" class="floating-label-activo-sm">Descripción </label>
-                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                </div>
-                                                             </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--V-->
 
 
-                                        <!--Medicamentos o Examen-->
-                                        <div class="form-group col-md-3">
-                                             <button type="button" class="btn btn-success btn-block btn-sm mt-1" onclick="i_medicamento();"><i class="fa fa-plus"></i> Indicar medicamento</button>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <button type="button" class="btn btn-success btn-block btn-sm mt-1" onclick="i_examen();"><i class="fa fa-plus"></i> Indicar examen</button>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <button type="button" class="btn btn-success btn-block btn-sm mt-1" onclick="i_examen_derm() ;"><i class="fa fa-plus"></i> Indicar examen Especialidad</button>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <button type="button" class="btn btn-success btn-block btn-sm mt-1" onclick="i_indic_derm();"><i class="fa fa-plus"></i> Indicaciones Post Procedimiento</button>
-                                        </div>
-                                    </div>
 
-                                    <hr>
-                                    <!--Guardar o imprimir ficha-->
-                                    <div class="row mb-3">
-                                        <div class="col-md-12 text-center">
-                                            <button type="button" class="btn btn-info">Guardar</button>
-                                            <button type="button" class="btn btn-success">Imprimir</button>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="jumbotron text-center" style="padding: 2rem 2rem;">
-                                      <h5>Cargar  múltiples imágenes del Examen </h5>
-                                    </div>
-
-                                    <div class="container">
-                                        <form id="submitForm">
-                                            <div class="row">
-                                                  <div class="col-md-6">
-                                                      <div class="input-group">
-                                                          <div class="custom-file mb-3">
-                                                            <input type="file" class="custom-file-input" name="multipleFile[]" id="multipleFile" required="" multiple>
-                                                            <label class="custom-file-label" for="multipleFile">Elija varias imágenes para cargar</label>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                                  <div class="col-md-2">
-                                                  <button type="submit" name="upload" class="btn btn-primary">Cargar Archivos</button>
-                                                  </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="alert alert-success alert-dismissible" id="success" style="display: none;">
-                                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                                        El archivo se ha cargado correctamente
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                      <!-- view of uploaded images -->
-                                    <div class="container" id="gallery"></div>
-
-                                    <!--Edit Multiple image form -->
-                                    <div class='modal' id='exampleModal'>
-                                        <div class='modal-dialog'>
-                                            <div class='modal-content'>
-                                                <div class='modal-header'>
-                                                  <h4 class='modal-title'>Actualizar imagen</h4>
-                                                  <button type='button' class='close' data-dismiss='modal'>&times;</button>
-                                                </div>
-                                                <div id="editForm">
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <iframe>
-                                     <div style="widh:100%"></div>
-                                    </iframe>
-
-
-                                    <script type="text/javascript">
-                                        $(document).ready(function(){
-                                            $("#submitForm").on("submit", function(e){
-                                            e.preventDefault();
-                                            $.ajax({
-                                              url  :"upload.php",
-                                              type :"POST",
-                                              cache:false,
-                                              contentType : false, // you can also use multipart/form-data replace of false
-                                              processData : false,
-                                              data: new FormData(this),
-                                              success:function(response){
-                                                $("#success").show();
-                                                $("#multipleFile").val("");
-                                                fetchData();
-                                              }
-                                            });
-                                            });
-
-                                          // Fetch Data from Database
-                                          function fetchData(){
-                                            $.ajax({
-                                              url  : "fetch_data.php",
-                                              type : "POST",
-                                              cache: false,
-                                              success:function(data){
-                                                $("#gallery").html(data);
-                                              }
-                                            });
-                                          }
-                                          fetchData();
-
-                                          // Edit Data from Database
-                                          $(document).on("click",".btn-success", function(){
-                                            var editId = $(this).data('id');
-                                            $.ajax({
-                                              url : "edit.php",
-                                              type : "POST",
-                                              cache: false,
-                                              data : {editId:editId},
-                                              success:function(data){
-                                                $("#editForm").html(data);
-                                              }
-                                            });
-                                          });
-
-                                          // Delete Data from database
-
-                                          $(document).on('click','.delete-btn', function(){
-                                            var deleteId = $(this).data('id');
-                                            if (confirm("¿Está seguro de que desea eliminar esta imagen?")) {
-                                              $.ajax({
-                                                url  : "delete.php",
-                                                type : "POST",
-                                                cache:false,
-                                                data:{deleteId:deleteId},
-                                                success:function(data){
-                                                    $("#success").show();
-                                                  fetchData();
-                                                  //alert("La imagen eliminada correctamente");
-                                                }
-                                              });
-                                            }
-                                          });
-
-                                          // Update Data from database
-                                          $(document).on("submit", "#editForm", function(e){
-                                          e.preventDefault();
-                                          var formData = new FormData(this);
-                                          $.ajax({
-                                              url  : "update.php",
-                                              type : "POST",
-                                              cache: false,
-                                              contentType : false, // you can also use multipart/form-data replace of false
-                                              processData : false,
-                                              data: formData,
-                                              success:function(response){
-                                                $("#exampleModal").modal('hide');
-                                                alert("Imagen actualizada correctamente");
-                                                fetchData();
-                                              }
-                                            });
-                                          });
-                                        });
-
-                                    </script>
-                                </div>
-                            </div>
-                        </div>
-                        <!--CIERRE: proc-->
-                        <!--ATENCIÓN biopsias-->
-                        <div class="tab-pane fade" id="biop_derma" role="tabpanel" aria-labelledby="biop_derma-tab">
-                            <div class="row bg-white shadow-sm rounded mx-3 mt-4">
-
-                                <div class="col-md-12">
-                                    <hr class="mt-1">
-                                    <div class="row">
-                                        <!--Formulario / Menor de edad-->
-                                        <div class="col-sm-12">
-                                            <div class="card">
-                                                <div class="card-body shadow-none" id="formulario_rinofibro">
-                                                    <form>
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6>BIOPSIA</h6>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label class="floating-label">Motivo Procedimiento</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="obs_rinofibro" id="obs_rinofibro">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label id="" name="" class="floating-label-activo-sm">Descripción </label>
-                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                </div>
-                                                             </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-body shadow-none" id="formulario_rinofibro">
-                                                    <form>
-
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6>RESULTADO</h6>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label class="floating-label">INFORME</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="obs_rinofibro" id="obs_rinofibro">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4 mt-2">
-                                                                    <div class="form-group fill">
-                                                                        <label id="" name="" class="floating-label-activo-sm">Comentarios </label>
-                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            <div class="col-sm-4 mt-2">
-                                                                <div class="form-group fill">
-                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="medicamento" id="med"></textarea>
-                                                                </div>
-                                                             </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--V-->
-
-
-                                        <!--Medicamentos o Examen-->
-                                        <div class="form-group col-md-3">
-                                             <button type="button" class="btn btn-success btn-block btn-sm mt-1" onclick="i_medicamento();"><i class="fa fa-plus"></i> Indicar medicamento</button>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <button type="button" class="btn btn-success btn-block btn-sm mt-1" onclick="i_examen();"><i class="fa fa-plus"></i> Indicar examen</button>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <button type="button" class="btn btn-success btn-block btn-sm mt-1" onclick="i_examen_derm() ;"><i class="fa fa-plus"></i> Indicar examen Especialidad</button>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <button type="button" class="btn btn-success btn-block btn-sm mt-1" onclick="i_indic_derm();"><i class="fa fa-plus"></i> Indicaciones Post Procedimiento</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--CIERRE: biopsias-->
                     </div>
                 </form>
             </div>
@@ -1926,11 +1353,7 @@
             }
         }
 
-        function abrir_modal_guardar_tipo()
-        {
-            $('#modal_registrar_ficha_tipo_orl').modal('show');
-            cargarSeccion('registro_f_t_orl_detalle');
-        }
+
 
         function cargarSeccion(div_destino)
         {
@@ -2008,274 +1431,7 @@
             $('#'+label).html( $('#'+textarea).val() );
         }
 
-        function guardar_tipo_ficha_otorrino()
-        {
-            var registro_f_t_orl_nombre = $('#registro_f_t_orl_nombre').val();
-            var registro_f_t_orl_descripcion = $('#registro_f_t_orl_descripcion').val();
-            var _token = CSRF_TOKEN;
-            if(registro_f_t_orl_nombre == ''){
-                swal({
-                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Nombre",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    });
-                    return false;
-            }
-            if(registro_f_t_orl_descripcion == ''){
-                swal({
-                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    });
-                    return false;
-            }
 
-
-            var data = [];
-            data.registro_f_t_orl_nombre = registro_f_t_orl_nombre;
-            data.registro_f_t_orl_descripcion = registro_f_t_orl_descripcion;
-
-            $('#registro_f_t_orl_detalle').find('input,textarea').each(function(key, elemento){
-                //console.log($(elemento).attr('id'));
-                //console.log($(elemento).val());
-                //console.log($(elemento).prop('nodeName'));
-                //console.log('*******');
-
-                data[$(elemento).attr('id')] = $(elemento).val();
-
-            });
-
-            console.log(data);
-
-            url = "{{ route('profesional.ficha_tipo_otorrino') }}";
-            $.ajax({
-
-                url: url,
-                type: "POST",
-                data: {
-                    _token: _token,
-                    id_profesional : $('#id_profesional').val(),
-
-                    modal_agregar_tipo_apreciacion_auditiva :  data.modal_agregar_tipo_apreciacion_auditiva,
-                    modal_agregar_tipo_apreciacion_resp :  data.modal_agregar_tipo_apreciacion_resp,
-                    modal_agregar_tipo_disfonia :  data.modal_agregar_tipo_disfonia,
-                    modal_agregar_tipo_ex_boca :  data.modal_agregar_tipo_ex_boca,
-                    modal_agregar_tipo_examen_bio_od :  data.modal_agregar_tipo_examen_bio_od,
-                    modal_agregar_tipo_examen_bio_oi :  data.modal_agregar_tipo_examen_bio_oi,
-                    modal_agregar_tipo_examen_faringe :  data.modal_agregar_tipo_examen_faringe,
-                    modal_agregar_tipo_examen_fnd :  data.modal_agregar_tipo_examen_fnd,
-                    modal_agregar_tipo_examen_fni :  data.modal_agregar_tipo_examen_fni,
-                    modal_agregar_tipo_examen_laringe :  data.modal_agregar_tipo_examen_laringe,
-                    modal_agregar_tipo_examen_od :  data.modal_agregar_tipo_examen_od,
-                    modal_agregar_tipo_examen_oi :  data.modal_agregar_tipo_examen_oi,
-                    modal_agregar_tipo_nariz_general :  data.modal_agregar_tipo_nariz_general,
-                    modal_agregar_tipo_usa_audifono :  data.modal_agregar_tipo_usa_audifono,
-                    observaciones_aprec_auditiva_def :  data.observaciones_aprec_auditiva_def,
-                    observaciones_aprec_resp_def :  data.observaciones_aprec_resp_def,
-                    observaciones_audifono :  data.observaciones_audifono,
-                    observaciones_det_disfonia :  data.observaciones_det_disfonia,
-                    observaciones_det_nariz_general :  data.observaciones_det_nariz_general,
-                    observaciones_detalle_ex_boca :  data.observaciones_detalle_ex_boca,
-                    observaciones_ex_farige_anormal :  data.observaciones_ex_farige_anormal,
-                    observaciones_ex_fnd_anormal :  data.observaciones_ex_fnd_anormal,
-                    observaciones_ex_fni_anormal :  data.observaciones_ex_fni_anormal,
-                    observaciones_ex_larige_anormal :  data.observaciones_ex_larige_anormal,
-                    observaciones_ex_od_anormal :  data.observaciones_ex_od_anormal,
-                    observaciones_ex_oi_anormal :  data.observaciones_ex_oi_anormal,
-                    observaciones_obs_ex_biom :  data.observaciones_obs_ex_biom,
-                    observaciones_obs_ex_nasal :  data.observaciones_obs_ex_nasal,
-                    observaciones_obs_ex_oidos :  data.observaciones_obs_ex_oidos,
-                    observaciones_obs_ex_orl :  data.observaciones_obs_ex_orl,
-                    observaciones_obs_examen_bio_od :  data.observaciones_obs_examen_bio_od,
-                    observaciones_obs_examen_bio_oi :  data.observaciones_obs_examen_bio_oi,
-                    observaciones_obs_examen_laringe :  data.observaciones_obs_examen_laringe,
-                    registro_f_t_orl_descripcion :  data.registro_f_t_orl_descripcion,
-                    registro_f_t_orl_nombre :  data.registro_f_t_orl_nombre,
-
-                    modal_agregar_tipo_episodios: data.modal_agregar_tipo_episodios,
-                    observaciones_detalle_episodios: data.observaciones_detalle_episodios,
-                    modal_agregar_tipo_equilibrio: data.modal_agregar_tipo_equilibrio,
-                    observaciones_detalle_equilibrio: data.observaciones_detalle_equilibrio,
-                    modal_agregar_tipo_ng: data.modal_agregar_tipo_ng,
-                    observaciones_detalle_ng: data.observaciones_detalle_ng,
-                    modal_agregar_tipo_sint_acomp: data.modal_agregar_tipo_sint_acomp,
-                    observaciones_detalle_sint_acompanantes: data.observaciones_detalle_sint_acompanantes,
-                    modal_agregar_tipo_vertigo: data.modal_agregar_tipo_tipo_vertigo,
-                    observaciones_detalle_tipo_vertigo: data.observaciones_detalle_tipo_vertigo,
-                    observaciones_vestibular: data.observaciones_obs_vestibular,
-                },
-            })
-            .done(function(data)
-            {
-                // console.log('-----------------------');
-                // console.log(data);
-                // console.log('-----------------------');
-                if(data.estado == 1)
-                {
-                    $('#modal_registrar_ficha_tipo_orl').modal('hide');
-                    swal({
-                        title: "Tipo Ficha Registrado",
-                        icon: "success",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                }
-                else{
-
-                    swal({
-                        title: "Problema al Registrar Tipo Ficha.",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                }
-
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-        }
-
-        function cargar_info_ficha_tipo_orl(select, div_descripcion)
-        {
-            let id_ft = $('#'+select).val();
-            if(id_ft == '')
-            {
-                $('#'+div_descripcion).html('');
-                $('#form-otorrino').find('select,textarea').each(function(key, elemento){
-                    if($(elemento).prop('nodeName') == 'SELECT')
-                    {
-                        $(elemento).val(0);
-                    }
-                    else
-                    {
-                        $(elemento).val('');
-                    }
-                });
-
-                evaluar_para_carga_detalle('usa_audifono','div_detalle_usa_audifono','audifono',5);
-                evaluar_para_carga_detalle('apreciacion_auditiva','div_detalle_apreciacion_auditiva','aprec_auditiva_def',2);
-                evaluar_para_carga_detalle('examen_oi','div_detalle_examen_oi','ex_oi_anormal',2);
-                evaluar_para_carga_detalle('examen_od','div_detalle_examen_od','ex_od_anormal',2);
-                evaluar_para_carga_detalle('examen_bio_oi','div_obs_examen_bio_oi','obs_examen_bio_oi',2);
-                evaluar_para_carga_detalle('examen_bio_od','div_obs_examen_bio_od','obs_examen_bio_od',2);
-                evaluar_para_carga_detalle('tipo_vertigo','div_detalle_tipo_vertigo','detalle_tipo_vertigo',3);
-                evaluar_para_carga_detalle('sint_acomp','div_detalle_sintomas_acompanantes','detalle_sint_acompanantes',3);
-                evaluar_para_carga_detalle('ng','div_detalle_ng','detalle_ng',2);
-                evaluar_para_carga_detalle('episodios','div_detalle_episodios','detalle_episodios',3);
-                evaluar_para_carga_detalle('equilibrio','div_detalle_equilibrio','detalle_equilibrio',2);
-                evaluar_para_carga_detalle('nariz_general','div_detalle_nariz_gen','det_nariz_general',2);
-                evaluar_para_carga_detalle('apreciacion_resp','div_detalle_nariz_resp','aprec_resp_def',2);
-                evaluar_para_carga_detalle('examen_fni','div_detalle_examen_fni','ex_fni_anormal',2);
-                evaluar_para_carga_detalle('examen_fnd','div_detalle_examen_fnd','ex_fnd_anormal',2);
-                evaluar_para_carga_detalle('disfonia','div_disfonia','det_disfonia',2);
-                evaluar_para_carga_detalle('ex_boca','div_detalle_ex_boca','detalle_ex_boca',2);
-                evaluar_para_carga_detalle('examen_faringe','div_detalle_examen_faringe','ex_farige_anormal',2);
-                evaluar_para_carga_detalle('examen_laringe','div_detalle_examen_laringe','ex_larige_anormal',2);
-                return false;
-            }
-            $('#'+div_descripcion).html($('#'+select+' option:selected').attr('data-descripcion'));
-
-            url = "{{ route('profesional.buscar_ficha_tipo_otorrino') }}";
-            $.ajax({
-
-                url: url,
-                type: "GET",
-                data: {
-                    id_profesional : $('#id_profesional').val(),
-                    id_ficha_tipo :  id_ft,
-                },
-            })
-            .done(function(data)
-            {
-                // console.log('-----------------------');
-                // console.log(data);
-                // console.log('-----------------------');
-                if(data.estado == 1)
-                {
-                    $.each(data.registros, function(index, value)
-                    {
-                        // console.log(index);
-                        // console.log(value);
-                        // console.log($('#'+index));
-
-                        if(index == 'id_usa_audifono')
-                            index = 'usa_audifono';
-
-                        if(index == 'id_tipo_episodios')
-                            index = 'episodios';
-
-                        if(index == 'id_tipo_equilibrio')
-                            index = 'equilibrio';
-
-                        if(index == 'id_tipo_ng')
-                            index = 'ng';
-
-                        if(index == 'id_tipo_sint_acomp')
-                            index = 'sint_acomp';
-
-                        if(index == 'id_tipo_vertigo')
-                            index = 'tipo_vertigo';
-
-                        if(index == 'obs_tipo_vertigo')
-                            index = 'detalle_tipo_vertigo';
-
-                        if(index == 'obs_sint_acomp')
-                            index = 'detalle_sint_acompanantes';
-
-                        if(index == 'obs_ng')
-                            index = 'detalle_ng';
-
-                        if(index == 'obs_episodios')
-                            index = 'detalle_episodios';
-
-                        if(index == 'obs_equilibrio')
-                            index = 'detalle_equilibrio';
-
-
-
-                        $('#'+index).val(value);
-                    });
-
-                    evaluar_para_carga_detalle('usa_audifono','div_detalle_usa_audifono','audifono',5);
-                    evaluar_para_carga_detalle('apreciacion_auditiva','div_detalle_apreciacion_auditiva','aprec_auditiva_def',2);
-                    evaluar_para_carga_detalle('examen_oi','div_detalle_examen_oi','ex_oi_anormal',2);
-                    evaluar_para_carga_detalle('examen_od','div_detalle_examen_od','ex_od_anormal',2);
-                    evaluar_para_carga_detalle('examen_bio_oi','div_obs_examen_bio_oi','obs_examen_bio_oi',2);
-                    evaluar_para_carga_detalle('examen_bio_od','div_obs_examen_bio_od','obs_examen_bio_od',2);
-                    evaluar_para_carga_detalle('tipo_vertigo','div_detalle_tipo_vertigo','detalle_tipo_vertigo',3);
-                    evaluar_para_carga_detalle('sint_acomp','div_detalle_sintomas_acompanantes','detalle_sint_acompanantes',3);
-                    evaluar_para_carga_detalle('ng','div_detalle_ng','detalle_ng',2);
-                    evaluar_para_carga_detalle('episodios','div_detalle_episodios','detalle_episodios',3);
-                    evaluar_para_carga_detalle('equilibrio','div_detalle_equilibrio','detalle_equilibrio',2);
-                    evaluar_para_carga_detalle('nariz_general','div_detalle_nariz_gen','det_nariz_general',2);
-                    evaluar_para_carga_detalle('apreciacion_resp','div_detalle_nariz_resp','aprec_resp_def',2);
-                    evaluar_para_carga_detalle('examen_fni','div_detalle_examen_fni','ex_fni_anormal',2);
-                    evaluar_para_carga_detalle('examen_fnd','div_detalle_examen_fnd','ex_fnd_anormal',2);
-                    evaluar_para_carga_detalle('disfonia','div_disfonia','det_disfonia',2);
-                    evaluar_para_carga_detalle('ex_boca','div_detalle_ex_boca','detalle_ex_boca',2);
-                    evaluar_para_carga_detalle('examen_faringe','div_detalle_examen_faringe','ex_farige_anormal',2);
-                    evaluar_para_carga_detalle('examen_laringe','div_detalle_examen_laringe','ex_larige_anormal',2);
-
-                }
-                else{
-
-                    swal({
-                        title: "Problema al Cargar Tipo Ficha.",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                }
-
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        }
 
         function agregar_medicamentos_ficha() {
 

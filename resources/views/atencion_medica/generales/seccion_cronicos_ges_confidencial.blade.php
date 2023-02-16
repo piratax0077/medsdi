@@ -1,6 +1,6 @@
 <!--ENFERMO CRÓNICO O GES-->
-<div class="col-sm-12 col-md-12">
-    <div class="row">
+<div class="col-sm-12 col-md-12" >
+    <div class="row" style="background-color: rgb(211, 235, 205);margin:0.5%">
         {{-- CRONICO --}}
         <div class="col-md-4 mx-auto">
             <div class="row">

@@ -14,7 +14,7 @@
 
                         <div class="form-group col-md-6">
                             <label class="floating-label-activo-sm">Tipo</label>
-                            <select class="form-control form-control-sm" id="registro_f_t_orl_tipo_seccion" onchange="cargarSeccion'registro_f_t_orl_detalle');">
+                            <select class="form-control form-control-sm" id="registro_f_t_orl_tipo_seccion" onchange="cargarSeccion('registro_f_t_orl_detalle');">
                                 <option value="">Seleccione</option>
                                 <option value="1">Oído</option>
                                 <option value="2">Nariz</option>
