@@ -55,23 +55,19 @@
 			</div>
 		</div>
 	</div>
-	<script>
+	<script type="text/javascript">
 
 		function calculaIMC() {
 
 			var peso, altura, imc, leyenda;
 
-			const peso =parseFloat( document.getElementById("peso").value);
-            const altura =parseFloat( document.getElementById("altura").valuevalue / 100);
+			peso = document.getElementById("peso").value;
+			altura = document.getElementById("altura").value / 100;
 
+			imc = peso / (altura * altura);
 
-			const imc = peso / (altura * altura);
+			document.getElementById("imc").value = imc.toFixed(2);
 
-			document.getElementById("imc").value = imc.toFixed(1);
-            document.querySelector("leyenda").innerHTML =imc;
-        }
-    </script>
-    <script>
 			if (imc <= 20.5) {
 
 				leyenda = "Está delgado. debe engordar " + (altura * altura * 20.5 - peso).toFixed(1) + " kilos";
