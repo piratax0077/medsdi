@@ -630,7 +630,7 @@
                                                         <div class="form-row">
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;"data-input_igual="lic_descripcion_hipotesis,sospecha_diagnostica_eda,sospecha_diagnostica_edb" name="hip_diag_spec" id="hip_diag_spec" onChange="cargarIgual('hip_diag_spec')"></textarea>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" data-input_igual="lic_descripcion_hipotesis,sospecha_diagnostica_cisto" name="hip_diag_spec" id="hip_diag_spec" onchange="cargarIgual('hip_diag_spec')"></textarea>
                                                             </div>
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Indicaciones</label>
@@ -837,6 +837,7 @@
 
         function abrir_modal_guardar_tipo(div_id_data, div_id_detalle,tipo)
         {
+            $("#btn_modal_registrar_ficha_tipo_dg").unbind();
             if(tipo == 'cdg')
             {
                 $('#btn_modal_registrar_ficha_tipo_dg').click(function(){
@@ -1486,10 +1487,10 @@
             },
             removedfile(file) {
                 // console.log('-------------removedfile-----------------------');
-                cargar_lista_imagenes(myDropzone_eda,'eda');
                 if (file.previewElement != null && file.previewElement.parentNode != null) {
                     file.previewElement.parentNode.removeChild(file.previewElement);
                 }
+                cargar_lista_imagenes(myDropzone_eda,'eda');
                 return this._updateMaxFilesReachedClass();
             },
             canceled: function canceled(file) {
@@ -1587,10 +1588,10 @@
             },
             removedfile(file) {
                 // console.log('-------------removedfile-----------------------');
-                cargar_lista_imagenes(myDropzone_edb, 'edb');
                 if (file.previewElement != null && file.previewElement.parentNode != null) {
                     file.previewElement.parentNode.removeChild(file.previewElement);
                 }
+                cargar_lista_imagenes(myDropzone_edb, 'edb');
                 return this._updateMaxFilesReachedClass();
             },
             canceled: function canceled(file) {

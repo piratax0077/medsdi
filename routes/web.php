@@ -444,6 +444,9 @@ Route::group([
     Route::post('/profesional/agregar_ficha_tipo_oft_fondo_ojo', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoOftFondo'])->name('profesional.ficha_tipo_oft_fondo_ojo');
     Route::get('/profesional/buscar_ficha_tipo_oft_fondo_ojo', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoOftFondo'])->name('profesional.buscar_ficha_tipo_oft_fondo_ojo');
 
+    /** REGISTRO DE FICHA TIPO URO UROLOGIA */
+    Route::post('/profesional/agregar_ficha_tipo_uro', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoUro'])->name('profesional.ficha_tipo_uro');
+	Route::get('/profesional/buscar_ficha_tipo_uro', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoUro'])->name('profesional.buscar_ficha_tipo_uro');
 
     /** REGISTRO DE FICHA TIPO CDG CIRUGIA GENERAL */
     Route::post('/profesional/agregar_ficha_tipo_cg', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoCG'])->name('profesional.ficha_tipo_cg');
@@ -707,6 +710,7 @@ Route::group([
 	Route::post('Ficha_Atencion/crear/orl', [ficha_atencionController::class, 'store_orl'])->name('fichaAtencion.registrar_ficha_orl');
     Route::post('Ficha_Atencion/crear/cdg', [ficha_atencionController::class, 'store_cdg'])->name('fichaAtencion.registrar_ficha_cdg');
     Route::post('Ficha_Atencion/crear/uro', [ficha_atencionController::class, 'store_uro'])->name('fichaAtencion.registrar_ficha_uro');
+	Route::post('Ficha_Atencion/crear/oft', [ficha_atencionController::class, 'store_oft'])->name('fichaAtencion.registrar_ficha_oft');
     //Route::post('Ficha_atencion/Registro_ficha', [ficha_atencionController::class, 'store'])->name('crear.ficha_atencion');
 
     Route::post('/getArticulo', [ficha_atencionController::class, 'getArticulo'])->name('ficha_medica.getArticulo');

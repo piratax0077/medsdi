@@ -29,6 +29,7 @@ use App\Models\FichaOftBiomicroscopiaTipo;
 use App\Models\FichaOftFondoOjoTipo;
 use App\Models\FichaOftTipo;
 use App\Models\FichaOtorrinoTipo;
+use App\Models\FichaUroTipo;
 use App\Models\GrupoSanguineo;
 use App\Models\Hipertension;
 use App\Models\HoraMedica;
@@ -3227,4 +3228,86 @@ class EscritorioProfesional extends Controller
     }
     /** CIERRE EXAMEN FONDO DE OJO TIPO */
     /**************** CIERRE FICHA TIPO OFTALMOLOGIA ******************** */
+
+     /**************** FICHA TIPO UROLOGIA ******************** */
+    /** FICHA UROLOGIA GENERAL TIPO */
+    public function agregarFichaTipoUro(Request $request)
+    {
+        $datos = array();
+        $ficha_tipo = new FichaUroTipo();
+        $ficha_tipo->nombre = $request->nombre;
+        $ficha_tipo->descripcion = $request->descripcion;
+        $ficha_tipo->id_profesional = $request->id_profesional;
+
+        $ficha_tipo->costo_vert_ld = $request->costo_vert_ld;
+        $ficha_tipo->obs_costo_vert_ld = $request->obs_costo_vert_ld;
+        $ficha_tipo->costo_vert_li = $request->costo_vert_li;
+        $ficha_tipo->obs_costo_vert_li = $request->obs_costo_vert_li;
+        $ficha_tipo->examen_abd = $request->examen_abd;
+        $ficha_tipo->obs_examen_abd = $request->obs_examen_abd;
+        $ficha_tipo->tacto_rec = $request->tacto_rec;
+        $ficha_tipo->obs_tacto_rec = $request->obs_tacto_rec;
+        $ficha_tipo->antigeno_prost = $request->antigeno_prost;
+        $ficha_tipo->obs_antigeno_prost = $request->obs_antigeno_prost;
+        $ficha_tipo->biopsia_uro = $request->biopsia_uro;
+        $ficha_tipo->obs_biopsia_uro = $request->obs_biopsia_uro;
+        $ficha_tipo->ingle = $request->ingle;
+        $ficha_tipo->obs_detalle_ingle = $request->obs_detalle_ingle;
+        $ficha_tipo->habitos_micionales = $request->habitos_micionales;
+        $ficha_tipo->obs_habitos_micionales = $request->obs_habitos_micionales;
+        $ficha_tipo->funcion_pene = $request->funcion_pene;
+        $ficha_tipo->obs_funcion_pene = $request->obs_funcion_pene;
+        $ficha_tipo->sintomas_funcionales = $request->sintomas_funcionales;
+        $ficha_tipo->obs_sintomas_funcionales = $request->obs_sintomas_funcionales;
+        $ficha_tipo->uretra_masc = $request->uretra_masc;
+        $ficha_tipo->obs_detalle_uretra_masc = $request->obs_detalle_uretra_masc;
+        $ficha_tipo->examen_pene = $request->examen_pene;
+        $ficha_tipo->obs_pene_anormal = $request->obs_pene_anormal;
+        $ficha_tipo->examen_test = $request->examen_test;
+        $ficha_tipo->obs_test_anormal = $request->obs_test_anormal;
+        $ficha_tipo->vulva = $request->vulva;
+        $ficha_tipo->obs_det_vulva = $request->obs_det_vulva;
+        $ficha_tipo->vagina = $request->vagina;
+        $ficha_tipo->obs_det_vagina = $request->obs_det_vagina;
+        $ficha_tipo->examen_horm = $request->examen_horm;
+        $ficha_tipo->obs_examen_horm = $request->obs_examen_horm;
+        $ficha_tipo->obs_ex_uro = $request->obs_ex_uro;
+
+
+        if($ficha_tipo->save())
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro exitoso';
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro NO exitoso';
+        }
+        return $datos;
+    }
+
+    public function buscarFichaTipoUro(Request $request)
+    {
+        $datos = array();
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $registro = FichaUroTipo::where('id_profesional',$profesional->id)->where('id',$request->id_ficha_tipo)->first();
+
+        if($registro)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registro;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
+        }
+
+        return $datos;
+    }
+    /** CIERRE FICHA UROLOGIA GENERAL TIPO */
 }

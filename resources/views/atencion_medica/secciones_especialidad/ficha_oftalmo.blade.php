@@ -4,12 +4,12 @@
             <div class="col-sm-12 col-md-12">
                 <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones active text-uppercase" id="atencion_orl-tab" data-toggle="tab" href="#atencion_orl" role="tab" aria-controls="atencion_orl" aria-selected="true">Atención Especialidad</a>
+                        <a class="nav-secciones active text-uppercase" id="atencion_oft-tab" data-toggle="tab" href="#atencion_oft" role="tab" aria-controls="atencion_oft" aria-selected="true">Atención Especialidad</a>
                     </li>
                 </ul>
             </div>
             <div class="col-sm-12 col-md-12">
-                <form action="{{ route('fichaAtencion.registrar_ficha_orl') }}" method="POST">
+                <form action="{{ route('fichaAtencion.registrar_ficha_oft') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
                     <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
@@ -25,7 +25,7 @@
                     @csrf
                     <div class="tab-content" id="orl-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
-                        <div class="tab-pane fade show active" id="atencion_orl" role="tabpanel" aria-labelledby="atencion_orl-tab">
+                        <div class="tab-pane fade show active" id="atencion_oft" role="tabpanel" aria-labelledby="atencion_oft-tab">
                             <div class="row bg-white shadow-none rounded mx-1">
                                 <div class="col-md-12">
                                     <div class="row">
@@ -784,66 +784,66 @@
                                                 </div>
                                                 <div id="plan_oft" class="collapse show" aria-labelledby="plan_oft" data-parent="#plan_oft">
                                                     <div class="card-body-aten shadow-none">
-                                                        <form>
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="col-sm-12">
-                                                                            <div class="form-group">
-                                                                                <input type="hidden" name="tratamiento" id="tratamiento" value="">
-                                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                                    <input type="checkbox" id="tratamiento_check" name="tratamiento_check" value="" />
-                                                                                    <label for="tratamiento_check" class="cr"></label>
-                                                                                </div>
-                                                                                <label>Solo Tratamiento<br>Médico</label>
+
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-3">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <input type="hidden" name="tratamiento" id="tratamiento" value="">
+                                                                            <div class="switch switch-success d-inline m-r-10">
+                                                                                <input type="checkbox" id="tratamiento_check" name="tratamiento_check" value="" />
+                                                                                <label for="tratamiento_check" class="cr"></label>
                                                                             </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="col-sm-12">
-                                                                            <div class="form-group">
-                                                                                <input type="hidden" name="lentes" id="lentes" value="">
-                                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                                    <input type="checkbox" id="lentes_check" name="lentes_check" value="" />
-                                                                                    <label for="lentes_check" class="cr"></label>
-                                                                                </div>
-                                                                                <label>Lentes</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="col-sm-12">
-                                                                            <div class="form-group">
-                                                                                <input type="hidden" name="procedimiento" id="procedimiento" value="">
-                                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                                    <input type="checkbox" id="procedimiento_check" name="procedimiento_check" value="" />
-                                                                                    <label for="procedimiento_check" class="cr"></label>
-                                                                                </div>
-                                                                                <label>Procedimiento</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group col-md-3">
-                                                                    <div class="row">
-                                                                        <div class="col-sm-12">
-                                                                            <div class="form-group">
-                                                                                <input type="hidden" name="cirugia" id="cirugia" value="">
-                                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                                    <input type="checkbox" id="cirugia_check" name="cirugia_check" value="" />
-                                                                                    <label for="cirugia_check" class="cr"></label>
-                                                                                </div>
-                                                                                <label>Cirugía</label>
-                                                                            </div>
+                                                                            <label>Solo Tratamiento<br>Médico</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </form>
+                                                            <div class="form-group col-md-3">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <input type="hidden" name="lentes" id="lentes" value="">
+                                                                            <div class="switch switch-success d-inline m-r-10">
+                                                                                <input type="checkbox" id="lentes_check" name="lentes_check" value="" />
+                                                                                <label for="lentes_check" class="cr"></label>
+                                                                            </div>
+                                                                            <label>Lentes</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <input type="hidden" name="procedimiento" id="procedimiento" value="">
+                                                                            <div class="switch switch-success d-inline m-r-10">
+                                                                                <input type="checkbox" id="procedimiento_check" name="procedimiento_check" value="" />
+                                                                                <label for="procedimiento_check" class="cr"></label>
+                                                                            </div>
+                                                                            <label>Procedimiento</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <input type="hidden" name="cirugia" id="cirugia" value="">
+                                                                            <div class="switch switch-success d-inline m-r-10">
+                                                                                <input type="checkbox" id="cirugia_check" name="cirugia_check" value="" />
+                                                                                <label for="cirugia_check" class="cr"></label>
+                                                                            </div>
+                                                                            <label>Cirugía</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -853,11 +853,6 @@
                             </div>
                         </div>
                         <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
-
-
-                        @include('atencion_medica.secciones_especialidad.seccion_ficha_general')
-
-
 
                         {{--  div de botones  --}}
                         <div class="bg-white shadow-none rounded mx-1 p-15">
