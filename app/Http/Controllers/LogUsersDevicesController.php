@@ -277,8 +277,18 @@ class LogUsersDevicesController extends Controller
             $registro->tipo = $request->tipo;
 
             $registro->estado = $request->estado;
-            $registro->fecha_ingreso = $request->fecha_ingreso;
-            $registro->fecha_termino = $request->fecha_termino;
+
+
+            $fecha =date('Y-m-d');
+            $hora = date('H:i:s');
+            $fecha_actual  = date('Y-m-d H:i:s', strtotime($fecha.' '.$hora));
+            $fecha_vencimiento  = date ( 'Y-m-d H:i:s' ,strtotime ( '-'.env('TIEMPO_ESPERA_CONFIRMACION').' hours' , strtotime ($fecha_actual) ) );
+            $fecha_expira = date ( 'Y-m-d H:i:s' ,strtotime ( '-'.((int)env('TIEMPO_ESPERA_CONFIRMACION')+6).' hours' , strtotime ($fecha_actual) ) );
+
+            $registro->fecha_ingreso = $fecha_actual;
+            $registro->fecha_termino = $fecha_vencimiento;
+            $registro->fecha_exp = $fecha_expira;
+            $registro->token = md5(uniqid());
 
             if($registro->save())
             {

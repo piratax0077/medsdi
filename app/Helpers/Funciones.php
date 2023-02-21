@@ -45,6 +45,8 @@ class Funciones{
         $log_users_devices->fecha_ingreso = $fecha_actual;
         $log_users_devices->fecha_termino = $fecha_vencimiento;
         $log_users_devices->tipo = 3; // confirmacion hora
+        $log_users_devices->token = md5(uniqid());
+        $log_users_devices->fecha_exp = $fecha_expira;
 
         if($log_users_devices->save())
         {
@@ -52,6 +54,7 @@ class Funciones{
             $datos['app']['msj'] = $msj;
             $datos['app']['fecha_inicio'] = $fecha_actual;
             $datos['app']['fecha_termino'] = $fecha_vencimiento;
+            $datos['app']['fecha_exp'] = $fecha_expira;
             $datos['app']['tiempo'] = env('TIEMPO_ESPERA');
             $datos['app']['last_id'] = $log_users_devices->id;
 
