@@ -77,7 +77,7 @@ class Funciones{
         $fecha =date('Y-m-d');
         $hora = date('H:i:s');
         $fecha_actual  = date('Y-m-d H:i:s', strtotime($fecha.' '.$hora));
-        $fecha_vencimiento  = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.env('TIEMPO_ESPERA_CONFIRMACION').' hours' , strtotime ($fecha_actual) ) );
+        $fecha_vencimiento  = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.(int)env('TIEMPO_ESPERA_CONFIRMACION').' hours' , strtotime ($fecha_actual) ) );
         $fecha_expira = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.((int)env('TIEMPO_ESPERA_CONFIRMACION')+(int)env('TIEMPO_EXP_PERMISO')).' hours' , strtotime ($fecha_actual) ) );
 
         $id = LogUsersDevices::latest()->first();
