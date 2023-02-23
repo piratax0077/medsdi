@@ -713,7 +713,8 @@ Route::group([
 	Route::post('Ficha_Atencion/crear/orl', [ficha_atencionController::class, 'store_orl'])->name('fichaAtencion.registrar_ficha_orl');
     Route::post('Ficha_Atencion/crear/cdg', [ficha_atencionController::class, 'store_cdg'])->name('fichaAtencion.registrar_ficha_cdg');
     Route::post('Ficha_Atencion/crear/uro', [ficha_atencionController::class, 'store_uro'])->name('fichaAtencion.registrar_ficha_uro');
-	Route::post('Ficha_Atencion/crear/oft', [ficha_atencionController::class, 'store_oft'])->name('fichaAtencion.registrar_ficha_oft');
+	Route::post('Ficha_Atencion/crear/dermo', [ficha_atencionController::class, 'store_dermo'])->name('fichaAtencion.registrar_ficha_dermo');
+    //Route::post('Ficha_atencion/Registro_ficha', [ficha_atencionController::class, 'store'])->name('crear.ficha_atencion');
     //Route::post('Ficha_atencion/Registro_ficha', [ficha_atencionController::class, 'store'])->name('crear.ficha_atencion');
 
     Route::post('/getArticulo', [ficha_atencionController::class, 'getArticulo'])->name('ficha_medica.getArticulo');
