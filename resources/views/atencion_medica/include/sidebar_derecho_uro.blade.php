@@ -85,6 +85,9 @@
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="icirugia()";>+ Indicaciones post cirugía Urológica</button>
                         </div>
                     </div>
+
+                    @include("atencion_medica.sidebars.modals_especialidad.urologia.m_uro_cuidados")
+                    @include("atencion_medica.sidebars.modals_especialidad.urologia.m_uro_cistoscopia")
                     @include("atencion_medica.sidebars.modals_generales.ingreso")
                     @include("atencion_medica.sidebars.modals_generales.m_cuidados_cirugia")
                     @include("atencion_medica.sidebars.modals_generales.m_req_ingreso")

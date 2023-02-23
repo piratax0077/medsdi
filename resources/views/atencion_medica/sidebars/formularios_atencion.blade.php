@@ -129,26 +129,6 @@
                     </div>
                 </div>
             </div>
-            <div class="card-sidebar">
-                <div class="card-header-sidebar" id="heading_consentimientos_informados">
-                    <h2 class="mb-0">
-                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse"
-                            data-target="#collapse_consentimientos_informados" aria-expanded="false"
-                            aria-controls="collapse_consentimientos_informados"><i
-                                class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
-                            CONSENTIMIENTOS INFORMADOS GENERALES
-                        </button>
-                    </h2>
-                </div>
-                <div id="collapse_consentimientos_informados" class="collapse"
-                    aria-labelledby="heading_consentimientos_informados" data-parent="#accordion_formularios_atencion">
-                    <div class="card-body-sidebar">
-                        <!--Boton Modal Formulario Antestesia-->
-                        <button type="button"
-                            class="btn btn-sm btn-info btn-block text-left accion_modal_anestesia">+ Antestesia</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>

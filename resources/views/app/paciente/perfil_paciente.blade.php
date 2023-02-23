@@ -77,14 +77,14 @@
                             <div class="col-md-6">
                                 <!--Card Información Básica-->
                                 <div class="card">
-                                    <div class="card-header d-flex align-items-center justify-content-between bg-info">
+                                    <div class="card-body d-flex align-items-center justify-content-between bg-info">
                                         <h5 class="mb-0 text-white">Datos Personales</h5>
                                         <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
                                             <i class="feather icon-edit"></i>
                                         </button>
                                     </div>
                                     <!--Datos Personales-->
-                                    <div class="card-body info_basica collapse show" id="info_basica-1">
+                                    <div class="card-body border-top info_basica collapse show" id="info_basica-1">
                                         <form>
                                             <div class="form-group row">
                                                 <label class="col-sm-5 col-form-label font-weight-bolder">Rut</label>
@@ -130,7 +130,7 @@
                                     </div>
                                     <!--Cierre: Datos Personales-->
                                     <!--(Editar)Datos Personales-->
-                                    <div class="card-body info_basica collapse" id="pinfo_basica_2">
+                                    <div class="card-body border-top info_basica collapse" id="pinfo_basica_2">
                                         <form>
                                             <div class="form-group row">
                                                 <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
@@ -206,14 +206,14 @@
                             <div class="col-md-6">
                                 <!--Card Contacto-->
                                 <div class="card">
-                                    <div class="card-header d-flex align-items-center justify-content-between bg-info">
+                                    <div class="card-body d-flex align-items-center justify-content-between bg-info">
                                         <h5 class="mb-0 text-white">Contacto</h5>
                                         <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
                                             <i class="feather icon-edit"></i>
                                         </button>
                                     </div>
                                     <!--Contacto-->
-                                    <div class="card-body info_contacto collapse show" id="info_contacto_1">
+                                    <div class="card-body border-top info_contacto collapse show" id="info_contacto_1">
                                         <form>
                                             <div class="form-group row">
                                                 <label class="col-sm-5 col-form-label font-weight-bolder">Correo
@@ -228,7 +228,7 @@
                                     </div>
                                     <!--Cierre: Contacto-->
                                     <!--(Editar) Contacto-->
-                                    <div class="card-body info_contacto collapse " id="info_contacto_2">
+                                    <div class="card-body border-top info_contacto collapse " id="info_contacto_2">
                                         <form>
                                             <div class="form-group row">
                                                 <label class="col-sm-5 col-form-label font-weight-bolder">Correo Electrónico</label>
@@ -256,14 +256,14 @@
                                 <!--Cierre: Card Contacto-->
                                 <!--Card Residencia-->
                                 <div class="card">
-                                    <div class="card-header d-flex align-items-center justify-content-between bg-info">
+                                    <div class="card-body d-flex align-items-center justify-content-between bg-info">
                                         <h5 class="mb-0 text-white">Residencia</h5>
                                         <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
                                             <i class="feather icon-edit"></i>
                                         </button>
                                     </div>
                                     <!--Residencia-->
-                                    <div class="card-body info_residencial collapse show" id="info_residencial_1">
+                                    <div class="card-body border-top info_residencial collapse show" id="info_residencial_1">
                                         <form>
                                             <div class="form-group row">
                                                 <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
@@ -287,7 +287,7 @@
                                     </div>
                                     <!--Cierre: Residencia-->
                                     <!--(Editar) Residencia-->
-                                    <div class="card-body info_residencial collapse " id="info_residencial_2">
+                                    <div class="card-body border-top info_residencial collapse " id="info_residencial_2">
                                         <form action="{{ ROUTE('paciente.perfil.editdirec') }}" method="GET">
                                             <div class="form-group row">
                                                 <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
@@ -428,13 +428,13 @@
                             <div class="col-md-12">
                                 <!--Card Datos profesional-->
                                 <div class="card">
-                                    <div class="card-header d-flex align-items-center justify-content-between bg-c-blue">
+                                    <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
                                         <h5 class="mb-0 text-white">Datos del médico responsable del llenado y/o
                                             Actualización de datos </h5>
 
                                     </div>
                                     <!--Datos profesional-->
-                                    <div class="card-body info_basica_sos collapse show" id="info_basica_sos_1">
+                                    <div class="card-body border-top info_basica_sos collapse show" id="info_basica_sos_1">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <form>
@@ -479,7 +479,7 @@
                                     </div>
                                     <!--Cierre: Datos profesional-->
                                     <!--(Editar)Datos profesional-->
-                                    <div class="card-body info_basica_sos collapse" id="info_basica_sos_2">
+                                    <div class="card-body border-top info_basica_sos collapse" id="info_basica_sos_2">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
@@ -547,7 +547,7 @@
                             <div class="col-md-12">
                                 <!--Card Datos Sangre Donación de Organos-->
                                 <div class="card">
-                                    <div class="card-header d-flex align-items-center justify-content-between bg-c-blue">
+                                    <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
                                         <h5 class="mb-0 text-white">Antecedentes I (Transfusiones y Donación de
                                             Órganos)</h5>
                                         <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial_sos" aria-expanded="false" aria-controls="info_residencial_sos_1 info_residencial_sos_2">
@@ -555,7 +555,7 @@
                                         </button>
                                     </div>
                                     <!--Sangre Donación de Organo-->
-                                    <div class="card-body info_residencial_sos collapse show" id="info_residencial_sos_1">
+                                    <div class="card-body border-top info_residencial_sos collapse show" id="info_residencial_sos_1">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
@@ -699,7 +699,7 @@
                                     </div>
                                     <!--Cierre: Sangre Donación de Organo-->
                                     <!--(Editar) Sangre Donación de Organo-->
-                                    <div class="card-body info_residencial_sos collapse " id="info_residencial_sos_2">
+                                    <div class="card-body border-top info_residencial_sos collapse " id="info_residencial_sos_2">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
@@ -979,14 +979,14 @@
                             <div class="col-md-12">
                                 <!--Card Datos Rompe Clave-->
                                 <div class="card">
-                                    <div class="card-header d-flex align-items-center justify-content-between bg-info">
+                                    <div class="card-body d-flex align-items-center justify-content-between bg-info">
                                         <h5 class="mb-0 text-white">Romper clave</h5>
                                         <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".rompeclave" aria-expanded="false" aria-controls="rompeclave_1 rompeclave_2">
                                             <i class="feather icon-edit"></i>
                                         </button>
                                     </div>
                                     <!--Datos Rompe Clave-->
-                                    <div class="card-body rompeclave collapse show" id="rompeclave_1">
+                                    <div class="card-body border-top rompeclave collapse show" id="rompeclave_1">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <form>
@@ -1010,7 +1010,7 @@
                                     </div>
                                     <!--Cierre: Datos Rompe Clave-->
                                     <!--(Editar)Datos Rompe Clave-->
-                                    <div class="card-body rompeclave collapse" id="rompeclave_2">
+                                    <div class="card-body border-top rompeclave collapse" id="rompeclave_2">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
@@ -1078,8 +1078,8 @@
                             <div class="col-md-6">
                                 <!--Card Contraseña Personal-->
                                 <div class="card">
-                                    <div class="card-header d-flex align-items-center justify-content-between bg-info">
-                                        <h5 class="mb-0 text-white">Cambiar contraseña personal</h5>
+                                    <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                        <h5 class="mb-0 text-white">Cambie su Contraseña Personal</h5>
                                         <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
                                             <i class="feather icon-edit"></i>
                                         </button>
@@ -1136,14 +1136,14 @@
                             <div class="col-md-6">
                                 <!--Card Contraseña Confidencial-->
                                 <div class="card">
-                                    <div class="card-header d-flex align-items-center justify-content-between bg-danger">
+                                    <div class="card-body d-flex align-items-center justify-content-between bg-danger">
                                         <h5 class="mb-0 text-white">Cambie su Contraseña Confidencial</h5>
                                         <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".pass_confidencial" aria-expanded="false" aria-controls="pass_confidencial_1 pass_confidencial_2">
                                             <i class="feather icon-edit"></i>
                                         </button>
                                     </div>
                                     <!--Contraseña Confidencial-->
-                                    <div class="card-body pass_confidencial collapse show" id="pass_confidencial_1">
+                                    <div class="card-body border-top pass_confidencial collapse show" id="pass_confidencial_1">
                                         <form>
                                             <div class="form-group row">
                                                 <label class="col-sm-5 col-form-label font-weight-bolder">Contraseña
@@ -1154,7 +1154,7 @@
                                     </div>
                                     <!--Cierre: Contraseña Confidencial-->
                                     <!--(Editar)Contraseña Confidencial-->
-                                    <div class="card-body pass_confidencial collapse" id="pass_confidencial_2">
+                                    <div class="card-body border-top pass_confidencial collapse" id="pass_confidencial_2">
                                         <form>
                                             <div class="form-group row">
                                                 <label class="col-sm-5 col-form-label font-weight-bolder">Contraseña
@@ -1180,9 +1180,9 @@
                                             <div class="form-group row">
                                                 <label class="col-sm-12 col-form-label"></label>
                                                 <div class="col-sm-12 d-flex justify-content-end">
-                                                    <button type="submit" class="btn btn-danger btn-sm mr-2">Cancelar</button>
-                                                    <button type="submit" class="btn btn-info btn-sm">Guardar
-                                                        cambios</button>
+                                                    <button type="submit" class="btn btn-danger mr-2">Cancelar</button>
+                                                    <button type="submit" class="btn btn-info">Guardar
+                                                        Cambios</button>
                                                 </div>
                                             </div>
                                         </form>

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\LogLogUsersDevices;
 use App\Models\LogUsersDevices;
 use Illuminate\Http\Request;
-use App\Helpers\Funciones;
 
 class LogUsersDevicesController extends Controller
 {

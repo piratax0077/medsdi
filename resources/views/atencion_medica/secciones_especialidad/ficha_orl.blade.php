@@ -865,14 +865,10 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
                                     </div>
-
                                 </div>
                             </div>
                             {{--  div de botones  --}}
-
                             <div class="bg-white shadow-none rounded mx-1 p-15">
                                 <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
                                 @include('atencion_medica.generales.seccion_receta_examen_comunes')
@@ -881,9 +877,7 @@
                                 <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
                                 @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')
                                 <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD FIN  -->
-
                                 <hr>
-
                                 <!--GUARDAR O IMPRIMIR FICHA-->
                                 <div class="row mb-3">
                                     <div class="col-md-12 text-center">
@@ -894,7 +888,6 @@
                             </div>
                         </div>
                         <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
-
                         <!--INFORME RINOFIBROLARINGOSCOPÍA-->
                         <div class="tab-pane fade" id="rinofibro" role="tabpanel" aria-labelledby="rinofibro-tab">
                             <div class="row bg-white shadow-none rounded mx-1">
@@ -906,7 +899,7 @@
                                         </div>
                                     </div>
                                     {!! $examen !!}
-                                    {{--
+
                                     <div class="row">
                                         <!--Motivo examen-->
                                         <div class="col-md-12">
@@ -922,13 +915,12 @@
                                                             <div class="form-group col-md-2" >
                                                                 <input type="hidden" name="id_profesional_solicitado_por" id="id_profesional_solicitado_por" value="">
                                                                 <label class="floating-label-activo-sm">RUT</label>
-                                                                <input type="text" class="form-control form-control-sm" name="solicitado_rut_rfl" id="solicitado_rut_rfl" onblur="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');" onchange="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');" onkeyup="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');">
+                                                                <input type="text" class="form-control form-control-sm" name="solicitado_por_rut_rfl" id="solicitado_por_rut_rfl" onblur="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');" onchange="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');" onkeyup="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');">
                                                             </div>
                                                             <div class="form-group col-md-2" >
                                                                 <label class="floating-label-activo-sm">Solicitado por</label>
                                                                 <input type="text" class="form-control form-control-sm" name="solicitado_por_rfl" id="solicitado_por_rfl" readonly="readonly">
                                                             </div>
-
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Motivo del Examen</label>
                                                                 <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_consulta_orl" name="descripcion_examen_rfl" id="descripcion_examen_rfl" onchange="cargarIgual('descripcion_examen_rfl');">
@@ -937,13 +929,11 @@
                                                                 <label class="floating-label-activo-sm">Antecedentes Especialidad</label>
                                                                 <input type="text" class="form-control form-control-sm" data-input_igual="antec_especialidad"  name="antec_especialidad_rfl" id="antec_especialidad_rfl" onchange="cargarIgual('antec_especialidad_rfl');">
                                                             </div>
-
                                                             <div class="form-group col-md-12" id="div_mensaje"  style="display: none;">
                                                                 <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por"></span>
                                                             </div>
                                                         </div>
                                                         <div class="row" id="div_profesional_no_inscrito" style="display: none;">
-
                                                             <div class="form-group col-md-3">
                                                                 <label class="floating-label-activo-sm">Nombre</label>
                                                                 <input type="text" class="form-control form-control-sm"  name="solicitado_por_nombre_rfl" id="solicitado_por_nombre_rfl" onchange="actualizar_solicitado_por('solicitado_por_rfl', 'solicitado_por_nombre_rfl', 'solicitado_por_apellido_rfl');">
@@ -960,7 +950,6 @@
                                                                 <label class="floating-label-activo-sm">Email</label>
                                                                 <input type="text" class="form-control form-control-sm"  name="solicitado_por_email_rfl" id="solicitado_por_email_rfl" >
                                                             </div>
-
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1068,7 +1057,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!--IMAGENES-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
@@ -1088,7 +1076,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!--INFO-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
@@ -1109,7 +1096,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!--DIAGNÓSTICO-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
@@ -1134,12 +1120,9 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
-                                    --}}
                                 </div>
                                 <hr>
-
                                 <!--GUARDAR EXAMEN-->
                                 <div class="col-md-12 text-center mb-3">
                                     <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
@@ -1161,7 +1144,7 @@
         $(document).ready(function() {
 
             /* formatear rut */
-            $("#solicitado_rut_rfl").rut({
+            $("#solicitado_por_rut_rfl").rut({
                 formatOn: 'keyup',
                 minimumLength: 2,
                 validateOn: 'change',

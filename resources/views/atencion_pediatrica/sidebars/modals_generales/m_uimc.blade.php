@@ -62,35 +62,36 @@
 							<input type="text" class="form-control" name="leyenda" id="leyenda" size="50" maxlength="140" aria-multiline="True" contenteditable="true" style="background-color: #FFFFFF;text-align:center;color:red">
 						</div>
 					</div>
-				</form>								
-			</div>					
+				</form>
+			</div>
 		</div>
 	</div>
 	<script type="text/javascript">
-   
-		function calculaIMC() {
-    
+
+		function calculaIMC()
+        {
+
 			var peso, altura, imc, leyenda;
- 
+
 			peso = document.getElementById("peso").value;
 			altura = document.getElementById("altura").value / 100;
-       
+
 			imc = peso / (altura * altura);
-           
+
 			document.getElementById("imc").value = imc.toFixed(2);
-          
+
 			if (imc <= 20.5) {
-              
+
 				leyenda = "Está delgado. debe engordar " + (altura * altura * 20.5 - peso).toFixed(1) + " kilos";
 			}
 			else if (imc >= 25.5) {
-               
+
 				leyenda = "Tiene sobrepeso. debe adelgazar " + (peso - altura * altura * 25.5).toFixed(1) + " kilos";
 			}
 			else {
 				leyenda = "Esta en  peso ideal";
 			}
-            
+
 			document.getElementById("leyenda").value = leyenda;
 		}
 	</script>

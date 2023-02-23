@@ -28,7 +28,10 @@
 
 
     <!-- fileupload-custom css -->
-    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}?t={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
+    <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
+
+
 
     <!--Accordion-->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
@@ -80,9 +83,7 @@
     @include('atencion_medica.secciones_especialidad.ficha_uro_tipo')
 
     <!-- Modal de la vista fin -->
-    <footer>
-        {{--  @include('template.include.footer')  --}}
-    </footer>
+
 
 
     <!-- Required Js -->
@@ -136,7 +137,8 @@
     <script src="{{ asset('js/check_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!-- file-upload Js -->
-    <script src="{{ asset('js/plugins/dropzone-amd-module.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
+    <!-- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script> -->
 
     <!-- mensajes -->
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
@@ -175,6 +177,3 @@
     @yield('page-script-med-exa') {{--  seccion receta y exmaenes --}}
     @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
     @yield('js-sidebar') {{-- seccion js side bar --}}
-</body>
-
-</html>

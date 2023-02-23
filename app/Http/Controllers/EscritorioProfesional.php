@@ -25,7 +25,11 @@ use App\Models\FichaAtencion;
 use App\Models\FichaCirugiaDigestivaTipo;
 use App\Models\FichaCirugiaGeneral;
 use App\Models\FichaCirugiaGeneralTipo;
+use App\Models\FichaOftBiomicroscopiaTipo;
+use App\Models\FichaOftFondoOjoTipo;
+use App\Models\FichaOftTipo;
 use App\Models\FichaOtorrinoTipo;
+use App\Models\FichaUroTipo;
 use App\Models\GrupoSanguineo;
 use App\Models\Hipertension;
 use App\Models\HoraMedica;
@@ -2869,6 +2873,14 @@ class EscritorioProfesional extends Controller
         $ficha_tipo->ind_esp_cirugia = $request->ind_esp_cirugia;
         $ficha_tipo->dolor_cdg = $request->dolor_cdg;
         $ficha_tipo->obs_dolor_cdg = $request->obs_dolor_cdg;
+
+        $ficha_tipo->transito_intest = $request->transito_intest;
+        $ficha_tipo->obs_transito_intest = $request->obs_transito_intest;
+        $ficha_tipo->dolor_def = $request->dolor_def;
+        $ficha_tipo->obs_dolor_def = $request->obs_dolor_def;
+        $ficha_tipo->sangre_otros = $request->sangre_otros;
+        $ficha_tipo->obs_sangre_otros = $request->obs_sangre_otros;
+
         $ficha_tipo->otros_sintomas_cdg = $request->otros_sintomas_cdg;
         $ficha_tipo->obs_otros_sintomas_cdg = $request->obs_otros_sintomas_cdg;
         $ficha_tipo->ceg_cdg = $request->ceg_cdg;
@@ -2982,4 +2994,320 @@ class EscritorioProfesional extends Controller
         return $datos;
     }
     /** CIERRE FICHA CIRUGIA GENERAL TIPO */
+
+
+    /**************** FICHA TIPO OFTALMOLOGIA ******************** */
+    /** FICHA OFTALMOLOGIA GENERAL TIPO */
+    public function agregarFichaTipoOft(Request $request)
+    {
+        $datos = array();
+        $ficha_tipo = new FichaOftTipo();
+        $ficha_tipo->nombre = $request->nombre;
+        $ficha_tipo->descripcion = $request->descripcion;
+        $ficha_tipo->id_profesional = $request->id_profesional;
+
+        $ficha_tipo->agudeza_visual_subj_od = $request->agudeza_visual_subj_od;
+        $ficha_tipo->obs_agudeza_visual_subj_od = $request->obs_agudeza_visual_subj_od;
+        $ficha_tipo->agudeza_visual_subj_oi = $request->agudeza_visual_subj_oi;
+        $ficha_tipo->obs_agudeza_visual_subj_oi = $request->obs_agudeza_visual_subj_oi;
+        $ficha_tipo->agudeza_visual_obj_od = $request->agudeza_visual_obj_od;
+        $ficha_tipo->obs_agudeza_visual_obj_od = $request->obs_agudeza_visual_obj_od;
+        $ficha_tipo->agudeza_visual_obj_oi = $request->agudeza_visual_obj_oi;
+        $ficha_tipo->obs_agudeza_visual_obj_oi = $request->obs_agudeza_visual_obj_oi;
+        $ficha_tipo->mov_oculares = $request->mov_oculares;
+        $ficha_tipo->obs_mov_oculares = $request->obs_mov_oculares;
+        $ficha_tipo->autorefracto_od = $request->autorefracto_od;
+        $ficha_tipo->obs_autorefracto_od = $request->obs_autorefracto_od;
+        $ficha_tipo->autorefracto_oi = $request->autorefracto_oi;
+        $ficha_tipo->obs_autorefracto_oi = $request->obs_autorefracto_oi;
+        $ficha_tipo->presion_ocular_od = $request->presion_ocular_od;
+        $ficha_tipo->obs_presion_ocular_od = $request->obs_presion_ocular_od;
+        $ficha_tipo->valor_presion_ocular_od = $request->valor_presion_ocular_od;
+        $ficha_tipo->presion_ocular_oi = $request->presion_ocular_oi;
+        $ficha_tipo->obs_presion_ocular_oi = $request->obs_presion_ocular_oi;
+        $ficha_tipo->valor_presion_ocular_oi = $request->valor_presion_ocular_oi;
+        $ficha_tipo->campo_visual_od = $request->campo_visual_od;
+        $ficha_tipo->obs_campo_visual_od = $request->obs_campo_visual_od;
+        $ficha_tipo->campo_visual_oi = $request->campo_visual_oi;
+        $ficha_tipo->obs_campo_visual_oi = $request->obs_campo_visual_oi;
+        $ficha_tipo->campo_otros_ex_general = $request->campo_otros_ex_general;
+        $ficha_tipo->otro = $request->otro;
+        $ficha_tipo->otro2 = $request->otro2;
+
+        $ficha_tipo->estado = 1;
+
+
+        if($ficha_tipo->save())
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro exitoso';
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro NO exitoso';
+        }
+        return $datos;
+    }
+
+    public function buscarFichaTipoOft(Request $request)
+    {
+        $datos = array();
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $registro = FichaOftTipo::where('id_profesional',$profesional->id)->where('id',$request->id_ficha_tipo)->first();
+
+        if($registro)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registro;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
+        }
+
+        return $datos;
+    }
+    /** CIERRE FICHA OFTALMOLOGIA GENERAL TIPO */
+
+    /** EXAMEN EXAMEN BIOMICROSCOPIA TIPO */
+    public function agregarFichaTipoOftBio(Request $request)
+    {
+        $datos = array();
+        $ficha_tipo = new FichaOftBiomicroscopiaTipo();
+        $ficha_tipo->nombre = $request->nombre;
+        $ficha_tipo->descripcion = $request->descripcion;
+        $ficha_tipo->id_profesional = $request->id_profesional;
+
+        $ficha_tipo->parpbiood = $request->parpbiood;
+        $ficha_tipo->obs_parpbiood = $request->obs_parpbiood;
+        $ficha_tipo->conjuntiva_bio_od = $request->conjuntiva_bio_od;
+        $ficha_tipo->obs_conjuntiva_bio_od = $request->obs_conjuntiva_bio_od;
+        $ficha_tipo->biocornea_od = $request->biocornea_od;
+        $ficha_tipo->obs_biocornea_od = $request->obs_biocornea_od;
+        $ficha_tipo->camara_ant_od = $request->camara_ant_od;
+        $ficha_tipo->obs_camara_ant_od = $request->obs_camara_ant_od;
+        $ficha_tipo->tyndall_od = $request->tyndall_od;
+        $ficha_tipo->obs_tyndall_od = $request->obs_tyndall_od;
+        $ficha_tipo->cristalino_bio_od = $request->cristalino_bio_od;
+        $ficha_tipo->obs_cristalino_bio_od = $request->obs_cristalino_bio_od;
+        $ficha_tipo->campo_otros_bio_od = $request->campo_otros_bio_od;
+        $ficha_tipo->parpbiooi = $request->parpbiooi;
+        $ficha_tipo->obs_parpbiooi = $request->obs_parpbiooi;
+        $ficha_tipo->conjuntiva_bio_oi = $request->conjuntiva_bio_oi;
+        $ficha_tipo->obs_conjuntiva_bio_oi = $request->obs_conjuntiva_bio_oi;
+        $ficha_tipo->biocornea_oi = $request->biocornea_oi;
+        $ficha_tipo->obs_biocornea_oi = $request->obs_biocornea_oi;
+        $ficha_tipo->camara_ant_oi = $request->camara_ant_oi;
+        $ficha_tipo->obs_camara_ant_oi = $request->obs_camara_ant_oi;
+        $ficha_tipo->tyndall_oi = $request->tyndall_oi;
+        $ficha_tipo->obs_tyndall_oi = $request->obs_tyndall_oi;
+        $ficha_tipo->cristalino_bio_oi = $request->cristalino_bio_oi;
+        $ficha_tipo->obs_cristalino_bio_oi = $request->obs_cristalino_bio_oi;
+        $ficha_tipo->campo_otros_bio_oi = $request->campo_otros_bio_oi;
+        $ficha_tipo->otro = $request->otro;
+        $ficha_tipo->otro2 = $request->otro2;
+
+        $ficha_tipo->estado = 1;
+
+        if($ficha_tipo->save())
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro exitoso';
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro NO exitoso';
+        }
+        return $datos;
+    }
+
+    public function buscarFichaTipoOftBio(Request $request)
+    {
+        $datos = array();
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $registro = FichaOftBiomicroscopiaTipo::where('id_profesional',$profesional->id)->where('id',$request->id_ficha_tipo)->first();
+
+        if($registro)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registro;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
+        }
+
+        return $datos;
+    }
+    /** CIERRE EXAMEN EXAMEN BIOMICROSCOPIA TIPO */
+
+    /** EXAMEN FONDO DE OJO TIPO */
+    public function agregarFichaTipoOftFondo(Request $request)
+    {
+        $datos = array();
+        $ficha_tipo = new FichaOftFondoOjoTipo();
+        $ficha_tipo->nombre = $request->nombre;
+        $ficha_tipo->descripcion = $request->descripcion;
+        $ficha_tipo->id_profesional = $request->id_profesional;
+
+        $ficha_tipo->papilas_fo_od = $request->papilas_fo_od;
+        $ficha_tipo->obs_papilas_fo_od = $request->obs_papilas_fo_od;
+        $ficha_tipo->excavacion_fo_od = $request->excavacion_fo_od;
+        $ficha_tipo->obs_excavacion_fo_od = $request->obs_excavacion_fo_od;
+        $ficha_tipo->bordes_od = $request->bordes_od;
+        $ficha_tipo->obs_bordes_od = $request->obs_bordes_od;
+        $ficha_tipo->maculas_fo_od = $request->maculas_fo_od;
+        $ficha_tipo->obs_maculas_fo_od = $request->obs_maculas_fo_od;
+        $ficha_tipo->vasos_fo_od = $request->vasos_fo_od;
+        $ficha_tipo->obs_vasos_fo_od = $request->obs_vasos_fo_od;
+        $ficha_tipo->periferia_fo_od = $request->periferia_fo_od;
+        $ficha_tipo->obs_periferia_fo_od = $request->obs_periferia_fo_od;
+        $ficha_tipo->campo_fo_otros_od = $request->campo_fo_otros_od;
+        $ficha_tipo->papilas_fo_oi = $request->papilas_fo_oi;
+        $ficha_tipo->obs_papilas_fo_oi = $request->obs_papilas_fo_oi;
+        $ficha_tipo->excavacion_fo_oi = $request->excavacion_fo_oi;
+        $ficha_tipo->obs_excavacion_fo_oi = $request->obs_excavacion_fo_oi;
+        $ficha_tipo->bordes_oi = $request->bordes_oi;
+        $ficha_tipo->obs_bordes_oi = $request->obs_bordes_oi;
+        $ficha_tipo->maculas_fo_oi = $request->maculas_fo_oi;
+        $ficha_tipo->obs_maculas_fo_oi = $request->obs_maculas_fo_oi;
+        $ficha_tipo->vasos_fo_oi = $request->vasos_fo_oi;
+        $ficha_tipo->obs_vasos_fo_oi = $request->obs_vasos_fo_oi;
+        $ficha_tipo->periferia_fo_oi = $request->periferia_fo_oi;
+        $ficha_tipo->obs_periferia_fo_oi = $request->obs_periferia_fo_oi;
+        $ficha_tipo->campo_fo_otros_oi = $request->campo_fo_otros_oi;
+        $ficha_tipo->otro = $request->otro;
+        $ficha_tipo->otro2 = $request->otro2;
+
+        $ficha_tipo->estado = 1;
+
+        if($ficha_tipo->save())
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro exitoso';
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro NO exitoso';
+        }
+        return $datos;
+    }
+
+    public function buscarFichaTipoOftFondo(Request $request)
+    {
+        $datos = array();
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $registro = FichaOftFondoOjoTipo::where('id_profesional',$profesional->id)->where('id',$request->id_ficha_tipo)->first();
+
+        if($registro)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registro;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
+        }
+
+        return $datos;
+    }
+    /** CIERRE EXAMEN FONDO DE OJO TIPO */
+    /**************** CIERRE FICHA TIPO OFTALMOLOGIA ******************** */
+
+     /**************** FICHA TIPO UROLOGIA ******************** */
+    /** FICHA UROLOGIA GENERAL TIPO */
+    public function agregarFichaTipoUro(Request $request)
+    {
+        $datos = array();
+        $ficha_tipo = new FichaUroTipo();
+        $ficha_tipo->nombre = $request->nombre;
+        $ficha_tipo->descripcion = $request->descripcion;
+        $ficha_tipo->id_profesional = $request->id_profesional;
+
+        $ficha_tipo->costo_vert_ld = $request->costo_vert_ld;
+        $ficha_tipo->obs_costo_vert_ld = $request->obs_costo_vert_ld;
+        $ficha_tipo->costo_vert_li = $request->costo_vert_li;
+        $ficha_tipo->obs_costo_vert_li = $request->obs_costo_vert_li;
+        $ficha_tipo->examen_abd = $request->examen_abd;
+        $ficha_tipo->obs_examen_abd = $request->obs_examen_abd;
+        $ficha_tipo->tacto_rec = $request->tacto_rec;
+        $ficha_tipo->obs_tacto_rec = $request->obs_tacto_rec;
+        $ficha_tipo->antigeno_prost = $request->antigeno_prost;
+        $ficha_tipo->obs_antigeno_prost = $request->obs_antigeno_prost;
+        $ficha_tipo->biopsia_uro = $request->biopsia_uro;
+        $ficha_tipo->obs_biopsia_uro = $request->obs_biopsia_uro;
+        $ficha_tipo->ingle = $request->ingle;
+        $ficha_tipo->obs_detalle_ingle = $request->obs_detalle_ingle;
+        $ficha_tipo->habitos_micionales = $request->habitos_micionales;
+        $ficha_tipo->obs_habitos_micionales = $request->obs_habitos_micionales;
+        $ficha_tipo->funcion_pene = $request->funcion_pene;
+        $ficha_tipo->obs_funcion_pene = $request->obs_funcion_pene;
+        $ficha_tipo->sintomas_funcionales = $request->sintomas_funcionales;
+        $ficha_tipo->obs_sintomas_funcionales = $request->obs_sintomas_funcionales;
+        $ficha_tipo->uretra_masc = $request->uretra_masc;
+        $ficha_tipo->obs_detalle_uretra_masc = $request->obs_detalle_uretra_masc;
+        $ficha_tipo->examen_pene = $request->examen_pene;
+        $ficha_tipo->obs_pene_anormal = $request->obs_pene_anormal;
+        $ficha_tipo->examen_test = $request->examen_test;
+        $ficha_tipo->obs_test_anormal = $request->obs_test_anormal;
+        $ficha_tipo->vulva = $request->vulva;
+        $ficha_tipo->obs_det_vulva = $request->obs_det_vulva;
+        $ficha_tipo->vagina = $request->vagina;
+        $ficha_tipo->obs_det_vagina = $request->obs_det_vagina;
+        $ficha_tipo->examen_horm = $request->examen_horm;
+        $ficha_tipo->obs_examen_horm = $request->obs_examen_horm;
+        $ficha_tipo->obs_ex_uro = $request->obs_ex_uro;
+
+
+        if($ficha_tipo->save())
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro exitoso';
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro NO exitoso';
+        }
+        return $datos;
+    }
+
+    public function buscarFichaTipoUro(Request $request)
+    {
+        $datos = array();
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $registro = FichaUroTipo::where('id_profesional',$profesional->id)->where('id',$request->id_ficha_tipo)->first();
+
+        if($registro)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registro;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
+        }
+
+        return $datos;
+    }
+    /** CIERRE FICHA UROLOGIA GENERAL TIPO */
 }

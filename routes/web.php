@@ -436,6 +436,21 @@ Route::group([
     Route::post('/profesional/agregar_ficha_tipo_cdg', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoCDG'])->name('profesional.ficha_tipo_cdg');
 	Route::get('/profesional/buscar_ficha_tipo_cdg', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoCDG'])->name('profesional.buscar_ficha_tipo_cdg');
 
+    /** REGISTRO DE FICHA TIPO OFTALMOLOGIA */
+    /** EXAMEN ESPACIALIDAD */
+    Route::post('/profesional/agregar_ficha_tipo_oft', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoOft'])->name('profesional.ficha_tipo_oft');
+	Route::get('/profesional/buscar_ficha_tipo_oft', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoOft'])->name('profesional.buscar_ficha_tipo_oft');
+    /** EXAMEN BIOMICROSCOPIA */
+    Route::post('/profesional/agregar_ficha_tipo_oft_bio', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoOftBio'])->name('profesional.ficha_tipo_oft_bio');
+	Route::get('/profesional/buscar_ficha_tipo_oft_bio', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoOftBio'])->name('profesional.buscar_ficha_tipo_oft_bio');
+    /** EXAMEN FONDO DE OJO */
+    Route::post('/profesional/agregar_ficha_tipo_oft_fondo_ojo', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoOftFondo'])->name('profesional.ficha_tipo_oft_fondo_ojo');
+    Route::get('/profesional/buscar_ficha_tipo_oft_fondo_ojo', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoOftFondo'])->name('profesional.buscar_ficha_tipo_oft_fondo_ojo');
+
+    /** REGISTRO DE FICHA TIPO URO UROLOGIA */
+    Route::post('/profesional/agregar_ficha_tipo_uro', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoUro'])->name('profesional.ficha_tipo_uro');
+	Route::get('/profesional/buscar_ficha_tipo_uro', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoUro'])->name('profesional.buscar_ficha_tipo_uro');
+
     /** REGISTRO DE FICHA TIPO CDG CIRUGIA GENERAL */
     Route::post('/profesional/agregar_ficha_tipo_cg', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoCG'])->name('profesional.ficha_tipo_cg');
 	Route::get('/profesional/buscar_ficha_tipo_cg', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoCG'])->name('profesional.buscar_ficha_tipo_cg');
@@ -696,6 +711,9 @@ Route::group([
 
     Route::post('Ficha_Atencion/crear', [ficha_atencionController::class, 'store'])->name('fichaAtencion.registrar_ficha');
 	Route::post('Ficha_Atencion/crear/orl', [ficha_atencionController::class, 'store_orl'])->name('fichaAtencion.registrar_ficha_orl');
+    Route::post('Ficha_Atencion/crear/cdg', [ficha_atencionController::class, 'store_cdg'])->name('fichaAtencion.registrar_ficha_cdg');
+    Route::post('Ficha_Atencion/crear/uro', [ficha_atencionController::class, 'store_uro'])->name('fichaAtencion.registrar_ficha_uro');
+	Route::post('Ficha_Atencion/crear/oft', [ficha_atencionController::class, 'store_oft'])->name('fichaAtencion.registrar_ficha_oft');
     //Route::post('Ficha_atencion/Registro_ficha', [ficha_atencionController::class, 'store'])->name('crear.ficha_atencion');
 
     Route::post('/getArticulo', [ficha_atencionController::class, 'getArticulo'])->name('ficha_medica.getArticulo');
@@ -1065,9 +1083,6 @@ Route::get('/hora/atencion/cancelacion', [App\Http\Controllers\ConfirmacionHoraC
 
 
 Route::get('/img/mover', [App\Http\Controllers\CargaImagenController::class, 'moverImagen_r'])->name('img.mover');
-
-
-Route::get('/examen_especialidad/json', [App\Http\Controllers\ExamenEspecialidadController::class, 'estructurajson_r']);
 
 
 

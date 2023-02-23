@@ -9,7 +9,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis recetas</h5>
+                                <h5 class="m-b-10 font-weight-bold">Mis Recetas</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip"
@@ -28,14 +28,21 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h6 class="f-20 text-c-blue">Mis recetas</h6>
-                            </div>
                         <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4 class="text-c-blue f-22 d-inline ml-4 my-1 py-1">Mis Recetas</h4>
+                                    <!--<button type="button" class="btn btn-success btn-sm d-inline float-right mr-4 my-1"
+                                        data-toggle="modal" data-target="#agregar_receta_profesional_ro">
+                                        <i class="feather icon-plus"></i> Agregar receta
+                                    </button>-->
+                                </div>
+                            </div>
+                            <hr>
                             <div class="row">
                                 <div class="col-sm-6 col-md-12">
                                     <table id="tabla_recetas_profesional_ro"
-                                        class="display table table-striped dt-responsive nowrap table-xs"
+                                        class="display table table-striped table-hover dt-responsive nowrap table-sm"
                                         style="width:100%">
                                         <thead>
                                             <tr>

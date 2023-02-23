@@ -12,13 +12,13 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis pacientes</h5>
+                                <h5 class="m-b-10 font-weight-bold">Mis Pacientes</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip"
                                         data-placement="top" title="Volver a mi escritorio"><i
                                             class="feather icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="#">Mis pacientes </a></li>
+                                <li class="breadcrumb-item"><a href="#">Mis Pacientes </a></li>
                             </ul>
                         </div>
                     </div>
@@ -33,10 +33,10 @@
                     <div class="card-header text-center bg-info">
                         <div class="row">
                             <div class="col-md-12 align-botton">
-                                <h4 class="text-white f-20 d-inline ml-4 mt-1 float-left">Mis pacientes</h4>
+                                <h4 class="text-white f-20 d-inline ml-4 mt-1 float-left">Mis Pacientes</h4>
                                 {{-- <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4"
                                     data-toggle="modal" data-target="#agregar_paciente_profesional">
-                                    <i class="feather icon-plus"></i> Registrar paciente
+                                    <i class="feather icon-plus"></i> Registrar Paciente
                                 </button>--}}
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                             <div class="col-md-12 mb-3">
                             </div>
                         </div>
-                        <table id="res-config" class="display table table-striped dt-responsive nowrap table-xs"
+                        <table id="res-config" class="display table table-striped table-hover dt-responsive nowrap table-sm"
                             style="width:100%">
                             <thead>
                                 <tr>
@@ -119,7 +119,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Registrar paciente</h5>
+                    <h5 class="modal-title text-white text-center">Registrar Paciente</h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">×</span></button>
                 </div>
@@ -137,9 +137,11 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
+
                                     <label class="floating-label">Rut</label>
-                                    <input type="text" class="form-control form-control-sm" name="rut_paciente_agregar"
+                                    <input type="text" class="form-control" name="rut_paciente_agregar"
                                         id="rut_paciente_agregar" required>
+
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-12">
