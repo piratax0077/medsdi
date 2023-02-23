@@ -40,8 +40,18 @@
                             </div>
                         </a>
                     </div>
+                    <!--
                     <div class="card subir">
                         <a href="{{ ROUTE('paciente.mi_ficha') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center" src="{{ asset('images/iconos/fmu.svg') }}">
+                                <h5 class="mt-1"> Mi Ficha Médica Única </h5>
+                            </div>
+                        </a>
+                    </div>
+                    -->
+                    <div class="card subir">
+                        <a href="{{ ROUTE('check_sdi') }}?urla=Inicio&urln=Mi_Ficha_Medica">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center" src="{{ asset('images/iconos/fmu.svg') }}">
                                 <h5 class="mt-1"> Mi Ficha Médica Única </h5>

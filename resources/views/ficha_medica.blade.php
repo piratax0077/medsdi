@@ -55,8 +55,8 @@
                 -->
                 </ul>
                 <form class="d-flex">                
-                <button class="btn btn-outline-success mr-1" onclick="window.open('Mi_Ficha_Medica_Pdf?funcionalidad=D')">DOWNLOAD FICHA</button>
-                <button class="btn btn-outline-success" onclick="window.open('Mi_Ficha_Medica_Pdf?funcionalidad=V')">IMPRIMIR FICHA</button>
+                <a class="btn btn-outline-success mr-1" href="Mi_Ficha_Medica_Pdf?token={{$token}}&funcionalidad=D" target="_blank">DOWNLOAD FICHA</a>
+                <a class="btn btn-outline-success" href="Mi_Ficha_Medica_Pdf?token={{$token}}&funcionalidad=V" target="_blank">IMPRIMIR FICHA</a>
                 </form>
             </div>
         </nav>

@@ -40,7 +40,8 @@
 						<li><a href="{{ ROUTE('paciente.home') }}">Mi Escritorio Paciente</a></li>
 						<li><a href="{{ ROUTE('paciente.agendar_hora') }}">Reservar Hora Médica</a></li>
 						<li><a href="{{ ROUTE('paciente.mis_profesionales') }}">Mis Médicos</a></li>
-						<li><a href="{{ ROUTE('paciente.mi_ficha') }}">Mi Ficha Médica Única</a></li>
+						<!--<li><a href="{{ ROUTE('paciente.mi_ficha') }}">Mi Ficha Médica Única</a></li>-->
+						<li><a href="{{ ROUTE('check_sdi') }}?urla=Inicio&urln=Mi_Ficha_Medica">Mi Ficha Médica Única</a></li>
 						<li><a href="{{ ROUTE('paciente.receta') }}">Receta Online</a></li>
 						<li><a href="{{ ROUTE('paciente.receta.examen') }}">Mis Exámenes</a>
 						</li>

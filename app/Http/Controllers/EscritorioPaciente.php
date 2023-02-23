@@ -36,6 +36,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
+use App\Helpers\Funciones;
+
 class EscritorioPaciente extends Controller
 {
 
@@ -167,8 +169,50 @@ class EscritorioPaciente extends Controller
         return view('app.paciente.medicos_paciente', ['profesional' => $profesional]);
     }
 
-    public function miFichaMedica()
+    public function checkSdi(Request $request)
     {
+        $url_anterior = $request->urla;
+        $url_nueva = $request->urln;
+
+        $id_usuario = Auth::user()->id;
+
+        $id_user_create = $id_usuario;
+        $id_user_recept = $id_usuario;
+        $evento = 'Ficha Única';
+        $nombre = Auth::user()->name;
+        $apellido_p = '';
+        $apellido_m = '';
+        $lugar = 'Sistema';
+        $profesional = Auth::user()->name;
+        $tipo = 'Check SDI';
+
+        if($request->token)
+        {
+            Funciones::disablePermApp($request->token);        
+        }
+
+        $permiso = Funciones::generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo);        
+
+        return view('check_sdi', [
+            'url_nueva' => $url_nueva,
+            'url_anterior' => $url_anterior,
+            'token' => $permiso['app']['token'],
+            'fecha_termino' => $permiso['app']['fecha_termino']
+        ]);
+    }
+
+    public function checkSdiToken(Request $request){       
+        $state = Funciones::checkStatePermApp($request->token);        
+
+        return $state;
+    }
+
+    public function miFichaMedica(Request $request)
+    {
+        //VALIDAR TOKEN
+        Funciones::validTokenPermApp($request->token); 
+        
+
         $id_usuario = Auth::user()->id;
 
         /* PACIENTE */
@@ -190,7 +234,7 @@ class EscritorioPaciente extends Controller
         
         if(is_object($pacientes_contacto_emergencia))
         {
-            $contacto_emergencia = ContactosEmergencia::where('id',$pacientes_contacto_emergencia->id_contacto);
+            $contacto_emergencia = ContactoEmergencia::find($pacientes_contacto_emergencia->id_contacto);
 
             list($ano,$mes,$dia) = explode("-",$paciente->fecha_nac);
             $ano_diferencia  = date("Y") - $ano;
@@ -268,7 +312,8 @@ class EscritorioPaciente extends Controller
             'contacto_emergencia' => $contacto_emergencia,
             'antecedentes_paciente' => $antecedentes_paciente,
             'grupo_sanguineo' => $grupo_sanguineo,
-            'antecedentes' => $antecedentes
+            'antecedentes' => $antecedentes,
+            'token' => $request->token
 
         ]);
     }
@@ -296,7 +341,7 @@ class EscritorioPaciente extends Controller
         
         if(is_object($pacientes_contacto_emergencia))
         {
-            $contacto_emergencia = ContactosEmergencia::where('id',$pacientes_contacto_emergencia->id_contacto);
+            $contacto_emergencia = ContactoEmergencia::find($pacientes_contacto_emergencia->id_contacto);
 
             list($ano,$mes,$dia) = explode("-",$paciente->fecha_nac);
             $ano_diferencia  = date("Y") - $ano;
@@ -374,7 +419,8 @@ class EscritorioPaciente extends Controller
             'contacto_emergencia' => $contacto_emergencia,
             'antecedentes_paciente' => $antecedentes_paciente,
             'grupo_sanguineo' => $grupo_sanguineo,
-            'antecedentes' => $antecedentes
+            'antecedentes' => $antecedentes,
+            'token' => $request->token
         );
         $nombre = 'ficha_medica_'.$id_usuario;
         $template = 'pdf_mi_ficha_medica';

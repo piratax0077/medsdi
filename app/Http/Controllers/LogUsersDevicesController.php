@@ -471,6 +471,34 @@ class LogUsersDevicesController extends Controller
         return response($datos)->header('Content-Type', 'application/json');
     }
 
+    public function checkStateSol(){ // CRON CADA 1 MIN
+        
+        $registros = LogUsersDevices::where('estado',0)->get();
+
+        if($registros)
+        {
+            foreach($registros as $key => $value)
+            {
+                
+                $fecha_actual = date('Y-m-d H:i:s');
+                $fecha_exp = $value['fecha_exp'];
+                if($fecha_exp==null)
+                {
+                    $value->estado = 3;
+                    $value->save();
+                }else{
+                    $segundos = strtotime($fecha_exp) - strtotime($fecha_actual);
+                    if($segundos<0)
+                    {
+                        $value->estado = 3;
+                        $value->save();
+                    }
+                }
+            }
+        }
+
+    }
+
     public function genSolicitud(Request $request)
     {
         /* params generatePermApp() */ 

@@ -11,14 +11,74 @@ class Funciones{
      
     }
 
+    public function disablePermApp($token){
+        $datos = array();
+        $registro = LogUsersDevices::where('token',trim($token))->first();
+        if($registro->count() > 0)
+        {
+            $registro->estado = 3;
+            $registro->save();
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro encontrado';
+           
+        }else{
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registros no encontrados';
+        }
+
+        return $datos;
+    }
+
+    public function checkStatePermApp($token)
+    {
+        $datos = array();
+        $registro = LogUsersDevices::where('token',trim($token))->first();
+        if($registro)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro encontrado';
+            $datos['registro'] = $registro;
+            /* Fecha Exp */
+            $fechaInicial = $registro->fecha_ingreso;
+            $fechaFinal = $registro->fecha_termino;
+            $fechaExp = $registro->fecha_exp;
+            $segundos = strtotime($fechaExp) - strtotime($fechaInicial);
+            $datos['tiempo'] = $segundos;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['registro']['estado'] = 0;
+            $datos['msj'] = 'registros no encontrados';
+        }
+
+        return $datos;
+
+    }
+
+    public function validTokenPermApp($token)
+    {
+        if($token)
+        {
+            $state = Funciones::checkStatePermApp($token);   
+            if($state['registro']['estado'] != 1)
+            {
+             abort(401);
+            }
+        }else{
+            abort(401);
+        }
+    }
+
     public function generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo = 'confirmacion'){
 
+        $datos = array();
         /** calculo de periodo de vigencia para aprobacion */
         $fecha =date('Y-m-d');
         $hora = date('H:i:s');
         $fecha_actual  = date('Y-m-d H:i:s', strtotime($fecha.' '.$hora));
-        $fecha_vencimiento  = date ( 'Y-m-d H:i:s' ,strtotime ( '-'.env('TIEMPO_ESPERA_CONFIRMACION').' hours' , strtotime ($fecha_actual) ) );
-        $fecha_expira = date ( 'Y-m-d H:i:s' ,strtotime ( '-'.((int)env('TIEMPO_ESPERA_CONFIRMACION')+6).' hours' , strtotime ($fecha_actual) ) );
+        $fecha_vencimiento  = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.env('TIEMPO_ESPERA_CONFIRMACION').' hours' , strtotime ($fecha_actual) ) );
+        $fecha_expira = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.((int)env('TIEMPO_ESPERA_CONFIRMACION')+(int)env('TIEMPO_EXP_PERMISO')).' hours' , strtotime ($fecha_actual) ) );
 
         $id = LogUsersDevices::latest()->first();
         if(is_object($id)==false)
@@ -57,6 +117,7 @@ class Funciones{
             $datos['app']['fecha_exp'] = $fecha_expira;
             $datos['app']['tiempo'] = env('TIEMPO_ESPERA');
             $datos['app']['last_id'] = $log_users_devices->id;
+            $datos['app']['token'] = $log_users_devices->token;
 
         }
         else
