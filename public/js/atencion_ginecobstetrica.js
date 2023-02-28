@@ -1,29 +1,29 @@
 /** TABLAS **/
 /** Exámenes **/
-$(document).ready(function() {
-    $('#bandeja_entrada').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#bandeja_entrada').DataTable({
+//         responsive: true,
+//     });
+// });
 
-$(document).ready(function() {
-    $('#exam_radiologicos').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#exam_radiologicos').DataTable({
+//         responsive: true,
+//     });
+// });
 
-$(document).ready(function() {
-    $('#exam_general').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#exam_general').DataTable({
+//         responsive: true,
+//     });
+// });
 
 /** Atenciones previas **/
-$(document).ready(function() {
-    $('#aten_previas').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#aten_previas').DataTable({
+//         responsive: true,
+//     });
+// });
 
 /** MODALS **/
 /** MODALS FORMULARIOS GENERALES **/
@@ -73,17 +73,12 @@ function tunner() {
 
 /** PAP **/
 function ex_pap() {
-    $('#ex_pap_modal').modal('show');
+    $('#m_exesppap').modal('show');
 }
 
 /** Examen clínico de mamas **/
 function ex_mamas() {
-    $('#ex_mamas_modal').modal('show');
-}
-
-/** Factores de riesgo (embarazo) **/
-function riesgo_emb() {
-    $('#embarazoriesgo_modal').modal('show');
+    $('#modal_mamas').modal('show');
 }
 
 /** Factores de riesgo (embarazo) **/
@@ -98,7 +93,7 @@ function riesgo_emb() {
 
 /** Ecografía obstetrica **/
 function eco_obst() {
-    $('#eco_obst_modal').modal('show');
+    $('#ecoobstetrica_modal').modal('show');
 }
 
 /** Control diabetes **/
@@ -120,83 +115,83 @@ function control_aro3() {
 /** TABLAS DE MODALS **/
 /** Modal ciclo mentrual **/
 /** Menarquia **/
-$(document).ready(function() {
-    $('#menarquia_gt').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#menarquia_gt').DataTable({
+//         responsive: true,
+//     });
+// });
 
 /** Ciclo menstrual **/
-$(document).ready(function() {
-    $('#ciclo_menstrual_gt').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#ciclo_menstrual_gt').DataTable({
+//         responsive: true,
+//     });
+// });
 
 /** Modal método anticonceptivo
     /** Hormonales **/
-$(document).ready(function() {
-    $('#hormonales_gt').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#hormonales_gt').DataTable({
+//         responsive: true,
+//     });
+// });
 
 /** Mecánicos **/
-$(document).ready(function() {
-    $('#mecanicos_gt').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#mecanicos_gt').DataTable({
+//         responsive: true,
+//     });
+// });
 
 /** Modal antecedentes de embarazo y puerperio**/
-$(document).ready(function() {
-    $('#embarazo_gt').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#embarazo_gt').DataTable({
+//         responsive: true,
+//     });
+// });
 
 /** Modal antecedentes mamas**/
-$(document).ready(function() {
-    $('#ant_mamas_gt').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#ant_mamas_gt').DataTable({
+//         responsive: true,
+//     });
+// });
 
 /** Modal antecedentes hormonales**/
-$(document).ready(function() {
-    $('#ant_hormonales_gt').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#ant_hormonales_gt').DataTable({
+//         responsive: true,
+//     });
+// });
 
 /** Modal Tunner**/
-$(document).ready(function() {
-    $('#ev_tunner_gt').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#ev_tunner_gt').DataTable({
+//         responsive: true,
+//     });
+// });
 
 /** Modal riesgo embarazo**/
 /** Antecedentes progenitores**/
-$(document).ready(function() {
-    $('#ant_prog_gt').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#ant_prog_gt').DataTable({
+//         responsive: true,
+//     });
+// });
 
 /** Antecedentes factores de riesgo actual**/
-$(document).ready(function() {
-    $('#riesg_act_gt').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#riesg_act_gt').DataTable({
+//         responsive: true,
+//     });
+// });
 
 /** Antecedentes partos anteriores**/
-$(document).ready(function() {
-    $('#partos_ant_gt').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#partos_ant_gt').DataTable({
+//         responsive: true,
+//     });
+// });
 
 
 
@@ -335,3 +330,8 @@ $('#com_trasl_puerp').click(function() {
 $('#signos_vitales_puerp').click(function() {
     $('#form_3_puerp').toggle();
 });
+
+function abrir_div(nombre_div)
+{
+    $('#'+nombre_div).toggle();
+}

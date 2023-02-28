@@ -1,4 +1,4 @@
-@extends('template.pediatria.template_pediatria')
+@extends('template.pediatria.template_matrona_cns')
 @section('Content')
 
     <!--Container Completo-->
@@ -10,7 +10,7 @@
                     <div class="row align-items-center pb-2">
                         <div class="col-md-6">
                             <div class="page-header-title">
-                                <h5 class="text-white d-inline f-16 mt-1"><strong>CONTROL NIÑO SANO MATRONA</strong></h5>
+                                <h5 class="text-white d-inline f-16 mt-1"><strong>FICHA ATENCIÓN MATRONA</strong></h5>
                                 <p class="font-italic mt-0 mb-0 text-white">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -70,7 +70,7 @@
                     <div class="tab-content" id="at-oftalmo">
                         <!--Atender paciente-->
                         <div class="tab-pane fade show active" id="atender" role="tabpanel" aria-labelledby="atender-tab">
-                            @include('atencion_pediatrica.secciones_especialidad.control_nino_sano_matrona')
+                            @include('atencion_pediatrica.secciones_especialidad.ficha_matrona_cns')
                         </div>
                         <!--Licencia-->
                         <div class="tab-pane fade show" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
@@ -116,7 +116,7 @@
         </div>
         <!--Cierre: Botón flotante-->
 
-        <!-- SIDE BAR ORL -->
+        <!-- SIDE BAR MATRONA -->
         @include("atencion_pediatrica.include.sidebar_derecho_pediatria")
 
         <!--Modals de especialidad -->
