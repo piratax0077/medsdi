@@ -2,41 +2,43 @@
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="modal_info1"> Antecedentes mamas</h5>
+                <h5 class="modal-title text-white mt-1 f-18" id="modal_info1"> Antecedentes  Mamas</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <div class="row pt-2 mb-3">
                     <div class="col-md-12">
-                        <h6 id="ant_2" class="text-primary" style="cursor: pointer;" onclick="abrir_div('formulario_2');">Añadir nuevo antecedente <i class="fas fa-plus-circle text-primary"></i></h6>
+                        <h6 id="ant_2" class="text-primary" style="cursor: pointer;" onclick="abrir_div('formulario_2');">Añadir Nuevo Antecedente <i class="fas fa-plus-circle text-primary"></i></h6>
                     </div>
                 </div>
                 <div class="row py-2" id="formulario_2" style="display:none;">
                     <div class="col-md-12">
                         <form>
                             <div class="form-row">
-                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-group fill col-sm-3">
                                     <label class="floating-label-activo-sm">Fecha</label>
                                     <input type="date" class="form-control form-control-sm" name="fecha" id="fecha">
                                 </div>
-                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                    <label class="floating-label-activo-sm">Tipo de examen</label>
+                                <div class="form-group fill col-sm-3">
+                                    <label class="floating-label-activo-sm">Tipo de Examen</label>
                                     <input type="text" class="form-control form-control-sm" name="proc_ant" id="proc_ant">
                                 </div>
-                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-group fill col-sm-3">
                                     <label class="floating-label-activo-sm">Resultado</label>
                                     <input type="text" class="form-control form-control-sm" name="proc_ant" id="proc_ant">
                                 </div>
-                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-group fill col-sm-3">
                                     <label class="floating-label-activo-sm">Indicaciones</label>
                                     <input type="text" class="form-control form-control-sm" name="proc_ant" id="proc_ant">
                                 </div>
-                                <div class="form-group col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group fill col-sm-8">
                                     <label class="floating-label-activo-sm">Tratamientos o complicaciones</label>
-                                    <textarea class="form-control caja-texto form-control-sm " rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="otros_ant" id="otros_ant"></textarea>
+                                    <textarea type="text" class="form-control form-control-sm" rows="1" name="otros_ant" id="otros_ant"></textarea>
                                 </div>
-                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                    <button type="button" class="btn btn-info btn-sm btn-block">Añadir</button>
+                                <div class="form-group fill col-sm-4">
+                                    <button type="button" class="btn btn-success btn-sm btn-block">Añadir</button>
                                 </div>
                             </div>
                         </form>

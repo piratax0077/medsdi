@@ -10,29 +10,33 @@
             <div class="modal-body">
                 <form>
                     <div class="form-row">
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <div class="form-group">
+                        <div class="col-sm-6 mt-2">
+                            <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Fecha</label>
-                                <input type="date" class="form-control form-control-sm" name="" id=""></input>
+                                <input type="date" class="form-control form-control-sm" name="" id="">
+                                </input>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Nº de Orden</label>
+                        <div class="col-sm-6 mt-2">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm>Nº de Orden"</label>
                                 <input type="number" name="" id="" type="text" class="form-control form-control-sm">
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <div class="form-group">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-sm-6 mt-2">
+                            <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Examen de PAP</label>
                                 <select class="form-control form-control-sm" name="" id="">
                                     <option>Examen de PAP</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Sospecha clínica</label>
+                        <div class="col-sm-6 mt-2">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Sospecha Clínica</label>
                                 <select class="form-control form-control-sm" name="" id="">
                                     <option>Examen de rutina</option>
                                     <option>Lesión Cervical Pequeña</option>
@@ -43,8 +47,10 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <div class="form-group">
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm-6 mt-2">
+                            <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Urgencia</label>
                                 <select class="form-control form-control-sm" name="" id="">
                                     <option>Urgente</option>
@@ -53,25 +59,27 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <div class="form-group">
+                        <div class="col-sm-6 mt-2">
+                            <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Observaciones</label>
                                 <textarea class="form-control caja-texto form-control-sm mt-1" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_pap" id="obs_pap"></textarea>
                             </div>
                         </div>
                     </div>
+
                     <div class="form-row">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <button type="button" class="btn btn-info btn-sm float-right">
-                            <i class="fa fa-plus"></i> Agregar examen</button>
+                        <div class="col-sm-12">
+                            <button type="button" class="btn btn-success btn-sm float-right">
+                            <i class="fa fa-plus"></i> Agregar Examen</button>
                         </div>
                     </div>
+
                     <div class="form-row">
                         <div class="col-sm-12 mt-3">
                         <!--**** Al agregar un examen, se debe cargar la tabla *****-->
                             <!--Tabla-->
                             <div class="table-responsive">
-                                <table class="table table-bordered table-xs">
+                                <table class="table table-bordered table-sm">
                                     <thead>
                                         <tr>
                                             <th class="text-center align-middle">Fecha</th>
@@ -101,9 +109,10 @@
                     </div>
                 </form>
             </div>
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info btn-sm">Guardar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-info">Guardar</button>
             </div>
         </div>
     </div>
