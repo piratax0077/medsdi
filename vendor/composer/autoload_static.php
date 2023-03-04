@@ -38,6 +38,7 @@ class ComposerStaticInit21566f332364f7353536a4fdc70876ad
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'ed962a97bd972bc82007176b647d4e36' => __DIR__ . '/..' . '/facade/ignition/src/helpers.php',
         '377b22b161c09ed6e5152de788ca020a' => __DIR__ . '/..' . '/spatie/laravel-permission/src/helpers.php',
+        'a095a384963ea027a2e1dadea949b026' => __DIR__ . '/../..' . '/app/Helpers/Funciones.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -85,6 +86,7 @@ class ComposerStaticInit21566f332364f7353536a4fdc70876ad
             'Symfony\\Component\\Console\\' => 26,
             'Svg\\' => 4,
             'Spatie\\Permission\\' => 18,
+            'SimpleSoftwareIO\\QrCode\\' => 24,
             'Sabberworm\\CSS\\' => 15,
         ),
         'R' => 
@@ -333,6 +335,10 @@ class ComposerStaticInit21566f332364f7353536a4fdc70876ad
         'Spatie\\Permission\\' => 
         array (
             0 => __DIR__ . '/..' . '/spatie/laravel-permission/src',
+        ),
+        'SimpleSoftwareIO\\QrCode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/simplesoftwareio/simple-qrcode/src',
         ),
         'Sabberworm\\CSS\\' => 
         array (
@@ -642,6 +648,7 @@ class ComposerStaticInit21566f332364f7353536a4fdc70876ad
         'App\\Actions\\Jetstream\\UpdateTeamName' => __DIR__ . '/../..' . '/app/Actions/Jetstream/UpdateTeamName.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Helpers\\Funciones' => __DIR__ . '/../..' . '/app/Helpers/Funciones.php',
         'App\\Http\\Controllers\\AdminController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminController.php',
         'App\\Http\\Controllers\\AdministracionController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdministracionController.php',
         'App\\Http\\Controllers\\AdministradorCmController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdministradorCmController.php',
@@ -656,6 +663,7 @@ class ComposerStaticInit21566f332364f7353536a4fdc70876ad
         'App\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
         'App\\Http\\Controllers\\Auth\\VerificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerificationController.php',
         'App\\Http\\Controllers\\CargaImagenController' => __DIR__ . '/../..' . '/app/Http/Controllers/CargaImagenController.php',
+        'App\\Http\\Controllers\\CertificadoController' => __DIR__ . '/../..' . '/app/Http/Controllers/CertificadoController.php',
         'App\\Http\\Controllers\\CertificadoReposoController' => __DIR__ . '/../..' . '/app/Http/Controllers/CertificadoReposoController.php',
         'App\\Http\\Controllers\\CierreDiarioController' => __DIR__ . '/../..' . '/app/Http/Controllers/CierreDiarioController.php',
         'App\\Http\\Controllers\\CirugiaController' => __DIR__ . '/../..' . '/app/Http/Controllers/CirugiaController.php',
@@ -679,6 +687,7 @@ class ComposerStaticInit21566f332364f7353536a4fdc70876ad
         'App\\Http\\Controllers\\ExamenEspecialidadController' => __DIR__ . '/../..' . '/app/Http/Controllers/ExamenEspecialidadController.php',
         'App\\Http\\Controllers\\ExamenesPPFController' => __DIR__ . '/../..' . '/app/Http/Controllers/ExamenesPPFController.php',
         'App\\Http\\Controllers\\FlujoCajaController' => __DIR__ . '/../..' . '/app/Http/Controllers/FlujoCajaController.php',
+        'App\\Http\\Controllers\\GeneradorQrController' => __DIR__ . '/../..' . '/app/Http/Controllers/GeneradorQrController.php',
         'App\\Http\\Controllers\\GesDiagnosticosController' => __DIR__ . '/../..' . '/app/Http/Controllers/GesDiagnosticosController.php',
         'App\\Http\\Controllers\\HipertensionController' => __DIR__ . '/../..' . '/app/Http/Controllers/HipertensionController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
@@ -789,6 +798,8 @@ class ComposerStaticInit21566f332364f7353536a4fdc70876ad
         'App\\Models\\FichaCirugiaDigestivaTipo' => __DIR__ . '/../..' . '/app/Models/FichaCirugiaDigestivaTipo.php',
         'App\\Models\\FichaCirugiaGeneral' => __DIR__ . '/../..' . '/app/Models/FichaCirugiaGeneral.php',
         'App\\Models\\FichaCirugiaGeneralTipo' => __DIR__ . '/../..' . '/app/Models/FichaCirugiaGeneralTipo.php',
+        'App\\Models\\FichaDermo' => __DIR__ . '/../..' . '/app/Models/FichaDermo.php',
+        'App\\Models\\FichaDermoImg' => __DIR__ . '/../..' . '/app/Models/FichaDermoImg.php',
         'App\\Models\\FichaNeonatologia' => __DIR__ . '/../..' . '/app/Models/FichaNeonatologia.php',
         'App\\Models\\FichaOft' => __DIR__ . '/../..' . '/app/Models/FichaOft.php',
         'App\\Models\\FichaOftBiomicroscopia' => __DIR__ . '/../..' . '/app/Models/FichaOftBiomicroscopia.php',
@@ -1142,6 +1153,7 @@ class ComposerStaticInit21566f332364f7353536a4fdc70876ad
         'Database\\Seeders\\roleSeeder' => __DIR__ . '/../..' . '/database/seeders/roleSeeder.php',
         'Database\\Seeders\\sub_tipo_examenSeeder' => __DIR__ . '/../..' . '/database/seeders/sub_tipo_examenSeeder.php',
         'Database\\Seeders\\temperaturaSeeder' => __DIR__ . '/../..' . '/database/seeders/temperaturaSeeder.php',
+        'Database\\Seeders\\tipoAntecedenteSeeder' => __DIR__ . '/../..' . '/database/seeders/tipoAntecedenteSeeder.php',
         'Database\\Seeders\\tipo_especialidadSeeder' => __DIR__ . '/../..' . '/database/seeders/tipo_especialidadSeeder.php',
         'Database\\Seeders\\tipo_examenSeeder' => __DIR__ . '/../..' . '/database/seeders/tipo_examenSeeder.php',
         'DeepCopy\\DeepCopy' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
@@ -5901,6 +5913,18 @@ class ComposerStaticInit21566f332364f7353536a4fdc70876ad
         'SebastianBergmann\\Type\\UnknownType' => __DIR__ . '/..' . '/sebastian/type/src/type/UnknownType.php',
         'SebastianBergmann\\Type\\VoidType' => __DIR__ . '/..' . '/sebastian/type/src/type/VoidType.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
+        'SimpleSoftwareIO\\QrCode\\DataTypes\\BTC' => __DIR__ . '/..' . '/simplesoftwareio/simple-qrcode/src/DataTypes/BTC.php',
+        'SimpleSoftwareIO\\QrCode\\DataTypes\\DataTypeInterface' => __DIR__ . '/..' . '/simplesoftwareio/simple-qrcode/src/DataTypes/DataTypeInterface.php',
+        'SimpleSoftwareIO\\QrCode\\DataTypes\\Email' => __DIR__ . '/..' . '/simplesoftwareio/simple-qrcode/src/DataTypes/Email.php',
+        'SimpleSoftwareIO\\QrCode\\DataTypes\\Geo' => __DIR__ . '/..' . '/simplesoftwareio/simple-qrcode/src/DataTypes/Geo.php',
+        'SimpleSoftwareIO\\QrCode\\DataTypes\\PhoneNumber' => __DIR__ . '/..' . '/simplesoftwareio/simple-qrcode/src/DataTypes/PhoneNumber.php',
+        'SimpleSoftwareIO\\QrCode\\DataTypes\\SMS' => __DIR__ . '/..' . '/simplesoftwareio/simple-qrcode/src/DataTypes/SMS.php',
+        'SimpleSoftwareIO\\QrCode\\DataTypes\\WiFi' => __DIR__ . '/..' . '/simplesoftwareio/simple-qrcode/src/DataTypes/WiFi.php',
+        'SimpleSoftwareIO\\QrCode\\Facades\\QrCode' => __DIR__ . '/..' . '/simplesoftwareio/simple-qrcode/src/Facades/QrCode.php',
+        'SimpleSoftwareIO\\QrCode\\Generator' => __DIR__ . '/..' . '/simplesoftwareio/simple-qrcode/src/Generator.php',
+        'SimpleSoftwareIO\\QrCode\\Image' => __DIR__ . '/..' . '/simplesoftwareio/simple-qrcode/src/Image.php',
+        'SimpleSoftwareIO\\QrCode\\ImageMerge' => __DIR__ . '/..' . '/simplesoftwareio/simple-qrcode/src/ImageMerge.php',
+        'SimpleSoftwareIO\\QrCode\\QrCodeServiceProvider' => __DIR__ . '/..' . '/simplesoftwareio/simple-qrcode/src/QrCodeServiceProvider.php',
         'Spatie\\Permission\\Commands\\CacheReset' => __DIR__ . '/..' . '/spatie/laravel-permission/src/Commands/CacheReset.php',
         'Spatie\\Permission\\Commands\\CreatePermission' => __DIR__ . '/..' . '/spatie/laravel-permission/src/Commands/CreatePermission.php',
         'Spatie\\Permission\\Commands\\CreateRole' => __DIR__ . '/..' . '/spatie/laravel-permission/src/Commands/CreateRole.php',

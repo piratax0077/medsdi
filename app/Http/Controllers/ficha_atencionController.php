@@ -3616,7 +3616,7 @@ class ficha_atencionController extends Controller
                 'id' => $profesional->id,
                 'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
                 'rut' => $profesional->rut,
-                'especialidad' => $profesional->SubTipoEspecialidad()->first()->nombre,
+                'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
                 'token' =>  $token_firma,
             );
             $array_paciente = array(

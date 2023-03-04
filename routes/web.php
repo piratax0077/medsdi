@@ -23,6 +23,10 @@ Route::get('/autocomplete', [ficha_atencionController::class, 'autocomplete'])->
 Route::name('print')->get('/imprimir', [App\Http\Controllers\ficha_atencionController::class, 'imprimir']);
 Route::get('ver_receta_pdf/{id}', [App\Http\Controllers\EscritorioProfesional::class, 'ver_receta_pdf'])->name('profesional.ver_recetas_pdf');
 
+Route::get('pdf', function(){
+    return view('PDF.pdf_receta_medica');
+});
+
 //Ingreso
 Route::get('/', function () {
     return redirect('Ingreso');
@@ -1086,6 +1090,10 @@ Route::get('/hora/atencion/cancelacion', [App\Http\Controllers\ConfirmacionHoraC
 Route::get('/img/mover', [App\Http\Controllers\CargaImagenController::class, 'moverImagen_r'])->name('img.mover');
 
 
+Route::get('/certificacdo/test', [App\Http\Controllers\CertificadoController::class, 'testCertificacion']);
+
+/** simple qrcode  */
+Route::get('/qr', [App\Http\Controllers\GeneradorQrController::class, 'generar']);
 
 /** PARA VISUALIZAR DEMOS */
 // Route::get('/autorizacion/enlace', function () {

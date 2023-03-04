@@ -236,7 +236,17 @@ class DetalleRecetaController extends Controller
             $profesional = Profesional::find($id_profesional);
             $paciente = Paciente::find($id_paciente);
             $lugar_atencion = LugarAtencion::find($id_lugar_atencion);
-            $detalle_receta->receta_token = encrypt( $dia.'_'.$profesional->nombre.'_'.$paciente->apellido_uno.'_'.$lugar_atencion->id );
+
+            // $detalle_receta->receta_token = encrypt( $dia.'_'.$profesional->nombre.'_'.$paciente->apellido_uno.'_'.$lugar_atencion->id );
+
+            $certificado_documento = CertificadoController::certificadoDocumento((int)$id_ficha, (int)$id_profesional, (int)$id_paciente, 1);
+
+            if($certificado_documento['estado'] == 1)
+                $detalle_receta->receta_token = $certificado_documento['certificado'];
+            else
+                $detalle_receta->receta_token = encrypt( $dia.'_'.$profesional->nombre.'_'.$paciente->apellido_uno.'_'.$lugar_atencion->id );
+
+
             $detalle_receta->estado = 1;
             if($detalle_receta->save()){
                 $datos['estado'] = 1;
