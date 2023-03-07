@@ -1095,6 +1095,13 @@ Route::get('/certificacdo/test', [App\Http\Controllers\CertificadoController::cl
 /** simple qrcode  */
 Route::get('/qr', [App\Http\Controllers\GeneradorQrController::class, 'generar']);
 
+
+Route::get('/validacion/documento', [App\Http\Controllers\CertificadoController::class, 'validarDocumento'])->name('validacion_documento_');
+Route::get('/validacion/profesional', [App\Http\Controllers\CertificadoController::class, 'validarProfesional'])->name('validacion_profesional_');
+
+
+
+
 /** PARA VISUALIZAR DEMOS */
 // Route::get('/autorizacion/enlace', function () {
 //     return view('app/autorizacion/enlace_equipo_app');

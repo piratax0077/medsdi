@@ -592,7 +592,7 @@ class CertificadoController extends Controller
 
     }
 
-    public function generarUrlProfesional($token)
+    static public function generarUrlProfesional($token)
     {
         $valido = 1;
         $retorno = '';
@@ -603,7 +603,8 @@ class CertificadoController extends Controller
 
         if($valido)
         {
-            $retorno = route('validacion_documento_').'?tkx='.$token;
+            // $retorno = route('validacion_profesional_').'?tkx='.$token;
+            $retorno = action([CertificadoController::class, 'validarProfesional'], ['tkx' => $token]);
         }
         else
         {
@@ -612,7 +613,7 @@ class CertificadoController extends Controller
         return $retorno;
     }
 
-    public function generarUrlDocumento($token)
+    static public function generarUrlDocumento($token)
     {
         $valido = 1;
         $retorno = '';
@@ -623,7 +624,8 @@ class CertificadoController extends Controller
 
         if($valido)
         {
-            $retorno = route('validacion_documento_').'?tkx='.$token;
+            // $retorno = route('validacion_documento_').'?tkx='.$token;
+            $retorno = action([CertificadoController::class, 'validarDocumento'], ['tkx' => $token]);
         }
         else
         {

@@ -305,52 +305,140 @@
     </footer>
 
     <main>
-        @foreach ($cuerpo['detalle_receta'] as $key =>$detalle)
-            @if($loop->count == 1)
-            <div class="contenido-body" style="page-break-after: auto;">
-            @else
-                @if ($cuerpo['cantidad_recetas'] == $loop->iteration)
-                <div class="contenido-body" style="page-break-after: avoid;">
-                @else
-                <div class="contenido-body" style="page-break-after: always;">
-                @endif
-            @endif
 
-                <!--Inicio de información-->
-                <h4 class="text-blue">Rp:</h4>
-                <table class="tabla-receta">
-                    <thead>
-                        <tr class="t-gris">
-                            <th style="text-align: left;">Medicamento</th>
-                            <th style="text-align: left;">Posología</th>
-                            <th style="text-align: left;">Tratamiento por:</th>
-                            <th style="text-align: left;">Cantidad</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        <div class="contenido-body" style="page-break-after: always;">
+            <!--Inicio de información-->
+            <h4 class="text-blue">Rp:</h4>
+            <table class="tabla-receta">
+                <thead>
+                    <tr class="t-gris">
+                        <th style="text-align: left;">Prescripción</th>
+                        <th style="text-align: left;">Cantidad</th>
+                        <th style="text-align: left;">Duración<br>tratamiento</th>
+                        <th style="text-align: left;">Indicación <br>para paciente</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>LEXAPRO 20 mg (Escitalopram)</strong><br>
+                        28 comprimidos, <span>vía oral</span></td>
+                        <td>2 cajas (dos)</td>
+                        <td>3 días</td>
+                        <td>1 comprimido por la mañana</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ENALAPRIL 10mg (Enalapril)</strong><br>
+                        3 ampollas, <span>vía inyectable</span></td>
+                        <td>1 caja (una)</td>
+                        <td><span>uso crónico</span></td>
+                        <td>1 comprimido cada 8 horas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PACLITAXEL 80mg/4ml solución inyectable (Paclitaxel)</strong></td>
+                        <td>3 frascos de amp. (tres)</td>
+                        <td>3 días</td>
+                        <td>1 ampolla cada 8 horas</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-                            @foreach ($detalle as $medicamento)
-
-                                {{--
-                                    nombre_medicamento
-                                droga
-                                presentacion
-                                posologia
-                                via_administracion
-                                periodo
-                                uso_cronico
-                                cantidad_compra  --}}
-                                    <tr>
-                                        <td style="text-align: left;"><strong>{{ $medicamento['nombre_medicamento'] }}</strong> {{ $medicamento['droga'] }}</td>
-                                        <td style="text-align: left;">{{ $medicamento['posologia'] }}</td>
-                                        <td style="text-align: left;">{{ $medicamento['periodo'] }}</td>
-                                        <td style="text-align: left;">{{ $medicamento['cantidad_compra'] }}</td>
-                                    </tr>
-                            @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endforeach
+        <div class="contenido-body" style="page-break-after: auto;">
+            <!--Inicio de información-->
+            <h4 class="text-blue">Rp:</h4>
+            <table class="tabla-receta">
+                <thead>
+                    <tr class="t-gris">
+                        <th style="text-align: left;">Prescripción</th>
+                        <th style="text-align: left;">Cantidad</th>
+                        <th style="text-align: left;">Duración<br>tratamiento</th>
+                        <th style="text-align: left;">Indicación <br>para paciente</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1LEXAPRO 20 mg (Escitalopram)</strong><br>
+                        28 comprimidos, <span>vía oral</span></td>
+                        <td>2 cajas (dos)</td>
+                        <td>3 días</td>
+                        <td>1 comprimido por la mañana</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2ENALAPRIL 10mg (Enalapril)</strong><br>
+                        3 ampollas, <span>vía inyectable</span></td>
+                        <td>1 caja (una)</td>
+                        <td><span>uso crónico</span></td>
+                        <td>1 comprimido cada 8 horas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3PACLITAXEL 80mg/4ml solución inyectable (Paclitaxel)</strong></td>
+                        <td>3 frascos de amp. (tres)</td>
+                        <td>3 días</td>
+                        <td>1 ampolla cada 8 horas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4LEXAPRO 20 mg (Escitalopram)</strong><br>
+                        28 comprimidos, <span>vía oral</span></td>
+                        <td>2 cajas (dos)</td>
+                        <td>3 días</td>
+                        <td>1 comprimido por la mañana</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5ENALAPRIL 10mg (Enalapril)</strong><br>
+                        3 ampollas, <span>vía inyectable</span></td>
+                        <td>1 caja (una)</td>
+                        <td><span>uso crónico</span></td>
+                        <td>1 comprimido cada 8 horas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6PACLITAXEL 80mg/4ml solución inyectable (Paclitaxel)</strong></td>
+                        <td>3 frascos de amp. (tres)</td>
+                        <td>3 días</td>
+                        <td>1 ampolla cada 8 horas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7LEXAPRO 20 mg (Escitalopram)</strong><br>
+                        28 comprimidos, <span>vía oral</span></td>
+                        <td>2 cajas (dos)</td>
+                        <td>3 días</td>
+                        <td>1 comprimido por la mañana</td>
+                    </tr>
+                    <tr>
+                        <td><strong>8ENALAPRIL 10mg (Enalapril)</strong><br>
+                        3 ampollas, <span>vía inyectable</span></td>
+                        <td>1 caja (una)</td>
+                        <td><span>uso crónico</span></td>
+                        <td>1 comprimido cada 8 horas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>9PACLITAXEL 80mg/4ml solución inyectable (Paclitaxel)</strong></td>
+                        <td>3 frascos de amp. (tres)</td>
+                        <td>3 días</td>
+                        <td>1 ampolla cada 8 horas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10LEXAPRO 20 mg (Escitalopram)</strong><br>
+                        28 comprimidos, <span>vía oral</span></td>
+                        <td>2 cajas (dos)</td>
+                        <td>3 días</td>
+                        <td>1 comprimido por la mañana</td>
+                    </tr>
+                    <tr>
+                        <td><strong>11ENALAPRIL 10mg (Enalapril)</strong><br>
+                        3 ampollas, <span>vía inyectable</span></td>
+                        <td>1 caja (una)</td>
+                        <td><span>uso crónico</span></td>
+                        <td>1 comprimido cada 8 horas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>12PACLITAXEL 80mg/4ml solución inyectable (Paclitaxel)</strong></td>
+                        <td>3 frascos de amp. (tres)</td>
+                        <td>3 días</td>
+                        <td>1 ampolla cada 8 horas</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </main>
 </html>
 

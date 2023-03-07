@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class GeneradorQrController extends Controller
 {
-    public function generar($valor = '')
+    static public function generar($valor = '')
     {
         //https://www.simplesoftware.io/#/docs-introduction
 
@@ -21,7 +21,7 @@ class GeneradorQrController extends Controller
 
 
         //format('png')->(requiere imagick)
-        return QrCode::size(100)->color(0, 0, 0)->backgroundColor(28, 190, 190 )->margin(1)->generate($valor);
+        return QrCode::size(150)->color(0, 0, 0)->backgroundColor(255, 255, 255 )->margin(1)->generate($valor);
 
         //Genera un QrCode con una imagen en el centro.
         // return QrCode::format('png')->merge('/public/images/logo.png', .3)->generate($valor);
