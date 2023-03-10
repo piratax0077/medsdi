@@ -3,31 +3,32 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>PLANTILLA PDF</title>
+        <title>{{ $titulo }}</title>
+        <!-- <link rel="stylesheet" href="{{ asset('css/pdf.css') }}"> -->
         <style>
             /*Tipografía*/
             @font-face {
-              font-family: 'Poppins';
-              src:
-              local("Poppins"),
-              url("{{ asset('fonts/Poppins/Poppins-Bold.woff2') }}") format("woff2"),
-              url("{{ asset('fonts/Poppins/Poppins-Bold.woff') }}") format("woff"),
-              url("{{ asset('fonts/Poppins/Poppins-Bold.ttf') }}") format("truetype"),
-              url("{{ asset('fonts/Poppins/Poppins-Bold.ttf') }}") format("opentype");
-              font-style: bold;
-              font-weight: 600;
+                font-family: 'Poppins';
+                src:
+                local("Poppins"),
+                url("{{ asset('fonts/Poppins/Poppins-Bold.woff2') }}") format("woff2"),
+                url("{{ asset('fonts/Poppins/Poppins-Bold.woff') }}") format("woff"),
+                url("{{ asset('fonts/Poppins/Poppins-Bold.ttf') }}") format("truetype"),
+                url("{{ asset('fonts/Poppins/Poppins-Bold.ttf') }}") format("opentype");
+                font-style: bold;
+                font-weight: 600;
             }
 
             @font-face {
-              font-family: 'Poppins';
-              src:
-              local("Poppins"),
-              url("{{ asset('fonts/Poppins/Poppins-Regular.woff2') }}") format("woff2"),
-              url("{{ asset('fonts/Poppins/Poppins-Regular.woff') }}") format("woff"),
-              url("{{ asset('fonts/Poppins/Poppins-Regular.ttf') }}") format("truetype"),
-              url("{{ asset('fonts/Poppins/Poppins-Regular.ttf') }}") format("opentype");
-              font-style: regular;
-              font-weight: 400;
+                font-family: 'Poppins';
+                src:
+                local("Poppins"),
+                url("{{ asset('fonts/Poppins/Poppins-Regular.woff2') }}") format("woff2"),
+                url("{{ asset('fonts/Poppins/Poppins-Regular.woff') }}") format("woff"),
+                url("{{ asset('fonts/Poppins/Poppins-Regular.ttf') }}") format("truetype"),
+                url("{{ asset('fonts/Poppins/Poppins-Regular.ttf') }}") format("opentype");
+                font-style: regular;
+                font-weight: 400;
             }
 
             h1, h2, h3, h4, h5, h6, span, p, td, th{
@@ -137,7 +138,7 @@
                 margin: auto;
                 padding-right: 1rem;
                 padding-left: 1rem;
-                 /* width: 1000px; */
+                    /* width: 1000px; */
                 /* height: 1000px; */
             }
 
@@ -238,71 +239,9 @@
         </style>
     </head>
     <div class="texto-vertical-2">Este documento lo puedes validar en www.med-sdi.cl - Cód. Indetificador {{ $cuerpo['array_ficha_atencion']['token'] }}</div>
-    <header>
-        <div class="contenido-encabezado-uno">
-            <div class="contenido-logo">
-                <!-- <img style="width: 100%;" class="logo" src="{{ asset('images/pdf/sdi-logo.svg') }}"> -->
-                <img style="width: 100%;" class="logo" src="https://med-sdi.cl/images/pdf/sdi-logo.svg">
-            </div>
-            <div class="contenido-infoprof">
-                <p><strong>{{ $cuerpo['array_profesional']['nombre'] }}</strong></p>
-                <p>{{ $cuerpo['array_profesional']['especialidad'] }}</p>
-                <p>Rut: {{ $cuerpo['array_profesional']['rut'] }}</p>
-                <p>RCM: 00000-0</p>
-                <p>Arlegui 934, Viña del Mar</p>
-                <p>V región</p>
-            </div>
-        </div>
-        <div class="contenido-encabezado-dos">
-            <h2 class="text-blue centrar mb-1">RECETA MÉDICA</h2>
-            <table>
-                <tbody>
-                    <tr>
-                        <td style="padding: 0px;"><strong>Paciente:</strong></td>
-                        <td style="padding-top: 8px;">{{ $cuerpo['array_paciente']['nombre'] }}</td>
-                        <td style="padding: 0px;"><strong>Rut:</strong></td>
-                        <td style="padding-top: 8px;">{{ $cuerpo['array_paciente']['rut'] }}</td>
-                        <td style="padding: 0px;"><strong>Sexo:</strong></td>
-                        <td style="padding-top: 8px;">{{ $cuerpo['array_paciente']['sexo'] }}</td>
-                        <td style="padding: 0px;"><strong>Edad:</strong></td>
-                        <td style="padding-top: 8px;">{{ \Carbon\Carbon::parse($cuerpo['array_paciente']['fecha_nac'])->age }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Dirección:</strong></td>
-                        <td>{{ $cuerpo['array_paciente']['direccion'] }}</td>
-                        <!--Calle, Nº, Comuna. Región-->
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <hr class="">
-        <div class="fecha"><strong>Fecha:</strong> {{ $cuerpo['array_ficha_atencion']['created_at'] }}</div>
-    </header>
 
-    <footer>
-        <div class="contenido-footer">
-            <table class="text-center" >
-                <tbody>
-                <tr>
-                    <th style="width: 50%;">
-                        <div class="div-qr">
-                            <img src="data:image/svg+xml;base64,{{ base64_encode($cuerpo['array_ficha_atencion']['qr']) }}" style="width: 100%;">
-                        </div>
-                        <div style="line-height: 10px; font-weight: bold; font-family: Poppins;">Valide este documento<br>escaneando el código</div>
-                    </th>
-                    <th style="padding-top: 10px;width: 50%;">
-                        <div class="div-qr">
-                            <img src="data:image/svg+xml;base64,{{ base64_encode($cuerpo['array_profesional']['qr']) }}" style="width: 100%;">
-                        </div>
-                        <div style="line-height: 10px; font-weight: lighter; font-family: Poppins; font-size: 10px;">Firma Digital Avanzada SDI</div>
-                        <div style="line-height: 10px; font-weight: bold; font-family: Poppins;">Dr. {{ $cuerpo['array_profesional']['nombre'] }}</div>
-                        <div style="line-height: 10px; font-weight: lighter; font-family: Poppins;">{{ $cuerpo['array_profesional']['token'] }}</div>
-                    </th>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </footer>
+    @include('PDF.header')
+    @include('PDF.footer')
 
     <main>
         @foreach ($cuerpo['detalle_receta'] as $key =>$detalle)
@@ -316,8 +255,9 @@
                 @endif
             @endif
 
-                <!--Inicio de información-->
-                <h4 class="text-blue">Rp:</h4>
+            <!--Inicio de información-->
+            <h4 class="text-blue">Rp:</h4>
+            @if($key != 'ORL_AUDIFONO')
                 <table class="tabla-receta">
                     <thead>
                         <tr class="t-gris">
@@ -332,23 +272,80 @@
                             @foreach ($detalle as $medicamento)
 
                                 {{--
-                                    nombre_medicamento
+                                nombre_medicamento
                                 droga
                                 presentacion
                                 posologia
                                 via_administracion
                                 periodo
                                 uso_cronico
-                                cantidad_compra  --}}
-                                    <tr>
-                                        <td style="text-align: left;"><strong>{{ $medicamento['nombre_medicamento'] }}</strong> {{ $medicamento['droga'] }}</td>
-                                        <td style="text-align: left;">{{ $medicamento['posologia'] }}</td>
-                                        <td style="text-align: left;">{{ $medicamento['periodo'] }}</td>
-                                        <td style="text-align: left;">{{ $medicamento['cantidad_compra'] }}</td>
-                                    </tr>
+                                cantidad_compra
+                                --}}
+                                <tr>
+                                    <td style="text-align: left;"><strong>{{ $medicamento['nombre_medicamento'] }}</strong> {{ $medicamento['droga'] }}</td>
+                                    <td style="text-align: left;">{{ $medicamento['posologia'] }}</td>
+                                    <td style="text-align: left;">{{ $medicamento['periodo'] }}</td>
+                                    <td style="text-align: left;">{{ $medicamento['cantidad_compra'] }}</td>
+                                </tr>
                             @endforeach
                     </tbody>
                 </table>
+            @else
+                {{--
+                tipo
+                od
+                especificacion_od
+                oi
+                especificacion_oi
+                bi
+                especificacion_bi
+                especificacion_general
+                --}}
+                <table class="tabla-receta">
+                    <!-- <thead>
+                        <tr class="t-gris">
+                            <th style="text-align: left;">Medicamento</th>
+                            <th style="text-align: left;">Posología</th>
+                            <th style="text-align: left;">Tratamiento por:</th>
+                            <th style="text-align: left;">Cantidad</th>
+                        </tr>
+                    </thead> -->
+                    <tbody>
+                        @foreach ($detalle as $medicamento)
+                            <tr>
+                                <td style="text-align: left; width: 20%;"><strong>{{ $medicamento['tipo'] }}</strong></td>
+                                <td style="text-align: left; width: 80%;"></td>
+                            </tr>
+                            @if($medicamento['od'])
+                            <tr>
+                                <td style="text-align: left; width: 20%;"><strong>Oído Derecho</strong></td>
+                                <td style="text-align: left; width: 80%;">{{ $medicamento['especificacion_od'] }}</td>
+                            </tr>
+                            @endif
+
+                            @if($medicamento['oi'])
+                            <tr>
+                                <td style="text-align: left; width: 20%;"><strong>Oído izquierdo</strong></td>
+                                <td style="text-align: left; width: 80%;">{{ $medicamento['especificacion_oi'] }}</td>
+                            </tr>
+                            @endif
+
+                            @if($medicamento['bi'])
+                            <tr>
+                                <td style="text-align: left; width: 20%;"><strong>Bilateral</strong></td>
+                                <td style="text-align: left; width: 80%;">{{ $medicamento['especificacion_bi'] }}</td>
+                            </tr>
+                            @endif
+
+                            <tr>
+                                <td style="text-align: left;"><strong>Recomendaciones Generales</strong></td>
+                                <td style="text-align: left;">{{ $medicamento['especificacion_general'] }}</td>
+                            </tr>
+
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
             </div>
         @endforeach
     </main>

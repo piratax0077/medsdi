@@ -58,6 +58,7 @@ use App\Models\FichaOftFondoOjoTipo;
 use App\Models\FichaOftTipo;
 use App\Models\FichaUro;
 use App\Models\FichaUroTipo;
+use App\Models\RecetaAudifono;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -3561,7 +3562,7 @@ class ficha_atencionController extends Controller
     }
 
 
-    public function pdf_receta_medicamentos(Request $request)
+    public function pdf_receta_medicamentosBAK(Request $request)
     {
         $datos = array();
         $detalleReceta = DetalleReceta::where('id_ficha', $request->id_ficha_atencion)->get();
@@ -3703,6 +3704,157 @@ class ficha_atencionController extends Controller
         }
     }
 
+    public function pdf_receta_medicamentos(Request $request)
+    {
+        $datos = array();
+
+        $ficha_atencion = FichaAtencion::find($request->id_ficha_atencion);
+        $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
+        $profesional = Profesional::find($ficha_atencion->id_profesional);
+        $paciente = Paciente::find($ficha_atencion->id_paciente);
+
+        /** token receta */
+        $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 1);
+        if($temp_token['estado'] == 1)
+        {
+            $token_receta = $temp_token['certificado'];
+            $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+            $qr_documento = GeneradorQrController::generar($url_documento);
+        }
+        else
+        {
+            $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 1);
+            $token_receta = $temp_token['certificado'];
+            $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+            $qr_documento = GeneradorQrController::generar($url_documento);
+        }
+
+        /** token profesional */
+        $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+        if($temp_token['estado'] == 1)
+        {
+            $token_profesional = $temp_token['certificado'];
+            $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+            $qr_profesional = GeneradorQrController::generar($url_documento);
+        }
+        else
+        {
+            $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+            $token_profesional = $temp_token['certificado'];
+            $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+            $qr_profesional = GeneradorQrController::generar($url_documento);
+        }
+
+        /** cantidad de hojas (secciones) */
+        $cantidad_recetas = 0;
+
+        /** detalle de receta */
+        $detalle_receta = (object)array();
+
+        /** MEDICAMENTOS */
+        $detalleReceta = DetalleReceta::where('id_ficha', $request->id_ficha_atencion)->get();
+        if($detalleReceta->count()>0)
+        {
+            foreach ($detalleReceta as $key_detalle_receta => $value_detalle_receta)
+            {
+                // var_dump($value_detalle_receta);
+                $producto = Articulo::where('nombre',$value_detalle_receta->producto)->first();
+
+                $array_medicamento = array(
+                    'nombre_medicamento' => $producto->nombre,
+                    'droga'=>$producto->droga,
+                    'presentacion' => $value_detalle_receta->presentacion,
+                    'posologia' => $value_detalle_receta->posologia,
+                    'via_administracion' => $value_detalle_receta->via_administracion,
+                    'periodo' => $value_detalle_receta->periodo,
+                    'uso_cronico' => $value_detalle_receta->uso_cronico,
+                    'cantidad_compra' => $value_detalle_receta->cantidad_compra,
+                    'receta_token' => $value_detalle_receta->receta_token,
+                );
+
+                $nombre_control = $producto->RecetaControl()->first()->descripcion;
+                $id_control = $producto->RecetaControl()->first()->cod_control;
+
+                // 4 - Receta retenida
+                // 6 - Receta Simple
+                // 7 - Venta Directa
+
+                // 1 - Receta retenida con control de Psicotrópicos
+                // 2 - Receta retenida con control de Estupefacientes
+                // 3 - Receta Cheque
+                // 5 - Receta retenida con control de Codeína
+
+
+                if(trim($nombre_control) == 'Receta retenida' || trim($nombre_control) == 'Receta Simple' || trim($nombre_control) == 'Venta Directa')
+                {
+                    $nombre_control = 'Receta';
+                    if(!isset($detalle_receta->$nombre_control))
+                        $cantidad_recetas ++;
+                }
+                else
+                {
+                    $nombre_control = trim($nombre_control).'_'.$key_detalle_receta;
+                    if(!isset($detalle_receta->$nombre_control))
+                        $cantidad_recetas ++;
+                }
+                $detalle_receta->$nombre_control[] = $array_medicamento;
+            }
+
+            // return  PdfController::generarPDF('RECETA MEDICA', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_receta','cantidad_recetas'), 'Receta Medica '.$paciente->rut, 'pdf_receta_medica');
+        }
+
+        /** ESPECIALIDAD OTORRINOLARINGOLOGÍA (AUDIFONOS) */
+        $detalleOrlAudifono = RecetaAudifono::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+        if($detalleOrlAudifono)
+        {
+            $cantidad_recetas ++;
+            $arrayTipo = array('','Intracanal', 'Retroauricular', 'Audigafas', 'Implante', 'Otro Tipo');
+            $array_medicamento = array(
+                'tipo' => $arrayTipo[$detalleOrlAudifono->tipo],
+                'od' => $detalleOrlAudifono->od,
+                'especificacion_od' => $detalleOrlAudifono->especificacion_od,
+                'oi' => $detalleOrlAudifono->oi,
+                'especificacion_oi' => $detalleOrlAudifono->especificacion_oi,
+                'bi' => $detalleOrlAudifono->bi,
+                'especificacion_bi' => $detalleOrlAudifono->especificacion_bi,
+                'especificacion_general' => $detalleOrlAudifono->especificacion_general,
+            );
+            $nombre_control = 'ORL_AUDIFONO';
+            $detalle_receta->$nombre_control[] = $array_medicamento;
+        }
+
+        $array_ficha_atencion = array(
+            'id' => $ficha_atencion->id,
+            'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
+            'token' => $token_receta,
+            'url' => $url_documento,
+            'qr' => $qr_documento,
+        );
+        $array_lugar_atencion = array(
+            'id' => $lugar_atencion->id,
+            'nombre' => $lugar_atencion->nombre
+        );
+        $array_profesional = array(
+            'id' => $profesional->id,
+            'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
+            'rut' => $profesional->rut,
+            'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
+            'token' =>  $token_profesional,
+            'url' =>  $url_profesional,
+            'qr' =>  $qr_profesional,
+        );
+        $array_paciente = array(
+            'id' => $paciente->id,
+            'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
+            'fecha_nac' => $paciente->fecha_nac,
+            'rut' => $paciente->rut,
+            'sexo' => $paciente->sexo,
+            'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
+        );
+        return  PdfController::generarPDF('RECETA MEDICA', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_receta','cantidad_recetas'), 'Receta Medica '.$paciente->rut, 'pdf_receta_medica');
+
+    }
+
     public function pdf_orden_examenes(Request $request)
     {
         $datos = array();
@@ -3719,55 +3871,118 @@ class ficha_atencionController extends Controller
             $detalle_orden = (object)array();
 
             $token_receta = '';
+            $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 1);
+            if($temp_token['estado'] == 1)
+            {
+                $token_receta = $temp_token['certificado'];
+                $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                $qr_documento = GeneradorQrController::generar($url_documento);
+            }
+            else
+            {
+                $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 1);
+                $token_receta = $temp_token['certificado'];
+                $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                $qr_documento = GeneradorQrController::generar($url_documento);
+            }
+
+            $cantidad_recetas = 0;
             foreach ($examenesPPF as $key_examen_ppf => $value_examen_ppf)
             {
                 $nombre_examen = $value_examen_ppf->examen;
 
+                $nombre_parent = '';
                 $examen_base = ExamenMedico::where('nombre_examen', $value_examen_ppf->examen)->first();
+                if($examen_base->cod_parent !== 0)
+                {
+                    $padre1 = ExamenMedico::where('cod_examen', $examen_base->cod_parent)->first();
+                    if($padre1)
+                    {
+                        $nombre_parent = $padre1->nombre_examen;
+                        if($padre1->cod_parent != 0)
+                        {
+                            $padre2 = ExamenMedico::where('cod_examen', $padre1->cod_parent)->first();
+                            if($padre2)
+                            {
+                                $nombre_parent = $padre2->nombre_examen;
+                                if($padre2->cod_parent != 0)
+                                {
+                                    $padre3 = ExamenMedico::where('cod_examen', $padre2->cod_parent)->first();
+                                    if($padre3)
+                                    {
+                                        $nombre_parent = $padre3->nombre_examen;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
 
                 $id_base =  $examen_base->cod_parent;
                 $codigo =  $examen_base->codigo;
                 $con_contraste =  $value_examen_ppf->con_contraste;
-                $nombre_control = 'orden';
-                if( $id_base == 363 || $id_base == 364 || $id_base == 365 || $id_base == 366 || $id_base == 367 )
-                {
-                    $nombre_control = 'radiologia';
-                    if( $id_base == 363 || $id_base == 364 )
-                    {
-                        $nombre_radiologia = ExamenMedico::where('cod_examen', $id_base)->first();
-                        $nombre_examen = $nombre_radiologia->nombre_examen.' '.$value_examen_ppf->examen;
-                    }
+                $nombre_control = $nombre_parent;
+                // $nombre_control = 'orden';
+                // if( $id_base == 363 || $id_base == 364 || $id_base == 365 || $id_base == 366 || $id_base == 367 )
+                // {
+                //     $nombre_control = 'radiologia';
+                //     if( $id_base == 363 || $id_base == 364 )
+                //     {
+                //         $nombre_radiologia = ExamenMedico::where('cod_examen', $id_base)->first();
+                //         $nombre_examen = $nombre_radiologia->nombre_examen.' '.$value_examen_ppf->examen;
+                //     }
 
-                }
+                // }
+
+
+
+                if(!isset($detalle_orden->$nombre_control))
+                        $cantidad_recetas ++;
 
                 /**
-                `id_prioridad`,
-                `id_paciente`,
-                `id_profesional`,
-                `id_ficha_atencion`,
-                `examen`,
-                `tipo_examen`,
-                `tipo_ficha`,
-                 */
+                * `id_prioridad`,
+                * `id_paciente`,
+                * `id_profesional`,
+                * `id_ficha_atencion`,
+                * `examen`,
+                * `tipo_examen`,
+                * `tipo_ficha`,
+                */
                 $prioridad_text = array('','Baja', 'Media', 'Alta', 'Urgente');
                 $array_examenes = array(
                     'prioridad' => $prioridad_text[$value_examen_ppf->id_prioridad],
-                    'examen'=>$nombre_examen,
+                    'examen'=> $nombre_examen,
                     'contraste'=>$con_contraste,
                     'tipo_examen' => $value_examen_ppf->tipo_examen,
                     'codigo' => $codigo,
                 );
 
 
-
                 $detalle_orden->$nombre_control[] = $array_examenes;
 
+                $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+                if($temp_token['estado'] == 1)
+                {
+                    $token_profesional = $temp_token['certificado'];
+                    $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                    $qr_profesional = GeneradorQrController::generar($url_documento);
+                }
+                else
+                {
+                    $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                    $token_profesional = $temp_token['certificado'];
+                    $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                    $qr_profesional = GeneradorQrController::generar($url_documento);
+                }
             }
 
             $array_ficha_atencion = array(
                 'id' => $ficha_atencion->id,
                 'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
                 'token' => $token_receta,
+                'url' => $url_documento,
+                'qr' => $qr_documento,
             );
             $array_lugar_atencion = array(
                 'id' => $lugar_atencion->id,
@@ -3778,17 +3993,20 @@ class ficha_atencionController extends Controller
                 'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
                 'rut' => $profesional->rut,
                 'especialidad' => $profesional->SubTipoEspecialidad()->first()->nombre,
-                'token' =>  $token_firma,
+                'token' =>  $token_profesional,
+                'url' =>  $url_profesional,
+                'qr' =>  $qr_profesional,
             );
             $array_paciente = array(
                 'id' => $paciente->id,
                 'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
                 'fecha_nac' => $paciente->fecha_nac,
                 'rut' => $paciente->rut,
+                'sexo' => $paciente->sexo,
                 'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
             );
 
-            return  PdfController::generarPDF('ORDEN EXAMENES', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_orden'), 'Orden Examenes '.$paciente->rut, 'pdf_orden_examen');
+            return  PdfController::generarPDF('ORDEN EXAMENES', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_orden','cantidad_recetas'), 'Orden Examenes '.$paciente->rut, 'pdf_orden_examen');
         }
         else
         {

@@ -1,188 +1,67 @@
-@foreach ($cuerpo['detalle_orden'] as $detalle)
-    <!DOCTYPE html>
-    <html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 
     <head>
         <meta charset="UTF-8">
-        <title>ORDEN PDF</title>
-        <style>
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6,
-            span,
-            p,
-            td,
-            th {
-                font-family: arial;
-            }
-
-            h1 {
-                text-align: center;
-                text-transform: uppercase;
-            }
-
-            img {
-                align-items: center;
-                width: 18%;
-            }
-
-            table,
-            th,
-            td {
-                border: 0px solid black;
-                text-align: left;
-                margin-right: 10px;
-                margin-left: 10px;
-            }
-
-            table {
-                width: 80%;
-            }
-
-            hr {
-                border: 1px solid #3366CC;
-            }
-
-            #titulo-azul {
-                color: #3366CC;
-                text-align: center;
-            }
-
-            .contenido {
-                font-size: 15px;
-                color: #3F3E3E;
-            }
-
-            #centro {
-                text-align: center;
-            }
-
-        </style>
+        <title>{{ $titulo }}</title>
+        <link rel="stylesheet" href="{{ asset('css/pdf.css') }}">
     </head>
+    <div class="texto-vertical-2">Este documento lo puedes validar en www.med-sdi.cl - Cód. Indetificador {{ $cuerpo['array_ficha_atencion']['token'] }}</div>
 
-    <body>
-        <div class="contenido">
-            <table style="width: 100%">
-                <tr>
-                    <td style="width:25%">
-                        <img style="width: 100%;" class="logo" src="{{ asset('images/pdf/sdi-logo.svg') }}">
+    @include('PDF.header')
+    @include('PDF.footer')
 
-                    </td>
-                    <td style="width:25%">
+    <main>
+        @foreach ($cuerpo['detalle_orden'] as $key =>$detalle)
+            @if($loop->count == 1)
+            <div class="contenido-body" style="page-break-after: auto;">
+            @else
+                @if ($cuerpo['cantidad_recetas'] == $loop->iteration)
+                <div class="contenido-body" style="page-break-after: avoid;">
+                @else
+                <div class="contenido-body" style="page-break-after: always;">
+                @endif
+            @endif
 
-                        <img style="width: 100%;" src="{{ asset('images/logo_instituciones/logo_insi.jpg') }}">
-                    </td>
+                <!--Inicio de información-->
+                <h4 class="text-blue">Rp:</h4>
+                <h5 class="text-blue text-center">{{ $key }}</h5>
+                <table class="tabla-receta">
+                    <thead>
+                        <tr class="t-gris">
+                            <th style="text-align: left;">Examen</th>
+                            <th style="text-align: left;">Prioridad</th>
+                            <th style="text-align: left;">Código:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                    <td style="width:50%">
-                        Vicuña Mackenna 864, Quilpué<br/>
-                        Teléfono: (32) 218 8930<br/>
-                        Solicitar Hora vía Whatsapp: (+56) 9 8558 0587<br/>
-                    </td>
-                </tr>
-            </table>
+                            @foreach ($detalle as $examenes)
 
-
-
-            <hr>
-            <table>
-                <tr>
-                    <td><strong>Paciente:</strong></td>
-                    <td>{{ $cuerpo['array_paciente']['nombre'] }}</td>
-                    <td><strong>Fecha:</strong></td>
-                    <td>{{ $cuerpo['array_ficha_atencion']['created_at'] }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Rut:</strong></td>
-                    <td>{{ $cuerpo['array_paciente']['rut'] }}</td>
-                    <td><strong>Direccion:</strong></td>
-                    <td>{{ $cuerpo['array_paciente']['direccion'] }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Edad:</strong></td>
-                    <td>{{ $cuerpo['array_paciente']['fecha_nac'] }}</td>
-                </tr>
-            </table>
-            <hr>
-            <!--Inicio de información-->
-            <p>
-            <h2 id="titulo-azul">{{ $titulo }}</h2>
-            <h4>Solicitud de Examenes Clínicos:</h4>
-            <table style="width:100%">
-            @foreach ($detalle as $examenes)
-
-                {{--
-                    prioridad
-                    examen
-                    tipo_examen
-                --}}
-
-
-                    <tr>
-                        <td>
-                            <strong>{{ $examenes['examen'] }}</strong>
-                            @if($examenes['contraste'] == 1)
-                                <br/><span><strong>Con Contraste</strong></span>
-                            @endif
-                        </td>
-                        <td>{{ $examenes['prioridad'] }}</td>
-						@if(isset($examenes['codigo']) && $examenes['codigo']!= 'NULL' )
-                        <td>Codigo:{{ $examenes['codigo'] }}</td>
-                        @else
-                        <td></td>
-                        @endif
-                    </tr>
-
-            @endforeach
-            </table>
-            <br>
-
-
-            </p>
-            <!--Cierre: Inicio de información-->
-            <hr>
-            <p>
-            <table style="width: 100%;">
-                <tr>
-                    <td style="width:50%">
-                        <table style="width: 100%;">
-                            <tr>
-                                <td><strong>{{ $cuerpo['array_profesional']['nombre'] }}</strong></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Rut:</strong> {{ $cuerpo['array_profesional']['rut'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ $cuerpo['array_profesional']['especialidad'] }}</td>
-                            </tr>
-                            <tr>
-                                {{--  <td style="word-wrap: break-word;">{{ $cuerpo['array_profesional']['token'] }}</td>  --}}
-                                <td style="word-wrap: break-word;"><strong>Firmado digitalmente por el profesional:</strong><br/>asdf56!4fasd.ddsf5as4dfrtTRWer#ty654fgsdfg#</td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td style="width:50%">
-                        <table style="width: 100%;">
-                            <tr>
-                                <td style="word-wrap: break-word;"><strong>Código SDI autentificación</strong></td>
-                            </tr>
-                            <tr>
-                                {{--  <td style="word-wrap: break-word;"><strong>{{ $cuerpo['array_ficha_atencion']['token'] }}</strong></td>  --}}
-                                <td style="word-wrap: break-word;"><strong>as#dfASDF.%asdfew584f4afeffr&e.</strong></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-
-            </p>
-            <hr>
-        </div>
-    </body>
-
-    </html>
-@endforeach
-
+                                {{--
+                                prioridad
+                                examen
+                                tipo_examen
+                                --}}
+                                <tr>
+                                    <td>
+                                        <strong>{{ $examenes['examen'] }}</strong>
+                                        @if($examenes['contraste'] == 1)
+                                            <br/><span><strong>Con Contraste</strong></span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $examenes['prioridad'] }}</td>
+                                    @if(isset($examenes['codigo']) && $examenes['codigo']!= 'NULL' )
+                                        <td>Codigo:{{ $examenes['codigo'] }}</td>
+                                    @else
+                                        <td></td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endforeach
+    </main>
+</html>
 
