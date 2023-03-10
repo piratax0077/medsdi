@@ -127,9 +127,7 @@
         <div id="img_uro_flujo-c" class="collapse show" aria-labelledby="img_uro_flujo" data-parent="#img_uro_flujo">
             <div class="card-body-aten shadow-none">
                 <!-- [ Main Content ] start -->
-                <div class="dropzone" id="mis-imagenes-uro_flujo" action="{{ route('profesional.imagen.carga') }}">
-                <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                </div>
+                <div class="dropzone" id="mis-imagenes-uro_flujo" action="{{ route('profesional.imagen.carga') }}"></div>
                 <!-- [ file-upload ] end -->
             </div>
         </div>

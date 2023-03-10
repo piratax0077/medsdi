@@ -181,6 +181,9 @@ return [
         /** PDF */
         Barryvdh\DomPDF\ServiceProvider::class,
 
+        /** Simple QrCode */
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
+
     ],
 
     /*
@@ -239,6 +242,9 @@ return [
 
         /** PDF */
         'PDF' => Barryvdh\DomPDF\Facade::class,
+
+        /** Simple QrCode */
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
 
     ],
 

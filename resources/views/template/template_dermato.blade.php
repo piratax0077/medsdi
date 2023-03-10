@@ -81,7 +81,6 @@
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
 
-
     <!-- Modal de la vista fin -->
 
 

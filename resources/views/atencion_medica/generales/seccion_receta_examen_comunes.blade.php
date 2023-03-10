@@ -351,10 +351,12 @@
         {
             if($('#via_administracion_ficha_dental').val() == 11)
             {
+                $('#div_observaciones_medicamento_ficha_dental').show();
                 $('#observaciones_medicamento_ficha_dental').removeAttr('disabled');
             }
             else
             {
+                $('#div_observaciones_medicamento_ficha_dental').hide();
                 $('#observaciones_medicamento_ficha_dental').attr('disabled','disabled');
                 $('#observaciones_medicamento_ficha_dental').val('');
             }
@@ -364,10 +366,12 @@
         {
             if($('#periodo_ficha_dental').val() == 11)
             {
+                $('#div_observaciones_periodo_ficha_dental').show();
                 $('#observaciones_periodo_ficha_dental').removeAttr('disabled');
             }
             else
             {
+                $('#div_observaciones_periodo_ficha_dental').hide();
                 $('#observaciones_periodo_ficha_dental').attr('disabled','disabled');
                 $('#observaciones_periodo_ficha_dental').val('');
             }
@@ -377,10 +381,12 @@
         {
             if($('#cantidad_comprar').val() == 999)
             {
+                $('#div_otra_cantidad_a_comprar').show();
                 $('#otra_cantidad_a_comprar').removeAttr('disabled');
             }
             else
             {
+                $('#div_otra_cantidad_a_comprar').hide();
                 $('#otra_cantidad_a_comprar').attr('disabled','disabled');
                 $('#otra_cantidad_a_comprar').val('');
             }

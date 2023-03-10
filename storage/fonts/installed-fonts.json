@@ -14,5 +14,8 @@
     },
     "cryptocoins": {
         "normal": "cryptocoins_normal_eb050d55bc840c77b4eeecf6fd3eed55"
+    },
+    "poppins": {
+        "bold": "poppins_bold_329c316416a587646abfbbab0a84d600"
     }
 }

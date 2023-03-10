@@ -83,13 +83,12 @@
                                 <option value="11">Otra Vía</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="col-sm-6 mt-2">
-                        <div class="form-group fill">
+                        <div class="form-group fill" id="div_observaciones_medicamento_ficha_dental" style="display: none;">
                             <label class="floating-label">Otra vía de Administración</label>
                             <input type="text" id="observaciones_medicamento_ficha_dental" name="observaciones_medicamento_ficha_dental" class="form-control form-control-sm " disabled >
                         </div>
                     </div>
+
                     <div class="col-sm-6 mt-2">
                         <div class="form-group fill">
                             <label class="floating-label">Periodo</label>
@@ -108,12 +107,12 @@
                                 <option value="11">Otro Periodo</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="col-sm-6 mt-2">
-                        <div class="form-group fill">
+
+                        <div class="form-group fill" id="div_observaciones_periodo_ficha_dental" style="display: none;">
                             <label class="floating-label">Otro Periodo</label>
                             <input type="text" id="observaciones_periodo_ficha_dental" name="observaciones_periodo_ficha_dental" class="form-control form-control-sm " disabled >
                         </div>
+
                     </div>
 
                     {{-- cantidad de medicamento a despachar o comprar    --}}
@@ -125,29 +124,31 @@
                                 <option value="999">Otra Cantidad</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="col-sm-6 mt-2">
-                        <div class="form-group fill">
+                        <div class="form-group fill" id="div_otra_cantidad_a_comprar" style="display: none;">
                             <label class="floating-label">Otra Cantidad</label>
                             <input type="text" id="otra_cantidad_a_comprar" name="otra_cantidad_a_comprar" class="form-control form-control-sm " disabled >
                         </div>
                     </div>
 
-
-                    <div class="col-sm-6">
-                        <div class="form-group mb-1">
-                            <label><strong>Uso Crónico</strong></label>
-                            <div class="switch switch-success d-inline m-r-10">
-                                <input type="checkbox" id="medicamento_uso_cronico">
-                                <label for="medicamento_uso_cronico" class="cr"></label>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group mb-1">
+                                    <label><strong>Uso Crónico</strong></label>
+                                    <div class="switch switch-success d-inline m-r-10">
+                                        <input type="checkbox" id="medicamento_uso_cronico">
+                                        <label for="medicamento_uso_cronico" class="cr"></label>
+                                    </div>
+                                    <div class="alert-primary" id="mensaje_uso_cronico" style="display:none;">Acaba de seleccionar medicamento como USO CRÓNICO </div>
+                                </div>
                             </div>
-                            <div class="alert-primary" id="mensaje_uso_cronico" style="display:none;">Acaba de seleccionar medicamento como USO CRÓNICO </div>
+                            <div class="col-sm-6">
+                                <button type="button" onclick="indicar_medicamento_cirugia()"
+                                    class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> AgregarMedicamento</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <button type="button" onclick="indicar_medicamento_cirugia()"
-                            class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> AgregarMedicamento</button>
-                    </div>
+
                 </div>
 
                 <div class="col-sm-12 mt-3">

@@ -9,7 +9,7 @@
                 </ul>
             </div>
             <div class="col-sm-12 col-md-12">
-                <form action="{{ route('fichaAtencion.registrar_ficha_orl') }}" method="POST">
+                <form action="{{ route('fichaAtencion.registrar_ficha_dermo') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
                     <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
@@ -86,17 +86,32 @@
                                                                     </div>
                                                                     <div class="form-row">
                                                                         <div class="col-sm-4 mt-2">
-                                                                            <div class="form-group fill">
-
-                                                                                <div id="img_cons_dermato_pre" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                            <div class="card">
+                                                                                <div class="card-header" id="img">
+                                                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_elim_cicat_pre" aria-expanded="false" aria-controls="imagenes_elim_cicat_pre">
+                                                                                        Imagenes Pre
+                                                                                    </button>
+                                                                                </div>
+                                                                                <div id="img_cons_dermato_pre-c" class="collapse show" aria-labelledby="img_cons_dermato_pre" data-parent="#img_cons_dermato_pre">
                                                                                     <div class="card-body-aten shadow-none">
                                                                                         <!-- [ Main Content ] start -->
-                                                                                        <div class="col-sm-12 mt-2">
-                                                                                            <h6 class="center">Imagenes Pre</h6>
-                                                                                        </div>
-                                                                                        <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                                                        <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                                                        </div>
+                                                                                        <div class="dropzone" id="mis-imagenes-cons-dermato-pre" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                                                        <!-- [ file-upload ] end -->
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-4 mt-2">
+                                                                            <div class="card">
+                                                                                <div class="card-header" id="img">
+                                                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_elim_cicat_pre" aria-expanded="false" aria-controls="imagenes_elim_cicat_pre">
+                                                                                        Imagenes Post
+                                                                                    </button>
+                                                                                </div>
+                                                                                <div id="img_cons_dermato_post-c" class="collapse show" aria-labelledby="img_cons_dermato_post" data-parent="#img_cons_dermato_post">
+                                                                                    <div class="card-body-aten shadow-none">
+                                                                                        <!-- [ Main Content ] start -->
+                                                                                        <div class="dropzone" id="mis-imagenes-cons-dermato-post" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                         <!-- [ file-upload ] end -->
                                                                                     </div>
                                                                                 </div>
@@ -104,27 +119,10 @@
                                                                         </div>
                                                                         <div class="col-sm-4 mt-2">
                                                                             <div class="form-group fill">
-
-                                                                                <div id="img_cons_dermato_post" class="collapse show" aria-labelledby="img" data-parent="#img">
-                                                                                    <div class="card-body-aten shadow-none">
-                                                                                        <!-- [ Main Content ] start -->
-                                                                                        <div class="col-sm-12 mt-2">
-                                                                                            <h6 class="center">Imagenes Pre</h6>
-                                                                                        </div>
-                                                                                        <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                                                        <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                                                        </div>
-                                                                                        <!-- [ file-upload ] end -->
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-
-                                                                        </div>
-                                                                        <div class="col-sm-4 mt-2">
-                                                                            <div class="form-group fill">
+                                                                                <input type="hidden" name="biopsia_dermat" id="biopsia_dermat" value="">
                                                                                 <div class="switch switch-success d-inline m-r-10">
-                                                                                    <input type="checkbox" onchange="biopsia_dermat();" id="biopsia_dermat" name="biopsia_dermat" value="">
-                                                                                    <label for="biopsia_dermat" class="cr"></label>
+                                                                                    <input type="checkbox" onchange="biopsia('dermat');" id="biopsia_check_dermat" name="biopsia_check_dermat" value="">
+                                                                                    <label for="biopsia_check_dermat" class="cr"></label>
                                                                                 </div>
                                                                                 <label>biopsia</label>
                                                                                 <hr>
@@ -162,135 +160,54 @@
                                                             <div class="col-sm-12">
                                                                 <div class="card">
                                                                     <div class="card-body shadow-none" id="formulario_tto_dermico">
-                                                                        <form>
-                                                                            <div class="form-row mb-2">
-                                                                                <div class="col-md-12">
-                                                                                    <h6>  ELIMINACIÓN DE CICATRICES </h6>
+                                                                        <div class="form-row mb-2">
+                                                                            <div class="col-md-12">
+                                                                                <h6>  ELIMINACIÓN DE CICATRICES </h6>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-4 mt-2">
+                                                                                <div class="form-group fill">
+                                                                                    <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
+                                                                                    <select class="form-control form-control-sm" name="elim_cicat" id="elim_cicat">
+                                                                                        <option>Seleccione una opción</option>
+                                                                                        <option value = "1-1">•	Dermoabrasión</option>
+                                                                                        <option value = "1-2">•	Exfoliacion quimica</option>
+                                                                                        <option value = "1-1">•	Inyecciones de relleno dérmico</option>
+                                                                                        <option value = "1-1">•	Exfoliación por láser y fototerapias</option>
+                                                                                        <option value = "1-2">•	Microinjertos</option>
+                                                                                        <option value = "1-1">•	Incisión subcutánea. </option>
+                                                                                        <option value = "1-2">•	Transferencia de grasa autóloga</option>
+                                                                                        <option value = "1-1">•	Inyecciones  intralesionales</option>
+                                                                                        <option value = "1-1">•	Crioterapia</option>
+                                                                                        <option value = "1-3">•	Cremas tópicas </option>
+                                                                                    </select>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="form-row">
-                                                                                <div class="col-sm-4 mt-2">
-                                                                                    <div class="form-group fill">
-                                                                                        <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
-                                                                                        <select class="form-control form-control-sm" name="elim_cicat" id="elim_cicat">
-                                                                                            <option>Seleccione una opción</option>
-                                                                                            <option value = "1-1">•	Dermoabrasión</option>
-                                                                                            <option value = "1-2">•	Exfoliacion quimica</option>
-                                                                                            <option value = "1-1">•	Inyecciones de relleno dérmico</option>
-                                                                                            <option value = "1-1">•	Exfoliación por láser y fototerapias</option>
-                                                                                            <option value = "1-2">•	Microinjertos</option>
-                                                                                            <option value = "1-1">•	Incisión subcutánea. </option>
-                                                                                            <option value = "1-2">•	Transferencia de grasa autóloga</option>
-                                                                                            <option value = "1-1">•	Inyecciones  intralesionales</option>
-                                                                                            <option value = "1-1">•	Crioterapia</option>
-                                                                                            <option value = "1-3">•	Cremas tópicas </option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-sm-4 mt-2">
-                                                                                        <div class="form-group fill">
-                                                                                            <label id="" name="" class="floating-label-activo-sm">Descripción </label>
-                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="desc_elim_cicat" id="desc_elim_cicat"></textarea>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                <div class="col-sm-4 mt-2">
-                                                                                    <div class="form-group fill">
-                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_elim_cica" id="obs_elim_cica"></textarea>
-                                                                                    </div>
-                                                                                 </div>
-                                                                                 <!--IMAGENES-->
-                                                                                 <div class="col-sm-6 col-md-6">
-                                                                                     <div class="card">
-                                                                                         <div class="card-header" id="img">
-                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_elim_cicat_pre" aria-expanded="false" aria-controls="imagenes_elim_cicat_pre">
-                                                                                                 Imagenes.pre
-                                                                                             </button>
-                                                                                         </div>
-                                                                                         <div id="imagenes_elim_cicat_pre" class="collapse show" aria-labelledby="img" data-parent="#img">
-                                                                                             <div class="card-body-aten shadow-none">
-                                                                                                 <!-- [ Main Content ] start -->
-                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                                                                 </div>
-                                                                                                 <!-- [ file-upload ] end -->
-                                                                                             </div>
-                                                                                         </div>
-                                                                                     </div>
-                                                                                 </div>
-                                                                                 <div class="col-sm-6 col-md-6">
-                                                                                     <div class="card">
-                                                                                         <div class="card-header" id="img">
-                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_elim_cicat_post" aria-expanded="false" aria-controls="imagenes_elim_cicat_post">
-                                                                                                 Imagenes.post
-                                                                                             </button>
-                                                                                         </div>
-                                                                                         <div id="imagenes_elim_cicat_post" class="collapse show" aria-labelledby="img" data-parent="#img">
-                                                                                             <div class="card-body-aten shadow-none">
-                                                                                                 <!-- [ Main Content ] start -->
-                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                                                                 </div>
-                                                                                                 <!-- [ file-upload ] end -->
-                                                                                             </div>
-                                                                                         </div>
-                                                                                     </div>
-                                                                                 </div>
-                                                                            </div>
-
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card">
-                                                                    <div class="card-body shadow-none" id="formulario_rinofibro">
-                                                                        <form>
-                                                                            <div class="form-row mb-2">
-                                                                                <div class="col-md-12">
-                                                                                    <h6>TRATAMIENTO DE PIEL DAÑADA</h6>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="col-sm-4 mt-2">
-                                                                                    <div class="form-group fill">
-                                                                                        <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
-                                                                                        <select class="form-control form-control-sm" name="proc_piel_danada" id="proc_piel_danada">
-                                                                                            <option>Seleccione una opción</option>
-                                                                                            <option value = "1-1">•	Toxina botulínica tipo A</option>
-                                                                                            <option value = "1-2">•	Exfoliacion quimica. </option>
-                                                                                            <option value = "1-1">•	Aumento del tejido blando/inyecciones de relleno dérmico</option>
-                                                                                            <option value = "1-1">•	Dermoabrasión</option>
-                                                                                            <option value = "1-2">•	Rejuvenecimiento de la piel con láser. </option>
-                                                                                            <option value = "1-1">•	Luz pulsada intensa</option>
-                                                                                            <option value = "1-2">•	Tratamiento con tretinoína</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-sm-4 mt-2">
+                                                                            <div class="col-sm-4 mt-2">
                                                                                     <div class="form-group fill">
                                                                                         <label id="" name="" class="floating-label-activo-sm">Descripción </label>
-                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="proc_piel_danada_desc" id="proc_piel_danada_desc"></textarea>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="desc_elim_cicat" id="desc_elim_cicat"></textarea>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="col-sm-4 mt-2">
-                                                                                    <div class="form-group fill">
-                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="proc_piel_danada_obs" id="proc_piel_danada_obs"></textarea>
-                                                                                    </div>
+                                                                            <div class="col-sm-4 mt-2">
+                                                                                <div class="form-group fill">
+                                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_elim_cica" id="obs_elim_cica"></textarea>
+                                                                                </div>
                                                                                 </div>
                                                                                 <!--IMAGENES-->
                                                                                 <div class="col-sm-6 col-md-6">
                                                                                     <div class="card">
                                                                                         <div class="card-header" id="img">
-                                                                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#proc_piel_danada_img_pre" aria-expanded="false" aria-controls="proc_piel_danada_desc_img_pre">
-                                                                                                Imagenes.pre
+                                                                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_elim_cicat_pre" aria-expanded="false" aria-controls="imagenes_elim_cicat_pre">
+                                                                                                Imagenes Pre
                                                                                             </button>
                                                                                         </div>
-                                                                                        <div id="proc_piel_danada_obs_img_pre" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                                        <div id="imagenes_elim_cicat_pre-c" class="collapse show" aria-labelledby="imagenes_elim_cicat_pre" data-parent="#imagenes_elim_cicat_pre">
                                                                                             <div class="card-body-aten shadow-none">
                                                                                                 <!-- [ Main Content ] start -->
-                                                                                                <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                                                                <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                                                                </div>
+                                                                                                <div class="dropzone" id="mis-imagenes-elim_cicar_pre" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                                 <!-- [ file-upload ] end -->
                                                                                             </div>
                                                                                         </div>
@@ -299,284 +216,329 @@
                                                                                 <div class="col-sm-6 col-md-6">
                                                                                     <div class="card">
                                                                                         <div class="card-header" id="img">
-                                                                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#proc_piel_danada_img_post" aria-expanded="false" aria-controls="proc_piel_danada_img_post">
-                                                                                                Imagenes.post
+                                                                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_elim_cicat_post" aria-expanded="false" aria-controls="imagenes_elim_cicat_post">
+                                                                                                Imagenes Post
                                                                                             </button>
                                                                                         </div>
-                                                                                        <div id="proc_piel_danada_img_post" class="collapse show" aria-labelledby="img" data-parent="#img">
+                                                                                        <div id="imagenes_elim_cicat_post-c" class="collapse show" aria-labelledby="imagenes_elim_cicat_post" data-parent="#imagenes_elim_cicat_post">
                                                                                             <div class="card-body-aten shadow-none">
                                                                                                 <!-- [ Main Content ] start -->
-                                                                                                <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                                                                <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                                                                </div>
+                                                                                                <div class="dropzone" id="mis-imagenes-elim-cicat-post" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                                 <!-- [ file-upload ] end -->
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        </form>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="card">
                                                                     <div class="card-body shadow-none" id="formulario_rinofibro">
-                                                                        <form>
-                                                                            <div class="form-row mb-2">
-                                                                                <div class="col-md-12">
-                                                                                    <h6>EXFOLIACIÓN QUÍMICA</h6>
+                                                                        <div class="form-row mb-2">
+                                                                            <div class="col-md-12">
+                                                                                <h6>TRATAMIENTO DE PIEL DAÑADA</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-4 mt-2">
+                                                                                <div class="form-group fill">
+                                                                                    <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
+                                                                                    <select class="form-control form-control-sm" name="proc_piel_danada" id="proc_piel_danada">
+                                                                                        <option>Seleccione una opción</option>
+                                                                                        <option value = "1-1">•	Toxina botulínica tipo A</option>
+                                                                                        <option value = "1-2">•	Exfoliacion quimica. </option>
+                                                                                        <option value = "1-1">•	Aumento del tejido blando/inyecciones de relleno dérmico</option>
+                                                                                        <option value = "1-1">•	Dermoabrasión</option>
+                                                                                        <option value = "1-2">•	Rejuvenecimiento de la piel con láser. </option>
+                                                                                        <option value = "1-1">•	Luz pulsada intensa</option>
+                                                                                        <option value = "1-2">•	Tratamiento con tretinoína</option>
+                                                                                    </select>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="form-row">
-                                                                                <div class="col-sm-3 mt-2">
-                                                                                    <div class="form-group fill">
-                                                                                        <label class="floating-label-activo-sm">Motivo Procedimiento </label>
-                                                                                        <select class="form-control form-control-sm" name="exfoliacion_proc" id="exfoliacion_proc">
-                                                                                            <option>Seleccione una opción</option>
-                                                                                            <option value = "1-1">Corregir el color (pigmento) desigual de la piel</option>
-                                                                                            <option value = "1-2">Eliminar masas precancerosas de la piel</option>
-                                                                                            <option value = "1-1">Suavizar el acné o tratar las cicatrices que producen</option>
-                                                                                            <option value = "1-1">Tratar las arrugas que producen el sol, así como daños y tejido cicatricial</option>
-                                                                                            <option value = "1-2">Tratar las imperfecciones de la piel que se deben a la edad ya la herencia</option>
-                                                                                            <option value = "1-1">Otro</option>
-                                                                                        </select>
-                                                                                    </div>
+                                                                            <div class="col-sm-4 mt-2">
+                                                                                <div class="form-group fill">
+                                                                                    <label id="" name="" class="floating-label-activo-sm">Descripción </label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="proc_piel_danada_desc" id="proc_piel_danada_desc"></textarea>
                                                                                 </div>
-                                                                                <div class="col-sm-3 mt-2">
-                                                                                    <div class="form-group fill">
-                                                                                        <label class="floating-label-activo-sm">Compuesto</label>
-                                                                                        <select class="form-control form-control-sm" name="exfoliacion_comp" id="exfoliacion_comp">
-                                                                                            <option>Seleccione una opción</option>
-                                                                                            <option value = "1-1">Alfahidroxiácidos</option>
-                                                                                            <option value = "1-2">ácido tricloroacético</option>
-                                                                                            <option value = "1-1">fenol</option>
-                                                                                        </select>
-                                                                                    </div>
+                                                                            </div>
+                                                                            <div class="col-sm-4 mt-2">
+                                                                                <div class="form-group fill">
+                                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="proc_piel_danada_obs" id="proc_piel_danada_obs"></textarea>
                                                                                 </div>
-                                                                                <div class="col-sm-3 mt-2">
-                                                                                        <div class="form-group fill">
-                                                                                            <label id="" name="" class="floating-label-activo-sm">Descripción </label>
-                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="exfoliacion_desc" id="exfoliacion_desc"></textarea>
+                                                                            </div>
+                                                                            <!--IMAGENES-->
+                                                                            <div class="col-sm-6 col-md-6">
+                                                                                <div class="card">
+                                                                                    <div class="card-header" id="img">
+                                                                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#proc_piel_danada_img_pre" aria-expanded="false" aria-controls="proc_piel_danada_desc_img_pre">
+                                                                                            Imagenes Pre
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <div id="proc_piel_danada_img_pre-c" class="collapse show" aria-labelledby="proc_piel_danada_img_pre" data-parent="#proc_piel_danada_obs_img_pre">
+                                                                                        <div class="card-body-aten shadow-none">
+                                                                                            <!-- [ Main Content ] start -->
+                                                                                            <div class="dropzone" id="mis-imagenes-proc-piel-danada-img-pre" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                                                            <!-- [ file-upload ] end -->
                                                                                         </div>
                                                                                     </div>
-                                                                                <div class="col-sm-3 mt-2">
-                                                                                    <div class="form-group fill">
-                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="exfoliacion_obs" id="exfoliacion_obs"></textarea>
-                                                                                    </div>
-                                                                                 </div>
-                                                                                 <!--IMAGENES-->
-                                                                                 <div class="col-sm-6 col-md-6">
-                                                                                     <div class="card">
-                                                                                         <div class="card-header" id="img">
-                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_exfoliacion_pre" aria-expanded="false" aria-controls="imagenes_exfoliacion_pre">
-                                                                                                 Imagenes.pre
-                                                                                             </button>
-                                                                                         </div>
-                                                                                         <div id="imagenes_exfoliacion_pre" class="collapse show" aria-labelledby="img" data-parent="#img">
-                                                                                             <div class="card-body-aten shadow-none">
-                                                                                                 <!-- [ Main Content ] start -->
-                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                                                                 </div>
-                                                                                                 <!-- [ file-upload ] end -->
-                                                                                             </div>
-                                                                                         </div>
-                                                                                     </div>
-                                                                                 </div>
-                                                                                 <div class="col-sm-6 col-md-6">
-                                                                                     <div class="card">
-                                                                                         <div class="card-header" id="img">
-                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_exfoliacion_post" aria-expanded="false" aria-controls="imagenes_exfoliacion_post">
-                                                                                                 Imagenes.post
-                                                                                             </button>
-                                                                                         </div>
-                                                                                         <div id="imagenes_exfoliacion_post" class="collapse show" aria-labelledby="img" data-parent="#img">
-                                                                                             <div class="card-body-aten shadow-none">
-                                                                                                 <!-- [ Main Content ] start -->
-                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                                                                 </div>
-                                                                                                 <!-- [ file-upload ] end -->
-                                                                                             </div>
-                                                                                         </div>
-                                                                                     </div>
-                                                                                 </div>
+                                                                                </div>
                                                                             </div>
-
-                                                                        </form>
+                                                                            <div class="col-sm-6 col-md-6">
+                                                                                <div class="card">
+                                                                                    <div class="card-header" id="img">
+                                                                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#proc_piel_danada_img_post" aria-expanded="false" aria-controls="proc_piel_danada_img_post">
+                                                                                            Imagenes Post
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <div id="proc_piel_danada_img_post-c" class="collapse show" aria-labelledby="proc_piel_danada_img_post" data-parent="#proc_piel_danada_img_post">
+                                                                                        <div class="card-body-aten shadow-none">
+                                                                                            <!-- [ Main Content ] start -->
+                                                                                            <div class="dropzone" id="mis-imagenes-proc-piel-danada-img-post" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                                                            <!-- [ file-upload ] end -->
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="card">
                                                                     <div class="card-body shadow-none" id="formulario_rinofibro">
-                                                                        <form>
-                                                                            <div class="form-row mb-2">
-                                                                                <div class="col-md-12">
-                                                                                    <h6>DERMABRASIÓN / DERMOPLANING</h6>
+                                                                        <div class="form-row mb-2">
+                                                                            <div class="col-md-12">
+                                                                                <h6>EXFOLIACIÓN QUÍMICA</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-3 mt-2">
+                                                                                <div class="form-group fill">
+                                                                                    <label class="floating-label-activo-sm">Motivo Procedimiento </label>
+                                                                                    <select class="form-control form-control-sm" name="exfoliacion_proc" id="exfoliacion_proc">
+                                                                                        <option>Seleccione una opción</option>
+                                                                                        <option value = "1-1">Corregir el color (pigmento) desigual de la piel</option>
+                                                                                        <option value = "1-2">Eliminar masas precancerosas de la piel</option>
+                                                                                        <option value = "1-1">Suavizar el acné o tratar las cicatrices que producen</option>
+                                                                                        <option value = "1-1">Tratar las arrugas que producen el sol, así como daños y tejido cicatricial</option>
+                                                                                        <option value = "1-2">Tratar las imperfecciones de la piel que se deben a la edad ya la herencia</option>
+                                                                                        <option value = "1-1">Otro</option>
+                                                                                    </select>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="form-row">
-                                                                                <div class="col-sm-4 mt-2">
+                                                                            <div class="col-sm-3 mt-2">
+                                                                                <div class="form-group fill">
+                                                                                    <label class="floating-label-activo-sm">Compuesto</label>
+                                                                                    <select class="form-control form-control-sm" name="exfoliacion_comp" id="exfoliacion_comp">
+                                                                                        <option>Seleccione una opción</option>
+                                                                                        <option value = "1-1">Alfahidroxiácidos</option>
+                                                                                        <option value = "1-2">ácido tricloroacético</option>
+                                                                                        <option value = "1-1">fenol</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-3 mt-2">
                                                                                     <div class="form-group fill">
-                                                                                        <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
-                                                                                        <select class="form-control form-control-sm" name="dermabras_proc" id="dermabras_proc">
-                                                                                            <option>Seleccione una opción</option>
-                                                                                            <option value = "1-1">DERMABRASIÓN</option>
-                                                                                            <option value = "1-2">DERMOPLANING</option>
-                                                                                        </select>
+                                                                                        <label id="" name="" class="floating-label-activo-sm">Descripción </label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="exfoliacion_desc" id="exfoliacion_desc"></textarea>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="col-sm-4 mt-2">
-                                                                                        <div class="form-group fill">
-                                                                                            <label id="" name="" class="floating-label-activo-sm">Descripción </label>
-                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="dermabras_desc" id="dermabras_desc"></textarea>
+                                                                            <div class="col-sm-3 mt-2">
+                                                                                <div class="form-group fill">
+                                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="exfoliacion_obs" id="exfoliacion_obs"></textarea>
+                                                                                </div>
+                                                                                </div>
+                                                                                <!--IMAGENES-->
+                                                                                <div class="col-sm-6 col-md-6">
+                                                                                    <div class="card">
+                                                                                        <div class="card-header" id="img">
+                                                                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_exfoliacion_pre" aria-expanded="false" aria-controls="imagenes_exfoliacion_pre">
+                                                                                                Imagenes Pre
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <div id="imagenes_exfoliacion_pre-c" class="collapse show" aria-labelledby="imagenes_exfoliacion_pre" data-parent="#imagenes_exfoliacion_pre">
+                                                                                            <div class="card-body-aten shadow-none">
+                                                                                                <!-- [ Main Content ] start -->
+                                                                                                <div class="dropzone" id="mis-imagenes-imagenes-exfoliacion-pre" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                                                                <!-- [ file-upload ] end -->
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                <div class="col-sm-4 mt-2">
-                                                                                    <div class="form-group fill">
-                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="dermabras_obs" id="dermabras_obs"></textarea>
+                                                                                </div>
+                                                                                <div class="col-sm-6 col-md-6">
+                                                                                    <div class="card">
+                                                                                        <div class="card-header" id="img">
+                                                                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_exfoliacion_post" aria-expanded="false" aria-controls="imagenes_exfoliacion_post">
+                                                                                                Imagenes Post
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <div id="imagenes_exfoliacion_post-c" class="collapse show" aria-labelledby="imagenes_exfoliacion_post" data-parent="#imagenes_exfoliacion_post">
+                                                                                            <div class="card-body-aten shadow-none">
+                                                                                                <!-- [ Main Content ] start -->
+                                                                                                <div class="dropzone" id="mis-imagenes-imagenes-exfoliacion-post" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                                                                <!-- [ file-upload ] end -->
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </div>
-                                                                                 </div>
-                                                                                 <!--IMAGENES-->
-                                                                                 <div class="col-sm-6 col-md-6">
-                                                                                     <div class="card">
-                                                                                         <div class="card-header" id="img">
-                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_dermabras_pre" aria-expanded="false" aria-controls="imagenes_dermabras_pre">
-                                                                                                 Imagenes.pre
-                                                                                             </button>
-                                                                                         </div>
-                                                                                         <div id="imagenes_dermabras_pre" class="collapse show" aria-labelledby="img" data-parent="#img">
-                                                                                             <div class="card-body-aten shadow-none">
-                                                                                                 <!-- [ Main Content ] start -->
-                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                                                                 </div>
-                                                                                                 <!-- [ file-upload ] end -->
-                                                                                             </div>
-                                                                                         </div>
-                                                                                     </div>
-                                                                                 </div>
-                                                                                 <div class="col-sm-6 col-md-6">
-                                                                                     <div class="card">
-                                                                                         <div class="card-header" id="img">
-                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_dermabras-post" aria-expanded="false" aria-controls="imagenes_dermabras-post">
-                                                                                                 Imagenes.post
-                                                                                             </button>
-                                                                                         </div>
-                                                                                         <div id="imagenes_dermabras-post" class="collapse show" aria-labelledby="img" data-parent="#img">
-                                                                                             <div class="card-body-aten shadow-none">
-                                                                                                 <!-- [ Main Content ] start -->
-                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                                                                 </div>
-                                                                                                 <!-- [ file-upload ] end -->
-                                                                                             </div>
-                                                                                         </div>
-                                                                                     </div>
-                                                                                 </div>
-                                                                            </div>
-                                                                        </form>
+                                                                                </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="card">
                                                                     <div class="card-body shadow-none" id="formulario_rinofibro">
-                                                                        <form>
-
-                                                                            <div class="form-row mb-2">
-                                                                                <div class="col-md-12">
-                                                                                    <h6>CIRUGÍA LASER</h6>
+                                                                        <div class="form-row mb-2">
+                                                                            <div class="col-md-12">
+                                                                                <h6>DERMABRASIÓN / DERMOPLANING</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-4 mt-2">
+                                                                                <div class="form-group fill">
+                                                                                    <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
+                                                                                    <select class="form-control form-control-sm" name="dermabras_proc" id="dermabras_proc">
+                                                                                        <option>Seleccione una opción</option>
+                                                                                        <option value = "1-1">DERMABRASIÓN</option>
+                                                                                        <option value = "1-2">DERMOPLANING</option>
+                                                                                    </select>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="form-row">
-                                                                                <div class="col-sm-4 mt-2">
+                                                                            <div class="col-sm-4 mt-2">
                                                                                     <div class="form-group fill">
-                                                                                         <label class="floating-label">Motivo Procedimiento</label>
-                                                                                        <input type="text" class="form-control form-control-sm" name="laser_motivo" id="laser_motivo">
+                                                                                        <label id="" name="" class="floating-label-activo-sm">Descripción </label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="dermabras_desc" id="dermabras_desc"></textarea>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="col-sm-4 mt-2">
-                                                                                        <div class="form-group fill">
-                                                                                            <label id="" name="" class="floating-label-activo-sm">Descripción </label>
-                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="laser_desc" id="laser_desc"></textarea>
+                                                                            <div class="col-sm-4 mt-2">
+                                                                                <div class="form-group fill">
+                                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="dermabras_obs" id="dermabras_obs"></textarea>
+                                                                                </div>
+                                                                                </div>
+                                                                                <!--IMAGENES-->
+                                                                                <div class="col-sm-6 col-md-6">
+                                                                                    <div class="card">
+                                                                                        <div class="card-header" id="img">
+                                                                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_dermabras_pre" aria-expanded="false" aria-controls="imagenes_dermabras_pre">
+                                                                                                Imagenes Pre
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <div id="imagenes_dermabras_pre-c" class="collapse show" aria-labelledby="imagenes_dermabras_pre" data-parent="#imagenes_dermabras_pre">
+                                                                                            <div class="card-body-aten shadow-none">
+                                                                                                <!-- [ Main Content ] start -->
+                                                                                                <div class="dropzone" id="mis-imagenes-imagenes-dermabras-pre" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                                                                <!-- [ file-upload ] end -->
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                <div class="col-sm-4 mt-2">
-                                                                                    <div class="form-group fill">
-                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="laser_obs" id="laser_obs"></textarea>
+                                                                                </div>
+                                                                                <div class="col-sm-6 col-md-6">
+                                                                                    <div class="card">
+                                                                                        <div class="card-header" id="img">
+                                                                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_dermabras-post" aria-expanded="false" aria-controls="imagenes_dermabras-post">
+                                                                                                Imagenes Post
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <div id="imagenes_dermabras_post-c" class="collapse show" aria-labelledby="imagenes_dermabras_post" data-parent="#imagenes_dermabras_post">
+                                                                                            <div class="card-body-aten shadow-none">
+                                                                                                <!-- [ Main Content ] start -->
+                                                                                                <div class="dropzone" id="mis-imagenes-imagenes-dermabras-post" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                                                                <!-- [ file-upload ] end -->
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </div>
-                                                                                 </div>
-                                                                                 <!--IMAGENES-->
-                                                                                 <div class="col-sm-6 col-md-6">
-                                                                                     <div class="card">
-                                                                                         <div class="card-header" id="img">
-                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_laser_post" aria-expanded="false" aria-controls="imagenes_laser_pre">
-                                                                                                 Imagenes.pre
-                                                                                             </button>
-                                                                                         </div>
-                                                                                         <div id="imagenes_laser_pre" class="collapse show" aria-labelledby="img" data-parent="#img">
-                                                                                             <div class="card-body-aten shadow-none">
-                                                                                                 <!-- [ Main Content ] start -->
-                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                                                                 </div>
-                                                                                                 <!-- [ file-upload ] end -->
-                                                                                             </div>
-                                                                                         </div>
-                                                                                     </div>
-                                                                                 </div>
-                                                                                 <div class="col-sm-6 col-md-6">
-                                                                                     <div class="card">
-                                                                                         <div class="card-header" id="img">
-                                                                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_laser_post" aria-expanded="false" aria-controls="imagenes_laser_post">
-                                                                                                 Imagenes.post
-                                                                                             </button>
-                                                                                         </div>
-                                                                                         <div id="imagenes_laser_post" class="collapse show" aria-labelledby="img" data-parent="#img">
-                                                                                             <div class="card-body-aten shadow-none">
-                                                                                                 <!-- [ Main Content ] start -->
-                                                                                                 <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                                                                 <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                                                                 </div>
-                                                                                                 <!-- [ file-upload ] end -->
-                                                                                             </div>
-                                                                                         </div>
-                                                                                     </div>
-                                                                                 </div>
-                                                                            </div>
-                                                                        </form>
+                                                                                </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="card">
                                                                     <div class="card-body shadow-none" id="formulario_rinofibro">
-                                                                        <form>
-
-                                                                            <div class="form-row mb-2">
-                                                                                <div class="col-md-12">
-                                                                                    <h6>OTRO PROCEDIMIENTO</h6>
+                                                                        <div class="form-row mb-2">
+                                                                            <div class="col-md-12">
+                                                                                <h6>CIRUGÍA LASER</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-4 mt-2">
+                                                                                <div class="form-group fill">
+                                                                                        <label class="floating-label">Motivo Procedimiento</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="laser_motivo" id="laser_motivo">
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="form-row">
-                                                                                <div class="col-sm-4 mt-2">
+                                                                            <div class="col-sm-4 mt-2">
                                                                                     <div class="form-group fill">
-                                                                                        <label class="floating-label">Procedimiento</label>
-                                                                                        <input type="text" class="form-control form-control-sm" name="nombre_otro proced" id="nombre_otro proced"/>
+                                                                                        <label id="" name="" class="floating-label-activo-sm">Descripción </label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="laser_desc" id="laser_desc"></textarea>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="col-sm-4 mt-2">
-                                                                                        <div class="form-group fill">
-                                                                                            <label id="" name="" class="floating-label-activo-sm">Descripción </label>
-                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="desc_tro proced" id="desc_otro proced"></textarea>
+                                                                            <div class="col-sm-4 mt-2">
+                                                                                <div class="form-group fill">
+                                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="laser_obs" id="laser_obs"></textarea>
+                                                                                </div>
+                                                                                </div>
+                                                                                <!--IMAGENES-->
+                                                                                <div class="col-sm-6 col-md-6">
+                                                                                    <div class="card">
+                                                                                        <div class="card-header" id="img">
+                                                                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_laser_post" aria-expanded="false" aria-controls="imagenes_laser_pre">
+                                                                                                Imagenes Pre
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <div id="imagenes_laser_pre-c" class="collapse show" aria-labelledby="imagenes_laser_pre" data-parent="#imagenes_laser_pre">
+                                                                                            <div class="card-body-aten shadow-none">
+                                                                                                <!-- [ Main Content ] start -->
+                                                                                                <div class="dropzone" id="mis-imagenes-imagenes-laser-pre" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                                                                <!-- [ file-upload ] end -->
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                <div class="col-sm-4 mt-2">
-                                                                                    <div class="form-group fill">
-                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_otro proced" id="obs_otro proced"></textarea>
+                                                                                </div>
+                                                                                <div class="col-sm-6 col-md-6">
+                                                                                    <div class="card">
+                                                                                        <div class="card-header" id="img">
+                                                                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_laser_post" aria-expanded="false" aria-controls="imagenes_laser_post">
+                                                                                                Imagenes Post
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <div id="imagenes_laser_post-c" class="collapse show" aria-labelledby="imagenes_laser_post" data-parent="#imagenes_laser_post">
+                                                                                            <div class="card-body-aten shadow-none">
+                                                                                                <!-- [ Main Content ] start -->
+                                                                                                <div class="dropzone" id="mis-imagenes-imagenes-laser-post" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                                                                <!-- [ file-upload ] end -->
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </div>
-                                                                                 </div>
+                                                                                </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card">
+                                                                    <div class="card-body shadow-none" id="formulario_rinofibro">
+                                                                        <div class="form-row mb-2">
+                                                                            <div class="col-md-12">
+                                                                                <h6>OTRO PROCEDIMIENTO</h6>
                                                                             </div>
-                                                                        </form>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-4 mt-2">
+                                                                                <div class="form-group fill">
+                                                                                    <label class="floating-label">Procedimiento</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="nombre_otro_proced" id="nombre_otro_proced"/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-4 mt-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label id="" name="" class="floating-label-activo-sm">Descripción </label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="desc_otro_proced" id="desc_otro_proced"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            <div class="col-sm-4 mt-2">
+                                                                                <div class="form-group fill">
+                                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_otro_proced" id="obs_otro_proced"></textarea>
+                                                                                </div>
+                                                                                </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -815,11 +777,7 @@
                                 <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
                                 @include('atencion_medica.generales.seccion_receta_examen_comunes')
                                 <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-
-
-
                                 <hr>
-
                                 <!--GUARDAR O IMPRIMIR FICHA-->
                                 <div class="row mb-3">
                                     <div class="col-md-12 text-center">
@@ -829,9 +787,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
                 </form>
             </div>
@@ -1017,11 +972,12 @@
         })
 
         /** MANEJO DE IMAGENES */
-        var myDropzone ;
-        Dropzone.options.misImagenes = {
+
+        var myDropzoneConsDermatoPre;
+        Dropzone.options.misImagenesConsDermatoPre  = {
             init:function()
             {
-                myDropzone = this;
+                myDropzoneConsDermatoPre = this;
             },
             url: "{{ route('profesional.imagen.carga') }}",
             method: 'post',
@@ -1081,7 +1037,7 @@
             // },
             success: function(file, response){
                 // console.log('-------------success-----------------------');
-                cargar_lista_imagenes();
+                cargar_lista_imagenes(myDropzoneConsDermatoPre, 'img_cons_dermato_pre');
 
                 if (file.previewElement) {
                     return file.previewElement.classList.add("dz-success");
@@ -1106,26 +1062,1239 @@
             },
             removedfile(file) {
                 // console.log('-------------removedfile-----------------------');
-                cargar_lista_imagenes();
+                cargar_lista_imagenes(myDropzoneConsDermatoPre, 'img_cons_dermato_pre');
                 if (file.previewElement != null && file.previewElement.parentNode != null) {
                     file.previewElement.parentNode.removeChild(file.previewElement);
                 }
                 return this._updateMaxFilesReachedClass();
             },
             canceled: function canceled(file) {
-                cargar_lista_imagenes();
+                cargar_lista_imagenes(myDropzoneConsDermatoPre, 'img_cons_dermato_pre');
                 return this.emit("error", file, this.options.dictUploadCanceled);
             },
         };
 
+        var myDropzoneConsDermatoPost;
+        Dropzone.options.misImagenesConsDermatoPost  = {
+            init:function()
+            {
+                myDropzoneConsDermatoPost = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzoneConsDermatoPost, 'img_cons_dermato_post');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzoneConsDermatoPost, 'img_cons_dermato_post');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzoneConsDermatoPost, 'img_cons_dermato_post');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var myDropzoneElimCicarPre;
+        Dropzone.options.misImagenesElimCicarPre  = {
+            init:function()
+            {
+                myDropzoneElimCicarPre = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzoneElimCicarPre, 'imagenes_elim_cicat_pre');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzoneElimCicarPre, 'imagenes_elim_cicat_pre');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzoneElimCicarPre, 'imagenes_elim_cicat_pre');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var myDropzoneElimCicatPost;
+        Dropzone.options.misImagenesElimCicatPost  = {
+            init:function()
+            {
+                myDropzoneElimCicatPost = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzoneElimCicatPost, 'imagenes_elim_cicat_post');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzoneElimCicatPost, 'imagenes_elim_cicat_post');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzoneElimCicatPost, 'imagenes_elim_cicat_post');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var myDropzoneProcPielDanadaImgPre;
+        Dropzone.options.misImagenesProcPielDanadaImgPre  = {
+            init:function()
+            {
+                myDropzoneProcPielDanadaImgPre = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzoneProcPielDanadaImgPre, 'proc_piel_danada_img_pre');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzoneProcPielDanadaImgPre, 'proc_piel_danada_img_pre');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzoneProcPielDanadaImgPre, 'proc_piel_danada_img_pre');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var myDropzoneProcPielDanadaImgPost;
+        Dropzone.options.misImagenesProcPielDanadaImgPost  = {
+            init:function()
+            {
+                myDropzoneProcPielDanadaImgPost = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzoneProcPielDanadaImgPost, 'proc_piel_danada_img_post');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzoneProcPielDanadaImgPost, 'proc_piel_danada_img_post');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzoneProcPielDanadaImgPre, 'proc_piel_danada_img_post');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var myDropzoneImagenesExfoliacionPre;
+        Dropzone.options.misImagenesImagenesExfoliacionPre  = {
+            init:function()
+            {
+                myDropzoneImagenesExfoliacionPre = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzoneImagenesExfoliacionPre, 'imagenes_exfoliacion_pre');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzoneImagenesExfoliacionPre, 'imagenes_exfoliacion_pre');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzoneImagenesExfoliacionPre, 'imagenes_exfoliacion_pre');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var myDropzoneImagenesExfoliacionPost;
+        Dropzone.options.misImagenesImagenesExfoliacionPost  = {
+            init:function()
+            {
+                myDropzoneImagenesExfoliacionPost = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzoneImagenesExfoliacionPost, 'imagenes_exfoliacion_post');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzoneImagenesExfoliacionPost, 'imagenes_exfoliacion_post');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzoneImagenesExfoliacionPost, 'imagenes_exfoliacion_post');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var myDropzoneImagenesDermabrasPre;
+        Dropzone.options.misImagenesImagenesDermabrasPre  = {
+            init:function()
+            {
+                myDropzoneImagenesDermabrasPre = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzoneImagenesDermabrasPre, 'imagenes_dermabras_pre');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzoneImagenesDermabrasPre, 'imagenes_dermabras_pre');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzoneImagenesDermabrasPre, 'imagenes_dermabras_pre');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var myDropzoneImagenesDermabrasPost;
+        Dropzone.options.misImagenesImagenesDermabrasPost  = {
+            init:function()
+            {
+                myDropzoneImagenesDermabrasPost = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzoneImagenesDermabrasPost, 'imagenes_dermabras_post');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzoneImagenesDermabrasPost, 'imagenes_dermabras_post');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzoneImagenesDermabrasPost, 'imagenes_dermabras_post');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var myDropzoneImagenesLaserPre;
+        Dropzone.options.misImagenesImagenesLaserPre  = {
+            init:function()
+            {
+                myDropzoneImagenesLaserPre = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzoneImagenesLaserPre, 'imagenes_laser_pre');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzoneImagenesLaserPre, 'imagenes_laser_pre');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzoneImagenesLaserPre, 'imagenes_laser_pre');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var myDropzoneImagenesLaserPost;
+        Dropzone.options.misImagenesImagenesLaserPost  = {
+            init:function()
+            {
+                myDropzoneImagenesLaserPost = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzoneImagenesLaserPost, 'imagenes_laser_post');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzoneImagenesLaserPost, 'imagenes_laser_post');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzoneImagenesLaserPost, 'imagenes_laser_post');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        // var myDropzone ;
+        // Dropzone.options.misImagenes = {
+        //     init:function()
+        //     {
+        //         myDropzone = this;
+        //     },
+        //     url: "{{ route('profesional.imagen.carga') }}",
+        //     method: 'post',
+        //     createImageThumbnails: true,
+        //     addRemoveLinks: true,
+        //     headers:{
+        //         'X-CSRF-TOKEN' : CSRF_TOKEN,
+        //         // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+        //     },
+
+        //     acceptedFiles: "image/*",
+        //     maxFilesize: 4,
+        //     maxFiles: 12,
+        //     /** El texto utilizado antes de que se eliminen los archivos. */
+        //     dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+        //     /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+        //     dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+        //     /**
+        //      * El texto que se agregará antes del formulario alternativo.
+        //      * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+        //      * ser ignorado.
+        //      */
+        //     dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+        //     /**
+        //      * Si el tamaño del archivo es demasiado grande.
+        //      * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+        //      */
+        //      dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+        //     /** Si el archivo no coincide con el tipo de archivo. */
+        //     dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+        //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+        //     dictCancelUpload: "Cancelar carga",
+
+        //     /** El texto que se muestra si una carga se canceló manualmente */
+        //     dictUploadCanceled: "Subida cancelada.",
+
+        //     /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+        //     dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+        //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+        //     dictRemoveFile: "Eliminar archivo",
+
+        //     /**
+        //      * Se muestra si `maxFiles` es st y se excede.
+        //      */
+        //     dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+        //     // accept(file, done) {
+        //     //     console.log('-------------accept-----------------------');
+        //     //     cargar_lista_imagenes();
+        //     //     return done();
+        //     // },
+        //     success: function(file, response){
+        //         // console.log('-------------success-----------------------');
+        //         cargar_lista_imagenes();
+
+        //         if (file.previewElement) {
+        //             return file.previewElement.classList.add("dz-success");
+        //         }
+        //     },
+        //     error(file, message) {
+        //         // console.log('-------------error-----------------------');
+        //         if (file.previewElement) {
+        //             file.previewElement.classList.add("dz-error");
+        //             if (typeof message !== "string" && message.error)
+        //             {
+        //                 message = message.error;
+        //             }
+        //             else
+        //             {
+        //                 message = message.message;
+        //             }
+        //             for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+        //                 node.textContent = message;
+        //             }
+        //         }
+        //     },
+        //     removedfile(file) {
+        //         // console.log('-------------removedfile-----------------------');
+        //         cargar_lista_imagenes();
+        //         if (file.previewElement != null && file.previewElement.parentNode != null) {
+        //             file.previewElement.parentNode.removeChild(file.previewElement);
+        //         }
+        //         return this._updateMaxFilesReachedClass();
+        //     },
+        //     canceled: function canceled(file) {
+        //         cargar_lista_imagenes();
+        //         return this.emit("error", file, this.options.dictUploadCanceled);
+        //     },
+        // };
+
 
 
         var lista_imagenes = [];
-        function cargar_lista_imagenes()
+        var lista_imagenes = {};
+        function cargar_lista_imagenes(obj_dropzone, alias_examen)
         {
             // console.log('--------------cargar_lista_imagenes----------------------');
-            lista_imagenes = [];
-            let temp  = myDropzone.getAcceptedFiles();
+            lista_imagenes[alias_examen] = [];
+            let temp  = obj_dropzone.getAcceptedFiles();
             $.each(temp, function( index, value )
             {
                 if(value.status == "success")
@@ -1133,7 +2302,7 @@
                     if(value.xhr !== undefined)
                     {
                         var img_temp = JSON.parse(value.xhr.response);
-                        lista_imagenes[index] = [
+                        lista_imagenes[alias_examen][index] = [
                             url=img_temp.img.url,
                             nombre_origian= img_temp.img.original_file_name,
                             nombre_img = img_temp.img.nombre_img,
@@ -1144,8 +2313,6 @@
                     }
                 }
             });
-
-
         }
 
         /** MANEJO DE IMAGENES */
@@ -1353,83 +2520,110 @@
             }
         }
 
-
-
-        function cargarSeccion(div_destino)
+        function biopsia(alias_examen)
         {
-            // var tipo = $('#'+select+'').val();
-            $('#'+div_destino).html('');
-            var seccion_actual = '';
-            var seccion_previa = '';
-            $('#form-otorrino').find('select,textarea').each(function(key, elemento){
-
-
-                html ='';
-
-                // if(seccion_previa == '' && seccion_actual == '')
-                if(key == 0)
-                {
-                    seccion_actual = $(elemento).data('seccion').trim();
-                    seccion_previa = $(elemento).data('seccion').trim();
-
-                    html +='<hr>';
-                    html +='<div class="row"><div class="col-md-12 text-center"><h6 style="color: #3e55c3;">'+seccion_actual+'</h6></div></div>';
-                    html +='<hr>';
-                }
-                else
-                {
-                    if($(elemento).data('seccion'))
-                    seccion_actual = $(elemento).data('seccion').trim();
-                }
-
-                if(seccion_actual == seccion_previa)
-                {
-                    html +='<hr>';
-                    html +='<div class="row"><div class="col-md-12 text-center"><h6 style="color: #3e55c3;">'+seccion_actual+'</h6></div></div>';
-                    html +='<hr>';
-                }
-
-                html +='<div class="row" style="margin-top:10px;">';
-                if($(elemento).prop('nodeName') == 'SELECT')
-                {
-                    if($(elemento).val() == 0)
-                        $(elemento).val(1)
-
-                    html +='<div class="col-md-5">'+$(elemento).data('titulo')+'</div>';
-                    html +='<div class="col-md-5">';
-                    html +='    '+$('#'+$(elemento).attr('id')+' option:selected').text()+'';
-                    html +='    <input type="hidden" name="modal_agregar_tipo_'+$(elemento).attr('id')+'" id="modal_agregar_tipo_'+$(elemento).attr('id')+'" value="'+$(elemento).val()+'">';
-                    html +='</div>';
-                    html +='<div class="col-md-2"></div>';
-                }
-                else if($(elemento).prop('nodeName') == 'TEXTAREA')
-                {
-                    if($(elemento).data('tipo'))
-                        html +='<div class="col-md-5">'+$(elemento).data('titulo')+'</div>';
-                    else
-                        html +='<div class="col-md-5">Detalle</div>';
-                    html +='<div class="col-md-5">';
-                    html +='    <textarea class="form-control caja-texto form-control-sm '+$(elemento).attr('id')+'_editar" style="display:none;" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_'+$(elemento).attr('id')+'" id="observaciones_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</textarea>';
-                    html +='    <label class="'+$(elemento).attr('id')+'_mostrar" id="label_observacion_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</label>';
-                    html +='</div>';
-                    html +='<div class="col-md-2">';
-                    html +='    <button class="btn btn-sm btn-success '+$(elemento).attr('id')+'_mostrar"  onclick="cambiar_div(\''+$(elemento).attr('id')+'_editar'+'\',\''+$(elemento).attr('id')+'_mostrar'+'\',\'label_observacion_'+$(elemento).attr('id')+'\',\'observaciones_'+$(elemento).attr('id')+'\')">Editar</button>';
-                    html +='    <button class="btn btn-sm btn-success '+$(elemento).attr('id')+'_editar" style="display:none;" onclick="cambiar_div(\''+$(elemento).attr('id')+'_mostrar'+'\',\''+$(elemento).attr('id')+'_editar'+'\',\'label_observacion_'+$(elemento).attr('id')+'\',\'observaciones_'+$(elemento).attr('id')+'\')">Guardar</button>';
-                    html +='</div>';
-
-                }
-                html +='</div>';
-                $('#'+div_destino).append(html);
-                seccion_previa = $(elemento).data('seccion');
-            });
+            if($('#biopsia_check_'+alias_examen).prop('checked'))
+			{
+				$('#m_biopsia_cir').modal('show');
+                $('#biopsia_'+alias_examen).val(1);
+			}
+            else
+            {
+                $('#biopsia_'+alias_examen).val(0);
+                $('#m_biopsia_cir').modal('hide');
+            }
         }
 
-        function cambiar_div(mostrar, ocultar, label, textarea)
+        function cambio_select_biopsia(alias_examen, select, div, input, valor)
         {
-            $('.'+mostrar).show();
-            $('.'+ocultar).hide();
-            $('#'+label).html( $('#'+textarea).val() );
+            if($('#biopsia_check_'+alias_examen).prop('checked'))
+			{
+				$('#'+select).attr('disabled',false).val(1);
+			}
+            else
+            {
+                $('#'+select).attr('disabled','disabled').val(0);
+            }
+            // evaluar_para_carga_detalle(select,div,input,valor);
+            evaluar_para_carga_detalle('biopsia_uro','div_biopsia_uro','obs_biopsia_uro',2);
         }
+
+
+        // function cargarSeccion(div_destino)
+        // {
+        //     // var tipo = $('#'+select+'').val();
+        //     $('#'+div_destino).html('');
+        //     var seccion_actual = '';
+        //     var seccion_previa = '';
+        //     $('#form-otorrino').find('select,textarea').each(function(key, elemento){
+
+
+        //         html ='';
+
+        //         // if(seccion_previa == '' && seccion_actual == '')
+        //         if(key == 0)
+        //         {
+        //             seccion_actual = $(elemento).data('seccion').trim();
+        //             seccion_previa = $(elemento).data('seccion').trim();
+
+        //             html +='<hr>';
+        //             html +='<div class="row"><div class="col-md-12 text-center"><h6 style="color: #3e55c3;">'+seccion_actual+'</h6></div></div>';
+        //             html +='<hr>';
+        //         }
+        //         else
+        //         {
+        //             if($(elemento).data('seccion'))
+        //             seccion_actual = $(elemento).data('seccion').trim();
+        //         }
+
+        //         if(seccion_actual == seccion_previa)
+        //         {
+        //             html +='<hr>';
+        //             html +='<div class="row"><div class="col-md-12 text-center"><h6 style="color: #3e55c3;">'+seccion_actual+'</h6></div></div>';
+        //             html +='<hr>';
+        //         }
+
+        //         html +='<div class="row" style="margin-top:10px;">';
+        //         if($(elemento).prop('nodeName') == 'SELECT')
+        //         {
+        //             if($(elemento).val() == 0)
+        //                 $(elemento).val(1)
+
+        //             html +='<div class="col-md-5">'+$(elemento).data('titulo')+'</div>';
+        //             html +='<div class="col-md-5">';
+        //             html +='    '+$('#'+$(elemento).attr('id')+' option:selected').text()+'';
+        //             html +='    <input type="hidden" name="modal_agregar_tipo_'+$(elemento).attr('id')+'" id="modal_agregar_tipo_'+$(elemento).attr('id')+'" value="'+$(elemento).val()+'">';
+        //             html +='</div>';
+        //             html +='<div class="col-md-2"></div>';
+        //         }
+        //         else if($(elemento).prop('nodeName') == 'TEXTAREA')
+        //         {
+        //             if($(elemento).data('tipo'))
+        //                 html +='<div class="col-md-5">'+$(elemento).data('titulo')+'</div>';
+        //             else
+        //                 html +='<div class="col-md-5">Detalle</div>';
+        //             html +='<div class="col-md-5">';
+        //             html +='    <textarea class="form-control caja-texto form-control-sm '+$(elemento).attr('id')+'_editar" style="display:none;" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_'+$(elemento).attr('id')+'" id="observaciones_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</textarea>';
+        //             html +='    <label class="'+$(elemento).attr('id')+'_mostrar" id="label_observacion_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</label>';
+        //             html +='</div>';
+        //             html +='<div class="col-md-2">';
+        //             html +='    <button class="btn btn-sm btn-success '+$(elemento).attr('id')+'_mostrar"  onclick="cambiar_div(\''+$(elemento).attr('id')+'_editar'+'\',\''+$(elemento).attr('id')+'_mostrar'+'\',\'label_observacion_'+$(elemento).attr('id')+'\',\'observaciones_'+$(elemento).attr('id')+'\')">Editar</button>';
+        //             html +='    <button class="btn btn-sm btn-success '+$(elemento).attr('id')+'_editar" style="display:none;" onclick="cambiar_div(\''+$(elemento).attr('id')+'_mostrar'+'\',\''+$(elemento).attr('id')+'_editar'+'\',\'label_observacion_'+$(elemento).attr('id')+'\',\'observaciones_'+$(elemento).attr('id')+'\')">Guardar</button>';
+        //             html +='</div>';
+
+        //         }
+        //         html +='</div>';
+        //         $('#'+div_destino).append(html);
+        //         seccion_previa = $(elemento).data('seccion');
+        //     });
+        // }
+
+        // function cambiar_div(mostrar, ocultar, label, textarea)
+        // {
+        //     $('.'+mostrar).show();
+        //     $('.'+ocultar).hide();
+        //     $('#'+label).html( $('#'+textarea).val() );
+        // }
 
 
 

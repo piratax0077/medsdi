@@ -1,0 +1,636 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\DetalleReceta;
+use App\Models\Especialidad;
+use App\Models\FichaAtencion;
+use App\Models\LugarAtencion;
+use App\Models\Paciente;
+use App\Models\Profesional;
+use App\Models\SubTipoEspecialidad;
+use App\Models\TipoEspecialidad;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
+class CertificadoController extends Controller
+{
+
+    public function testCertificacion(Request $request)
+    {
+        $datos = array();
+
+        // $datos['certificadoProfesional'] = static::certificadoProfesional($request->id_profesional);
+        // $datos['validarCertificadoProfesional'] = static::validarCertificadoProfesional($datos['certificadoProfesional']['certificado']);
+        $datos['certificadoDocumento'] = static::certificadoDocumento($request->id_ficha, $request->id_profesional, $request->id_paciente, $request->id_tipo);
+        $datos['validarCertificadoDocumento'] = static::validarCertificadoDocumento($datos['certificadoDocumento']['certificado']);
+
+        return $datos;
+    }
+
+    static public function certificadoProfesional($id_profesional)
+    {
+        $datos = array();
+        $error = array();
+        $campo_requerido = 1;
+
+        if(empty($id_profesional))
+        {
+            $error['id_profesional'] = 'campo requerido';
+            $campo_requerido = 0;
+        }
+
+        if($campo_requerido)
+        {
+            $profesional = Profesional::select('id', 'nombre', 'apellido_uno','rut','email')->find($id_profesional);
+
+            if($profesional)
+            {
+                /** datos profesional */
+                $id = $profesional->id;
+
+                /** cantidad de caracteres en id */
+                $cantidad = strlen($id);
+
+                /** completando a 10 caracteres */
+                $permitted_chars = '#\ABCDEFGHIJKLMNOPQRSTUVWXYZ&=';
+                $certificado = $id.rand(0,9).substr(str_shuffle($permitted_chars), 0, (9-$cantidad));
+
+                $datos['estado'] = 1;
+                $datos['certificado'] = base64_encode($certificado);
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Profesional no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
+    static public function validarCertificadoProfesional($token)
+    {
+        $datos = array();
+        $error = array();
+        $campo_requerido = 1;
+
+        if(empty($token))
+        {
+            $error['id'] = 'campo requerido';
+            $campo_requerido = 0;
+        }
+
+        if($campo_requerido)
+        {
+            $token_normal = base64_decode($token);
+            if(strlen($token_normal)==10)
+            {
+                $array_token = str_split($token_normal);
+                $numeros = '';
+                $letras = '';
+
+                foreach($array_token as $value)
+                {
+                    if(is_numeric($value))
+                    {
+                        $numeros .= $value;
+                    }
+                    else
+                    {
+                        $letras .= $value;
+                    }
+                }
+
+                $id_valido = substr($numeros,0,(strlen($numeros)-1));
+
+                if( !empty($id_valido) )
+                {
+
+                    $profesional = Profesional::select('id', 'nombre', 'apellido_uno', 'apellido_dos','rut','email', 'certificado', 'numero_certificado', 'id_especialidad', 'id_tipo_especialidad', 'id_sub_tipo_especialidad')->find($id_valido);
+
+                    if($profesional)
+                    {
+                        $especialidad = Especialidad::select('nombre')->find($profesional->id_especialidad);
+                        $tipo_especialidad = TipoEspecialidad::select('nombre')->find($profesional->id_tipo_especialidad);
+                        $sub_tipo_especialidad = SubTipoEspecialidad::select('nombre')->find($profesional->id_sub_tipo_especialidad);
+                        unset($profesional->id);
+                        unset($profesional->id_especialidad);
+                        unset($profesional->id_tipo_especialidad);
+                        unset($profesional->id_sub_tipo_especialidad);
+
+                        if($especialidad) $profesional->especialidad = $especialidad->nombre;
+                        else $profesional->especialidad = '';
+
+                        if($tipo_especialidad) $profesional->tipo_especialidad = $tipo_especialidad->nombre;
+                        else $profesional->tipo_especialidad = '';
+
+                        if($sub_tipo_especialidad) $profesional->sub_tipo_especialidad = $sub_tipo_especialidad->nombre;
+                        else $profesional->sub_tipo_especialidad = '';
+                        unset($profesional->id );
+                        unset($profesional->id_especialidad );
+                        unset($profesional->id_tipo_especialidad );
+                        unset($profesional->id_sub_tipo_especialidad );
+
+                        $datos['estado'] = 1;
+                        $datos['token'] = $token;
+                        $datos['registro'] = $profesional;
+                    }
+                    else
+                    {
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'Token no valido 2';
+                    }
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Token no valido 1';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Token no valido 3';
+            }
+
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
+    static public function certificadoDocumento($id_ficha, $id_profesional, $id_paciente, $tipo_documento )
+    {
+        $datos = array();
+        $error = array();
+        $campo_requerido = 1;
+
+        if(empty($id_ficha))
+        {
+            $error['id_ficha'] = 'campo requerido';
+            $campo_requerido = 0;
+        }
+
+        if(empty($id_profesional))
+        {
+            $error['id_profesional'] = 'campo requerido';
+            $campo_requerido = 0;
+        }
+
+        if(empty($id_paciente))
+        {
+            $error['id_paciente'] = 'campo requerido';
+            $campo_requerido = 0;
+        }
+
+        if(empty($tipo_documento))
+        {
+            $error['tipo_documento'] = 'campo requerido';
+            $campo_requerido = 0;
+        }
+
+        if($campo_requerido)
+        {
+            //id_ficha 0X id_profesional 0X id_paciente 0x
+            $ficha = $id_ficha.rand(0,9);
+            $profesional = $id_profesional.rand(0,9);
+            $paciente = $id_paciente.rand(0,9);
+            $tipo = $tipo_documento.rand(0,9);
+
+            /** completando a 10 caracteres */
+            $permitted_chars = '#\ABCDEFGHIJKLMNOPQRSTUVWXYZ&=';
+
+            $ficha_temp = $ficha.substr(str_shuffle($permitted_chars), 0, (6-strlen($ficha)));
+            $profesional_temp = $profesional.substr(str_shuffle($permitted_chars), 0, (6-strlen($profesional)));
+            $paciente_temp = $paciente.substr(str_shuffle($permitted_chars), 0, (6-strlen($paciente)));
+            $tipo_temp = $tipo.substr(str_shuffle($permitted_chars), 0, (2-strlen($tipo)));
+
+            $certificado = $tipo_temp.'-'.$ficha_temp.'-'.$profesional_temp.'-'.$paciente_temp;
+
+            $datos['estado'] = 1;
+            $datos['certificado'] = base64_encode($certificado);
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
+    static public function validarCertificadoDocumento($token)
+    {
+        $datos = array();
+        $error = array();
+        $campo_requerido = 1;
+
+        if(empty($token))
+        {
+            $error['token'] = 'campo requerido';
+            $campo_requerido = 0;
+        }
+
+        if($campo_requerido)
+        {
+
+            $token_normal = base64_decode($token);
+            /** token con 23 caracteres */
+            if(strlen($token_normal)==23)
+            {
+                /** divide en tres seccion */
+                $array_token = explode('-',$token_normal);
+                $numeros = array();
+                $letras = array();
+
+                foreach($array_token as $key_elementos => $value_elementos)
+                {
+                    $array_value_elementos = str_split($value_elementos);
+                    foreach($array_value_elementos as $value)
+                    {
+                        if(is_numeric($value))
+                        {
+                            if(isset($numeros[$key_elementos]))
+                                $numeros[$key_elementos] = $numeros[$key_elementos].$value;
+                            else
+                                $numeros[$key_elementos] = $value;
+                        }
+                        else
+                        {
+                            if(isset($letras[$key_elementos]))
+                                $letras[$key_elementos] = $letras[$key_elementos].$value;
+                            else
+                                $letras[$key_elementos] = $value;
+                        }
+                    }
+                }
+
+                /** quitar numero extra de los id */
+                $id_tipo = substr($numeros[0],0,(strlen($numeros[0])-1));
+                $id_ficha = substr($numeros[1],0,(strlen($numeros[1])-1));
+                $id_profesional = substr($numeros[2],0,(strlen($numeros[2])-1));
+                $id_paciente = substr($numeros[3],0,(strlen($numeros[3])-1));
+
+                if( !empty($id_ficha) || !empty($id_profesional) || !empty($id_paciente) )
+                {
+                    /** carga de datos de carda elemento */
+                    $ficha = FichaAtencion::select('id', 'id_lugar_atencion', 'motivo', 'hipotesis_diagnostico', 'id_paciente', 'id_profesional')->find($id_ficha);
+                    $profesional = Profesional::select('id', 'nombre', 'apellido_uno', 'apellido_dos', 'rut', 'email', 'certificado', 'numero_certificado', 'id_especialidad', 'id_tipo_especialidad', 'id_sub_tipo_especialidad')->find($id_profesional);
+                    $paciente = Paciente::select('id', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'email')->find($id_paciente);
+
+                    /**validacion de ficha encontrada */
+                    if($ficha)
+                    {
+                        /** validar que el profesional se sea el mismo que en ficha */
+                        if($ficha->id_profesional == $id_profesional)
+                        {
+                            /** validar que el paciente sea el mismo que en ficha */
+                            if($ficha->id_paciente == $id_paciente)
+                            {
+                                /** validacion de profesional encontrado */
+                                if($profesional)
+                                {
+                                    /** validacion de paciente encontrado */
+                                    if($paciente)
+                                    {
+                                        /** ficha  */
+                                        $lugaratencion = LugarAtencion::select('nombre')->find($ficha->id_lugar_atencion);
+                                        unset($ficha->id);
+                                        unset($ficha->id_lugar_atencion);
+                                        unset($ficha->id_paciente);
+                                        unset($ficha->id_profesional);
+                                        $ficha->lugar_atencion = $lugaratencion->nombre;
+
+                                        /** profesional */
+                                        $especialidad = Especialidad::select('nombre')->find($profesional->id_especialidad);
+                                        $tipo_especialidad = TipoEspecialidad::select('nombre')->find($profesional->id_tipo_especialidad);
+                                        $sub_tipo_especialidad = SubTipoEspecialidad::select('nombre')->find($profesional->id_sub_tipo_especialidad);
+                                        unset($profesional->id);
+                                        unset($profesional->id_especialidad);
+                                        unset($profesional->id_tipo_especialidad);
+                                        unset($profesional->id_sub_tipo_especialidad);
+
+                                        if($especialidad) $profesional->especialidad = $especialidad->nombre;
+                                        else $profesional->especialidad = '';
+
+                                        if($tipo_especialidad) $profesional->tipo_especialidad = $tipo_especialidad->nombre;
+                                        else $profesional->tipo_especialidad = '';
+
+                                        if($sub_tipo_especialidad) $profesional->sub_tipo_especialidad = $sub_tipo_especialidad->nombre;
+                                        else $profesional->sub_tipo_especialidad = '';
+
+
+                                        /** paciente */
+                                        unset($paciente->id);
+
+                                        /** CARGA DE DETALLE Y/O PDF */
+                                        switch ($id_tipo) {
+                                            // 1. RECETA
+                                            case '1':
+                                                $valido = 1;
+                                                $retorno_valido = 1;
+
+                                                $filtro_receta = array();
+                                                $filtro_receta[] = array('id_ficha', $id_ficha);
+                                                $detalles_receta = DetalleReceta::where($filtro_receta)->get();
+                                                if($detalles_receta)
+                                                {
+                                                    foreach ($detalles_receta as $key_detalle => $value_detalle) {
+
+                                                        if(static::validarTokenDocumento($token, $value_detalle->receta_token) == false)
+                                                        {
+                                                            $valido = 0;
+                                                            $retorno_valido = 0;
+                                                        }
+                                                    }
+                                                    if($valido)
+                                                    {
+                                                        $datos['registros']['detalle'] = $detalles_receta;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    $valido = 0;
+                                                    $retorno_valido = 0;
+                                                }
+                                                break;
+                                            // 2. RECETA ESPECIALIDADES
+                                            case '2':
+                                                break;
+                                            // 3. EXAMEN
+                                            case '3':
+                                                break;
+                                            // 4. EXAMEN ESPECIALIDADES
+                                            case '4':
+                                                break;
+                                            // 5. CONSENTIMIENTOS INFORMADOS
+                                            case '5':
+                                                break;
+                                            // 6. INFORME DE EXAMENES
+                                            case '6':
+                                                break;
+                                            // 7. CERTIFICADO DE REPOSO
+                                            case '7':
+                                                break;
+                                            // 8. INTER CONSULTA
+                                            case '8':
+                                                break;
+                                            // 9. RESPUESTA INTERCONSULTA
+                                            case '9':
+                                                break;
+                                            // 10. INFORM MEDICO
+                                            case '10':
+                                                break;
+                                            // 11. CONSTANCIA GES
+                                            case '11':
+                                                break;
+                                            // 12. REMBOLSO GASTOS MEDICOS
+                                            case '12':
+                                                break;
+                                            // 13. LICENCIA
+                                            case '13':
+                                                break;
+                                            // 14. FICHA MEDICA UNICA
+                                            case '14':
+                                                break;
+                                            // 15. ORDEN HOSPITALIZACION
+                                            case '15':
+                                                break;
+                                            // 17. SOLICITUD DE PABELLON
+                                            case '17':
+                                                break;
+                                            // 18. EPICRISIS
+                                            case '18':
+                                                break;
+                                            // 19. PROTOCOLO OPERATORIO
+                                            case '19':
+                                                break;
+                                            // 20. CARNE DE ALTA
+                                            case '20':
+                                                break;
+                                            // 21. CARNE DE VACUNA
+                                            case '21':
+                                                break;
+                                            default:
+                                                # code...
+                                                break;
+                                        }
+
+                                        if($retorno_valido)
+                                        {
+                                            /** retorno */
+                                            $datos['estado'] = 1;
+                                            $datos['token'] = $token;
+                                            $datos['registros']['ficha'] = $ficha;
+                                            $datos['registros']['profesional'] = $profesional;
+                                            $datos['registros']['paciente'] = $paciente;
+                                        }
+                                        else
+                                        {
+                                            $datos['estado'] = 0;
+                                            $datos['msj'] = 'Token no valido 8';
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        $datos['estado'] = 0;
+                                        $datos['msj'] = 'Token no valido 5';
+                                    }
+                                }
+                                else
+                                {
+                                    $datos['estado'] = 0;
+                                    $datos['msj'] = 'Token no valido 4';
+                                }
+                            }
+                            else
+                            {
+                                $datos['estado'] = 0;
+                                $datos['msj'] = 'Token no valido 7';
+                            }
+                        }
+                        else
+                        {
+                            $datos['estado'] = 0;
+                            $datos['msj'] = 'Token no valido 6';
+                        }
+                    }
+                    else
+                    {
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'Token no valido 3';
+                    }
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Token no valido 2';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Token no valido 1';
+            }
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
+    /**
+     * validarTokenDocumento
+     *
+     * @param [strin] $token1 (base64)
+     * @param [strin] $token2 (base64)
+     * @return boolean
+     */
+    static public function validarTokenDocumento($token1, $token2)
+    {
+        $return = 0;
+        $token_normal1 = base64_decode($token1);
+        $token_normal2 = base64_decode($token2);
+        /** token con 23 caracteres */
+        if(strlen($token_normal1)==23 && strlen($token_normal2)==23)
+        {
+            /** token 1 */
+            $array_token1 = explode('-',$token_normal1);
+            $numeros1 = array();
+            $letras1 = array();
+
+            foreach($array_token1 as $key_elementos => $value_elementos)
+            {
+                $array_value_elementos = str_split($value_elementos);
+                foreach($array_value_elementos as $value)
+                {
+                    if(is_numeric($value))
+                    {
+                        if(isset($numeros1[$key_elementos]))
+                            $numeros1[$key_elementos] = $numeros1[$key_elementos].$value;
+                        else
+                            $numeros1[$key_elementos] = $value;
+                    }
+                    else
+                    {
+                        if(isset($letras[$key_elementos]))
+                            $letras1[$key_elementos] = $letras1[$key_elementos].$value;
+                        else
+                            $letras1[$key_elementos] = $value;
+                    }
+                }
+            }
+
+            /** quitar numero extra de los id */
+            $id_tipo1 = substr($numeros1[0],0,(strlen($numeros1[0])-1));
+            $id_ficha1 = substr($numeros1[1],0,(strlen($numeros1[1])-1));
+            $id_profesional1 = substr($numeros1[2],0,(strlen($numeros1[2])-1));
+            $id_paciente1 = substr($numeros1[3],0,(strlen($numeros1[3])-1));
+
+            /** token 2 */
+            $array_token2 = explode('-',$token_normal2);
+            $numeros2 = array();
+            $letras2 = array();
+
+            foreach($array_token2 as $key_elementos => $value_elementos)
+            {
+                $array_value_elementos = str_split($value_elementos);
+                foreach($array_value_elementos as $value)
+                {
+                    if(is_numeric($value))
+                    {
+                        if(isset($numeros2[$key_elementos]))
+                            $numeros2[$key_elementos] = $numeros2[$key_elementos].$value;
+                        else
+                            $numeros2[$key_elementos] = $value;
+                    }
+                    else
+                    {
+                        if(isset($letras[$key_elementos]))
+                            $letras2[$key_elementos] = $letras2[$key_elementos].$value;
+                        else
+                            $letras2[$key_elementos] = $value;
+                    }
+                }
+            }
+
+            /** quitar numero extra de los id */
+            $id_tipo2 = substr($numeros2[0],0,(strlen($numeros2[0])-1));
+            $id_ficha2 = substr($numeros2[1],0,(strlen($numeros2[1])-1));
+            $id_profesional2 = substr($numeros2[2],0,(strlen($numeros2[2])-1));
+            $id_paciente2 = substr($numeros2[3],0,(strlen($numeros2[3])-1));
+
+            if( $id_tipo1 == $id_tipo2 && $id_ficha1 == $id_ficha2 && $id_profesional1 == $id_profesional2 && $id_paciente1 == $id_paciente2 )
+                $return = 1;
+            else
+                $return = 0;
+
+        }
+        else
+        {
+            $return = 0;
+        }
+
+        return $return;
+
+    }
+
+    static public function generarUrlProfesional($token)
+    {
+        $valido = 1;
+        $retorno = '';
+        if(empty($token))
+        {
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            // $retorno = route('validacion_profesional_').'?tkx='.$token;
+            $retorno = action([CertificadoController::class, 'validarProfesional'], ['tkx' => $token]);
+        }
+        else
+        {
+            $retorno = env('APP_URL');
+        }
+        return $retorno;
+    }
+
+    static public function generarUrlDocumento($token)
+    {
+        $valido = 1;
+        $retorno = '';
+        if(empty($token))
+        {
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            // $retorno = route('validacion_documento_').'?tkx='.$token;
+            $retorno = action([CertificadoController::class, 'validarDocumento'], ['tkx' => $token]);
+        }
+        else
+        {
+            $retorno = env('APP_URL');
+        }
+        return $retorno;
+    }
+}

@@ -48,6 +48,8 @@ use App\Models\User;
 use App\Models\UsoPersonal;
 use Carbon\Carbon;
 use App\Models\FichaCirugiaDigestiva;
+use App\Models\FichaDermo;
+use App\Models\FichaDermoImg;
 use App\Models\FichaOft;
 use App\Models\FichaOftBiomicroscopia;
 use App\Models\FichaOftBiomicroscopiaTipo;
@@ -56,6 +58,7 @@ use App\Models\FichaOftFondoOjoTipo;
 use App\Models\FichaOftTipo;
 use App\Models\FichaUro;
 use App\Models\FichaUroTipo;
+use App\Models\RecetaAudifono;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -332,6 +335,14 @@ class ficha_atencionController extends Controller
                 //NEONATOLOGIA
                 $ruta_blade = 'atencion_pediatrica.atencion_pediatrica_neonatologia';
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $fichaTipo = '';
+                $examen = '';
+                $lista_examen_especial = '';
+            }
+            else if($profesional->id_tipo_especialidad == 53 && empty($profesional->id_sub_tipo_especialidad))
+            {
+                // ATENCIÓN ENFERMERA CONTROL NIÑO SANO
+                $ruta_blade = 'atencion_pediatrica.atencion_enfermeria_control_nino_sano';
                 $fichaTipo = '';
                 $examen = '';
                 $lista_examen_especial = '';
@@ -2978,6 +2989,326 @@ class ficha_atencionController extends Controller
         }
     }
 
+    public function store_dermo(Request $request)
+    {
+        $campos_requeridos = 1;
+        $mensaje = '';
+        if(empty( trim($request->descripcion_hipotesis)))
+        {
+            $campos_requeridos = 0;
+            $mensaje = 'El Diagnóstico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
+        }
+        if($campos_requeridos)
+        {
+            /** FICHA ATENCION  */
+            $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+
+            $ficha = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
+            $id_profesional = $request->id_profesional_fc;
+            $id_paciente = $request->id_paciente_fc;
+
+            $ficha->motivo = $request->descripcion_consulta_dermato;
+            $ficha->antecedentes = $request->antec_especialidad_dermato;
+
+            $ges = 0;
+            if ($request->modal_ges == 'on') {
+                $ges = 1;
+            } else {
+                $ges = 0;
+            }
+
+            $cronico = 0;
+            if ($request->enf_cronico == 'on') {
+                $cronico = 1;
+            } else {
+                $cronico = 0;
+            }
+
+            $confidencial = 0;
+            if ($request->confidencial == 'on') {
+                $confidencial = 1;
+            } else {
+                $confidencial = 0;
+            }
+
+            //Signos vitales
+            if ($request->temperatura != '') {
+                $ficha->temperatura = $request->temperatura;
+            } else {
+                $ficha->temperatura = null;
+            }
+
+            if ($request->pulso != '') {
+                $ficha->pulso = $request->pulso;
+            } else {
+                $ficha->pulso = null;
+            }
+
+            if ($request->frecuencia_reposo != '') {
+                $ficha->frecuencia_reposo = $request->frecuencia_reposo;
+            } else {
+                $ficha->frecuencia_reposo = null;
+            }
+
+            if ($request->peso != '') {
+                $ficha->peso = $request->peso;
+            } else {
+                $ficha->peso = null;
+            }
+
+            if ($request->talla != '') {
+                $ficha->talla = $request->talla;
+            } else {
+                $ficha->talla = null;
+            }
+
+            if ($request->imc != '') {
+                $ficha->imc = $request->imc;
+            } else {
+                $ficha->imc = null;
+            }
+
+            if ($request->estado_nutricional != '') {
+                $ficha->estado_nutricional = $request->estado_nutricional;
+            } else {
+                $ficha->estado_nutricional = null;
+            }
+
+            //presion Arterial
+            if ($request->presion_bi != '') {
+                $ficha->presion_bi = $request->presion_bi;
+            } else {
+                $ficha->presion_bi = null;
+            }
+
+            if ($request->presion_bd != '') {
+                $ficha->presion_bd = $request->presion_bd;
+            } else {
+                $ficha->presion_bd = null;
+            }
+
+            if ($request->presion_de_pie != '') {
+                $ficha->presion_de_pie = $request->presion_de_pie;
+            } else {
+                $ficha->presion_de_pie = null;
+            }
+
+            if ($request->presion_sentado != '') {
+                $ficha->presion_sentado = $request->presion_sentado;
+            } else {
+                $ficha->presion_sentado = null;
+            }
+
+            //comunicacion y Traslado
+            if ($request->ct_estado_conciencia != '') {
+                $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
+            } else {
+                $ficha->ct_estado_conciencia = null;
+            }
+
+            if ($request->ct_lenguaje != '') {
+                $ficha->ct_lenguaje = $request->ct_lenguaje;
+            } else {
+                $ficha->ct_lenguaje = null;
+            }
+
+            if ($request->ct_traslado != '') {
+                $ficha->ct_traslado = $request->ct_traslado;
+            } else {
+                $ficha->ct_traslado = null;
+            }
+
+            $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
+            $ficha->diagnostico_ce10 = $request->descripcion_cie;
+
+            $ficha->cronico = $cronico;
+            $ficha->ges = $ges;
+            $ficha->confidencial = $confidencial;
+            $ficha->id_paciente = $id_paciente;
+            $ficha->id_profesional = $id_profesional;
+            $ficha->finalizada = 1;
+            if (!$ficha->save())
+            {
+                return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
+            }
+            else
+            {
+                $tipo_mensaje = 'success';
+                $mensaje .= 'Ficha Clínica guardada de forma correcta\n';
+
+                /** IMAGENES DE DERMATOLOGIA */
+                $array_imagenes = (array)json_decode($request->input_lista_imagenes);
+                if(array_key_exists('',$array_imagenes))
+
+                $value_img_cons_dermato_pre = 0;
+                $value_img_cons_dermato_post = 0;
+                $value_imagenes_elim_cicat_pre = 0;
+                $value_imagenes_elim_cicat_post = 0;
+                $value_proc_piel_danada_img_pre = 0;
+                $value_proc_piel_danada_img_post = 0;
+                $value_imagenes_exfoliacion_pre = 0;
+                $value_imagenes_exfoliacion_post = 0;
+                $value_imagenes_dermabras_pre = 0;
+                $value_imagenes_dermabras_post = 0;
+                $value_imagenes_laser_pre = 0;
+                $value_imagenes_laser_post = 0;
+                if(array_key_exists('img_cons_dermato_pre',$array_imagenes))
+                    $value_img_cons_dermato_pre = 1;
+                if(array_key_exists('img_cons_dermato_post',$array_imagenes))
+                    $value_img_cons_dermato_post = 1;
+                if(array_key_exists('imagenes_elim_cicat_pre',$array_imagenes))
+                    $value_imagenes_elim_cicat_pre = 1;
+                if(array_key_exists('imagenes_elim_cicat_post',$array_imagenes))
+                    $value_imagenes_elim_cicat_post = 1;
+                if(array_key_exists('proc_piel_danada_img_pre',$array_imagenes))
+                    $value_proc_piel_danada_img_pre = 1;
+                if(array_key_exists('proc_piel_danada_img_post',$array_imagenes))
+                    $value_proc_piel_danada_img_post = 1;
+                if(array_key_exists('imagenes_exfoliacion_pre',$array_imagenes))
+                    $value_imagenes_exfoliacion_pre = 1;
+                if(array_key_exists('imagenes_exfoliacion_post',$array_imagenes))
+                    $value_imagenes_exfoliacion_post = 1;
+                if(array_key_exists('imagenes_dermabras_pre',$array_imagenes))
+                    $value_imagenes_dermabras_pre = 1;
+                if(array_key_exists('imagenes_dermabras_post',$array_imagenes))
+                    $value_imagenes_dermabras_post = 1;
+                if(array_key_exists('imagenes_laser_pre',$array_imagenes))
+                    $value_imagenes_laser_pre = 1;
+                if(array_key_exists('imagenes_laser_post',$array_imagenes))
+                    $value_imagenes_laser_post = 1;
+
+
+
+                /** REGISTRO FICHA DERMATOLOGIA */
+                $ficha_dermo = new FichaDermo();
+
+                $ficha_dermo->id_ficha_atencion = $ficha->id;
+                $ficha_dermo->id_paciente = $id_paciente;
+                $ficha_dermo->id_profesional = $id_profesional;
+
+                $ficha_dermo->descripcion_consulta_dermato = $request->descripcion_consulta_dermato;
+                $ficha_dermo->antec_especialidad_dermato = $request->antec_especialidad_dermato;
+                $ficha_dermo->img_cons_dermato_pre = $value_img_cons_dermato_pre;
+                $ficha_dermo->img_cons_dermato_post = $value_img_cons_dermato_post;
+                $ficha_dermo->biopsia_dermat = $request->biopsia_dermat;
+                $ficha_dermo->obs_result_biopsia = $request->obs_result_biopsia;
+                $ficha_dermo->elim_cicat = $request->elim_cicat;
+                $ficha_dermo->desc_elim_cicat = $request->desc_elim_cicat;
+                $ficha_dermo->obs_elim_cica = $request->obs_elim_cica;
+                $ficha_dermo->imagenes_elim_cicat_pre = $value_imagenes_elim_cicat_pre;
+                $ficha_dermo->imagenes_elim_cicat_post = $value_imagenes_elim_cicat_post;
+
+                $ficha_dermo->proc_piel_danada = $request->proc_piel_danada;
+                $ficha_dermo->proc_piel_danada_desc = $request->proc_piel_danada_desc;
+                $ficha_dermo->proc_piel_danada_obs = $request->proc_piel_danada_obs;
+                $ficha_dermo->proc_piel_danada_img_pre = $value_proc_piel_danada_img_pre;
+                $ficha_dermo->proc_piel_danada_img_post = $value_proc_piel_danada_img_post;
+                $ficha_dermo->exfoliacion_proc = $request->exfoliacion_proc;
+                $ficha_dermo->exfoliacion_comp = $request->exfoliacion_comp;
+                $ficha_dermo->exfoliacion_desc = $request->exfoliacion_desc;
+                $ficha_dermo->exfoliacion_obs = $request->exfoliacion_obs;
+                $ficha_dermo->imagenes_exfoliacion_pre = $value_imagenes_exfoliacion_pre;
+                $ficha_dermo->imagenes_exfoliacion_post = $value_imagenes_exfoliacion_post;
+
+                $ficha_dermo->dermabras_proc = $request->dermabras_proc;
+                $ficha_dermo->dermabras_desc = $request->dermabras_desc;
+                $ficha_dermo->dermabras_obs = $request->dermabras_obs;
+                $ficha_dermo->imagenes_dermabras_pre = $value_imagenes_dermabras_pre;
+                $ficha_dermo->imagenes_dermabras_post = $value_imagenes_dermabras_post;
+                $ficha_dermo->laser_motivo = $request->laser_motivo;
+                $ficha_dermo->laser_desc = $request->laser_desc;
+                $ficha_dermo->laser_obs = $request->laser_obs;
+                $ficha_dermo->imagenes_laser_pre = $value_imagenes_laser_pre;
+                $ficha_dermo->imagenes_laser_post = $value_imagenes_laser_post;
+
+                $ficha_dermo->nombre_otro_proced = $request->nombre_otro_proced;
+                $ficha_dermo->desc_otro_proced = $request->desc_otro_proced;
+                $ficha_dermo->obs_otro_proced = $request->obs_otro_proced;
+
+                if($ficha_dermo->save())
+                {
+                    $mensaje .= 'Ficha Clínica Dermatologia guardada de forma correcta\n';
+                    //  finalizar hora medica
+                    $hora_medica->id_estado = 6;
+                    $mensaje_estado_hora_medica = '';
+                    if (!$hora_medica->save()) {
+                        $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
+                    }
+                    else
+                    {
+                        $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.\n';
+                    }
+                    $mensaje .= $mensaje_estado_hora_medica;
+
+                    $array_lista_key_img = array( 'img_cons_dermato_pre', 'img_cons_dermato_post', 'imagenes_elim_cicat_pre', 'imagenes_elim_cicat_post', 'proc_piel_danada_img_pre', 'proc_piel_danada_img_post', 'imagenes_exfoliacion_pre', 'imagenes_exfoliacion_post', 'imagenes_dermabras_pre', 'imagenes_dermabras_post', 'imagenes_laser_pre', 'imagenes_laser_post' );
+
+                    $resulto_img = array();
+                    foreach ($array_lista_key_img as $key_key => $value_key)
+                    {
+                        if(array_key_exists($value_key,$array_imagenes))
+                        {
+                            foreach ($array_imagenes[$value_key] as $key => $value)
+                            {
+                                $paciente = Paciente::find($id_paciente);
+                                // echo json_encode($value);
+                                $ruta_temp = $value[0];
+                                $nombre_real = $value[1];
+                                $nombre_temp = $value[2];
+                                $file_extension = $value[3];
+                                $nombre_final = $paciente->rut.'_'.$value_key.'_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+
+                                $resulto_img[$key] = CargaImagenController::moverImagen($nombre_temp, 'img_examen', $nombre_final);
+                                $registro_img = new FichaDermoImg();
+                                $registro_img->id_ficha_atencion = $ficha->id;
+                                $registro_img->id_ficha_dermo = $ficha_dermo->id;
+                                $registro_img->id_paciente = $id_paciente;
+                                $registro_img->id_profesional = $id_profesional;
+                                $registro_img->tipo = $value_key;
+                                $registro_img->url = $resulto_img[$key]['proceso']['url'];
+                                $registro_img->nombre = $nombre_final;
+
+                                if($registro_img->save())
+                                {
+                                    $resulto_img[$key]['estado'] = 1;
+                                    $resulto_img[$key]['msj'] = 'imagen registrada';
+                                }
+                                else
+                                {
+                                    $resulto_img[$key]['estado'] = 0;
+                                    $resulto_img[$key]['msj'] = 'falla en registro de imagen';
+                                }
+                            }
+                            $datos['imagenes'][$value_key]['resulto_img'][] = $resulto_img;
+                        }
+                    }
+                }
+                else
+                {
+                    $mensaje .= 'Ficha Clínica Dermatologia problema al registrar\n';
+                }
+
+                if($request->cerrarsession == 0 || $request->cerrarsession =='')
+                {
+                    /** redireccion Redirect funciona correcto */
+                    return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+                }
+                else if($request->cerrarsession == 1)
+                {
+                    //si funciona
+                    $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+                    return \Redirect::route('home.ingreso');
+
+                }
+            }
+
+        }
+        else
+        {
+            return back()->with('error', $mensaje)->withInput();
+        }
+    }
+
 
     public function crear_licencia(Request $request)
     {
@@ -3231,7 +3562,7 @@ class ficha_atencionController extends Controller
     }
 
 
-    public function pdf_receta_medicamentos(Request $request)
+    public function pdf_receta_medicamentosBAK(Request $request)
     {
         $datos = array();
         $detalleReceta = DetalleReceta::where('id_ficha', $request->id_ficha_atencion)->get();
@@ -3247,6 +3578,7 @@ class ficha_atencionController extends Controller
             $detalle_receta = (object)array();
 
             $token_receta = '';
+            $cantidad_recetas = 0;
             foreach ($detalleReceta as $key_detalle_receta => $value_detalle_receta)
             {
                 // var_dump($value_detalle_receta);
@@ -3263,28 +3595,83 @@ class ficha_atencionController extends Controller
                     'cantidad_compra' => $value_detalle_receta->cantidad_compra,
                     'receta_token' => $value_detalle_receta->receta_token,
                 );
-                $token_receta = $value_detalle_receta->receta_token;
+
+                $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 1);
+                if($temp_token['estado'] == 1)
+                {
+                    $token_receta = $temp_token['certificado'];
+                    $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                    $qr_documento = GeneradorQrController::generar($url_documento);
+                }
+                else
+                {
+                    $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 1);
+                    $token_receta = $temp_token['certificado'];
+                    $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                    $qr_documento = GeneradorQrController::generar($url_documento);
+                }
 
 
                 $nombre_control = $producto->RecetaControl()->first()->descripcion;
                 $id_control = $producto->RecetaControl()->first()->cod_control;
-                // 1- Receta retenida con control de Psicotrópicos
-                // 2- Receta retenida con control de Estupefacientes
-                // 3- Receta Cheque
 
-                if(trim($nombre_control) != 'Receta retenida con control de Psicotrópicos' && trim($nombre_control) != 'Receta retenida con control de Estupefacientes' && trim($nombre_control) != 'Receta Cheque')
+                // 4 - Receta retenida
+                // 6 - Receta Simple
+                // 7 - Venta Directa
+
+                // 1 - Receta retenida con control de Psicotrópicos
+                // 2 - Receta retenida con control de Estupefacientes
+                // 3 - Receta Cheque
+                // 5 - Receta retenida con control de Codeína
+
+
+                if(trim($nombre_control) == 'Receta retenida' || trim($nombre_control) == 'Receta Simple' || trim($nombre_control) == 'Venta Directa')
+                {
                     $nombre_control = 'Receta';
-                if(trim($nombre_control) == 'Receta retenida con control de Psicotrópicos' || trim($nombre_control) == 'Receta retenida con control de Estupefacientes' || trim($nombre_control) == 'Receta Cheque')
+
+                    if(!isset($detalle_receta->$nombre_control))
+                        $cantidad_recetas ++;
+
+                }
+                else
+                {
                     $nombre_control = trim($nombre_control).'_'.$key_detalle_receta;
+
+                    if(!isset($detalle_receta->$nombre_control))
+                        $cantidad_recetas ++;
+
+                }
 
                 $detalle_receta->$nombre_control[] = $array_medicamento;
 
+
+                $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+                if($temp_token['estado'] == 1)
+                {
+                    $token_profesional = $temp_token['certificado'];
+                    $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                    $qr_profesional = GeneradorQrController::generar($url_documento);
+                }
+                else
+                {
+                    $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                    $token_profesional = $temp_token['certificado'];
+                    $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                    $qr_profesional = GeneradorQrController::generar($url_documento);
+                }
+
+
             }
+
+            // echo json_encode($detalle_receta);
+            // die();
 
             $array_ficha_atencion = array(
                 'id' => $ficha_atencion->id,
                 'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
                 'token' => $token_receta,
+                'url' => $url_documento,
+                'qr' => $qr_documento,
             );
             $array_lugar_atencion = array(
                 'id' => $lugar_atencion->id,
@@ -3294,24 +3681,178 @@ class ficha_atencionController extends Controller
                 'id' => $profesional->id,
                 'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
                 'rut' => $profesional->rut,
-                'especialidad' => $profesional->SubTipoEspecialidad()->first()->nombre,
-                'token' =>  $token_firma,
+                'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
+                'token' =>  $token_profesional,
+                'url' =>  $url_profesional,
+                'qr' =>  $qr_profesional,
             );
             $array_paciente = array(
                 'id' => $paciente->id,
                 'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
                 'fecha_nac' => $paciente->fecha_nac,
                 'rut' => $paciente->rut,
+                'sexo' => $paciente->sexo,
                 'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
             );
 
-            return  PdfController::generarPDF('RECETA MEDICA', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_receta'), 'Receta Medica '.$paciente->rut, 'pdf_receta_medica');
+            return  PdfController::generarPDF('RECETA MEDICA', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_receta','cantidad_recetas'), 'Receta Medica '.$paciente->rut, 'pdf_receta_medica');
         }
         else
         {
             $datos['estado'] = 0;
             $datos['msj'] = 'No se encontraron medicamentos';
         }
+    }
+
+    public function pdf_receta_medicamentos(Request $request)
+    {
+        $datos = array();
+
+        $ficha_atencion = FichaAtencion::find($request->id_ficha_atencion);
+        $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
+        $profesional = Profesional::find($ficha_atencion->id_profesional);
+        $paciente = Paciente::find($ficha_atencion->id_paciente);
+
+        /** token receta */
+        $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 1);
+        if($temp_token['estado'] == 1)
+        {
+            $token_receta = $temp_token['certificado'];
+            $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+            $qr_documento = GeneradorQrController::generar($url_documento);
+        }
+        else
+        {
+            $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 1);
+            $token_receta = $temp_token['certificado'];
+            $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+            $qr_documento = GeneradorQrController::generar($url_documento);
+        }
+
+        /** token profesional */
+        $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+        if($temp_token['estado'] == 1)
+        {
+            $token_profesional = $temp_token['certificado'];
+            $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+            $qr_profesional = GeneradorQrController::generar($url_documento);
+        }
+        else
+        {
+            $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+            $token_profesional = $temp_token['certificado'];
+            $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+            $qr_profesional = GeneradorQrController::generar($url_documento);
+        }
+
+        /** cantidad de hojas (secciones) */
+        $cantidad_recetas = 0;
+
+        /** detalle de receta */
+        $detalle_receta = (object)array();
+
+        /** MEDICAMENTOS */
+        $detalleReceta = DetalleReceta::where('id_ficha', $request->id_ficha_atencion)->get();
+        if($detalleReceta->count()>0)
+        {
+            foreach ($detalleReceta as $key_detalle_receta => $value_detalle_receta)
+            {
+                // var_dump($value_detalle_receta);
+                $producto = Articulo::where('nombre',$value_detalle_receta->producto)->first();
+
+                $array_medicamento = array(
+                    'nombre_medicamento' => $producto->nombre,
+                    'droga'=>$producto->droga,
+                    'presentacion' => $value_detalle_receta->presentacion,
+                    'posologia' => $value_detalle_receta->posologia,
+                    'via_administracion' => $value_detalle_receta->via_administracion,
+                    'periodo' => $value_detalle_receta->periodo,
+                    'uso_cronico' => $value_detalle_receta->uso_cronico,
+                    'cantidad_compra' => $value_detalle_receta->cantidad_compra,
+                    'receta_token' => $value_detalle_receta->receta_token,
+                );
+
+                $nombre_control = $producto->RecetaControl()->first()->descripcion;
+                $id_control = $producto->RecetaControl()->first()->cod_control;
+
+                // 4 - Receta retenida
+                // 6 - Receta Simple
+                // 7 - Venta Directa
+
+                // 1 - Receta retenida con control de Psicotrópicos
+                // 2 - Receta retenida con control de Estupefacientes
+                // 3 - Receta Cheque
+                // 5 - Receta retenida con control de Codeína
+
+
+                if(trim($nombre_control) == 'Receta retenida' || trim($nombre_control) == 'Receta Simple' || trim($nombre_control) == 'Venta Directa')
+                {
+                    $nombre_control = 'Receta';
+                    if(!isset($detalle_receta->$nombre_control))
+                        $cantidad_recetas ++;
+                }
+                else
+                {
+                    $nombre_control = trim($nombre_control).'_'.$key_detalle_receta;
+                    if(!isset($detalle_receta->$nombre_control))
+                        $cantidad_recetas ++;
+                }
+                $detalle_receta->$nombre_control[] = $array_medicamento;
+            }
+
+            // return  PdfController::generarPDF('RECETA MEDICA', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_receta','cantidad_recetas'), 'Receta Medica '.$paciente->rut, 'pdf_receta_medica');
+        }
+
+        /** ESPECIALIDAD OTORRINOLARINGOLOGÍA (AUDIFONOS) */
+        $detalleOrlAudifono = RecetaAudifono::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+        if($detalleOrlAudifono)
+        {
+            $cantidad_recetas ++;
+            $arrayTipo = array('','Intracanal', 'Retroauricular', 'Audigafas', 'Implante', 'Otro Tipo');
+            $array_medicamento = array(
+                'tipo' => $arrayTipo[$detalleOrlAudifono->tipo],
+                'od' => $detalleOrlAudifono->od,
+                'especificacion_od' => $detalleOrlAudifono->especificacion_od,
+                'oi' => $detalleOrlAudifono->oi,
+                'especificacion_oi' => $detalleOrlAudifono->especificacion_oi,
+                'bi' => $detalleOrlAudifono->bi,
+                'especificacion_bi' => $detalleOrlAudifono->especificacion_bi,
+                'especificacion_general' => $detalleOrlAudifono->especificacion_general,
+            );
+            $nombre_control = 'ORL_AUDIFONO';
+            $detalle_receta->$nombre_control[] = $array_medicamento;
+        }
+
+        $array_ficha_atencion = array(
+            'id' => $ficha_atencion->id,
+            'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
+            'token' => $token_receta,
+            'url' => $url_documento,
+            'qr' => $qr_documento,
+        );
+        $array_lugar_atencion = array(
+            'id' => $lugar_atencion->id,
+            'nombre' => $lugar_atencion->nombre
+        );
+        $array_profesional = array(
+            'id' => $profesional->id,
+            'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
+            'rut' => $profesional->rut,
+            'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
+            'token' =>  $token_profesional,
+            'url' =>  $url_profesional,
+            'qr' =>  $qr_profesional,
+        );
+        $array_paciente = array(
+            'id' => $paciente->id,
+            'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
+            'fecha_nac' => $paciente->fecha_nac,
+            'rut' => $paciente->rut,
+            'sexo' => $paciente->sexo,
+            'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
+        );
+        return  PdfController::generarPDF('RECETA MEDICA', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_receta','cantidad_recetas'), 'Receta Medica '.$paciente->rut, 'pdf_receta_medica');
+
     }
 
     public function pdf_orden_examenes(Request $request)
@@ -3330,55 +3871,118 @@ class ficha_atencionController extends Controller
             $detalle_orden = (object)array();
 
             $token_receta = '';
+            $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 1);
+            if($temp_token['estado'] == 1)
+            {
+                $token_receta = $temp_token['certificado'];
+                $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                $qr_documento = GeneradorQrController::generar($url_documento);
+            }
+            else
+            {
+                $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 1);
+                $token_receta = $temp_token['certificado'];
+                $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                $qr_documento = GeneradorQrController::generar($url_documento);
+            }
+
+            $cantidad_recetas = 0;
             foreach ($examenesPPF as $key_examen_ppf => $value_examen_ppf)
             {
                 $nombre_examen = $value_examen_ppf->examen;
 
+                $nombre_parent = '';
                 $examen_base = ExamenMedico::where('nombre_examen', $value_examen_ppf->examen)->first();
+                if($examen_base->cod_parent !== 0)
+                {
+                    $padre1 = ExamenMedico::where('cod_examen', $examen_base->cod_parent)->first();
+                    if($padre1)
+                    {
+                        $nombre_parent = $padre1->nombre_examen;
+                        if($padre1->cod_parent != 0)
+                        {
+                            $padre2 = ExamenMedico::where('cod_examen', $padre1->cod_parent)->first();
+                            if($padre2)
+                            {
+                                $nombre_parent = $padre2->nombre_examen;
+                                if($padre2->cod_parent != 0)
+                                {
+                                    $padre3 = ExamenMedico::where('cod_examen', $padre2->cod_parent)->first();
+                                    if($padre3)
+                                    {
+                                        $nombre_parent = $padre3->nombre_examen;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
 
                 $id_base =  $examen_base->cod_parent;
                 $codigo =  $examen_base->codigo;
                 $con_contraste =  $value_examen_ppf->con_contraste;
-                $nombre_control = 'orden';
-                if( $id_base == 363 || $id_base == 364 || $id_base == 365 || $id_base == 366 || $id_base == 367 )
-                {
-                    $nombre_control = 'radiologia';
-                    if( $id_base == 363 || $id_base == 364 )
-                    {
-                        $nombre_radiologia = ExamenMedico::where('cod_examen', $id_base)->first();
-                        $nombre_examen = $nombre_radiologia->nombre_examen.' '.$value_examen_ppf->examen;
-                    }
+                $nombre_control = $nombre_parent;
+                // $nombre_control = 'orden';
+                // if( $id_base == 363 || $id_base == 364 || $id_base == 365 || $id_base == 366 || $id_base == 367 )
+                // {
+                //     $nombre_control = 'radiologia';
+                //     if( $id_base == 363 || $id_base == 364 )
+                //     {
+                //         $nombre_radiologia = ExamenMedico::where('cod_examen', $id_base)->first();
+                //         $nombre_examen = $nombre_radiologia->nombre_examen.' '.$value_examen_ppf->examen;
+                //     }
 
-                }
+                // }
+
+
+
+                if(!isset($detalle_orden->$nombre_control))
+                        $cantidad_recetas ++;
 
                 /**
-                `id_prioridad`,
-                `id_paciente`,
-                `id_profesional`,
-                `id_ficha_atencion`,
-                `examen`,
-                `tipo_examen`,
-                `tipo_ficha`,
-                 */
+                * `id_prioridad`,
+                * `id_paciente`,
+                * `id_profesional`,
+                * `id_ficha_atencion`,
+                * `examen`,
+                * `tipo_examen`,
+                * `tipo_ficha`,
+                */
                 $prioridad_text = array('','Baja', 'Media', 'Alta', 'Urgente');
                 $array_examenes = array(
                     'prioridad' => $prioridad_text[$value_examen_ppf->id_prioridad],
-                    'examen'=>$nombre_examen,
+                    'examen'=> $nombre_examen,
                     'contraste'=>$con_contraste,
                     'tipo_examen' => $value_examen_ppf->tipo_examen,
                     'codigo' => $codigo,
                 );
 
 
-
                 $detalle_orden->$nombre_control[] = $array_examenes;
 
+                $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+                if($temp_token['estado'] == 1)
+                {
+                    $token_profesional = $temp_token['certificado'];
+                    $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                    $qr_profesional = GeneradorQrController::generar($url_documento);
+                }
+                else
+                {
+                    $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                    $token_profesional = $temp_token['certificado'];
+                    $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                    $qr_profesional = GeneradorQrController::generar($url_documento);
+                }
             }
 
             $array_ficha_atencion = array(
                 'id' => $ficha_atencion->id,
                 'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
                 'token' => $token_receta,
+                'url' => $url_documento,
+                'qr' => $qr_documento,
             );
             $array_lugar_atencion = array(
                 'id' => $lugar_atencion->id,
@@ -3389,17 +3993,20 @@ class ficha_atencionController extends Controller
                 'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
                 'rut' => $profesional->rut,
                 'especialidad' => $profesional->SubTipoEspecialidad()->first()->nombre,
-                'token' =>  $token_firma,
+                'token' =>  $token_profesional,
+                'url' =>  $url_profesional,
+                'qr' =>  $qr_profesional,
             );
             $array_paciente = array(
                 'id' => $paciente->id,
                 'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
                 'fecha_nac' => $paciente->fecha_nac,
                 'rut' => $paciente->rut,
+                'sexo' => $paciente->sexo,
                 'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
             );
 
-            return  PdfController::generarPDF('ORDEN EXAMENES', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_orden'), 'Orden Examenes '.$paciente->rut, 'pdf_orden_examen');
+            return  PdfController::generarPDF('ORDEN EXAMENES', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_orden','cantidad_recetas'), 'Orden Examenes '.$paciente->rut, 'pdf_orden_examen');
         }
         else
         {

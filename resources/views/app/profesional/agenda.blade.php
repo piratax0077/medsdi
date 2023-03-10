@@ -1,6 +1,7 @@
 @extends('template.profesional.template')
 @section('page-styles')
     <link href='{{ asset('js/fullcalendar-5.10.1/lib/main.css') }}' rel='stylesheet' />
+
     <style>
         #loading {
             display: none;
@@ -35,6 +36,7 @@
             height: 3.5em;
         }
     </style>
+    <link href='{{ asset('css/estilos_boton_agen_examenes.css') }}' rel='stylesheet' />
 @endsection
 
 @section('content')
@@ -61,165 +63,8 @@
             </div>
         </div>
     </div>
-{{--
-    <div class="pcoded-main-container">
-        <div class="pcoded-content">
-            <!--Header-->
-            <div class="page-header">
-                <div class="page-block">
-                    <div class="row align-items-center">
-                        <div class="col-md-12">
-                            <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio Profesional</h5>
-                            </div>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top"
-                                        title="Volver a mi escritorio">
-                                        <i class="feather icon-home"></i>
-                                    </a>
-                                </li>
-                                <li class="breadcrumb-item">
-                                    <a href="/configurar_lugar_atencion">Configuraci&oacute;n de Mis Lugares de Atención</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--Cierre: Header-->
-            <div class="card-body">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header bg-info">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-6 pt-2">
-                                        <h4 class="text-white f-20">Mi Agenda de: {{ strtoupper($lugar_atencion_nombre) }}</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body bg-white">
-                        <div id='agenda'></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>  --}}
-
-    {{--  <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#reservar_hora">
-        Launch
-    </button>  --}}
 
     @include('app.profesional.modales.modal_consulta_agenda')
-
-
-    <!-- Modal -->
-
-    {{--
-        <div class="modal fade" id="opciones_reserva" name="opciones_reserva" tabindex="-1" role="dialog"
-        aria-labelledby="opciones_reserva" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info pt-3 pb-2">
-                    <h5 class="text-white text-center">Opciones</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">x</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <input type="hidden" name="id_hora_medica" id="id_hora_medica" val="">
-
-                    <div id="opciones_botones" class="form-group row">
-
-                        <div class="row col-md-6 ">
-                            <button type="button" onclick="opcion_confirmar_hora();" class="btn btn-secondary"
-                                data-dismiss="modal" aria-hidden="true">
-                                Confirmar Hora
-                            </button>
-                        </div>
-
-                        <div class="row col-md-6">
-
-
-
-                            <form method="get" action="{{ route('profesional.realizar_consulta') }}">
-                                @csrf
-                                <input type="hidden" name="id_hora_realizar" id="id_hora_realizar" val="">
-                                <button type="submit" class="btn btn-primary">Realizar
-                                    Consulta
-                                </button>
-                            </form>
-
-                        </div>
-
-                        <div class="row col-md-6 ">
-                            <button type="button" onclick="opcion_cancelar_hora();" class="btn btn-secondary"
-                                data-dismiss="modal" aria-hidden="true">
-                                Anular Hora
-                            </button>
-                        </div>
-
-                        <div class="row col-md-6">
-                            <button type="button" class="btn btn-primary">No Asiste</button>
-                        </div>
-
-                    </div>
-
-                    <div id="opcion_confirmar_hora_div">
-                        <div class="col-sm-12 col-md-12">
-                            <div>
-                                <span>
-                                    <h4>Confirmar Hora</h4>
-                                </span>
-                            </div>
-                            <div class="form-group">
-                                <label class="floating-label">Comentarios</label>
-                                <input type="text" class="form-control" id="confirmar_hora_comentario"
-                                    name="confirmar_hora_comentario">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                                    aria-hidden="true">Close</button>
-                                <button type="button" onclick="confirmar_hora();" class="btn btn-primary">Save</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="opcion_cancelar_hora_div">
-                        <div class="col-sm-12 col-md-12">
-                            <div>
-                                <span>
-                                    <h4>Confirmar Hora</h4>
-                                </span>
-                            </div>
-                            <div class="form-group">
-                                <label class="floating-label">Comentarios</label>
-                                <input type="text" class="form-control" id="cancelar_hora_comentario"
-                                    name="cancelar_hora_comentario">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                                    aria-hidden="true">Close</button>
-                                <button type="button" onclick="cancelar_hora();" class="btn btn-primary">Confirmar</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-hidden="true">Close</button>
-                    <button type="button" class="btn btn-primary">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    --}}
-
 
     <div id="agenda_agregar_paciente" class="modal fade" tabindex="-1" role="dialog"
         aria-labelledby="agregar_paciente_asistente" aria-hidden="true">
@@ -610,5 +455,7 @@
     </div>
     <!-- FIN RECEPCION BONO  -->
 
+    @include('app.profesional.modales.boton_flotante_agenda_exa_ciru')
 
 @endsection
+
