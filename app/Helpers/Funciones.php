@@ -4,11 +4,108 @@ namespace App\Helpers;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\LogUsersDevices;
+use App\Models\Profesional;
+use App\Models\Paciente;
+use App\Models\Asistente;
+use App\Models\AdminInstServ;
 
 class Funciones{
     function __construct()
     {
      
+    }
+
+    public function userData($id_usuario)
+    {
+        /*
+        * profesionales
+        id,nombre,apellido_uno,apellido_dos,sexo,rut,email,telefono_uno,telefono_dos,
+
+        * pacientes
+        id,nombres,apellido_uno,apellido_dos,telefono_uno,telefono_dos,profesion,sexo,email,fecha_nac
+
+        * asistentes
+        id,nombres,apellido_uno,apellido_dos,telefono_uno,telefono_dos,sexo,email,fecha_nac
+
+        *admin_inst_serv
+        id,rut,nombres,apellido_uno,apellido_dos,telefono_uno,telefono_dos,sexo,email,fecha_nac
+        */
+
+         /* DATOS USUARIO - LOGEADO */
+         $usuario = array(
+            'nombre' => '',
+            'apellido_uno' => '',
+            'apellido_dos' => '',
+            'sexo' => '',
+            'rut' => '',
+            'email' => '',
+            'telefono_uno' => '',
+            'telefono_dos' => '',
+            'profesion' => '',
+            'fecha_nac' => '',
+         );         
+
+         $profesional_ = Profesional::with('Especialidad')->where('id_usuario',$id_usuario)->first();
+         if($profesional_)
+         {
+            $usuario['nombre'] = $profesional_->nombre;
+            $usuario['apellido_uno'] = $profesional_->apellido_uno;
+            $usuario['apellido_dos'] = $profesional_->apellido_dos;
+            $usuario['sexo'] = $profesional_->sexo;
+            $usuario['rut'] = $profesional_->rut;
+            $usuario['email'] = $profesional_->email;
+            $usuario['telefono_uno'] = $profesional_->telefono_uno;
+            $usuario['telefono_dos'] = $profesional_->telefono_dos;
+            $usuario['profesion'] = $profesional_->Especialidad->nombre;
+            //$usuario['fecha_nac'] = $profesional_->fecha_nac;
+         }
+         $paciente_ = Paciente::where('id_usuario',$id_usuario)->first();
+         if($paciente_)
+         {
+            $usuario['nombre'] = $paciente_->nombres;
+            $usuario['apellido_uno'] = $paciente_->apellido_uno;
+            $usuario['apellido_dos'] = $paciente_->apellido_dos;
+            $usuario['sexo'] = $paciente_->sexo;
+            $usuario['rut'] = $paciente_->rut;
+            $usuario['email'] = $paciente_->email;
+            $usuario['telefono_uno'] = $paciente_->telefono_uno;
+            $usuario['telefono_dos'] = $paciente_->telefono_dos;
+            $usuario['profesion'] = $paciente_->profesion;
+            $usuario['fecha_nac'] = $paciente_->fecha_nac;
+         }
+         $asistente_ = Asistente::where('id_usuario',$id_usuario)->first();
+         if($asistente_)
+         {
+            $usuario['nombre'] = $asistente_->nombres;
+            $usuario['apellido_uno'] = $asistente_->apellido_uno;
+            $usuario['apellido_dos'] = $asistente_->apellido_dos;
+            $usuario['sexo'] = $asistente_->sexo;
+            //$usuario['rut'] = $asistente_->rut;
+            $usuario['email'] = $asistente_->email;
+            $usuario['telefono_uno'] = $asistente_->telefono_uno;
+            $usuario['telefono_dos'] = $asistente_->telefono_dos;
+            //$usuario['profesion'] = $asistente_->profesion;
+            $usuario['fecha_nac'] = $asistente_->fecha_nac;
+         }
+         $adminInstServ_ = AdminInstServ::where('id_admin',$id_usuario)->first();
+         if($adminInstServ_)
+         {
+            $usuario['nombre'] = $adminInstServ_->nombres;
+            $usuario['apellido_uno'] = $adminInstServ_->apellido_uno;
+            $usuario['apellido_dos'] = $adminInstServ_->apellido_dos;
+            $usuario['sexo'] = $adminInstServ_->sexo;
+            $usuario['rut'] = $adminInstServ_->rut;
+            $usuario['email'] = $adminInstServ_->email;
+            $usuario['telefono_uno'] = $adminInstServ_->telefono_uno;
+            $usuario['telefono_dos'] = $adminInstServ_->telefono_dos;
+            //$usuario['profesion'] = $adminInstServ_->profesion;
+            $usuario['fecha_nac'] = $adminInstServ_->fecha_nac;
+         }
+
+         
+     /* FIN DATOS USUARIO - LOGEADO */
+
+        return $usuario;
     }
 
     public function disablePermApp($token){

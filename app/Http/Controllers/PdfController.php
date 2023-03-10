@@ -44,13 +44,13 @@ class PdfController extends Controller
         //return $pdf->stream($nombre_pdf.'.pdf');
 
         switch ($funcionalida) {
-            case 'V':
+            case 'V': //VER
                 return $pdf->stream($nombre_pdf.'.pdf');
             break;
-            case 'G':
+            case 'G': //GUARDAR
                 $pdf->save('../pdf/' . $nombre_pdf . '.pdf');
             break;
-            case 'D':
+            case 'D': //DESCARGAR
                 return $pdf->download($nombre_pdf.'.pdf');
             break;            
             
