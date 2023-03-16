@@ -80,13 +80,14 @@
                                         <div id="reposo-c" class="collapse show" aria-labelledby="reposo" data-parent="#reposo">
                                             <div class="card-body-aten shadow-none">
                                                 <div class="form-row">
-                                                    <div class="form-group col-md-3">
-                                                        <label class="floating-label-activo-sm">N° días</label>
-                                                        <input type="text" name="num_dias_reposo" id="num_dias_reposo" class="form-control form-control-sm" onchange="sumaFecha(this.value,$('#fecha').val());"/>
-                                                    </div>
+                                                    
                                                     <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Desde</label>
-                                                        <input type="date" name="fecha" id="fecha" class="form-control form-control-sm"/>
+                                                        <input type="date" name="fecha" id="fecha" class="form-control form-control-sm" onchange="sumaFecha($('#num_dias_reposo').val(),$('#fecha').val());"/>
+                                                    </div>
+                                                    <div class="form-group col-md-3">
+                                                        <label class="floating-label-activo-sm">N° días</label>
+                                                        <input type="text" name="num_dias_reposo" id="num_dias_reposo" class="form-control form-control-sm" onchange="sumaFecha($('#num_dias_reposo').val(),$('#fecha').val());"/>
                                                     </div>
                                                     <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Hasta</label>
@@ -104,27 +105,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <script>
-                                                    // Función que suma o resta días a la fecha indicada
-                                                    sumaFecha = function(d, fecha)
-                                                    {
-                                                    var Fecha = new Date();
-                                                    var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
-                                                    var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
-                                                    var aFecha = sFecha.split(sep);
-                                                    var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];
-                                                    fecha= new Date(fecha);
-                                                    fecha.setDate(fecha.getDate()+parseInt(d));
-                                                    var anno=fecha.getFullYear();
-                                                    var mes= fecha.getMonth()+1;
-                                                    var dia= fecha.getDate();
-                                                    mes = (mes < 10) ? ("0" + mes) : mes;
-                                                    dia = (dia < 10) ? ("0" + dia) : dia;
-                                                    var fechaFinal = dia+sep+mes+sep+anno;
-                                                   // return (fechaFinal);
-                                                    $('#hasta').val(fechaFinal);
-                                                    }
-                                                </script>
+                                               
                                             </div>
                                         </div>
                                     </div>
@@ -277,3 +258,48 @@
         </div>
     </div>
 </div>
+
+
+<script>
+//num_dias_reposo
+//fecha
+//hasta
+
+        // Función que suma o resta días a la fecha indicada
+        /*
+        sumaFecha2 = function(d, fecha)
+        {
+        var Fecha = new Date();
+        var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
+        var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
+        var aFecha = sFecha.split(sep);
+        var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];
+        fecha= new Date(fecha);
+        fecha.setDate(fecha.getDate()+parseInt(d));
+        var anno=fecha.getFullYear();
+        var mes= fecha.getMonth()+1;
+        var dia= fecha.getDate();
+        mes = (mes < 10) ? ("0" + mes) : mes;
+        dia = (dia < 10) ? ("0" + dia) : dia;
+        var fechaFinal = dia+sep+mes+sep+anno;
+        // return (fechaFinal);
+        $('#hasta').val(fechaFinal);
+        }
+        */
+        function sumaFecha(dias,fecha_eng ) 
+        {
+            dias = parseInt(dias);
+            if(dias>0)
+            {
+            var result = new Date(fecha_eng);
+            result.setDate(result.getDate() + (dias+1));
+            var anno=result.getFullYear();
+            var mes= result.getMonth()+1;            
+            var dia= result.getDate();
+            mes = (mes < 10) ? ("0" + mes) : mes;
+            dia = (dia < 10) ? ("0" + dia) : dia;
+            $('#hasta').val(dia+'/'+mes+'/'+anno);
+            //$('#hasta').val(anno+'-'+mes+'-'+dia);
+            }
+        }
+</script>
