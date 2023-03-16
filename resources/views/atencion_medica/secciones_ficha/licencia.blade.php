@@ -289,7 +289,7 @@
         function sumaFecha(dias,fecha_eng ) 
         {
             dias = parseInt(dias);
-            if(dias>0)
+            if(dias>0&&fecha_eng!='')
             {
             var result = new Date(fecha_eng);
             result.setDate(result.getDate() + (dias+1));
