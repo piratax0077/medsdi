@@ -1,0 +1,124 @@
+<!-- SOLICITADO POR -->
+<div class="row">
+
+</div>
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            Solicitado por:
+        </div>
+        <div class="card-body-aten shadow-none">
+            <div class="form-row">
+                <div class="form-group col-md-2" >
+                    <label class="examen-label" >RUT: </label>
+                    <label class="examen-detalle" >{{SOLICITADO_RUT}}</label>
+                </div>
+                <div class="form-group col-md-2" >
+                    <label class="examen-label" >Solicitado por: </label>
+                    <label class="examen-detalle">{{SOLICITADO_NOMBRE}} {{SOLICITADO_APELLIDO}}</label>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label class="examen-label" >H.Diagnóstica: </label>
+                    <label class="examen-detalle" >{{SOSPECHA_DIAGNOSTICA}}</label>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="examen-label" >Premedicación: </label>
+                    <label class="examen-detalle">{{PREMED}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- FIN SOLICITADO POR -->
+
+<!--INFORME CITOSCOPIA-->
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Informe
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <label class="examen-label">Meato y Uretra</label>
+                        <label class="examen-descripcion">{{URETRA}}</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <label class="examen-label">Vejiga</label>
+                        <label class="examen-descripcion">{{VEJIGA}}</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <label class="examen-label">Biópsias</label>
+                        <label class="examen-descripcion">{{BIOPSIAS}}</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <label class="examen-label">Tratamientos</label>
+                        <label class="examen-descripcion">{{TRATAMIENTOS}}</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <label class="examen-label">Comentarios</label>
+                        <label class="examen-descripcion">{{COMENTRARIOS}}</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <label class="examen-label">Biopsia</label>
+                        <label class="examen-detalle">{{BIOPSIA}}</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--DIAGNÓSTICO-->
+<div class="row" >
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Diagnóstico
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="examen-label" >Diagnóstico endoscópico: </label>
+                        <label class="examen-detalle">{{HIP_DIAG}}</label>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="examen-label" >Observaciones: </label>
+                        <label class="examen-detalle">{{OBS}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--IMAGENES-->
+<div class="row" style="page-break-before:always;">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Imagenes.
+            </div>
+            <div class="card-body-aten shadow-none">
+                <!-- imagenes -->
+                <div style="margin-top: 30px;">
+                    {{IMAGENES}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

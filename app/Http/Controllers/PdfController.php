@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
-use DateTime;
+use Illuminate\Support\Facades\Log;
+
 
 class PdfController extends Controller
 {
@@ -23,6 +24,7 @@ class PdfController extends Controller
     static function generarPDF($titulo, $detalle, $nombre, $template, $funcionalida = 'V')
     {
 
+        ini_set('display_errors', '1');
         // return response($detalle)->header('Content-Type', 'application/json');
         $date = date('Y-m-d');
         $titulo = $titulo;
@@ -31,29 +33,37 @@ class PdfController extends Controller
 
         $view =  View::make('PDF.'.$template, compact('date', 'titulo', 'cuerpo'))->render();
         // $view =  View::make('PDF.pdf_receta_medica', compact('date', 'titulo', 'cuerpo'))->render();
+
+
         $pdf = App::make('dompdf.wrapper');
+
+        /** tamaño de pagina */
+        // $customPaper = array(0,0,600,765);
+        // $pdf->setPaper($customPaper);
+        // $pdf->setPaper('A4', 'portrait');
+
+        /** contraseña para editar documento */
+        $permitted_chars = '0123456789=!abcdefghijklmnopqrstuvwxyz.$阿贝色德饿艾弗日阿什伊鸡卡艾勒艾马艾娜哦佩苦艾和艾丝特玉维独布勒维伊克斯伊格黑克贼德ABCDEFGHIJKLMNOPQRSTUVWXYZ&בגדהוזחטיכלמנסעפצקרשת';
+
+        $tempPass = substr(str_shuffle($permitted_chars), 0, 150);
+        $pdf->get_canvas()->get_cpdf()->setEncryption('',$tempPass,array( 'modify','add' ));
+
+
+        $pdf->loadHTML(ob_get_clean());
         $pdf->loadHTML($view);
-
-        /** 1_1_20190903.pdf */
-
-        /** guardar */
-        // $pdf->save('../pdf/' . $nombre_pdf . '.pdf');
-        /** descarga */
-        //return $pdf->download($nombre_pdf.'.pdf');
-        /** ver */
-        //return $pdf->stream($nombre_pdf.'.pdf');
+        $pdf->render();
 
         switch ($funcionalida) {
             case 'V':
-                return $pdf->stream($nombre_pdf.'.pdf');
+                return $pdf->stream($nombre_pdf.'.pdf', array("Attachment" => 0));
             break;
             case 'G':
                 $pdf->save('../pdf/' . $nombre_pdf . '.pdf');
             break;
             case 'D':
                 return $pdf->download($nombre_pdf.'.pdf');
-            break;            
-            
+            break;
+
         }
     }
 }

@@ -453,6 +453,33 @@ class ficha_atencionController extends Controller
                 $examen = '';
 				$lista_examen_especial = '';
             }
+            else if($profesional->id_tipo_especialidad == 25 )
+            {
+                // KINESIOLOGIA GENERAL
+                $ruta_blade = 'atencion_otros_prof.atencion_kine';
+                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $fichaTipo = '';
+                $examen = '';
+				$lista_examen_especial = '';
+            }
+            else if($profesional->id_sub_tipo_especialidad == 28 )
+            {
+                // FONOAUDIOLOGIA CLÍNICA ADULTOS Y NIÑOS
+                $ruta_blade = 'atencion_otros_prof.atencion_fono';
+                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $fichaTipo = '';
+                $examen = '';
+				$lista_examen_especial = '';
+            }
+            else if($profesional->id_tipo_especialidad == 31 && empty($profesional->id_sub_tipo_especialidad))
+            {
+                // ATENCIÓN NUTRICION
+                $ruta_blade = 'atencion_otros_prof.atencion_nutricion';
+                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $fichaTipo = '';
+                $examen = '';
+                $lista_examen_especial = '';
+            }
             else
             {
                 $ruta_blade = 'atencion_medica.atencion_medica';
@@ -1802,8 +1829,21 @@ class ficha_atencionController extends Controller
 
                 if($request->cerrarsession == 0 || $request->cerrarsession =='')
                 {
-                    /** redireccion Redirect funciona correcto */
-                    return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+                    // if($request->mostrarpdf == 0 || $request->mostrarpdf =='')
+                    // {
+                    //     return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+                    // }
+                    // else
+                    {
+                        /** redireccion Redirect funciona correcto */
+                        $array_tem = array(
+                            'lugares_atencion' => $request->id_lugar_atencion,
+                            'pdf' => $request->mostrarpdf,
+                            'tipo' => $request->tipopdf,
+                            'id_examen' => $examen->id,
+                        );
+                        return \Redirect::route('profesional.mi_agenda',$array_tem)->with($tipo_mensaje, $mensaje);
+                    }
                 }
                 else if($request->cerrarsession == 1)
                 {
@@ -2166,6 +2206,8 @@ class ficha_atencionController extends Controller
                                                         $nombre_real = $value[1];
                                                         $nombre_temp = $value[2];
                                                         $file_extension = $value[3];
+                                                        if(isset($value[4])) $descripcion = $value[4];
+                                                        else $descripcion = '';
                                                         $nombre_final = $paciente->rut.'_'.$examen->id.'_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
 
                                                         $resulto_img[$key] = CargaImagenController::moverImagen($nombre_temp, 'img_examen', $nombre_final);
@@ -2173,7 +2215,7 @@ class ficha_atencionController extends Controller
                                                         $registro_img->id_examen = $examen->id;
                                                         $registro_img->url = $resulto_img[$key]['proceso']['url'];
                                                         $registro_img->nombre = $nombre_final;
-                                                        $registro_img->otro = '';
+                                                        $registro_img->otro = $descripcion;
                                                         $registro_img->estado = 1;
 
                                                         if($registro_img->save())
