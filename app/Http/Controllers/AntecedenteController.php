@@ -96,9 +96,8 @@ class AntecedenteController extends Controller
 
                 if($registros->count())
                 {
-                    foreach ($registros as $valor) {
-                        $valor['antecedente_data'] = json_decode($valor['data'],true);
-                    }
+                    
+                        $registros['antecedente_data'] = json_decode($registros['data'],true);
 
                     $datos['estado'] = 1;
                     $datos['registros'] = $registros;
@@ -152,18 +151,20 @@ class AntecedenteController extends Controller
             $error['id_users'] = 'campo requerido';
             $campos_requeridos = 1;
         }
-
+        /*
         if($request->comentario=='')
         {
             $error['comentario'] = 'campo requerido';
             $campos_requeridos = 1;
-        }
+        }*/
 
+        /*
         if($request->data=='')
         {
             $error['data'] = 'campo requerido';
             $campos_requeridos = 1;
         }
+        */
 
         if($request->estado=='')
         {
@@ -182,8 +183,6 @@ class AntecedenteController extends Controller
             $registro->id_tipo_antecedente = $request->id_tipo_antecedente;
 
             $registro->id_users = $request->id_users;
-            $registro->comentario = $request->comentario;
-
             $registro->comentario = $request->comentario;
             //GUARDADO DE DATOS
             $data_json = $this->estructuraJson($request);                                    
@@ -240,25 +239,27 @@ class AntecedenteController extends Controller
             $campos_requeridos = 1;
         }
 
+        /*
         if($request->comentario=='')
         {
             $error['comentario'] = 'campo requerido';
             $campos_requeridos = 1;
         }
-
+        */
+        /*
         if($request->data=='')
         {
             $error['data'] = 'campo requerido';
             $campos_requeridos = 1;
         }
-        
+        */
 
         if($campos_requeridos==0)
         {
 
             $registro = Antecedente::find($request->id);
 
-            if(count($registro))
+            if($registro)
             {
 
                 if(!empty($request->id_paciente))
@@ -323,8 +324,7 @@ class AntecedenteController extends Controller
 
             if($registro->count()>0)
             {
-                if($registro->estado == 0)
-                {
+             
                     $registro->estado = $request->estado;
                     if($registro->save())
                     {
@@ -336,12 +336,7 @@ class AntecedenteController extends Controller
                         $datos['msg'] = 'Problemas al actualizar el registro';
                         $datos['request'] = $request->all();
                     }
-                }else{
-                    $datos['estado'] = 2;
-                    $datos['estado_registro'] = $registro->estado;
-                    $datos['msg'] = 'Registro ya actualizado';
-                    $datos['request'] = $request->all();
-                }
+                
 
             }else{
                 $datos['estado'] = 0;
@@ -368,6 +363,7 @@ class AntecedenteController extends Controller
         $fecha = isset($fecha)==true?$fecha:'';
         $procedimiento = isset($procedimiento)==true?$procedimiento:'';
         $detalle = isset($detalle)==true?$detalle:'';
+        $profesional = isset($profesional)==true?$profesional:'';
         $rut_responsable = isset($rut_responsable)==true?$rut_responsable:'';
         $comentario = isset($comentario)==true?$comentario:'';
         $transfusion = isset($transfusion)==true?$transfusion:'';
@@ -391,6 +387,7 @@ class AntecedenteController extends Controller
             'fecha'=>$fecha,
             'procedimiento'=>$procedimiento,
             'detalle'=>$detalle,
+            'profesional'=>$profesional,
             'rut_responsable'=>$rut_responsable,
             'comentario'=>$comentario,
             'transfusion'=>$transfusion,
@@ -407,7 +404,8 @@ class AntecedenteController extends Controller
             'id_medicamento'=>$id_medicamento,
             'nombre_medicamento_cronico'=>$nombre_medicamento_cronico,
             'id_dosis'=>$id_dosis,
-            'dosis'=>$dosis
+            'dosis'=>$dosis,
+            'fecha_regitro'=>date('d-m-Y H:i:s')
         );
 
         /* JSON */ 

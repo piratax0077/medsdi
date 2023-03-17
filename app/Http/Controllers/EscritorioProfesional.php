@@ -62,6 +62,8 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use PDF;
+use App\Helpers\Funciones;
+
 
 class EscritorioProfesional extends Controller
 {
@@ -1164,8 +1166,13 @@ class EscritorioProfesional extends Controller
         $fichasConfi = FichaAtencion::where('id_paciente', 4)->where('confidencial', true)->get();
         $grupo_sanguineo = GrupoSanguineo::all();
 
+        $id_usuario = Auth::user()->id;        
+        $userData = Funciones::userData($id_usuario);
+
+
         return view('app.profesional.editar_perfil_paciente_profesional')
             ->with([
+                'userData' => $userData,
                 'paciente' => $paciente,
                 'prevision' => $prevision,
                 'contacto' => $contacto,

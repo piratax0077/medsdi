@@ -472,7 +472,7 @@ class LogUsersDevicesController extends Controller
 
     public function checkStateSol(){ // CRON CADA 1 MIN
         
-        $registros = LogUsersDevices::where('estado',0)->get();
+        $registros = LogUsersDevices::whereIn('estado',[0,1])->get();
 
         if($registros)
         {

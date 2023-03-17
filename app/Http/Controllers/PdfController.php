@@ -57,10 +57,10 @@ class PdfController extends Controller
             case 'V':
                 return $pdf->stream($nombre_pdf.'.pdf', array("Attachment" => 0));
             break;
-            case 'G':
+            case 'G': //GUARDAR
                 $pdf->save('../pdf/' . $nombre_pdf . '.pdf');
             break;
-            case 'D':
+            case 'D': //DESCARGAR
                 return $pdf->download($nombre_pdf.'.pdf');
             break;
 

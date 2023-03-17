@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UsersDevicesController;
 use App\Http\Controllers\LogUsersDevicesController;
+use App\Http\Controllers\AntecedenteController;
 use App\Http\Controllers\Auth\LoginController;
 
 
@@ -43,6 +44,14 @@ Route::get('/log_user_devices/ver_registro', [LogUsersDevicesController::class, 
 Route::post('/log_user_devices/estado',       [LogUsersDevicesController::class, 'estado']);
 Route::get('/log_user_devices/gen_solicitud',       [LogUsersDevicesController::class, 'genSolicitud']);
 Route::get('/log_user_devices/check_state_sol',       [LogUsersDevicesController::class, 'checkStateSol']);
+
+
+//USER DEVICES - CRUD
+Route::post('/antecedente/registrar',    [AntecedenteController::class, 'registrar']);
+Route::post('/antecedente/modificar',    [AntecedenteController::class, 'modificar']);
+Route::get('/antecedente/ver_registros',[AntecedenteController::class, 'verRegistros']);
+Route::get('/antecedente/ver_registro', [AntecedenteController::class, 'verRegistro']);
+Route::post('/antecedente/estado',       [AntecedenteController::class, 'estado']);
 
 
 
