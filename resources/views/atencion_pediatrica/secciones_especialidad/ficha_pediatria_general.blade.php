@@ -4,13 +4,13 @@
             <div class="col-sm-12 col-md-12">
                 <ul class="nav nav-tabs-secciones mb-3 mt-3" id="pediatria_general" role="tablist">
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones active text-uppercase" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="false">Ficha Atención</a>
+                        <a class="nav-secciones active text-uppercase" id="atencion_ped_gen-tab" data-toggle="tab" href="#atencion_ped_gen" role="tab" aria-controls="atencion_ped_gen" aria-selected="false">Ficha Atención</a>
                     </li>
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="ns-tab" data-toggle="tab" href="#ns" role="tab" aria-controls="ns" aria-selected="false">Control Niño Sano</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="vac-tab" data-toggle="tab" href="#vac" role="tab" aria-controls="vac" aria-selected="false">vacunas</a>
+                        <a class="nav-secciones text-uppercase" id="vac-tab" data-toggle="tab" href="#vac" role="tab" aria-controls="vac" aria-selected="false">Vacunas</a>
                     </li>
                     {{--  <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="neo-tab" data-toggle="tab" href="#neo" role="tab" aria-controls="neo" aria-selected="false">Neonatología</a>

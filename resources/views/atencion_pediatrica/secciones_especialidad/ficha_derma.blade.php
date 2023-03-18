@@ -92,11 +92,11 @@
                                            <form>
                                                 <div class="form-row">
                                                     <div class="form-group col-md-6">
-                                                        <label class="floating-label">Motivo de Consulta</label>
+                                                        <label class="floating-label">Motivo de consulta</label>
                                                         <input type="text" class="form-control form-control-sm" name="hip-diag" id="hip-diag">
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label class="floating-label">Examen Especialidad</label>
+                                                        <label class="floating-label">Examen especialidad</label>
                                                         <input type="text" class="form-control form-control-sm" name="cie-10" id="cie-10">
                                                     </div>
                                                 </div>

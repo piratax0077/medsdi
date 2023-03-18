@@ -151,7 +151,7 @@
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="icirugia()";>+ Indicaciones post cirugía</button>
                     </div>
                     @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.m_ipostparto")
-                    @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.modal_prev_accidentes")
+                    {{--@include("atencion_pediatrica\sidebars\modals_especialidad\pediatria\modal_prev_accidentes")--}}
                     @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.m_ilactancia")
                     @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.m_tlactancia")
                     @include("atencion_pediatrica.sidebars.modals_generales.m_cuidados_cirugia")
