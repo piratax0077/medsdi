@@ -101,7 +101,6 @@ class Funciones{
             //$usuario['profesion'] = $adminInstServ_->profesion;
             $usuario['fecha_nac'] = $adminInstServ_->fecha_nac;
          }
-
          
      /* FIN DATOS USUARIO - LOGEADO */
 

@@ -96,8 +96,8 @@
                                                         <h5 class="mb-1 mt-2">{{ $p->nombre }} {{ $p->apellido_uno }} {{ $p->apellido_dos }}</h5>
                                                     </a>
                                                     <p class="mb-3 text-muted">
-                                                        <i class="feather icon-calendar"></i>Próxima hora 27/08/2021</p>
-                                                    <a class="btn btn-sm btn-info" href="#" role="button">Ver Agenda</a>
+                                                        <!--<i class="feather icon-calendar"></i></p>-->
+                                                    <a class="btn btn-sm btn-info" href='{{ url("Paciente/Reservar_Hora/{$p->id_especialidad}/{$p->id_tipo_especialidad}/{$p->id_sub_tipo_especialidad}") }}' role="button">Agendar Hora</a>
                                                 </div>
                                             </div>
                                         </div>

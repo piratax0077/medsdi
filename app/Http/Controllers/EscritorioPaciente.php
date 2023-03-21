@@ -109,11 +109,14 @@ class EscritorioPaciente extends Controller
         return view('auth.Registros.registro_paciente')->with(['region' => $region, 'prevision' => $prevision]);
     }
 
-    public function agendarHora()
+    public function agendarHora($id_profesion_ = 0,$id_especialidad_ = 0,$id_subespecialidad_ = 0)
     {
         $profesiones = Especialidad::where('estado', 1)->whereNotIn('id',[8,10,11,12])->get();
         $especialidades = TipoEspecialidad::where('estado', 1)->whereNotIn('id_especialidad',[8,10,11,12])->get();
-        // $sub_especialidades = SubTipoEspecialidad::where('estado', 1)->get();
+        if($id_especialidad_>0)
+        $sub_especialidades = SubTipoEspecialidad::where('estado', 1)->where('id_tipo_especialidad',$id_especialidad_)->get();
+        else
+        $sub_especialidades = (object)array();
         $regiones = Region::all();
         $ciudades = Ciudad::all();
         $previsiones = Prevision::all();
@@ -129,12 +132,17 @@ class EscritorioPaciente extends Controller
                 [
                     'profesiones' => $profesiones,
                     'especialidades' => $especialidades,
-                    // 'sub_especialidades' => $sub_especialidades,
+                    'sub_especialidades' => $sub_especialidades,
                     'previsiones' => $previsiones,
                     'paciente' => $paciente,
                     'regiones' => $regiones,
                     'ciudades' => $ciudades,
                     'reg_confirmacion_hora' => $reg_confirmacion_hora,
+                    'filtros' => array(
+                        'id_profesion' => $id_profesion_,
+                        'id_especialidad' => $id_especialidad_,
+                        'id_subespecialidad' => $id_subespecialidad_ 
+                    )
 
                 ]
             );
@@ -146,9 +154,14 @@ class EscritorioPaciente extends Controller
                 [
                     'profesiones' => $profesiones,
                     'especialidades' => $especialidades,
-                    // 'sub_especialidades' => $sub_especialidades,
+                    'sub_especialidades' => $sub_especialidades,
                     'regiones' => $regiones,
-                    'ciudades' => $ciudades
+                    'ciudades' => $ciudades,
+                    'filtros' => array(
+                        'id_profesion' => $id_profesion_,
+                        'id_especialidad' => $id_especialidad_,
+                        'id_subespecialidad' => $id_subespecialidad_ 
+                    )
 
                 ]
             );
@@ -159,7 +172,7 @@ class EscritorioPaciente extends Controller
 
     public function miProfesionales()
     {
-        $fichas = FichaAtencion::where('id_paciente', Auth::user()->id)->get();
+        $fichas = FichaAtencion::where('id_paciente', Auth::user()->id)->get()->unique('id_profesional');
 
         $profesional = [];
         foreach ($fichas as $f) {
@@ -490,9 +503,13 @@ class EscritorioPaciente extends Controller
         $fichasConfi = FichaAtencion::where('id_paciente', $paciente->id)->where('confidencial', true)->get();
         $grupo_sanguineo = GrupoSanguineo::all();
 
+        $id_usuario = Auth::user()->id;        
+        $userData = Funciones::userData($id_usuario);
+
         return view(
             'app.paciente.perfil_paciente',
             [
+                'userData' => $userData,
                 'paciente' => $paciente,
                 'previsiones' => $previsiones,
                 'regiones' => $regiones,

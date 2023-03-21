@@ -70,9 +70,15 @@
                                                     <label class="floating-label-activo-sm">Profesión</label>
                                                     <select class="form-control form-control-sm" name="buscar_especialidad_profesion" id="buscar_especialidad_profesion" onchange="buscar_tipo_especialidad(this);">
                                                         <option value="">Seleccione</option>
+                                                        
                                                         @if(isset($profesiones))
                                                             @foreach($profesiones as $pro_key => $pro)
-                                                                <option value="{{ $pro->id }}">{{ $pro->nombre }}</option>
+                                                            @php
+                                                                $selected_id1 = '';                                                            
+                                                                if((int)$filtros['id_profesion']==$pro->id && (int)$filtros['id_profesion']>0)
+                                                                $selected_id1 = 'selected';
+                                                            @endphp
+                                                                <option value="{{ $pro->id }}" {{$selected_id1}}>{{ $pro->nombre }}</option>
                                                             @endforeach
                                                         @endif
                                                     </select>
@@ -85,7 +91,12 @@
                                                         <option value="">Seleccione</option>
                                                         @if(isset($especialidades))
                                                             @foreach($especialidades as $esp_key => $esp)
-                                                                <option value="{{ $esp->id }}">{{ $esp->nombre }}</option>
+                                                            @php
+                                                                $selected_id2 = '';
+                                                                if($filtros['id_especialidad']==$esp->id && $filtros['id_especialidad']!=0)
+                                                                $selected_id2 = 'selected';
+                                                            @endphp
+                                                                <option value="{{ $esp->id }}" {{$selected_id2}}>{{ $esp->nombre }}</option>
                                                             @endforeach
                                                         @endif
                                                     </select>
@@ -96,14 +107,20 @@
                                                     <label class="floating-label-activo-sm">Sub-Especialidad</label>
                                                     <select class="form-control form-control-sm" name="buscar_especialidad_subespec" id="buscar_especialidad_subespec">
                                                         <option value="">Seleccione</option>
-                                                        {{--  @if(isset($sub_especialidades))
+                                                        @if(isset($sub_especialidades))
                                                             @foreach($sub_especialidades as $sub_key => $sub)
-                                                                <option value="{{ $sub->id }}">{{ $sub->nombre }}</option>
+                                                                @php
+                                                                    $selected_id3 = '';
+                                                                    if($filtros['id_subespecialidad']==$sub->id && $filtros['id_subespecialidad']!=0)
+                                                                    $selected_id3 = 'selected';
+                                                                @endphp
+                                                                <option value="{{ $sub->id }}" {{$selected_id3}}>{{ $sub->nombre }}</option>
                                                             @endforeach
-                                                        @endif  --}}
+                                                        @endif
                                                     </select>
                                                 </div>
                                             </div>
+                                           
                                             <div class="col-sm-12 col-md-4">
                                                 <div class="form-group">
                                                     <label class="floating-label-activo-sm">Región</label>
@@ -310,10 +327,12 @@
     <!--Modals buscador -->
     @include("app.general.buscador_profesionales.modals.ficha_profesional")
     @include("app.general.buscador_profesionales.modals.reservar_hora")
+   
 @endsection
 
 
-{{--  @section('page-script')
+@section('page-script')
     <script>
+     buscar_profesional_especialidad();
     </script>
-@endsection  --}}
+@endsection

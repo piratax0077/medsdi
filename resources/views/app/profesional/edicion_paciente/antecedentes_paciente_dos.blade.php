@@ -214,7 +214,8 @@
     });
     }
 
-    const modificarAntecedente = () => {
+    const modificarAntecedente = () => 
+    {
 
         $('#title-antecedente').html('Modificar Antecedente');    
     
@@ -468,7 +469,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Desactivar Antecedente</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <button type="button" class="close" onclick="verModalDesactivar('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
                         </div>
                         <div class="modal-body">
                             <p class="mb-0">Desea desactivar el antecedente ingresado.</p>
@@ -477,7 +478,7 @@
                             <input type="hidden" value="" id="id-antecedente-m-desactivar">
                             <input type="hidden" value="" id="tipo-antecedente-m-desactivar">    
                             <button type="button" class="btn  btn-danger mr-0" onclick="eliminarAntecedente()">Desactivar</button>
-                            <button type="button" class="btn  btn-primary" data-dismiss="modal">Cerrar</button>                            
+                            <button type="button" class="btn  btn-primary" onclick="verModalDesactivar('hide')">Cerrar</button>                            
                         </div>
                     </div>
                 </div>
