@@ -1101,6 +1101,10 @@ Route::get('/validacion/documento', [App\Http\Controllers\CertificadoController:
 Route::get('/validacion/profesional', [App\Http\Controllers\CertificadoController::class, 'validarProfesional'])->name('validacion_profesional_');
 
 
+Route::get('/pdf/examen', [App\Http\Controllers\ExamenEspecialidadController::class, 'generarPDF_r'])->name('pdf.examen_especialidad');
+Route::get('/pdf/previsualizacion', [App\Http\Controllers\ExamenEspecialidadController::class, 'visualizarGenerarPDF_r'])->name('pdf.visualizar.examen');
+
+
 
 
 /** PARA VISUALIZAR DEMOS */

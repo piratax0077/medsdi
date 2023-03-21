@@ -22,6 +22,8 @@
                     <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
                     <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
                     <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
+                    <input type="hidden" name="mostrarpdf" id="mostrarpdf" value="0">
+                    <input type="hidden" name="tipopdf" id="tipopdf" value="0">
                     <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
 
                     @csrf
@@ -898,234 +900,15 @@
                                             <hr>
                                         </div>
                                     </div>
-                                    {!! $examen !!}
-
-                                    <div class="row">
-                                        <!--Motivo examen-->
-                                        <div class="col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="motivo">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#motivo_c" aria-expanded="false" aria-controls="motivo_c">
-                                                        Motivo del Examen
-                                                    </button>
-                                                </div>
-                                                <div id="motivo_c" class="collapse show" aria-labelledby="motivo" data-parent="#motivo">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-2" >
-                                                                <input type="hidden" name="id_profesional_solicitado_por" id="id_profesional_solicitado_por" value="">
-                                                                <label class="floating-label-activo-sm">RUT</label>
-                                                                <input type="text" class="form-control form-control-sm" name="solicitado_por_rut_rfl" id="solicitado_por_rut_rfl" onblur="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');" onchange="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');" onkeyup="cargar_profesional(this,'solicitado_por_rfl', 'id_profesional_solicitado_por', 'div_profesional_no_inscrito');">
-                                                            </div>
-                                                            <div class="form-group col-md-2" >
-                                                                <label class="floating-label-activo-sm">Solicitado por</label>
-                                                                <input type="text" class="form-control form-control-sm" name="solicitado_por_rfl" id="solicitado_por_rfl" readonly="readonly">
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">Motivo del Examen</label>
-                                                                <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_consulta_orl" name="descripcion_examen_rfl" id="descripcion_examen_rfl" onchange="cargarIgual('descripcion_examen_rfl');">
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">Antecedentes Especialidad</label>
-                                                                <input type="text" class="form-control form-control-sm" data-input_igual="antec_especialidad"  name="antec_especialidad_rfl" id="antec_especialidad_rfl" onchange="cargarIgual('antec_especialidad_rfl');">
-                                                            </div>
-                                                            <div class="form-group col-md-12" id="div_mensaje"  style="display: none;">
-                                                                <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row" id="div_profesional_no_inscrito" style="display: none;">
-                                                            <div class="form-group col-md-3">
-                                                                <label class="floating-label-activo-sm">Nombre</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_nombre_rfl" id="solicitado_por_nombre_rfl" onchange="actualizar_solicitado_por('solicitado_por_rfl', 'solicitado_por_nombre_rfl', 'solicitado_por_apellido_rfl');">
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <label class="floating-label-activo-sm">Apellido</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_apellido_rfl" id="solicitado_por_apellido_rfl" onchange="actualizar_solicitado_por('solicitado_por_rfl', 'solicitado_por_nombre_rfl', 'solicitado_por_apellido_rfl');">
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <label class="floating-label-activo-sm">Telefono</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_telefono_rfl" id="solicitado_por_telefono_rfl" >
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <label class="floating-label-activo-sm">Email</label>
-                                                                <input type="text" class="form-control form-control-sm"  name="solicitado_por_email_rfl" id="solicitado_por_email_rfl" >
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--NARIZ Y FOSAS NASALES-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="nariz-fosasnas">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#nariz-fosasnas-c" aria-expanded="false" aria-controls="nariz-fosasnas-c">
-                                                        Nariz y fosas nasales
-                                                    </button>
-                                                </div>
-                                                <div id="nariz-fosasnas-c" class="collapse show" aria-labelledby="nariz-fosasnas" data-parent="#nariz-fosasnas">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-6 mx-auto">
-                                                                <label class="floating-label-activo-sm">Mucosa</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="muc_nasal_permeab" id="muc_nasal_permeab"></textarea>
-                                                            </div>
-                                                            <div class="form-group col-md-6 mx-auto">
-                                                                <label class="floating-label-activo-sm">Cornetes</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="cornetes" id="cornetes"></textarea>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-6 mx-auto">
-                                                                <label class="floating-label-activo-sm">Tabique</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="tabique" id="tabique"></textarea>
-                                                            </div>
-                                                            <div class="form-group col-md-6 mx-auto">
-                                                                <label class="floating-label-activo-sm">Tumoraciones</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="tumor" id="tumor"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--RINOFARINGE-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="rinofar">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#rinofar-c" aria-expanded="false" aria-controls="rinofar-c">
-                                                    Rinofaringe
-                                                    </button>
-                                                </div>
-                                                <div id="rinofar-c" class="collapse show" aria-labelledby="rinofar" data-parent="#rinofar">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-12 mx-auto">
-                                                                <label class="floating-label-activo-sm">Descripción</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="rinofaringe" id="rinofaringe"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--OROFARINGE-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="orofar">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#orofar-c" aria-expanded="false" aria-controls="orofar-c">
-                                                        Orofaringe
-                                                    </button>
-                                                </div>
-                                                <div id="orofar-c" class="collapse show" aria-labelledby="orofar" data-parent="#orofar">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-sm-12 col-md-12">
-                                                                <label class="floating-label-activo-sm">Descripción</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="orofaringe" id="orofaringe"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--LARINGE-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="laringe">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#laringe-c" aria-expanded="false" aria-controls="laringe-c">
-                                                        Laringe.
-                                                    </button>
-                                                </div>
-                                                <div id="laringe-c" class="collapse show" aria-labelledby="laringe" data-parent="#laringe">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">Cuerdas</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" placeholder="Aspecto general comisuras" name="cuerdas" id="cuerdas"></textarea>
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">Movilidad, hiatos, otros</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="movilidad" id="movilidad"></textarea>
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label-activo-sm">Cierre glótico</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="cierre_glotico" id="cierre_glotico"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--IMAGENES-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="img">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_rfl" aria-expanded="false" aria-controls="imagenes_rfl">
-                                                        Imagenes.
-                                                    </button>
-                                                </div>
-                                                <div id="imagenes_rfl" class="collapse show" aria-labelledby="img" data-parent="#img">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <!-- [ Main Content ] start -->
-                                                        <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}">
-                                                        <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
-                                                        </div>
-                                                        <!-- [ file-upload ] end -->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--INFO-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="info">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#info-c" aria-expanded="false" aria-controls="info-c">
-                                                        Info.
-                                                    </button>
-                                                </div>
-                                                <div id="info-c" class="collapse show" aria-labelledby="info" data-parent="#info">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-sm-12 col-md-12">
-                                                                <label class="floating-label-activo-sm">Descripción</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="info" id="info"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--DIAGNÓSTICO-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="diag-rinofibro">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diag-rinofibro-c" aria-expanded="false" aria-controls="diag-rinofibro-c">
-                                                        Diagnóstico
-                                                    </button>
-                                                </div>
-                                                <div id="diag-rinofibro-c" class="collapse show" aria-labelledby="diag-rinofibro" data-parent="#diag-rinofibro">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-sm-12 col-md-6">
-                                                                <label class="floating-label-activo-sm">Diagnóstico endoscópico</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" data-input_igual="descripcion_hipotesis,lic_descripcion_hipotesis"  name="diag_endos" id="diag_endos" onchange="cargarIgual('diag_endos');"></textarea>
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-6">
-                                                                <label class="floating-label-activo-sm">Observaciones</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones" id="observaciones"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="div_form_examen_rfl">
+                                        {!! $examen !!}
                                     </div>
                                 </div>
                                 <hr>
                                 <!--GUARDAR EXAMEN-->
                                 <div class="col-md-12 text-center mb-3">
                                     <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
+                                    <bottom type="bottom" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('rfl');">Ver Examen PDF</bottom>
                                 </div>
                             </div>
                         </div>
@@ -3139,6 +2922,39 @@
 
         }
         /** FIN CRONICO */
+
+        /** PERVISUALIZACION DE EXAMEN */
+        function visualizar_pdf_examen(tipo_examen)
+        {
+            if(tipo_examen!='')
+            {
+                var array_datos = {};
+                $('.div_form_examen_'+tipo_examen).find('input,textarea,select').each(function (key, element){
+                    array_datos[element.id] = element.value;
+                });
+
+                var imagenes = $('#input_lista_imagenes').val();
+                if(imagenes != '')
+                {
+                    imagenes = JSON.stringify(imagenes);
+                }
+
+                var data ='id_ficha='+$('#id_fc').val()+'&contenido='+JSON.stringify(array_datos)+'&imagenes='+imagenes;
+                Fancybox.show(
+                    [
+                        {
+                        src: '{{ route("pdf.visualizar.examen") }}?'+data,
+                        type: "iframe",
+                        preload: false,
+                        },
+                    ]
+                );
+            }
+            else
+            {
+                console.log('tipo examen no especificado');
+            }
+        }
 
     </script>
 @endsection

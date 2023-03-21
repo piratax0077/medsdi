@@ -30,6 +30,25 @@
                     <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
                     <input type="hidden" name="tipo_examen_especial" id="tipo_examen_especial" value="{{ $lista_examen_especial }}">
 
+                    @php
+                        /** carga de id examen de espcialidad tipo  */
+                        $temp = $lista_examen_especial;
+
+                        $array_temp = explode('|',$temp);
+                        //var_dump($array_temp);
+                        $array_temp2 = array();
+                        foreach($array_temp as $key=>$value)
+                        {
+                            $array_temp2[] = explode(',',$value);
+                        }
+                        $array_examen_especialidad_tipo = array();
+                        foreach($array_temp2 as $key=>$value)
+                        {
+                            $array_examen_especialidad_tipo[$value[0]] = $value[1];
+                        }
+                        // var_dump($array_examen_especialidad_tipo);
+                    @endphp
+
                     @csrf
                     <div class="tab-content" id="orl-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
@@ -648,6 +667,27 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                {{--  div de botones  --}}
+                                <div class="col-md-12 bg-white shadow-none rounded mx-1 p-15">
+                                    <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+                                    @include('atencion_medica.generales.seccion_receta_examen_comunes')
+                                    <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+
+                                    <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
+                                    {{--  @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')  --}}
+                                    <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD FIN  -->
+
+                                    <hr>
+
+                                    <!--GUARDAR O IMPRIMIR FICHA-->
+                                    <div class="row mb-3">
+                                        <div class="col-md-12 text-center">
+                                            <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+                                            <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
@@ -662,8 +702,16 @@
                                             <hr>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row div_form_examen_eda">
+                                        <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_eda" id="id_examen_especialidad_tipo_eda" value="{{ $array_examen_especialidad_tipo['eda'] }}">
                                         {!! $examen['eda'] !!}
+                                    </div>
+                                    <!--GUARDAR EXAMEN-->
+                                    <div class="row">
+                                        <div class="col-md-12 text-center mb-3">
+                                            <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
+                                            <bottom type="bottom" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('eda');">Ver Examen PDF</bottom>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -671,7 +719,7 @@
                         <!--CIERRE: INFORME ENDOSCOPIA ALTA-->
 
                         <!--INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
-                       <div class="tab-pane fade" id="colonoscopia" role="tabpanel" aria-labelledby="colonoscopia-tab">
+                        <div class="tab-pane fade" id="colonoscopia" role="tabpanel" aria-labelledby="colonoscopia-tab">
                            <div class="row bg-white shadow-none rounded mx-1">
                                <div class="col-md-12">
                                    <div class="row">
@@ -680,34 +728,23 @@
                                            <hr>
                                        </div>
                                    </div>
-                                   <div class="row">
+                                   <div class="row div_form_examen_edb">
+                                        <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_edb" id="id_examen_especialidad_tipo_edb" value="{{ $array_examen_especialidad_tipo['edb'] }}">
                                         {!! $examen['edb'] !!}
                                    </div>
+                                   <!--GUARDAR EXAMEN-->
+                                   <div class="row">
+                                        <div class="col-md-12 text-center mb-3">
+                                            <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
+                                            <bottom type="bottom" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('edb');">Ver Examen PDF</bottom>
+                                        </div>
+                                    </div>
                                </div>
                            </div>
-                       </div>
-                       <!--CIERRE:INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
-
-                        {{--  div de botones  --}}
-                        <div class="bg-white shadow-none rounded mx-1 p-15">
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                            @include('atencion_medica.generales.seccion_receta_examen_comunes')
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
-                            {{--  @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')  --}}
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD FIN  -->
-
-                            <hr>
-
-                            <!--GUARDAR O IMPRIMIR FICHA-->
-                            <div class="row mb-3">
-                                <div class="col-md-12 text-center">
-                                    <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                                    <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
-                                </div>
-                            </div>
                         </div>
+                        <!--CIERRE:INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
+
+
                     </div>
                 </form>
             </div>
@@ -1412,6 +1449,7 @@
                 'X-CSRF-TOKEN' : CSRF_TOKEN,
                 // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
             },
+            previewTemplate: '<div class="dz-preview dz-processing dz-image-preview dz-success dz-complete"> <div class="dz-image"><img data-dz-thumbnail="" alt="" src=""></div><div class="dz-details"> <div class="dz-size"><span data-dz-size=""></span></div><div class="dz-filename"><span data-dz-name=""></span></div></div><div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress="" style=""></span></div><div class="dz-error-message"><span data-dz-errormessage=""></span></div><div class="dz-success-mark"><svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>Check</title><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><path d="M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" stroke-opacity="0.198794158" stroke="#747474" fill-opacity="0.816519475" fill="#FFFFFF"></path> </g> </svg></div><div class="dz-error-mark"><svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>Error</title><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF" fill-opacity="0.816519475"><path d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z"></path></g></g></svg></div> <input type="text" placeholder="Descripción" id="description_img" name="description_img" value="" class="form-control form-control-sm " onchange="cargar_lista_imagenes('+myDropzone_eda+', \'eda\');"></div>',
 
             acceptedFiles: "image/*",
             maxFilesize: 4,
@@ -1433,7 +1471,7 @@
              * Si el tamaño del archivo es demasiado grande.
              * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
              */
-             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+            dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
 
             /** Si el archivo no coincide con el tipo de archivo. */
             dictInvalidFileType: "No puedes subir archivos de este tipo.",
@@ -1513,6 +1551,8 @@
                 'X-CSRF-TOKEN' : CSRF_TOKEN,
                 // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
             },
+
+            previewTemplate: '<div class="dz-preview dz-processing dz-image-preview dz-success dz-complete"> <div class="dz-image"><img data-dz-thumbnail="" alt="" src=""></div><div class="dz-details"> <div class="dz-size"><span data-dz-size=""></span></div><div class="dz-filename"><span data-dz-name=""></span></div></div><div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress="" style=""></span></div><div class="dz-error-message"><span data-dz-errormessage=""></span></div><div class="dz-success-mark"><svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>Check</title><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><path d="M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" stroke-opacity="0.198794158" stroke="#747474" fill-opacity="0.816519475" fill="#FFFFFF"></path> </g> </svg></div><div class="dz-error-mark"><svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>Error</title><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF" fill-opacity="0.816519475"><path d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z"></path></g></g></svg></div> <input type="text" placeholder="Descripción" id="description_img" name="description_img" value="" class="form-control form-control-sm " onchange="cargar_lista_imagenes('+myDropzone_edb+', \'edb\');"></div>',
 
             acceptedFiles: "image/*",
             maxFilesize: 4,
@@ -1604,27 +1644,56 @@
         var lista_imagenes = {};
         function cargar_lista_imagenes(obj_dropzone, alias_examen)
         {
-            // console.log('--------------cargar_lista_imagenes----------------------');
+            console.log('--------------cargar_lista_imagenes----------------------');
+            if(obj_dropzone == undefined)
+            {
+                if(alias_examen == 'eda')
+                    obj_dropzone = myDropzone_eda;
+                else
+                    obj_dropzone = myDropzone_edb;
+
+            }
             lista_imagenes[alias_examen] = [];
             let temp  = obj_dropzone.getAcceptedFiles();
-            $.each(temp, function( index, value )
+            console.log('----------------temp--------------------');
+            console.log(temp);
+            if(temp.length == 0)
             {
-                if(value.status == "success")
+                $('#input_lista_imagenes').val('');
+                $('#input_lista_imagenes').val(JSON.stringify(lista_imagenes));
+            }
+            else
+            {
+                $.each(temp, function( index, value )
                 {
-                    if(value.xhr !== undefined)
+                    console.log('------------------------------------');
+                    console.log(index);
+                    console.log(value);
+                    // var str = value.previewElement.querySelector("#description_img").value;
+                    // console.log(str);
+                    console.log('------------------------------------');
+                    if(value.status == "success")
                     {
-                        var img_temp = JSON.parse(value.xhr.response);
-                        lista_imagenes[alias_examen][index] = [
-                            url=img_temp.img.url,
-                            nombre_origian= img_temp.img.original_file_name,
-                            nombre_img = img_temp.img.nombre_img,
-                            file_extension = img_temp.img.file_extension,
-                        ];
-                        $('#input_lista_imagenes').val('');
-                        $('#input_lista_imagenes').val(JSON.stringify(lista_imagenes));
+                        if(value.xhr !== undefined)
+                        {
+
+                            var str = '';
+                            if(value.previewElement.querySelector("#description_img"))
+                                str = value.previewElement.querySelector("#description_img").value;
+                            var img_temp = JSON.parse(value.xhr.response);
+                            lista_imagenes[alias_examen][index] = [
+                                url=img_temp.img.url,
+                                nombre_origian= img_temp.img.original_file_name,
+                                nombre_img = img_temp.img.nombre_img,
+                                file_extension = img_temp.img.file_extension,
+                                descripcion = str,
+                            ];
+                            $('#input_lista_imagenes').val('');
+                            $('#input_lista_imagenes').val(JSON.stringify(lista_imagenes));
+                        }
                     }
-                }
-            });
+                });
+            }
 
 
         }
@@ -1725,6 +1794,69 @@
             {
                 // $('#'+input_solitado_por).attr('readonly', false);
                 $('#'+input_solitado_por).val();
+            }
+        }
+
+        /** PERVISUALIZACION DE EXAMEN */
+        function visualizar_pdf_examen(tipo_examen)
+        {
+            if(tipo_examen!='')
+            {
+                var array_datos = {};
+                $('.div_form_examen_'+tipo_examen).find('input,textarea,select').each(function (key, element){
+                    var key_temp = element.id.replace('_'+tipo_examen,'');
+
+                    if(key_temp == 'biopsia' || key_temp == 'muestra_hp')
+                    {
+                        if(element.value == 1)
+                        {
+                            array_datos[key_temp] = 'SI';
+                        }
+                        else
+                        {
+                            array_datos[key_temp] = 'NO';
+                        }
+                    }
+                    else if(key_temp == 'muestra_hp_resultado')
+                    {
+                        if(element.value == 1)
+                        {
+                            array_datos[key_temp] = 'Positivo';
+                        }
+                        else
+                        {
+                            array_datos[key_temp] = 'Negativa';
+                        }
+                    }
+                    else
+                    {
+                        array_datos[key_temp] = element.value;
+                    }
+                });
+
+                var imagenes = $('#input_lista_imagenes').val();
+                if(imagenes != '')
+                {
+                    imagenes = JSON.parse(imagenes);
+                    imagenes = JSON.stringify(JSON.stringify(imagenes[tipo_examen]));
+                    console.log(imagenes );
+                }
+
+
+                var data ='id_ficha='+$('#id_fc').val()+'&contenido='+JSON.stringify(array_datos)+'&imagenes='+imagenes;
+                Fancybox.show(
+                    [
+                        {
+                        src: '{{ route("pdf.visualizar.examen") }}?'+data,
+                        type: "iframe",
+                        preload: false,
+                        },
+                    ]
+                );
+            }
+            else
+            {
+                console.log('tipo examen no especificado');
             }
         }
 

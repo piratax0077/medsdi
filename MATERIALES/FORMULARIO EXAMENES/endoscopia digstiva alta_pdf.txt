@@ -1,0 +1,212 @@
+<!--Motivo examen-->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Motivo del Examen
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-md-2" >
+                        <label class="examen-label" >RUT: </label>
+                        <label class="examen-detalle" >{{SOLICITADO_POR_RUT}}</label>
+                    </div>
+                    <div class="form-group col-md-2" >
+                        <label class="examen-label" >Solicitado por: </label>
+                        <label class="examen-detalle">{{SOLICITADO_POR_NOMBRE}} {{SOLICITADO_POR_APELLIDO}}</label>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label class="examen-label" >Hipótesis Diagnóstica: </label>
+                        <label class="examen-detalle" >{{SOSPECHA_DIAGNOSTICA}}</label>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="examen-label" >Premedicación: </label>
+                        <label class="examen-detalle">{{PREMED}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--ANTECEDENTES-->
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Antecedentes
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-md-12 mx-auto">
+                        <label class="examen-label" >Antecedentes Generales: </label>
+                        <label class="examen-detalle">{{ANTEC_ENDO_GASTRICA_GEN}}</label>
+                    </div>
+                    <div class="form-group col-md-12 mx-auto">
+                        <label class="examen-label" >Antecedentes Gastroenterológicos: </label>
+                        <label class="examen-detalle">{{ANTEC_ENDO_GASTRICA_GO}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--TRAYECTO ESOFAGO-->
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Trayecto y Esófago
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-md-12 mx-auto">
+                        <label class="examen-label" >Trayecto: </label>
+                        <label class="examen-detalle">{{ESOF_TRAYECTO}}</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12 mx-auto">
+                        <label class="examen-label" >Esófago: </label>
+                        <label class="examen-detalle">{{ESOF_ESOFAGO}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--ESTOMAGO-->
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header" id="orofar">
+                Estómago
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form group row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="examen-label">Cardias</label>
+                                <label class="examen-detalle">{{CARDIAS}}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="examen-label">Contenido y Pliegues </label>
+                                <label class="examen-detalle">{{CONT_PLIEGUES}}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="examen-label">Mucosa</label>
+                                <label class="examen-detalle">{{MUCOSA}}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="examen-label">Ángulo</label>
+                                <label class="examen-detalle">{{ANGULO}}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="examen-label">Antro</label>
+                                <label class="examen-detalle">{{ANTRO}}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="examen-label">Píloro</label>
+                                <label class="examen-detalle">{{PILORO}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="examen-label">Biopsia</label>
+                            <label class="examen-detalle">{{BIOPSIA}}</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="examen-label">Muestra H.P</label>
+                            <label class="examen-detalle">{{MUESTRA_HP}}</label>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="examen-label">Resultado</label>
+                                <label class="examen-detalle">{{MUESTRA_HP_RESULTADO}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-12">
+                        <label class="examen-label">Descripción Examen</label>
+                        <label class="examen-detalle">{{DESC_ENDO_GAST}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--DUODENO-->
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Duodéno
+            </div>
+
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-md-12">
+                        <label class="examen-label">Descripción</label>
+                        <label class="examen-detalle">{{DUODENO}}</label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--IMAGENES-->
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Imagenes.
+            </div>
+            <div class="card-body-aten shadow-none">
+                <!-- imagenes -->
+                <div style="margin-top: 10px;">
+                    {{IMAGENES}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--DIAGNÓSTICO-->
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Diagnóstico
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label class="examen-label">Diagnóstico endoscópico</label>
+                        <label class="examen-detalle">{{DIAG_ENDOS}}</label>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label class="examen-label">Observaciones</label>
+                        <label class="examen-detalle">{{OBSERVACIONES}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

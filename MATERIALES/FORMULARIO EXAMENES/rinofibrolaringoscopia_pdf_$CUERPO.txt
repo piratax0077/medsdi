@@ -1,0 +1,191 @@
+<!--Motivo examen-->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Motivo del Examen
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-md-2" >
+                        <label class="examen-label" >RUT: </label>
+                        <label class="examen-detalle" >{{ $cuerpo['registro']->solicitado_rut }}</label>
+                    </div>
+                    <div class="form-group col-md-2" >
+                        <label class="examen-label" >Solicitado por: </label>
+                        <label class="examen-detalle">{{ $cuerpo['registro']->solicitado_nombre }}</label>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label class="examen-label" >Motivo del Examen: </label>
+                        <label class="examen-detalle" >{{ $cuerpo['registro']->motivo }}</label>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="examen-label" >Antecedentes Especialidad: </label>
+                        <label class="examen-detalle">{{ $cuerpo['registro']->antec_especialidad }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--NARIZ Y FOSAS NASALES-->
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Nariz y fosas nasales
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-md-6 mx-auto">
+                        <label class="examen-label" >Mucosa: </label>
+                        <label class="examen-detalle">{{ $cuerpo['registro']->muc_nasal_permeab }}</label>
+                    </div>
+                    <div class="form-group col-md-6 mx-auto">
+                        <label class="examen-label" >Cornetes: </label>
+                        <label class="examen-detalle">{{ $cuerpo['registro']->cornetes }}</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6 mx-auto">
+                        <label class="examen-label" >Tabique: </label>
+                        <label class="examen-detalle">{{ $cuerpo['registro']->tabique }}</label>
+                    </div>
+                    <div class="form-group col-md-6 mx-auto">
+                        <label class="examen-label" >Tumoraciones: </label>
+                        <label class="examen-detalle">{{ $cuerpo['registro']->tumor }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--RINOFARINGE-->
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Rinofaringe
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-md-12 mx-auto">
+                        <label class="examen-label" >Descripción: </label>
+                        <label class="examen-detalle">{{ $cuerpo['registro']->rinofaringe }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--OROFARINGE-->
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Orofaringe
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-md-12">
+                        <label class="examen-label" >Descripción: </label>
+                        <label class="examen-detalle">{{ $cuerpo['registro']->orofaringe }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--LARINGE-->
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Laringe.
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="examen-label" >Cuerdas: </label>
+                        <label class="examen-detalle">{{ $cuerpo['registro']->cuerdas }}</label>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="examen-label" >Movilidad, hiatos, otros: </label>
+                        <label class="examen-detalle">{{ $cuerpo['registro']->movilidad }}</label>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="examen-label" >Cierre glótico: </label>
+                        <label class="examen-detalle">{{ $cuerpo['registro']->cierre_glotico }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--IMAGENES-->
+<div class="row" style="page-break-before:always;">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Imagenes.
+            </div>
+            <div class="card-body-aten shadow-none">
+                <!-- imagenes -->
+                <div style="margin-top: 30px;">
+                @foreach($cuerpo['imagenes'] as $key => $img)
+                    <!-- <img style="margin: 3px;" src="{{ asset('storage/imagenes/examen/'.$img->nombre) }}" alt="{{ $img->nombre }}"> -->
+                    <img style="margin: 3px;" src="data:image/png;base64,{{ base64_encode(file_get_contents(asset('storage/imagenes/examen/'.$img->nombre))) }}" alt="{{ $img->nombre }}">
+                @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--INFO-->
+<!-- <div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Info.
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-md-12">
+                        <label class="examen-label" >Descripción: </label>
+                        <label class="examen-detalle"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<!--DIAGNÓSTICO-->
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Diagnóstico
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label class="examen-label" >Diagnóstico endoscópico: </label>
+                        <label class="examen-detalle" >{{ $cuerpo['registro']->diag_endos }}</label>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label class="examen-label" >Observaciones: </label>
+                        <label class="examen-detalle" >{{ $cuerpo['registro']->observaciones_endos }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

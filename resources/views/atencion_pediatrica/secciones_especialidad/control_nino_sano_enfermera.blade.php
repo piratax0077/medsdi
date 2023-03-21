@@ -61,7 +61,7 @@
                                             <form>
                                                 <div class="form-row mb-2">
                                                     <div class="col-md-12">
-                                                        <h6>Información del acompañente</h6>
+                                                        <h6>Información del acompañenteX</h6>
                                                     </div>
                                                 </div>
                                                 <div class="form-row">

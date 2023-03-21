@@ -1,0 +1,91 @@
+<!-- SOLICITADO POR -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Solicitado por:
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="form-group col-md-2" >
+                        <label class="examen-label" >RUT: </label>
+                        <label class="examen-detalle" >{{SOLICITADO_RUT}}</label>
+                    </div>
+                    <div class="form-group col-md-2" >
+                        <label class="examen-label" >Solicitado por: </label>
+                        <label class="examen-detalle">{{SOLICITADO_NOMBRE}} {{SOLICITADO_APELLIDO}}</label>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label class="examen-label" >H.Diagnóstica: </label>
+                        <label class="examen-detalle" >{{SOSPECHA_DIAGNOSTICA}}</label>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="examen-label" >Premedicación: </label>
+                        <label class="examen-detalle">{{PREMED}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--INFORME URO_FLUJOMETRIA-->
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Informe
+            </div>
+            <div class="card-body-aten shadow-none">
+                <div class="form-row">
+                    <div class="col-md-3">
+                        <label class="examen-label">Volumen de Vaciado</label>
+                        <label class="examen-detalle">{{VOL_VAC}}</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-3">
+                        <label class="examen-label"> Qmax -Flujo</label>
+                        <label class="examen-detalle">{{Q_FLUJO}}</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-3">
+                        <label class="examen-label">Morfología de la Curva</label>
+                        <label class="examen-detalle">{{M_CURVA}}</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-3">
+                        <label class="examen-label">Residuo Post-Miccional</label>
+                        <label class="examen-detalle">{{RESIDUO}}</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-3">
+                        <label class="examen-label">Comentarios</label>
+                        <label class="examen-detalle">{{COMENTRARIOS}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--IMAGENES-->
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Imagenes.
+            </div>
+            <div class="card-body-aten shadow-none">
+                <!-- imagenes -->
+                <div style="margin-top: 30px;">
+                    {{IMAGENES}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -29,6 +29,26 @@
                     <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
                     <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
                     <input type="hidden" name="tipo_examen_especial" id="tipo_examen_especial" value="{{ $lista_examen_especial }}">
+
+                    @php
+                        /** carga de id examen de espcialidad tipo  */
+                        $temp = $lista_examen_especial;
+
+                        $array_temp = explode('|',$temp);
+                        //var_dump($array_temp);
+                        $array_temp2 = array();
+                        foreach($array_temp as $key=>$value)
+                        {
+                            $array_temp2[] = explode(',',$value);
+                        }
+                        $array_examen_especialidad_tipo = array();
+                        foreach($array_temp2 as $key=>$value)
+                        {
+                            $array_examen_especialidad_tipo[$value[0]] = $value[1];
+                        }
+                        // var_dump($array_examen_especialidad_tipo);
+                    @endphp
+
                     @csrf
                     <div class="tab-content" id="uro-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
@@ -692,6 +712,27 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        {{--  div de botones  --}}
+                                        <div class="col-md-12 bg-white shadow-none rounded mx-1 p-15">
+                                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+                                            @include('atencion_medica.generales.seccion_receta_examen_comunes')
+                                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+
+                                            <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
+                                            {{--  @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')  --}}
+                                            <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD FIN  -->
+
+                                            <hr>
+
+                                            <!--GUARDAR O IMPRIMIR FICHA-->
+                                            <div class="row mb-3">
+                                                <div class="col-md-12 text-center">
+                                                    <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+                                                    <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -709,9 +750,17 @@
 											<hr>
 										</div>
 									</div>
-									<div class="row">
+									<div class="row div_form_examen_cisto">
+                                        <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_cisto" id="id_examen_especialidad_tipo_cisto" value="{{ $array_examen_especialidad_tipo['cisto'] }}">
 										{!! $examen['cisto'] !!}
 									</div>
+                                    <!--GUARDAR EXAMEN-->
+                                    <div class="row">
+                                        <div class="col-md-12 text-center mb-3">
+                                            <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
+                                            <bottom type="bottom" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('cisto');">Ver Examen PDF</bottom>
+                                        </div>
+                                    </div>
 								</div>
 							</div>
 						</div>
@@ -727,29 +776,22 @@
                                             <hr>
                                         </div>
                                     </div>
+                                    <div class="row div_form_examen_uro_flujo">
+                                        <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_uro_flujo" id="id_examen_especialidad_tipo_uro_flujo" value="{{ $array_examen_especialidad_tipo['uro_flujo'] }}">
+                                        {!! $examen['uro_flujo'] !!}
+                                    </div>
+                                    <!--GUARDAR EXAMEN-->
                                     <div class="row">
-                                    {!! $examen['uro_flujo'] !!}
+                                        <div class="col-md-12 text-center mb-3">
+                                            <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
+                                            <bottom type="bottom" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('uro_flujo');">Ver Examen PDF</bottom>
+                                        </div>
                                     </div>
 								</div>
 							</div>
 						</div>
 						<!--CIERRE:UROFLUJO-->
 
-                        {{--  div de botones  --}}
-
-                        <div class="bg-white shadow-none rounded mx-1 p-15">
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                            @include('atencion_medica.generales.seccion_receta_examen_comunes')
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-                            <hr>
-                            <!--GUARDAR O IMPRIMIR FICHA-->
-                            <div class="row mb-3">
-                                <div class="col-md-12 text-center">
-                                    <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                                    <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </form>
             </div>
@@ -2980,6 +3022,57 @@
             }
             // evaluar_para_carga_detalle(select,div,input,valor);
             evaluar_para_carga_detalle('biopsia_uro','div_biopsia_uro','obs_biopsia_uro',2);
+        }
+
+        /** PERVISUALIZACION DE EXAMEN */
+        function visualizar_pdf_examen(tipo_examen)
+        {
+            if(tipo_examen!='')
+            {
+                var array_datos = {};
+                $('.div_form_examen_'+tipo_examen).find('input,textarea,select').each(function (key, element){
+                    var key_temp = element.id.replace('_'+tipo_examen,'');
+
+                    if(key_temp == 'biopsia')
+                    {
+                        if(element.value == 1)
+                        {
+                            array_datos[key_temp] = 'SI';
+                        }
+                        else
+                        {
+                            array_datos[key_temp] = 'NO';
+                        }
+                    }
+                    else
+                    {
+                        array_datos[key_temp] = element.value;
+                    }
+                });
+
+                var imagenes = $('#input_lista_imagenes').val();
+                if(imagenes != '')
+                {
+                    imagenes = JSON.parse(imagenes);
+                    imagenes = JSON.stringify(JSON.stringify(imagenes[tipo_examen]));
+                    console.log(imagenes );
+                }
+
+                var data ='id_ficha='+$('#id_fc').val()+'&contenido='+JSON.stringify(array_datos)+'&imagenes='+imagenes;
+                Fancybox.show(
+                    [
+                        {
+                        src: '{{ route("pdf.visualizar.examen") }}?'+data,
+                        type: "iframe",
+                        preload: false,
+                        },
+                    ]
+                );
+            }
+            else
+            {
+                console.log('tipo examen no especificado');
+            }
         }
     </script>
 @endsection

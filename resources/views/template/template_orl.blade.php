@@ -169,6 +169,12 @@
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     </script>
+    <script>
+        /** EVITAR CIERRE DE VENTANA */
+        window.onbeforeunload = function() {
+            return "You work will be lost.";
+        };
+    </script>
 
     @yield('js_inferior')
     @yield('page-script')
