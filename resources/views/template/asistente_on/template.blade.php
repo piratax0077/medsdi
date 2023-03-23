@@ -49,7 +49,11 @@
     <script src="{{ asset('js/plugins/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('js/pages/data-basic-custom.js') }}"></script>
     <script src="{{ asset('js/toggle_asistentes.js') }}"></script>
-    
+    {{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+
+
     @yield('page-script')
 </body>
 </html>

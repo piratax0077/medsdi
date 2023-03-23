@@ -118,6 +118,9 @@
     <script src="{{ asset('js/plugins/apexcharts.min.js') }}"></script>
     <!-- peity chart js -->
     <script src="{{ asset('js/plugins/jquery.peity.min.js') }}"></script>
+{{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
     <!--Gráficos-->
     {{--  <script src="{{ asset('js/graficos/sf-prof-admin-cm.js') }}"></script>

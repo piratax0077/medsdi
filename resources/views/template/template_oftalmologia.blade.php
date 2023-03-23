@@ -78,7 +78,6 @@
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
     @include('atencion_medica.secciones_especialidad.ficha_oftalmo_tipo')
-    @include('atencion_medica.secciones_especialidad.ficha_oftalmo_procedimiento')
 
     <!-- Modal de la vista fin -->
 
@@ -140,10 +139,9 @@
     <!-- mensajes -->
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
-    {{-- autocomplete --}}
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-
-
+{{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
     {{--  @include('template.templateAutorizacion')  --}}
 
@@ -165,7 +163,7 @@
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-        $(document).ready(function () {
+		$(document).ready(function () {
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
                 swal({

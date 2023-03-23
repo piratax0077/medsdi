@@ -132,6 +132,10 @@
     <script src="{{ asset('js/alerta_suscripcion.js') }}"></script>
      <!-- Tablas -->
     <script src="{{ asset('js/facturacion.js') }}"></script>
+    {{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+
 	<script>
         function cuenta_corriente() {
             $('#dat_bancarios').modal('show');

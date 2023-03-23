@@ -149,6 +149,9 @@
     <!-- sweet alert Js -->
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
     <script src="{{ asset('js/alerta_suscripcion.js') }}"></script>
+{{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
     <!--select2 -->
     <script src="{{ asset('js/plugins/select2.full.min.js')}}"></script>

@@ -81,6 +81,7 @@
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
 
+
     <!-- Modal de la vista fin -->
 
 
@@ -142,8 +143,9 @@
     <!-- mensajes -->
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
-    {{-- autocomplete --}}
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+{{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
 
 
