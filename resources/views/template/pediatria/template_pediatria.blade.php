@@ -69,7 +69,7 @@
         @yield('Modals-med-exa')
         @yield('Modals-med-exa-esp')
         @yield('modal-ficha-general-espc')
-        @include('atencion_pediatrica.secciones_especialidad.ficha_pediatria_tipo')
+        @include('atencion_pediatrica.secciones_especialidad.ficha_pediatria_general_tipo')
         <!-- Modal de la vista fin -->
 
 
@@ -130,8 +130,9 @@
         <!-- mensajes -->
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
-        {{-- autocomplete --}}
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        {{-- autocomplete
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+        <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
 
 
@@ -149,8 +150,8 @@
 
         <!--Modals Sidebar derecho-->
         <script src="{{ asset('js/modals_sidebar_esp.js') }}?upd={{ random_int(1111,9999) }}"></script>
-        <!--Tablas y Toggle atención PEDIATRIA-->
 
+        <!--Tablas y Toggle atención PEDIATRIA-->
         <script src="{{ asset('js/atencion_pediatria.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
         <script>
@@ -162,7 +163,7 @@
         @yield('page-script-ficha-atencion'){{-- ficha_orl.blade --}}
         @yield('js-ficha-general-espc') {{-- seccion js fiche general especialidad --}}
         @yield('page-script-med-exa') {{--  seccion receta y exmaenes --}}
-        @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
+       {{-- @yield('page-script-med-exa-esp') --}} {{--seccion receta y exmaenes especiales --}}
         @yield('js-sidebar') {{-- seccion js side bar --}}
     </body>
 </html>
