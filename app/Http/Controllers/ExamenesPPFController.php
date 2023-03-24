@@ -26,7 +26,9 @@ class ExamenesPPFController extends Controller
                                             $request->tipo_examen,
                                             $request->tipo_ficha,
                                             $request->con_contraste,
-                                            $request->archivos
+                                            $request->archivos,
+                                            $request->otro,
+
                                         );
 
     }
@@ -110,6 +112,7 @@ class ExamenesPPFController extends Controller
                                 $request->tipo_ficha,
                                 $con_contraste,
                                 isset($examenes[$i]->archivo)?$examenes[$i]->archivo:'',
+                                $examenes[$i]->lado,
                         );
                 if($retorno['estado'] == 1)
                     $exito++;
@@ -145,7 +148,7 @@ class ExamenesPPFController extends Controller
      * @param [type] $archivo
      * @return array()
      */
-    public function registroExamen($id_prioridad, $id_paciente, $id_profesional, $id_ficha_atencion, $id_examen, $examen, $examen_especialidad, $tipo_examen, $tipo_ficha, $con_contraste, $archivo)
+    public function registroExamen($id_prioridad, $id_paciente, $id_profesional, $id_ficha_atencion, $id_examen, $examen, $examen_especialidad, $tipo_examen, $tipo_ficha, $con_contraste, $archivo, $otro)
     {
         $datos = array();
         $error = array();
@@ -234,6 +237,7 @@ class ExamenesPPFController extends Controller
             $examen_ppf->con_contraste = $con_contraste;
             $examen_ppf->codigo_fonasa = $codigo;
             $examen_ppf->archivo = $archivo;
+            $examen_ppf->otro = $otro;
             //$examen_ppf->estado = 1;
 
             if($examen_ppf->save()){
