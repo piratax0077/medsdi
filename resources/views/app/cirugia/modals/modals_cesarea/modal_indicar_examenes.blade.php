@@ -42,7 +42,19 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-12 mt-2">
+                    <div class="col-sm-6 mt-2">
+                        <div class="form-group fill">
+                            <label class="floating-label">Lado</label>
+                            <select class="form-control form-control-sm" id="lado" name="lado">
+                                <option value="0" selected>Seleccione</option>
+                                <option value="Derecho">Derecho</option>
+                                <option value="Izquierdo">Izquierdo</option>
+                                <option value="Bilateral">Bilateral</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mt-2">
                         <div class="form-group fill">
                             <label class="floating-label">Prioridad</label>
                             <select class="form-control form-control-sm" id="prioridad" name="prioridad">
@@ -54,6 +66,8 @@
                             </select>
                         </div>
                     </div>
+
+
                     <div class="col-sm-12 mt-3">
                         <div class="form-group mb-1">
                             <label><strong>Con Contraste</strong></label>
@@ -79,6 +93,7 @@
                                         <th class="text-center align-middle" style="display:none">id</th>
                                         <th class="text-center align-middle" style="display:none">Nombre Examen</th>
                                         <th class="text-center align-middle">Nombre Examen</th>
+                                        <th class="text-center align-middle">Lado</th>
                                         <th class="text-center align-middle">Tipo</th>
                                         {{--  <th class="text-center align-middle">Sub-Tipo</th>  --}}
                                         <th class="text-center align-middle">Prioridad</th>

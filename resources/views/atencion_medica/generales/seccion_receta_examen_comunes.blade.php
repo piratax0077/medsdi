@@ -133,7 +133,7 @@
                         }
 
                         /** ACTIVAR CHECHBOK DE CON  CONTRASTE */
-                        if($('#tipo_examen').val() == 362) $('#imagenologia_con_contraste').removeAttr('disabled');
+                        if($('#tipo_examen').val() == 354) $('#imagenologia_con_contraste').removeAttr('disabled');
                         else  $('#imagenologia_con_contraste').attr('disabled','disabled');
                     })
                     .fail(function() {
@@ -618,7 +618,7 @@
             var med_faltante = $.trim($('#med_faltante').val());
             if(med_faltante != ''){
                 /** registro */
-                let url = "https://www.med-sdi.cl/MedicamentoFaltante/registrar";
+                let url = "{{ route('medicamentoFaltante.registro')}}";
 
 
                 var _token = CSRF_TOKEN;
@@ -740,6 +740,7 @@
             var examen = $("#examen option:selected").text();
             var id_examen = $("#examen").val();
             var prioridad = $("#prioridad option:selected").text();
+            var lado = $("#lado option:selected").text();
 
             // var imagenologia_con_contraste = 'N/C';
             // if($('#imagenologia_con_contraste').is(':checked'))
@@ -776,6 +777,10 @@
                     fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + id_examen + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + examen + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">' + examen + '</td>';
+                    if(lado == 'Seleccione')
+                        fila +=     '<td class="text-center align-middle text-wrap"> </td>';
+                    else
+                        fila +=     '<td class="text-center align-middle text-wrap">' + lado + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">' + tipo_examen + '</td>';
                     //fila =     '<td>' + sub_tipo_examen + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">' + prioridad + '</td>';
@@ -811,6 +816,7 @@
                         fila +=     '<td class="text-center align-middle text-wrap" style="display:none">85</td>';
                         fila +=     '<td class="text-center align-middle text-wrap" style="display:none">CREATININA EN SANGRE</td>';
                         fila +=     '<td class="text-center align-middle text-wrap">CREATININA EN SANGRE</td>';
+                        fila +=     '<td class="text-center align-middle text-wrap"> </td>';
                         fila +=     '<td class="text-center align-middle text-wrap">SANGRE</td>';
                         //fila =     '<td>' + sub_tipo_examen + '</td>';
                         fila +=     '<td class="text-center align-middle text-wrap">Media</td>';
@@ -829,6 +835,7 @@
                 $("#tipo_examen").val('');
                 $("#sub_tipo_examen").val('');
                 $("#examen").val('');
+                $("#lado").val(0);
                 $("#prioridad").val(2);
                 $('#imagenologia_con_contraste').prop('checked', false);
                 $('#mensaje_imagenologia_con_contraste').hide();
@@ -888,11 +895,12 @@
                     var data = $(this).find("td");
                     rol["id_examen"] = $.trim($(data[0]).text().split("\n").join(""));
                     rol["nombre_examen"] = $.trim($(data[1]).text().split("\n").join(""));
+                    rol["lado"] = $.trim($(data[3]).text().split("\n").join(""));
                     rol["nombre_examen_especialidad"] = $.trim($(data[2]).text().split("\n").join(""));
-                    rol["tipo"] = $.trim($(data[3]).text().split("\n").join(""));
+                    rol["tipo"] = $.trim($(data[4]).text().split("\n").join(""));
                     // rol["subtipo"] = $.trim($(data[2]).text().split("\n").join(""));
-                    rol["prioridad"] = $.trim($(data[4]).text().split("\n").join(""));
-                    rol["con_contraste"] = $.trim($(data[5]).text().split("\n").join(""));
+                    rol["prioridad"] = $.trim($(data[5]).text().split("\n").join(""));
+                    rol["con_contraste"] = $.trim($(data[6]).text().split("\n").join(""));
                     rows1.push(rol);
                 }
             });
@@ -1108,6 +1116,7 @@
                     html += '        <th class="text-center align-middle" style="display:none">ID</th>';
                     html += '        <th class="text-center align-middle" style="display:none">NOMBRE</th>';
                     html += '        <th class="text-center align-middle">Nombre Examen</th>';
+                    html += '        <th class="text-center align-middle">Lado</th>';
                     html += '        <th class="text-center align-middle">Tipo</th>';
                     {{--  html += '        <th class="text-center align-middle">Sub-Tipo</th>';  --}}
                     html += '        <th class="text-center align-middle">Prioridad</th>';
@@ -1129,6 +1138,10 @@
                                 html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.id_examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+value.examen+'</td>';
+                                if(value.otro == 0 || value.otro == 'null' || value.otro == ' ')
+                                    html += '    <td class="text-center align-middle text-wrap"> </td>';
+                                else
+                                    html += '    <td class="text-center align-middle text-wrap">'+value.otro+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+value.tipo_examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+prioridad[value.id_prioridad]+'</td>';
                                 var text_con_contraste = 'N/C';
@@ -1144,6 +1157,10 @@
                                 html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.id_examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+value.examen+'</td>';
+                                if(value.otro == 0 || value.otro == 'null' || value.otro == ' ')
+                                    html += '    <td class="text-center align-middle text-wrap"> </td>';
+                                else
+                                    html += '    <td class="text-center align-middle text-wrap">'+value.otro+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+value.tipo_examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+prioridad[value.id_prioridad]+'</td>';
                                 var text_con_contraste = 'N/C';
