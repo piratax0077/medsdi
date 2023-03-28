@@ -22,6 +22,7 @@ use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
 use App\Models\ContactosEmergencia;
 
+
 use App\Models\Prevision;
 use App\Models\Profesional;
 use App\Models\ProfesionalesLugaresAtencion;
@@ -170,16 +171,60 @@ class EscritorioPaciente extends Controller
 
     }
 
-    public function miProfesionales()
+    public function miProfesionales($id_usuario_ = 0, $id_profesional_ = 0)
     {
-        $fichas = FichaAtencion::where('id_paciente', Auth::user()->id)->get()->unique('id_profesional');
+        // DESVINCULAR profesional
+        if($id_usuario_ != 0 && $id_profesional_ != 0)
+        {
+            $fichas = FichaAtencion::where('id_paciente', $id_usuario_)
+                                     ->where('id_profesional', $id_profesional_)                                     
+                                     ->first();
 
-        $profesional = [];
-        foreach ($fichas as $f) {
-            array_push($profesional, $f->profesional()->first());
+            if($fichas)
+            {
+                $fichas->desvincular = 1;
+                $fichas->save();
+            }
         }
 
-        return view('app.paciente.medicos_paciente', ['profesional' => $profesional]);
+        // VER lista de profesionales
+
+        
+        
+        $fichas = FichaAtencion::where('id_paciente', Auth::user()->id)->get()->unique('id_profesional');
+
+        $fichas_desvinculados = FichaAtencion::select('id_profesional')
+                                        ->where('id_paciente', Auth::user()->id)
+                                        ->where('desvincular', 1)
+                                        ->get()
+                                        ->unique('id_profesional');
+            
+        $profesional = [];
+        $desvinculados = [];
+        $profesion = [];
+        foreach ($fichas as $f) {
+            array_push($profesional, $f->profesional()->first());
+            $profesional_ = Profesional::with('Especialidad')->find($f->id_profesional);            
+            array_push($profesion,$profesional_->Especialidad->nombre);
+        }
+
+        foreach ($fichas_desvinculados as $d) {                
+            array_push($desvinculados, $d->id_profesional);
+        }    
+
+        $id_usuario = Auth::user()->id;
+
+        $lista_especialidad = array_unique($profesion);
+                
+
+        return view('app.paciente.medicos_paciente', 
+        [
+            'id_usuario' => $id_usuario,
+            'profesional' => $profesional,
+            'desvinculados' => $desvinculados,
+            'lista_especialidad' => $lista_especialidad
+        ]
+    );
     }
 
     public function checkSdi(Request $request)

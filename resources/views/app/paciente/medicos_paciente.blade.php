@@ -29,9 +29,18 @@
                 <div class="card">
                     <div class="card-body">
                         <ul class="nav nav-pills bg-white" id="myTab" role="tablist">
+                        @foreach( $lista_especialidad as $le)
+                            <li class="nav-item" onclick="active_e('{{$le}}')">
+                                <a class="btn btn-outline-info btn-sm mr-1 my-1" id="user2-tab" data-toggle="tab" href="#user2" role="tab" aria-controls="user2" aria-selected="false">{{$le}}</a>
+                            </li>
+                        @endforeach
+                            <li class="nav-item" onclick="active_e('all')">
+                                <a class="btn btn-outline-info btn-sm mr-1 my-1 active" id="user2-tab" data-toggle="tab" href="#user2" role="tab" aria-controls="user2" aria-selected="false">VER TODOS</a>
+                            </li>
                             <!--<li class="nav-item">
                                     <a class="btn btn-outline-info btn-sm mr-1 my-1" id="user1-tab" data-toggle="tab" href="#todos" role="tab" aria-controls="todos" aria-selected="true">Todos</a>
                                 </li>-->
+                                <!--
                             <li class="nav-item">
                                 <a class="btn btn-outline-info btn-sm mr-1 my-1" id="user2-tab" data-toggle="tab"
                                     href="#user2" role="tab" aria-controls="user2" aria-selected="false">Medicina
@@ -50,6 +59,7 @@
                                 <a class="btn btn-outline-info btn-sm mr-1 my-1" id="user5-tab" data-toggle="tab"
                                     href="#user5" role="tab" aria-controls="user5" aria-selected="false">Cardiología</a>
                             </li>
+                            -->
                         </ul>
                     </div>
                 </div>
@@ -60,8 +70,9 @@
                         <div class="row mb-n4">
                             @if(isset($profesional))
                                 @foreach( $profesional as $p)
+                                    @if(in_array($p->id, $desvinculados)==false)
                                     <!--Card Tomar Hora Perfil Médico -->
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 filtro_le le_{{ $p->Especialidad()->first()->nombre }}">
                                         <div class="card user-card user-card-1 mt-4">
                                             <div class="card-body pt-0">
                                                 <div class="user-about-block text-center">
@@ -84,7 +95,7 @@
                                                                         title="Opciones"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="#">Desvincular profesional</a>
+                                                                    <a class="dropdown-item" href='{{ url("Paciente/desvincular_profesional/{$id_usuario}/{$p->id}") }}'>Desvincular profesional</a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -103,6 +114,7 @@
                                         </div>
                                     </div>
                                     <!--CIERRE: Card Tomar Hora Perfil Médico -->
+                                    @endif
                                 @endforeach
                             @endif
                         </div>
@@ -115,4 +127,18 @@
     </div>
 </div>
 <!--Cierre: Container Completo-->
+@endsection
+
+@section('page-script')
+    <script>
+        function active_e(tipo_esp){
+            if(tipo_esp=='all') 
+            {
+                $('.filtro_le').removeClass('d-none');
+            }else{
+                $('.filtro_le').addClass('d-none');
+                $('.le_'+tipo_esp).removeClass('d-none');
+            }
+        }
+    </script>
 @endsection
