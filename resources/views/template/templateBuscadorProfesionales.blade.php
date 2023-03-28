@@ -35,7 +35,10 @@
     <link rel="stylesheet" href="{{ asset('js/fullcalendar-5.10.1/lib/main.css') }}" />
 
 
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" />
+   {{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+
 
 
     @yield('page-styles')

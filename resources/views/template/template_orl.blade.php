@@ -143,8 +143,11 @@
     <!-- mensajes -->
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
-    {{-- autocomplete --}}
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    {{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+
+
 
 
 
@@ -168,12 +171,50 @@
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-    </script>
-    <script>
-        /** EVITAR CIERRE DE VENTANA */
-        window.onbeforeunload = function() {
-            return "You work will be lost.";
-        };
+        $(document).ready(function () {
+            {{--  mensaje de exito al registrar ficha clinica  --}}
+             @if(session('mensaje'))
+                swal({
+                    title: "Registro de Ficha Clínica.",
+                    text:"{{ session('mensaje') }}",
+                    icon: "info",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+            @endif
+            {{--  mensaje de exito al registrar ficha clinica  --}}
+            @if(session('success'))
+                swal({
+                    title: "Registro de Ficha Clínica.",
+                    text:"{{ session('success') }}",
+                    icon: "success",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+            @endif
+
+			{{--  mensaje de erro al registrar ficha clinica  --}}
+			@if(session('error'))
+				swal({
+					title: "Registro de Ficha Clínica.",
+					text:"{{ session('error') }}",
+					icon: "error",
+					// buttons: "Aceptar",
+					//SuccessMode: true,
+				});
+			@endif
+
+			{{--  mensaje de warning al registrar ficha clinica  --}}
+			@if(session('warning'))
+				swal({
+					title: "Registro de Ficha Clínica.",
+					text:"{{ session('warning') }}",
+					icon: "warning",
+					// buttons: "Aceptar",
+					//SuccessMode: true,
+				});
+			@endif
+        });
     </script>
 
     @yield('js_inferior')

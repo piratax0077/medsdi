@@ -24,8 +24,8 @@
             @endif
 
                 <!--Inicio de información-->
-                <h4 class="text-blue">Rp:</h4>
-                <h5 class="text-blue text-center">{{ $key }}</h5>
+                <h4 class="text-blue">Ruego practicar los siguientes examenes:</h4>
+                {{-- <h5 class="text-blue text-center">{{ $key }}</h5> --}}
                 <table class="tabla-receta">
                     <thead>
                         <tr class="t-gris">
@@ -46,6 +46,9 @@
                                 <tr>
                                     <td>
                                         <strong>{{ $examenes['examen'] }}</strong>
+                                        @if(!empty($examenes['otro']))
+                                            <br/><span><strong>{{ $examenes['otro'] }}</strong></span>
+                                        @endif
                                         @if($examenes['contraste'] == 1)
                                             <br/><span><strong>Con Contraste</strong></span>
                                         @endif

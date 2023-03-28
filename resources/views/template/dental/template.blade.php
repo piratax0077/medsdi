@@ -62,6 +62,9 @@
     <!--formulario sm-->
     <link rel="stylesheet" href="{{ asset('css/cara_dental.css') }}">
 
+{{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
 
     <style>
@@ -1979,7 +1982,7 @@
                                                 //$("#nro_orden").disabled();
 
                                             }
-                    
+
 
 
                                     } */
@@ -2418,7 +2421,7 @@
              let hipotesis_certificado = $('#hipotesis_certificado').val();
              let comentarios_certificado = $('#comentarios_certificado').val();
              let id_paciente = $('#paciente_certificado_reposo').val();
-             
+
              $.ajax({
                      url: url,
                      type: "get",
