@@ -590,6 +590,21 @@ class ficha_atencionController extends Controller
                 /** examenes radiologicos */
                 $examenes_radiologicos = '';
             }
+            else if($profesional->id_tipo_especialidad == 34 && empty($profesional->id_sub_tipo_especialidad))
+            {
+                // ATENCIÓN PSICOLOGIA
+                $ruta_blade = 'atencion_otros_prof.atencion_psicologia';
+                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $fichaTipo = '';
+                $examen = '';
+                $lista_examen_especial = '';
+
+				/** examenes de la especialidad */
+                $examenes_especialidad = '';
+
+                /** examenes radiologicos */
+                $examenes_radiologicos = '';
+            }
             else if($profesional->id_tipo_especialidad == 31 && empty($profesional->id_sub_tipo_especialidad))
             {
                 // ATENCIÓN NUTRICION

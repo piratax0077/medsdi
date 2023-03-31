@@ -177,7 +177,7 @@ class EscritorioPaciente extends Controller
         if($id_usuario_ != 0 && $id_profesional_ != 0)
         {
             $fichas = FichaAtencion::where('id_paciente', $id_usuario_)
-                                     ->where('id_profesional', $id_profesional_)                                     
+                                     ->where('id_profesional', $id_profesional_)
                                      ->first();
 
             if($fichas)
@@ -188,43 +188,41 @@ class EscritorioPaciente extends Controller
         }
 
         // VER lista de profesionales
-
-        
-        
-        $fichas = FichaAtencion::where('id_paciente', Auth::user()->id)->get()->unique('id_profesional');
+        $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
+        $fichas = FichaAtencion::where('id_paciente', $paciente->id)->get()->unique('id_profesional');
 
         $fichas_desvinculados = FichaAtencion::select('id_profesional')
-                                        ->where('id_paciente', Auth::user()->id)
+                                        ->where('id_paciente', $paciente->id)
                                         ->where('desvincular', 1)
                                         ->get()
                                         ->unique('id_profesional');
-            
+
         $profesional = [];
         $desvinculados = [];
         $profesion = [];
         foreach ($fichas as $f) {
             array_push($profesional, $f->profesional()->first());
-            $profesional_ = Profesional::with('Especialidad')->find($f->id_profesional);            
+            $profesional_ = Profesional::with('Especialidad')->find($f->id_profesional);
             array_push($profesion,$profesional_->Especialidad->nombre);
         }
 
-        foreach ($fichas_desvinculados as $d) {                
+        foreach ($fichas_desvinculados as $d) {
             array_push($desvinculados, $d->id_profesional);
-        }    
+        }
 
         $id_usuario = Auth::user()->id;
 
         $lista_especialidad = array_unique($profesion);
-                
 
-        return view('app.paciente.medicos_paciente', 
+        // var_dump(Auth::user()->id);
+        // var_dump($profesional);
+        return view('app.paciente.medicos_paciente',
         [
             'id_usuario' => $id_usuario,
             'profesional' => $profesional,
             'desvinculados' => $desvinculados,
             'lista_especialidad' => $lista_especialidad
-        ]
-    );
+        ]);
     }
 
     public function checkSdi(Request $request)
