@@ -14,7 +14,12 @@
                                 <label class="floating-label-activo-sm">Tipo del Examen Lab Otorrinolaringología</label>
                                 <select class="form-control form-control-sm" name="tipo_ex_lab_orl" id="tipo_ex_lab_orl" onchange="mostrar_otros('tipo_ex_lab_orl','div_otros_examen_orl','otro');buscar_examen_real('tipo_ex_lab_orl','real_tipo_ex_lab_orl');">
                                     <option value="">Seleccione</option>
-                                    <optgroup label="OÌDOS">
+                                    @if ($examenes_especialidad)
+                                        @foreach ( $examenes_especialidad as $ex_esp)
+                                            <option value="{{ $ex_esp->cod_examen }}"  data-multicodigo="" data-contraste="1">{{ $ex_esp->nombre_examen }}</option>
+                                        @endforeach
+                                    @endif
+                                    {{-- <optgroup label="OÌDOS">
                                         <option value="989" data-multicodigo="">Audiometría Niños</option>
                                         <option value="988" data-multicodigo="">Audiometría Adultos</option>
                                         <option value="990" data-multicodigo="">Impedanciometría</option>
@@ -35,7 +40,7 @@
                                     <optgroup label="TRATAMIENTOS">
                                         <option value="12">Ejercicios de Rehabilitación Vestibular***</option>
                                         <option value="otro" data-multicodigo="">Otros</option>
-                                    </optgroup>
+                                    </optgroup> --}}
                                 </select>
                                 <label id="real_tipo_ex_lab_orl" class="f-10 highcharts-strong"data-id=""></label>
                             </div>
@@ -54,7 +59,12 @@
                                 <label class="floating-label-activo-sm">Tipo del Examen Lab Radiología</label>
                                 <select class="form-control form-control-sm" name="tipo_ex_rx_orl" id="tipo_ex_rx_orl" onchange="mostrar_otros('tipo_ex_rx_orl','div_otros_examen_rx_orl','otro');buscar_examen_real('tipo_ex_rx_orl','real_tipo_ex_rx_orl');">
                                     <option value="">Seleccione</option>
-                                    <optgroup label="OÌDOS">
+                                    @if ($examenes_radiologicos)
+                                        @foreach ( $examenes_radiologicos as $ex_radio)
+                                            <option value="{{ $ex_radio->cod_examen }}"  data-multicodigo="" data-contraste="1">{{ $ex_radio->nombre_examen }}</option>
+                                        @endforeach
+                                    @endif
+                                    {{-- <optgroup label="OÌDOS">
                                         <option value="468"  data-multicodigo="" data-contraste="1">TAC OIDO DERECHO CON CONTRASTE</option>
                                         <option value="468"  data-multicodigo="" data-contraste="0">TAC OIDO DERECHO SIN CONTRASTE</option>
                                         <option value="468"  data-multicodigo="" data-contraste="1">TAC OIDO IZQUIERDO CON CONTRASTE</option>
@@ -72,16 +82,39 @@
                                         <option value="473"  data-multicodigo="" data-contraste="0">ECOTOMOGRAFÍA PARTES BLANDAS DE CUELLO</option>
                                         <option value="503"  data-multicodigo="" data-contraste="0">ECOGRAFIA TIROIDEA </option>
                                         <option value="otro">OTROS</option>
-                                    </optgroup>
+                                    </optgroup> --}}
                                 </select>
                                 <label id="real_tipo_ex_rx_orl" class="f-10 highcharts-strong"data-id=""></label>
                             </div>
                         </div>
+                        <div class="col-sm-6 mt-2">
+                            <div class="form-group fill">
+                                <label class="floating-label">Lado</label>
+                                <select class="form-control form-control-sm" id="lado_orl" name="lado_orl">
+                                    <option value="0" selected>Seleccione</option>
+                                    <option value="Derecho">Derecho</option>
+                                    <option value="Izquierdo">Izquierdo</option>
+                                    <option value="Bilateral">Bilateral</option>
+                                </select>
+                            </div>
+                        </div>
 
-                        <div class="col-sm-6 mt-2" id="div_otros_examen_rx_orl" style="display:none;">
+                        <div class="col-sm-6">
+                            <div class="form-group mb-1">
+                                <label><strong>Con Contraste</strong></label>
+                                <div class="switch switch-success d-inline m-r-10">
+                                    <input type="checkbox" id="imagenologia_con_contraste_orl" >
+                                    <label for="imagenologia_con_contraste_orl" class="cr"></label>
+                                </div>
+                                <div class="alert-primary" id="mensaje_imagenologia_con_contraste_orl" style="display:none;">Acaba de seleccionar Imagen con Constraste, El examen de Creatinina fue adjuntado correctamente.</div>
+                            </div>
+                        </div>
+
+                        {{-- <div class="col-sm-6 mt-2" id="div_otros_examen_rx_orl" style="display:none;">
                             <label id="" name="" class="floating-label-activo-sm">Otros Examen</label>
                             <input class="form-control form-control-sm" type="text" name="otro_examen_examen_rx_orl" id="otro_examen_examen_rx_orl" value="">
-                        </div>
+                        </div> --}}
+
                     </div>
                     <hr>
 
@@ -97,12 +130,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-6 mt-2">
-                            <div class="form-group fill">
-                                <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
-                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="examen_esp_orl_examen" id="examen_esp_orl_examen"></textarea>
-                            </div>
-                        </div>
+
                     </div>
                     <div class="form-row">
                         <div class="col-sm-12">
@@ -118,6 +146,7 @@
                                             <th class="text-center align-middle" style="display:none;">id</th>
                                             <th class="text-center align-middle" style="display:none;">Nombre Real</th>
                                             <th class="text-center align-middle">Nombre Examen</th>
+                                            <th class="text-center align-middle">Lado</th>
                                             <th class="text-center align-middle">Tipo</th>
                                             <th class="text-center align-middle">Prioridad</th>
                                             <th class="text-center align-middle">Con Contraste</th>

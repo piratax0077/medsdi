@@ -97,8 +97,13 @@
         @include('template.administracion.menu')
         @include('template.administracion.header')
     @elseif(Auth::user()->hasRole('Paciente'))
-        @include('template.paciente.menu')
-        @include('template.paciente.header')
+        @if(isset($id_dependiente_activo))
+            @include('template.paciente_dependiente.menu')
+            @include('template.paciente_dependiente.header')
+        @else
+            @include('template.paciente.menu')
+            @include('template.paciente.header')
+        @endif
     @endif
 
 
@@ -823,12 +828,16 @@
             $('#reserva_hora_hora_consulta').val('');
 
             let url = "{{ route('paciente.get.informacion') }}";
+            var datos = {};
+            var id_dependiente_activo = '{{ $paciente->id }}';
+
+            if(id_dependiente_activo != '')
+                datos.id_dependiente_activo = id_dependiente_activo;
+
             $.ajax({
                 url: url,
                 type: "get",
-                data: {
-                    // _token: _token,
-                },
+                data: datos,
             })
             .done(function(data) {
                 console.log(data);

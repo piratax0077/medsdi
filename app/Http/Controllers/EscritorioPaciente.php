@@ -141,7 +141,7 @@ class EscritorioPaciente extends Controller
                     'filtros' => array(
                         'id_profesion' => $id_profesion_,
                         'id_especialidad' => $id_especialidad_,
-                        'id_subespecialidad' => $id_subespecialidad_ 
+                        'id_subespecialidad' => $id_subespecialidad_
                     )
 
                 ]
@@ -160,7 +160,7 @@ class EscritorioPaciente extends Controller
                     'filtros' => array(
                         'id_profesion' => $id_profesion_,
                         'id_especialidad' => $id_especialidad_,
-                        'id_subespecialidad' => $id_subespecialidad_ 
+                        'id_subespecialidad' => $id_subespecialidad_
                     )
 
                 ]
@@ -201,10 +201,10 @@ class EscritorioPaciente extends Controller
 
         if($request->token)
         {
-            Funciones::disablePermApp($request->token);        
+            Funciones::disablePermApp($request->token);
         }
 
-        $permiso = Funciones::generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo);        
+        $permiso = Funciones::generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo);
 
         return view('check_sdi', [
             'url_nueva' => $url_nueva,
@@ -214,8 +214,8 @@ class EscritorioPaciente extends Controller
         ]);
     }
 
-    public function checkSdiToken(Request $request){       
-        $state = Funciones::checkStatePermApp($request->token);        
+    public function checkSdiToken(Request $request){
+        $state = Funciones::checkStatePermApp($request->token);
 
         return $state;
     }
@@ -223,28 +223,28 @@ class EscritorioPaciente extends Controller
     public function miFichaMedica(Request $request)
     {
         //VALIDAR TOKEN
-        Funciones::validTokenPermApp($request->token); 
-        
+        Funciones::validTokenPermApp($request->token);
+
 
         $id_usuario = Auth::user()->id;
 
         /* PACIENTE */
         $paciente = Paciente::where('id_usuario', $id_usuario)->first();
-        
+
         list($ano,$mes,$dia) = explode("-",$paciente->fecha_nac);
         $ano_diferencia  = date("Y") - $ano;
         $mes_diferencia = date("m") - $mes;
         $dia_diferencia   = date("d") - $dia;
         if ($dia_diferencia < 0 || $mes_diferencia < 0)
           $ano_diferencia--;
-        
+
         $edad = $ano_diferencia;
         $paciente->fecha_nac = $dia.'-'.$mes.'-'.$ano;
         $paciente->edad = $edad;
 
         /* CONTACTO EMERGENCIA */
         $pacientes_contacto_emergencia = PacienteContactoEmergencia::where('id_paciente',$paciente->id)->first();
-        
+
         if(is_object($pacientes_contacto_emergencia))
         {
             $contacto_emergencia = ContactoEmergencia::find($pacientes_contacto_emergencia->id_contacto);
@@ -255,7 +255,7 @@ class EscritorioPaciente extends Controller
             $dia_diferencia   = date("d") - $dia;
             if ($dia_diferencia < 0 || $mes_diferencia < 0)
             $ano_diferencia--;
-            
+
             $edad = $ano_diferencia;
             $contacto_emergencia->fecha_nac = $dia.'-'.$mes.'-'.$ano;
             $contacto_emergencia->edad = $edad;
@@ -297,7 +297,7 @@ class EscritorioPaciente extends Controller
             );
         }
 
-        /* SANGUINEO */ 
+        /* SANGUINEO */
 
         $id_grupo_sanguineo = $antecedentes_paciente->id_grupo_sanguineo;
         if($id_grupo_sanguineo!=0)
@@ -311,7 +311,7 @@ class EscritorioPaciente extends Controller
             );
         }
 
-        /* ANTECEDENTES */ 
+        /* ANTECEDENTES */
         $antecedentes = Antecedente::where('id_users',$id_usuario)->with('users','paciente','tipo_antecendente')->get();
         //$antecedentes = Antecedente::with('users','paciente','tipo_antecendente')->get();
 
@@ -337,21 +337,21 @@ class EscritorioPaciente extends Controller
 
         /* PACIENTE */
         $paciente = Paciente::where('id_usuario', $id_usuario)->first();
-        
+
         list($ano,$mes,$dia) = explode("-",$paciente->fecha_nac);
         $ano_diferencia  = date("Y") - $ano;
         $mes_diferencia = date("m") - $mes;
         $dia_diferencia   = date("d") - $dia;
         if ($dia_diferencia < 0 || $mes_diferencia < 0)
           $ano_diferencia--;
-        
+
         $edad = $ano_diferencia;
         $paciente->fecha_nac = $dia.'-'.$mes.'-'.$ano;
         $paciente->edad = $edad;
 
         /* CONTACTO EMERGENCIA */
         $pacientes_contacto_emergencia = PacienteContactoEmergencia::where('id_paciente',$paciente->id)->first();
-        
+
         if(is_object($pacientes_contacto_emergencia))
         {
             $contacto_emergencia = ContactoEmergencia::find($pacientes_contacto_emergencia->id_contacto);
@@ -362,7 +362,7 @@ class EscritorioPaciente extends Controller
             $dia_diferencia   = date("d") - $dia;
             if ($dia_diferencia < 0 || $mes_diferencia < 0)
             $ano_diferencia--;
-            
+
             $edad = $ano_diferencia;
             $contacto_emergencia->fecha_nac = $dia.'-'.$mes.'-'.$ano;
             $contacto_emergencia->edad = $edad;
@@ -404,8 +404,8 @@ class EscritorioPaciente extends Controller
             );
         }
 
-        /* SANGUINEO */         
-        $id_grupo_sanguineo = $antecedentes_paciente->id_grupo_sanguineo;        
+        /* SANGUINEO */
+        $id_grupo_sanguineo = $antecedentes_paciente->id_grupo_sanguineo;
         if($id_grupo_sanguineo!=0)
         {
             $grupo_sanguineo = GrupoSanguineo::find($id_grupo_sanguineo);
@@ -417,7 +417,7 @@ class EscritorioPaciente extends Controller
             );
         }
 
-         /* ANTECEDENTES */ 
+         /* ANTECEDENTES */
         $antecedentes = Antecedente::where('id_users',$id_usuario)->with('users','paciente','tipo_antecendente')->get();
         //$antecedentes = Antecedente::with('users','paciente','tipo_antecendente')->get();
 
@@ -503,7 +503,7 @@ class EscritorioPaciente extends Controller
         $fichasConfi = FichaAtencion::where('id_paciente', $paciente->id)->where('confidencial', true)->get();
         $grupo_sanguineo = GrupoSanguineo::all();
 
-        $id_usuario = Auth::user()->id;        
+        $id_usuario = Auth::user()->id;
         $userData = Funciones::userData($id_usuario);
 
         return view(
@@ -864,11 +864,24 @@ class EscritorioPaciente extends Controller
         return redirect()->route('paciente.perfil');
     }
 
-    public function getPacienteUser()
-    {
-        $datos = array();
 
-        $paciente = Paciente::where('id_usuario', Auth::user()->id)
+    public function getPacienteUser(Request $request)
+    {
+        // var_dump($request->all());
+        // var_dump($request->id_dependiente_activo);
+
+        $datos = array();
+        if(empty($request->id_dependiente_activo))
+            $paciente = Paciente::where('id_usuario', Auth::user()->id)
+                        ->with(['Prevision' => function($query){
+                            $query->select('id', 'nombre');
+                        }])
+                        ->with(['Direccion' => function($query){
+                            $query->with('Ciudad')->first();
+                        }])
+                        ->first();
+        else
+            $paciente = Paciente::where('id', $request->id_dependiente_activo)
                         ->with(['Prevision' => function($query){
                             $query->select('id', 'nombre');
                         }])

@@ -109,6 +109,7 @@
             {{--  EXAMENES  --}}
             {{--  funcion para capturar el tipo de examen y buscar los subtipo que estan relacionados con el  --}}
             $('#tipo_examen').change(function(e) {
+                console.log('tipo examen examen comun');
                 e.preventDefault();
                 tipo_examen = $('#tipo_examen').val();
 
@@ -813,7 +814,7 @@
                     {
                         fila = '';
                         fila += '<tr class="tr_examen_cirugia" id="row' + i + '">';
-                        fila +=     '<td class="text-center align-middle text-wrap" style="display:none">85</td>';
+                        fila +=     '<td class="text-center align-middle text-wrap" style="display:none">78</td>';
                         fila +=     '<td class="text-center align-middle text-wrap" style="display:none">CREATININA EN SANGRE</td>';
                         fila +=     '<td class="text-center align-middle text-wrap">CREATININA EN SANGRE</td>';
                         fila +=     '<td class="text-center align-middle text-wrap"> </td>';
@@ -1177,7 +1178,7 @@
                     {
 
                         html += '<tr class="examenes_sin_registros">';
-                        html += '    <td class="text-center align-middle " colspan="5">'+data.msj+'</td>';
+                        html += '    <td class="text-center align-middle " colspan="6">'+data.msj+'</td>';
                         html += '</tr>';
 
                     }
