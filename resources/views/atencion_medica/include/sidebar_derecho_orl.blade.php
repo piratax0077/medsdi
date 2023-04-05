@@ -35,16 +35,18 @@
                     </div>
                     <div id="collapse_consentimientos_informados" class="collapse" aria-labelledby="heading_consentimientos_informados" data-parent="#accordion_gineco_obst">
                         <div class="card-body-sidebar">
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cons_anest()";>+ Anestesia</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="concir_menor()";>+ Cirugía menor</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="concir_mayor()";>+ Cirugía mayor</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="conprocedim()";>+ Procedimientos en general</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cons_tto()";>+ Para tratamiento</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cons_revtto()";>+ Revocación Consentimiento</button>
+                        </div>
+                        <div class="card-body-sidebar">
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="solalta()";>+ Solicitar Alta Voluntaria</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="rechtto()";>+ Rechazo Tratamiento</button>
                         </div>
                     </div>
-                    @include("atencion_medica.sidebars.modals_generales.m_aconsentcir")
-                    @include("atencion_medica.sidebars.modals_generales.m_aconsentcirm")
-                    @include("atencion_medica.sidebars.modals_generales.m_acprocedimientos")
-                    @include("atencion_medica.sidebars.modals_generales.m_acanestesia")
+                     @include("atencion_pediatrica.formularios.modal_atencion_general.m_aconsent_tto")
+                     @include("atencion_pediatrica.formularios.modal_atencion_general.m_revocacionconsent")
+                     @include("atencion_pediatrica.formularios.modal_atencion_general.m_sol_alta")
+                     @include("atencion_pediatrica.formularios.modal_atencion_general.m_rech_tto")
                 </div>
 
                 <div class="card-sidebar">

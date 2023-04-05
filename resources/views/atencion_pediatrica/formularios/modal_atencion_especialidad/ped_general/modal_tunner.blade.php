@@ -1,8 +1,8 @@
-<div id="tunner_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tunner_modal" aria-hidden="true">
+<div id="tunner_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tunner_modal_m" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="modal_info1"> Grados de desarrollo Tunner Femenino</h5>
+                <h5 class="modal-title text-white mt-1 f-18" id="modal_titulo"> Grados de desarrollo Tunner</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
                 </button>
             </div>
@@ -10,36 +10,34 @@
                 <!--Grados de desarrollo Tunner-->
                 <div class="row">
                     <div class="col-md-12 mb-2">
-                        <h5>Grados de desarrollo Tunner <i id="grado_tunner_ped_f" class="fas fa-plus-circle text-primary tooltip-test" title="Añadir antecedente" style="cursor:pointer;"></i></h5>
+                        <h5 onclick="$('#form_11_ped').toggle();">Grados de desarrollo Tunner <i id="grado_tunner_ped" class="fas fa-plus-circle text-primary tooltip-test" title="Añadir antecedente" style="cursor:pointer;"></i></h5>
                     </div>
-                    <div class="col-md-12" id="form_12_ped" style="display:none;">
-                        <form>
-                            <div class="form-row">
-                                <div class="form-group fill col-sm-4">
-                                    <label class="floating-label">Grado Tanner</label>
-                                    {{-- <input type="text" class="form-control form-control-sm" name="tanner" id="tanner"> --}}
-                                    <select class="form-control form-control-sm" name="f_tanner" id="f_tanner">
-                                        <option value="I" data-edad_biologica="Menor de 10 Años 6 Meses">I - Edad Bio.: Menor de 10 Años 6 Meses</option>
-                                        <option value="II" data-edad_biologica="10 Años 6 Meses">II - Edad Bio.: 10 Años 6 Meses</option>
-                                        <option value="III" data-edad_biologica="11 Años">III - Edad Bio.: 11 Años</option>
-                                        <option value="IV" data-edad_biologica="12 Años (sin Menarquia)">IV - Edad Bio.: 12 Años (sin Menarquia)</option>
-                                        <option value="V" data-edad_biologica="12 años y 8 meses o mayor">V - Edad Bio.: 12 años y 8 meses o mayor</option>
-                                    </select>
-                                </div>
-                                <div class="form-group fill col-sm-4">
-                                    <label class="floating-label">Edad cronológica</label>
-                                    <input type="text" class="form-control form-control-sm" name="f_edad" id="f_edad">
-                                </div>
-                                <div class="form-group fill col-sm-4">
-                                    <button type="button" class="btn btn-success btn-sm btn-block" onclick="registrar_tunner('f');">Añadir</button>
-                                </div>
-                                <div class="form-group fill col-sm-8">
-                                    <label class="floating-label">Comentarios sobre el desarrollo</label>
-                                    <textarea type="text" class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="f_cometarios_tanner" id="f_cometarios_tanner"></textarea>
-                                </div>
-
+                    <div class="col-md-12" id="form_tunner_ped" style="display:none;">
+                        <input type="hidden" name="tipo_tunner" id="tipo_tunner" value="">
+                        <div class="form-row">
+                            <div class="form-group fill col-sm-4">
+                                <label class="floating-label">Grado Tanner</label>
+                                {{-- <input type="text" class="form-control form-control-sm" name="tanner" id="tanner"> --}}
+                                <select class="form-control form-control-sm" name="tanner" id="tanner">
+                                    <option value="I" data-edad_biologica="Menor de 12 Años">I - Edad Bio.: Menor de 12 Años</option>
+                                    <option value="II" data-edad_biologica="12 Años">II - Edad Bio.: 12 Años</option>
+                                    <option value="III" data-edad_biologica="12 Años 6 meses">III - Edad Bio.: 12 Años 6 meses</option>
+                                    <option value="IV" data-edad_biologica="13 Años 6 meses ">IV - Edad Bio.: 13 Años 6 meses </option>
+                                    <option value="V" data-edad_biologica="14 años y 6 meses o mayor">V - Edad Bio.: 14 años y 6 meses o mayor</option>
+                                </select>
                             </div>
-                        </form>
+                            <div class="form-group fill col-sm-4">
+                                <label class="floating-label">Edad cronológica</label>
+                                <input type="text" class="form-control form-control-sm" name="edad" id="edad">
+                            </div>
+                            <div class="form-group fill col-sm-4">
+                                <button type="button" class="btn btn-success btn-sm btn-block" onclick="registrar_tunner();">Añadir</button>
+                            </div>
+                            <div class="form-group fill col-sm-8">
+                                <label class="floating-label">Comentarios sobre el desarrollo</label>
+                                <textarea type="text" class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="cometarios_tanner" id="cometarios_tanner"></textarea>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-12">
                         <div class="table-responsive">
@@ -55,33 +53,33 @@
                                 <tbody>
                                     <tr>
                                         <td class="text-center align-middle">I</td>
-                                        <td class="text-center align-middle"> <img src="{{ asset('images\imagenes_ped\tanner_1.png') }}" style="width:50%"></td>
-                                        <td class="text-center align-middle">No Hay tejido Mamario Solo <br>el Pezón protruye Areola sin Pigmentar</td>
-                                        <td class="text-center align-middle">Menor de 10 Años 6 Meses</td>
+                                        <td class="text-center align-middle"> <img src="{{ asset('images\imagenes_ped\tanner_1_m.png') }}" style="width:100%"></td>
+                                        <td class="text-center align-middle">Los Testículos tienen un Volumen menor a 4 cc<br>Escroto y pene con características Infantiles</td>
+                                        <td class="text-center align-middle">Menor de 12 Años</td>
                                     </tr>
                                     <tr>
                                         <td class="text-center align-middle">II</td>
-                                        <td class="text-center align-middle"> <img src="{{ asset('images\imagenes_ped\tanner_2.png') }}" style="width:50%"></td>
-                                        <td class="text-center align-middle">Se palpa tejido Mamario bajo la<br> areola aumentada de diámetro sin sobrepasarla</td>
-                                        <td class="text-center align-middle">10 Años 6 Meses</td>
+                                        <td class="text-center align-middle"> <img src="{{ asset('images\imagenes_ped\tanner_2_m.png') }}" style="width:100%"></td>
+                                        <td class="text-center align-middle">El Pene no se modifica,los testículos aumentan su tamaño de 4 a 8 cc.<br> La piél del escrotose enrojece y se hace mas laxa</td>
+                                        <td class="text-center align-middle">12 Años</td>
                                     </tr>
                                     <tr>
                                         <td class="text-center align-middle">III</td>
-                                        <td class="text-center align-middle"> <img src="{{ asset('images\imagenes_ped\tanner_3.png') }}" style="width:50%"></td>
-                                        <td class="text-center align-middle">Crecimiento de la mama <br>Pigmentación de la Areola </td>
-                                        <td class="text-center align-middle">11 Años</td>
+                                        <td class="text-center align-middle"> <img src="{{ asset('images\imagenes_ped\tanner_3_m.png') }}" style="width:100%"></td>
+                                        <td class="text-center align-middle">Crecimiento del pene en longitud Volumen testicular entre 6 y 12 cc <br>El escroto está aún mas laxo </td>
+                                        <td class="text-center align-middle">12 Años 6 meses</td>
                                     </tr>
                                     <tr>
                                         <td class="text-center align-middle">IV</td>
-                                        <td class="text-center align-middle"> <img src="{{ asset('images\imagenes_ped\tanner_4.png') }}" style="width:50%"></td>
-                                        <td class="text-center align-middle">Mayor aumento de la mama <br> Areola más Pigmentada y solevantada</td>
-                                        <td class="text-center align-middle">12 Años (sin Menarquia)</td>
+                                        <td class="text-center align-middle"> <img src="{{ asset('images\imagenes_ped\tanner_4_m.png') }}" style="width:100%"></td>
+                                        <td class="text-center align-middle">Mayor crecimiento del peney aumento de su diametro con desarrollo del glande <br> Los testículos tienen entre 15 y 20 cc escroto mas desarrollado y pigmentado</td>
+                                        <td class="text-center align-middle">13 Años 6 meses </td>
                                     </tr>
                                     <tr>
                                         <td class="text-center align-middle">V</td>
-                                        <td class="text-center align-middle"> <img src="{{ asset('images\imagenes_ped\tanner_5.png') }}" style="width:50%"></td>
-                                        <td class="text-center align-middle">La mama es de tipo adulto <br>el Pezón protruye Areola se retrae</td>
-                                        <td class="text-center align-middle">12 años y 8 meses o mayor</td>
+                                        <td class="text-center align-middle"> <img src="{{ asset('images\imagenes_ped\tanner_5_m.png') }}" style="width:100%"></td>
+                                        <td class="text-center align-middle">Los genitales tienen forma y tamaño adulto <br>Volumen testicular aprox 25 cc.</td>
+                                        <td class="text-center align-middle">14 años y 6 meses o mayor</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -93,7 +91,7 @@
                     </div>
                     <div class="col-md-12">
                         <div class="table-responsive">
-                            <table id="table_tunner_f" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                            <table id="table_tunner_m" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th class="text-center align-middle">Fecha Registro</th>
@@ -116,7 +114,20 @@
 </div>
 
 <script>
-    function registrar_tunner(sexo)
+    function tunner(sexo) {
+        $('#tunner_modal').modal('show');
+        $('#tipo_tunner').val(sexo);
+        if(sexo == 'f')
+        {
+            $('#modal_titulo').html('Grados de desarrollo Tunner Femenino');
+        }
+        else id(sexo = 'm')
+        {
+            $('#modal_titulo').html('Grados de desarrollo Tunner ');
+        }
+        cargar_tunner('f');
+    }
+    function registrar_tunner()
     {
         url = "{{ route('ped.tunner.agregar') }}";
         $.ajax({
@@ -128,12 +139,12 @@
                 id_ficha_atencion : $('#id_fc').val(),
                 id_paciente : $('#id_paciente_fc').val(),
                 id_profesional : $('#id_profesional_fc').val(),
-                sexo : sexo,
-                tanner : $('#'+sexo+'_tanner').val(),
+                sexo : $('#tipo_tunner').val(),
+                tanner : $('#tanner').val(),
                 edad_biologica : $("#"+sexo+"_tanner option:selected").attr('data-edad_biologica'),
-                edad_cronologica : $('#'+sexo+'_edad').val(),
-                comentario : $('#'+sexo+'_cometarios_tanner').val(),
-                // fecha : m_fecha,
+                edad_cronologica : $('#edad').val(),
+                comentario : $('#cometarios_tanner').val(),
+                // fecha : fecha,
 
             },
         })
@@ -144,9 +155,9 @@
             {
                 // $('#tunner_modal_'+sexo).modal('hide');
                 cargar_tunner(sexo);
-                $('#'+sexo+'_tanner').val('I');
-                $('#'+sexo+'_edad').val('');
-                $('#'+sexo+'_cometarios_tanner').val('');
+                $('#tanner').val('I');
+                $('#edad').val('');
+                $('#cometarios_tanner').val('');
             }
             else{
 
