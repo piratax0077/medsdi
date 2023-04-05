@@ -315,8 +315,26 @@ function inter() {
 // function solicitar_autorizacion() {
 //     $('#m_acomp1').modal('show');
 // }
+/** Autorización revocacion tratamiento y consentimientos informados**/
+function cons_tto() {
+    $('#m_aconsentcirm').modal('show');
+}
 
+function solalta() {
+    $('#solalta').modal('show');
+}
 
+function cons_revtto() {
+    $('#m_rev_cons').modal('show');
+}
+
+function rechtto() {
+    $('#m_rech_tto').modal('show');
+}
+
+function guia_vac() {
+    $('#m_tabla_vac').modal('show');
+}
 
 
 

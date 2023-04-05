@@ -8,6 +8,7 @@ use App\Models\FichaAtencion;
 use App\Models\Paciente;
 use App\Models\PacientesDependientes;
 use App\Models\Prevision;
+use App\Models\Profesional;
 use App\Models\Region;
 use App\Models\RegistroConfirmacionHoraAgenda;
 use App\Models\SubTipoEspecialidad;
@@ -127,18 +128,69 @@ class EscritorioPacienteDependiente extends Controller
         }
     }
 
-    public function miProfesionales(Request $request)
+    public function miProfesionales($id_dependiente_activo_, $id_usuario_ = 0, $id_profesional_ = 0)
     {
-        $fichas = FichaAtencion::where('id_paciente', $request->id_dependiente_activo)->get()->unique('id_profesional');
+        // var_dump($id_dependiente_activo_);
+        // var_dump($id_usuario_);
+        // var_dump($id_profesional_);
+        /** responsable */
+        $paciente_responsable = Paciente::where('id_usuario', Auth::user()->id)->first();
+        /** dependiente */
+        $paciente_dependiente = Paciente::where('id', $id_dependiente_activo_)->first();
 
-        $paciente = Paciente::where('id', $request->id_dependiente_activo)->first();
+        // DESVINCULAR profesional
+        if($id_usuario_ != 0 && $id_profesional_ != 0)
+        {
+            $fichas = FichaAtencion::where('id_paciente', $id_usuario_)
+                                     ->where('id_profesional', $id_profesional_)
+                                     ->first();
 
-        $profesional = [];
-        foreach ($fichas as $f) {
-            array_push($profesional, $f->profesional()->first());
+            if($fichas)
+            {
+                $fichas->desvincular = 1;
+                $fichas->save();
+            }
         }
 
-        return view('app.paciente_dependiente.medicos_paciente', ['profesional' => $profesional, 'id_dependiente_activo' => $request->id_dependiente_activo, 'paciente' => $paciente]);
+        // VER lista de profesionales
+        $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
+        $fichas = FichaAtencion::where('id_paciente', $paciente_dependiente->id)->get()->unique('id_profesional');
+
+        $fichas_desvinculados = FichaAtencion::select('id_profesional')
+                                        ->where('id_paciente', $paciente_dependiente->id)
+                                        ->where('desvincular', 1)
+                                        ->get()
+                                        ->unique('id_profesional');
+
+        $profesional = [];
+        $desvinculados = [];
+        $profesion = [];
+        foreach ($fichas as $f) {
+            array_push($profesional, $f->profesional()->first());
+            $profesional_ = Profesional::with('Especialidad')->find($f->id_profesional);
+            array_push($profesion,$profesional_->Especialidad->nombre);
+        }
+
+        foreach ($fichas_desvinculados as $d) {
+            array_push($desvinculados, $d->id_profesional);
+        }
+
+        $id_usuario = Auth::user()->id;
+
+        $lista_especialidad = array_unique($profesion);
+
+        // var_dump(Auth::user()->id);
+        // var_dump($profesional);
+        return view('app.paciente_dependiente.medicos_paciente',
+        [
+            'paciente' => $paciente_dependiente,
+            'responsable' => $paciente_responsable,
+            'id_usuario' => $id_usuario,
+            'profesional' => $profesional,
+            'desvinculados' => $desvinculados,
+            'lista_especialidad' => $lista_especialidad
+        ]);
+
     }
 
     public function recetaOnline(Request $request)

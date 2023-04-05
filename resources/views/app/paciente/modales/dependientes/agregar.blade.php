@@ -62,7 +62,7 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="floating-label-activo-sm"><span style="color: red;">*</span>Tipo Dependencia</label>
-                            <select class="form-control form-control-sm" name="agregar_tipo_dependencia" id="agregar_tipo_dependencia" onchange="evaluar_tipodependencia('agregar_tipo_dependencia', 'agregar_fechas', 3);">
+                            <select class="form-control form-control-sm" name="agregar_tipo_dependencia" id="agregar_tipo_dependencia" onchange="evaluar_tipodependencia('agregar_tipo_dependencia', 'agregar_fechas', '2,4');">
                                 <option value="">Seleccione</option>
                             </select>
                         </div>
@@ -223,8 +223,8 @@
             </div>
 
             <hr>
-
-            <div class="row">
+            <div id="mensaje_edad" style="display: none" class="alert alert-danger" ></div>
+            <div class="row" id="div_relaciones">
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label class="floating-label-activo-sm"><span class="requerido" style="color: red;" id="requerido_modal_agregar_dep_nuevo_tipo_dependencia">*</span>Relación</label>
@@ -236,22 +236,24 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label class="floating-label-activo-sm"><span class="requerido" style="color: red;" id="requerido_3">*</span>Tipo Dependencia</label>
-                        <select class="form-control form-control-sm" name="modal_agregar_dep_nuevo_tipo_dependencia" id="modal_agregar_dep_nuevo_tipo_dependencia" onchange="evaluar_tipodependencia('modal_agregar_dep_nuevo_tipo_dependencia', 'modal_agregar_dep_nuevo_fechas', 3);">
+                        <select class="form-control form-control-sm" name="modal_agregar_dep_nuevo_tipo_dependencia" id="modal_agregar_dep_nuevo_tipo_dependencia" onchange="evaluar_tipodependencia('modal_agregar_dep_nuevo_tipo_dependencia', 'modal_agregar_dep_nuevo_fechas', '2,4');">
                             <option value="">Seleccione</option>
                         </select>
                     </div>
                 </div>
-                <div class="modal_agregar_dep_nuevo_fechas" name="modal_agregar_dep_nuevo_fechas" id="modal_agregar_dep_nuevo_fechas" style="display: none;">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label for="modal_agregar_dep_nuevo_fecha_inicio"><span class="requerido" style="color: red;" id="equerido_')">*</span>Fecha Ir nicio</label>
-                            <input class="form-control form-control-sm" type="date" name="modal_agregar_dep_nuevo_fecha_inicio" id="modal_agregar_dep_nuevo_fecha_inicio" value="{{ date('Y-m-d') }}">
+                <div class="col-sm-12 modal_agregar_dep_nuevo_fechas" name="modal_agregar_dep_nuevo_fechas" id="modal_agregar_dep_nuevo_fechas" style="display: none;">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="modal_agregar_dep_nuevo_fecha_inicio"><span class="requerido" style="color: red;" id="requerido_4">*</span>Fecha Inicio</label>
+                                <input class="form-control form-control-sm" type="date" name="modal_agregar_dep_nuevo_fecha_inicio" id="modal_agregar_dep_nuevo_fecha_inicio" value="{{ date('Y-m-d') }}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label for="modal_agregar_dep_nuevo_fecha_termino"><span class="requerido" style="color: red;" id="">*</span>Fecha requerido_Tvalueermino</label>
-                            <input type="date" name="modal_agregar_dep_nuevo_fecha_termino" id="modal_agregar_dep_nuevo_fecha_termino" value="">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="modal_agregar_dep_nuevo_fecha_termino"><span class="requerido" style="color: red;" id="requerido_5">*</span>Fecha Termino</label>
+                                <input class="form-control form-control-sm" type="date" name="modal_agregar_dep_nuevo_fecha_termino" id="modal_agregar_dep_nuevo_fecha_termino" value="">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -272,7 +274,7 @@
 
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary" onclick="registrar_dep_nuevo();">Registrar</button>
+            <button type="button" class="btn btn-primary" id="btn_registrar" onclick="registrar_dep_nuevo();">Registrar</button>
         </div>
 
     </div>

@@ -7,6 +7,7 @@ use App\Models\Paciente;
 use App\Models\PacientesDependientes;
 use App\Models\Prevision;
 use App\Models\Region;
+use App\Models\TipoDependencia;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,48 +18,106 @@ class EscritorioDependientesController extends Controller
     /** dependencia definitiva */
     public function verDependiente(Request $request)
     {
-        $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
-        $registros = PacientesDependientes::whereIn('tipo_dependencia', [1,2])
-                                            // ->with('Responsable')
-                                            ->with('Paciente')
-                                            // ->with('Relacion')
-                                            ->with('Tipodependencia')
-                                            ->where('id_responsable',$paciente->id)
-                                            ->get();
-        $prevision = Prevision::all();
-        $region = Region::all();
 
-        return view('app.paciente.dependientes')->with([
-            'registros' => $registros,
-            'dependencia' => 1,
-            'tipo_dependencias' => '1,2',
-            'prevision' => $prevision,
-            'region' => $region,
+        if(!empty($request->tipo_dependencia))
+        {
+            if(gettype($request->tipo_dependencia) == 'string')
+                $lista = explode(',',$request->tipo_dependencia);
+            else
+                $lista = $request->tipo_dependencia;
 
-        ]);
+            $tipo_dpendencia = TipoDependencia::whereIn('id', $lista)->get();
+            if($tipo_dpendencia)
+            {
+                $dependencia = 0;
+                $tipo = array();
+                foreach ($tipo_dpendencia as $key => $value) {
+                    array_push($tipo, $value->id);
+                    $dependencia = $value->tipo;
+                }
+
+                $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
+                $registros = PacientesDependientes::whereIn('tipo_dependencia', $tipo)
+                                                    // ->with('Responsable')
+                                                    ->with('Paciente')
+                                                    // ->with('Relacion')
+                                                    ->with('Tipodependencia')
+                                                    ->where('id_responsable',$paciente->id)
+                                                    ->get();
+                $prevision = Prevision::all();
+                $region = Region::all();
+                $titulo = '';
+                if($dependencia == 1) $titulo = 'Menor Edad';
+                if($dependencia == 2) $titulo = 'Mayor Edad';
+
+                return view('app.paciente.dependientes')->with([
+                    'titulo' => $titulo,
+                    'registros' => $registros,
+                    'dependencia' => $dependencia,
+                    'tipo_dependencias' => $request->tipo_dependencia,
+                    'prevision' => $prevision,
+                    'region' => $region,
+
+                ]);
+
+            }
+        }
+        else
+        {
+            back()->with('error', 'Debe indicar tipo de Dependiente, (Adulto, Infante)');
+        }
+
     }
 
     /** dependencia temporal */
     public function verDependienteAdultoTemporales(Request $request)
     {
-        $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
-        $registros = PacientesDependientes::whereIn('tipo_dependencia', [3])
-                                            // ->with('Responsable')
-                                            ->with('Paciente')
-                                            // ->with('Relacion')
-                                            ->with('Tipodependencia')
-                                            ->where('id_responsable',$paciente->id)
-                                            ->get();
-        $prevision = Prevision::all();
-        $region = Region::all();
+        if(!empty($request->tipo_dependencia))
+        {
+            if(gettype($request->tipo_dependencia) == 'string')
+                $lista = explode(',',$request->tipo_dependencia);
+            else
+                $lista = $request->tipo_dependencia;
 
-        return view('app.paciente.dependientes')->with([
-            'registros' => $registros,
-            'dependencia' => 2,
-            'tipo_dependencias' => '3',
-            'prevision' => $prevision,
-            'region' => $region,
-        ]);
+            $tipo_dpendencia = TipoDependencia::whereIn('id', $lista)->get();
+            if($tipo_dpendencia)
+            {
+                $dependencia = 0;
+                $tipo = array();
+                foreach ($tipo_dpendencia as $key => $value) {
+                    $dependencia = $value->tipo;
+                    array_push($tipo, $value->id);
+                }
+
+                $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
+                $registros = PacientesDependientes::whereIn('tipo_dependencia', $tipo)
+                                                    // ->with('Responsable')
+                                                    ->with('Paciente')
+                                                    // ->with('Relacion')
+                                                    ->with('Tipodependencia')
+                                                    ->where('id_responsable',$paciente->id)
+                                                    ->get();
+                $prevision = Prevision::all();
+                $region = Region::all();
+
+                $titulo = '';
+                if($dependencia == 1) $titulo = 'Menor Edad';
+                if($dependencia == 2) $titulo = 'Mayor Edad';
+
+                return view('app.paciente.dependientes')->with([
+                    'titulo' => $titulo,
+                    'registros' => $registros,
+                    'dependencia' => $dependencia,
+                    'tipo_dependencias' => $request->tipo_dependencia,
+                    'prevision' => $prevision,
+                    'region' => $region,
+                ]);
+            }
+        }
+        else
+        {
+            back()->with('error', 'Debe indicar tipo de Dependiente, (Adulto, Infante)');
+        }
     }
 
 
@@ -413,7 +472,8 @@ class EscritorioDependientesController extends Controller
                     $registro->relacion = $request->relacion;
                     $registro->tipo_dependencia = $request->tipo_dependencia;
 
-                    if($request->tipo_dependencia == 3)
+                    /** Menor de Edad Temporal */
+                    if($request->tipo_dependencia == 2)
                     {
                         $registro->fecha_inicio = $request->fecha_inicio;
                         $registro->fecha_termino = $request->fecha_termino;

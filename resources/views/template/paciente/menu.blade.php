@@ -45,12 +45,26 @@
 						<li><a href="{{ ROUTE('paciente.receta') }}">Receta Online</a></li>
 						<li><a href="{{ ROUTE('paciente.receta.examen') }}">Mis Exámenes</a></li>
 						<li>
-                            <a href="javascript:void(0)" class="nav-link"><span class="pcoded-mtext text-center">Dependen de Mi</span></a>
+                            <a href="javascript:void(0)" class="nav-link"><span class="pcoded-mtext text-center">Dependen Definitiva</span></a>
                             <ul class="pcoded-submenu">
-                                <li><a href="{{ ROUTE('paciente.dependientes.definitiva') }}">Definitiva</a></li>
-                                <li><a href="{{ ROUTE('paciente.dependientes.adulto_temporales') }}">Adultos Temporales</a></li>
+                                <li>
+                                    <a href="{{ ROUTE('paciente.dependientes.infante.definitiva', ['tipo_dependencia' => '1,5' ]) }}">Infantes</a>
+                                </li>
+                                <li><a href="{{ ROUTE('paciente.dependientes.adulto.definitiva', ['tipo_dependencia' => 3 ]) }}">Adultos</a></li>
                             </ul>
 						</li>
+
+                        <li>
+                            <a href="javascript:void(0)" class="nav-link"><span class="pcoded-mtext text-center">Dependencia Temporal</span></a>
+                            <ul class="pcoded-submenu">
+                                <li>
+                                    <a href="{{ ROUTE('paciente.dependientes.infante.temporal', ['tipo_dependencia' => 2 ]) }}">Infante</a>
+                                </li>
+                                <li><a href="{{ ROUTE('paciente.dependientes.adulto.temporal', ['tipo_dependencia' => 4 ]) }}">Adultos</a></li>
+                            </ul>
+						</li>
+
+
                         <li><a href="{{ ROUTE('paciente.receta.examen') }}">Mis Controles</a></li>
 					</ul>
 				</li>

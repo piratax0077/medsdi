@@ -27,13 +27,15 @@
                 <div class="col-md-12">
                     <div class="card h-100 pb-0">
                         <div class="card-header text-center bg-c-info">
-                            <h5 class="text-white d-inline text-center" style="font-size: 1.2rem;">Mis Dependientes</h5>
+                            <h5 class="text-white d-inline text-center" style="font-size: 1.2rem;">Mis Dependientes {{ $titulo }}</h5>
                         </div>
                         <div class="card-body pt-4 pb-0">
 
                             <div class="row m-b-30">
                                 <div class="col-md-12">
-                                    <button type="button" class="btn btn-success" id="btn-agregar-dep" name="btn-agregar-dep">Agregar</button>
+                                    @if ( $tipo_dependencias != '4' )
+                                        <button type="button" class="btn btn-success" id="btn-agregar-dep" name="btn-agregar-dep">Agregar</button>
+                                    @endif
                                     <input type="hidden" name="dependencia" id="dependencia" value="{{ $dependencia }}">
                                     <input type="hidden" name="tipo_dependencias" id="tipo_dependencias" value="{{ $tipo_dependencias }}">
                                 </div>
@@ -59,7 +61,7 @@
                                                                 @endif
                                                                 <h5 class="mt-2">{{ $registro->paciente->nombres.' '.$registro->paciente->apellido_uno. ' '.$registro->paciente->apellido_dos }}</h5>
                                                                 {{-- <h6 class="mt-2">Relación: {{ $registro->relacion }}</h6> --}}
-                                                                {{-- <h6 class="mt-2">Tipo Dependencia: {{ $registro->Tipodependencia->nombre }}</h6> --}}
+                                                                {{-- <h6 class="mt-2">Tipo Dependencia: <br />{{ $registro->Tipodependencia->nombre }}</h6> --}}
                                                             </div>
                                                         </a>
                                                     </div>
@@ -138,17 +140,57 @@
                             $('#label_agregar_rut_paciente').html('');
 
                             console.log('rut encontrado');
-                            $('#modal_agregar_dep_buscar').modal('hide');
+                            console.log(data.fecha_nac);
 
-                            cargar_select_relacion('agregar_relacion','agregar_tipo_dependencia');
+                            var edad_temp = calcularEdad_valor(data.fecha_nac);
+                            console.log(edad_temp);
+                            console.log($('#dependencia').val());
 
-                            $('#modal_agregar_dep_existente').modal('show');
+                            if(edad_temp < 18 && $('#dependencia').val() == 1)
+                            {
+                                /** menor edad */
+                                $('#modal_agregar_dep_buscar').modal('hide');
 
-                            $('#id_paciente_dependiente').val(data.id);
-                            $('#label_agregar_nombre_paciente').html(data.nombres);
-                            $('#label_agregar_apellido_paciente').html(data.apellido_uno + ' ' + data.apellido_dos);
-                            $('#label_agregar_rut_paciente').html(data.rut);
+                                cargar_select_relacion('agregar_relacion','agregar_tipo_dependencia');
 
+                                $('#modal_agregar_dep_existente').modal('show');
+
+                                $('#id_paciente_dependiente').val(data.id);
+                                $('#label_agregar_nombre_paciente').html(data.nombres);
+                                $('#label_agregar_apellido_paciente').html(data.apellido_uno + ' ' + data.apellido_dos);
+                                $('#label_agregar_rut_paciente').html(data.rut);
+                            }
+                            else if(edad_temp >= 18 && $('#dependencia').val() == 2)
+                            {
+                                /** mayor edad */
+                                $('#modal_agregar_dep_buscar').modal('hide');
+
+                                cargar_select_relacion('agregar_relacion','agregar_tipo_dependencia');
+
+                                $('#modal_agregar_dep_existente').modal('show');
+
+                                $('#id_paciente_dependiente').val(data.id);
+                                $('#label_agregar_nombre_paciente').html(data.nombres);
+                                $('#label_agregar_apellido_paciente').html(data.apellido_uno + ' ' + data.apellido_dos);
+                                $('#label_agregar_rut_paciente').html(data.rut);
+                            }
+                            else
+                            {
+                                var mensaje = '';
+                                if(edad_temp < 18 && $('#dependencia').val() == 2)
+                                    mensaje = 'Esta intentando registrar\n El Paciente '+data.apellido_uno + ' ' + data.apellido_dos+' que es Menor de Edad como Dependiente Mayor de Edad.';
+                                else if(edad_temp >= 18 && $('#dependencia').val() == 1)
+                                    mensaje = 'Esta intentando registrar\n El Paciente '+data.apellido_uno + ' ' + data.apellido_dos+' que es Mayor de Edad como Dependiente Menor de Edad.';
+
+                                swal({
+                                    title: "Busqueda de Paciente por RUT",
+                                    text:mensaje,
+                                    icon: "error",
+                                    // buttons: "Aceptar",
+                                    //SuccessMode: true,
+                                });
+                                return false;
+                            }
                         }
                         else
                         {
@@ -166,7 +208,7 @@
                             $('#modal_agregar_dep_nuevo_telefono_uno').val('');
                             $('#modal_agregar_dep_nuevo_relacion').val('');
                             $('#modal_agregar_dep_nuevo_tipo_dependencia').val('');
-                            $('#modal_agregar_dep_nuevo_fecha_inicio').val('');
+                            // $('#modal_agregar_dep_nuevo_fecha_inicio').val('');
                             $('#modal_agregar_dep_nuevo_fecha_termino').val('');
                             $('#modal_agregar_dep_nuevo_comentario').val('');
 
@@ -174,6 +216,11 @@
                             $('#modal_agregar_dep_buscar').modal('hide');
 
                             cargar_select_relacion('modal_agregar_dep_nuevo_relacion','modal_agregar_dep_nuevo_tipo_dependencia');
+
+                            $('#div_relaciones').show();
+                            $('#btn_registrar').show();
+                            $('#mensaje_edad').hide();
+                            $('#mensaje_edad').html('');
 
                             $('#modal_agregar_dep_nuevo').modal('show');
                             $('#modal_agregar_dep_nuevo_rut').val(rut);
@@ -202,7 +249,7 @@
 
         function cargar_select_relacion(select, select_tipo_dependencia)
         {
-            /* menor edad 1, mayor edad 2,3 */
+            /* menor edad 1, mayor edad 2 */
             var dependencia = $('#dependencia').val();
 
             if(dependencia == '1')
@@ -211,19 +258,19 @@
                 html += '<option data-tipo="1" value="Hijo(a)" selected>Hijo(a)</option>';
                 html += '<option data-tipo="1" value="Sobrino(a)">Sobrino(a)</option>';
                 html += '<option data-tipo="1" value="Nieto(a)">Nieto(a)</option>';
-                html += '<option data-tipo="2" value="Esposo(a)" >Esposo(a)</option>';
-                html += '<option data-tipo="2" value="Padre - Madre">Padre - Madre</option>';
-                html += '<option data-tipo="1,2" value="Hermano(a)">Hermano(a)</option>';
-                html += '<option data-tipo="1,2" value="Primo(a)">Primo(a)</option>';
+                html += '<option data-tipo="1" value="Hermano(a)">Hermano(a)</option>';
+                html += '<option data-tipo="1" value="Primo(a)">Primo(a)</option>';
                 $('#'+select).html(html);
             }
-            else
+            else if(dependencia == '2')
             {
                 var html = '';
-                html += '<option data_tipo="2" value="Esposo(a)" selected>Esposo(a)</option>';
-                html += '<option data_tipo="2" value="Padre - Madre">Padre - Madre</option>';
-                html += '<option data_tipo="1,2" value="Hermano(a)">Hermano(a)</option>';
-                html += '<option data_tipo="1,2" value="Primo(a)">Primo(a)</option>';
+                html += '<option data_tipo="2" value="Padre - Madre" selected>Padre - Madre</option>';
+                html += '<option data_tipo="2" value="Esposo(a)">Esposo(a)</option>';
+                html += '<option data_tipo="2" value="Hermano(a)">Hermano(a)</option>';
+                html += '<option data-tipo="2" value="Nieto(a)">Nieto(a)</option>';
+                html += '<option data_tipo="2" value="Primo(a)">Primo(a)</option>';
+                html += '<option data-tipo="2" value="Sobrino(a)">Sobrino(a)</option>';
                 $('#'+select).html(html);
             }
             cargar_tipo_dependencia(select, select_tipo_dependencia);
@@ -231,7 +278,7 @@
 
         function cargar_tipo_dependencia(select_relacion, select)
         {
-            // var tipo_dependencias = $('#tipo_dependencias').val();
+            var tipo_dependencias = $('#tipo_dependencias').val();
             var tipo = $('#'+select_relacion+' option:selected').data('tipo')
             let url = "{{ route('tipo_dependencia.lista') }}";
 
@@ -241,7 +288,7 @@
                     type: "GET",
                     data: {
                         tipo: tipo,
-                        id: '1,2',
+                        id: tipo_dependencias,
                     },
                 })
                 .done(function(data) {
@@ -262,6 +309,8 @@
                         html = '<option value="">Seleccione</option>';
                     }
                     $('#'+select).html(html);
+
+                    evaluar_tipodependencia('modal_agregar_dep_nuevo_tipo_dependencia', 'modal_agregar_dep_nuevo_fechas', '2,4');
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     console.log(jqXHR, ajaxOptions, thrownError)
@@ -272,6 +321,8 @@
         {
             var valor = $('#'+select).val();
 
+            var option = option.split(',');
+
             if(valor == 0)
             {
                 $('#'+div).hide();
@@ -280,7 +331,10 @@
             }
             else
             {
-                if(valor == option)
+                console.log(valor);
+                console.log(option);
+                // if(valor == option)
+                if($.inArray(valor, option) > -1)
                 {
                     $('#'+div).show();
                     $('#agregar_fecha_inicio').val('{{ date("Y-m-d")}}');
@@ -421,17 +475,74 @@
             return edad_actual;
         }
 
+        function calcularEdad_valor(valor)
+        {
+            fecha = valor;
+            var hoy = new Date();
+            var cumpleanos = new Date(fecha);
+            var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+            var m = hoy.getMonth() - cumpleanos.getMonth();
+
+            if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate()))
+            {
+                edad--;
+            }
+            // $('#age').val(edad);
+            edad_actual = edad;
+            return edad_actual;
+        }
+
         function validar_requeridos(input_fecha)
         {
+            $('#div_relaciones').show();
+            $('#btn_registrar').show();
+            $('#mensaje_edad').hide();
+            var mensaje = '';
+
             if(calcularEdad(input_fecha)<18)
             {
                 $('#requerido_modal_agregar_dep_nuevo_correo').hide();
                 $('#requerido_modal_agregar_dep_nuevo_telefono_uno').hide();
+
+
+                /** menor edad */
+                if($('#dependencia').val() == 1)
+                {
+                    mensaje = '';
+                }
+                /** mayor edad */
+                else if($('#dependencia').val() == 2)
+                {
+
+                    mensaje = 'Esta intentando registrar un Paciente Menor de Edad como Dependiente Mayor de Edad';
+                    $('#div_relaciones').hide();
+                    $('#btn_registrar').hide();
+                    $('#mensaje_edad').show();
+                }
+
+                $('#mensaje_edad').html(mensaje);
             }
             else
             {
                 $('#requerido_modal_agregar_dep_nuevo_correo').show();
                 $('#requerido_modal_agregar_dep_nuevo_telefono_uno').show();
+
+                /** menor edad */
+                if($('#dependencia').val() == 1)
+                {
+                    // mensaje = 'Esta intentando registrar un Paciente Menor de Edad como Dependiente Mayor de Edad';
+                    mensaje = 'Esta intentando registrar un Paciente Mayor de Edad como Dependiente Menor de Edad';
+                    $('#div_relaciones').hide();
+                    $('#btn_registrar').hide();
+                    $('#mensaje_edad').show();
+                }
+                /** mayor edad */
+                else if($('#dependencia').val() == 2)
+                {
+                    mensaje = '';
+                }
+
+                $('#mensaje_edad').html(mensaje);
             }
         }
 
@@ -577,12 +688,13 @@
                 datos.telefono_uno = telefono_uno;
                 datos.relacion = relacion;
                 datos.tipo_dependencia = tipo_dependencia;
-                if(tipo_dependencia == 3)
+                /** Menor de Edad Temporal */
+                if(tipo_dependencia == 2)
                 {
                     datos.fecha_inicio = fecha_inicio;
                     datos.fecha_termino = fecha_termino;
                 }
-                datos.comentario
+                datos.comentario = comentario;
                 datos.otro = '';
 
                 $.ajax({
@@ -683,7 +795,7 @@
                             html += '            <img class="wid-60 text-center mt-1" src="'+img+'">';
                             html += '            <h5 class="mt-2">'+value.paciente.nombres+' '+value.paciente.apellido_uno+ ' '+value.paciente.apellido_dos+'</h5>';
                             // html += '            <h6 class="mt-2">Relación: '+value.relacion+'</h6>';
-                            // html += '            <h6 class="mt-2">Tipo Dependencia: '+value.Tipodependencia.nombre+'</h6>';
+                            // html += '            <h6 class="mt-2">Tipo Dependencia: <br/>'+value.Tipodependencia.nombre+'</h6>';
                             html += '        </div>';
                             html += '    </a>';
                             html += '</div>';

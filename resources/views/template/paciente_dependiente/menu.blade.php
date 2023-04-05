@@ -32,6 +32,18 @@
 			<ul class="nav pcoded-inner-navbar ">
 				<li class="nav-item pcoded-menu-caption text-center">
 				</li>
+                <li class="nav-item pcoded-hasmenu">
+					<a href="javascript:void(0)" class="nav-link">
+						<span class="pcoded-micon">
+							<i class="feather icon-home"></i>
+						</span>
+						<span class="pcoded-mtext text-center">Escritorio Principal</span>
+					</a>
+					<ul class="pcoded-submenu">
+						<li><a href="{{ ROUTE('paciente.home') }}">Escritorio Usuario</a></li>
+
+					</ul>
+				</li>
 				<li class="nav-item pcoded-hasmenu">
 					<a href="javascript:void(0)" class="nav-link">
 						<span class="pcoded-micon">

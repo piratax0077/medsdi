@@ -312,8 +312,17 @@ Route::group([
 
     /** DEPENDENCIA */
     Route::get('dependientes/cargar/lista', [App\Http\Controllers\PacientesDependientesController::class, 'ver_registro_paciente'])->name('paciente.dependientes.ver_registros');
-    Route::get('dependientes/definitiva', [App\Http\Controllers\EscritorioDependientesController::class, 'verDependiente'])->name('paciente.dependientes.definitiva');
-    Route::get('dependientes/adulto/temporarles', [App\Http\Controllers\EscritorioDependientesController::class, 'verDependienteAdultoTemporales'])->name('paciente.dependientes.adulto_temporales');
+
+    /** DEPENDENCIA MENOR DE EDAD */
+    Route::get('dependientes/definitiva/infante', [App\Http\Controllers\EscritorioDependientesController::class, 'verDependiente'])->name('paciente.dependientes.infante.definitiva');
+    Route::get('dependientes/definitiva/adulto', [App\Http\Controllers\EscritorioDependientesController::class, 'verDependiente'])->name('paciente.dependientes.adulto.definitiva');
+
+    /** DEPENDENCIA MAYOR DE EDAD */
+    Route::get('dependientes/temporales/infante', [App\Http\Controllers\EscritorioDependientesController::class, 'verDependienteAdultoTemporales'])->name('paciente.dependientes.infante.temporal');
+    Route::get('dependientes/temporales/adulto', [App\Http\Controllers\EscritorioDependientesController::class, 'verDependienteAdultoTemporales'])->name('paciente.dependientes.adulto.temporal');
+
+    // Route::get('dependientes/definitiva', [App\Http\Controllers\EscritorioDependientesController::class, 'verDependiente'])->name('paciente.dependientes.definitiva');
+    // Route::get('dependientes/adulto/temporales', [App\Http\Controllers\EscritorioDependientesController::class, 'verDependienteAdultoTemporales'])->name('paciente.dependientes.adulto_temporales');
 
     Route::post('dependientes/registro', [App\Http\Controllers\EscritorioDependientesController::class, 'registrarDepPacienteExistente'])->name('paciente.dependientes.registro');
     Route::post('dependientes/nuevo/registro', [App\Http\Controllers\EscritorioDependientesController::class, 'registroDepPacienteNuevo'])->name('paciente.dependientes.nuevo.registro');
@@ -326,6 +335,7 @@ Route::group([
     // Route::get('dependiente/Reservar_Hora/{id_dependiente_activo}', [App\Http\Controllers\EscritorioPacienteDependiente::class, 'agendarHora'])->name('paciente.dependiente.agendar_hora');
     Route::get('dependiente/Reservar_Hora/{id_dependiente_activo}/{profesion?}/{especialidad?}/{subespecialidad?}', [App\Http\Controllers\EscritorioPacienteDependiente::class, 'agendarHora'])->name('paciente.dependiente.agendar_hora');
     Route::get('dependiente/Mi_Profesionales/{id_dependiente_activo}', [App\Http\Controllers\EscritorioPacienteDependiente::class, 'miProfesionales'])->name('paciente.dependiente.mis_profesionales');
+    Route::get('dependiente/desvincular_profesional/{id_dependiente_activo}/{id_usuario}/{id_profesional}', [App\Http\Controllers\EscritorioPacienteDependiente::class, 'miProfesionales'])->name('paciente.dependiente.desvincular_profesional');
     Route::get('dependiente/Mi_Ficha_Medica/{id_dependiente_activo}', [App\Http\Controllers\EscritorioPacienteDependiente::class, 'miFichaMedica'])->name('paciente.dependiente.mi_ficha');
 
     Route::get('dependiente/Receta_Online/{id_dependiente_activo}', [App\Http\Controllers\EscritorioPacienteDependiente::class, 'recetaOnline'])->name('paciente.dependiente.receta');
