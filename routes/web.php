@@ -276,7 +276,7 @@ Route::group([
     Route::get('desvincular_profesional/{id_usuario}/{id_profesional}', [App\Http\Controllers\EscritorioPaciente::class, 'miProfesionales'])->name('paciente.desvincular_profesional');
 
     Route::get('Check_sdi',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdi'])->name('check_sdi'); // PARAMS OBLIGATORIOS urla=Inicio&urln=Mi_Ficha_Medica
-    Route::get('Check_sdi_token',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdiToken'])->name('check_sdi_token');
+    // Route::get('Check_sdi_token',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdiToken'])->name('check_sdi_token'); // se traspaso a grupo de paciente y profesional
     Route::get('Mi_Ficha_Medica', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('paciente.mi_ficha');
     Route::get('Mi_Ficha_Medica_Pdf', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedicaPdfView']);
 
@@ -359,6 +359,7 @@ Route::group(
     function () {
         Route::post('Perfil/Agregar_contacto', [ContactoEmergenciaController::class, 'registrar_contacto_emergencia'])->name('contacto_emergencia.registrar_contacto_emergencia');
         Route::post('buscar_contacto', [ContactoEmergenciaController::class, 'buscar_contacto'])->name('contacto_emergencia.buscar_contacto');
+        Route::get('Check_sdi_token',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdiToken'])->name('check_sdi_token');
     }
 );
 
@@ -520,6 +521,8 @@ Route::group([
     /** peditria tunner */
 	Route::post('/peditria/tunner/agregar', [App\Http\Controllers\FichaPediatriaController::class, 'agergarTunner'])->name('ped.tunner.agregar');
 	Route::get('/peditria/tunner/ver', [App\Http\Controllers\FichaPediatriaController::class, 'verTunner'])->name('ped.tunner.ver');
+
+
 });
 
 /* ASISTENTE CONSULTA*/
@@ -1186,6 +1189,13 @@ Route::get('/validacion/profesional', [App\Http\Controllers\CertificadoControlle
 Route::get('/pdf/examen', [App\Http\Controllers\ExamenEspecialidadController::class, 'generarPDF_r'])->name('pdf.examen_especialidad');
 Route::get('/pdf/previsualizacion', [App\Http\Controllers\ExamenEspecialidadController::class, 'visualizarGenerarPDF_r'])->name('pdf.visualizar.examen');
 
+/** consentimiento */
+Route::get('/consentimiento/ver_lista', [App\Http\Controllers\ConsentimientosController::class, 'ver_consentimiento_autocomplete'])->name('consentimiento.ver_autocomplete');
+Route::get('/consentimiento/cargar', [App\Http\Controllers\ConsentimientosController::class, 'cargar_consentimiento'])->name('consentimiento.cargar_consentimiento');
+Route::post('/consentimiento/registrar/autorizacion', [App\Http\Controllers\ConsentimientosController::class, 'registrar'])->name('consentimiento.registrar.autorizacion');
+Route::post('/consentimiento/estado/autorizacion', [App\Http\Controllers\ConsentimientosController::class, 'estado_autorizacion'])->name('consentimiento.estado.autorizacion');
+Route::get('/consentimiento/paciente/ver', [App\Http\Controllers\ConsentimientosController::class, 'consentimiento_paciente'])->name('consentimiento.paciente.ver');
+Route::get('/consentimiento/pdf', [App\Http\Controllers\ConsentimientosController::class, 'pdf_consentimineto'])->name('consentimiento.pdf');
 
 
 

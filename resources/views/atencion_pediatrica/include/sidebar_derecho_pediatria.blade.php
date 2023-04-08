@@ -98,7 +98,9 @@
                     </div>
 
                 </div>
-                <div class="card-sidebar">
+                <!-- SECCION CONSENTIMIENTOS -->
+                @include('general.sidebar.seccion_consentimientos')
+                {{-- <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_consentimientos_informados">
                         <h2 class="mb-0">
                         <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_consentimientos_informados" aria-expanded="false" aria-controls="collapse_consentimientos_informados"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
@@ -117,10 +119,10 @@
                         </div>
                     </div>
                     @include("atencion_pediatrica.formularios.modal_atencion_general.m_aconsent_tto")
-                     @include("atencion_pediatrica.formularios.modal_atencion_general.m_revocacionconsent")
-                     @include("atencion_pediatrica.formularios.modal_atencion_general.m_sol_alta")
-                     @include("atencion_pediatrica.formularios.modal_atencion_general.m_rech_tto")
-                </div>
+                    @include("atencion_pediatrica.formularios.modal_atencion_general.m_revocacionconsent")
+                    @include("atencion_pediatrica.formularios.modal_atencion_general.m_sol_alta")
+                    @include("atencion_pediatrica.formularios.modal_atencion_general.m_rech_tto")
+                </div> --}}
 
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_utilidades">
