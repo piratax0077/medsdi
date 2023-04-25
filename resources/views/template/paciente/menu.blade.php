@@ -65,7 +65,7 @@
 						</li>
 
 
-                        <li><a href="{{ ROUTE('paciente.receta.examen') }}">Mis Controles</a></li>
+                        <li><a href="{{ ROUTE('paciente.mis_controles') }}">Mis Controles</a></li>
 					</ul>
 				</li>
 				<li class="nav-item pcoded-hasmenu">

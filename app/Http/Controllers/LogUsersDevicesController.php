@@ -126,6 +126,115 @@ class LogUsersDevicesController extends Controller
                         else
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Reserva Cancelada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
                     break;
+                    case 4: // consentimiento informado
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id_consentimiento_pcte;
+                        $consentimiento = $data->nombre_consentimiento;
+                        $paciente = $data->nombre_paciente;
+                        $profesional = $data->nombre_profesional;
+                        $tipo = $data->tipo;
+
+                        /** peticion */
+                        $value['msg_estado'] = "Tiene pendiente confirmar un Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}. Puede leerlo en su escritorio de Paciente o email.";
+
+                        /** resultado */
+                        if($value['estado'] == 1)
+                            $value['msg_body'] = "Usted ha Autorizado el Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
+                        elseif($value['estado'] == 2)
+                            $value['msg_body'] = "Usted ha Rechazado el Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
+                        else
+                            $value['msg_body'] = "Se ha cancelado la solicitud de Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}. Por sobrepasar el tiempo de aprobación.";
+
+                        /** lista log */
+                        if($value['estado'] == 1)
+                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Consentimiento Autorizado</span> Consentimiento de {$consentimiento}</p><br>";
+                        elseif($value['estado'] == 2)
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Consentimiento Rechazada</span> Consentimiento de {$consentimiento}</p><br>";
+                        else
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Consentimiento Cancelada</span> Consentimiento de {$consentimiento}</p><br>";
+                    break;
+
+                    case 5: // revocacion de consentimiento informado
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id_consentimiento_pcte;
+                        $consentimiento = $data->nombre_consentimiento;
+                        $paciente = $data->nombre_paciente;
+                        $profesional = $data->nombre_profesional;
+                        $tipo = $data->tipo;
+
+                        /** peticion */
+                        $value['msg_estado'] = "Tiene pendiente confirmar una Revocacionde Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
+
+                        /** resultado */
+                        if($value['estado'] == 1)
+                            $value['msg_body'] = "Usted ha Confirmado la Revocación de Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
+                        elseif($value['estado'] == 2)
+                            $value['msg_body'] = "Usted ha Rechazado la Revocacion de Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
+                        else
+                            $value['msg_body'] = "Se ha cancelado la Revocación de Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}. Por sobrepasar el tiempo de aprobación.";
+
+                        /** lista log */
+                        if($value['estado'] == 1)
+                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Revocación de Consentimiento Confirmada</span> {$consentimiento}.<br>";
+                        elseif($value['estado'] == 2)
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Revocación de Consentimiento Rechazada</span> {$consentimiento}.<br>";
+                        else
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Revocación de Consentimiento Cancelada</span> {$consentimiento}.<br>";
+                    break;
+                    case 6: //  solicitud alta voluntaria
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id_sol_alta;
+                        $consentimiento = $data->nombre_consentimiento;
+                        $paciente = $data->nombre_paciente;
+                        $profesional = $data->nombre_profesional;
+                        $tipo = $data->tipo;
+
+                        /** peticion */
+                        $value['msg_estado'] = "Tiene pendiente confirmar una <span class='color-azul txt_bold'>Solicitud de Alta Voluntaria</span>.";
+
+                        /** resultado */
+                        if($value['estado'] == 1)
+                            $value['msg_body'] = "Usted ha Autorizado su <span class='color-azul txt_bold'>Solicitud de Alta Voluntaria</span></span>.";
+                        elseif($value['estado'] == 2)
+                            $value['msg_body'] = "Usted ha Rechazado su <span class='color-azul txt_bold'>Solicitud de Alta Voluntaria</span>.";
+                        else
+                            $value['msg_body'] = "Se ha cancelado su <span class='color-azul txt_bold'>Solicitud de Alta Voluntaria</span>. Por sobrepasar el tiempo de aprobación.";
+
+                        /** lista log */
+                        if($value['estado'] == 1)
+                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud de Alta Voluntaria Autorizada</span></p><br>";
+                        elseif($value['estado'] == 2)
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud de Alta Voluntaria Rechazada</span></p><br>";
+                        else
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud de Alta Voluntaria Cancelada</span></p><br>";
+                    break;
+                    case 7: //  rechazo de tratamiento
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id_rechazo_trtt;
+                        $consentimiento = $data->nombre_consentimiento;
+                        $paciente = $data->nombre_paciente;
+                        $profesional = $data->nombre_profesional;
+                        $tipo = $data->tipo;
+
+                        /** peticion */
+                        $value['msg_estado'] = "Tiene pendiente confirmar un <span class='color-azul txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia</span>.";
+
+                        /** resultado */
+                        if($value['estado'] == 1)
+                            $value['msg_body'] = "Usted ha Autorizado un <span class='color-azul txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia</span></span>.";
+                        elseif($value['estado'] == 2)
+                            $value['msg_body'] = "Usted ha Rechazado un <span class='color-azul txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia</span>.";
+                        else
+                            $value['msg_body'] = "Se ha cancelado un <span class='color-azul txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia</span>. Por sobrepasar el tiempo de aprobación.";
+
+                        /** lista log */
+                        if($value['estado'] == 1)
+                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia Autorizada</span></p><br>";
+                        elseif($value['estado'] == 2)
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia Rechazada</span></p><br>";
+                        else
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia Cancelada</span></p><br>";
+                    break;
                 }
 
 
@@ -471,14 +580,14 @@ class LogUsersDevicesController extends Controller
     }
 
     public function checkStateSol(){ // CRON CADA 1 MIN
-        
+
         $registros = LogUsersDevices::whereIn('estado',[0,1])->get();
 
         if($registros)
         {
             foreach($registros as $key => $value)
             {
-                
+
                 $fecha_actual = date('Y-m-d H:i:s');
                 $fecha_exp = $value['fecha_exp'];
                 if($fecha_exp==null)
@@ -500,7 +609,7 @@ class LogUsersDevicesController extends Controller
 
     public function genSolicitud(Request $request)
     {
-        /* params generatePermApp() */ 
+        /* params generatePermApp() */
         /* $id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo = 'confirmacion' */
         $id_user_create = 3;
         $id_user_recept = 3;

@@ -73,7 +73,7 @@
                         </div>
                         <!--Licencia-->
                         <div class="tab-pane fade show" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
-                            @include('atencion_medica.secciones_ficha.licencia')
+                            @include('general.secciones_ficha.licencia')
                         </div>
                         <!--Ficha Médica Única-->
                         <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
@@ -97,18 +97,8 @@
             </div>
         </div>
 
-        <!-- SIDE BAR ORL -->
-        @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
-        @include("atencion_medica.include.sidebar_derecho_cda"){{-- modales y data de sidebar especialidad --}}
-
-        <!--Modals de especialidad -->
-        {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
-
-        <!--Modals formularios generales-->
-        {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")--}}
-
-
+        <!-- SIDE BAR CDA -->
+        @include("atencion_medica.include.sidebar_derecho_cda")
     </div>
     <!--Cierre: Container Completo-->
 	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")

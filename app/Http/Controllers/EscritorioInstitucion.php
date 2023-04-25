@@ -21,12 +21,22 @@ class EscritorioInstitucion extends Controller
         $tipo_institucion = TipoInstitucion::all();
 
 
-        if (isset($servicio)) {
 
+        if (isset($servicio))
+        {
+            if($servicio->bienvenida == 1)
+            {
+                $servicio->bienvenida = 0;
+                $servicio->save();
+                return view('bienvenida.instituciones')->with(['regiones' => $region ]);
+            }
+            else
+            {
+                return view('app.adm_cm.home');
+            }
             // return view('app.profesional.escritorio_profesional')->with(['region' => $region, 'profesional' => $profesional, 'hora_dia' => $horas_dia]);
             return view('app.adm_cm.home');
         }
-
 
         return view('auth.Registros.registro_institucion')->with([
             'region' => $region,

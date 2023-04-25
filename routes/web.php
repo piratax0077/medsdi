@@ -348,6 +348,9 @@ Route::group([
     Route::get('dependiente/RompeClave/{id_dependiente_activo}', [App\Http\Controllers\EscritorioPacienteDependiente::class, 'rompeclave'])->name('paciente.dependiente.rompeclave');
     Route::get('dependiente/Suscripcion/{id_dependiente_activo}', [App\Http\Controllers\EscritorioPacienteDependiente::class, 'subcripcion'])->name('paciente.dependiente.subcripcion');
 
+    /** mis controles personales */
+    Route::get('mis_controles', [App\Http\Controllers\EscritorioPaciente::class, 'mis_controles'])->name('paciente.mis_controles');
+
 
 });
 
@@ -1193,9 +1196,30 @@ Route::get('/pdf/previsualizacion', [App\Http\Controllers\ExamenEspecialidadCont
 Route::get('/consentimiento/ver_lista', [App\Http\Controllers\ConsentimientosController::class, 'ver_consentimiento_autocomplete'])->name('consentimiento.ver_autocomplete');
 Route::get('/consentimiento/cargar', [App\Http\Controllers\ConsentimientosController::class, 'cargar_consentimiento'])->name('consentimiento.cargar_consentimiento');
 Route::post('/consentimiento/registrar/autorizacion', [App\Http\Controllers\ConsentimientosController::class, 'registrar'])->name('consentimiento.registrar.autorizacion');
+Route::post('/consentimiento/revocacion/autorizacion', [App\Http\Controllers\ConsentimientosController::class, 'solicitar_autorizacion_revocacion'])->name('consentimiento.revocacion.autorizacion');
 Route::post('/consentimiento/estado/autorizacion', [App\Http\Controllers\ConsentimientosController::class, 'estado_autorizacion'])->name('consentimiento.estado.autorizacion');
+Route::post('/consentimiento/estado/revocacion', [App\Http\Controllers\ConsentimientosController::class, 'estado_revocacion'])->name('consentimiento.estado.revocacion');
 Route::get('/consentimiento/paciente/ver', [App\Http\Controllers\ConsentimientosController::class, 'consentimiento_paciente'])->name('consentimiento.paciente.ver');
 Route::get('/consentimiento/pdf', [App\Http\Controllers\ConsentimientosController::class, 'pdf_consentimineto'])->name('consentimiento.pdf');
+Route::get('/revocacion/pdf', [App\Http\Controllers\ConsentimientosController::class, 'pdf_revocacion'])->name('consentimiento.revocacion.pdf');
+
+
+/** consentimiento Solicitud de alta medica */
+Route::post('/consentimiento/solicitud/alta_medica/registro/autorizacion', [App\Http\Controllers\ConsentimientoSolicitudAltaMedicaController::class, 'registro_aprobacion'])->name('consentimiento.solicitud.alta.registrar.autorizacion');
+Route::post('/consentimiento/solicitud/alta_medica/registro', [App\Http\Controllers\ConsentimientoSolicitudAltaMedicaController::class, 'registro'])->name('consentimiento.solicitud.alta.registrar');
+Route::post('/consentimiento/solicitud/alta_medica/estado/autorizacion', [App\Http\Controllers\ConsentimientoSolicitudAltaMedicaController::class, 'estado_autorizacion'])->name('consentimiento.solicitud.alta.estado.autorizacion');
+Route::get('/consentimiento/solicitud/alta_medica/pdf', [App\Http\Controllers\ConsentimientoSolicitudAltaMedicaController::class, 'pdf_consentimineto'])->name('consentimiento.solicitud.alta.pdf');
+
+/** consentimiento Rechazo de Tratamiento */
+Route::post('/consentimiento/rechazo/tratamiento/registro/autorizacion', [App\Http\Controllers\ConsentimientoRechazoTratamientoController::class, 'registro_aprobacion'])->name('consentimiento.rechazo.tratamiento.registrar.autorizacion');
+Route::post('/consentimiento/rechazo/tratamiento/registro', [App\Http\Controllers\ConsentimientoRechazoTratamientoController::class, 'registro'])->name('consentimiento.rechazo.tratamiento.registrar');
+Route::post('/consentimiento/rechazo/tratamiento/estado/autorizacion', [App\Http\Controllers\ConsentimientoRechazoTratamientoController::class, 'estado_autorizacion'])->name('consentimiento.rechazo.tratamiento.estado.autorizacion');
+Route::get('/consentimiento/rechazo/tratamiento/pdf', [App\Http\Controllers\ConsentimientoRechazoTratamientoController::class, 'pdf_consentimineto'])->name('consentimiento.rechazo.tratamiento.pdf');
+
+
+/** INDICACIONES MEDICAS */
+Route::post('/indicacion/medica/registrar/enviar',[App\Http\Controllers\DocumentoFcPacienteController::class, 'registrar_enviar'])->name('indicacion.medica.registro.envio');
+Route::get('/indicacion/medica/enviar',[App\Http\Controllers\DocumentoFcPacienteController::class, 'enviarDocumento_r'])->name('indicacion.medica.envio');
 
 
 

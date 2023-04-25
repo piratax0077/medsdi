@@ -6,7 +6,7 @@
             <h5 class="d-inline-block text-light mb-0 float-right">Formularios Cirugía Digestiva</h5>
         </header>
         <div class="bs-canvas-content">
-            <div class="accordion" id="accordion_cirugia_alta">
+            <div class="accordion" id="accordion_side_bar">
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_solicitud_examenes">
                         <h2 class="mb-0">
@@ -15,7 +15,7 @@
                             </button>
                         </h2>
                     </div>
-                    <div id="collapse_solicitud_examenes" class="collapse" aria-labelledby="heading_solicitud_examenes" data-parent="#accordion_cirugia_alta">
+                    <div id="collapse_solicitud_examenes" class="collapse" aria-labelledby="heading_solicitud_examenes" data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="mostrar_modal_ex_rx_cirugia();">+ Orden radiología</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="i_biopsia()";>+ Biopsias </button>
@@ -26,30 +26,8 @@
 
                 </div>
 
-                <div class="card-sidebar">
-                    <div class="card-header-sidebar" id="heading_consentimientos_informados">
-                        <h2 class="mb-0">
-                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_consentimientos_informados" aria-expanded="false" aria-controls="collapse_consentimientos_informados"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
-                            CONSENTIMIENTOS INFORMADOS
-                        </button>
-                        </h2>
-                    </div>
-                    <div id="collapse_consentimientos_informados" class="collapse" aria-labelledby="heading_consentimientos_informados" data-parent="#accordion_cirugia_alta">
-                        <div class="card-body-sidebar">
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cons_tto()";>+ Para tratamiento</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cons_revtto()";>+ Revocación Consentimiento</button>
-                        </div>
-                        <div class="card-body-sidebar">
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="solalta()";>+ Solicitar Alta Voluntaria</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="rechtto()";>+ Rechazo Tratamiento</button>
-                        </div>
-                    </div>
-                    @include("atencion_pediatrica.formularios.modal_atencion_general.m_aconsent_tto")
-                     @include("atencion_pediatrica.formularios.modal_atencion_general.m_revocacionconsent")
-                     @include("atencion_pediatrica.formularios.modal_atencion_general.m_sol_alta")
-                     @include("atencion_pediatrica.formularios.modal_atencion_general.m_rech_tto")
-                </div>
-
+				<!-- SECCION CONSENTIMIENTOS -->
+                @include('general.sidebar.seccion_consentimientos')              
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_utilidades">
                         <h2 class="mb-0">
@@ -58,16 +36,15 @@
                         </button>
                         </h2>
                     </div>
-                    <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_cirugia_alta">
+                    <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ufonasa()";>+ Buscador código FONASA</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ucalcimc()";>+ Calculadora de IMC</button>
                         </div>
                     </div>
-                    @include("atencion_medica.sidebars.modals_generales.m_ucodigofonasa")
-                    @include("atencion_medica.sidebars.modals_generales.m_uimc")
+                    @include("general.modal.m_ucodigofonasa")
+                    @include("general.modal.m_uimc")
                 </div>
-
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_recom">
                         <h2 class="mb-0">
@@ -76,7 +53,7 @@
                         </button>
                         </h2>
                     </div>
-                    <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_formularios_atencion">
+                    <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ind_endoscopia()";>+ Indicaciones Cuidados Post Endoscopia</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingreso()";>+ Orden de Hospitalización</button>
@@ -84,14 +61,29 @@
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="icirugia()";>+ Indicaciones post cirugía En General</button>
                         </div>
                     </div>
-
-
-                    @include("atencion_medica.sidebars.modals_generales.ingreso")
-                    @include("atencion_medica.sidebars.modals_generales.m_cuidados_cirugia")
-                    @include("atencion_medica.sidebars.modals_generales.m_req_ingreso")
+                    @include("general.modal.ingreso")
+                    @include("general.modal.m_cuidados_cirugia")
+                    @include("general.modal.m_req_ingreso")
                     @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.recom_endoscopia")
-
-
+                </div>
+				<div class="card-sidebar">
+                    <div class="card-header-sidebar" id="heading_sugerencias">
+                        <h2 class="mb-0">
+                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_sugerencias" aria-expanded="false" aria-controls="collapse_sugerencias"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                            AYUDENOS A MEJORAR
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapse_sugerencias" class="collapse" aria-labelledby="heading_sugerencias" data-parent="#accordion_side_bar">
+                        <div class="card-body-sidebar">
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="c_faltante()";>+ Consentimiento  faltante</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="f_faltante()";>+ formulario faltante</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="sugerencias()";>+ Sugerencias</button>
+                        </div>
+                    </div>
+                    @include("general.modal.m_form_faltante")
+                    @include("general.modal.m_sugerencias")
+                    @include("general.modal.m_consent_faltante")
                 </div>
             </div>
         </div>

@@ -30,6 +30,11 @@ class ConConsentimientosPcte extends Model
         return $this->hasOne(LogUsersDevices::class, 'id', 'id_log_users_devices');
     }
 
+    public function LogUsersDevicesRevocacion()
+    {
+        return $this->hasOne(LogUsersDevices::class, 'id', 'id_log_user_devices_revocacion');
+    }
+
     public function scopeLugarAtencion($query, $lista)
     {
         if (!empty($lista))

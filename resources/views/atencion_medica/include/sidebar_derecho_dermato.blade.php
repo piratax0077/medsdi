@@ -6,7 +6,7 @@
             <h5 class="d-inline-block text-light mb-0 float-right">Formularios Dermatología</h5>
         </header>
         <div class="bs-canvas-content">
-            <div class="accordion" id="accordion_gineco_obst">
+            <div class="accordion" id="accordion_side_bar">
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_solicitud_examenes">
                         <h2 class="mb-0">
@@ -15,7 +15,7 @@
                             </button>
                         </h2>
                     </div>
-                    <div id="collapse_solicitud_examenes" class="collapse" aria-labelledby="heading_solicitud_examenes" data-parent="#accordion_gineco_obst">
+                    <div id="collapse_solicitud_examenes" class="collapse" aria-labelledby="heading_solicitud_examenes" data-parent="#accordion_side_bar">
                          <div class="card-body-sidebar">
 
 
@@ -27,28 +27,9 @@
                     </div>
                 </div>
 
-                <div class="card-sidebar">
-                    <div class="card-header-sidebar" id="heading_consentimientos_informados">
-                        <h2 class="mb-0">
-                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_consentimientos_informados" aria-expanded="false" aria-controls="collapse_consentimientos_informados"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
-                            CONSENTIMIENTOS INFORMADOS
-                        </button>
-                        </h2>
-                    </div>
-                    <div id="collapse_consentimientos_informados" class="collapse" aria-labelledby="heading_consentimientos_informados" data-parent="#accordion_gineco_obst">
-                        <div class="card-body-sidebar">
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cons_anest()";>+ Anestesia</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="concir_menor()";>+ Cirugía menor</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="concir_mayor()";>+ Cirugía mayor</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="conprocedim()";>+ Procedimientos en general</button>
-                        </div>
-                    </div>
-                    @include("atencion_medica.sidebars.modals_generales.m_aconsentcir")
-                    @include("atencion_medica.sidebars.modals_generales.m_aconsentcirm")
-                    @include("atencion_medica.sidebars.modals_generales.m_acprocedimientos")
-                    @include("atencion_medica.sidebars.modals_generales.m_acanestesia")
-                </div>
-
+                <!-- SECCION CONSENTIMIENTOS -->
+                @include('general.sidebar.seccion_consentimientos')
+                
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_utilidades">
                         <h2 class="mb-0">
@@ -57,7 +38,7 @@
                         </button>
                         </h2>
                     </div>
-                    <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_gineco_obst">
+                    <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_side_bar">
                     <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ufonasa()";>+ Buscador código FONASA</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ucalcimc()";>+ Calculadora de IMC</button>
@@ -75,7 +56,7 @@
                         </button>
                         </h2>
                     </div>
-                    <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_formularios_atencion">
+                    <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cuid_piel()";>+ Indicaciones Cuidados de la piel</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="tipos() ";>+ Tipos de la piel</button>
@@ -94,9 +75,25 @@
 
                     @include("atencion_medica.sidebars.modals_especialidad.dermatologia.m_tipos_piel")
 
-
-
-
+                </div>
+				 <div class="card-sidebar">
+                    <div class="card-header-sidebar" id="heading_sugerencias">
+                        <h2 class="mb-0">
+                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_sugerencias" aria-expanded="false" aria-controls="collapse_sugerencias"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                            AYUDENOS A MEJORAR
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapse_sugerencias" class="collapse" aria-labelledby="heading_sugerencias" data-parent="#accordion_side_bar">
+                        <div class="card-body-sidebar">
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="c_faltante()";>+ Consentimiento  faltante</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="f_faltante()";>+ formulario faltante</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="sugerencias()";>+ Sugerencias</button>
+                        </div>
+                    </div>
+                    @include("general.modal.m_form_faltante")
+                    @include("general.modal.m_sugerencias")
+                    @include("general.modal.m_consent_faltante")
                 </div>
             </div>
         </div>
