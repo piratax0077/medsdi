@@ -49,6 +49,9 @@
 
         <!--formulario sm-->
         <link rel="stylesheet" href="{{ asset('css/formulario_sm.css') }}">
+
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
+
         {{--  /** agregar css */  --}}
         <style>
             .ui-front {
