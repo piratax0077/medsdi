@@ -197,6 +197,9 @@ class Funciones{
         $log_users_devices->id_user_create = $id_user_create;
         $log_users_devices->id_user_recept = $id_user_recept;
         $log_users_devices->msg = json_encode($msj);
+        if($id_user_create == $id_user_recept)
+        $log_users_devices->estado = 1;
+        else
         $log_users_devices->estado = 0;
         $log_users_devices->fecha_ingreso = $fecha_actual;
         $log_users_devices->fecha_termino = $fecha_vencimiento;
