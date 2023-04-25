@@ -32,94 +32,111 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-3">
                                             <label class="floating-label">Clínica / Hospital</label>
-                                            <input type="text" class="form-control form-control-sm" name="n_clinica_hospital" id="n_clinica_hospital">
+                                            <input type="text" class="form-control form-control-sm" name="ficha_neo_nombre_centro" id="ficha_neo_nombre_centro">
+                                            <input type="hidden" class="form-control form-control-sm" name="ficha_neo_id_institucion" id="ficha_neo_id_institucion">
                                         </div>
                                         <div class="form-group col-md-3">
                                             <label class="floating-label">Patología del embarazo</label>
-                                            <input type="text" class="form-control form-control-sm" name="p_pat_embarazo" id="p_pat_embarazo">
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label class="floating-label">Semanas gestación</label>
-                                            <input type="text" class="form-control form-control-sm" name="p_sem_gest" id="p_sem_gest">
+                                            <input type="text" class="form-control form-control-sm" name="p_pat_embarazo" id="p_pat_embarazo"><!-- protocolo - diagnostico_preoperatorio -->
                                         </div>
                                         <div class="form-group col-md-3">
                                             <label class="floating-label">Embarazo controlado</label>
-                                            <input type="text" class="form-control form-control-sm" name="p_cont_emb" id="p_cont_emb">
+                                            <input type="text" class="form-control form-control-sm" name="p_cont_emb" id="p_cont_emb"> <!-- protocolo - tipo_embarazo -->
                                         </div>
                                         <div class="form-group col-md-3">
                                             <label class="floating-label">Tipo de parto</label>
-                                            <input type="text" class="form-control form-control-sm" name="p_tpo_parto" id="p_tpo_parto">
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label class="floating-label">Lactancia</label>
-                                            <input type="text" class="form-control form-control-sm" name="p_madre_lactancia" id="p_madre_lactancia">
+                                            <input type="text" class="form-control form-control-sm" name="ficha_neo_tipo_procedimiento" id="ficha_neo_tipo_procedimiento">
                                         </div>
                                         <div class="form-group col-md-3">
                                             <label class="floating-label">Inscripción en Registro Civil</label>
                                             <input type="text" class="form-control form-control-sm" name="p_insc" id="p_insc">
+                                            <input type="hidden" class="form-control form-control-sm" name="ficha_neo_id_infante" id="ficha_neo_id_infante">
                                         </div>
                                         <div class="form-group col-md-3">
+                                            <label class="floating-label">Nombre Neonatólogo</label> recibe bebe
+                                            <input type="text" class="form-control form-control-sm" name="p_nombre_neonatologo" id="p_nombre_neonatologo">
+                                            <input type="hidden" class="form-control form-control-sm" name="p_id_neonatologo" id="p_id_neonatologo">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label class="floating-label">Nombre Obstétra</label> opera
+                                            <input type="text" class="form-control form-control-sm" name="p_nombre_obstetra" id="p_nombre_obstetra">
+                                            <input type="hidden" class="form-control form-control-sm" name="p_id_profesional" id="p_id_profesional">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label class="floating-label">Matrona</label>
+                                            <input type="text" class="form-control form-control-sm" name="p_matron" id="p_matron">
+                                            <input type="text" class="form-control form-control-sm" name="p_id_matron" id="p_id_matron">
+                                        </div>
+                                        {{-- <div class="form-group col-md-3">
                                             <label class="floating-label">Otros</label>
                                             <input type="text" class="form-control form-control-sm" name="p_otros_parto" id="p_otros_parto">
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="form-row mb-3 mt-2">
                                         <div class="col-md-12">
                                             <h6>II. Datos del recién nacido <i id="btn_recien_nacido" class="fas fa-plus-circle text-primary" data-toggle="tooltip" data-placement="top" title="Ver" style="cursor:pointer;"></i></h6>
                                         </div>
                                     </div>
-                                    <div class="form-row" id="recien_nacido" style="display:none;">
+                                    <div class="form-row" id="recien_nacido" style="display: none;">
+                                        <div class="form-group col-sm-3 col-md-3">
+                                            <label class="floating-label-activo-sm">Numero de Brazalete</label>
+                                            <input type="text" class="form-control form-control-sm" name="ficha_neo_codigo_brazalete" id="ficha_neo_codigo_brazalete">
+                                        </div>
+                                        <div class="form-group col-sm-3 col-md-3">
+                                            <label class="floating-label-activo-sm">Sexo</label>
+                                            <input type="date" class="form-control form-control-sm" name="ficha_neo_sexo_nacimiento" id="ficha_neo_sexo_nacimiento">
+                                        </div>
                                         <div class="form-group col-sm-3 col-md-3">
                                             <label class="floating-label-activo-sm">Fecha nacimiento</label>
-                                            <input type="date" class="form-control form-control-sm" name="p_fn" id="p_fn">
+                                            <input type="date" class="form-control form-control-sm" name="ficha_neo_fecha_nacimiento" id="ficha_neo_fecha_nacimiento">
                                         </div>
                                         <div class="form-group col-sm-3 col-md-3">
                                             <label class="floating-label-activo-sm">Hora</label>
-                                            <input type="time" class="form-control form-control-sm" name="p_hora" id="p_hora">
+                                            <input type="time" class="form-control form-control-sm" name="ficha_neo_hora_nacimiento" id="ficha_neo_hora_nacimiento">
                                         </div>
                                         <div class="form-group col-sm-3 col-md-3">
                                             <label class="floating-label">Peso (kg.)</label>
-                                            <input type="number" class="form-control form-control-sm" name="p_nac" id="p_nac">
+                                            <input type="number" class="form-control form-control-sm" name="ficha_neo_peso_nacimiento" id="ficha_neo_peso_nacimiento">
                                         </div>
                                         <div class="form-group col-sm-3 col-md-3">
                                             <label class="floating-label">Talla (cm.)</label>
-                                            <input type="number" class="form-control form-control-sm" name="p_talla" id="p_talla">
+                                            <input type="number" class="form-control form-control-sm" name="ficha_neo_talla_nacimiento" id="ficha_neo_talla_nacimiento">
                                         </div>
                                         <div class="form-group col-sm-3 col-md-3">
                                             <label class="floating-label">Perimetro cefálico (cm.)</label>
-                                            <input type="number" class="form-control form-control-sm" name="p_pc" id="p_pc">
+                                            <input type="number" class="form-control form-control-sm" name="ficha_neo_perimetro_cefalico" id="ficha_neo_perimetro_cefalico">
                                         </div>
                                         <div class="form-group col-sm-3 col-md-3">
                                             <label class="floating-label">APGAR min</label>
-                                            <input type="text" class="form-control form-control-sm" name="p_apgar_1" id="p_apgar_1">
+                                            <input type="text" class="form-control form-control-sm" name="ficha_neo_apgar" id="ficha_neo_apgar">
                                         </div>
                                         <div class="form-group col-sm-3 col-md-3">
                                             <label class="floating-label">APGAR 5 min</label>
-                                            <input type="text" class="form-control form-control-sm" name="p_apgar_5" id="p_apgar_5">
+                                            <input type="text" class="form-control form-control-sm" name="ficha_neo_apgar_cinco" id="ficha_neo_apgar_cinco">
                                         </div>
                                         <div class="form-group col-sm-3 col-md-3">
                                             <label class="floating-label">Edad gestacional</label>
-                                            <input type="text" class="form-control form-control-sm" name="p_eg" id="p_eg">
+                                            <input type="text" class="form-control form-control-sm" name="ficha_neo_edad_gestacional" id="ficha_neo_edad_gestacional">
                                         </div>
                                         <div class="form-group col-sm-6 col-md-6">
                                             <label class="floating-label">Reanimación</label>
-                                            <input type="text" class="form-control form-control-sm" name="p_reanimacion" id="p_reanimacion">
+                                            <input type="text" class="form-control form-control-sm" name="ficha_neo_reanimacion" id="ficha_neo_reanimacion">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="floating-label">Diagnóstico</label>
+                                            <input class="form-control form-control-sm" name="ficha_neo_diag" id="ficha_neo_diag" value="">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="floating-label">Pronóstico</label>
+                                            <input class="form-control form-control-sm" name="ficha_neo_pronostico" id="ficha_neo_pronostico" value="">
                                         </div>
                                         <div class="form-group col-sm-6 col-md-6">
-                                            <label class="floating-label">Medicamentos</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="p_uso_medicamento" id="p_uso_medicamento"></textarea>
+                                            <label class="floating-label">Sueros y Medicamentos</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="ficha_neo_medicamentos" id="ficha_neo_medicamentos"></textarea>
                                         </div>
-                                        <div class="form-group col-md-4">
-                                            <label class="floating-label">Diagnóstico</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="p_n_diag" id="p_n_diag"></textarea>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label class="floating-label">Pronóstico</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="p_n_pronostico" id="p_n_pronostico"></textarea>
-                                        </div>
-                                        <div class="form-group col-md-4">
+                                        <div class="form-group col-md-6">
                                             <label class="floating-label">Observaciones</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="p_n_obs" id="p_n_obs"></textarea>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="ficha_neo_obs" id="ficha_neo_obs"></textarea>
                                         </div>
                                     </div>
                                     <div class="form-row mb-3 mt-2">
@@ -127,22 +144,18 @@
                                             <h6>III. Vacunas <i id="btn_vac_part_puerp" class="fas fa-plus-circle text-primary" data-toggle="tooltip" data-placement="top" title="Ver" style="cursor:pointer;"></i></h6>
                                         </div>
                                     </div>
-                                    <div class="form-row" id="vac_part_puerp" style="display:none;">
-                                        <div class="form-group col-md-3">
+                                    <div class="form-row" id="vac_part_puerp" style="display: none;">
+                                        <div class="form-group col-md-4">
                                             <label class="floating-label">BCG</label>
-                                            <input type="text" class="form-control form-control-sm" name="p_bcg" id="p_bcg">
+                                            <input type="text" class="form-control form-control-sm" name="ficha_neo_bcg" id="ficha_neo_bcg">
                                         </div>
-                                        <div class="form-group col-md-3">
+                                        <div class="form-group col-md-4">
                                             <label class="floating-label">Hepatitis B</label>
-                                            <input type="text" class="form-control form-control-sm" name="p_hep_b" id="p_hep_b">
+                                            <input type="text" class="form-control form-control-sm" name="ficha_neo_hepatitis_b" id="ficha_neo_hepatitis_b">
                                         </div>
-                                        <div class="form-group col-md-3">
+                                        <div class="form-group col-md-4">
                                             <label class="floating-label">Otra</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="p_otra_vac" id="p_otra_vac"></textarea>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label class="floating-label">Sueros y Medicamentos</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="p_otra_msuero" id="p_otra_msuero"></textarea>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="ficha_neo_otras_vacunas" id="ficha_neo_otras_vacunas"></textarea>
                                         </div>
                                     </div>
                                     <div class="form-row mb-3 mt-2">
@@ -150,22 +163,22 @@
                                             <h6>IV. Exámenes y Tamizaje <i id="btn_extamiz" class="fas fa-plus-circle text-primary" data-toggle="tooltip" data-placement="top" title="Ver" style="cursor:pointer;"></i></h6>
                                         </div>
                                     </div>
-                                    <div class="form-row" id="extamiz" style="display:none;">
+                                    <div class="form-row" id="extamiz" style="display: none;">
                                         <div class="form-group col-md-3">
                                             <label class="floating-label">TSH</label>
-                                            <input type="text" class="form-control form-control-sm" name="p_tsh" id="p_tsh">
+                                            <input type="text" class="form-control form-control-sm" name="ficha_neo_tsh" id="ficha_neo_tsh">
                                         </div>
                                         <div class="form-group col-md-3">
                                             <label class="floating-label">Evaluacion auditíva</label>
-                                            <input type="text" class="form-control form-control-sm" name="p_eval_audit" id="p_eval_audit">
+                                            <input type="text" class="form-control form-control-sm" name="ficha_neo_eval_audit" id="ficha_neo_eval_audit">
                                         </div>
                                         <div class="form-group col-md-3">
                                             <label class="floating-label">PKU</label>
-                                            <input type="text" class="form-control form-control-sm" name="p_pku" id="p_pku">
+                                            <input type="text" class="form-control form-control-sm" name="ficha_neo_pku" id="ficha_neo_pku">
                                         </div>
                                         <div class="form-group col-md-3">
                                             <label class="floating-label">Otros</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="p_otros_ex" id="p_otros_ex"></textarea>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="ficha_neo_otros_ex" id="ficha_neo_otros_ex"></textarea>
                                         </div>
                                     </div>
                                 </form>
@@ -833,7 +846,7 @@
                                     <label class="floating-label-activo-sm">Reflejos</label>
                                     <textarea class="form-control form-control-sm"  data-titulo="Reflejos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_1_p_ref" id="obs_p_1_p_ref"></textarea>
                                 </div>
-                            </div>                        
+                            </div>
                             <div class="col-sm-12 col-md-4">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Motilidad</label>

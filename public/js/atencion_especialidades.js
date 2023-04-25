@@ -317,11 +317,6 @@ function inter() {
 // }
 
 
-
-
-
-
-
 /** TOGGLE **/
 /** Atención especialidad **/
 /** Paciente menor de edad **/

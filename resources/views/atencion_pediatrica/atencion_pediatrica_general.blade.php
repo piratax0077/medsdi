@@ -98,7 +98,7 @@
             </div>
         </div>
 
-        <!-- SIDE BAR ORL -->
+        <!-- SIDE BAR PEDIATIA -->
         @include("atencion_pediatrica.modales"){{-- base de botones de sidebar --}}
         @include("atencion_pediatrica.include.sidebar_derecho_pediatria"){{-- modales y data de sidebar especialidad --}}
 
@@ -107,9 +107,11 @@
         {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
 
         <!--Modals formularios generales-->
-        {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
+        {{--
+        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
+        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")
+        --}}
 
 
     </div>

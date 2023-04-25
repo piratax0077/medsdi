@@ -47,7 +47,7 @@ function parpados() {
     $('#m_ind_blefaro').modal('show');
 }
       /** especialidades modals derecho **/
-    
+
     /** EXÁMENES ESPECÍFICOS **/
         /** Modal ecografía gineco-obstétrica **/
         function eco_obstetrica (){
@@ -132,15 +132,15 @@ function parpados() {
         function voz_disf() {
             $('#m_eje_disf').modal('show');
         }
-        
+
     /** CONSENTIMIENTOS INFORMADOS **/
         /** Anestesia **/
         function cons_anest (){
                 $('#modal_anestesia').modal('show');
         }
-        function cons_tto() {
-            $('#m_aconsenttto').modal('show');
-        }
+        // function cons_tto() {
+        //     $('#m_aconsenttto').modal('show');
+        // }
 
         /** Cirugía menor **/
         function concir_menor (){

@@ -37,7 +37,7 @@
                                 </div>
                                 <div class="form-group fill col-sm-6">
                                     <label class="floating-label">Recién nacido (APGAR)</label>
-                                    <input type="text" class="form-control form-control-sm" name="recien_nacido" id="recien_nacido">
+                                    <input type="text" class="form-control form-control-sm" name="apgar_1" id="apgar_1">
                                 </div>
                                 <div class="form-group fill col-sm-8">
                                     <label class="floating-label">Tratamientos o complicaciones</label>

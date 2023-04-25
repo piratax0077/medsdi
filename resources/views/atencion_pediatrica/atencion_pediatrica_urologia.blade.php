@@ -1,4 +1,4 @@
-@extends('template/template_orl')
+@extends('template.template_orl')
 @section('Content')
 
     <!--Container Completo-->

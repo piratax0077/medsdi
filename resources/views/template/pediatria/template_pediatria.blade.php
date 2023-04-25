@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="{{ asset('css/boton-flotante.css') }}?t={{ time() }}">
         <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="{{ asset('js/jquery-ui/jquery-3.6.0.min.js') }}"></script>
         <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
         <!-- data tables css -->
@@ -153,6 +153,9 @@
 
         <!--Tablas y Toggle atención PEDIATRIA-->
         <script src="{{ asset('js/atencion_pediatria.js') }}?upd={{ random_int(1111,9999) }}"></script>
+
+        {{-- atencion_especialidades --}}
+        <script src="{{ asset('js/atencion_especialidades.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');

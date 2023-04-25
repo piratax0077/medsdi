@@ -63,7 +63,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use PDF;
 use App\Helpers\Funciones;
-
+use App\Models\FichaPediatriaGeneralTipo;
 
 class EscritorioProfesional extends Controller
 {
@@ -1166,7 +1166,7 @@ class EscritorioProfesional extends Controller
         $fichasConfi = FichaAtencion::where('id_paciente', 4)->where('confidencial', true)->get();
         $grupo_sanguineo = GrupoSanguineo::all();
 
-        $id_usuario = Auth::user()->id;        
+        $id_usuario = Auth::user()->id;
         $userData = Funciones::userData($id_usuario);
 
 
@@ -3236,7 +3236,7 @@ class EscritorioProfesional extends Controller
     /** CIERRE EXAMEN FONDO DE OJO TIPO */
     /**************** CIERRE FICHA TIPO OFTALMOLOGIA ******************** */
 
-     /**************** FICHA TIPO UROLOGIA ******************** */
+    /**************** FICHA TIPO UROLOGIA ******************** */
     /** FICHA UROLOGIA GENERAL TIPO */
     public function agregarFichaTipoUro(Request $request)
     {
@@ -3317,4 +3317,75 @@ class EscritorioProfesional extends Controller
         return $datos;
     }
     /** CIERRE FICHA UROLOGIA GENERAL TIPO */
+
+
+    /**************** FICHA TIPO PEDIATRIA ******************** */
+    /** FICHA PEDIATRIA GENERAL TIPO */
+    public function agregarFichaTipoPedGen(Request $request)
+    {
+        $datos = array();
+        $ficha_tipo = new FichaPediatriaGeneralTipo();
+
+        $ficha_tipo->id_profesional = $request->id_profesional;
+        $ficha_tipo->nombre = $request->nombre;
+        $ficha_tipo->descripcion = $request->descripcion;
+        $ficha_tipo->e_nutricional = $request->e_nutricional;
+        $ficha_tipo->obs_e_nutricional = $request->obs_e_nutricional;
+        $ficha_tipo->e_vacunas = $request->e_vacunas;
+        $ficha_tipo->obs_e_vacunas = $request->obs_e_vacunas;
+        $ficha_tipo->obs_ex_nutricional_vacunas = $request->obs_ex_nutricional_vacunas;
+        $ficha_tipo->e_piel = $request->e_piel;
+        $ficha_tipo->obs_e_piel = $request->obs_e_piel;
+        $ficha_tipo->e_cabcuello = $request->e_cabcuello;
+        $ficha_tipo->obs_e_cabcuello = $request->obs_e_cabcuello;
+        $ficha_tipo->e_torax = $request->e_torax;
+        $ficha_tipo->obs_e_torax = $request->obs_e_torax;
+        $ficha_tipo->e_abdomen = $request->e_abdomen;
+        $ficha_tipo->obs_e_abdomen = $request->obs_e_abdomen;
+        $ficha_tipo->e_muscesq = $request->e_muscesq;
+        $ficha_tipo->obs_e_muscesq = $request->obs_e_muscesq;
+        $ficha_tipo->e_o_sent = $request->e_o_sent;
+        $ficha_tipo->obs_e_o_sent = $request->obs_e_o_sent;
+        $ficha_tipo->obs_ex_segmentario = $request->obs_ex_segmentario;
+        $ficha_tipo->obs_ex_pedgen = $request->obs_ex_pedgen;
+
+        if($ficha_tipo->save())
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro exitoso';
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro NO exitoso';
+        }
+        return $datos;
+    }
+
+    public function buscarFichaTipoPedGen(Request $request)
+    {
+        $datos = array();
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $registro = FichaPediatriaGeneralTipo::where('id_profesional',$profesional->id)->where('id',$request->id_ficha_tipo)->first();
+
+        if($registro)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registro;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
+        }
+
+        return $datos;
+    }
+    /** CIERRE FICHA PEDIATRIA GENERAL TIPO */
+
+
+
+
 }

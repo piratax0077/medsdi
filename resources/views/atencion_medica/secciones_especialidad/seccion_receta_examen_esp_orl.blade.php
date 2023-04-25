@@ -100,6 +100,18 @@
                 }
             });
 
+            $('#imagenologia_con_contraste_orl').change(function(){
+                if($('#imagenologia_con_contraste_orl').is(':checked') )
+                {
+                    $('#mensaje_imagenologia_con_contraste_orl').show();
+                }
+                else
+                {
+                    $('#mensaje_imagenologia_con_contraste_orl').hide();
+                }
+
+            });
+
         });
 
         function registrar_audifono()
@@ -312,8 +324,12 @@
             let tipo_ex_rx_orl_multi_examen = $('#tipo_ex_rx_orl option:selected').attr('data-multicodigo');
             let tipo_ex_rx_orl_nombre = $('#tipo_ex_rx_orl option:selected').text();
             let tipo_ex_rx_orl_nombre_real = $('#real_tipo_ex_rx_orl').html();
-            let tipo_ex_rx_orl_contraste = $('#tipo_ex_rx_orl option:selected').attr('data-contraste');
+            // let tipo_ex_rx_orl_contraste = $('#tipo_ex_rx_orl option:selected').attr('data-contraste');
+            let tipo_ex_rx_orl_contraste = $('#imagenologia_con_contraste_orl').prop('checked');
             let otro_examen_examen_rx_orl = $('#otro_examen_examen_rx_orl').val();
+
+            let lado_orl = $("#lado_orl option:selected").text();
+            // let imagenologia_con_contraste_orl = $('#imagenologia_con_contraste_orl').prop('checked');
 
             let examen_esp_orl_prioridad = $('#examen_esp_orl_prioridad option:selected').text();
 
@@ -321,6 +337,8 @@
 
             var valido  = 1;
             var mensaje = '';
+
+
 
             if(tipo_ex_lab_orl=='' && tipo_ex_rx_orl==''){
                 valido = 0;
@@ -349,6 +367,9 @@
 
 
                     fila +=     '<td class="text-center align-middle text-wrap">' + tipo_ex_lab_orl_nombre + '</td>';
+
+                    fila +=     '<td class="text-center align-middle text-wrap"> </td>';
+
                     fila +=     '<td class="text-center align-middle text-wrap">Otorrinolaringológico</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">' + examen_esp_orl_prioridad + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">N/C</td>';
@@ -363,6 +384,7 @@
                     var fila = '';
                     fila += '<tr class="tr_examen_esp_orl" id="row' + i + '">';
                     fila +=     '<td class="text-center align-middle text-wrap">' + otro_examen_examen_orl + '</td>';
+                    fila +=     '<td class="text-center align-middle text-wrap"> </td>';
                     fila +=     '<td class="text-center align-middle text-wrap">Otorrinolaringológico</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">' + examen_esp_orl_prioridad + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">N/C</td>';
@@ -386,10 +408,14 @@
                         fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + tipo_ex_rx_orl_nombre_real + '</td>';
 
                         fila +=     '<td class="text-center align-middle text-wrap">' + tipo_ex_rx_orl_nombre + '</td>';
+                        if(lado_orl == 'Seleccione')
+                            fila +=     '<td class="text-center align-middle text-wrap"> </td>';
+                        else
+                            fila +=     '<td class="text-center align-middle text-wrap">' + lado_orl + '</td>';
                         fila +=     '<td class="text-center align-middle text-wrap">Otorrinolaringológico</td>';
                         fila +=     '<td class="text-center align-middle text-wrap">' + examen_esp_orl_prioridad + '</td>';
                         var text_con_contraste = 'Sin Contraste';
-                        if(tipo_ex_rx_orl_contraste == 1)
+                        if(tipo_ex_rx_orl_contraste == true)
                             text_con_contraste = 'Con Contraste';
                         fila +=     '<td class="text-center align-middle text-wrap">' + text_con_contraste + '</td>';
                         fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_orl(\'row' + i + '\');">Quitar</div></td>';
@@ -398,37 +424,42 @@
                     i++;
                     $('#tabla_examen_esp_orl tr:first').after(fila);
 
-
-                    $('#tabla_examen_esp_orl tr').each(function(key, value)
+                    if(tipo_ex_rx_orl_contraste == true)
                     {
-                        $(value).find('td').each(function(key_td, value_td)
+                        $('#tabla_examen_esp_orl tr').each(function(key, value)
                         {
-                            if(key_td == 0)
+                            $(value).find('td').each(function(key_td, value_td)
                             {
-                                if($(value_td).text() == 'CREATININA EN SANGRE')
+                                if(key_td == 0)
                                 {
-                                    creatinina = 1;
+                                    if($(value_td).text() == 'CREATININA EN SANGRE')
+                                    {
+                                        creatinina = 1;
+                                    }
                                 }
-                            }
+                            });
                         });
-                    });
 
-                    if(creatinina == 0)
-                    {
-                        fila = '';
-                        fila += '<tr class="tr_examen_cirugia CREATININA" id="row' + i + '">';
-                        fila +=     '<td class="text-center align-middle text-wrap" style="display:none">85</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap" style="display:none">CREATININA EN SANGRE</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap">CREATININA EN SANGRE</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap">SANGRE</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap">Media</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap">N/C</td>';
-                        fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_orl_contraste(\'row' + i + '\');creatinina=1;">Quitar</div></td>';
-                        fila += '</tr>';
-                        $('#tabla_examen_esp_orl tr:first').after(fila);
-                        i++;
-                        creatinina = 1;
+                        if(creatinina == 0)
+                        {
+                            fila = '';
+                            fila += '<tr class="tr_examen_cirugia CREATININA" id="row' + i + '">';
+                            fila +=     '<td class="text-center align-middle text-wrap" style="display:none">78</td>';
+                            fila +=     '<td class="text-center align-middle text-wrap" style="display:none">CREATININA EN SANGRE</td>';
+                            fila +=     '<td class="text-center align-middle text-wrap">CREATININA EN SANGRE</td>';
+                            fila +=     '<td class="text-center align-middle text-wrap"> </td>';
+                            fila +=     '<td class="text-center align-middle text-wrap">SANGRE</td>';
+                            fila +=     '<td class="text-center align-middle text-wrap">Media</td>';
+                            fila +=     '<td class="text-center align-middle text-wrap">N/C</td>';
+                            fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_orl_contraste(\'row' + i + '\');creatinina=1;">Quitar</div></td>';
+                            fila += '</tr>';
+                            $('#tabla_examen_esp_orl tr:first').after(fila);
+                            i++;
+                            creatinina = 1;
+                        }
                     }
+
+
                 }
                 else if(otro_examen_examen_rx_orl !='' && tipo_ex_lab_orl == 'otro')
                 {
@@ -437,6 +468,10 @@
                     fila +=     '<td class="text-center align-middle text-wrap" style="display:none">0</td>';
                     fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + otro_examen_examen_rx_orl + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">' + otro_examen_examen_rx_orl + '</td>';
+                    if(lado_orl == 'Seleccione')
+                        fila +=     '<td class="text-center align-middle text-wrap"> </td>';
+                    else
+                        fila +=     '<td class="text-center align-middle text-wrap">' + lado_orl + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">Otorrinolaringológico</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">' + examen_esp_orl_prioridad + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">N/C</td>';
@@ -453,6 +488,9 @@
                 $('#otro_examen_examen_rx_orl').val('');
                 $('#examen_esp_orl_examen').val('');
                 $('#examen_esp_orl_prioridad').val('2');
+                $('#lado_orl').val('0');
+                $('#imagenologia_con_contraste_orl').prop('checked', false)
+                $('#mensaje_imagenologia_con_contraste_orl').hide();
 
                 mostrar_otros('tipo_ex_lab_orl','div_otros_examen_orl','otro');
                 mostrar_otros('tipo_ex_rx_orl','div_otros_examen_rx_orl','otro');
@@ -503,10 +541,13 @@
                     var data = $(this).find("td");
                     rol["id_examen"] = $.trim($(data[0]).text().split("\n").join(""));
                     rol["nombre_examen"] = $.trim($(data[1]).text().split("\n").join(""));
+                    rol["lado"] = $.trim($(data[3]).text().split("\n").join(""));
                     rol["nombre_examen_especialidad"] = $.trim($(data[2]).text().split("\n").join(""));
-                    rol["tipo"] = $.trim($(data[3]).text().split("\n").join(""));
-                    rol["prioridad"] = $.trim($(data[4]).text().split("\n").join(""));
-                    rol["con_contraste"] = $.trim($(data[5]).text().split("\n").join(""));
+                    rol["tipo"] = $.trim($(data[4]).text().split("\n").join(""));
+                    // rol["subtipo"] = $.trim($(data[2]).text().split("\n").join(""));
+                    rol["prioridad"] = $.trim($(data[5]).text().split("\n").join(""));
+                    rol["con_contraste"] = $.trim($(data[6]).text().split("\n").join(""));
+
                     rows1.push(rol);
                 }
             });
@@ -632,6 +673,7 @@
                     html += '        <th class="text-center align-middle" style="display:none">id</th>';
                     html += '        <th class="text-center align-middle" style="display:none">Nombre Real</th>';
                     html += '        <th class="text-center align-middle">Nombre Examen</th>';
+                    html += '        <th class="text-center align-middle">Lado</th>';
                     html += '        <th class="text-center align-middle">Tipo</th>';
                     {{--  html += '        <th class="text-center align-middle">Sub-Tipo</th>';  --}}
                     html += '        <th class="text-center align-middle">Prioridad</th>';
@@ -659,6 +701,7 @@
                                 else
                                     nombre = value.examen_especialidad;
                                 html += '    <td class="text-center align-middle text-wrap">'+nombre+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap">'+value.otro+'</td>';
 
                                 html += '    <td class="text-center align-middle text-wrap">'+value.tipo_examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+prioridad[value.id_prioridad]+'</td>';
@@ -682,6 +725,7 @@
                                 else
                                     nombre = value.examen_especialidad;
                                 html += '    <td class="text-center align-middle text-wrap">'+nombre+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap">'+value.otro+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+value.tipo_examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+prioridad[value.id_prioridad]+'</td>';
                                 var text_con_contraste = 'N/C';

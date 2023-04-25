@@ -43,30 +43,40 @@ function i_medicamento() {
 function rx_ped() {
     $('#modal_ex_radiologicoped').modal('show');
 }
-$('#btn_recien_nacido').click(function() {
-    $('#recien_nacido').toggle();
+
+$(document).ready(function() {
+    $('#btn_recien_nacido').click(function () {
+        $('#recien_nacido').toggle();
+    });
 });
 
 /** Datos recien nacido **/
-$('#btn_vac_part_puerp').click(function() {
-    $('#vac_part_puerp').toggle();
+$(document).ready(function() {
+    $('#btn_vac_part_puerp').click(function() {
+        $('#vac_part_puerp').toggle();
+    });
 });
 
 /** Datos recien nacido **/
-$('#btn_extamiz').click(function() {
-    $('#extamiz').toggle();
+$(document).ready(function() {
+    $('#btn_extamiz').click(function() {
+        $('#extamiz').toggle();
+    });
 });
 /** examen fisico pediatria **/
 function ant_parto() {
     $('#neonat_modal').modal('show');
 }
-/** pautas varones **/
+/** pautas femenino **/
 function tunner() {
     $('#tunner_modal').modal('show');
+    cargar_tunner('f');
 }
 
+/** pautas masculino */
 function tunner_m() {
     $('#tunner_modal_m').modal('show');
+    cargar_tunner('m');
 }
 
 function per_cef_v() {
@@ -111,14 +121,6 @@ function percint_v() {
 
 function presion_v() {
     $('#presion_v').modal('show');
-}
-/** pautas mujeres **/
-function tunner() {
-    $('#tunner_modal').modal('show');
-}
-
-function tunner_m() {
-    $('#tunner_modal_m').modal('show');
 }
 
 function per_cef_f() {
@@ -266,14 +268,6 @@ function hormonas() {
     $('#hormona_modal').modal('show');
 }
 
-/** Grado de tunner **/
-function tunner() {
-    $('#tunner_modal').modal('show');
-}
-
-function tunner_m() {
-    $('#tunner_modal_m').modal('show');
-}
 
 /** interconsultas **/
 function inter() {

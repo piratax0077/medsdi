@@ -21,13 +21,13 @@
     @else
     <div class="col-sm-12 col-md-6 text-center">
         <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
-            <button type="button" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-sm mt-1" onclick="i_lente();"><i class="feather icon-plus"></i>Receta de lentes</button>
+            <button type="button" disabled="disabled" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-sm mt-1" onclick="i_lente();"><i class="feather icon-plus"></i>Receta de lentes</button>
             <button type="button" onclick="ver_pdf_receta($('#id_fc').val());" class=" btn_medicamento_pdf btn btn-warning btn-sm mt-1" id="btn_medicamento_pdf"><i class="feather icon-file"></i>Ver PDF</button>
         </div>
     </div>
     <div class="col-sm-12 col-md-6">
         <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
-            <button type="button" id="btn_agregar_examen" class=" btn_agregar_examen btn btn-info btn-sm mt-1" onclick="i_examen_espoft();"><i class="feather icon-plus"></i>Examen Especialidad</button>
+            <button type="button" disabled="disabled" id="btn_agregar_examen" class=" btn_agregar_examen btn btn-info btn-sm mt-1" onclick="i_examen_espoft();"><i class="feather icon-plus"></i>Examen Especialidad</button>
             <button type="button" onclick="ver_pdf_orden_examenes($('#id_fc').val());" class=" btn_examenes_pdf btn btn-warning btn-sm mt-1" id="btn_examenes_pdf"><i class="feather icon-file"></i>Ver PDF</button>
         </div>
     </div>
@@ -98,6 +98,17 @@
                 }
             });
 
+            $('#imagenologia_con_contraste_ex_rx_oft').change(function(){
+                if($('#imagenologia_con_contraste_ex_rx_oft').is(':checked') )
+                {
+                    $('#mensaje_imagenologia_con_contraste_ex_rx_oft').show();
+                }
+                else
+                {
+                    $('#mensaje_imagenologia_con_contraste_ex_rx_oft').hide();
+                }
+
+            });
         });
 
         function registrar_audifono()
@@ -298,29 +309,36 @@
         }
 
 
-        function indicar_examen_orl()
+        function indicar_examen_oft()
         {
-            let tipo_ex_lab_orl = $('#tipo_ex_lab_orl').val();
-            let tipo_ex_lab_orl_multi_examen = $('#tipo_ex_lab_orl option:selected').attr('data-multicodigo');
-            let tipo_ex_lab_orl_nombre = $('#tipo_ex_lab_orl option:selected').text();
-            let tipo_ex_lab_orl_nombre_real = $('#real_tipo_ex_lab_orl').html();
-            let otro_examen_examen_orl = $('#otro_examen_examen_orl').val();
+            let tipo_ex_lab_oft = $('#tipo_ex_lab_oft').val();
+            let tipo_ex_lab_oft_multi_examen = $('#tipo_ex_lab_oft option:selected').attr('data-multicodigo');
+            let tipo_ex_lab_oft_nombre = $('#tipo_ex_lab_oft option:selected').text();
+            let tipo_ex_lab_oft_nombre_real = $('#real_tipo_ex_lab_oft').html();
+            let otro_examen_examen_oft = $('#otro_examen_examen_oft').val();
 
-            let tipo_ex_rx_orl = $('#tipo_ex_rx_orl').val();
-            let tipo_ex_rx_orl_multi_examen = $('#tipo_ex_rx_orl option:selected').attr('data-multicodigo');
-            let tipo_ex_rx_orl_nombre = $('#tipo_ex_rx_orl option:selected').text();
-            let tipo_ex_rx_orl_nombre_real = $('#real_tipo_ex_rx_orl').html();
-            let tipo_ex_rx_orl_contraste = $('#tipo_ex_rx_orl option:selected').attr('data-contraste');
-            let otro_examen_examen_rx_orl = $('#otro_examen_examen_rx_orl').val();
+            let tipo_ex_rx_oft = $('#tipo_ex_rx_oft').val();
+            let tipo_ex_rx_oft_multi_examen = $('#tipo_ex_rx_oft option:selected').attr('data-multicodigo');
+            let tipo_ex_rx_oft_nombre = $('#tipo_ex_rx_oft option:selected').text();
+            let tipo_ex_rx_oft_nombre_real = $('#real_tipo_ex_rx_oft').html();
+            // let tipo_ex_rx_oft_contraste = $('#tipo_ex_rx_oft option:selected').attr('data-contraste');
+            let tipo_ex_rx_oft_contraste = $('#imagenologia_con_contraste_ex_rx_oft').prop('checked');
+            let otro_examen_examen_rx_oft = $('#otro_examen_examen_rx_oft').val();
 
-            let examen_esp_orl_prioridad = $('#examen_esp_orl_prioridad option:selected').text();
+            let lado_ex_lab_oft = $("#lado_ex_lab_oft option:selected").text();
+            let lado_ex_rx_oft = $("#lado_ex_rx_oft option:selected").text();
+            // let imagenologia_con_contraste_ex_rx_oft = $('#imagenologia_con_contraste_ex_rx_oft').prop('checked');
 
-            let examen_esp_orl_examen = $('#examen_esp_orl_examen').val();
+            let examen_esp_oft_prioridad = $('#examen_esp_oft_prioridad option:selected').text();
+
+            let examen_esp_oft_examen = $('#examen_esp_oft_examen').val();
 
             var valido  = 1;
             var mensaje = '';
 
-            if(tipo_ex_lab_orl=='' && tipo_ex_rx_orl==''){
+
+
+            if(tipo_ex_lab_oft=='' && tipo_ex_rx_oft==''){
                 valido = 0;
                 mensaje = 'Debe seleccionar al menos un examen\n';
             }
@@ -330,130 +348,155 @@
 
                 $('.examenes_sin_registros').remove();
 
-                var i = $('#tabla_examen_esp_orl tr').length; //contador para asignar id al boton que borrara la fila
+                var i = $('#tabla_examen_esp_oft tr').length; //contador para asignar id al boton que borrara la fila
 
-                if(tipo_ex_lab_orl != '' && tipo_ex_lab_orl != 'otro')
+                if(tipo_ex_lab_oft != '' && tipo_ex_lab_oft != 'otro')
                 {
                     var fila = '';
-                    fila += '<tr class="tr_examen_esp_orl" id="row' + i + '">';
+                    fila += '<tr class="tr_examen_esp_oft" id="row' + i + '">';
 
-                    var id_tipo_ex_lab_orl ='';
-                    if(tipo_ex_lab_orl_multi_examen == '')
-                        id_tipo_ex_lab_orl = tipo_ex_lab_orl;
+                    var id_tipo_ex_lab_oft ='';
+                    if(tipo_ex_lab_oft_multi_examen == '')
+                        id_tipo_ex_lab_oft = tipo_ex_lab_oft;
                     else
-                        id_tipo_ex_lab_orl = tipo_ex_lab_orl_multi_examen;
-                    fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + id_tipo_ex_lab_orl + '</td>';
-                    fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + tipo_ex_lab_orl_nombre_real + '</td>';
+                        id_tipo_ex_lab_oft = tipo_ex_lab_oft_multi_examen;
+                    fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + id_tipo_ex_lab_oft + '</td>';
+                    fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + tipo_ex_lab_oft_nombre_real + '</td>';
 
 
-                    fila +=     '<td class="text-center align-middle text-wrap">' + tipo_ex_lab_orl_nombre + '</td>';
-                    fila +=     '<td class="text-center align-middle text-wrap">Otorrinolaringológico</td>';
-                    fila +=     '<td class="text-center align-middle text-wrap">' + examen_esp_orl_prioridad + '</td>';
+                    fila +=     '<td class="text-center align-middle text-wrap">' + tipo_ex_lab_oft_nombre + '</td>';
+                    if(lado_ex_lab_oft == 'Seleccione')
+                        fila +=     '<td class="text-center align-middle text-wrap"> </td>';
+                    else
+                        fila +=     '<td class="text-center align-middle text-wrap">' + lado_ex_lab_oft + '</td>';
+                    fila +=     '<td class="text-center align-middle text-wrap">Oftalmológico</td>';
+                    fila +=     '<td class="text-center align-middle text-wrap">' + examen_esp_oft_prioridad + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">N/C</td>';
-                    fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_orl(\'row' + i + '\');">Quitar</div></td>';
+                    fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_oft(\'row' + i + '\');">Quitar</div></td>';
                     fila += '</tr>';
 
                     i++;
-                    $('#tabla_examen_esp_orl tr:first').after(fila);
+                    $('#tabla_examen_esp_oft tr:first').after(fila);
                 }
-                else if(otro_examen_examen_orl !='' && tipo_ex_lab_orl == 'otro')
+                else if(otro_examen_examen_oft !='' && tipo_ex_lab_oft == 'otro')
                 {
                     var fila = '';
-                    fila += '<tr class="tr_examen_esp_orl" id="row' + i + '">';
-                    fila +=     '<td class="text-center align-middle text-wrap">' + otro_examen_examen_orl + '</td>';
-                    fila +=     '<td class="text-center align-middle text-wrap">Otorrinolaringológico</td>';
-                    fila +=     '<td class="text-center align-middle text-wrap">' + examen_esp_orl_prioridad + '</td>';
+                    fila += '<tr class="tr_examen_esp_oft" id="row' + i + '">';
+                    fila +=     '<td class="text-center align-middle text-wrap">' + otro_examen_examen_oft + '</td>';
+                    if(lado_ex_lab_oft == 'Seleccione')
+                        fila +=     '<td class="text-center align-middle text-wrap"> </td>';
+                    else
+                        fila +=     '<td class="text-center align-middle text-wrap">' + lado_ex_lab_oft + '</td>';
+                    fila +=     '<td class="text-center align-middle text-wrap">Oftalmológico</td>';
+                    fila +=     '<td class="text-center align-middle text-wrap">' + examen_esp_oft_prioridad + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">N/C</td>';
-                    fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_orl(\'row' + i + '\');">Quitar</div></td>';
+                    fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_oft(\'row' + i + '\');">Quitar</div></td>';
                     fila += '</tr>';
 
                     i++;
-                    $('#tabla_examen_esp_orl tr:first').after(fila);
+                    $('#tabla_examen_esp_oft tr:first').after(fila);
                 }
 
-                if(tipo_ex_rx_orl != '' && tipo_ex_rx_orl != 'otro')
+                if(tipo_ex_rx_oft != '' && tipo_ex_rx_oft != 'otro')
                 {
                     var fila = '';
                         fila += '<tr class="tr_examen_cirugia" id="row' + i + '">';
-                        var id_tipo_ex_rx_orl ='';
-                        if(tipo_ex_rx_orl_multi_examen == '')
-                            id_tipo_ex_rx_orl = tipo_ex_rx_orl;
+                        var id_tipo_ex_rx_oft ='';
+                        if(tipo_ex_rx_oft_multi_examen == '')
+                            id_tipo_ex_rx_oft = tipo_ex_rx_oft;
                         else
-                            id_tipo_ex_rx_orl = tipo_ex_rx_orl_multi_examen;
-                        fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + id_tipo_ex_rx_orl + '</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + tipo_ex_rx_orl_nombre_real + '</td>';
+                            id_tipo_ex_rx_oft = tipo_ex_rx_oft_multi_examen;
+                        fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + id_tipo_ex_rx_oft + '</td>';
+                        fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + tipo_ex_rx_oft_nombre_real + '</td>';
 
-                        fila +=     '<td class="text-center align-middle text-wrap">' + tipo_ex_rx_orl_nombre + '</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap">Otorrinolaringológico</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap">' + examen_esp_orl_prioridad + '</td>';
+                        fila +=     '<td class="text-center align-middle text-wrap">' + tipo_ex_rx_oft_nombre + '</td>';
+                        if(lado_ex_rx_oft == 'Seleccione')
+                            fila +=     '<td class="text-center align-middle text-wrap"> </td>';
+                        else
+                            fila +=     '<td class="text-center align-middle text-wrap">' + lado_ex_rx_oft + '</td>';
+                        fila +=     '<td class="text-center align-middle text-wrap">Oftalmológico</td>';
+                        fila +=     '<td class="text-center align-middle text-wrap">' + examen_esp_oft_prioridad + '</td>';
                         var text_con_contraste = 'Sin Contraste';
-                        if(tipo_ex_rx_orl_contraste == 1)
+                        if(tipo_ex_rx_oft_contraste == true)
                             text_con_contraste = 'Con Contraste';
                         fila +=     '<td class="text-center align-middle text-wrap">' + text_con_contraste + '</td>';
-                        fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_orl(\'row' + i + '\');">Quitar</div></td>';
+                        fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_oft(\'row' + i + '\');">Quitar</div></td>';
                         fila += '</tr>';
 
                     i++;
-                    $('#tabla_examen_esp_orl tr:first').after(fila);
+                    $('#tabla_examen_esp_oft tr:first').after(fila);
 
-
-                    $('#tabla_examen_esp_orl tr').each(function(key, value)
+                    if(tipo_ex_rx_oft_contraste == true)
                     {
-                        $(value).find('td').each(function(key_td, value_td)
+                        $('#tabla_examen_esp_oft tr').each(function(key, value)
                         {
-                            if(key_td == 0)
+                            $(value).find('td').each(function(key_td, value_td)
                             {
-                                if($(value_td).text() == 'CREATININA EN SANGRE')
+                                if(key_td == 0)
                                 {
-                                    creatinina = 1;
+                                    if($(value_td).text() == 'CREATININA EN SANGRE')
+                                    {
+                                        creatinina = 1;
+                                    }
                                 }
-                            }
+                            });
                         });
-                    });
 
-                    if(creatinina == 0)
-                    {
-                        fila = '';
-                        fila += '<tr class="tr_examen_cirugia CREATININA" id="row' + i + '">';
-                        fila +=     '<td class="text-center align-middle text-wrap" style="display:none">85</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap" style="display:none">CREATININA EN SANGRE</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap">CREATININA EN SANGRE</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap">SANGRE</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap">Media</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap">N/C</td>';
-                        fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_orl_contraste(\'row' + i + '\');creatinina=1;">Quitar</div></td>';
-                        fila += '</tr>';
-                        $('#tabla_examen_esp_orl tr:first').after(fila);
-                        i++;
-                        creatinina = 1;
+                        if(creatinina == 0)
+                        {
+                            fila = '';
+                            fila += '<tr class="tr_examen_cirugia CREATININA" id="row' + i + '">';
+                            fila +=     '<td class="text-center align-middle text-wrap" style="display:none">78</td>';
+                            fila +=     '<td class="text-center align-middle text-wrap" style="display:none">CREATININA EN SANGRE</td>';
+                            fila +=     '<td class="text-center align-middle text-wrap">CREATININA EN SANGRE</td>';
+                            fila +=     '<td class="text-center align-middle text-wrap"> </td>';
+                            fila +=     '<td class="text-center align-middle text-wrap">SANGRE</td>';
+                            fila +=     '<td class="text-center align-middle text-wrap">Media</td>';
+                            fila +=     '<td class="text-center align-middle text-wrap">N/C</td>';
+                            fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_oft_contraste(\'row' + i + '\');creatinina=1;">Quitar</div></td>';
+                            fila += '</tr>';
+                            $('#tabla_examen_esp_oft tr:first').after(fila);
+                            i++;
+                            creatinina = 1;
+                        }
                     }
+
+
                 }
-                else if(otro_examen_examen_rx_orl !='' && tipo_ex_lab_orl == 'otro')
+                else if(otro_examen_examen_rx_oft !='' && tipo_ex_lab_oft == 'otro')
                 {
                     var fila = '';
-                    fila += '<tr class="tr_examen_esp_orl" id="row' + i + '">';
+                    fila += '<tr class="tr_examen_esp_oft" id="row' + i + '">';
                     fila +=     '<td class="text-center align-middle text-wrap" style="display:none">0</td>';
-                    fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + otro_examen_examen_rx_orl + '</td>';
-                    fila +=     '<td class="text-center align-middle text-wrap">' + otro_examen_examen_rx_orl + '</td>';
-                    fila +=     '<td class="text-center align-middle text-wrap">Otorrinolaringológico</td>';
-                    fila +=     '<td class="text-center align-middle text-wrap">' + examen_esp_orl_prioridad + '</td>';
+                    fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + otro_examen_examen_rx_oft + '</td>';
+                    fila +=     '<td class="text-center align-middle text-wrap">' + otro_examen_examen_rx_oft + '</td>';
+                    if(lado_ex_rx_oft == 'Seleccione')
+                        fila +=     '<td class="text-center align-middle text-wrap"> </td>';
+                    else
+                        fila +=     '<td class="text-center align-middle text-wrap">' + lado_ex_rx_oft + '</td>';
+                    fila +=     '<td class="text-center align-middle text-wrap">Oftalmológico</td>';
+                    fila +=     '<td class="text-center align-middle text-wrap">' + examen_esp_oft_prioridad + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">N/C</td>';
-                    fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_orl(\'row' + i + '\');">Quitar</div></td>';
+                    fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_oft(\'row' + i + '\');">Quitar</div></td>';
                     fila += '</tr>';
 
                     i++;
-                    $('#tabla_examen_esp_orl tr:first').after(fila);
+                    $('#tabla_examen_esp_oft tr:first').after(fila);
                 }
 
-                $('#tipo_ex_lab_orl').val('');
-                $('#otro_examen_examen_orl').val('');
-                $('#tipo_ex_rx_orl').val('');
-                $('#otro_examen_examen_rx_orl').val('');
-                $('#examen_esp_orl_examen').val('');
-                $('#examen_esp_orl_prioridad').val('2');
+                $('#tipo_ex_lab_oft').val('');
+                $('#otro_examen_examen_oft').val('');
+                $('#tipo_ex_rx_oft').val('');
+                $('#otro_examen_examen_rx_oft').val('');
+                $('#examen_esp_oft_examen').val('');
+                $('#examen_esp_oft_prioridad').val('2');
+                $('#lado_ex_rx_oft').val('0');
+                $('#lado_ex_lab_oft').val('0');
+                $('#imagenologia_con_contraste_ex_rx_oft').prop('checked', false);
+                $('#mensaje_imagenologia_con_contraste_ex_rx_oft').hide();
 
-                mostrar_otros('tipo_ex_lab_orl','div_otros_examen_orl','otro');
-                mostrar_otros('tipo_ex_rx_orl','div_otros_examen_rx_orl','otro');
+                mostrar_otros('tipo_ex_lab_oft','div_otros_examen_oft','otro');
+                mostrar_otros('tipo_ex_rx_oft','div_otros_examen_rx_oft','otro');
             }
             else
             {
@@ -469,11 +512,11 @@
 
         }
 
-        function eliminar_examen_orl(id_row){
-            $('#tabla_examen_esp_orl [id='+id_row+']').remove();
+        function eliminar_examen_oft(id_row){
+            $('#tabla_examen_esp_oft [id='+id_row+']').remove();
         }
 
-        function eliminar_examen_orl_contraste(id_row)
+        function eliminar_examen_oft_contraste(id_row)
         {
             swal({
                 title: "Eliminar Examen relacionado con contraste.",
@@ -487,24 +530,27 @@
                 }
                 else
                 {
-                    $('#tabla_examen_esp_orl [id='+id_row+']').remove();
+                    $('#tabla_examen_esp_oft [id='+id_row+']').remove();
                     creatinina = 0;
                 }
             });
         }
 
-        function registro_examen_ficha_orl() {
+        function registro_examen_ficha_oft() {
             var rows1 = [];
-            $('#tabla_examen_esp_orl tr').each(function(i, n) {
+            $('#tabla_examen_esp_oft tr').each(function(i, n) {
                 if (i > 0) {
                     rol = {};
                     var data = $(this).find("td");
                     rol["id_examen"] = $.trim($(data[0]).text().split("\n").join(""));
                     rol["nombre_examen"] = $.trim($(data[1]).text().split("\n").join(""));
+                    rol["lado"] = $.trim($(data[3]).text().split("\n").join(""));
                     rol["nombre_examen_especialidad"] = $.trim($(data[2]).text().split("\n").join(""));
-                    rol["tipo"] = $.trim($(data[3]).text().split("\n").join(""));
-                    rol["prioridad"] = $.trim($(data[4]).text().split("\n").join(""));
-                    rol["con_contraste"] = $.trim($(data[5]).text().split("\n").join(""));
+                    rol["tipo"] = $.trim($(data[4]).text().split("\n").join(""));
+                    // rol["subtipo"] = $.trim($(data[2]).text().split("\n").join(""));
+                    rol["prioridad"] = $.trim($(data[5]).text().split("\n").join(""));
+                    rol["con_contraste"] = $.trim($(data[6]).text().split("\n").join(""));
+
                     rows1.push(rol);
                 }
             });
@@ -548,7 +594,7 @@
                                 // buttons: "Aceptar",
                                 //SuccessMode: true,
                             });
-                            $('#indicar_examen_orl').modal('hide');
+                            $('#indicar_examen_oft').modal('hide');
                         }
                         else
                         {
@@ -561,7 +607,7 @@
                                     // buttons: "Aceptar",
                                     //SuccessMode: true,
                                 });
-                                $('#indicar_examen_orl').modal('hide');
+                                $('#indicar_examen_oft').modal('hide');
                             }
                             else
                             {
@@ -603,7 +649,7 @@
 
             var _token = CSRF_TOKEN;
             var id_ficha = $('#id_fc').val();
-            $('#tabla_examen_esp_orl').html('');
+            $('#tabla_examen_esp_oft').html('');
 
             $.ajax({
 
@@ -630,6 +676,7 @@
                     html += '        <th class="text-center align-middle" style="display:none">id</th>';
                     html += '        <th class="text-center align-middle" style="display:none">Nombre Real</th>';
                     html += '        <th class="text-center align-middle">Nombre Examen</th>';
+                    html += '        <th class="text-center align-middle">Lado</th>';
                     html += '        <th class="text-center align-middle">Tipo</th>';
                     {{--  html += '        <th class="text-center align-middle">Sub-Tipo</th>';  --}}
                     html += '        <th class="text-center align-middle">Prioridad</th>';
@@ -657,6 +704,7 @@
                                 else
                                     nombre = value.examen_especialidad;
                                 html += '    <td class="text-center align-middle text-wrap">'+nombre+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap">'+value.otro+'</td>';
 
                                 html += '    <td class="text-center align-middle text-wrap">'+value.tipo_examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+prioridad[value.id_prioridad]+'</td>';
@@ -664,7 +712,7 @@
                                 if(value.con_contraste == 1)
                                     text_con_contraste = 'Con Contraste';
                                 html += '    <td class="text-center align-middle text-wrap">'+text_con_contraste+'</td>';
-                                html += '    <td class="text-center align-middle text-wrap"><div name="remove" id="' + index +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_orl_contraste(\'row' + index + '\');">Quitar</div></td>';
+                                html += '    <td class="text-center align-middle text-wrap"><div name="remove" id="' + index +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_oft_contraste(\'row' + index + '\');">Quitar</div></td>';
                                 html += '</tr>';
                             }
                             else
@@ -680,13 +728,14 @@
                                 else
                                     nombre = value.examen_especialidad;
                                 html += '    <td class="text-center align-middle text-wrap">'+nombre+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap">'+value.otro+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+value.tipo_examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+prioridad[value.id_prioridad]+'</td>';
                                 var text_con_contraste = 'N/C';
                                 if(value.con_contraste == 1)
                                     text_con_contraste = 'Con Contraste';
                                 html += '    <td class="text-center align-middle text-wrap">'+text_con_contraste+'</td>';
-                                html += '    <td class="text-center align-middle text-wrap"><div name="remove" id="' + index +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_orl(\'row' + index + '\');">Quitar</div></td>';
+                                html += '    <td class="text-center align-middle text-wrap"><div name="remove" id="' + index +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_oft(\'row' + index + '\');">Quitar</div></td>';
                                 html += '</tr>';
                             }
                         });
@@ -701,7 +750,7 @@
 
                     }
                     html += '</tbody>';
-                    $('#tabla_examen_esp_orl').html(html);
+                    $('#tabla_examen_esp_oft').html(html);
                 }
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
