@@ -198,7 +198,7 @@ class DocumentoFcPacienteController extends Controller
                         'NOMBRE_PACIENTE' => mb_strtoupper($nombre_pc),
                         'NOMBRE_PROFESIONAL' => mb_strtoupper($nombre_pf)
                     );
-                    $archivo = $registro->url;/** ruta relativa */
+                    $archivo = public_path($registro->url);/** ruta relativa */
                     $id_institucion = '';
 
                     $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
