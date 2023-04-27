@@ -215,7 +215,7 @@ class EscritorioPaciente extends Controller
         foreach ($fichas as $f) {
             array_push($profesional, $f->profesional()->first());
             $profesional_ = Profesional::with('Especialidad')->find($f->id_profesional);
-            array_push($profesion,$profesional_->Especialidad->nombre);
+            $profesion[$profesional_->Especialidad->id] = $profesional_->Especialidad->nombre;                
         }
 
         foreach ($fichas_desvinculados as $d) {
@@ -224,7 +224,8 @@ class EscritorioPaciente extends Controller
 
         $id_usuario = Auth::user()->id;
 
-        $lista_especialidad = array_unique($profesion);
+        //$lista_especialidad = array_unique($profesion);
+        $lista_especialidad = $profesion;               
 
         // var_dump(Auth::user()->id);
         // var_dump($profesional);

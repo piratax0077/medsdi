@@ -29,8 +29,8 @@
                 <div class="card">
                     <div class="card-body">
                         <ul class="nav nav-pills bg-white" id="myTab" role="tablist">
-                        @foreach( $lista_especialidad as $le)
-                            <li class="nav-item" onclick="active_e('{{$le}}')">
+                        @foreach( $lista_especialidad as $key => $le)
+                            <li class="nav-item" onclick="active_e('{{$key}}')">
                                 <a class="btn btn-outline-info btn-sm mr-1 my-1" id="user2-tab" data-toggle="tab" href="#user2" role="tab" aria-controls="user2" aria-selected="false">{{$le}}</a>
                             </li>
                         @endforeach
@@ -72,7 +72,7 @@
                                 @foreach( $profesional as $p)
                                     @if(in_array($p->id, $desvinculados)==false)
                                     <!--Card Tomar Hora Perfil Médico -->
-                                    <div class="col-md-4 filtro_le le_{{ $p->Especialidad()->first()->nombre }}">
+                                    <div class="col-md-4 filtro_le le_{{ $p->id_especialidad }}">
                                         <div class="card user-card user-card-1 mt-4">
                                             <div class="card-body pt-0">
                                                 <div class="user-about-block text-center">
