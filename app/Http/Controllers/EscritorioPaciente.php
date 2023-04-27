@@ -253,13 +253,14 @@ class EscritorioPaciente extends Controller
         $lugar = 'Sistema';
         $profesional = Auth::user()->name;
         $tipo = 'Check SDI';
+        $id_tipo = 2; // CHECK FUM - ficha medica unica
 
         if($request->token)
         {
             Funciones::disablePermApp($request->token);
         }
 
-        $permiso = Funciones::generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo);
+        $permiso = Funciones::generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo,$id_tipo);
 
         return view('check_sdi', [
             'url_nueva' => $url_nueva,

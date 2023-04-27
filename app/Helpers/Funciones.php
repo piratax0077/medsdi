@@ -166,15 +166,15 @@ class Funciones{
         }
     }
 
-    public function generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo = 'confirmacion'){
+    public function generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo = 'confirmacion',$tipo_id){
 
         $datos = array();
         /** calculo de periodo de vigencia para aprobacion */
-        $fecha =date('Y-m-d');
-        $hora = date('H:i:s');
+        $fecha = date('Y-m-d');
+        $hora =  date('H:i:s');
         $fecha_actual  = date('Y-m-d H:i:s', strtotime($fecha.' '.$hora));
         $fecha_vencimiento  = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.(int)env('TIEMPO_ESPERA_CONFIRMACION').' hours' , strtotime ($fecha_actual) ) );
-        $fecha_expira = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.((int)env('TIEMPO_ESPERA_CONFIRMACION')+(int)env('TIEMPO_EXP_PERMISO')).' hours' , strtotime ($fecha_actual) ) );
+        $fecha_expira = date ('Y-m-d H:i:s' ,strtotime ( '+'.((int)env('TIEMPO_ESPERA_CONFIRMACION')+(int)env('TIEMPO_EXP_PERMISO')).' hours' , strtotime ($fecha_actual) ) );
 
         $id = LogUsersDevices::latest()->first();
         if(is_object($id)==false)
@@ -203,7 +203,7 @@ class Funciones{
         $log_users_devices->estado = 0;
         $log_users_devices->fecha_ingreso = $fecha_actual;
         $log_users_devices->fecha_termino = $fecha_vencimiento;
-        $log_users_devices->tipo = 3; // confirmacion hora
+        $log_users_devices->tipo = $tipo_id; // check sdi // ESTRUCTURA DE TEXTO
         $log_users_devices->token = md5(uniqid());
         $log_users_devices->fecha_exp = $fecha_expira;
 
