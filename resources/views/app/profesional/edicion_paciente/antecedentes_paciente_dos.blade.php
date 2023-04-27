@@ -441,7 +441,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="title-antecedente">Agregar Antecedente</h5>                    
+                        <h5 class="modal-title" id="title-antecedente">Agregar Antecedente</h5>                                            
                         <button type="button" class="close" onclick="verModalAgregar('hide')" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -493,7 +493,9 @@
                             <h5 class="mb-0 text-white">
                                 Anestesias Paciente
                             </h5>
+                            @if(Auth::user()->hasRole('Profesional'))
                             <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)"></button>
+                            @endif
                         </div>                        
                         <div class="card-body border-top collapse show" >
                             <div class="container">
@@ -537,7 +539,9 @@
                             <h5 class="mb-0 text-white">
                                 Patologías Crónicas
                             </h5>
+                            @if(Auth::user()->hasRole('Profesional'))
                             <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',2,0)"></button>
+                            @endif
                         </div>
 
                         <div class="card-body border-top collapse show" >
@@ -580,7 +584,9 @@
                             <h5 class="mb-0 text-white">
                                 Medicamentos de uso Crónico
                             </h5>
+                            @if(Auth::user()->hasRole('Profesional'))
                             <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',3,0)"></button>
+                            @endif
                         </div>
                         
                         <div class="card-body border-top collapse show" >
@@ -625,7 +631,9 @@
                             <h5 class="mb-0 text-white">
                                     Antecedentes Quirúrgicos
                             </h5>
+                            @if(Auth::user()->hasRole('Profesional'))
                             <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',4,0)"></button>
+                            @endif
                         </div>
                        
                         <div class="card-body border-top collapse show" >
@@ -670,7 +678,9 @@
                             <h5 class="mb-0 text-white">
                                     Antecedentes de Alergias
                             </h5>
+                            @if(Auth::user()->hasRole('Profesional'))
                             <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',5,0)"></button>
+                            @endif
                         </div>
                        
                         <div class="card-body border-top collapse show" >
@@ -711,7 +721,9 @@
                             <h5 class="mb-0 text-white">
                                     Antecedentes de Enfermedades crónicas
                             </h5>
+                            @if(Auth::user()->hasRole('Profesional'))
                             <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',6,0)"></button>
+                            @endif
                         </div>
                        
                         <div class="card-body border-top collapse show" >
@@ -750,7 +762,9 @@
                             <h5 class="mb-0 text-white">
                                     Antecedentes de Medicamento Crónico
                             </h5>
+                            @if(Auth::user()->hasRole('Profesional'))
                             <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',7,0)"></button>
+                            @endif
                         </div>
                         
                         <div class="card-body border-top collapse show" >
