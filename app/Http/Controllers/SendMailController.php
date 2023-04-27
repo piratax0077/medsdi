@@ -167,7 +167,8 @@ class SendMailController extends Controller
         $cc = array();
         $bcc = array();
         $asunto = 'MED-SDI - Codigo Registro APP';
-        $body = array('CODIGO'=>'12345', 'nombre_cliente'=> 'demo demo');
+        $body = array('CODIGO'=>'12345', 'NOMBRE_CLIENTE'=> 'demo demo', 'URL'=>'455646');
+        // $archivo = 'documentos/consejosodontopediatría.pdf';/** pendiente */
         $archivo = '';/** pendiente */
         $id_institucion = '';
 

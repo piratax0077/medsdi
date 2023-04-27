@@ -61,6 +61,7 @@ use App\Models\FichaPediatriaGeneralTipo;
 use App\Models\FichaUro;
 use App\Models\FichaUroTipo;
 use App\Models\RecetaAudifono;
+use App\Models\TipoInforme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -1156,6 +1157,7 @@ class ficha_atencionController extends Controller
         $error = array();
         $valido = 1;
 
+
         if(empty($request->comentarios_informe_medico)) {
             $error['comentarios_informe_medico'] = 'campo requerido';
             $valido = 0;
@@ -1175,7 +1177,13 @@ class ficha_atencionController extends Controller
 
             $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
 
+            $tipo_informe = $request->tipo_informe;
+            if(empty($request->tipo_informe)) {
+                $tipo_informe = 1;
+            }
+
             $informe = new InformeMedico();
+            $informe->id_tipo_informe = $tipo_informe;
             $informe->informe_medico = $request->comentarios_informe_medico;
             $informe->fecha_informe_medico = date('Y-m-d');
             $informe->id_paciente = $hora_medica->id_paciente;
@@ -1191,7 +1199,7 @@ class ficha_atencionController extends Controller
             }
             else
             {
-                $delete  = InformeMedico::where('id_ficha_atencion', $hora_medica->id_ficha_atencion)->whereNotIn('id', [$informe->id])->delete();
+                $delete  = InformeMedico::where('id_ficha_atencion', $hora_medica->id_ficha_atencion)->where('id_tipo_informe', $tipo_informe)->whereNotIn('id', [$informe->id])->delete();
                 $datos['estado'] = 1;
                 $datos['mjs'] = 'registro exitoso';
                 $datos['delete'] = $delete;
@@ -4525,17 +4533,53 @@ class ficha_atencionController extends Controller
     public function pdf_informe_medico(Request $request)
     {
         $datos = array();
-        $informMedico = InformeMedico::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
-        if($informMedico->count()>0)
+        $filtro = array();
+        $filtro[] = array('id_ficha_atencion', $request->id_ficha_atencion);
+        if(!empty($request->id_tipo_informe))
+            $filtro[] = array('id_tipo_informe', $request->id_tipo_informe);
+        else
+            $filtro[] = array('id_tipo_informe', 1);
+
+        $informMedico = InformeMedico::where($filtro)->first();
+        if($informMedico)
         {
+            $tipo_informe = TipoInforme::find($informMedico->id_tipo_informe);
             $ficha_atencion = FichaAtencion::find($request->id_ficha_atencion);
             $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
             $profesional = Profesional::find($ficha_atencion->id_profesional);
             $paciente = Paciente::find($ficha_atencion->id_paciente);
 
-            $token_firma = encrypt( $profesional->rut.'_'.$profesional->email.'_'.$lugar_atencion->id );
+            /** token receta */
+            $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 1);
+            if($temp_token['estado'] == 1)
+            {
+                $token_receta = $temp_token['certificado'];
+                $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                $qr_documento = GeneradorQrController::generar($url_documento);
+            }
+            else
+            {
+                $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 1);
+                $token_receta = $temp_token['certificado'];
+                $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                $qr_documento = GeneradorQrController::generar($url_documento);
+            }
 
-            $token_receta = '';
+            /** token profesional */
+            $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+            if($temp_token['estado'] == 1)
+            {
+                $token_profesional = $temp_token['certificado'];
+                $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                $qr_profesional = GeneradorQrController::generar($url_documento);
+            }
+            else
+            {
+                $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                $token_profesional = $temp_token['certificado'];
+                $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                $qr_profesional = GeneradorQrController::generar($url_documento);
+            }
 
             $detalle_informe_medico = array(
                 'informe_medico' => $informMedico->informe_medico,
@@ -4546,6 +4590,8 @@ class ficha_atencionController extends Controller
                 'id' => $ficha_atencion->id,
                 'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
                 'token' => $token_receta,
+                'url' => $url_documento,
+                'qr' => $qr_documento,
             );
             $array_lugar_atencion = array(
                 'id' => $lugar_atencion->id,
@@ -4555,23 +4601,27 @@ class ficha_atencionController extends Controller
                 'id' => $profesional->id,
                 'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
                 'rut' => $profesional->rut,
-                'especialidad' => $profesional->SubTipoEspecialidad()->first()->nombre,
-                'token' =>  $token_firma,
+                'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
+                'token' =>  $token_profesional,
+                'url' =>  $url_profesional,
+                'qr' =>  $qr_profesional,
             );
             $array_paciente = array(
                 'id' => $paciente->id,
                 'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
                 'fecha_nac' => $paciente->fecha_nac,
                 'rut' => $paciente->rut,
+                'sexo' => $paciente->sexo,
                 'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
             );
 
-            return  PdfController::generarPDF('INFORME MEDICO', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_informe_medico'), 'Informe Medico '.$paciente->rut, 'pdf_informe_medico');
+            return  PdfController::generarPDF(strtoupper($tipo_informe->nombre), compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_informe_medico'), $tipo_informe->nombre.' '.$paciente->rut, $tipo_informe->pdf);
         }
         else
         {
             $datos['estado'] = 0;
-            $datos['msj'] = 'No se encontraron medicamentos';
+            $datos['msj'] = 'No se encontraron Documento';
+            return $datos;
         }
     }
 

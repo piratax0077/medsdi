@@ -6,13 +6,15 @@
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <embed src="{{ asset('documentos\pediatria\prev. accidentes.pdf') }}" type="application/pdf" width="100%" height="800px"/>
+                <embed src="{{ asset('documentos\pediatria\prev. accidentes.pdf') }}" type="application/pdf" data-documento="prev. accidentes.pdf" data-url="documentos\pediatria\prev. accidentes.pdf" width="100%" height="800px"/>
               </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info btn-sm">Enviar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="envio_indicaciones_pdf('modal_prev_acc');">Enviar al Paciente</button>
             </div>
         </div>
     </div>
 </div>
+
+

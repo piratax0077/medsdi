@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class ConRechazoTratamiento extends Model
 {
     use HasFactory;
-    protected $table = 'con_rehazo_tratamiento';
+    protected $table = 'con_rechazo_tratamiento';
 }

@@ -103,10 +103,22 @@ class EscritorioPaciente extends Controller
         $region = Region::all();
         $prevision = Prevision::all();
 
+
         if (isset($paciente)) {
-            return view('app.paciente.escritorio_paciente')->with('paciente', $paciente);
+
+            if($paciente->bienvenida == 1)
+            {
+                $paciente->bienvenida = 0;
+                $paciente->save();
+                return view('bienvenida.pacientes')->with(['regiones' => $region ]);
+            }
+            else
+            {
+                return view('app.paciente.escritorio_paciente')->with('paciente', $paciente);
+            }
         }
 
+        /** formulario nuevos */
         return view('auth.Registros.registro_paciente')->with(['region' => $region, 'prevision' => $prevision]);
     }
 
@@ -1033,4 +1045,14 @@ class EscritorioPaciente extends Controller
 
         return json_encode($hora_medica);
     }
+
+
+	/** MIS CONTROLES PERSONALES */
+
+	public function mis_controles()
+	{
+		return view('app.paciente.mis_controles');
+	}
+
 }
+
