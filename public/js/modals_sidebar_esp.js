@@ -178,10 +178,6 @@ function parpados() {
             }
 
     /** UTILIDADES **/
-        /** Buscador de código FONASA **/
-        function ufonasa (){
-                $('#modal_codfonasa').modal('show');
-            }
 
         /** Cálculo de edad gestacional **/
         function uedadgest (){

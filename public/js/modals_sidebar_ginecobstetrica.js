@@ -15,7 +15,7 @@
             }
 
 /** FORMULARIOS GINECO-OBSTETRICOS **/
-    
+
     /** EXÁMENES ESPECÍFICOS **/
         /** Modal ecografía gineco-obstétrica **/
         function eco_obstetrica (){
@@ -139,10 +139,6 @@
             }
 
     /** UTILIDADES **/
-        /** Buscador de código FONASA **/
-        function ufonasa (){
-                $('#modal_codfonasa').modal('show');
-            }
 
         /** Cálculo de edad gestacional **/
         function uedadgest (){
