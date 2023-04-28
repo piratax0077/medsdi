@@ -13,9 +13,9 @@
                             <h5>Búsqueda por código<h5>
                         </div>
                         <div class="input-group col-sm-12 col-md-12 mb-3">
-                            <input type="number" class="form-control form-control-sm" placeholder="Ingresar código">
+                            <input type="number" class="form-control form-control-sm" placeholder="Ingresar código" name="modal_codfonasa_codigo" id="modal_codfonasa_codigo">
                             <div class="input-group-append">
-                                <button class="btn btn-primary btn-sm" type="button" id="button-addon2">Buscar</button>
+                                <button class="btn btn-primary btn-sm" type="button" id="button-addon2" onclick="buscar_por_codigo();">Buscar</button>
                             </div>
                         </div>
                     </div>
@@ -23,9 +23,9 @@
                         <div class="col-sm-12 col-md-12 mb-2">
                             <h6>Resultado de la búsqueda<h6>
                         </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="alert alert-success" role="alert">
-                                22839482349
+                        <div class="col-sm-12 col-md-12" name="modal_codfonasa_mensaje_codigo" id="modal_codfonasa_mensaje_codigo">
+                            <div class="alert alert-info" role="alert">
+                                Ingrese valor para realizar la busqueda
                             </div>
                         </div>
                     </div>
@@ -38,9 +38,9 @@
                             <h5 class="text-c-blue">Búsqueda por nombre<h5>
                         </div>
                         <div class="input-group col-sm-12 col-md-12 mb-3">
-                            <input type="text" class="form-control form-control-sm" placeholder="Ingresar nombre">
+                            <input type="text" class="form-control form-control-sm" placeholder="Ingresar nombre" name="modal_codfonasa_nombre" id="modal_codfonasa_nombre">
                             <div class="input-group-append">
-                                <button class="btn btn-primary btn-sm" type="button" id="button-addon2">Buscar</button>
+                                <button class="btn btn-primary btn-sm" type="button" id="button-addon2" onclick="buscar_por_nombre();">Buscar</button>
                             </div>
                         </div>
                     </div>
@@ -48,9 +48,9 @@
                         <div class="col-sm-12 col-md-12 mb-2">
                             <h6>Resultado de la búsqueda<h6>
                         </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="alert alert-danger" role="alert">
-                                No se han encontrado resultados de tu búsqueda
+                        <div class="col-sm-12 col-md-12" name="modal_codfonasa_mensaje_nombre" id="modal_codfonasa_mensaje_nombre">
+                            <div class="alert alert-info" role="alert">
+                                Ingrese valor para realizar la busqueda
                             </div>
                         </div>
                     </div>
@@ -59,3 +59,99 @@
         </div>
     </div>
 </div>
+
+<script>
+    function ufonasa (){
+        $('#modal_codfonasa').modal('show');
+    }
+
+    function buscar_por_codigo()
+    {
+        $('#modal_codfonasa_mensaje_codigo').html('');
+        let url = "{{ route('fonasa.buscar.por.codigo') }}";
+        var valor = $('#modal_codfonasa_codigo').val();
+        if(valor != '')
+        {
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    valor:valor
+                },
+                success: (resp)=>{
+                    if(resp.estado==1)
+                    {
+                        var texto = '';
+                        if(resp.cantidad>0)
+                        {
+                            $.each(resp.registros, function (key, value) {
+                                texto += '<strong>'+value.codigo+'</strong> - '+value.nombre+'<br>';
+                            });
+                            $('#modal_codfonasa_mensaje_codigo').html('<div class="alert alert-success" role="alert">'+texto+'</div>');
+                        }
+                        else
+                        {
+                            $('#modal_codfonasa_mensaje_codigo').html('<div class="alert alert-danger" role="alert">No se han encontrado resultados de tu búsqueda</div>');
+                        }
+                    }
+                    else
+                    {
+                        $('#modal_codfonasa_mensaje_codigo').html('<div class="alert alert-danger" role="alert">No se han encontrado resultados de tu búsqueda</div>');
+                    }
+                },
+                error: (resp)=>{
+                    console.warn(resp);
+                }
+            });
+        }
+        else
+        {
+            $('#modal_codfonasa_mensaje_codigo').html('<div class="alert alert-danger" role="alert">No ha ingresado valor para realizar la busqueda, intente nuevamente</div>');
+        }
+    }
+
+    function buscar_por_nombre()
+    {
+        $('#modal_codfonasa_mensaje_nombre').html('');
+        let url = "{{ route('fonasa.buscar.por.nombre') }}";
+        var valor = $('#modal_codfonasa_nombre').val();
+        if(valor != '')
+        {
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    valor:valor
+                },
+                success: (resp)=>{
+                    if(resp.estado==1)
+                    {
+                        var texto = '';
+                        if(resp.cantidad>0)
+                        {
+                            $.each(resp.registros, function (key, value) {
+                                texto += '<strong>'+value.codigo+'</strong> - '+value.nombre+'<br>';
+                            });
+                            $('#modal_codfonasa_mensaje_nombre').html('<div class="alert alert-success" role="alert">'+texto+'</div>');
+                        }
+                        else
+                        {
+                            $('#modal_codfonasa_mensaje_nombre').html('<div class="alert alert-danger" role="alert">No se han encontrado resultados de tu búsqueda</div>');
+                        }
+                    }
+                    else
+                    {
+                        $('#modal_codfonasa_mensaje_nombre').html('<div class="alert alert-danger" role="alert">No se han encontrado resultados de tu búsqueda</div>');
+                    }
+                },
+                error: (resp)=>{
+                    console.warn(resp);
+                }
+            });
+        }
+        else
+        {
+            $('#modal_codfonasa_mensaje_nombre').html('<div class="alert alert-danger" role="alert">No ha ingresado valor para realizar la busqueda, intente nuevamente</div>');
+        }
+    }
+</script>
