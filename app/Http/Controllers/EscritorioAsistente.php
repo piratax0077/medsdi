@@ -47,7 +47,10 @@ class EscritorioAsistente extends Controller
 
 
         if (isset($asistente)) {
-            return view($url)->with($array_data);
+            if($asistente->bienvenido == 0)
+                return view('bienvenida.inicio_asistente');
+            else
+                return view($url)->with($array_data);
         }
 
         return view('auth.Registros.registro_asistente')->with(['region' => $region, 'prevision' => $prevision]);

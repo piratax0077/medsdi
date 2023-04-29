@@ -483,8 +483,9 @@ class EscritorioProfesional extends Controller
             $lugar_atencion_prof = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->count();
             $horario_prof = ProfesionalHorario::where('id_profesional', $profesional->id)->count();
 
-            if($lugar_atencion_prof == 0 || $horario_prof == 0)
-                return view('bienvenida.profesionales')->with(['regiones' => $region, 'profesional' => $profesional]);
+            //if($profesional->bienvenida == 0)
+            if( $lugar_atencion_prof == 0 )
+                return view('bienvenida.inicio_profesionales')->with(['regiones' => $region, 'profesional' => $profesional]);
             else
                 return view('app.profesional.escritorio_profesional')->with(['region' => $region, 'profesional' => $profesional, 'hora_dia' => $horas_dia]);
         }
