@@ -225,6 +225,7 @@ class EscritorioPaciente extends Controller
         // var_dump($profesional);
         return view('app.paciente.medicos_paciente',
         [
+            'paciente' => $paciente,
             'id_usuario' => $id_usuario,
             'profesional' => $profesional,
             'desvinculados' => $desvinculados,

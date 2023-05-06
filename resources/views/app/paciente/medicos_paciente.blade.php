@@ -108,7 +108,8 @@
                                                     </a>
                                                     <p class="mb-3 text-muted">
                                                         <!--<i class="feather icon-calendar"></i></p>-->
-                                                    <a class="btn btn-sm btn-info" href='{{ url("Paciente/Reservar_Hora/{$p->id_especialidad}/{$p->id_tipo_especialidad}/{$p->id_sub_tipo_especialidad}") }}' role="button">Agendar Hora</a>
+                                                    <!--<a class="btn btn-sm btn-info" href='{{ url("Paciente/Reservar_Hora/{$p->id_especialidad}/{$p->id_tipo_especialidad}/{$p->id_sub_tipo_especialidad}") }}' role="button">Agendar Hora</a>-->
+                                                    <div class="btn btn-sm btn-info" onclick="hora_medica({{$p->id}},0);">Agendar Hora</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -127,6 +128,9 @@
     </div>
 </div>
 <!--Cierre: Container Completo-->
+
+@include("general.reserva_hora.modal.tomar_hora")
+
 @endsection
 
 @section('page-script')
