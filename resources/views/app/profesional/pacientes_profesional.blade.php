@@ -68,6 +68,12 @@
                                                         {{ $p->telefono_uno }}
                                                     </td>
                                                     <td class="text-center align-middle">
+                                                        @if($p->id_usuario)
+                                                        <a href="{{ ROUTE('check_sdi', ['id_recept' => $p->id_usuario,'urla'=> 'Profesional/Mis_pacientes','urln' => 'Mi_Ficha_Medica']) }}" 
+                                                            class="btn btn-primary btn-icon" data-toggle="tooltip"
+                                                            data-placement="top" title="Ficha Médica Única"><i
+                                                                class="feather icon-file-plus"></i></a>
+                                                        @endif        
                                                         <a href="{{ ROUTE('profesional.atenciones_previas_paciente', $p->id) }}"
                                                             class="btn btn-icon btn-info" data-toggle="tooltip" data-placement="top"
                                                             title="Atenciones Previas"><i class="feather icon-activity"></i></a>

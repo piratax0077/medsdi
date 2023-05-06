@@ -159,7 +159,13 @@
                                     <div class="col-md-12"><h5>Grupo Sanguíneo</h5></div>
                                 </div>   
                                 <div class="form-group fill">
-                                    <label for="inputEmail4"><span id="grupo_sanguineo">{{$grupo_sanguineo->nombre_gs}}</span></label>                                                                        
+                                    <label for="inputEmail4">
+                                        <span id="grupo_sanguineo">
+                                            @if($grupo_sanguineo->nombre_gs)    
+                                            {{$grupo_sanguineo->nombre_gs}}                                                                                      
+                                            @endif
+                                        </span>
+                                    </label>                                                                        
                                 </div>        
                                 <div class="row">
                                     <div class="col-md-12"><h5>Medicamentos de Uso Crónico</h5></div>
@@ -167,12 +173,14 @@
                                 <div class="form-group fill">
                                     <label for="inputEmail4"><span id="medicamento_uso_cronico"></span></label>                                                                        
                                 </div>   
+                                <!--
                                 <div class="row">
                                     <div class="col-md-12"><h5>¿Acepta Transfusiones?</h5></div>
                                 </div>               
                                 <div class="form-group fill">
                                     <label for="inputEmail4"><span id="acepta_transfusiones"></span></label>                                                                        
                                 </div>                                        
+                                -->
                             </div>
                             <div class="col-sm-6">
                                 <div class="row">
@@ -222,33 +230,83 @@
                                     <div class="col-md-12"><h5>Donante Parcial</h5></div>
                                 </div>   
                                 <div class="form-group fill">
-                                    <label for="inputEmail4"><span id="medicamento_uso_cronico">{{$antecedentes_paciente->dona_organos_parcial}}</span></label>                                                                        
+                                    <label for="inputEmail4">
+                                        <span id="medicamento_uso_cronico">
+                                            @if($antecedentes_paciente->dona_organos_parcial == '1')    
+                                            Sí
+                                            @elseif($antecedentes_paciente->dona_organos_parcial == '0')
+                                            No
+                                            @else
+                                            {{$antecedentes_paciente->dona_organos_parcial}}
+                                            @endif
+                                        </span>
+                                    </label>                                                                        
                                 </div>   
                                 <div class="row">
                                     <div class="col-md-12"><h5>Organos a Donar</h5></div>
                                 </div>               
                                 <div class="form-group fill">
-                                    <label for="inputEmail4"><span id="acepta_transfusiones">{{$antecedentes_paciente->dona_organos}}</span></label>                                                                        
+                                    <label for="inputEmail4">
+                                        <span id="acepta_transfusiones">
+                                            @if($antecedentes_paciente->dona_organos == '1')    
+                                            Sí
+                                            @elseif($antecedentes_paciente->dona_organos == '0')
+                                            No
+                                            @else
+                                            {{$antecedentes_paciente->dona_organos}}
+                                            @endif
+                                        </span>
+                                    </label>                                                                        
                                 </div>        
                                 <div class="row">
                                     <div class="col-md-12"><h5>Donar Sangre</h5></div>
                                 </div>               
                                 <div class="form-group fill">
-                                    <label for="inputEmail4"><span id="acepta_transfusiones">{{$antecedentes_paciente->dona_sangre}}</span></label>                                                                        
+                                    <label for="inputEmail4">
+                                        <span id="acepta_transfusiones">
+                                            @if($antecedentes_paciente->dona_sangre == '1')    
+                                            Sí
+                                            @elseif($antecedentes_paciente->dona_sangre == '0')
+                                            No
+                                            @else
+                                            {{$antecedentes_paciente->dona_sangre}}
+                                            @endif
+                                        </span>
+                                    </label>                                                                        
                                 </div>                                    
                             </div>
                             <div class="col-sm-6">
                                 <div class="row">
-                                    <div class="col-md-12"><h5>Realiza Transfusiones</h5></div>
+                                    <div class="col-md-12"><h5>Aceptas Transfusiones</h5></div>
                                 </div>   
                                 <div class="form-group fill">
-                                    <label for="inputEmail4"><span id="ultimas_cirugias">{{$antecedentes_paciente->transfusion}}</span></label>                                                                        
+                                    <label for="inputEmail4">
+                                        <span id="ultimas_cirugias">
+                                        @if($antecedentes_paciente->transfusion == '1')    
+                                        Sí
+                                        @elseif($antecedentes_paciente->transfusion == '0')
+                                        No
+                                        @else
+                                        {{$antecedentes_paciente->transfusion}}
+                                        @endif
+                                        </span>
+                                    </label>                                                                        
                                 </div>        
                                 <div class="row">
                                     <div class="col-md-12"><h5>Impedimento Donar</h5></div>
                                 </div>   
                                 <div class="form-group fill">
-                                    <label for="inputEmail4"><span id="enfermedades_cronicas">{{$antecedentes_paciente->impedimento_donar}}</span></label>                                                                        
+                                    <label for="inputEmail4">
+                                        <span id="enfermedades_cronicas">
+                                            @if($antecedentes_paciente->impedimento_donar == '1')    
+                                            Sí
+                                            @elseif($antecedentes_paciente->impedimento_donar == '0')
+                                            No
+                                            @else
+                                            {{$antecedentes_paciente->impedimento_donar}}
+                                            @endif
+                                        </span>
+                                    </label>                                                                        
                                 </div>                                  
                             </div>                           
                         </div>                        

@@ -333,6 +333,8 @@
 
 @section('page-script')
     <script>
+     @if($filtros['id_profesion']!=0&&$filtros['id_especialidad']!=0)
      buscar_profesional_especialidad();
+     @endif
     </script>
 @endsection

@@ -160,6 +160,8 @@ class Funciones{
             if($state['registro']['estado'] != 1)
             {
              abort(401);
+            }else{
+                return $state['registro'];
             }
         }else{
             abort(401);

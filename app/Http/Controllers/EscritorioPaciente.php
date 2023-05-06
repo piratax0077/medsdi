@@ -242,10 +242,14 @@ class EscritorioPaciente extends Controller
     {
         $url_anterior = $request->urla;
         $url_nueva = $request->urln;
+        $id_usuario_recept = (int)$request->id_recept;
 
         $id_usuario = Auth::user()->id;
 
         $id_user_create = $id_usuario;
+        if($id_usuario_recept!=0)
+        $id_user_recept = $id_usuario_recept;
+        else
         $id_user_recept = $id_usuario;
         $evento = 'Ficha Única';
         $nombre = Auth::user()->name;
@@ -264,6 +268,7 @@ class EscritorioPaciente extends Controller
         $permiso = Funciones::generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo,$id_tipo);
 
         return view('check_sdi', [
+            'id_recept' => $id_user_recept,
             'url_nueva' => $url_nueva,
             'url_anterior' => $url_anterior,
             'token' => $permiso['app']['token'],
@@ -280,10 +285,11 @@ class EscritorioPaciente extends Controller
     public function miFichaMedica(Request $request)
     {
         //VALIDAR TOKEN
-        Funciones::validTokenPermApp($request->token);
+        $registro = Funciones::validTokenPermApp($request->token);
 
 
-        $id_usuario = Auth::user()->id;
+        //capturamos el id_usuario receptor
+        $id_usuario = $registro['id_user_recept'];
 
         /* PACIENTE */
         $paciente = Paciente::where('id_usuario', $id_usuario)->first();
@@ -387,10 +393,16 @@ class EscritorioPaciente extends Controller
 
         ]);
     }
+    
 
     public function miFichaMedicaPdfView(Request $request)
     {
-        $id_usuario = Auth::user()->id;
+        //VALIDAR TOKEN
+        $registro = Funciones::validTokenPermApp($request->token);
+
+
+        //capturamos el id_usuario receptor
+        $id_usuario = $registro['id_user_recept'];
 
         /* PACIENTE */
         $paciente = Paciente::where('id_usuario', $id_usuario)->first();

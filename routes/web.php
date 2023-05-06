@@ -276,7 +276,7 @@ Route::group([
     Route::get('desvincular_profesional/{id_usuario}/{id_profesional}', [App\Http\Controllers\EscritorioPaciente::class, 'miProfesionales'])->name('paciente.desvincular_profesional');
 
     Route::get('Check_sdi',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdi'])->name('check_sdi'); // PARAMS OBLIGATORIOS urla=Inicio&urln=Mi_Ficha_Medica
-    // Route::get('Check_sdi_token',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdiToken'])->name('check_sdi_token'); // se traspaso a grupo de paciente y profesional
+    Route::get('Check_sdi_token',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdiToken'])->name('check_sdi_token'); // se traspaso a grupo de paciente y profesional
     Route::get('Mi_Ficha_Medica', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('paciente.mi_ficha');
     Route::get('Mi_Ficha_Medica_Pdf', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedicaPdfView']);
 
@@ -363,6 +363,10 @@ Route::group(
         Route::post('Perfil/Agregar_contacto', [ContactoEmergenciaController::class, 'registrar_contacto_emergencia'])->name('contacto_emergencia.registrar_contacto_emergencia');
         Route::post('buscar_contacto', [ContactoEmergenciaController::class, 'buscar_contacto'])->name('contacto_emergencia.buscar_contacto');
         Route::get('Check_sdi_token',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdiToken'])->name('check_sdi_token');
+        Route::get('Check_sdi',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdi'])->name('check_sdi'); // PARAMS OBLIGATORIOS urla=Inicio&urln=Mi_Ficha_Medica
+        Route::get('Mi_Ficha_Medica', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('profesional.mi_ficha');
+        Route::get('Mi_Ficha_Medica_Pdf', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedicaPdfView']);
+
     }
 );
 
