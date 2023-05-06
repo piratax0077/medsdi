@@ -25,7 +25,7 @@
     <!-- data tables css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
-
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
 
     <!-- fileupload-custom css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">

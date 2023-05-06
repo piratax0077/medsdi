@@ -106,16 +106,10 @@ class EscritorioPaciente extends Controller
 
         if (isset($paciente)) {
 
-            if($paciente->bienvenida == 1)
-            {
-                $paciente->bienvenida = 0;
-                $paciente->save();
-                return view('bienvenida.pacientes')->with(['regiones' => $region ]);
-            }
+            if($paciente->bienvenida == 0)
+                return view('bienvenida.inicio_pacientes');
             else
-            {
                 return view('app.paciente.escritorio_paciente')->with('paciente', $paciente);
-            }
         }
 
         /** formulario nuevos */
@@ -215,7 +209,7 @@ class EscritorioPaciente extends Controller
         foreach ($fichas as $f) {
             array_push($profesional, $f->profesional()->first());
             $profesional_ = Profesional::with('Especialidad')->find($f->id_profesional);
-            $profesion[$profesional_->Especialidad->id] = $profesional_->Especialidad->nombre;                
+            $profesion[$profesional_->Especialidad->id] = $profesional_->Especialidad->nombre;
         }
 
         foreach ($fichas_desvinculados as $d) {
@@ -225,7 +219,7 @@ class EscritorioPaciente extends Controller
         $id_usuario = Auth::user()->id;
 
         //$lista_especialidad = array_unique($profesion);
-        $lista_especialidad = $profesion;               
+        $lista_especialidad = $profesion;
 
         // var_dump(Auth::user()->id);
         // var_dump($profesional);

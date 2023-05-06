@@ -9,7 +9,7 @@
 				</ul>
             </div>
             <div class="col-sm-12 col-md-12">
-                <form action="{{ route('fichaAtencion.registrar_ficha_orl') }}" method="POST">
+                <form action="{{ route('fichaAtencion.registrar_ficha_cg') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
                     <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
@@ -67,8 +67,12 @@
                                         </div>
 
 
-										<!--cirugia general-->
-										<div class="col-sm-12 col-md-12">
+
+
+										<!--CIRUGIA GENERAL-->
+                                        @include('general.secciones_ficha.cirugia_general.cirugia_adulto')
+                                        {{--
+                                        <div class="col-sm-12 col-md-12">
                                             <div class="card">
                                                 <div class="card-header" id="cirugia_general">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#cirugia_general_c" aria-expanded="false" aria-controls="cirugia_general_c">
@@ -193,184 +197,12 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        --}}
+
+
 
                                         <!--Formulario / Signos vitales y otros-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="signosvit-otros">
-                                                    <button class="accor-open btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#signosvit-otros-c" aria-expanded="false" aria-controls="signosvit-otros-c">
-                                                        Signos vitales y otros
-                                                    </button>
-                                                </div>
-                                                <div id="signosvit-otros-c" class="collapse" aria-labelledby="signosvit-otros" data-parent="#signosvit-otros">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-1">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->temperatura != null)
-                                                                    <label class="floating-label-activo-sm">Tº</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="temperatura" id="temperatura" value="{{ $fichaAtencion->temperatura }}">
-                                                                @else
-                                                                    <label class="floating-label-activo-sm">Tº</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="temperatura" id="temperatura" value="{!! old('temperatura') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-1">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->pulso != null)
-                                                                    <label class="floating-label-activo-sm">Pulso</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="pulso" id="pulso" value="{{ $fichaAtencion->pulso }}">
-                                                                @else
-                                                                    <label class="floating-label-activo-sm">Pulso</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="pulso" id="pulso" value="{!! old('pulso') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->frecuencia_reposo != null)
-                                                                <label class="floating-label-activo-sm">Frec.
-                                                                    Reposo</label>
-                                                                <input type="text" class="form-control form-control-sm" name="frecuencia_reposo" id="frecuencia_reposo" value="{{ $fichaAtencion->frecuencia_reposo }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Frec.
-                                                                    Reposo</label>
-                                                                <input type="text" class="form-control form-control-sm" name="frecuencia_reposo" id="frecuencia_reposo" value="{!! old('frecuencia_reposo') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->peso != null)
-                                                                <label class="floating-label-activo-sm">Peso</label>
-                                                                <input type="text" class="form-control form-control-sm" name="peso" id="peso" value="{{ $fichaAtencion->peso }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Peso</label>
-                                                                <input type="text" class="form-control form-control-sm" name="peso" id="peso" value="{!! old('peso') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->talla != null)
-                                                                <label class="floating-label-activo-sm">Talla</label>
-                                                                <input type="text" class="form-control form-control-sm" name="talla" id="talla" value="{{ $fichaAtencion->talla }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Talla</label>
-                                                                <input type="text" class="form-control form-control-sm" name="talla" id="talla" value="{!! old('talla') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->imc != null)
-                                                                <label class="floating-label-activo-sm">IMC</label>
-                                                                <input type="text" class="form-control form-control-sm" name="imc" id="imc" value="{{ $fichaAtencion->imc }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">IMC</label>
-                                                                <input type="text" class="form-control form-control-sm" name="imc" id="imc" value="{!! old('imc') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->estado_nutricional != null)
-                                                                <label class="floating-label-activo-sm">Estado
-                                                                    Nutricional</label>
-                                                                <input type="text" class="form-control form-control-sm" name="estado_nutricional" id="estado_nutricional" value="{{ $fichaAtencion->estado_nutricional }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Estado
-                                                                    Nutricional</label>
-                                                                <input type="text" class="form-control form-control-sm" name="estado_nutricional" id="estado_nutricional" value="{!! old('estado_nutricional') !!}">
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="form-group mb-1">
-                                                                <label><strong>Presión Arterial</strong></label>
-                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                    <input type="checkbox" id="p_arterial" value="{!! old('p_arterial') !!}">
-                                                                    <label for="p_arterial" class="cr"></label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row" id="form_1" style="display:none">
-                                                            <div class="form-group col-md-3">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->presion_bi !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">BI</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_bi" id="presion_bi" value="{{ $fichaAtencion->presion_bi }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">BI</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_bi" id="presion_bi" value="{!! old('presion_bi') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->presion_bd !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">BD</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_bd" id="presion_bd" value="{{ $fichaAtencion->presion_bd }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">BD</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_bd" id="presion_bd" value="{!! old('presion_bd') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->presion_de_pie !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">De pié</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_de_pie" id="presion_de_pie" value="{{ $fichaAtencion->presion_de_pie }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">De pié</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_de_pie" id="presion_de_pie" value="{!! old('presion_de_pie') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->presion_sentado !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">Sentado</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_sentado" id="presion_sentado" value="{{ $fichaAtencion->presion_sentado }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Sentado</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_sentado" id="presion_sentado" value="{!! old('presion_sentado') !!}">
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="form-group mb-1">
-                                                                <label><strong>Comunicación y traslado</strong></label>
-                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                    <input type="checkbox" id="com_trasl" value="{!! old('com_trasl') !!}">
-                                                                    <label for="com_trasl" class="cr"></label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row" id="form_2" style="display:none">
-                                                            <div class="form-group col-md-4">
-                                                                @if (isset($fichaAtencion) &&
-                                                                $fichaAtencion->ct_estado_conciencia != null)
-                                                                <label class="floating-label-activo-sm">Estado de
-                                                                    conciencia</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_estado_conciencia" id="ct_estado_conciencia" value="{{ $fichaAtencion->ct_estado_conciencia }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Estado de
-                                                                    conciencia</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_estado_conciencia" id="ct_estado_conciencia" value="{!! old('ct_estado_conciencia') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->ct_lenguaje !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">Lenguaje</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_lenguaje" id="ct_lenguaje" value="{{ $fichaAtencion->ct_lenguaje }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Lenguaje</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_lenguaje" id="ct_lenguaje" value="{!! old('ct_lenguaje') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->ct_traslado !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">Traslado</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_traslado" id="ct_traslado" value="{{ $fichaAtencion->ct_traslado }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Traslado</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_traslado" id="ct_traslado" value="{!! old('ct_traslado') !!}">
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @include('atencion_medica.generales.signos_vitales')
                                         <!--Cierre: Formulario / Signos vitales y otros-->
 
                                         <!-- control post qx -->
@@ -444,7 +276,7 @@
                                                         <div class="form-row">
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
-                                                                <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis" name="hip-diag_spec" id="hip-diag_spec" onchange="cargarIgual('hip-diag_spec')" >
+                                                                <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis" name="hip_diag_spec" id="hip_diag_spec" onchange="cargarIgual('hip_diag_spec')" >
                                                             </div>
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Indicaciones</label>
@@ -505,7 +337,7 @@
                 useThousandsSeparator : false
             });
             /** fin formulario pestaña 1 */
-            $('#hip-diag_spec').keyup(function(){
+            $('#hip_diag_spec').keyup(function(){
                 if($.trim(this.value) != ''){
                     $('.btn_agregar_medicamento').removeAttr("disabled");
                     $('.btn_medicamento_pdf').removeAttr("disabled");
@@ -671,61 +503,6 @@
             }
         }
 
-        function abrir_modal_guardar_tipo(div_id_data, div_id_detalle,tipo)
-        {
-            if(tipo == 'cdg')
-            {
-                $('#btn_modal_registrar_ficha_tipo_dg').click(function(){
-                    guardar_tipo_ficha_cdg();
-                });
-            }
-            else if(tipo == 'cg')
-            {
-                $('#btn_modal_registrar_ficha_tipo_dg').click(function(){
-                    guardar_tipo_ficha_cg();
-                });
-            }
-            $('#modal_registrar_ficha_tipo_dg').modal('show');
-
-            cargarSeccion(div_id_detalle,div_id_data);
-        }
-
-        function cargarSeccion(div_destino, div_data)
-        {
-            // var tipo = $('#'+select+'').val();
-            $('#'+div_destino).html('');
-            $('#'+div_data).find('select,textarea').each(function(key, elemento){
-                html ='';
-                html +='<div class="row" style="margin-top:10px;">';
-                if($(elemento).prop('nodeName') == 'SELECT')
-                {
-                    if($(elemento).val() == 0)
-                        $(elemento).val(1)
-
-                    html +='<div class="col-md-4">'+$(elemento).data('titulo')+'</div>';
-                    html +='<div class="col-md-4">';
-                    html +='    '+$('#'+$(elemento).attr('id')+' option:selected').text()+'';
-                    html +='    <input type="hidden" name="modal_agregar_tipo_'+$(elemento).attr('id')+'" id="modal_agregar_tipo_'+$(elemento).attr('id')+'" value="'+$(elemento).val()+'">';
-                    html +='</div>';
-                }
-                else if($(elemento).prop('nodeName') == 'TEXTAREA')
-                {
-                    html +='<div class="col-md-4">'+$(elemento).data('titulo')+'</div>';
-                    html +='<div class="col-md-6">';
-                    html +='    <textarea class="form-control caja-texto form-control-sm '+$(elemento).attr('id')+'_editar" style="display:none;" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_'+$(elemento).attr('id')+'" id="observaciones_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</textarea>';
-                    html +='    <label class="'+$(elemento).attr('id')+'_mostrar" id="label_observacion_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</label>';
-                    html +='</div>';
-                    html +='<div class="col-md-2">';
-                    html +='    <button class="btn btn-sm btn-success '+$(elemento).attr('id')+'_mostrar"  onclick="cambiar_div(\''+$(elemento).attr('id')+'_editar'+'\',\''+$(elemento).attr('id')+'_mostrar'+'\',\'label_observacion_'+$(elemento).attr('id')+'\',\'observaciones_'+$(elemento).attr('id')+'\')">Editar</button>';
-                    html +='    <button class="btn btn-sm btn-success '+$(elemento).attr('id')+'_editar" style="display:none;" onclick="cambiar_div(\''+$(elemento).attr('id')+'_mostrar'+'\',\''+$(elemento).attr('id')+'_editar'+'\',\'label_observacion_'+$(elemento).attr('id')+'\',\'observaciones_'+$(elemento).attr('id')+'\')">Guardar</button>';
-                    html +='</div>';
-
-                }
-                html +='</div>';
-                $('#'+div_destino).append(html);
-            });
-        }
-
         function cambiar_div(mostrar, ocultar, label, textarea){
             $('.'+mostrar).show();
             $('.'+ocultar).hide();
@@ -833,102 +610,7 @@
 
         }
 
-        function guardar_tipo_ficha_cg()
-        {
-            var registro_f_t_cg_nombre = $('#registro_f_t_cg_nombre').val();
-            var registro_f_t_cg_descripcion = $('#registro_f_t_cg_descripcion').val();
-            var _token = CSRF_TOKEN;
-            if(registro_f_t_cg_nombre == ''){
-                swal({
-                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Nombre",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    });
-                    return false;
-            }
-            if(registro_f_t_cg_descripcion == ''){
-                swal({
-                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    });
-                    return false;
-            }
 
-
-            var data = [];
-            data.registro_f_t_cg_nombre = registro_f_t_cg_nombre;
-            data.registro_f_t_cg_descripcion = registro_f_t_cg_descripcion;
-
-            $('#registro_f_t_cg_detalle').find('input,textarea').each(function(key, elemento){
-                {{--  console.log($(elemento).attr('id'));  --}}
-                {{--  console.log($(elemento).val());  --}}
-                {{--  console.log($(elemento).prop('nodeName'));  --}}
-                {{--  console.log('*******');  --}}
-
-                data[$(elemento).attr('id')] = $(elemento).val();
-
-            });
-
-            {{--  console.log(data);  --}}
-            url = "{{ route('profesional.ficha_tipo_cg') }}";
-            $.ajax({
-
-                url: url,
-                type: "POST",
-                data: {
-                    _token: _token,
-                    id_profesional : $('#id_profesional_fc').val(),
-                    ind_esp_cirugia : '',
-                    nombre : data.registro_f_t_cg_nombre,
-                    descripcion : data.registro_f_t_cg_descripcion,
-                    organo_cg : data.modal_agregar_tipo_organo_cg,
-                    obs_organo_cg : data.observaciones_obs_organo_cg,
-                    ceg_cg : data.modal_agregar_tipo_ceg_cg,
-                    obs_ceg_cg : data.observaciones_obs_ceg_cg,
-                    masa_cg : data.modal_agregar_tipo_masa_cg,
-                    obs_masas_cg : data.observaciones_obs_masas_cg,
-                    urgencia_cg : data.modal_agregar_tipo_urgencia_cg,
-                    obs_urgencia_cg : data.observaciones_obs_urgencia_cg,
-                    so_cg : data.modal_agregar_tipo_so_cg,
-                    obs_so_cg : data.observaciones_obs_so_cg,
-                    obs_egp_cg : data.observaciones_obs_egp_cg,
-                    obs_gen_ex_esp_cg : data.observaciones_obs_gen_ex_esp_cg,
-                },
-            })
-            .done(function(data)
-            {
-                {{--  console.log('-----------------------');  --}}
-                {{--  console.log(data);  --}}
-                {{--  console.log('-----------------------');  --}}
-                if(data.estado == 1)
-                {
-                    $('#modal_registrar_ficha_tipo_dg').modal('hide');
-                    swal({
-                        title: "Tipo Ficha Registrado",
-                        icon: "success",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                }
-                else{
-
-                    swal({
-                        title: "Problema al Registrar Tipo Ficha.",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                }
-
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-        }
 
         function cargar_info_ficha_tipo_cdg(select, div_descripcion)
         {
@@ -1007,80 +689,7 @@
             });
         }
 
-        function cargar_info_ficha_tipo_cg(select, div_descripcion)
-        {
-            let id_ft = $('#'+select).val();
-            if(id_ft == '')
-            {
-                $('#'+div_descripcion).html('');
-                $('#form-cg').find('select,textarea').each(function(key, elemento){
-                    if($(elemento).prop('nodeName') == 'SELECT')
-                    {
-                        $(elemento).val(1);
-                    }
-                    else
-                    {
-                        $(elemento).val('');
-                    }
-                });
 
-                evaluar_para_carga_detalle('organo_cg','div_detalle_organo','obs_organo_cg',2);
-                evaluar_para_carga_detalle('ceg_cg','div_detalle_ceg_cg','obs_ceg_cg',2);
-                evaluar_para_carga_detalle('masa_cg','div_detalle_masa_cg','obs_masas_cg',2);
-                evaluar_para_carga_detalle('urgencia_cg','div_detalle_urgencia_cg','obs_urgencia_cg',2);
-                evaluar_para_carga_detalle('so_cg','div_detalle_so_cg','obs_so_cg',2);
-
-                return false;
-            }
-            $('#'+div_descripcion).html($('#'+select+' option:selected').attr('data-descripcion'));
-
-            url = "{{ route('profesional.buscar_ficha_tipo_cg') }}";
-            $.ajax({
-
-                url: url,
-                type: "GET",
-                data: {
-                    id_profesional : $('#id_profesional_fc').val(),
-                    id_ficha_tipo :  id_ft,
-                },
-            })
-            .done(function(data)
-            {
-                {{--  console.log('-----------------------');  --}}
-                {{--  console.log(data);  --}}
-                {{--  console.log('-----------------------');  --}}
-                if(data.estado == 1)
-                {
-                    $.each(data.registros, function(index, value)
-                    {
-                        {{--  console.log(index);  --}}
-                        {{--  console.log(value);  --}}
-                        {{--  console.log($('#'+index));  --}}
-
-                        $('#'+index).val(value);
-                    });
-                    evaluar_para_carga_detalle('organo_cg','div_detalle_organo','obs_organo_cg',2);
-                    evaluar_para_carga_detalle('ceg_cg','div_detalle_ceg_cg','obs_ceg_cg',2);
-                    evaluar_para_carga_detalle('masa_cg','div_detalle_masa_cg','obs_masas_cg',2);
-                    evaluar_para_carga_detalle('urgencia_cg','div_detalle_urgencia_cg','obs_urgencia_cg',2);
-                    evaluar_para_carga_detalle('so_cg','div_detalle_so_cg','obs_so_cg',2);
-
-                }
-                else{
-
-                    swal({
-                        title: "Problema al Cargar Tipo Ficha.",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                }
-
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        }
 
         function agregar_medicamentos_ficha() {
 

@@ -31,9 +31,15 @@ function ind_endoscopia() {
     $('#ind_endoscopia_modal').modal('show');
 }
 
-function ingreso() {
-    $('#ingreso_modal').modal('show');
+function ind_endoscopia() {
+    $('#ind_endoscopia_modal').modal('show');
 }
+
+
+function sol_pabellon() {
+    $('#ingreso_sol_pab_modal').modal('show');
+}
+
 
 function r_ingreso() {
     $('#modal_ireqingreso').modal('show');
@@ -52,17 +58,7 @@ function i_lente() {
     $('#indicar_lente').modal('show');
 }
 
-/** biopsia cisto**/
 
-function biopsia_cisto() {
-    if ($('#biopsia_cisto').prop('checked')) {
-        $('#m_biopsia_cir').modal('show');
-    }
-}
-
-function biopsia_prost() {
-    $('#m_biopsia_cirugia').modal('show');
-}
 /** Indicar examen **/
 function i_examen() {
     $('#indicar_examenes').modal('show');
@@ -113,6 +109,21 @@ function i_indic_derm() {
 function i_examen_espoft() {
     $('#indicar_examen_oft').modal('show');
 }
+/**psicologia */
+
+function cons_tto_psi() {
+    $('#m_aconsentcirm').modal('show');
+}
+
+function psi_rorsch() {
+    $('#test_rorsch').modal('show');
+}
+/**nutricion */
+function cons_tto_nutri() {
+    $('#m_aconsentcirm').modal('show');
+}
+
+
 /** fonoaudiologia **/
 function interfono() {
     $('#modal_interfono').modal('show');
@@ -311,10 +322,41 @@ function inter() {
 
 
 
-/** Autorización examen menor de edad **/
+/** consentimientos sidebar **/
 // function solicitar_autorizacion() {
 //     $('#m_acomp1').modal('show');
 // }
+// function cons_tto() {
+//     $('#m_aconsentcirm').modal('show');
+// }
+
+// function solalta() {
+//     $('#solalta').modal('show');
+// }
+
+// function c_faltante() {
+//     $('#cfaltante').modal('show');
+// }
+
+// function f_faltante() {
+//     $('#ffaltante').modal('show');
+// }
+
+// function sugerencias() {
+//     $('#fsugerencias').modal('show');
+// }
+
+// function cons_revtto() {
+//     $('#m_rev_cons').modal('show');
+// }
+
+// function rechtto() {
+//     $('#m_rech_tto').modal('show');
+// }
+
+
+
+
 
 
 /** TOGGLE **/

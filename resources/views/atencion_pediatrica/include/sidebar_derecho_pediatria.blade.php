@@ -122,33 +122,51 @@
                  </div>
 
                  <div class="card-sidebar">
-                     <div class="card-header-sidebar" id="heading_recom">
-                         <h2 class="mb-0">
-                         <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_recom" aria-expanded="false" aria-controls="collapse_recom"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
-                         INDICACIONES A PACIENTES
-                         </button>
-                         </h2>
-                     </div>
-                     <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_side_bar">
-                         <div class="card-body-sidebar">
-                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="prev_acc()";>+ Prevension de Accidentes</button>
-                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ipostparto()";>+ Cuidados Post Parto</button>
-                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ilactan()";>+ Indicaciones  acerca de lactancia</button>
-                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="tlactan()";>+ Técnica de lactancia</button>
-                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="i_ingreso()";>+ Requisitos de ingreso</button>
-                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="icirugia()";>+ Indicaciones post cirugía</button>
-                         </div>
-                         @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.m_ipostparto")
-                         @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.modal_prev_accidentes")
-                         @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.m_ilactancia")
-                         @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.m_tlactancia")
-                         @include("general.modal.ingreso")
-                         @include("general.modal.m_cuidados_cirugia")
-                         @include("general.modal.m_req_ingreso")
-                     </div>
+                    <div class="card-header-sidebar" id="heading_recom">
+                        <h2 class="mb-0">
+                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_recom" aria-expanded="false" aria-controls="collapse_recom"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                        INDICACIONES A PACIENTES
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_side_bar">
+                        <div class="card-body-sidebar">
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="prev_acc()";>+ Prevension de Accidentes</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ipostparto()";>+ Cuidados Post Parto</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ilactan()";>+ Indicaciones  acerca de lactancia</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="tlactan()";>+ Técnica de lactancia</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="icirugia()";>+ Indicaciones post cirugía</button>
+                        </div>
+                        @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.m_ipostparto")
+                        @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.modal_prev_accidentes")
+                        @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.m_ilactancia")
+                        @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.m_tlactancia")
+						@include("general.modal.m_cuidados_cirugia")
+                    </div>
 
-                 </div>
-                  <div class="card-sidebar">
+                </div>
+				<div class="card-sidebar">
+                    <div class="card-header-sidebar" id="heading_hosp">
+                        <h2 class="mb-0">
+                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_hosp" aria-expanded="false" aria-controls="collapse_hosp"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                        FORMULARIOS DE HOSPITALIZACIÓN
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapse_hosp" class="collapse" aria-labelledby="headinghospm" data-parent="#accordion_side_bar">
+                        <div class="card-body-sidebar">
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="sol_pabellon()";>+ Solicitud Pabellón</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingreso()";>+ Hospitalización Cirugía</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingresomedico() ";>+ Hospitalización Tratamiento Médico</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="r_ingreso()";>+ Requisitos de ingreso</button>
+                        </div>
+                    </div>
+                    @include("general.modal.in_solic_pabellon")
+                    @include("general.modal.ingreso")
+                    @include("general.modal.ingreso_medico")
+                    @include("general.modal.m_req_ingreso")
+                </div>
+                <div class="card-sidebar">
                      <div class="card-header-sidebar" id="heading_sugerencias">
                          <h2 class="mb-0">
                          <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_sugerencias" aria-expanded="false" aria-controls="collapse_sugerencias"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
@@ -166,7 +184,7 @@
                      @include("general.modal.m_form_faltante")
                      @include("general.modal.m_sugerencias")
                      @include("general.modal.m_consent_faltante")
-                 </div>
+                </div>
             </div>
         </div>
     </div>

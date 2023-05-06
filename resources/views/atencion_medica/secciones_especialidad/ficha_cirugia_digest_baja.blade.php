@@ -73,12 +73,12 @@
                                         <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
-                                                <div class="card-header" id="exam_esp">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_c" aria-expanded="false" aria-controls="exam_esp_c">
+                                                <div class="card-header" id="exam_esp_cdb">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_cdb_c" aria-expanded="false" aria-controls="exam_esp_cdb_c">
                                                         Examen especialidad
                                                     </button>
                                                 </div>
-                                                <div id="exam_esp_c" class="collapse" aria-labelledby="exam_esp" data-parent="#exam_esp">
+                                                <div id="exam_esp_cdb_c" class="collapse" aria-labelledby="exam_esp_cdb" data-parent="#exam_esp_cdb">
                                                     <div class="card-body-aten shadow-none">
                                                         <div class="row">
                                                             <div class="col-md-6">
@@ -248,134 +248,10 @@
                                             </div>
                                         </div>
 
-										<!--cirugia general-->
-										<div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="cirugia_general">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#cirugia_general_c" aria-expanded="false" aria-controls="cirugia_general_c">
-                                                        Cirugia General
-                                                    </button>
-                                                </div>
-                                                <div id="cirugia_general_c" class="collapse" aria-labelledby="cirugia_general" data-parent="#cirugia_general">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Carga Ficha Tipo</label>
-                                                                    <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad_cirugia" onchange="cargar_info_ficha_tipo_cg('select_ficha_tipo_especialidad_cirugia','descripcion_ficha_tipo_especialidad_cirugia');">
-                                                                        <option value="">Seleccione</option>
-                                                                        @if(!empty($fichaTipo['cg']))
-                                                                            @foreach ($fichaTipo['cg'] as $ft )
-                                                                                <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
-                                                                            @endforeach
-                                                                        @endif
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <span id="descripcion_ficha_tipo_especialidad_cirugia"></span>
-                                                            </div>
-                                                        </div>
-
-                                                        <div id="form-cg">
-                                                            <div class="form-row mb-2">
-                                                                <div class="col-md-12">
-                                                                    <h5 style="text-align:center;">Cirugía General</h5>
-                                                                </div>
-                                                            </div>
-                                                            <hr>
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Organo</label>
-                                                                            <select name="organo_cg" id="organo_cg" data-titulo="Organo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('organo_cg','div_detalle_organo','obs_organo_cg',2)">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_organo" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Organo</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Organo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_organo_cg" id="obs_organo_cg"></textarea>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Compromiso estado General</label>
-                                                                            <select name="ceg_cg" id="ceg_cg" data-titulo="Compromiso estado General" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ceg_cg','div_detalle_ceg_cg','obs_ceg_cg',2)">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_ceg_cg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Compromiso estado General</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Compromiso estado General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ceg_cg" id="obs_ceg_cg"></textarea>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Masas Palpables</label>
-                                                                            <select name="masa_cg" id="masa_cg" data-titulo="Masas Palpables" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('masa_cg','div_detalle_masa_cg','obs_masas_cg',2);">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_masa_cg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Masas Palpables</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Masas Palpables" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_masas_cg" id="obs_masas_cg"></textarea>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Es Urgencia Qx.?</label>
-                                                                            <select name="urgencia_cg" id="urgencia_cg" data-titulo="Es Urgencia Qx.?" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cg','div_detalle_urgencia_cg','obs_urgencia_cg',2);">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_urgencia_cg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Es Urgencia Qx</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Es Urgencia Qx.?" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_urgencia_cg" id="obs_urgencia_cg"></textarea>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Sospecha de Organo</label>
-                                                                        <select name="so_cg" id="so_cg" data-titulo="Sospecha de Organo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('so_cg','div_detalle_so_cg','obs_so_cg',2);">
-                                                                            <option value="1" selected>No</option>
-                                                                            <option value="2">Si</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group col-md-12" id="div_detalle_so_cg" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Sospecha de Organo</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Sospecha de Organo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_so_cg" id="obs_so_cg"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class=" col-md-12">
-                                                                <div class="row">
-                                                                    <label class="floating-label-activo-sm">Observaciones Estado General Paciente</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Estado General Paciente" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_cg" id="obs_egp_cg"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <hr>
-                                                            <div class="row">
-                                                                <div class="col-md-9">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Observaciones Examen Especialidad</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Especialidad" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_gen_ex_esp_cg" id="obs_gen_ex_esp_cg"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-3 align-middle" style="margin:auto">
-                                                                <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo('form-cg','registro_f_t_cg_detalle','cg');"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- control post qx -->
+										<!--CIRUGIA GENERAL-->
+                                        @include('general.secciones_ficha.cirugia_general.cirugia_adulto')
+										<!--cierre CIRUGIA GENERAL-->
+                                          <!-- control post qx -->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
                                                 <div class="card-header" id="Control_cirugia">
@@ -430,183 +306,9 @@
                                         </div>
                                         <!-- cierre control post qx -->
 
-                                        <!--Formulario / Signos vitales y otros-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="signosvit-otros">
-                                                    <button class="accor-open btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#signosvit-otros-c" aria-expanded="false" aria-controls="signosvit-otros-c">
-                                                        Signos vitales y otros
-                                                    </button>
-                                                </div>
-                                                <div id="signosvit-otros-c" class="collapse" aria-labelledby="signosvit-otros" data-parent="#signosvit-otros">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-1">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->temperatura != null)
-                                                                    <label class="floating-label-activo-sm">Tº</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="temperatura" id="temperatura" value="{{ $fichaAtencion->temperatura }}">
-                                                                @else
-                                                                    <label class="floating-label-activo-sm">Tº</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="temperatura" id="temperatura" value="{!! old('temperatura') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-1">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->pulso != null)
-                                                                    <label class="floating-label-activo-sm">Pulso</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="pulso" id="pulso" value="{{ $fichaAtencion->pulso }}">
-                                                                @else
-                                                                    <label class="floating-label-activo-sm">Pulso</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="pulso" id="pulso" value="{!! old('pulso') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->frecuencia_reposo != null)
-                                                                <label class="floating-label-activo-sm">Frec.
-                                                                    Reposo</label>
-                                                                <input type="text" class="form-control form-control-sm" name="frecuencia_reposo" id="frecuencia_reposo" value="{{ $fichaAtencion->frecuencia_reposo }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Frec.
-                                                                    Reposo</label>
-                                                                <input type="text" class="form-control form-control-sm" name="frecuencia_reposo" id="frecuencia_reposo" value="{!! old('frecuencia_reposo') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->peso != null)
-                                                                <label class="floating-label-activo-sm">Peso</label>
-                                                                <input type="text" class="form-control form-control-sm" name="peso" id="peso" value="{{ $fichaAtencion->peso }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Peso</label>
-                                                                <input type="text" class="form-control form-control-sm" name="peso" id="peso" value="{!! old('peso') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->talla != null)
-                                                                <label class="floating-label-activo-sm">Talla</label>
-                                                                <input type="text" class="form-control form-control-sm" name="talla" id="talla" value="{{ $fichaAtencion->talla }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Talla</label>
-                                                                <input type="text" class="form-control form-control-sm" name="talla" id="talla" value="{!! old('talla') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->imc != null)
-                                                                <label class="floating-label-activo-sm">IMC</label>
-                                                                <input type="text" class="form-control form-control-sm" name="imc" id="imc" value="{{ $fichaAtencion->imc }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">IMC</label>
-                                                                <input type="text" class="form-control form-control-sm" name="imc" id="imc" value="{!! old('imc') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->estado_nutricional != null)
-                                                                <label class="floating-label-activo-sm">Estado
-                                                                    Nutricional</label>
-                                                                <input type="text" class="form-control form-control-sm" name="estado_nutricional" id="estado_nutricional" value="{{ $fichaAtencion->estado_nutricional }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Estado
-                                                                    Nutricional</label>
-                                                                <input type="text" class="form-control form-control-sm" name="estado_nutricional" id="estado_nutricional" value="{!! old('estado_nutricional') !!}">
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="form-group mb-1">
-                                                                <label><strong>Presión Arterial</strong></label>
-                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                    <input type="checkbox" id="p_arterial" value="{!! old('p_arterial') !!}">
-                                                                    <label for="p_arterial" class="cr"></label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row" id="form_1" style="display:none">
-                                                            <div class="form-group col-md-3">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->presion_bi !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">BI</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_bi" id="presion_bi" value="{{ $fichaAtencion->presion_bi }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">BI</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_bi" id="presion_bi" value="{!! old('presion_bi') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->presion_bd !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">BD</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_bd" id="presion_bd" value="{{ $fichaAtencion->presion_bd }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">BD</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_bd" id="presion_bd" value="{!! old('presion_bd') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->presion_de_pie !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">De pié</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_de_pie" id="presion_de_pie" value="{{ $fichaAtencion->presion_de_pie }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">De pié</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_de_pie" id="presion_de_pie" value="{!! old('presion_de_pie') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->presion_sentado !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">Sentado</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_sentado" id="presion_sentado" value="{{ $fichaAtencion->presion_sentado }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Sentado</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_sentado" id="presion_sentado" value="{!! old('presion_sentado') !!}">
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="form-group mb-1">
-                                                                <label><strong>Comunicación y traslado</strong></label>
-                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                    <input type="checkbox" id="com_trasl" value="{!! old('com_trasl') !!}">
-                                                                    <label for="com_trasl" class="cr"></label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row" id="form_2" style="display:none">
-                                                            <div class="form-group col-md-4">
-                                                                @if (isset($fichaAtencion) &&
-                                                                $fichaAtencion->ct_estado_conciencia != null)
-                                                                <label class="floating-label-activo-sm">Estado de
-                                                                    conciencia</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_estado_conciencia" id="ct_estado_conciencia" value="{{ $fichaAtencion->ct_estado_conciencia }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Estado de
-                                                                    conciencia</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_estado_conciencia" id="ct_estado_conciencia" value="{!! old('ct_estado_conciencia') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->ct_lenguaje !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">Lenguaje</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_lenguaje" id="ct_lenguaje" value="{{ $fichaAtencion->ct_lenguaje }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Lenguaje</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_lenguaje" id="ct_lenguaje" value="{!! old('ct_lenguaje') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->ct_traslado !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">Traslado</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_traslado" id="ct_traslado" value="{{ $fichaAtencion->ct_traslado }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Traslado</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_traslado" id="ct_traslado" value="{!! old('ct_traslado') !!}">
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+
+                                         <!--Formulario / Signos vitales y otros-->
+                                         @include('atencion_medica.generales.signos_vitales')
                                         <!--Cierre: Formulario / Signos vitales y otros-->
 
                                         @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
@@ -957,6 +659,7 @@
                 {{--  console.log('-----------------------');  --}}
                 if(data.estado == 1)
                 {
+                    cargar_lista_tipo_ficha_cdg();
                     $('#modal_registrar_ficha_tipo_dg').modal('hide');
                     swal({
                         title: "Tipo Ficha Registrado",
@@ -965,8 +668,9 @@
                         //SuccessMode: true,
                     })
                 }
-                else{
-
+                else
+                {
+                    cargar_lista_tipo_ficha_cdg();
                     swal({
                         title: "Problema al Registrar Tipo Ficha.",
                         icon: "warning",
@@ -982,7 +686,46 @@
 
         }
 
-        function guardar_tipo_ficha_cg()
+
+        function cargar_lista_tipo_ficha_cdg()
+        {
+            $('#select_ficha_tipo_ex_especialidad_cdg').html('<option value="">Seleccione</option>');
+
+            url = "{{ route('profesional.cargar_fichas_tipo_cdg') }}";
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {},
+            })
+            .done(function(data)
+            {
+                if(data.estado == 1)
+                {
+                    $.each(data.registros, function(index, value)
+                    {
+                        $('#select_ficha_tipo_ex_especialidad_cdg').append('<option value="'+value.id+'" data-descripcion="'+value.descripcion+'">'+value.nombre+'</option>');
+                    });
+                    cargar_info_ficha_tipo_cdg('select_ficha_tipo_ex_especialidad_cdg','descripcion_ficha_tipo_ex_especialidad_cdg');
+                }
+                else
+                {
+                    swal({
+                        title: "Problema al Cargar Tipo Ficha.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+
+        /* function guardar_tipo_ficha_cg()
         {
             var registro_f_t_cg_nombre = $('#registro_f_t_cg_nombre').val();
             var registro_f_t_cg_descripcion = $('#registro_f_t_cg_descripcion').val();
@@ -1078,6 +821,7 @@
             });
 
         }
+        */
 
         function cargar_info_ficha_tipo_cdg(select, div_descripcion)
         {
@@ -1711,3 +1455,4 @@
 @endsection
 
 
+S

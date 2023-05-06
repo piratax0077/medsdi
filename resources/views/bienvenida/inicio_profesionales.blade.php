@@ -1,69 +1,60 @@
-@extends('template.bienvenida.profesionales')
+@extends('template.bienvenida.bienvenida')
+
+@section('page-styles')
+    <style>
+        .auth-wrapper{
+            background-size: cover;
+            background-image: url("{{ asset('images/background_2.jpg') }}");
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+@endsection
 
 @section('content')
     <!--Container Completo-->
-    
-	<div class="pcoded-content">
-		<!--Header-->
-		<div class="page-header">
-			<div class="page-block">
-				<div class="row align-items-center pb-2">
-					<div class="col-md-6">
-						<div class="page-header-title">
-							<h5 class="text-white d-inline f-16 mt-1"><strong>SDI le da la Bienvenida Profesional nuevo</strong></h5>
-							<p class="font-italic mt-0 mb-0 text-white">
-								@php
-									$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-									$fecha = \Carbon\Carbon::parse(now());
-									$mes = $meses[($fecha->format('n')) - 1];
-									$fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
-								@endphp
-								{{ $fecha }}
-							</p>
 
+	<div class="auth-wrapper">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12 col-md-10 mx-auto py-2 px-5 text-center">
+					<h4 class="text-c-blue">MEDICHILE, te da la bienvenida</h4>
+					<h6>Ahora tendrás mejor gestión de tus pacientes y más beneficios. <br>Para ingresar a tu escritorio deberás completar la configuración básica
+				</div>
+				<div class="col-sm-12 mx-auto py-2 px-4">
+					<div class="card-deck">
+						<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4">
+							<a href="#" onclick="lugar();">
+							<div class="card">
+								<div class="card-body text-center">
+									<img src="{{ asset('images/iconos/lugar.svg') }}" class="img-fluid wid-50 mb-2" alt="...">
+									<h5>Mi lugar de atención</h5>
+									<p class="card-text">Registra tu primer lugar de atención</p>
+								</div>
+							</div>
+							</a>
+						</div>
+						<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4">
+							<a href="#" onclick="perfil();">
+							<div class="card">
+								<div class="card-body text-center">
+									<img src="{{ asset('images/iconos/academico.png') }}" class="img-fluid wid-60" alt="...">
+									<h5>Perfil académico</h5>
+									<p class="card-text">Completa tus datos profesionales</p>
+								</div>
+							</div>
+							</a>
+						</div>
+						<div class="col-sm-12 col-md-12 col-lg-12 text-center">
+							<button type="button" class="btn btn-primary">Acceder al escritorio</button>
 						</div>
 					</div>
-					<div class="col-md-6">
-						{{--  <div class="page-header-title">
-							<button type="button" class="btn btn-outline-light btn-sm d-inline float-md-right mr-4 mb-1">Finalizar atención</button>
-						</div>  --}}
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--Cierre: Header-->
-		<!-- TAB ATENCIÓN -->
-		<!--
-		<div class="user-profile user-card pt-0">
-			<div class="card-body py-0">
-				<div class="user-about-block m-0">
-					<div class="row">
-						<div class="col-md-12">
-							<ul class="nav nav-tabs profile-tabs nav-fill mt-2" id="myTab" role="tablist">
-								<li class="nav-item">
-									<a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
-								</li>
-
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		-->
-		<!-- tab general-->
-		<!--Contenido de tab-->
-		<div class="row">
-			<div class="col-md-12">
-				<div class="tab-content" id="at-oftalmo">
-					<!--Atender paciente-->
-					<div class="tab-pane fade show active" id="atender" role="tabpanel" aria-labelledby="atender-tab">
-					@include('bienvenida.profesionales')
-					</div>
-
 				</div>
 			</div>
 		</div>
 	</div>
-
+    @include("bienvenida.modal.c_lugar_prof");
+    @include("bienvenida.modal.c_asistente_prof");
+    @include("bienvenida.modal.c_perfil_prof");
 @endsection

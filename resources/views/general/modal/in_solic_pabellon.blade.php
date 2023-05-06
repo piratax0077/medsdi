@@ -2,13 +2,12 @@
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Solicitar Pabellón</h5>
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Solicitar pabellón</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form>
-                <div class="form-row">
+                <div class="row">
                     <div class="form-group col-sm-12 col-md-12 col-lg-12">
                         <script>
                         var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -17,116 +16,368 @@
                         document.write( f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
                         </script>
                     </div>
-                    <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                        <label class="floating-label-activo-sm">Médico tratante</label>
-                        <div class="form-group fill">
-                            <input type="text" class="form-control form-control-sm" name="med_tratante" id="med_tratante">
-                        </div>
-                    </div>
-                    <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                        <label class="floating-label-activo-sm">Clínica - Hospital</label>
-                        <input type="text" class="form-control form-control-sm" id="hosp_en" name="hosp_en">
-                    </div>
-                    <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                        <label class="floating-label-activo-sm">Diagnósticos </label>
-                        <textarea class="form-control caja-texto form-control-sm " rows="1"  onfocus="this.rows=8" onblur="this.rows=1;" name="dg_ingreso" id="dg_ingreso"></textarea>
-                    </div>
-                    <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                        <label class="floating-label-activo-sm">Tipo Pabellón</label>
-                        <div class="form-group">
-                            <input type="text" class="form-control form-control-sm" name="serv_hosp" id="serv_hosp">
-                        </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link-aten text-reset active" id="info-ingreso-tab" data-toggle="tab" href="#info-ingreso" role="tab" aria-controls="info-ingreso" aria-selected="true">Info. Ingreso</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-aten text-reset" id="cirugia-pab-tab" data-toggle="tab" href="#cirugia-pab" role="tab" aria-controls="cirugia-pab" aria-selected="false">Cirugía</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-aten text-reset" id="equipo-pab-tab" data-toggle="tab" href="#equipo-pab" role="tab" aria-controls="equipo-pab" aria-selected="false">Equipo</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-aten text-reset" id="comentarios-pab-tab" data-toggle="tab" href="#comentarios-pab" role="tab" aria-controls="comentarios-pab" aria-selected="false">Comentarios</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <div class="form-row mb-2">
-                    <div class="col-md-12 mb-3">
-                        <h6>Ingreso</h6>
-                    </div>
-                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                        <label class="floating-label-activo-sm">Indicaciones de ingreso</label>
-                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="ind_ingreso" id="ind_ingreso"></textarea>
-                    </div>
-                </div>
-                <div class="form-row mb-2">
-                    <div class="col-md-12 mb-3">
-                        <h6>Cirugía</h6>
-                    </div>
-                    <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                        <label class="floating-label-activo-sm">Órgano</label>
-                        <input type="text" class="form-control form-control-sm" name="organo_op" id="organo_op">
-                    </div>
-                    <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                        <label class="floating-label-activo-sm">Tipo de cirugía (nombre)</label>
-                        <input type="text" class="form-control form-control-sm" name="tipo_op" id="tipo_op">
-                    </div>
-                    <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                        <label class="floating-label-activo-sm">Anestésia</label>
-                        <input type="text" class="form-control form-control-sm" name="tipo_anest" id="tipo_anest">
-                    </div>
-                    <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                        <label class="floating-label-activo-sm">Hora de cirugía</label>
-                        <input type="time" class="form-control form-control-sm" name="hora_op" id="hora_op">
-                    </div>
-                </div>
-                <div class="form-row mb-2">
-                    <div class="col-md-12 mb-3">
-                        <h6>Equipo</h6>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label class="floating-label-activo-sm">Cirujano</label>
-                        <input type="text" class="form-control form-control-sm" name="cirujano" id="cirujano">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label class="floating-label-activo-sm">Ayudantes</label>
-                       <input type="text" class="form-control form-control-sm" name="ayudante" id="ayudante">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label class="floating-label-activo-sm">Anestesista</label>
-                        <input type="text" class="form-control form-control-sm" name="anestesista" id="anestesista">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label class="floating-label-activo-sm">Arsenalero/a</label>
-                        <input type="text" class="form-control form-control-sm" name="arsenalera" id="arsenalera">
-                    </div>
-                    <div class="form-group col-md-8">
-                       <label class="floating-label-activo-sm">Instrumental especial</label>
-                       <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="instrumental_especial" id="nstrumental_especial"></textarea>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-sm-12 col-md-6 col-lg-6">
-                        <h6 class="mb-3">Otros</h6>
-                        <div class="form-group">
-                        <label class="floating-label-activo-sm">Comentarios</label>
-                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="otros_hosp" id="otros_hosp"></textarea>
-                    </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 col-lg-6">
-                        <h6 class="mb-3">Agregar archivos</h6>
-                        <input class="mb-2" size="80" name="archivo_up" id="archivo_up" type="file" onchange="javascript: submit();">
-                        <br>
-                        <!--IDEA DEL ARCHIVO ADJUNTO-->
-                        <div class="alert alert-warning alert-dismissible fade show pb-2" role="alert">
-                            <i class="feather icon-file f-16"></i><a href="#" class="alert-link"> Nombre del archivo</a>
-                            <button type="button" class="close pt-1" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="alert alert-warning alert-dismissible fade show pb-2" role="alert">
-                            <i class="feather icon-file f-16"></i><a href="#" class="alert-link"> Eco -Doppler- Nombre paciente.pdf</a>
-                            <button type="button" class="close pt-1" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="tab-content" id="ev-nutricional">
+                            <!--INFO. INGRESO-->
+                            <div class="tab-pane fade show active" id="info-ingreso" role="tabpanel" aria-labelledby="info-ingreso-tab">
+                                <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 mb-2">
+                                        <h6 class="text-c-blue">INFORMACIÓN DE PACIENTE</h6>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                        <label class="label">Nombre</label>
+                                        <label class="label">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</label>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                        <label class="label">Edad</label>
+                                        <label class="label">{{ $paciente->fecha_naciemiento }}</label>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                        <label class="label">Prevision</label>
+                                        <label class="label">{{ $paciente->Prevision->first()->nombre }}</label>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                        <label class="label">Teléfono</label>
+                                        <label class="label">{{ $paciente->telefono_uno }}</label>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                        <label class="label">Email</label>
+                                        <label class="label">{{ $paciente->email }}</label>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                        <label class="label">Enfermedades Cronicas</label>
+                                        <label class="label">
+                                            @php
+                                                $patalogias_cronicas = '';
+                                            @endphp
+                                            @foreach ($patoligias_cronicas as $patologia_cronica)
+                                                @php
+                                                    $temp = json_decode($patologia_cronica->data);
+                                                    echo $temp->nombre;
+                                                    $patalogias_cronicas .= $temp->nombre;
+                                                @endphp
+                                                @if($patologia_cronica->comentario)
+                                                    ,{{ $patologia_cronica->comentario }}
+                                                    @php
+                                                        $patalogias_cronicas .= ', '.$patologia_cronica->comentario;
+                                                    @endphp
+                                                @endif
+                                                ;
+                                                @php
+                                                        $patalogias_cronicas .= ';';
+                                                @endphp
+                                            @endforeach
+                                        </label>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                        <label class="floating-label-activo-sm">Otros Antecedentes Medicos</label>
+                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_otros_antecedentes" id="ingreso_sol_pab_modal_otros_antecedentes" value="">
+                                        <input type="hidden" name="ingreso_sol_pab_modal_patalogias_cronicas" id="ingreso_sol_pab_modal_patalogias_cronicas" value="{{ $patalogias_cronicas }}">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 mb-2">
+                                        <h6 class="text-c-blue">INFORMACIÓN DE PROFESIONAL SOLICITANTE</h6>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                        <label class="label">Nombre</label>
+                                        <label class="label">{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}</label>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                        <label class="label">Especialidad</label>
+                                        <label class="label">{{ $profesional->TipoEspecialidad->first()->nombre }} @if($profesional->SubTipoEspecialidad->first()) {{ $profesional->SubTipoEspecialidad->first()->nombre }} @endif </label>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 mb-2">
+                                        <h6 class="text-c-blue">INFORMACIÓN DE INGRESO</h6>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                        <label class="floating-label-activo-sm">Clínica - Hospital</label>
+                                        <input type="text" class="form-control form-control-sm" id="ingreso_sol_pab_modal_hospital" name="ingreso_sol_pab_modal_hospital" placeholder="Ingrese Email o WhatsApp">
+                                        <input type="hidden" name="ingreso_sol_pab_modal_id_hospital" id="ingreso_sol_pab_modal_id_hospital" value="">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                        <label class="floating-label-activo-sm">Diagnósticos </label>
+                                        <textarea class="form-control caja-texto form-control-sm " rows="1"  onfocus="this.rows=8" onblur="this.rows=1;" name="ingreso_sol_pab_modal_diagnostico_preoperatorio" id="ingreso_sol_pab_modal_diagnostico_preoperatorio"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Tipo pabellón</label>
+                                            <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_tipo_cirugia" id="ingreso_sol_pab_modal_tipo_cirugia">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 mb-2">
+                                        <h6 class="text-c-blue">CONSENTIMIENTO INFORMADO</h6>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                        @if ($paciente->ConConsentimientoPctActiva()->get())
+                                            @foreach ( $paciente->ConConsentimientoPctActiva()->get() as $consentimiento)
+                                                @if($consentimiento->id_fc == $id_ficha_atencion)
+                                                    <button class="btn btn-danger m-1" onclick="ver_pdf_consentimiento('{{ $consentimiento->id }}', '{{ $id_ficha_atencion }}');">Descargar PDF - {{ $consentimiento->Consentimiento()->first()->nombre }}</button>
+                                                @endif
+                                            @endforeach
+                                        @endif
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!--CIRUGIA-->
+                            <div class="tab-pane fade show" id="cirugia-pab" role="tabpanel" aria-labelledby="cirugia-pab-tab">
+
+                                <div class="form-row mb-2">
+                                    <div class="col-md-12 mb-2">
+                                        <h6 class="text-c-blue">CIRUGÍA</h6>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Urgencia Quirúrgica</label>
+                                        <select class="form-control form-control-sm" name="ingreso_sol_pab_modal_grado_urgencia" id="ingreso_sol_pab_modal_grado_urgencia">
+                                            <option value="1">Electiva</option>
+                                            <option value="2">Urgencia Quirúrgica</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Tipo de cirugía <i>(nombre)</i></label>
+                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_operacion" id="ingreso_sol_pab_modal_operacion">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Codigo Cirugia</label>
+                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_cirugia" id="ingreso_sol_pab_modal_cirugia" readonly>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Anestésia</label>
+                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_anestesia" id="ingreso_sol_pab_modal_anestesia">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Fecha y Hora solicitada</label>
+                                        <input type="datetime-local" class="form-control form-control-sm" name="ingreso_sol_pab_modal_fecha_hora_operacion" id="ingreso_sol_pab_modal_fecha_hora_operacion">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--EQUIPO-->
+                            <div class="tab-pane fade show" id="equipo-pab" role="tabpanel" aria-labelledby="equipo-pab-tab">
+                                <div class="form-row mb-2">
+                                    <div class="col-md-12 mb-2">
+                                        <h6 class="text-c-blue">EQUIPO</h6>
+                                    </div>
+                                    <div class="form-group col-md-6 col-lg-6 col-xl-6">
+                                        <label class="floating-label-activo-sm">Cargar Equipo</label>
+                                        <select class="form-control form-control-sm" name="ingreso_sol_pab_modal_mi_equipo" id="ingreso_sol_pab_modal_mi_equipo" onchange="cargar_mi_equipo('ingreso_sol_pab_modal_mi_equipo','lista_profesionales');">
+                                            <option value="0">Seleccione</option>
+                                        </select>
+                                        <input type="hidden" name="ingreso_sol_pab_modal_lista_profesionales" id="ingreso_sol_pab_modal_lista_profesionales" value="">
+                                    </div>
+
+                                    <div class="col-md-12 mb-2">
+                                        <div class="form-row lista_profesionales">
+
+                                        </div>
+                                    </div>
+
+                                    {{--
+                                    <div class="form-group col-md-6 col-lg-6 col-xl-6">
+                                        <label class="floating-label-activo-sm">Cirujano</label>
+                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_cirujano" id="ingreso_sol_pab_modal_cirujano" value="{{ $profesional->nombre.' '.$profesional->apellido_uno }}">
+                                    </div>
+                                    <div class="form-group col-md-6 col-lg-6 col-xl-6">
+                                        <label class="floating-label-activo-sm">Ayudantes</label>
+                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_ayudante1" id="ingreso_sol_pab_modal_ayudante1">
+                                    </div>
+                                    <div class="form-group col-md-6 col-lg-6 col-xl-6">
+                                        <label class="floating-label-activo-sm">Anestesista</label>
+                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_anestesista" id="ingreso_sol_pab_modal_anestesista">
+                                    </div>
+                                    <div class="form-group col-md-6 col-lg-6 col-xl-6">
+                                        <label class="floating-label-activo-sm">Arsenalero/a</label>
+                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_arsenaleria" id="ingreso_sol_pab_modal_arsenaleria">
+                                    </div>
+                                    --}}
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <label class="floating-label-activo-sm">Instrumental especial</label>
+                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ingreso_sol_pab_modal_equipamiento_especial" id="ingreso_sol_pab_modal_equipamiento_especial"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--COMENTARIOS-->
+                            <div class="tab-pane fade show" id="comentarios-pab" role="tabpanel" aria-labelledby="comentarios-pab-tab">
+                                <div class="form-row mb-2">
+                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                    <h6 class="mb-3 text-c-blue">OTROS</h6>
+                                    <div class="form-group">
+                                    <label class="floating-label-activo-sm">Comentarios</label>
+                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ingreso_sol_pab_modal_comentarios" id="ingreso_sol_pab_modal_comentarios"></textarea>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-info">Guardar y enviar</button>
-                <button type="button" class="btn btn-primary">Ver formulario (PDF)</button>
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="button" class="btn btn-sm btn-info"><i class="feather icon-save"></i> Guardar y enviar solicitud</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+
+<script>
+    $(document).ready(function () {
+
+        /** autocomplete de tipo cirugia */
+        $("#ingreso_sol_pab_modal_operacion").autocomplete({
+            source: function(request, response) {
+                // Fetch data
+                $.ajax({
+                    url: "{{ route('fonasa.buscar.por.nombre.autocomplete') }}",
+                    type: 'get',
+                    dataType: "json",
+                    data: {
+                        search: request.term
+                    },
+                    success: function(data) {
+                        console.log(data.length);
+                        if( data.length == 0 )
+                        {
+                            $('#ingreso_sol_pab_modal_cirugia').val('');
+                        }
+                        else
+                        {
+                            $('#ingreso_sol_pab_modal_cirugia').val('');
+                        }
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                // Set selection
+                $('#ingreso_sol_pab_modal_operacion').val(ui.item.label); // display the selected text
+                $('#ingreso_sol_pab_modal_cirugia').val(ui.item.codigo); // save selected id to input
+
+                return false;
+            }
+        });
+    });
+
+    function sol_pabellon() {
+        $('#ingreso_sol_pab_modal').modal('show');
+        cargar_lista_equipos('ingreso_sol_pab_modal_mi_equipo');
+    }
+
+    function cargar_lista_equipos(input_select)
+    {
+        $('#'+input_select).html('');
+        $('#'+input_select).append('<option value="0">Seleccione</option><option value="nuevo">Nuevo Equipo</option>');
+        let url = "{{ route('profesional.equipo.ver') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                id_profesional: $('#id_profesional_fc').val(),
+            },
+        })
+        .done(function(resp) {
+            console.log(resp);
+            if (resp.estado == 1)
+            {
+                $.each(resp.registros, function(index, value)
+                {
+                    console.log(value);
+                    html = '';
+                    html = '<option value="'+value.id+'">'+value.nombre+'</option>';
+                    $('#'+input_select).append(html);
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+
+    }
+
+    function cargar_mi_equipo(input_select, div_destino)
+    {
+        var valor = $('#'+input_select).val();
+        if(valor == 'nuevo')
+        {
+
+        }
+        else if(valor == '0')
+        {
+            $('.'+div_destino).html('');
+            $('#ingreso_sol_pab_modal_lista_profesionales').val('');
+        }
+        else
+        {
+            var html = '';
+            $('.'+div_destino).html(html);
+            let url = "{{ route('profesional.equipo.ver.profesional') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    id_profesional_mi_equipo: valor,
+                },
+            })
+            .done(function(resp) {
+                console.log(resp);
+
+                if (resp.estado == 1)
+                {
+                    var lista_id_profesionales = '';
+                    $.each(resp.registros, function(index, value)
+                    {
+                        html = '';
+                        html += '<div class="form-group col-md-6 col-lg-6 col-xl-6">';
+                        html += '    <label class="floating-label-activo-sm">'+value.posicion+'</label>';
+                        html += '    <label type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_'+index+'" id="ingreso_sol_pab_modal_'+index+'">'+value.profesional.nombre+' '+value.profesional.apellido_uno+'</label>';
+                        html += '</div>';
+                        lista_id_profesionales += value.id_tipo_especialidad+','+value.id_sub_tipo_especialidad+','+value.posicion+','+value.id_profesional+'|';
+                        $('#ingreso_sol_pab_modal_lista_profesionales').val(lista_id_profesionales);
+                        $('.'+div_destino).append(html);
+                    });
+
+                }
+                else
+                {
+                    $('.'+div_destino).append('<h5>Sin registro de equipo</h5>');
+                    $('#ingreso_sol_pab_modal_lista_profesionales').val('');
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+    }
+</script>

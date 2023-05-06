@@ -91,7 +91,7 @@
                         </div>--}}
                         <!--Hospitalización-->
                         <div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">
-                            @include('atencion_pediatrica.secciones_ficha.hospitalizacion')
+                            @include('general.hospitalizacion.hospitalizacion')
                         </div>
                     </div>
                 </div>

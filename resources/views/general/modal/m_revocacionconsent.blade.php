@@ -271,7 +271,7 @@
 
     function checkTokenRevocacion(input_token, div_mostrar, div_ocultar, div_solicitud)
     {
-        let url = "{{ route('check_sdi_token') }}";
+        let url = "{{ route('check_sdi_token_global') }}";
         var _token = $('input[name=_token]').val();
         var token = $('#'+input_token).val();
         $.ajax({

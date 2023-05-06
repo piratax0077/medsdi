@@ -11,13 +11,13 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis Pacientes</h5>
+                                <h5 class="m-b-10 font-weight-bold">Mis pacientes</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
                                     <a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Mis Pacientes </a></li>
+                                <li class="breadcrumb-item"><a href="#">Mis pacientes </a></li>
                             </ul>
                         </div>
                     </div>
@@ -32,19 +32,19 @@
                     <div class="card-header text-center bg-info">
                         <div class="row">
                             <div class="col-md-12 align-botton">
-                                <h4 class="text-white f-20 d-inline ml-4 mt-1 float-left">Mis Pacientes</h4>
+                                <h4 class="text-white f-20 d-inline ml-4 mt-1 float-left">Mis pacientes</h4>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <table id="res-config" class="display table table-striped table-hover dt-responsive nowrap table-sm"
+                                <table id="res-config" class="display table table-striped  dt-responsive nowrap table-xs"
                                     style="width:100%">
                                     <thead>
                                         <tr>
                                             <th class="text-center align-middle">Paciente</th>
-                                            <th class="text-center align-middle">Fecha <br> nacimiento</th>
+                                            <th class="text-center align-middle">Nacimiento</th>
                                             <th class="text-center align-middle">Convenio</th>
                                             <th class="text-center align-middle">Contacto</th>
                                             <th class="text-center align-middle">Acción</th>
@@ -76,15 +76,18 @@
                                                         @endif        
                                                         <a href="{{ ROUTE('profesional.atenciones_previas_paciente', $p->id) }}"
                                                             class="btn btn-icon btn-info" data-toggle="tooltip" data-placement="top"
-                                                            title="Atenciones Previas"><i class="feather icon-activity"></i></a>
+                                                            title="Atenciones previas"><i class="feather icon-activity"></i></a>
+
                                                         <!--<a onclick="autorizacion_ficha_medica_unica({{ $p->id }});"
                                                             class="btn btn-warning btn-sm btn-icon" data-toggle="tooltip"
                                                             data-placement="top" title="Ficha Médica Única"><i
                                                                 class="feather icon-file-plus"></i></a>-->
+
                                                         <a href="{{ ROUTE('profesional.editar_paciente', $p->id) }}"
                                                             class="btn btn-secondary btn-sm btn-icon" data-toggle="tooltip"
-                                                            data-placement="top" title="Editar Datos Medicos del Paciente"><i
+                                                            data-placement="top" title="Editar datos medicos del paciente"><i
                                                                 class="feather icon-edit"></i></a>
+
                                                         <!--<a target="_blank" class="btn btn-icon btn-success text-white"
                                                             data-toggle="modal" data-target="#modal_correo" data-placement="top"
                                                             title="Enviar Email"><i class="fas feather icon-mail"></i></a>-->

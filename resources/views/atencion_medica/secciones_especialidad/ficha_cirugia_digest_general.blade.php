@@ -95,12 +95,12 @@
                                         <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
-                                                <div class="card-header" id="exam_esp">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_c" aria-expanded="false" aria-controls="exam_esp_c">
+                                                <div class="card-header" id="exam_esp_cdg">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_cdg_c" aria-expanded="false" aria-controls="exam_esp_cdg_c">
                                                         Examen especialidad
                                                     </button>
                                                 </div>
-                                                <div id="exam_esp_c" class="collapse" aria-labelledby="exam_esp" data-parent="#exam_esp">
+                                                <div id="exam_esp_cdg_c" class="collapse" aria-labelledby="exam_esp_cdg" data-parent="#exam_esp_cdg">
                                                     <div class="card-body-aten shadow-none">
                                                         <div class="row">
                                                             <div class="col-md-6">
@@ -272,7 +272,9 @@
                                             </div>
                                         </div>
 
-										<!--cirugia general-->
+										<!--CIRUGIA GENERAL-->
+                                        @include('general.secciones_ficha.cirugia_general.cirugia_adulto')
+                                        {{--
 										<div class="col-sm-12 col-md-12">
                                             <div class="card">
                                                 <div class="card-header" id="cirugia_general">
@@ -398,7 +400,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
+										--}}
                                         <!-- control post qx -->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card">
@@ -1016,6 +1018,7 @@
                 {{--  console.log('-----------------------');  --}}
                 if(data.estado == 1)
                 {
+                    cargar_lista_tipo_ficha_cdg();
                     $('#modal_registrar_ficha_tipo_dg').modal('hide');
                     swal({
                         title: "Tipo Ficha Registrado",
@@ -1024,13 +1027,14 @@
                         //SuccessMode: true,
                     })
                 }
-                else{
-
+                else
+                {
+                    cargar_lista_tipo_ficha_cdg();
                     swal({
                         title: "Problema al Registrar Tipo Ficha.",
                         icon: "warning",
                         // buttons: "Aceptar",
-                        //SuccessMode: true,
+                        // SuccessMode: true,
                     })
                 }
 
@@ -1041,90 +1045,31 @@
 
         }
 
-        function guardar_tipo_ficha_cg()
+        function cargar_lista_tipo_ficha_cdg()
         {
-            var registro_f_t_cg_nombre = $('#registro_f_t_cg_nombre').val();
-            var registro_f_t_cg_descripcion = $('#registro_f_t_cg_descripcion').val();
-            var _token = CSRF_TOKEN;
-            if(registro_f_t_cg_nombre == ''){
-                swal({
-                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Nombre",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    });
-                    return false;
-            }
-            if(registro_f_t_cg_descripcion == ''){
-                swal({
-                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    });
-                    return false;
-            }
+            $('#select_ficha_tipo_ex_especialidad_cdg').html('<option value="">Seleccione</option>');
 
-
-            var data = [];
-            data.registro_f_t_cg_nombre = registro_f_t_cg_nombre;
-            data.registro_f_t_cg_descripcion = registro_f_t_cg_descripcion;
-
-            $('#registro_f_t_cg_detalle').find('input,textarea').each(function(key, elemento){
-                {{--  console.log($(elemento).attr('id'));  --}}
-                {{--  console.log($(elemento).val());  --}}
-                {{--  console.log($(elemento).prop('nodeName'));  --}}
-                {{--  console.log('*******');  --}}
-
-                data[$(elemento).attr('id')] = $(elemento).val();
-
-            });
-
-            {{--  console.log(data);  --}}
-            url = "{{ route('profesional.ficha_tipo_cg') }}";
+            url = "{{ route('profesional.cargar_fichas_tipo_cdg') }}";
             $.ajax({
 
                 url: url,
-                type: "POST",
-                data: {
-                    _token: _token,
-                    id_profesional : $('#id_profesional_fc').val(),
-                    ind_esp_cirugia : '',
-                    nombre : data.registro_f_t_cg_nombre,
-                    descripcion : data.registro_f_t_cg_descripcion,
-                    organo_cg : data.modal_agregar_tipo_organo_cg,
-                    obs_organo_cg : data.observaciones_obs_organo_cg,
-                    ceg_cg : data.modal_agregar_tipo_ceg_cg,
-                    obs_ceg_cg : data.observaciones_obs_ceg_cg,
-                    masa_cg : data.modal_agregar_tipo_masa_cg,
-                    obs_masas_cg : data.observaciones_obs_masas_cg,
-                    urgencia_cg : data.modal_agregar_tipo_urgencia_cg,
-                    obs_urgencia_cg : data.observaciones_obs_urgencia_cg,
-                    so_cg : data.modal_agregar_tipo_so_cg,
-                    obs_so_cg : data.observaciones_obs_so_cg,
-                    obs_egp_cg : data.observaciones_obs_egp_cg,
-                    obs_gen_ex_esp_cg : data.observaciones_obs_gen_ex_esp_cg,
-                },
+                type: "GET",
+                data: {},
             })
             .done(function(data)
             {
-                {{--  console.log('-----------------------');  --}}
-                {{--  console.log(data);  --}}
-                {{--  console.log('-----------------------');  --}}
                 if(data.estado == 1)
                 {
-                    $('#modal_registrar_ficha_tipo_dg').modal('hide');
-                    swal({
-                        title: "Tipo Ficha Registrado",
-                        icon: "success",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
+                    $.each(data.registros, function(index, value)
+                    {
+                        $('#select_ficha_tipo_ex_especialidad_cdg').append('<option value="'+value.id+'" data-descripcion="'+value.descripcion+'">'+value.nombre+'</option>');
+                    });
+                    cargar_info_ficha_tipo_cdg('select_ficha_tipo_ex_especialidad_cdg','descripcion_ficha_tipo_ex_especialidad_cdg');
                 }
-                else{
-
+                else
+                {
                     swal({
-                        title: "Problema al Registrar Tipo Ficha.",
+                        title: "Problema al Cargar Tipo Ficha.",
                         icon: "warning",
                         // buttons: "Aceptar",
                         //SuccessMode: true,
@@ -1135,8 +1080,9 @@
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
-
         }
+
+
 
         function cargar_info_ficha_tipo_cdg(select, div_descripcion)
         {
