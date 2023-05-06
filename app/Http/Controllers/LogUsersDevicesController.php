@@ -41,7 +41,7 @@ class LogUsersDevicesController extends Controller
             $datos['request'] = $request->all();
 
             // Generamos la consulta
-             $registros = LogUsersDevices::where($filtros)->get();
+            $registros = LogUsersDevices::where($filtros)->orderBy('id', 'DESC')->get();
 
              foreach($registros as $key => $value)
              {
