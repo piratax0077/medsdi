@@ -19,7 +19,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?t={{ time() }}" />
     <link rel="stylesheet" href="{{ asset('css/escritorio_paciente.css') }}?t={{ time() }}" />
-
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
@@ -59,6 +59,37 @@
             </div>
         </div>
     </div>
+    {{--  header  --}}
+    <header class="navbar pcoded-header navbar-expand-lg navbar-light header-blue">
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li>
+                    <div class="dropdown drp-user">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="feather icon-user "></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right profile-notification">
+                            <div class="pro-head">
+                                <span>{{  @Auth::user()->name }}</span>
+                            </div>
+                            {{--  <ul></ul>  --}}
+                            <ul class="pro-body">
+                                <li>
+                                    <form action="{{ ROUTE('logout') }}" method="post" id="closeSession">
+                                        @csrf
+                                        <a data-toggle="tooltip" title="Cerrar sesión" class="text-danger" href="javascript:{}" onclick="document.getElementById('closeSession').submit();">
+                                            <i class="feather icon-power"></i> Cerrar sesión
+                                        </a>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+    {{--  cierre header  --}}
 
     @yield('content')
 
@@ -120,6 +151,73 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
+    <script>
+
+        function buscar_ciudad(select_region, select_ciudad, id_ciudad=0)
+        {
+            let region = $('#'+select_region).val();
+            let url = "{{ route('home.buscar_ciudad_region') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    region: region,
+                },
+            })
+            .done(function(data) {
+                if (data != null) {
+                    data = JSON.parse(data);
+
+                    let ciudades = $('#'+select_ciudad);
+
+                    ciudades.find('option').remove();
+                    ciudades.append('<option value="0">seleccione</option>');
+                    $(data).each(function(i, v) { // indice, valor
+                        ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                    })
+
+                    if(id_ciudad != 0)
+                        ciudades.val(id_ciudad);
+
+                } else {
+
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar las ciudades",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    })
+                    // alert('No se pudo Cargar las ciudades');
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        };
+
+        // public function getRegionesAll(){
+        //     $region = Region::all();
+        //     $data = [
+        //         'Regiones' => $region
+        //     ];
+
+        //     return json_encode($data);
+        // }
+
+        // public function getCuidades( Request $request){
+        //     $ciudad = Ciudad::where('id_region', $request->region)
+        //                 ->orderby('nombre')->get();
+        //     $data = [
+        //         'Ciudad' => $ciudad
+        //     ];
+
+        //     return json_encode($data);
+        // }
+
+
+    </script>
 
     @yield('page-script')
 

@@ -485,6 +485,7 @@ Route::group([
     /** REGISTRO DE FICHA TIPO CDG CIRUGIA DIGESTIVA GENERAL */
     Route::post('/profesional/agregar_ficha_tipo_cdg', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoCDG'])->name('profesional.ficha_tipo_cdg');
 	Route::get('/profesional/buscar_ficha_tipo_cdg', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoCDG'])->name('profesional.buscar_ficha_tipo_cdg');
+    Route::get('/profesional/cargar_fichas_tipo_cdg', [App\Http\Controllers\EscritorioProfesional::class, 'cargarFichasTipoCDG'])->name('profesional.cargar_fichas_tipo_cdg');
 
     /** REGISTRO DE FICHA TIPO OFTALMOLOGIA */
     /** EXAMEN ESPACIALIDAD */
@@ -504,6 +505,7 @@ Route::group([
     /** REGISTRO DE FICHA TIPO CDG CIRUGIA GENERAL */
     Route::post('/profesional/agregar_ficha_tipo_cg', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoCG'])->name('profesional.ficha_tipo_cg');
 	Route::get('/profesional/buscar_ficha_tipo_cg', [App\Http\Controllers\EscritorioProfesional::class, 'buscarFichaTipoCG'])->name('profesional.buscar_ficha_tipo_cg');
+    Route::get('/profesional/cargar_fichas_tipo_cg', [App\Http\Controllers\EscritorioProfesional::class, 'cargarFichasTipoCG'])->name('profesional.cargar_fichas_tipo_cg');
 
     /** REGISTRO DE FICHA TIPO PEDIATRIA GENERAL */
     Route::post('/profesional/agregar_ficha_tipo_pediatria', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoPedGen'])->name('profesional.ficha_tipo_ped_gen');
@@ -525,6 +527,10 @@ Route::group([
 	Route::post('/peditria/tunner/agregar', [App\Http\Controllers\FichaPediatriaController::class, 'agergarTunner'])->name('ped.tunner.agregar');
 	Route::get('/peditria/tunner/ver', [App\Http\Controllers\FichaPediatriaController::class, 'verTunner'])->name('ped.tunner.ver');
 
+    /** registro de equipo */
+    Route::get('mi/equipo/ver/equipos',[App\Http\Controllers\ProfesionalMiEquipoController::class, 'verEquiposProfesional'])->name('profesional.equipo.ver');
+    Route::get('mi/equipo/ver/equipos/profesional',[App\Http\Controllers\ProfesionalMiEquipoController::class, 'verDetalleEquipoProfesional'])->name('profesional.equipo.ver.profesional');
+    Route::post('mi/equipo/crear',[App\Http\Controllers\ProfesionalMiEquipoController::class, 'registroMiEquipoProfesionales'])->name('profesional.equipo.crear');
 
 });
 
@@ -772,6 +778,7 @@ Route::group([
 
     Route::post('Ficha_Atencion/crear', [ficha_atencionController::class, 'store'])->name('fichaAtencion.registrar_ficha');
 	Route::post('Ficha_Atencion/crear/orl', [ficha_atencionController::class, 'store_orl'])->name('fichaAtencion.registrar_ficha_orl');
+    Route::post('Ficha_Atencion/crear/cg', [ficha_atencionController::class, 'store_cg'])->name('fichaAtencion.registrar_ficha_cg');
     Route::post('Ficha_Atencion/crear/cdg', [ficha_atencionController::class, 'store_cdg'])->name('fichaAtencion.registrar_ficha_cdg');
     Route::post('Ficha_Atencion/crear/uro', [ficha_atencionController::class, 'store_uro'])->name('fichaAtencion.registrar_ficha_uro');
     Route::post('Ficha_Atencion/crear/oft', [ficha_atencionController::class, 'store_oft'])->name('fichaAtencion.registrar_ficha_oft');
@@ -1224,8 +1231,7 @@ Route::get('/indicacion/medica/enviar',[App\Http\Controllers\DocumentoFcPaciente
 
 Route::get('/codigo/fonasa/buscar/por/codigo',[App\Http\Controllers\CodigoFonasaController::class, 'buscarPorCodigo'])->name('fonasa.buscar.por.codigo');
 Route::get('/codigo/fonasa/buscar/por/nombre',[App\Http\Controllers\CodigoFonasaController::class, 'buscarPorNombre'])->name('fonasa.buscar.por.nombre');
-
-
+Route::get('/codigo/fonasa/buscar/por/nombre/Autocomplete',[App\Http\Controllers\CodigoFonasaController::class, 'buscarPorNombreAutocomplete'])->name('fonasa.buscar.por.nombre.autocomplete');
 
 
 /** PARA VISUALIZAR DEMOS */

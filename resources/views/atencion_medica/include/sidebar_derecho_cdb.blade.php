@@ -1,6 +1,6 @@
     <!--Sidebar 3 cdb)-->
     <div class="position-fixed w-100 h-100"></div>
-    <div id="formularios_colon" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="370px" data-offset="true">
+    <div id="formularios_cir_dbaja" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="370px" data-offset="true">
         <header class="bs-canvas-header p-3 bg-info overflow-auto">
             <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true" class="text-white">&times;</span></button>
             <h5 class="d-inline-block text-light mb-0 float-right">Formularios Coloproctología</h5>
@@ -25,7 +25,7 @@
                     </div>
                 </div>
 
-               !-- SECCION CONSENTIMIENTOS -->
+               <!-- SECCION CONSENTIMIENTOS -->
                 @include('general.sidebar.seccion_consentimientos')
 
 

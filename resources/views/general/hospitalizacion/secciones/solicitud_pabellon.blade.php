@@ -6,11 +6,12 @@
         </div>
 
         <div class="row bg-white shadow-sm rounded mx-3 mt-4">
+            {{-- tabla solicitud de pabellon --}}
             <div class="col-sm-12 mt-3">
                 <!--**** Al agregar un examen, se debe cargar la tabla *****-->
                 <!--Tabla-->
                 <div class="table-responsive">
-
+                    <h4>Solicitud de pabellon</h4>
                     <table id="tabla_examen" class="table table-bordered table-sm">
                         <thead>
                             <tr>
@@ -23,8 +24,122 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (isset($solicitudes_pabellon_quirurgico))
-                                @foreach ($solicitudes_pabellon_quirurgico as $solicitud_pq)
+                            @if (isset($antecedentes_quirurgicos))
+                                @foreach ($antecedentes_quirurgicos as $solicitud_pq)
+                                    @if ($solicitud_pq->tipo_cirugia == 'quirurgica')
+                                        <tr>
+                                            <td class="text-center align-middle"> {{ $solicitud_pq->operacion }} </td>
+                                            <td class="text-center align-middle">
+                                                {{ $solicitud_pq->Profesional()->first()->nombre . ' ' . $solicitud_pq->Profesional()->first()->apellido_uno }}
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                {{ $solicitud_pq->LugarAtencion()->first()->nombre }}
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                @if ($solicitud_pq->grado_urgencia == 1)
+                                                    Normal
+                                                @else
+                                                    Urgente
+                                                @endif
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                {{ \Carbon\Carbon::parse($solicitud_pq->fecha_hora_operacion)->format('d-m-Y') }}
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                {{-- <a href="{{ ROUTE('cirugia.ingreso_paciente', $solicitud_pq->id) }}" class="btn btn-icon btn-info" data-toggle="tooltip" data-placement="top" title="Ingreso Paciente"><i class="feather icon-activity"></i></a> --}}
+                                                <button type="button" class="btn btn-icon btn-info" onclick="ver_info_solicitud_pabellon('{{ $solicitud_pq->id }}')"><i class="feather icon-activity"></i></button>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="5"><span>NO EXISTEN REGISTROS</span></td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+                <!--Cierre Tabla-->
+            </div>
+
+            {{-- tabla orden hospitalizacion cirugia --}}
+            <div class="col-sm-12 mt-3">
+                <!--**** Al agregar un examen, se debe cargar la tabla *****-->
+                <!--Tabla-->
+                <div class="table-responsive">
+                    <h4>Orden hospitalizacion cirugia</h4>
+                    <table id="tabla_examen" class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th class="text-center align-middle">Nombre Operaci&oacute;n</th>
+                                <th class="text-center align-middle">Profesional</th>
+                                <th class="text-center align-middle">Lugar</th>
+                                <th class="text-center align-middle">Urgencia</th>
+                                <th class="text-center align-middle">Fecha</th>
+                                <th class="text-center align-middle"> Acci&oacute;n</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (isset($antecedentes_quirurgicos))
+                                @foreach ($antecedentes_quirurgicos as $solicitud_pq)
+                                    @if ($solicitud_pq->tipo_cirugia == 'quirurgica')
+                                        <tr>
+                                            <td class="text-center align-middle"> {{ $solicitud_pq->operacion }} </td>
+                                            <td class="text-center align-middle">
+                                                {{ $solicitud_pq->Profesional()->first()->nombre . ' ' . $solicitud_pq->Profesional()->first()->apellido_uno }}
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                {{ $solicitud_pq->LugarAtencion()->first()->nombre }}
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                @if ($solicitud_pq->grado_urgencia == 1)
+                                                    Normal
+                                                @else
+                                                    Urgente
+                                                @endif
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                {{ \Carbon\Carbon::parse($solicitud_pq->fecha_hora_operacion)->format('d-m-Y') }}
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                {{-- <a href="{{ ROUTE('cirugia.ingreso_paciente', $solicitud_pq->id) }}" class="btn btn-icon btn-info" data-toggle="tooltip" data-placement="top" title="Ingreso Paciente"><i class="feather icon-activity"></i></a> --}}
+                                                <button type="button" class="btn btn-icon btn-info"><i class="feather icon-activity"></i></button>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="5"><span>NO EXISTEN REGISTROS</span></td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+                <!--Cierre Tabla-->
+            </div>
+
+            {{-- tabla orden hospitalizacion tratamiento --}}
+            <div class="col-sm-12 mt-3">
+                <!--**** Al agregar un examen, se debe cargar la tabla *****-->
+                <!--Tabla-->
+                <div class="table-responsive">
+                    <h4>Orden hospitalizacion tratamiento medico</h4>
+                    <table id="tabla_examen" class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th class="text-center align-middle">Nombre Operaci&oacute;n</th>
+                                <th class="text-center align-middle">Profesional</th>
+                                <th class="text-center align-middle">Lugar</th>
+                                <th class="text-center align-middle">Urgencia</th>
+                                <th class="text-center align-middle">Fecha</th>
+                                <th class="text-center align-middle"> Acci&oacute;n</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (isset($antecedentes_quirurgicos))
+                                @foreach ($antecedentes_quirurgicos as $solicitud_pq)
                                     @if ($solicitud_pq->tipo_cirugia == 'quirurgica')
                                         <tr>
                                             <td class="text-center align-middle"> {{ $solicitud_pq->operacion }} </td>
@@ -56,7 +171,7 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <span>NO EXISTEN REGISTROS</span>
+                                    <td colspan="5"><span>NO EXISTEN REGISTROS</span></td>
                                 </tr>
                             @endif
                         </tbody>
@@ -64,6 +179,7 @@
                 </div>
                 <!--Cierre Tabla-->
             </div>
+
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12 mt-3 mb-0">
@@ -73,7 +189,7 @@
                 </div>
                 <form id="form_solicitud_pabellon_quirurgico_dental" action="{{ route('cirugia.registrar_solicitud_pabellon_quirurgico') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="ficha_id_quirurgico" id="ficha_id_quirurgico" value=" @if ($ficha != null) {{ $ficha->id }} @endif">
+                    <input type="hidden" name="ficha_id_quirurgico" id="ficha_id_quirurgico" value=" @if ($id_ficha_atencion != null) {{ $id_ficha_atencion }} @endif">
                     <input type="hidden" name="paciente_quirurgico" id="paciente_quirurgico" value="{{ $paciente->id }}">
                     <input type="hidden" name="tipo_cirugia" id="tipo_cirugia" value="quirurgica">
                     <div class="row">
@@ -90,9 +206,9 @@
                                             <label class="floating-label-activo">Clínica / Hospital</label>
                                             <select class="form-control form-control-sm" onchange="cargar_datos_lugar_atencion()" name="lugar_atencion_pabellon_quirurgico" id="lugar_atencion_pabellon_quirurgico">
                                                 <option value="0">Seleccione...</option>
-                                                @foreach ($lugares_atenciones as $lugares)
+                                                {{-- @foreach ($lugares_atencion as $lugares)
                                                     <option value="{{ $lugares->id }}">{{ $lugares->nombre }}</option>
-                                                @endforeach
+                                                @endforeach --}}
                                             </select>
                                         </div>
                                         <div class="form-group col-md-3">
@@ -277,3 +393,14 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    function ver_info_solicitud_pabellon()
+    {
+        /**
+         * abre modal
+         * carga info de solicitud
+         */
+    }
+</script>

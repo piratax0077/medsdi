@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Antecedente;
 use App\Models\AntecedenteAlergiaPaciente;
 use App\Models\AntecedenteEnferCronica;
 use App\Models\AntecedenteMedicamentoCronico;
@@ -179,6 +180,7 @@ class ficha_atencionController extends Controller
 
         // LUGAR DE ATENCION
         $lugar_atencion = LugarAtencion::where('id',$request->lugar_atencion_id)->first();
+        $lugares_atencion  = LugarAtencion::all();
 
         // FICHA DE ATENCION ACTUAL
         // $fichaAtencion = FichaAtencion::where('id_paciente', $hora->id_paciente)->where('confidencial', false)->where('finalizada', 0)->first();
@@ -198,7 +200,8 @@ class ficha_atencionController extends Controller
             $medicamentos_cronicos = AntecedenteMedicamentoCronico::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
             $alergias = AntecedenteAlergiaPaciente::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
             $antecedentes_quirurgicos = SolicitudPabellonQuirurgico::where('id_paciente', $paciente->id)->get();
-            $patoligias_cronicas = AntecedenteEnferCronica::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+            // $patoligias_cronicas = AntecedenteEnferCronica::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+            $patoligias_cronicas = Antecedente::where('id_tipo_antecedente', 2)->where('id_paciente', $paciente->id)->where('estado', 1)->get();
         } else {
             $medicamentos_cronicos = [];
             $alergias = [];
@@ -709,6 +712,7 @@ class ficha_atencionController extends Controller
                 'fichaAtencion' => $fichaAtencion,
                 'id_lugar_atencion' => $request->lugar_atencion_id,
                 'lugar_atencion' => $lugar_atencion,
+                'lugares_atencion ' => $lugares_atencion ,
                 'id_ficha_atencion' => $id_ficha_atencion,
                 'especialidad' => $especialidad,
                 'interconsulta' => $interconsulta,
@@ -717,6 +721,7 @@ class ficha_atencionController extends Controller
                 'lista_examen_especial' => $lista_examen_especial,
                 'examenes_especialidad' => $examenes_especialidad,
                 'examenes_radiologicos' => $examenes_radiologicos,
+
 
                 // 'ficha_ges' => $ges,
                 // 'direccion' => $direccion,
@@ -2049,6 +2054,244 @@ class ficha_atencionController extends Controller
 
     }
 
+    public function store_cg(Request $request)
+    {
+        $campos_requeridos = 0;
+        $mensaje = '';
+        if(empty( trim($request->hip_diag_spec)))
+        {
+            $campos_requeridos = 1;
+            $mensaje = 'El Diagnóstico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
+        }
+
+
+        if($campos_requeridos == 0)
+        {
+            $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+
+            $ficha = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
+            $id_profesional = $request->id_profesional_fc;
+            $id_paciente = $request->id_paciente_fc;
+
+            $ges = 0;
+            if ($request->modal_ges == 'on') {
+                $ges = 1;
+            } else {
+                $ges = 0;
+            }
+
+            $cronico = 0;
+            if ($request->enf_cronico == 'on') {
+                $cronico = 1;
+            } else {
+                $cronico = 0;
+            }
+
+            $confidencial = 0;
+            if ($request->confidencial == 'on') {
+                $confidencial = 1;
+            } else {
+                $confidencial = 0;
+            }
+
+            $ficha->motivo = $request->descripcion_consulta_cdg;
+            $ficha->antecedentes = $request->antec_especialidad_cdg;
+            // $ficha->examen_fisico = $request->descripcion_examen_fisico;
+
+            //Signos vitales
+            if ($request->temperatura != '') {
+                $ficha->temperatura = $request->temperatura;
+            } else {
+                $ficha->temperatura = null;
+            }
+
+            if ($request->pulso != '') {
+                $ficha->pulso = $request->pulso;
+            } else {
+                $ficha->pulso = null;
+            }
+
+            if ($request->frecuencia_reposo != '') {
+                $ficha->frecuencia_reposo = $request->frecuencia_reposo;
+            } else {
+                $ficha->frecuencia_reposo = null;
+            }
+
+            if ($request->peso != '') {
+                $ficha->peso = $request->peso;
+            } else {
+                $ficha->peso = null;
+            }
+
+            if ($request->talla != '') {
+                $ficha->talla = $request->talla;
+            } else {
+                $ficha->talla = null;
+            }
+
+            if ($request->imc != '') {
+                $ficha->imc = $request->imc;
+            } else {
+                $ficha->imc = null;
+            }
+
+            if ($request->estado_nutricional != '') {
+                $ficha->estado_nutricional = $request->estado_nutricional;
+            } else {
+                $ficha->estado_nutricional = null;
+            }
+
+            //presion Arterial
+            if ($request->presion_bi != '') {
+                $ficha->presion_bi = $request->presion_bi;
+            } else {
+                $ficha->presion_bi = null;
+            }
+
+            if ($request->presion_bd != '') {
+                $ficha->presion_bd = $request->presion_bd;
+            } else {
+                $ficha->presion_bd = null;
+            }
+
+            if ($request->presion_de_pie != '') {
+                $ficha->presion_de_pie = $request->presion_de_pie;
+            } else {
+                $ficha->presion_de_pie = null;
+            }
+
+            if ($request->presion_sentado != '') {
+                $ficha->presion_sentado = $request->presion_sentado;
+            } else {
+                $ficha->presion_sentado = null;
+            }
+
+            //comunicacion y Traslado
+            if ($request->ct_estado_conciencia != '') {
+                $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
+            } else {
+                $ficha->ct_estado_conciencia = null;
+            }
+
+            if ($request->ct_lenguaje != '') {
+                $ficha->ct_lenguaje = $request->ct_lenguaje;
+            } else {
+                $ficha->ct_lenguaje = null;
+            }
+
+            if ($request->ct_traslado != '') {
+                $ficha->ct_traslado = $request->ct_traslado;
+            } else {
+                $ficha->ct_traslado = null;
+            }
+
+            $ficha->hipotesis_diagnostico = $request->hip_diag_spec;
+            $ficha->diagnostico_ce10 = $request->descripcion_cie_esp;
+
+            // $ficha->cronico = $cronico;
+            // $ficha->ges = $ges;
+            // $ficha->confidencial = $confidencial;
+            $ficha->id_paciente = $id_paciente;
+            $ficha->id_profesional = $id_profesional;
+            $ficha->finalizada = 1;
+
+            if (!$ficha->save())
+            {
+                return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
+            }
+            else
+            {
+                $tipo_mensaje = 'success';
+                $mensaje = 'Ficha Clínica guardada de forma correcta\n';
+
+                /** registro de ficha Cirugia General  */
+                $ficha_cg = new FichaCirugiaGeneral();
+                $ficha_cg->id_ficha_atencion = $ficha->id;
+                $ficha_cg->id_profesional = $id_profesional;
+                $ficha_cg->id_paciente = $id_paciente;
+                $ficha_cg->ind_esp_cirugia = $request->ind_esp_cirugia;
+                $ficha_cg->e_general = $request->e_general;
+                $ficha_cg->obs_e_general = $request->obs_e_general;
+                $ficha_cg->e_signos_vit = $request->e_signos_vit;
+                $ficha_cg->obs_e_signos_vit = $request->obs_e_signos_vit;
+                $ficha_cg->e_dolor_loc = $request->e_dolor_loc;
+                $ficha_cg->obs_e_dolor_loc = $request->obs_e_dolor_loc;
+                $ficha_cg->masas_pal = $request->masas_pal;
+                $ficha_cg->obs_masas_pal = $request->obs_masas_pal;
+                $ficha_cg->e_piel_fan = $request->e_piel_fan;
+                $ficha_cg->obs_e_piel_fan = $request->obs_e_piel_fan;
+                $ficha_cg->ex_cabcuello = $request->ex_cabcuello;
+                $ficha_cg->obs_ex_cabcuello = $request->obs_ex_cabcuello;
+                $ficha_cg->ex_torax = $request->ex_torax;
+                $ficha_cg->obs_ex_torax = $request->obs_ex_torax;
+                $ficha_cg->ex_abdomen = $request->ex_abdomen;
+                $ficha_cg->obs_ex_abdomen = $request->obs_ex_abdomen;
+                $ficha_cg->ex_muscesq = $request->ex_muscesq;
+                $ficha_cg->obs_ex_muscesq = $request->obs_ex_muscesq;
+                $ficha_cg->ex_o_sent = $request->ex_o_sent;
+                $ficha_cg->obs_ex_o_sent = $request->obs_ex_o_sent;
+                $ficha_cg->obs_ex_segmentario = $request->obs_ex_segmentario;
+                $ficha_cg->urgencia_cg = $request->urgencia_cg;
+                $ficha_cg->obs_urgencia_cg = $request->obs_urgencia_cg;
+                $ficha_cg->hosp_cg = $request->hosp_cg;
+                $ficha_cg->obs_hosp_cg = $request->obs_hosp_cg;
+                $ficha_cg->otrotto_cg = $request->otrotto_cg;
+                $ficha_cg->obs_otrotto_cg = $request->obs_otrotto_cg;
+                $ficha_cg->obs_plan_tratamiento = $request->obs_plan_tratamiento;
+                $ficha_cg->hospen_cg = $request->hospen_cg;
+                $ficha_cg->obs_hospen_cg = $request->obs_hospen_cg;
+                $ficha_cg->hosp_enserv_cg = $request->hosp_enserv_cg;
+                $ficha_cg->obs_hosp_enserv_cg = $request->obs_hosp_enserv_cg;
+                $ficha_cg->otro_tto_cg = $request->otro_tto_cg;
+                $ficha_cg->obs_otro_tto_cg = $request->obs_otro_tto_cg;
+                $ficha_cg->obs_hospitalizacion_cg = $request->obs_hospitalizacion_cg;
+                // $ficha_cg->otro = '';
+                $ficha_cg->estado = 1;
+
+                if($ficha_cg->save())
+                {
+                    $mensaje = 'Ficha Cirugia General guardada de forma correcta\n';
+                }
+                else
+                {
+                    $mensaje .= 'Ficha Cirugia General presento problema al guardar\n';
+                }
+
+                // finalizar hora medica
+                $hora_medica->id_estado = 6;
+                $mensaje_estado_hora_medica = '';
+                if (!$hora_medica->save()) {
+                    $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
+                }
+                else
+                {
+                    $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.\n';
+                }
+                $mensaje .= $mensaje_estado_hora_medica;
+
+                if($request->cerrarsession == 0 || $request->cerrarsession =='')
+                {
+                    /** redireccion Redirect funciona correcto */
+                    return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+                }
+                else if($request->cerrarsession == 1)
+                {
+                    //si funciona
+                    $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+                    return \Redirect::route('home.ingreso');
+
+                }
+            }
+        }
+        else
+        {
+            var_dump($mensaje);
+            exit();
+            return back()->with('error', $mensaje)->withInput();
+        }
+    }
+
     public function store_cdg(Request $request)
     {
         $campos_requeridos = 0;
@@ -2264,22 +2507,41 @@ class ficha_atencionController extends Controller
                 $ficha_cg->id_profesional = $id_profesional;
                 $ficha_cg->id_paciente = $id_paciente;
                 $ficha_cg->ind_esp_cirugia = $request->ind_esp_cirugia;
-                $ficha_cg->organo_cg = $request->organo_cg;
-                $ficha_cg->obs_organo_cg = $request->obs_organo_cg;
-                $ficha_cg->ceg_cg = $request->ceg_cg;
-                $ficha_cg->obs_ceg_cg = $request->obs_ceg_cg;
-                $ficha_cg->masa_cg = $request->masa_cg;
-                $ficha_cg->obs_masas_cg = $request->obs_masas_cg;
+                $ficha_cg->e_general = $request->e_general;
+                $ficha_cg->obs_e_general = $request->obs_e_general;
+                $ficha_cg->e_signos_vit = $request->e_signos_vit;
+                $ficha_cg->obs_e_signos_vit = $request->obs_e_signos_vit;
+                $ficha_cg->e_dolor_loc = $request->e_dolor_loc;
+                $ficha_cg->obs_e_dolor_loc = $request->obs_e_dolor_loc;
+                $ficha_cg->masas_pal = $request->masas_pal;
+                $ficha_cg->obs_masas_pal = $request->obs_masas_pal;
+                $ficha_cg->e_piel_fan = $request->e_piel_fan;
+                $ficha_cg->obs_e_piel_fan = $request->obs_e_piel_fan;
+                $ficha_cg->ex_cabcuello = $request->ex_cabcuello;
+                $ficha_cg->obs_ex_cabcuello = $request->obs_ex_cabcuello;
+                $ficha_cg->ex_torax = $request->ex_torax;
+                $ficha_cg->obs_ex_torax = $request->obs_ex_torax;
+                $ficha_cg->ex_abdomen = $request->ex_abdomen;
+                $ficha_cg->obs_ex_abdomen = $request->obs_ex_abdomen;
+                $ficha_cg->ex_muscesq = $request->ex_muscesq;
+                $ficha_cg->obs_ex_muscesq = $request->obs_ex_muscesq;
+                $ficha_cg->ex_o_sent = $request->ex_o_sent;
+                $ficha_cg->obs_ex_o_sent = $request->obs_ex_o_sent;
+                $ficha_cg->obs_ex_segmentario = $request->obs_ex_segmentario;
                 $ficha_cg->urgencia_cg = $request->urgencia_cg;
                 $ficha_cg->obs_urgencia_cg = $request->obs_urgencia_cg;
-                $ficha_cg->so_cg = $request->so_cg;
-                $ficha_cg->obs_so_cg = $request->obs_so_cg;
-                $ficha_cg->obs_egp_cg = $request->obs_egp_cg;
-                $ficha_cg->obs_gen_ex_esp_cg = $request->obs_gen_ex_esp_cg;
-                $ficha_cg->eg_cpq_cg = $request->eg_cpq_cg;
-                $ficha_cg->hoc_cpa_cg = $request->hoc_cpa_cg;
-                $ficha_cg->masas_cpq_cg = $request->masas_cpq_cg;
-                $ficha_cg->obs_egp_cpq_cg = $request->obs_egp_cpq_cg;
+                $ficha_cg->hosp_cg = $request->hosp_cg;
+                $ficha_cg->obs_hosp_cg = $request->obs_hosp_cg;
+                $ficha_cg->otrotto_cg = $request->otrotto_cg;
+                $ficha_cg->obs_otrotto_cg = $request->obs_otrotto_cg;
+                $ficha_cg->obs_plan_tratamiento = $request->obs_plan_tratamiento;
+                $ficha_cg->hospen_cg = $request->hospen_cg;
+                $ficha_cg->obs_hospen_cg = $request->obs_hospen_cg;
+                $ficha_cg->hosp_enserv_cg = $request->hosp_enserv_cg;
+                $ficha_cg->obs_hosp_enserv_cg = $request->obs_hosp_enserv_cg;
+                $ficha_cg->otro_tto_cg = $request->otro_tto_cg;
+                $ficha_cg->obs_otro_tto_cg = $request->obs_otro_tto_cg;
+                $ficha_cg->obs_hospitalizacion_cg = $request->obs_hospitalizacion_cg;
                 // $ficha_cg->otro = '';
                 $ficha_cg->estado = 1;
 
@@ -2482,6 +2744,458 @@ class ficha_atencionController extends Controller
             return back()->with('error', $mensaje)->withInput();
         }
     }
+
+    // public function store_cdg(Request $request)
+    // {
+    //     $campos_requeridos = 0;
+    //     $mensaje = '';
+    //     if(empty( trim($request->hip_diag_spec)))
+    //     {
+    //         $campos_requeridos = 1;
+    //         $mensaje = 'El Diagnóstico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
+    //     }
+    //     else
+    //     {
+    //         if(!empty($request->diag_endos_eda))
+    //         {
+    //             if($request->diag_endos_eda != 'Test de ureasa No tomado')
+    //             {
+    //                 if(empty($request->id_profesional_solicitado_por_eda))
+    //                 {
+    //                     if(empty($request->solicitado_por_rut_eda))
+    //                     {
+    //                         $campos_requeridos = 1;
+    //                         $mensaje = 'Endoscopía Digestiva Alta - Campo requerido RUT del Solicitante.\n';
+    //                     }
+    //                     if(empty($request->solicitado_por_nombre_eda))
+    //                     {
+    //                         $campos_requeridos = 1;
+    //                         $mensaje = 'Endoscopía Digestiva Alta - Campo requerido NOMBRE del Solicitante.\n';
+    //                     }
+    //                     if(empty($request->solicitado_por_apellido_eda))
+    //                     {
+    //                         $campos_requeridos = 1;
+    //                         $mensaje = 'Endoscopía Digestiva Alta - Campo requerido APELLIDO del Solicitante.\n';
+    //                     }
+    //                     if(empty($request->solicitado_por_telefono_eda) || empty($request->solicitado_por_email_eda))
+    //                     {
+    //                         $campos_requeridos = 1;
+    //                         $mensaje = 'Endoscopía Digestiva Alta - Campo requerido TELÉFONO o EMAIL del Solicitante.\n';
+    //                     }
+    //                 }
+    //             }
+
+    //         }
+    //         else if(!empty($request->diag_endos_edb))
+    //         {
+    //             if(empty($request->id_profesional_solicitado_por_edb))
+    //             {
+    //                 if(empty($request->solicitado_por_rut_edb))
+    //                 {
+    //                     $campos_requeridos = 1;
+    //                     $mensaje = 'Endoscopía Digestiva Baja - Campo requerido RUT del Solicitante.\n';
+    //                 }
+    //                 if(empty($request->solicitado_por_nombre_edb))
+    //                 {
+    //                     $campos_requeridos = 1;
+    //                     $mensaje = 'Endoscopía Digestiva Baja - Campo requerido NOMBRE del Solicitante.\n';
+    //                 }
+    //                 if(empty($request->solicitado_por_apellido_edb))
+    //                 {
+    //                     $campos_requeridos = 1;
+    //                     $mensaje = 'Endoscopía Digestiva Baja - Campo requerido APELLIDO del Solicitante.\n';
+    //                 }
+    //                 if(empty($request->solicitado_por_telefono_edb) || empty($request->solicitado_por_email_edb))
+    //                 {
+    //                     $campos_requeridos = 1;
+    //                     $mensaje = 'Endoscopía Digestiva Baja - Campo requerido TELÉFONO o EMAIL del Solicitante.\n';
+    //                 }
+    //             }
+    //         }
+
+    //     }
+
+    //     if($campos_requeridos == 0)
+    //     {
+    //         $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+
+    //         $ficha = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
+    //         $id_profesional = $request->id_profesional_fc;
+    //         $id_paciente = $request->id_paciente_fc;
+
+    //         $ges = 0;
+    //         if ($request->modal_ges == 'on') {
+    //             $ges = 1;
+    //         } else {
+    //             $ges = 0;
+    //         }
+
+    //         $cronico = 0;
+    //         if ($request->enf_cronico == 'on') {
+    //             $cronico = 1;
+    //         } else {
+    //             $cronico = 0;
+    //         }
+
+    //         $confidencial = 0;
+    //         if ($request->confidencial == 'on') {
+    //             $confidencial = 1;
+    //         } else {
+    //             $confidencial = 0;
+    //         }
+
+    //         $ficha->motivo = $request->descripcion_consulta_cdg;
+    //         $ficha->antecedentes = $request->antec_especialidad_cdg;
+    //         // $ficha->examen_fisico = $request->descripcion_examen_fisico;
+
+    //         //Signos vitales
+    //         if ($request->temperatura != '') {
+    //             $ficha->temperatura = $request->temperatura;
+    //         } else {
+    //             $ficha->temperatura = null;
+    //         }
+
+    //         if ($request->pulso != '') {
+    //             $ficha->pulso = $request->pulso;
+    //         } else {
+    //             $ficha->pulso = null;
+    //         }
+
+    //         if ($request->frecuencia_reposo != '') {
+    //             $ficha->frecuencia_reposo = $request->frecuencia_reposo;
+    //         } else {
+    //             $ficha->frecuencia_reposo = null;
+    //         }
+
+    //         if ($request->peso != '') {
+    //             $ficha->peso = $request->peso;
+    //         } else {
+    //             $ficha->peso = null;
+    //         }
+
+    //         if ($request->talla != '') {
+    //             $ficha->talla = $request->talla;
+    //         } else {
+    //             $ficha->talla = null;
+    //         }
+
+    //         if ($request->imc != '') {
+    //             $ficha->imc = $request->imc;
+    //         } else {
+    //             $ficha->imc = null;
+    //         }
+
+    //         if ($request->estado_nutricional != '') {
+    //             $ficha->estado_nutricional = $request->estado_nutricional;
+    //         } else {
+    //             $ficha->estado_nutricional = null;
+    //         }
+
+    //         //presion Arterial
+    //         if ($request->presion_bi != '') {
+    //             $ficha->presion_bi = $request->presion_bi;
+    //         } else {
+    //             $ficha->presion_bi = null;
+    //         }
+
+    //         if ($request->presion_bd != '') {
+    //             $ficha->presion_bd = $request->presion_bd;
+    //         } else {
+    //             $ficha->presion_bd = null;
+    //         }
+
+    //         if ($request->presion_de_pie != '') {
+    //             $ficha->presion_de_pie = $request->presion_de_pie;
+    //         } else {
+    //             $ficha->presion_de_pie = null;
+    //         }
+
+    //         if ($request->presion_sentado != '') {
+    //             $ficha->presion_sentado = $request->presion_sentado;
+    //         } else {
+    //             $ficha->presion_sentado = null;
+    //         }
+
+    //         //comunicacion y Traslado
+    //         if ($request->ct_estado_conciencia != '') {
+    //             $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
+    //         } else {
+    //             $ficha->ct_estado_conciencia = null;
+    //         }
+
+    //         if ($request->ct_lenguaje != '') {
+    //             $ficha->ct_lenguaje = $request->ct_lenguaje;
+    //         } else {
+    //             $ficha->ct_lenguaje = null;
+    //         }
+
+    //         if ($request->ct_traslado != '') {
+    //             $ficha->ct_traslado = $request->ct_traslado;
+    //         } else {
+    //             $ficha->ct_traslado = null;
+    //         }
+
+    //         $ficha->hipotesis_diagnostico = $request->hip_diag_spec;
+    //         $ficha->diagnostico_ce10 = $request->descripcion_cie_esp;
+
+    //         // $ficha->cronico = $cronico;
+    //         // $ficha->ges = $ges;
+    //         // $ficha->confidencial = $confidencial;
+    //         $ficha->id_paciente = $id_paciente;
+    //         $ficha->id_profesional = $id_profesional;
+    //         $ficha->finalizada = 1;
+
+    //         if (!$ficha->save())
+    //         {
+    //             return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
+    //         }
+    //         else
+    //         {
+    //             $tipo_mensaje = 'success';
+    //             $mensaje = 'Ficha Clínica guardada de forma correcta\n';
+
+    //             /** registro de ficha Cirugia General  */
+    //             $ficha_cg = new FichaCirugiaGeneral();
+    //             $ficha_cg->id_ficha_atencion = $ficha->id;
+    //             $ficha_cg->id_profesional = $id_profesional;
+    //             $ficha_cg->id_paciente = $id_paciente;
+    //             $ficha_cg->ind_esp_cirugia = $request->ind_esp_cirugia;
+    //             $ficha_cg->obs_e_general = $request->obs_e_general;
+    //             $ficha_cg->e_signos_vit = $request->e_signos_vit;
+    //             $ficha_cg->obs_e_signos_vit = $request->obs_e_signos_vit;
+    //             $ficha_cg->e_dolor_loc = $request->e_dolor_loc;
+    //             $ficha_cg->obs_e_dolor_loc = $request->obs_e_dolor_loc;
+    //             $ficha_cg->masas_pal = $request->masas_pal;
+    //             $ficha_cg->obs_masas_pal = $request->obs_masas_pal;
+    //             $ficha_cg->e_piel_fan = $request->e_piel_fan;
+    //             $ficha_cg->obs_e_piel_fan = $request->obs_e_piel_fan;
+    //             $ficha_cg->ex_cabcuello = $request->ex_cabcuello;
+    //             $ficha_cg->obs_ex_cabcuello = $request->obs_ex_cabcuello;
+    //             $ficha_cg->ex_torax = $request->ex_torax;
+    //             $ficha_cg->obs_ex_torax = $request->obs_ex_torax;
+    //             $ficha_cg->ex_abdomen = $request->ex_abdomen;
+    //             $ficha_cg->obs_ex_abdomen = $request->obs_ex_abdomen;
+    //             $ficha_cg->ex_muscesq = $request->ex_muscesq;
+    //             $ficha_cg->obs_ex_muscesq = $request->obs_ex_muscesq;
+    //             $ficha_cg->ex_o_sent = $request->ex_o_sent;
+    //             $ficha_cg->obs_ex_o_sent = $request->obs_ex_o_sent;
+    //             $ficha_cg->obs_ex_segmentario = $request->obs_ex_segmentario;
+    //             $ficha_cg->urgencia_cg = $request->urgencia_cg;
+    //             $ficha_cg->obs_urgencia_cg = $request->obs_urgencia_cg;
+    //             $ficha_cg->hosp_cg = $request->hosp_cg;
+    //             $ficha_cg->obs_hosp_cg = $request->obs_hosp_cg;
+    //             $ficha_cg->otrotto_cg = $request->otrotto_cg;
+    //             $ficha_cg->obs_otrotto_cg = $request->obs_otrotto_cg;
+    //             $ficha_cg->obs_plan_tratamiento = $request->obs_plan_tratamiento;
+    //             $ficha_cg->hospen_cg = $request->hospen_cg;
+    //             $ficha_cg->obs_hospen_cg = $request->obs_hospen_cg;
+    //             $ficha_cg->hosp_enserv_cg = $request->hosp_enserv_cg;
+    //             $ficha_cg->obs_hosp_enserv_cg = $request->obs_hosp_enserv_cg;
+    //             $ficha_cg->otro_tto_cg = $request->otro_tto_cg;
+    //             $ficha_cg->obs_otro_tto_cg = $request->obs_otro_tto_cg;
+    //             $ficha_cg->obs_hospitalizacion_cg = $request->obs_hospitalizacion_cg;
+    //             // $ficha_cg->otro = '';
+    //             $ficha_cg->estado = 1;
+
+    //             if($ficha_cg->save())
+    //             {
+
+    //                 $mensaje = 'Ficha Cirugia General guardada de forma correcta\n';
+
+    //                 /** registro de ficha Cirugia Digestiva */
+    //                 $ficha_cd = new FichaCirugiaDigestiva();
+    //                 $ficha_cd->id_ficha_atencion = $ficha->id;
+    //                 $ficha_cd->id_ficha_cirugia = $ficha_cg->id;
+    //                 $ficha_cd->id_profesional = $id_profesional;
+    //                 $ficha_cd->id_paciente = $id_paciente;
+    //                 $ficha_cd->ind_esp_cirugia = $request->ind_esp_cirugia;
+    //                 $ficha_cd->dolor_cdg = $request->dolor_cdg;
+    //                 $ficha_cd->obs_dolor_cdg = $request->obs_dolor_cdg;
+
+    //                 $ficha_cd->transito_intest = $request->transito_intest;
+    //                 $ficha_cd->obs_transito_intest = $request->obs_transito_intest;
+    //                 $ficha_cd->dolor_def = $request->dolor_def;
+    //                 $ficha_cd->obs_dolor_def = $request->obs_dolor_def;
+    //                 $ficha_cd->sangre_otros = $request->sangre_otros;
+    //                 $ficha_cd->obs_sangre_otros = $request->obs_sangre_otros;
+
+    //                 $ficha_cd->otros_sintomas_cdg = $request->otros_sintomas_cdg;
+    //                 $ficha_cd->obs_otros_sintomas_cdg = $request->obs_otros_sintomas_cdg;
+    //                 $ficha_cd->ceg_cdg = $request->ceg_cdg;
+    //                 $ficha_cd->obs_ceg_cdg = $request->obs_ceg_cdg;
+    //                 $ficha_cd->masa_cdg = $request->masa_cdg;
+    //                 $ficha_cd->obs_masa_cdg = $request->obs_masa_cdg;
+    //                 $ficha_cd->urgencia_cdg = $request->urgencia_cdg;
+    //                 $ficha_cd->obs_urgencia_cdg = $request->obs_urgencia_cdg;
+    //                 $ficha_cd->so_cdg = $request->so_cdg;
+    //                 $ficha_cd->obs_so_cdg = $request->obs_so_cdg;
+    //                 $ficha_cd->obs_egp_cdg = $request->obs_egp_cdg;
+    //                 $ficha_cd->obs_gen_ex_esp_cdg = $request->obs_gen_ex_esp_cdg;
+    //                 // $ficha_cd->otro = '';
+    //                 $ficha_cd->estado = 1;
+
+    //                 if($ficha_cd->save())
+    //                 {
+    //                     $mensaje .= 'Ficha Cirugia Digestiva guardada de forma correcta\n';
+
+    //                     /** REGISTRO DE EXAMEN */
+    //                     $lista_examen_especialidad = explode('|',$request->tipo_examen_especial);
+    //                     foreach ($lista_examen_especialidad as $key_examen_tipo => $value_examen_tipo)
+    //                     {
+    //                         $parametro = $request->all();
+
+    //                         $temp_value_examen_tipo = explode(',',$value_examen_tipo);
+    //                         // $temp_value_examen_tipo[0] = alias template
+    //                         // $temp_value_examen_tipo[1] = id_tipo
+    //                         // $temp_value_examen_tipo[2] = id_template
+
+    //                         if( !empty( $request['diag_endos_'.$temp_value_examen_tipo[0]] ) )
+    //                         {
+
+    //                             if($request['diag_endos_'.$temp_value_examen_tipo[0]] != 'Test de ureasa No tomado')
+    //                             {
+    //                                 /** limpiar parametos */
+    //                                 foreach( $parametro as $key => $value )
+    //                                 {
+    //                                     if(!strpos($key, '_'.$temp_value_examen_tipo[0]) && !strpos($key, 'id_fc') && !strpos($key, '_fc') )
+    //                                     unset($parametro[$key]);
+    //                                 }
+
+    //                                 $parametro['id_ficha_cirugia_digestiva'] = $ficha_cd->id;
+    //                                 $examen_json = ExamenEspecialidadController::estructuraJson($temp_value_examen_tipo[2],$parametro);
+    //                                 if($examen_json['estado'] == 1)
+    //                                 {
+    //                                     $profesional = Profesional::find($id_profesional);
+    //                                     $template = ExamenEspecialidadTemplate::find($temp_value_examen_tipo[2]);
+
+    //                                     $examen = new ExamenEspecialidad();
+    //                                     $examen->id_tipo = '1';
+    //                                     $examen->id_template = $temp_value_examen_tipo[2];
+    //                                     $examen->id_examen_tipo = $temp_value_examen_tipo[1];
+    //                                     $examen->id_sub_tipo_especialidad = $profesional->id_sub_tipo_especialidad;
+    //                                     $examen->id_ficha_atencion = $ficha->id;
+    //                                     $examen->id_ficha_especialidad = $ficha_cd->id;
+    //                                     $examen->id_paciente = $id_paciente;
+    //                                     $examen->id_profesional = $id_profesional;
+    //                                     $examen->nombre = $template->nombre;
+    //                                     $examen->cuerpo = $examen_json['json'];
+    //                                     $examen->estado = '1';
+    //                                     if($examen->save())
+    //                                     {
+    //                                         $datos['examen'][$temp_value_examen_tipo[0]]['estado'] = 1;
+    //                                         $datos['examen'][$temp_value_examen_tipo[0]]['msj'] = 'registro exitoso';
+    //                                         $mensaje .= 'Examen '.$template->nombre.' registrado de forma exitosa\n';
+
+    //                                         /** carga imagen */
+    //                                         if(!empty($request->input_lista_imagenes))
+    //                                         {
+
+    //                                             $array_imagenes = (array)json_decode($request->input_lista_imagenes);
+
+    //                                             // var_dump($array_imagenes);
+    //                                             // var_dump($temp_value_examen_tipo[0]);
+    //                                             // var_dump($array_imagenes[$temp_value_examen_tipo[0]]);
+
+    //                                             if(!empty($array_imagenes[$temp_value_examen_tipo[0]]))
+    //                                             {
+    //                                                 $resulto_img = array();
+    //                                                 foreach ($array_imagenes[$temp_value_examen_tipo[0]] as $key => $value)
+    //                                                 {
+    //                                                     $paciente = Paciente::find($id_paciente);
+    //                                                     // echo json_encode($value);
+    //                                                     $ruta_temp = $value[0];
+    //                                                     $nombre_real = $value[1];
+    //                                                     $nombre_temp = $value[2];
+    //                                                     $file_extension = $value[3];
+    //                                                     if(isset($value[4])) $descripcion = $value[4];
+    //                                                     else $descripcion = '';
+    //                                                     $nombre_final = $paciente->rut.'_'.$examen->id.'_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+
+    //                                                     $resulto_img[$key] = CargaImagenController::moverImagen($nombre_temp, 'img_examen', $nombre_final);
+    //                                                     $registro_img = new ExamenEspecialidadImg();
+    //                                                     $registro_img->id_examen = $examen->id;
+    //                                                     $registro_img->url = $resulto_img[$key]['proceso']['url'];
+    //                                                     $registro_img->nombre = $nombre_final;
+    //                                                     $registro_img->otro = $descripcion;
+    //                                                     $registro_img->estado = 1;
+
+    //                                                     if($registro_img->save())
+    //                                                     {
+    //                                                         $resulto_img[$key]['estado'] = 1;
+    //                                                         $resulto_img[$key]['msj'] = 'imagen registrada';
+    //                                                     }
+    //                                                     else
+    //                                                     {
+    //                                                         $resulto_img[$key]['estado'] = 0;
+    //                                                         $resulto_img[$key]['msj'] = 'falla en registro de imagen';
+    //                                                     }
+
+    //                                                 }
+    //                                                 $datos['examen'][$temp_value_examen_tipo[0]]['resulto_img'] = $resulto_img;
+    //                                             }
+    //                                         }
+    //                                     }
+    //                                     else
+    //                                     {
+    //                                         $datos['examen'][$temp_value_examen_tipo[0]]['estado'] = 0;
+    //                                         $datos['examen'][$temp_value_examen_tipo[0]]['msj'] = 'Registro NO exitoso';
+    //                                         $mensaje .= 'Examen '.$template->nombre.' No guardada \n';
+    //                                     }
+    //                                 }
+    //                                 else
+    //                                 {
+    //                                     $mensaje .= 'Problema al general Estructura de examen '.$temp_value_examen_tipo[0].'\n';
+    //                                 }
+    //                             }
+    //                         }
+    //                         // else
+    //                         // {
+    //                         //     $mensaje .= 'No tiene diag_endos_'.$temp_value_examen_tipo[0].'\n';
+    //                         // }
+    //                     }
+    //                 }
+    //                 else
+    //                 {
+    //                     $mensaje .= 'Ficha Cirugia Digestiva presento problema al guardar\n';
+    //                 }
+    //             }
+    //             else
+    //             {
+    //                 $mensaje .= 'Ficha Cirugia General presento problema al guardar\n';
+    //             }
+
+    //             // finalizar hora medica
+    //             $hora_medica->id_estado = 6;
+    //             $mensaje_estado_hora_medica = '';
+    //             if (!$hora_medica->save()) {
+    //                 $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
+    //             }
+    //             else
+    //             {
+    //                 $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.\n';
+    //             }
+    //             $mensaje .= $mensaje_estado_hora_medica;
+
+    //             if($request->cerrarsession == 0 || $request->cerrarsession =='')
+    //             {
+    //                 /** redireccion Redirect funciona correcto */
+    //                 return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+    //             }
+    //             else if($request->cerrarsession == 1)
+    //             {
+    //                 //si funciona
+    //                 $request->session()->invalidate();
+    //                 $request->session()->regenerateToken();
+    //                 return \Redirect::route('home.ingreso');
+
+    //             }
+    //         }
+    //     }
+    //     else
+    //     {
+    //         return back()->with('error', $mensaje)->withInput();
+    //     }
+    // }
 
     public function store_uro(Request $request)
     {

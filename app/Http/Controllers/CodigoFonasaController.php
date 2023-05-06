@@ -88,4 +88,24 @@ class CodigoFonasaController extends Controller
 
         return $datos;
     }
+
+    public function buscarPorNombreAutocomplete(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '')
+        {
+            $registros = CodigoFonasa::orderby('nombre', 'asc')->select('id', 'nombre', 'codigo')->limit(15)->get();
+        }
+        else
+        {
+            $registros = CodigoFonasa::orderby('nombre', 'asc')->select('id', 'nombre','codigo')->where('nombre', 'like', '%'.$search.'%')->limit(15)->get();
+        }
+
+        $response = array();
+        foreach ($registros as $registro)
+        {
+            $response[] = array("value" => $registro->id, "label" => $registro->codigo.' - '.$registro->nombre, "codigo" => $registro->codigo);
+        }
+        return response()->json($response);
+    }
 }

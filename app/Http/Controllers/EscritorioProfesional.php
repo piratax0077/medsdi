@@ -485,7 +485,9 @@ class EscritorioProfesional extends Controller
 
             //if($profesional->bienvenida == 0)
             if( $lugar_atencion_prof == 0 )
-                return view('bienvenida.inicio_profesionales')->with(['regiones' => $region, 'profesional' => $profesional]);
+            {
+                return view('bienvenida.inicio_profesionales')->with(['region' => $region, 'profesional' => $profesional]);
+            }
             else
                 return view('app.profesional.escritorio_profesional')->with(['region' => $region, 'profesional' => $profesional, 'hora_dia' => $horas_dia]);
         }
@@ -2944,6 +2946,28 @@ class EscritorioProfesional extends Controller
 
         return $datos;
     }
+
+    public function cargarFichasTipoCDG()
+    {
+        $datos = array();
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $registro = FichaCirugiaDigestivaTipo::where('id_profesional',$profesional->id)->get();
+
+        if($registro)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registro;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
+        }
+
+        return $datos;
+    }
     /** CIERRE FICHA CIRUGIA DIGESTIVA TIPO */
 
     /** FICHA CIRUGIA GENERAL TIPO */
@@ -2951,22 +2975,45 @@ class EscritorioProfesional extends Controller
     {
         $datos = array();
         $ficha_tipo = new FichaCirugiaGeneralTipo();
-        $ficha_tipo->nombre = $request->nombre;
-        $ficha_tipo->descripcion = $request->descripcion;
         $ficha_tipo->id_profesional = $request->id_profesional;
         $ficha_tipo->ind_esp_cirugia = $request->ind_esp_cirugia;
-        $ficha_tipo->organo_cg = $request->organo_cg;
-        $ficha_tipo->obs_organo_cg = $request->obs_organo_cg;
-        $ficha_tipo->ceg_cg = $request->ceg_cg;
-        $ficha_tipo->obs_ceg_cg = $request->obs_ceg_cg;
-        $ficha_tipo->masa_cg = $request->masa_cg;
-        $ficha_tipo->obs_masas_cg = $request->obs_masas_cg;
+        $ficha_tipo->nombre = $request->nombre;
+        $ficha_tipo->descripcion = $request->descripcion;
+        $ficha_tipo->e_general = $request->e_general;
+        $ficha_tipo->obs_e_general = $request->obs_e_general;
+        $ficha_tipo->e_signos_vit = $request->e_signos_vit;
+        $ficha_tipo->obs_e_signos_vit = $request->obs_e_signos_vit;
+        $ficha_tipo->e_dolor_loc = $request->e_dolor_loc;
+        $ficha_tipo->obs_e_dolor_loc = $request->obs_e_dolor_loc;
+        $ficha_tipo->masas_pal = $request->masas_pal;
+        $ficha_tipo->obs_masas_pal = $request->obs_masas_pal;
+        $ficha_tipo->e_piel_fan = $request->e_piel_fan;
+        $ficha_tipo->obs_e_piel_fan = $request->obs_e_piel_fan;
+        $ficha_tipo->ex_cabcuello = $request->ex_cabcuello;
+        $ficha_tipo->obs_ex_cabcuello = $request->obs_ex_cabcuello;
+        $ficha_tipo->ex_torax = $request->ex_torax;
+        $ficha_tipo->obs_ex_torax = $request->obs_ex_torax;
+        $ficha_tipo->ex_abdomen = $request->ex_abdomen;
+        $ficha_tipo->obs_ex_abdomen = $request->obs_ex_abdomen;
+        $ficha_tipo->ex_muscesq = $request->ex_muscesq;
+        $ficha_tipo->obs_ex_muscesq = $request->obs_ex_muscesq;
+        $ficha_tipo->ex_o_sent = $request->ex_o_sent;
+        $ficha_tipo->obs_ex_o_sent = $request->obs_ex_o_sent;
+        $ficha_tipo->obs_ex_segmentario = $request->obs_ex_segmentario;
         $ficha_tipo->urgencia_cg = $request->urgencia_cg;
         $ficha_tipo->obs_urgencia_cg = $request->obs_urgencia_cg;
-        $ficha_tipo->so_cg = $request->so_cg;
-        $ficha_tipo->obs_so_cg = $request->obs_so_cg;
-        $ficha_tipo->obs_egp_cg = $request->obs_egp_cg;
-        $ficha_tipo->obs_gen_ex_esp_cg = $request->obs_gen_ex_esp_cg;
+        $ficha_tipo->hosp_cg = $request->hosp_cg;
+        $ficha_tipo->obs_hosp_cg = $request->obs_hosp_cg;
+        $ficha_tipo->otrotto_cg = $request->otrotto_cg;
+        $ficha_tipo->obs_otrotto_cg = $request->obs_otrotto_cg;
+        $ficha_tipo->obs_plan_tratamiento = $request->obs_plan_tratamiento;
+        $ficha_tipo->hospen_cg = $request->hospen_cg;
+        $ficha_tipo->obs_hospen_cg = $request->obs_hospen_cg;
+        $ficha_tipo->hosp_enserv_cg = $request->hosp_enserv_cg;
+        $ficha_tipo->obs_hosp_enserv_cg = $request->obs_hosp_enserv_cg;
+        $ficha_tipo->otro_tto_cg = $request->otro_tto_cg;
+        $ficha_tipo->obs_otro_tto_cg = $request->obs_otro_tto_cg;
+        $ficha_tipo->obs_hospitalizacion_cg = $request->obs_hospitalizacion_cg;
         $ficha_tipo->otro = $request->otro;
         $ficha_tipo->estado = 1;
 
@@ -2991,6 +3038,28 @@ class EscritorioProfesional extends Controller
 
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         $registro = FichaCirugiaGeneralTipo::where('id_profesional',$profesional->id)->where('id',$request->id_ficha_tipo)->first();
+
+        if($registro)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registro;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
+        }
+
+        return $datos;
+    }
+
+    public function cargarFichasTipoCG(Request $request)
+    {
+        $datos = array();
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $registro = FichaCirugiaGeneralTipo::where('id_profesional',$profesional->id)->get();
 
         if($registro)
         {

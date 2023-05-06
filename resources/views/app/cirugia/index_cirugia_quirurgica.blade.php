@@ -615,22 +615,11 @@
     <!--Cierre: Botón flotante-->
     <!--Modals Atenciones Generales-->
     <!--Formularios Generales-->
-    @include(
-        'app.dental.modals.atencion_general.formularios_generales.m_reposo'
-    )
-    @include(
-        'app.dental.modals.atencion_general.formularios_generales.interconsulta'
-    );
-    @include(
-        'app.dental.modals.atencion_general.formularios_generales.informe_medico'
-    );
-    @include(
-        'app.dental.modals.atencion_general.formularios_generales.uso_personal'
-    );
+    @include('app.dental.modals.atencion_general.formularios_generales.m_reposo')
+    @include('app.dental.modals.atencion_general.formularios_generales.interconsulta');
+    @include('app.dental.modals.atencion_general.formularios_generales.informe_medico');
+    @include('app.dental.modals.atencion_general.formularios_generales.uso_personal');
 
-
-    @include(
-        'app.dental.modals.formularios_dentales.concentimientos_informados.anestesia'
-    )
+    @include('app.dental.modals.formularios_dentales.concentimientos_informados.anestesia')
 
 @endsection
