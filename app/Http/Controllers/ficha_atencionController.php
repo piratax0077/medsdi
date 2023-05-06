@@ -564,6 +564,21 @@ class ficha_atencionController extends Controller
                 /** examenes radiologicos */
                 $examenes_radiologicos = '';
             }
+            else if($profesional->id_sub_tipo_especialidad == 66 )
+            {
+                // Cirugía Pediatrica General
+                $ruta_blade = 'atencion_pediatrica.atencion_cirugia_pediatrica';
+                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $fichaTipo = '';
+                $examen = '';
+				$lista_examen_especial = '';
+
+                /** examenes de la especialidad */
+                $examenes_especialidad = '';
+
+                /** examenes radiologicos */
+                $examenes_radiologicos = '';
+            }
             else if($profesional->id_tipo_especialidad == 25 )
             {
                 // KINESIOLOGIA GENERAL
@@ -643,6 +658,22 @@ class ficha_atencionController extends Controller
             {
                 // EXAMENES ORL
                 $ruta_blade = 'atencion_otros_prof.atencion_tecn_orl';
+                // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+                $fichaTipo = '';
+                $examen = '';
+                $lista_examen_especial = '';
+
+                /** examenes de la especialidad */
+                $examenes_especialidad = '';
+
+                /** examenes radiologicos */
+                $examenes_radiologicos = '';
+            }
+            /** traumatologia - 13 */
+            else if($profesional->id_tipo_especialidad == 13 && $profesional->id_sub_tipo_especialidad == 85)
+            {
+                // TRAUMATOLOGIA GENERAL
+                $ruta_blade = 'atencion_medica.atencion_traumatologia_general';
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
                 $examen = '';
