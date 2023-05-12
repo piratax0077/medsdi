@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SolicitudPabellonesQuirurgicosEquipo extends Model
 {
     use HasFactory;
-    protected $table = 'profesional_mi_equipo_profesionales';
+    protected $table = 'solicitudes_pabellones_quirurgicos_equipo';
 
     public function SolicitudPabellonQuirurgico()
     {

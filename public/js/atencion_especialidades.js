@@ -30,14 +30,8 @@ $(document).ready(function() {
 function ind_endoscopia() {
     $('#ind_endoscopia_modal').modal('show');
 }
-
 function ind_endoscopia() {
     $('#ind_endoscopia_modal').modal('show');
-}
-
-
-function sol_pabellon() {
-    $('#ingreso_sol_pab_modal').modal('show');
 }
 
 

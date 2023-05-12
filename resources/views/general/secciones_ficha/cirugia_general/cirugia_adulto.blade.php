@@ -345,13 +345,13 @@
                                             <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Hospitalizacion" data-seccion="Hospitalizacion" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_hospitalizacion_cg" id="obs_hospitalizacion_cg"></textarea>
                                         </div>
                                         <div class="form-group col-md-3">
-                                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingresomedico()";<i class="feather icon-save"></i> Orden de Hospitalización Tto Médico</button>
+                                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingresomedico()";<i class="feather icon-save"></i> Hospitalización Tto Médico</button>
                                         </div>
                                         <div class="form-group col-md-3">
                                             <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="sol_pabellon()";<i class="feather icon-save"></i> Solicitar Pabellón</button>
                                         </div>
                                         <div class="form-group col-md-3">
-                                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingreso()";<i class="feather icon-save"></i> Orden de Hospitalización Cirugía</button>
+                                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingreso()";<i class="feather icon-save"></i> Hospitalización Cirugía</button>
                                         </div>
 
 

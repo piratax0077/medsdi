@@ -24,7 +24,7 @@
                         <div class="col-sm-2">
                             <div class="form-group fill">
                                 <label class="label">Frasco uno</label>
-
+                                
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -36,7 +36,7 @@
 						<div class="col-sm-2">
                             <div class="form-group fill">
                                 <label class="label">Frasco dos</label>
-
+                                
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -48,7 +48,7 @@
 						<div class="col-sm-2">
                             <div class="form-group">
                                 <label class="label">Frasco tres</label>
-
+                                
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -60,7 +60,7 @@
 						<div class="col-sm-2">
                             <div class="form-group fill">
                                 <label class="label">Frasco cuatro</label>
-
+                                
                             </div>
                         </div>
                         <div class="col-sm-4">

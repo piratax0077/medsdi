@@ -81,6 +81,9 @@ Route::group([
 ], function () {
     Route::get('/Acceso-Redirect', [App\Http\Controllers\HomeController::class, 'index']);
     Route::get('/Acceso', [App\Http\Controllers\HomeController::class, 'acceso'])->name('acceso');
+
+    /** autocomplete  */
+    Route::post('/profesional/buscar/por/nombre/Autocomplete',[App\Http\Controllers\EscritorioProfesional::class, 'buscarPorNombreAutocomplete'])->name('profesional.buscar.por.nombre.autocomplete');
 });
 
 //Admnistracion
@@ -275,8 +278,8 @@ Route::group([
     Route::get('Mi_Profesionales', [App\Http\Controllers\EscritorioPaciente::class, 'miProfesionales'])->name('paciente.mis_profesionales');
     Route::get('desvincular_profesional/{id_usuario}/{id_profesional}', [App\Http\Controllers\EscritorioPaciente::class, 'miProfesionales'])->name('paciente.desvincular_profesional');
 
-    Route::get('Check_sdi',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdi'])->name('check_sdi'); // PARAMS OBLIGATORIOS urla=Inicio&urln=Mi_Ficha_Medica
-    Route::get('Check_sdi_token',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdiToken'])->name('check_sdi_token'); // se traspaso a grupo de paciente y profesional
+    // Route::get('Check_sdi',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdi'])->name('check_sdi'); // PARAMS OBLIGATORIOS urla=Inicio&urln=Mi_Ficha_Medica
+    // Route::get('Check_sdi_token',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdiToken'])->name('check_sdi_token'); // se traspaso a grupo de paciente y profesional
     Route::get('Mi_Ficha_Medica', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('paciente.mi_ficha');
     Route::get('Mi_Ficha_Medica_Pdf', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedicaPdfView']);
 
@@ -536,6 +539,8 @@ Route::group([
     Route::get('mi/equipo/ver/equipos/profesional',[App\Http\Controllers\ProfesionalMiEquipoController::class, 'verDetalleEquipoProfesional'])->name('profesional.equipo.ver.profesional');
     Route::post('mi/equipo/crear',[App\Http\Controllers\ProfesionalMiEquipoController::class, 'registroMiEquipoProfesionales'])->name('profesional.equipo.crear');
 
+    /** solicitud de pabellon  */
+    Route::post('solicitud/pabellon/crear',[App\Http\Controllers\SolicitudPabellonQuirurgicosController::class, 'registroSolicitud'])->name('solicitud.pabellon.registrar');
 });
 
 /* ASISTENTE CONSULTA*/
@@ -1236,6 +1241,8 @@ Route::get('/indicacion/medica/enviar',[App\Http\Controllers\DocumentoFcPaciente
 Route::get('/codigo/fonasa/buscar/por/codigo',[App\Http\Controllers\CodigoFonasaController::class, 'buscarPorCodigo'])->name('fonasa.buscar.por.codigo');
 Route::get('/codigo/fonasa/buscar/por/nombre',[App\Http\Controllers\CodigoFonasaController::class, 'buscarPorNombre'])->name('fonasa.buscar.por.nombre');
 Route::get('/codigo/fonasa/buscar/por/nombre/Autocomplete',[App\Http\Controllers\CodigoFonasaController::class, 'buscarPorNombreAutocomplete'])->name('fonasa.buscar.por.nombre.autocomplete');
+
+
 
 
 /** PARA VISUALIZAR DEMOS */

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CodigoFonasa;
+use App\Models\ExamenMedico;
 use Illuminate\Http\Request;
 
 class CodigoFonasaController extends Controller
@@ -23,8 +24,9 @@ class CodigoFonasaController extends Controller
         {
             $filtro = array();
             $filtro[] = array('codigo', 'like', '%'.$request->valor.'%');
-            $registros = CodigoFonasa::where($filtro)->get();
-
+            $registros_a = CodigoFonasa::select('id', 'nombre as nombre', 'codigo as codigo')->where($filtro);
+            $registros_b = ExamenMedico::select('id', 'nombre_examen as nombre', 'codigo as codigo')->where($filtro);
+            $registros = $registros_a->union($registros_b)->get();
             if($registros)
             {
                 $datos['estado'] = 1;
@@ -64,7 +66,13 @@ class CodigoFonasaController extends Controller
         {
             $filtro = array();
             $filtro[] = array('nombre', 'like', '%'.$request->valor.'%');
-            $registros = CodigoFonasa::where($filtro)->get();
+            $registros_a = CodigoFonasa::select('id', 'nombre as nombre', 'codigo as codigo')->where($filtro);
+
+            $filtro_2 = array();
+            $filtro_2[] = array('nombre_examen', 'like', '%'.$request->valor.'%');
+            $registros_b = ExamenMedico::select('id', 'nombre_examen as nombre', 'codigo as codigo')->where($filtro_2);
+
+            $registros = $registros_a->union($registros_b)->get();
 
             if($registros)
             {
