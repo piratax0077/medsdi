@@ -19,16 +19,16 @@
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link-aten text-reset active" id="info-ingreso-tab" data-toggle="tab" href="#info-ingreso" role="tab" aria-controls="info-ingreso" aria-selected="true">Info. Ingreso</a>
+                                <a class="nav-link-aten text-reset active" id="sol_pab_info-ingreso-tab" data-toggle="tab" href="#sol_pab_info-ingreso" role="tab" aria-controls="sol_pab_info-ingreso" aria-selected="true">Info. Ingreso</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="cirugia-pab-tab" data-toggle="tab" href="#cirugia-pab" role="tab" aria-controls="cirugia-pab" aria-selected="false">Cirugía</a>
+                                <a class="nav-link-aten text-reset" id="sol_pab_cirugia-pab-tab" data-toggle="tab" href="#sol_pab_cirugia-pab" role="tab" aria-controls="sol_pab_cirugia-pab" aria-selected="false">Cirugía</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="equipo-pab-tab" data-toggle="tab" href="#equipo-pab" role="tab" aria-controls="equipo-pab" aria-selected="false">Equipo</a>
+                                <a class="nav-link-aten text-reset" id="sol_pab_equipo-pab-tab" data-toggle="tab" href="#sol_pab_equipo-pab" role="tab" aria-controls="sol_pab_equipo-pab" aria-selected="false">Equipo</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="comentarios-pab-tab" data-toggle="tab" href="#comentarios-pab" role="tab" aria-controls="comentarios-pab" aria-selected="false">Comentarios</a>
+                                <a class="nav-link-aten text-reset" id="sol_pab_comentarios-pab-tab" data-toggle="tab" href="#sol_pab_comentarios-pab" role="tab" aria-controls="sol_pab_comentarios-pab" aria-selected="false">Comentarios</a>
                             </li>
                         </ul>
                     </div>
@@ -37,7 +37,7 @@
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="tab-content" id="ev-nutricional">
                             <!--INFO. INGRESO-->
-                            <div class="tab-pane fade show active" id="info-ingreso" role="tabpanel" aria-labelledby="info-ingreso-tab">
+                            <div class="tab-pane fade show active" id="sol_pab_info-ingreso" role="tabpanel" aria-labelledby="sol_pab_info-ingreso-tab">
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 mb-2">
                                         <h6 class="text-c-blue">INFORMACIÓN DE PACIENTE</h6>
@@ -150,7 +150,7 @@
                             </div>
 
                             <!--CIRUGIA-->
-                            <div class="tab-pane fade show" id="cirugia-pab" role="tabpanel" aria-labelledby="cirugia-pab-tab">
+                            <div class="tab-pane fade show" id="sol_pab_cirugia-pab" role="tabpanel" aria-labelledby="sol_pab_cirugia-pab-tab">
 
                                 <div class="form-row mb-2">
                                     <div class="col-md-12 mb-2">
@@ -184,7 +184,7 @@
                             </div>
 
                             <!--EQUIPO-->
-                            <div class="tab-pane fade show" id="equipo-pab" role="tabpanel" aria-labelledby="equipo-pab-tab">
+                            <div class="tab-pane fade show" id="sol_pab_equipo-pab" role="tabpanel" aria-labelledby="sol_pab_equipo-pab-tab">
                                 <div class="form-row mb-2">
                                     <div class="col-md-12 mb-2">
                                         <h6 class="text-c-blue">EQUIPO</h6>
@@ -210,7 +210,7 @@
                                 </div>
                             </div>
                             <!--COMENTARIOS-->
-                            <div class="tab-pane fade show" id="comentarios-pab" role="tabpanel" aria-labelledby="comentarios-pab-tab">
+                            <div class="tab-pane fade show" id="sol_pab_comentarios-pab" role="tabpanel" aria-labelledby="sol_pab_comentarios-pab-tab">
                                 <div class="form-row mb-2">
                                     <div class="col-sm-12 col-md-12 col-lg-12">
                                     <h6 class="mb-3 text-c-blue">OTROS</h6>
