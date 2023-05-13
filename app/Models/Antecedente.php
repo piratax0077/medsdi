@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Users;
 use App\Models\Paciente;
 use App\Models\TipoAntecedente;
+use App\Models\Profesional;
 
 class Antecedente extends Model
 {
@@ -32,6 +33,12 @@ class Antecedente extends Model
     public function users(){
 
         return $this->hasOne(User::class,'id','id_users');
+
+    }
+
+    public function profesional(){
+
+        return $this->hasOne(Profesional::class,'id','id_profesional');
 
     }
 }
