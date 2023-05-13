@@ -19,7 +19,7 @@ class EscritorioInstitucion extends Controller
 
         if (isset($servicio))
         {
-            if($servicio->bienvenida == 0)
+            if($servicio->bienvenido == 0)
                 return view('bienvenida.inicio_instituciones')->with(['regiones' => $region ]);
             else
                 return view('app.adm_cm.home');

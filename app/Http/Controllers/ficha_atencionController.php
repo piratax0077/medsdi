@@ -567,7 +567,7 @@ class ficha_atencionController extends Controller
             else if($profesional->id_sub_tipo_especialidad == 66 )
             {
                 // Cirugía Pediatrica General
-                $ruta_blade = 'atencion_pediatrica.atencion_cirugia_pediatrica';
+                $ruta_blade = 'atencion_pediatrica.atencion_pediatrica_cirugia';
                 // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
                 $fichaTipo = '';
                 $examen = '';

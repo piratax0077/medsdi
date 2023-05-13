@@ -29,8 +29,8 @@ class CreateProfesionalMiEquipo extends Migration
             $table->id();
 
             $table->bigInteger('id_profesional_mi_equipo');
-            $table->bigInteger('id_tipo_especialidad');
-            $table->bigInteger('id_sub_tipo_especialidad');
+            $table->bigInteger('id_tipo_especialidad')->nullable();
+            $table->bigInteger('id_sub_tipo_especialidad')->nullable();
             $table->string('posicion');
             $table->bigInteger('id_profesional');
             $table->integer('estado')->default(1)->nullable();
@@ -42,8 +42,8 @@ class CreateProfesionalMiEquipo extends Migration
             $table->id();
 
             $table->bigInteger('id_solicitudes_pabellones_quirurgicos');
-            $table->bigInteger('id_tipo_especialidad');
-            $table->bigInteger('id_sub_tipo_especialidad');
+            $table->bigInteger('id_tipo_especialidad')->nullable();
+            $table->bigInteger('id_sub_tipo_especialidad')->nullable();
             $table->string('posicion');
             $table->bigInteger('id_profesional');
             $table->integer('estado')->default(1)->nullable();

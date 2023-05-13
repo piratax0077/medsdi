@@ -3461,6 +3461,34 @@ class EscritorioProfesional extends Controller
     /** CIERRE FICHA PEDIATRIA GENERAL TIPO */
 
 
+    /** buscar profesionales autocomplete */
+    public function buscarPorNombreAutocomplete(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '')
+        {
+            $registros = Profesional::orderby('nombre', 'asc')->select('id', 'nombre', 'apellido_uno')->limit(5)->get();
+        }
+        else
+        {
+            $registros = Profesional::orderby('nombre', 'asc')
+                ->select('id', 'nombre', 'apellido_uno')
+                ->where(function($query) use($search){
+                    $query->where('nombre', 'like', '%'.$search.'%')
+                            ->orWhere('apellido_uno', 'like', '%'.$search.'%');
+                })
+                ->limit(5)
+                ->get();
+        }
+
+        $response = array();
+        foreach ($registros as $registro)
+        {
+            $response[] = array("value" => $registro->id, "label" => $registro->nombre.' '.$registro->apellido_uno, "codigo" => $registro->codigo);
+        }
+        return response()->json($response);
+    }
+    /** fin buscar profesionales autocomplete */
 
 
 }
