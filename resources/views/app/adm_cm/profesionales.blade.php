@@ -822,6 +822,7 @@
     @include('app.adm_cm.modal_adm.horario_usuario')
     @include('app.adm_cm.modal_adm.convenio_usuario')
     @include('app.adm_cm.modal_adm.contacto_usuario')
+    {{-- @include('app.adm_cm.modales.personal.contacto_personal') --}}
     {{--  @include('app.adm_cm.modal_adm.editar_profesional')  --}}
     {{--  @include('app.adm_cm.modal_adm.registrar_profesional')  --}}
     @include('app.adm_cm.modal_adm.asociar_profesional')
