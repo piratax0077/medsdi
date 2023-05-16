@@ -370,12 +370,17 @@ class EscritorioPaciente extends Controller
         }
 
         /* ANTECEDENTES */
-        $antecedentes = Antecedente::where('id_users',$id_usuario)->with('users','paciente','tipo_antecendente')->get();
-        //$antecedentes = Antecedente::with('users','paciente','tipo_antecendente')->get();
-
+        $antecedentes = Antecedente::where('id_users',$id_usuario)->with('users','paciente','tipo_antecendente','profesional')->get();    
+        
         foreach ($antecedentes as $valor) {
             $valor['antecedente_data'] = json_decode($valor['data']);
         }
+
+
+        /* ATENCIONES MEDICAS */                
+        $fichas = FichaAtencion::where('id_paciente', $paciente->id)->where('finalizada', 1)->get();
+        $especialidad = Especialidad::where('estado',1)->get();   
+        $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get(); 
 
         return view('ficha_medica', [
             'id_usuario' => $id_usuario,
@@ -384,7 +389,10 @@ class EscritorioPaciente extends Controller
             'antecedentes_paciente' => $antecedentes_paciente,
             'grupo_sanguineo' => $grupo_sanguineo,
             'antecedentes' => $antecedentes,
-            'token' => $request->token
+            'token' => $request->token,
+            'fichas' => $fichas,
+            'especialidad' => $especialidad,
+            'sub_tipo_especialidad' => $sub_tipo_especialidad
 
         ]);
     }

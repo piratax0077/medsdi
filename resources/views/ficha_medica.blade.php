@@ -17,6 +17,28 @@
 @section('page-script')
     <!-- Tablas ficha médica única-->
     <script src="{{ asset('/js/ficha_medica/main.js') }}"></script>
+
+    <script>
+        function select_nav(num){
+
+            $('.opt-sel').removeClass('active');
+            $('#opt-sel-'+num).addClass('active');
+
+            switch(num)
+            {
+                case 1:
+                    $('.opt-sel-1').show();
+                    $('.opt-sel-2').hide();                    
+                break;    
+
+                case 2:
+                    $('.opt-sel-1').hide();
+                    $('.opt-sel-2').show();
+                break;    
+            }
+
+        }
+    </script>
     
 @endsection
 
@@ -65,7 +87,8 @@
     <div class="container">
         <div class="mt-4">
             <nav class="nav nav-pills nav-justified">
-                <a class="nav-link active" href="#">RESUMEN</a>
+                <a id="opt-sel-1" class="nav-link opt-sel active"  onclick="select_nav(1)" href="#">RESUMEN</a>
+                <a id="opt-sel-2" class="nav-link opt-sel" onclick="select_nav(2)" href="#">ATENCIONES</a>
                 <!--
                 <a class="nav-link" href="#">Antecedentes Básicos del paciente</a>
                 <a class="nav-link" href="#">Transfusiones y donación de órganos</a>
@@ -75,7 +98,7 @@
     </div>    
     
     <!-- ANTECEDENTES BASICOS -->
-    <div class="container">            
+    <div class="container opt-sel-1">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -145,7 +168,7 @@
 
 
     <!-- RESUMEN -->
-    <div class="container">            
+    <div class="container opt-sel-1">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -210,7 +233,7 @@
     </div>
 
     <!-- TRANSFUCIONES -->
-    <div class="container">            
+    <div class="container opt-sel-1">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -380,7 +403,7 @@
         antecedentes_fracturas_pacientes
         antecedentes_hemorragias_pacientes
     -->
-    <div class="container">            
+    <div class="container opt-sel-1">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -431,7 +454,7 @@
             </div>
         </div>                              
     </div>
-    <div class="container">            
+    <div class="container opt-sel-1">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -480,7 +503,7 @@
             </div>
         </div>                              
     </div>
-    <div class="container">            
+    <div class="container opt-sel-1">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -531,7 +554,7 @@
             </div>
         </div>                              
     </div>
-    <div class="container">            
+    <div class="container opt-sel-1">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -583,7 +606,7 @@
         </div>                              
     </div>
 
-    <div class="container">            
+    <div class="container opt-sel-1">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -631,7 +654,7 @@
         </div>                              
     </div>
 
-    <div class="container">            
+    <div class="container opt-sel-1">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -677,7 +700,7 @@
         </div>                              
     </div>
 
-    <div class="container">            
+    <div class="container opt-sel-1">            
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -717,6 +740,28 @@
                                     
                                 </table>
                             </div>        
+                        </div>                        
+                    </div>
+                </div>    
+            </div>
+        </div>                              
+    </div>
+
+
+
+    <!-- Atenciones Médicas -->
+    <div class="container opt-sel-2">            
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Atenciones Médicas</h5>
+                    </div>
+                    <div class="card-body">                                             
+                        <div class="row">
+                            <div class="col-sm-12">
+                              @include('general.atenciones_realizadas.registros')                            
+                            </div>                           
                         </div>                        
                     </div>
                 </div>    
