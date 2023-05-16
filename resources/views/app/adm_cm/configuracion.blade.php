@@ -67,9 +67,9 @@
                                                     <li class="nav-item">
                                                         <a class="nav-link text-reset " id="p-adm-tab" data-toggle="tab" href="#p-adm" role="tab" aria-controls="p-adm" aria-selected="true"><i class="feather icon-user mr-2"></i>Perfil administrador</a>
                                                     </li>
-                                                    <li class="nav-item">
+                                                    {{-- <li class="nav-item">
                                                         <a class="nav-link text-reset" id="rol-permiso-tab" data-toggle="tab" href="#rol-permiso" role="tab" aria-controls="rol-permiso" aria-selected="false"><i class="feather  icon-lock mr-2"></i>Asignar Usuario y Clave</a>
-                                                    </li>
+                                                    </li> --}}
                                                     <li class="nav-item">
                                                         <a class="nav-link text-reset" id="ar-dep-tab" data-toggle="tab" href="#ar-dep" role="tab" aria-controls="ar-dep" aria-selected="false"><i class="fa-solid fa-stethoscope mr-2"></i>Especialidades y áreas</a>
                                                     </li>
@@ -770,13 +770,13 @@
                     <!--ESPECIALIDADES Y ÁREAS-->
                     <div class="tab-pane fade" id="ar-dep" role="tabpanel" aria-labelledby="ar-dep-tab">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <!--Especialidades-->
                                 <div class="card">
                                     <div class="card-header pt-3 pb-2 bg-light">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <h6 class="f-18 d-inline mt-3 text-info">Especialidades</h6>
+                                                <h6 class="f-18 d-inline mt-3 text-info">Especialidades Médicas</h6>
                                                 <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
                                                     <button type="button" class="btn btn-sm btn-info" onclick="ag_especialidad();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
                                                 </div>
@@ -846,7 +846,83 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <!--Especialidades-->
+                                <div class="card">
+                                    <div class="card-header pt-3 pb-2 bg-light">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h6 class="f-18 d-inline mt-3 text-info">Otros Profesionales</h6>
+                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="ag_especialidad();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-md-12">
+                                                <table id="especialidades_cm" class="display table table-striped table-xs dt-responsive nowrap" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-wrap text-center align-middle">Especialidad</th>
+                                                            <th class="text-wrap text-center align-middle">Acción</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="align-middle text-center">Médicina general</td>
+                                                            <td class="align-middle text-center">
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" class="custom-control-input" id="esp-1">
+                                                                    <label class="custom-control-label" for="esp-1"></label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="align-middle text-center">Médicina interna</td>
+                                                            <td class="align-middle text-center">
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" class="custom-control-input" id="esp-2">
+                                                                    <label class="custom-control-label" for="esp-2"></label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="align-middle text-center">Otorrinolaringologia</td>
+                                                            <td class="align-middle text-center">
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" class="custom-control-input" id="esp-3">
+                                                                    <label class="custom-control-label" for="esp-3"></label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="align-middle text-center">Odontología</td>
+                                                            <td class="align-middle text-center">
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" class="custom-control-input" id="esp-4">
+                                                                    <label class="custom-control-label" for="esp-4"></label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="align-middle text-center">Cardiología</td>
+                                                            <td class="align-middle text-center">
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" class="custom-control-input" id="esp-5">
+                                                                    <label class="custom-control-label" for="esp-5"></label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <!--Área-->
                                 <div class="card">
                                     <div class="card-header pt-3 pb-2 bg-light">
@@ -865,42 +941,62 @@
                                                 <table id="area_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-wrap text-center align-middle">Área</th>
-                                                            <th class="text-wrap text-center align-middle">Acción</th>
+                                                            <th class="text-wrap text-left align-middle">Área</th>
+                                                            <th class="text-wrap text-left align-middle">Acción</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td class="align-middle text-center">Traumatología</td>
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle text-left">Admin. Médica</td>
+                                                            <td class="align-middle text-left">
                                                                 <div class="custom-control custom-switch">
                                                                     <input type="checkbox" class="custom-control-input" id="area-1">
                                                                     <label class="custom-control-label" for="area-1"></label>
                                                                 </div>
                                                             </td>
                                                         </tr>
-                                                        <td class="align-middle text-center">Administración financiera</td>
-                                                        <td class="align-middle text-center">
-                                                            <div class="custom-control custom-switch">
-                                                                <input type="checkbox" class="custom-control-input" id="area-2">
-                                                                <label class="custom-control-label" for="area-2"></label>
-                                                            </div>
-                                                        </td>
-                                                        </tr>
-                                                        <td class="align-middle text-center">Administración comercial</td>
-                                                        <td class="align-middle text-center">
-                                                            <div class="custom-control custom-switch">
-                                                                <input type="checkbox" class="custom-control-input" id="area-3">
-                                                                <label class="custom-control-label" for="area-3"></label>
-                                                            </div>
-                                                        </td>
+                                                        <tr>
+                                                            <td class="align-middle text-left">Admin. comercial</td>
+                                                            <td class="align-middle text-left">
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" class="custom-control-input" id="area-2">
+                                                                    <label class="custom-control-label" for="area-2"></label>
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="align-middle text-center">Limpieza</td>
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle text-left">boxes y Consultas</td>
+                                                            <td class="align-middle text-left">
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" class="custom-control-input" id="area-3">
+                                                                    <label class="custom-control-label" for="area-3"></label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="align-middle text-left">Asistentes</td>
+                                                            <td class="align-middle text-left">
                                                                 <div class="custom-control custom-switch">
                                                                     <input type="checkbox" class="custom-control-input" id="area-4">
                                                                     <label class="custom-control-label" for="area-4"></label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="align-middle text-left">Mantención y Limpieza</td>
+                                                            <td class="align-middle text-left">
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" class="custom-control-input" id="area-5">
+                                                                    <label class="custom-control-label" for="area-5"></label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="align-middle text-left">Farmacia y Bodega</td>
+                                                            <td class="align-middle text-left">
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" class="custom-control-input" id="area-6">
+                                                                    <label class="custom-control-label" for="area-6"></label>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -2294,54 +2390,54 @@
                 });
         };
 
-        function buscar_ciudad_nuevo_empleado(id_ciudad=0) {
+        // function buscar_ciudad_nuevo_empleado(id_ciudad=0) {
 
 
-            let region = $('#add_empleado_region').val();
-            let url = "{{ route('adm_cm.buscar_ciudad_region') }}";
-            $.ajax({
+        //     let region = $('#add_empleado_region').val();
+        //     let url = "{{ route('adm_cm.buscar_ciudad_region') }}";
+        //     $.ajax({
 
-                    url: url,
-                    type: "get",
-                    data: {
-                        //_token: _token,
-                        region: region,
-                    },
-                })
-                .done(function(data) {
-                    if (data != null) {
-                        data = JSON.parse(data);
+        //             url: url,
+        //             type: "get",
+        //             data: {
+        //                 //_token: _token,
+        //                 region: region,
+        //             },
+        //         })
+        //         .done(function(data) {
+        //             if (data != null) {
+        //                 data = JSON.parse(data);
 
-                        let ciudades = $('#add_empleado_ciudad');
+        //                 let ciudades = $('#add_empleado_ciudad');
 
-                        ciudades.find('option').remove();
-                        ciudades.append('<option value="0">seleccione</option>');
-                        $(data).each(function(i, v) { // indice, valor
-                            ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
-                        })
+        //                 ciudades.find('option').remove();
+        //                 ciudades.append('<option value="0">seleccione</option>');
+        //                 $(data).each(function(i, v) { // indice, valor
+        //                     ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+        //                 })
 
-                        if(id_ciudad != 0)
-                            ciudades.val(id_ciudad);
+        //                 if(id_ciudad != 0)
+        //                     ciudades.val(id_ciudad);
 
-                    } else {
+        //             } else {
 
-                        swal({
-                            title: "Error",
-                            text: "Error al cargar las ciudades",
-                            icon: "error",
-                            buttons: "Aceptar",
-                            DangerMode: true,
-                        })
-                        // alert('No se pudo Cargar las ciudades');
-                    }
+        //                 swal({
+        //                     title: "Error",
+        //                     text: "Error al cargar las ciudades",
+        //                     icon: "error",
+        //                     buttons: "Aceptar",
+        //                     DangerMode: true,
+        //                 })
+        //                 // alert('No se pudo Cargar las ciudades');
+        //             }
 
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+        //         })
+        //         .fail(function(jqXHR, ajaxOptions, thrownError) {
+        //             console.log(jqXHR, ajaxOptions, thrownError)
+        //         });
 
 
-        };
+        // };
 
         function registrar_nuevo_empleado(){
             var valido = 1;

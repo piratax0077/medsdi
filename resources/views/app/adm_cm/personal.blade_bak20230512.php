@@ -24,6 +24,11 @@
                 <div class="card">
                     <div class="card-body">
                         <ul class="nav nav-pills bg-white" id="personal_cm" role="tablist">
+                            {{--
+                            <li class="nav-item">
+                                <a class="btn btn-outline-info btn-sm mr-1 my-1" id="prof_salud-tab" data-toggle="tab" href="#prof-salud" role="tab" aria-controls="prof_-alud" aria-selected="false">Profesionales de la salud</a>
+                            </li> --}}
+
                             <li class="nav-item">
                                 <a class="btn btn-outline-info btn-sm mr-1 my-1 active" id="asistentes-tab" data-toggle="tab" href="#asistentes" role="tab" aria-controls="asistentes" aria-selected="false">Asistentes</a>
                             </li>
@@ -40,6 +45,91 @@
             <div class="col-md-12">
                 <!--Cierre: Card Nav Pills-->
                 <div class="tab-content" id="personal_cm">
+                    <!--Tab Profesionales de la salud-->
+                    <div class="tab-pane fade" id="prof-salud" role="tabpanel" aria-labelledby="prof-salud-tab">
+                        <div class="row mb-n4">
+                           <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header bg-info">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                               <div class="col-md-6">
+                                                    <h4 class="text-white f-20 mt-2 mb-2 float-left">Profesionales Contratados</h4>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="btn-group mr-2 float-right mt- mb-">
+                                                        <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_profesional();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar Contrato nuevo/a profesional</button>
+                                                        <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
+                                                        <div class="dropdown-menu">
+                                                            <button class="dropdown-item" type="button" class="btn  btn-primary" onclick="asociar_profesional();">Asociar profesional</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <table id="profesionales_personal" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center align-middle">Nombre / Rut</th>
+                                                    <th class="text-center align-middle">Especialidad</th>
+                                                    <th class="text-center align-middle">Sucursales</th>
+                                                    <th class="text-center align-middle">Contacto</th>
+													<th class="text-center align-middle">Datos</th>
+													<th class="text-center align-middle">Convenio</th>
+                                                    <th class="text-center align-middle">Rol y permisos</th>
+                                                    <th class="text-center align-middle">Acción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="align-middle text-center">
+                                                        <span><strong>Jaime Kriman</strong></span><br>
+                                                        <span>4.345.466-2</span>
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        <span>Otorrinolaringología</span><br>
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        <span>Ist Viña del Mar</span><br>
+                                                        <span>Ist Quilpué</span><br>
+                                                        <span>Ist San Felipe</span>
+                                                    </td>
+                                                    <td class="align-middle text-center">
+														<!--Botón Modal-->
+														<button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto();" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
+													</td>
+													<td class="align-middle text-center">
+														<!--Botón Modal-->
+														<button type="button" class="btn btn-info btn-sm btn-icon" onclick="cuenta_corriente();" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
+														 <!--Botón Modal-->
+														<button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
+													</td>
+													<td class="align-middle text-center">
+														<!--Botón Modal-->
+														<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="contrato_ver();" data-toggle="tooltip" data-placement="top" title="Ver Contrato"><i class="fas fa-file-contract"></i></button>
+													</td>
+													<td class="align-middle text-center">
+														<!--Botón Modal-->
+														<button type="button" class="btn btn-warning btn-sm btn-icon" onclick="rol_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
+													</td>
+													<td class="align-middle text-center">
+														<button type="button" class="btn btn-success btn-sm" onclick="editar_datos_profesional();">
+														<i class="feather icon-edit"></i> Editar</button>
+														<button type="button" class="btn btn-danger btn-sm">
+														<i class="feather icon-x-circle"></i> Desasociar</button>
+													</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Cierre: Tab Profesionales de la salud-->
+
                     <!--Tab asistentes-->
                     <div class="tab-pane fade active show" id="asistentes" role="tabpanel" aria-labelledby="asistentes-tab">
                         <div class="row mb-n4">
@@ -53,7 +143,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="btn-group mr-2 float-right mt- mb-">
-                                                        <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_personal();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo/a asistente</button>
+                                                        <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_asistente();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo/a asistente</button>
                                                         <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
                                                         <div class="dropdown-menu">
                                                             <button class="dropdown-item" type="button" class="btn  btn-primary" onclick="asociar_asistente();">Asociar asistente</button>
@@ -84,7 +174,9 @@
                                                             <span>{{ $asistente->rut }}</span>
                                                         </td>
                                                         <td class="align-middle text-center">
-                                                            {{ $asistente->direccion()->first()->direccion }} #{{ $asistente->direccion()->first()->numero_dir }}, {{ $asistente->direccion()->first()->ciudad()->first()->nombre }}
+                                                            <span>Ist Viña del Mar</span><br>
+                                                            <span>Ist Quilpué</span><br>
+                                                            <span>Ist San Felipe</span>
                                                         </td>
                                                         <td class="align-middle text-center">
                                                             <!--Botón Modal-->
@@ -275,9 +367,6 @@
 </div>
 <!--****Cierre Container Completo****-->
 
-
-
-<!--/////////////MODALS PROFESIONALES /////////-->
 <!--Modal Registrar contrato profesional-->
 <div id="registrar_profesional_cm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="registrar_profesional_cm" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -848,8 +937,98 @@
         </div>
     </div>
 </div>
-
-
+<div id="registrar_asistente_cm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="registrar_asistente_cm" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Registrar asistente</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floating-label">Rut</label>
+                            <input type="number" class="form-control form-control-sm" name="rut" id="rut">
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floating-label">Nombre</label>
+                            <input class="form-control form-control-sm" name="nombre" id="nombre" type="text" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floating-label">Primer Apellido</label>
+                            <input class="form-control form-control-sm" name="apellido" id="apellido" type="text" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floating-label">Segundo Apellido</label>
+                            <input class="form-control form-control-sm" name="apellido" id="apellido" type="text" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group fill">
+                            <label class="floating-label">Correo Electrónico</label>
+                            <input class="form-control form-control-sm" name="email" id="email" type="email" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group fill">
+                            <label class="floating-label">Teléfono</label>
+                            <input class="form-control form-control-sm" name="telefono" id="telefono" type="number" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group fill">
+                            <label class="floating-label">Teléfono (opcional)</label>
+                            <input class="form-control form-control-sm" name="telefono" id="telefono" type="number" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floating-label">Dirección / Calle</label>
+                            <input class="form-control form-control-sm" name="direccion_nuevo_lugar_atencion" id="direccion_nuevo_lugar_atencion" type="text">
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floating-label">Número</label>
+                            <input class="form-control form-control-sm" name="numero" id="numero" type="text" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group fill">
+                            <label class="floating-label">Rol</label>
+                            <select class="form-control form-control-sm">
+                                <option>Seleccione una opción</option>
+                                <option>Función que tipo de asistente es</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="switch switch-success d-inline m-r-10">
+                                <input type="checkbox" id="correo-1" checked="">
+                                <label for="correo-1" class="cr"></label>
+                            </div>
+                            <label>Notificar por correo electrónico</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-info">Registrar asistente</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--Modal Asociar asistente-->
 <div id="asociar_asistente_cm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="asociar_asistente_cm" aria-hidden="true">
@@ -892,7 +1071,99 @@
     </div>
 </div>
 
-
+<!--Modal Editar asistente-->
+<div id="editar_asistente_cm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="registrar_asistente_cm" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Editar asistente</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floating-label">Rut</label>
+                            <input type="number" class="form-control form-control-sm" name="rut" id="rut">
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floating-label">Nombre</label>
+                            <input class="form-control form-control-sm" name="nombre" id="nombre" type="text" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floating-label">Primer Apellido</label>
+                            <input class="form-control form-control-sm" name="apellido" id="apellido" type="text" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floating-label">Segundo Apellido</label>
+                            <input class="form-control form-control-sm" name="apellido" id="apellido" type="text" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group fill">
+                            <label class="floating-label">Correo Electrónico</label>
+                            <input class="form-control form-control-sm" name="email" id="email" type="email" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group fill">
+                            <label class="floating-label">Teléfono</label>
+                            <input class="form-control form-control-sm" name="telefono" id="telefono" type="number" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group fill">
+                            <label class="floating-label">Teléfono (opcional)</label>
+                            <input class="form-control form-control-sm" name="telefono" id="telefono" type="number" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floating-label">Dirección / Calle</label>
+                            <input class="form-control form-control-sm" name="direccion_nuevo_lugar_atencion" id="direccion_nuevo_lugar_atencion" type="text">
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floating-label">Número</label>
+                            <input class="form-control form-control-sm" name="numero" id="numero" type="text" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group fill">
+                            <label class="floating-label">Rol</label>
+                            <select class="form-control form-control-sm">
+                                <option>Seleccione una opción</option>
+                                <option>Función que tipo de asistente es</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="switch switch-success d-inline m-r-10">
+                                <input type="checkbox" id="correo-1" checked="">
+                                <label for="correo-1" class="cr"></label>
+                            </div>
+                            <label>Notificar por correo electrónico</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-info">Guardar cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--Modal Rol y permisos
 <div id="rol_permisos_asistente_cm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="rol_permisos_profesional_cm" aria-hidden="true">
@@ -1792,6 +2063,51 @@
 
         }
 
+        /*-Modals personal-*/
+        function contacto(tipo,id)
+        {
+            var url = "";
+            if(tipo == 'profesional')
+                url = "{{ route('adm_cm.profesional_buscar') }}";
+            else if(tipo == 'asistente' || tipo == 'asistente publico')
+                url = "{{ route('adm_cm.asistente_buscar') }}";
+            else if(tipo == 'administrativo')
+                url = "{{ route('adm_cm.profesional_buscar') }}";
+            else if(tipo == 'limpieza')
+                url = "{{ route('adm_cm.profesional_buscar') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    id: id
+                },
+            })
+            .done(function(data) {
+                if (data.estado == 1)
+                {
+                    /** encontrado */
+                    $('#contacto_prof_rut').html(data.registro.rut);
+                    $('#contacto_prof_email').html(data.registro.email);
+                    $('#contacto_prof_telefono1').html(data.registro.telefono_uno);
+                    $('#contacto_prof_telefono2').html(data.registro.telefono_dos);
+                    $('#contacto_prof_direccion').html(data.direccion);
+                    $('#contacto_usuario').modal('show');
+                }
+                else
+                {
+                    /** no encontrado */
+                    swal({
+                        title: "Problema al cargar informacion del usuario.",
+                        icon: "error",
+                    });
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
 
         /** Modals datos bancarios */
         function datos_depositos(tipo, id) {
@@ -2003,9 +2319,7 @@
 @endsection
 
 @section('modales')
-    @include('app.adm_cm.modales.personal.registrar_personal')
-    @include('app.adm_cm.modales.personal.contacto_personal')
-
+    @include('app.adm_cm.modal_adm.contacto_usuario')
     @include('app.adm_cm.modal_adm.datos_banco')
     @include('app.adm_cm.modal_adm.horario_dependiente')
     @include('app.adm_cm.modal_adm.roles_permisos_prof')

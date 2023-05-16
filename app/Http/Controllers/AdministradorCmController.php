@@ -945,6 +945,7 @@ class AdministradorCmController extends Controller
         {
             $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
         }
+
         if($registro)
         {
             // var_dump($registro);
@@ -1016,13 +1017,41 @@ class AdministradorCmController extends Controller
         }
         /** FIN CARGA DE PROFESIONALES */
 
+        /** LISTA CONTRATO */
+        $lista_tipo_asistente = AsistenteTipo::select('id', 'nombre')->where('estado',1)->get();
+        $lista_tipo_administrador = TipoAdministrador::select('id', 'nombres')->where('estado',1)->get();
+
+        $lista_tipo_contrato = array();
+        foreach ($lista_tipo_asistente as $key => $value) {
+            array_push($lista_tipo_contrato,array(
+                'id' => $value->id,
+                'nombre' => strtoupper($value->nombre),
+            ));
+        }
+        foreach ($lista_tipo_administrador as $key => $value) {
+            array_push($lista_tipo_contrato,array(
+                'id' => $value->id,
+                'nombre' => strtoupper($value->nombres),
+            ));
+        }
+        /** FIN LISTA CONTRATO */
+
+        $regiones = Region::all();
+        $ciudades = Ciudad::where('id_region', $institucion->direccion()->first()->ciudad()->first()->Region()->first()->id)->orderBy('nombre')->get();
+
+
         return view('app.adm_cm.personal')->with([
             'responsable' => $responsable,
             'institucion' => $institucion,
             'tipo_institucion' => $tipo_institucion,
             'lista_asistente' => $lista_asistente,
+            'lista_tipo_contrato' => (object)$lista_tipo_contrato,
+            'regiones' => $regiones,
+            'ciudades' => $ciudades,
         ]);;
     }
+
+
 	public function asistente_adm_buscar_pacientes()
     {
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();

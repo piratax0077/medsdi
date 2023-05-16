@@ -1,7 +1,4 @@
 /*-Modals personal-*/
-function contacto() {
-    $('#contacto_usuario').modal('show');
-}
 
 /*-Modals profesional de la salud-*/
 function registrar_profesional() {
@@ -26,9 +23,7 @@ function asociar_profesional() {
 
 
 /*-Modals asistentes-*/
-function registrar_asistente() {
-    $('#registrar_asistente_cm').modal('show');
-}
+
 
 function editar_datos_asistente() {
     $('#editar_asistente_cm').modal('show');
