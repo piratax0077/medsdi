@@ -22,6 +22,7 @@ use App\Models\TipoEspecialidad;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -699,32 +700,10 @@ class EscritorioGeneral extends Controller
                         if($invitacion->id_user_invitado)
                         {
                             $profesional = Profesional::where('id_usuario',$invitacion->id_user_invitado)->first();
-                            $buscar_prof_lugar = ProfesionalesLugaresAtencion::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$invitacion->id_lugar_atencion)->first();
-                            if($buscar_prof_lugar)
+                            if($profesional)
                             {
-                                $invitacion->procesado = 1;
-                                $invitacion->fecha_procesado = date('Y-m-d H:i:s');
-                                $invitacion->fecha_aprobacion = date('Y-m-d H:i:s');
-                                $invitacion->estado = 1;
-                                if($invitacion->save())
-                                {
-                                    $mensaje .= 'Profesional '.$profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos.', ya se encuentra como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. ';
-                                }
-                                else
-                                {
-                                    $mensaje .= 'Profesional '.$profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos.', ya se encuentra como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. ';
-                                    $mensaje .= '<br>Invitacion no actualizada. ';
-                                }
-
-                            }
-                            else
-                            {
-                                /** profesional existente */
-                                $reg_prof_lugar = new ProfesionalesLugaresAtencion();
-                                $reg_prof_lugar->id_profesional = $profesional->id;
-                                $reg_prof_lugar->id_lugar_atencion = $invitacion->id_lugar_atencion;
-                                $reg_prof_lugar->estado = 1;
-                                if($reg_prof_lugar->save())
+                                $buscar_prof_lugar = ProfesionalesLugaresAtencion::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$invitacion->id_lugar_atencion)->first();
+                                if($buscar_prof_lugar)
                                 {
                                     $invitacion->procesado = 1;
                                     $invitacion->fecha_procesado = date('Y-m-d H:i:s');
@@ -732,18 +711,84 @@ class EscritorioGeneral extends Controller
                                     $invitacion->estado = 1;
                                     if($invitacion->save())
                                     {
-                                        $mensaje .= 'Profesional '.$profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos.', ha sido confirmado como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. ';
+                                        $mensaje .= 'Profesional '.$profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos.', ya se encuentra como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
                                     }
                                     else
                                     {
-                                        $mensaje .= 'Profesional '.$profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos.', ha sido confirmado como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. ';
-                                        $mensaje .= '<br>Invitacion no actualizada. ';
+                                        $mensaje .= 'Profesional '.$profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos.', ya se encuentra como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
+                                        $mensaje .= '<br/>';
+                                        $mensaje .= 'Invitacion no actualizada. <br/>';
                                     }
+
                                 }
                                 else
                                 {
-                                    $mensaje .= 'Profesional '.$profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos.', se ha presentado un problema al confirmar como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. ';
+                                    /** profesional existente */
+                                    $reg_prof_lugar = new ProfesionalesLugaresAtencion();
+                                    $reg_prof_lugar->id_profesional = $profesional->id;
+                                    $reg_prof_lugar->id_lugar_atencion = $invitacion->id_lugar_atencion;
+                                    $reg_prof_lugar->estado = 1;
+                                    if($reg_prof_lugar->save())
+                                    {
+                                        $invitacion->procesado = 1;
+                                        $invitacion->fecha_procesado = date('Y-m-d H:i:s');
+                                        $invitacion->fecha_aprobacion = date('Y-m-d H:i:s');
+                                        $invitacion->estado = 1;
+                                        if($invitacion->save())
+                                        {
+                                            $mensaje .= 'Profesional '.$profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos.', ha sido confirmado como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
+                                        }
+                                        else
+                                        {
+                                            $mensaje .= 'Profesional '.$profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos.', ha sido confirmado como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
+                                            $mensaje .= 'Invitacion no actualizada. <br/>';
+                                        }
+                                    }
+                                    else
+                                    {
+                                        $mensaje .= 'Profesional '.$profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos.', se ha presentado un problema al confirmar como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
+                                    }
                                 }
+                            }
+                            else
+                            {
+
+                                $user = User::find($invitacion->id_user_invitado);
+                                $temp_pass = rand(1111,9999);
+                                $user->password = Hash::make($temp_pass);
+                                if ($user->save())
+                                {
+                                    $mensaje .='Problema con Activar su invitación, intente nuevamente.<br/>';
+                                    /** envio de correo de confirmacion  */
+                                    $blade = 'profesional_usuario_creado';
+                                    $to = array(
+                                            array('email' => $invitacion->email,'name' => $invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos),
+                                        );
+                                    $cc = array();
+                                    $bcc = array();
+                                    $asunto = 'MED-SDI - Bienvenido!';
+                                    $body = array(
+                                        'nombre'=>$invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos,
+                                        'user' => $invitacion->email,
+                                        'pass' => $temp_pass,
+                                    );
+                                    $archivo = '';/** pendiente */
+                                    $id_institucion = '';
+
+                                    $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                                    if($result_mail['estado'])
+                                    {
+                                        $mensaje .= 'Usuario creado con exito.<br/>';
+                                        $mensaje .= 'Recibirá un correo de Bienvenida con la información de acceso al sistema. <br/>';
+                                    }
+                                    else
+                                    {
+                                        $mensaje .= 'Usuario creado con exito.<br/>';
+                                        $mensaje .= 'Correo de Bienvenida con la información de acceso al sistema con problema para envío. <br/>';
+                                    }
+                                }
+
                             }
                         }
                         else
@@ -755,36 +800,68 @@ class EscritorioGeneral extends Controller
                                 $user = new User();
                                 $user->name = $invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos;
                                 $user->email = $invitacion->email;
-                                $user->password = Hash::make(rand(1111,9999));
+                                $temp_pass = rand(1111,9999);
+                                $user->password = Hash::make($temp_pass);
                                 if ($user->save()) {
                                     $user->assignRole('Profesional');
                                     $invitacion->procesado = 1;
                                     $invitacion->fecha_procesado = date('Y-m-d H:i:s');
                                     $invitacion->fecha_aprobacion = date('Y-m-d H:i:s');
                                     $invitacion->id_user_invitado = $user->id;
-                                    $invitacion->estado = 1;
+                                    $invitacion->estado = 0;
                                     if($invitacion->save())
                                     {
-                                        $mensaje .= 'Profesional '.$invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos.', ha sido confirmado como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. ';
-                                        $mensaje .= 'Usuario creado con exito.<br>Recibirá un correo con la información de acceso al sistema. ';
-                                        $mensaje .= 'Deberá completar su perfil en el escritorio asignado. ';
+                                        $mensaje .= 'Profesional '.$invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos.', ha sido confirmado como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
+
+
+                                        /** envio de correo de confirmacion  */
+                                        $blade = 'profesional_usuario_creado';
+                                        $to = array(
+                                                array('email' => $invitacion->email,'name' => $invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos),
+                                            );
+                                        $cc = array();
+                                        $bcc = array();
+                                        $asunto = 'MED-SDI - Bienvenido!';
+                                        $body = array(
+                                            'nombre'=>$invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos,
+                                            'user' => $invitacion->email,
+                                            'pass' => $temp_pass,
+                                        );
+                                        $archivo = '';/** pendiente */
+                                        $id_institucion = '';
+
+                                        $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                                        if($result_mail['estado'])
+                                        {
+                                            $mensaje .= 'Usuario creado con exito.<br/>';
+                                            $mensaje .= 'Recibirá un correo de Bienvenida con la información de acceso al sistema. <br/>';
+                                        }
+                                        else
+                                        {
+                                            $mensaje .= 'Usuario creado con exito.<br/>';
+                                            $mensaje .= 'Correo de Bienvenida con la información de acceso al sistema con problema para envío. <br/>';
+                                        }
+
+                                        $mensaje .= 'Deberá completar su perfil en el escritorio asignado. <br/>';
                                     }
                                     else
                                     {
-                                        $mensaje .= 'Profesional '.$invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos.', ha sido confirmado como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. ';
-                                        $mensaje .= 'Usuario creado con exito.<br>Recibirá un correo con la información de acceso al sistema. ';
-                                        $mensaje .= 'Deberá completar su perfil en el escritorio asignado. ';
-                                        $mensaje .= 'Invitacion no actualizada. ';
+                                        $mensaje .= 'Profesional '.$invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos.', ha sido confirmado como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
+                                        $mensaje .= 'Usuario creado con exito.<br/>';
+                                        $mensaje .= 'Recibirá un correo con la información de acceso al sistema. <br/>';
+                                        $mensaje .= 'Deberá completar su perfil en el escritorio asignado. <br/>';
+                                        $mensaje .= 'Invitacion no actualizada. <br/>';
                                     }
                                 }
                                 else
                                 {
-                                    $mensaje .= 'Se presento un problema al generar su Usuario, intente nuevamente. ';
+                                    $mensaje .= 'Se presento un problema al generar su Usuario, intente nuevamente. <br/>';
                                 }
                             }
                             else
                             {
-                                $mensaje .= 'El correo "'.$invitacion->email.'" ya esta siendo utilizado o su usuario ya ha sido creado. ';
+                                $mensaje .= 'El correo "'.$invitacion->email.'" ya esta siendo utilizado o su usuario ya ha sido creado. <br/>';
                             }
 
                         }
@@ -797,12 +874,12 @@ class EscritorioGeneral extends Controller
                             $invitacion->estado = 2;
                             if($invitacion->save())
                             {
-                                $mensaje .= 'Profesional '.$invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos.', ha RECHAZADO la invitacion para ser integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. ';
+                                $mensaje .= 'Profesional '.$invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos.', ha RECHAZADO la invitacion para ser integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
                             }
                             else
                             {
-                                $mensaje .= 'Profesional '.$invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos.', ha RECHAZADO la invitacion para ser integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. ';
-                                $mensaje .= 'Invitacion no actualizada. ';
+                                $mensaje .= 'Profesional '.$invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos.', ha RECHAZADO la invitacion para ser integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
+                                $mensaje .= 'Invitacion no actualizada. <br/>';
                             }
                             /** CORREO NOTIFICACION AL CENTRO MEDICO DE RECHAZO DE INVITACION */
                             /** CORREO AL PROFESIONAL INDICANDO RECHAZO A LA INVITACION */
@@ -810,13 +887,13 @@ class EscritorioGeneral extends Controller
                         break;
 
                     default:
-                            $mensaje .= 'Proceso solicitado no aceptado. ';
+                            $mensaje .= 'Proceso solicitado no aceptado. <br/>';
                         break;
                 }
             }
             else
             {
-                $mensaje .= 'Invitacion Ya se encuentra procesada. ';
+                $mensaje .= 'Invitacion Ya se encuentra procesada. <br/>';
             }
         }
         return view('app.general.validaciones.invitacion')->with([

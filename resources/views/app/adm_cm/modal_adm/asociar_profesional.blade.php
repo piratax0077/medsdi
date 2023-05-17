@@ -126,3 +126,297 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        {{--  FORMATEO DE RUT AGREGAR NUEVO PROFESIONAL   --}}
+        $("#agregar_profesional_int_rut").rut({
+            formatOn: 'keyup',
+            minimumLength: 2,
+            validateOn: 'change',
+            useThousandsSeparator : false
+        });
+
+    })
+
+    function asociar_profesional() {
+        $('#agregar_profesional_btn_buscar_rut').removeAttr('disabled');
+        $('#div_agregar_profesional_busqueda').show();
+        $('#div_agregar_profesional_ver_info_prof').hide();
+        $('#div_agregar_profesional_formulario_nuevo_prof').hide();
+        $('#asociar_profesional_cm').modal('show');
+    }
+
+    function regresar_a_busqueda()
+    {
+        $('#agregar_profesional_btn_buscar_rut').removeAttr('disabled');
+        $('#agregar_profesional_int_rut').val('');
+
+        $('#div_agregar_profesional_busqueda').show();
+        $('#div_agregar_profesional_ver_info_prof').hide();
+        $('#div_agregar_profesional_formulario_nuevo_prof').hide();
+
+        $('#agregar_profesional_id_profesional').val('');
+        $('#agregar_profesional_texto_ver_nombre_profesional').html('');
+        $('#agregar_profesional_texto_ver_telefono').html('');
+        $('#agregar_profesional_texto_ver_email').html('');
+        $('#agregar_profesional_ver_nombre_profesional').val('');
+        $('#agregar_profesional_ver_telefono').val('');
+        $('#agregar_profesional_ver_email').val('');
+
+        $('#agregar_profesional_nuevo_nombre').val('');
+        $('#agregar_profesional_nuevo_apellido_p').val('');
+        $('#agregar_profesional_nuevo_apellido_m').val('');
+        $('#agregar_profesional_nuevo_telefono').val('');
+        $('#agregar_profesional_nuevo_email').val('');
+    }
+
+    {{--  BUSQUEDA EN EL MODAL DE ASOCIAR NUEVO PROFESIONAL  --}}
+    function buscar_profesional(){
+
+        let id_lugar_atencion = $('#agregar_profesional_int_id_lugar_atencion').val();
+
+        if(id_lugar_atencion == '')
+        {
+            swal({
+                title: "Debe seleccionar una sucursal",
+                icon: "error",
+            });
+            return false;
+        }
+
+        $('#agregar_profesional_btn_buscar_rut').attr('disabled', 'disabled');
+        var rut = $('#agregar_profesional_int_rut').val();
+        if(rut == ''){
+            swal({
+                title: "Debe ingresar un RUT",
+                icon: "error",
+            });
+            return false;
+        }
+        if(!$.validateRut(rut))
+        {
+            swal({
+                title: "Debe ingresar un RUT valido",
+                icon: "error",
+            });
+            return false;
+        }
+
+        {{--  busqueda  --}}
+        let profesional_inter = $('#profesional_inter');
+        profesional_inter.find('option').remove();
+
+        let url = "{{ route('profesional.buscador') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                rut: rut
+            },
+        })
+        .done(function(data) {
+            if (data.estado == 1)
+            {
+                /** encontrado */
+                $('#agregar_profesional_texto_ver_nombre_profesional').html(data.registros[0].profesionales_nombre+' '+data.registros[0].profesionales_apellido_uno+' '+data.registros[0].profesionales_apellido_dos);
+                $('#agregar_profesional_texto_ver_telefono').html(data.registros[0].profesional_telefono_uno);
+                $('#agregar_profesional_texto_ver_email').html(data.registros[0].profesional_email);
+                $('#agregar_profesional_ver_nombre_profesional').val(data.registros[0].profesionales_nombre+' '+data.registros[0].profesionales_apellido_uno+' '+data.registros[0].profesionales_apellido_dos);
+                $('#agregar_profesional_ver_telefono').val(data.registros[0].profesional_telefono_uno);
+                $('#agregar_profesional_ver_email').val(data.registros[0].profesional_email);
+
+                $('#agregar_profesional_id_profesional').val(data.registros[0].profesionales_id);
+
+                $('#div_agregar_profesional_busqueda').hide();
+                $('#div_agregar_profesional_ver_info_prof').show();
+                $('#div_agregar_profesional_formulario_nuevo_prof').hide();
+            }
+            else
+            {
+                /** no encontrado */
+                /** REALIZAR BUSQUEDA TABLA DE PROFESIONALES EXISTENTES EXTERNOS (POR HACER) */
+                let url = "{{ route('personas.buscador') }}";
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    data: {
+                        rut: rut
+                    },
+                })
+                .done(function(data2) {
+                    if (data2.estado == 1)
+                    {
+                        /** encontrado */
+                        $('#agregar_profesional_nuevo_apellido_p').val( data2.registros.appaterno );
+                        $('#agregar_profesional_nuevo_apellido_m').val( data2.registros.apmaterno );
+                        $('#agregar_profesional_nuevo_telefono').val( '' );
+                        $('#agregar_profesional_nuevo_email').val( '' );
+
+                        $('#div_agregar_profesional_busqueda').hide();
+                        $('#div_agregar_profesional_ver_info_prof').hide();
+                        $('#div_agregar_profesional_formulario_nuevo_prof').show();
+                    }
+                    else
+                    {
+                        /** no encontrado */
+                        $('#agregar_profesional_nuevo_nombre').val();
+                        $('#agregar_profesional_nuevo_apellido_p').val();
+                        $('#agregar_profesional_nuevo_apellido_m').val();
+                        $('#agregar_profesional_nuevo_telefono').val();
+                        $('#agregar_profesional_nuevo_email').val();
+
+                        $('#div_agregar_profesional_busqueda').hide();
+                        $('#div_agregar_profesional_ver_info_prof').hide();
+                        $('#div_agregar_profesional_formulario_nuevo_prof').show();
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function asociar_profesional_existente()
+    {
+        let id_lugar_atencion = $('#agregar_profesional_int_id_lugar_atencion').val();
+        let id_profesional = $('#agregar_profesional_id_profesional').val();
+        let url = "{{ route('adm_cm.asociar_profesional_existente')}}";
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                _token: CSRF_TOKEN,
+                id_lugar_atencion: id_lugar_atencion,
+                id_profesional: id_profesional,
+            },
+        })
+        .done(function(data) {
+            if (data.estado == 1)
+            {
+
+                swal({
+                    title: "Invitación al Profesional Realizada con Exito.",
+                    text: "Profesional pendiente por confirmar.",
+                    icon: "success",
+                });
+
+                $('#asociar_profesional_cm').modal('hide');
+
+                $('#agregar_profesional_btn_buscar_rut').removeAttr('disabled');
+                $('#agregar_profesional_int_rut').val('');
+
+                $('#div_agregar_profesional_busqueda').show();
+                $('#div_agregar_profesional_ver_info_prof').hide();
+                $('#div_agregar_profesional_formulario_nuevo_prof').hide();
+
+                $('#agregar_profesional_id_profesional').val('');
+                $('#agregar_profesional_texto_ver_nombre_profesional').html('');
+                $('#agregar_profesional_texto_ver_telefono').html('');
+                $('#agregar_profesional_texto_ver_email').html('');
+                $('#agregar_profesional_ver_nombre_profesional').val('');
+                $('#agregar_profesional_ver_telefono').val('');
+                $('#agregar_profesional_ver_email').val('');
+
+                $('#agregar_profesional_nuevo_nombre').val('');
+                $('#agregar_profesional_nuevo_apellido_p').val('');
+                $('#agregar_profesional_nuevo_apellido_m').val('');
+                $('#agregar_profesional_nuevo_telefono').val('');
+                $('#agregar_profesional_nuevo_email').val('');
+            }
+            else
+            {
+                swal({
+                    title: "Invitación al Profesional Fallida.",
+                    text: "Profesional pendiente por confirmar.",
+                    icon: "error",
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+
+    }
+
+    function asociar_nuevo_profesional()
+    {
+        let id_lugar_atencion = $('#agregar_profesional_int_id_lugar_atencion').val();
+        let nombre = $('#agregar_profesional_nuevo_nombre').val();
+        let apellido_p = $('#agregar_profesional_nuevo_apellido_p').val();
+        let apellido_m = $('#agregar_profesional_nuevo_apellido_m').val();
+        let telefono = $('#agregar_profesional_nuevo_telefono').val();
+        let email = $('#agregar_profesional_nuevo_email').val();
+        let url = "{{ route('adm_cm.asociar_profesional_nuevo')}}";
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                _token: CSRF_TOKEN,
+                id_lugar_atencion: id_lugar_atencion,
+                nombre: nombre,
+                apellido_uno: apellido_p,
+                apellido_dos: apellido_m,
+                telefono: telefono,
+                email: email,
+            },
+        })
+        .done(function(data) {
+            if (data.estado == 1)
+            {
+
+                swal({
+                    title: "Invitación al Profesional Realizada con Exito.",
+                    text: "Profesional pendiente por confirmar.",
+                    icon: "success",
+                });
+
+                $('#asociar_profesional_cm').modal('hide');
+
+                $('#agregar_profesional_btn_buscar_rut').removeAttr('disabled');
+                $('#agregar_profesional_int_rut').val('');
+
+                $('#div_agregar_profesional_busqueda').show();
+                $('#div_agregar_profesional_ver_info_prof').hide();
+                $('#div_agregar_profesional_formulario_nuevo_prof').hide();
+
+                $('#agregar_profesional_id_profesional').val('');
+                $('#agregar_profesional_texto_ver_nombre_profesional').html('');
+                $('#agregar_profesional_texto_ver_telefono').html('');
+                $('#agregar_profesional_texto_ver_email').html('');
+                $('#agregar_profesional_ver_nombre_profesional').val('');
+                $('#agregar_profesional_ver_telefono').val('');
+                $('#agregar_profesional_ver_email').val('');
+
+                $('#agregar_profesional_nuevo_nombre').val('');
+                $('#agregar_profesional_nuevo_apellido_p').val('');
+                $('#agregar_profesional_nuevo_apellido_m').val('');
+                $('#agregar_profesional_nuevo_telefono').val('');
+                $('#agregar_profesional_nuevo_email').val('');
+            }
+            else
+            {
+                swal({
+                    title: "Invitación al Profesional Fallida.",
+                    text: "Profesional pendiente por confirmar.",
+                    icon: "error",
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+
+    }
+</script>

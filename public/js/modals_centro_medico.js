@@ -13,13 +13,7 @@ function rol_permisos_cm() {
     $('#roles_permisos').modal('show');
 }
 
-function asociar_profesional() {
-    $('#agregar_profesional_btn_buscar_rut').removeAttr('disabled');
-    $('#div_agregar_profesional_busqueda').show();
-    $('#div_agregar_profesional_ver_info_prof').hide();
-    $('#div_agregar_profesional_formulario_nuevo_prof').hide();
-    $('#asociar_profesional_cm').modal('show');
-}
+
 
 
 /*-Modals asistentes-*/

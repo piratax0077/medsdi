@@ -1123,6 +1123,8 @@ class AdministradorCmController extends Controller
             $id_user_invitado = $profesionales->id_usuario;
             $resultado = InvitacionController::registroInvtacionProfesional($request->id_lugar_atencion, $rut, $nombre, $apellido_uno, $apellido_dos, $telefono, $email, $id_user_solicitud, $id_user_invitado);
             $datos = $resultado;
+            $datos['estado'] = 1;
+            $datos['msj'] = 'profesional invitado';
         }
         else
         {

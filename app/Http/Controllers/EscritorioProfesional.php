@@ -1490,7 +1490,7 @@ class EscritorioProfesional extends Controller
 
 
         if (count($horario) == 0) {
-            return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region, 'mensaje' => 'Debe ingresar un horario']);
+            return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region, 'mensaje' => 'Para abrir Agenda debe ingresar horario de atención en el botón correspondiente']);
         }
 
         // dd($horario);
@@ -1529,7 +1529,7 @@ class EscritorioProfesional extends Controller
 
 
         if (!isset($horario)) {
-            return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region, 'mensaje' => 'Debe ingresar un horario']);
+            return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region, 'mensaje' => 'Para abrir Agenda debe ingresar horario de atención en el botón correspondiente']);
         }
 
         return view('app.profesional.agenda')->with(
