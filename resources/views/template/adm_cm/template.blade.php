@@ -23,7 +23,7 @@
 
     <!--Estilos base-->
     <link rel="stylesheet" href='{{ asset('css/style.css') }}'/>
-
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
     <!--Estilos escritorios-->
     <link rel="stylesheet" href='{{ asset('css/escritorios.css') }}'/>
 
