@@ -338,11 +338,13 @@ class ManejoContratoController extends Controller
                 $datos['estado'] = 1;
                 $datos['msj'] = 'registros';
                 $datos['registros'] = $registros;
+                $datos['filtro'] = $filtro;
             }
             else
             {
                 $datos['estado'] = 0;
                 $datos['msj'] = 'sin registro';
+                $datos['request'] = $request->all();
             }
         }
         else
@@ -569,7 +571,7 @@ class ManejoContratoController extends Controller
     }
 
     /** MANEJO DE HISTORICO */
-    public function registrarHistorico(Request $request)
+    static public function registrarHistorico(Request $request)
     {
         $datos = array();
         $error = array();
@@ -977,6 +979,108 @@ class ManejoContratoController extends Controller
         }
 
         return (object)$datos;
+    }
+
+    public function modificarHorario(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id))
+        {
+            $error['id'] = 'ID Contato - campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_empleado))
+        {
+            $error['id_empleado'] = 'ID Empleado - campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->dias_laborales))
+        {
+            $error['dias_laborales'] = 'Dias Laborales - campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->hora_ingreso))
+        {
+            $error['hora_ingreso'] = 'Hora entrada - campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->hora_salida))
+        {
+            $error['hora_salida'] = 'Hora salida - campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->hora_inicio_colacion))
+        {
+            $error['hora_inicio_colacion'] = 'Hora inicio colación - campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->hora_termino_colacion))
+        {
+            $error['hora_termino_colacion'] = 'Hora término colación - campo requerido';
+            $valido = 0;
+        }
+
+
+        if($valido)
+        {
+            $filtro = array();
+            $filtro[] = array('id', $request->id);
+            $filtro[] = array('id_empleado', $request->id_empleado);
+
+            $registro = ContratoDependiente::where($filtro)->first();
+
+            if($registro)
+            {
+                $registro->dias_laborales = implode(',',$request->dias_laborales);
+                $registro->hora_ingreso = $request->hora_ingreso;
+                $registro->hora_salida = $request->hora_salida;
+                $registro->hora_inicio_colacion = $request->hora_inicio_colacion;
+                $registro->hora_termino_colacion = $request->hora_termino_colacion;
+
+                if($registro->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Horario Modificado';
+
+                    $requestHistorico = new Request(array(
+                        'id_contrato' => $request->id,
+                        'id_user' => Auth::user()->id,
+                        'data' => json_encode($request->all()),
+                        'fecha' => date('Y-m-d'),
+                        'hora' => date('H:i:s'),
+                        'tipo_verificacion_usuario' => null,
+                        'codigo_verificacion_usuario' => null,
+                        'fecha_codigo_usuario' => null,
+                        'tipo_verificacion_tercero' => null,
+                        'codigo_verificacion_tercero' => null,
+                        'fecha_codigo_tercero' => null,
+                        'procesado' => null,
+                    ));
+                    $datos['historico'] = static::registrarHistorico($requestHistorico);
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Problema al modificar Horario';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Contrato no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
     }
 
 

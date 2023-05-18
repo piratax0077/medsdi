@@ -1014,6 +1014,14 @@ class AdministradorCmController extends Controller
         {
             $lista_asistente = $LugarAtencion->AsistenteIntitucion()->get();
 
+            if($lista_asistente)
+            {
+                foreach ($lista_asistente as $key => $value)
+                {
+                    $lista_asistente[$key]->asistente_tipo = AsistenteTipo::find($value->id_asistente_tipo);
+                }
+            }
+
         }
         /** FIN CARGA DE PROFESIONALES */
 

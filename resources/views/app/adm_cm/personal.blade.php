@@ -94,7 +94,7 @@
                                                             <!--Botón Modal-->
                                                             <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('asistente publico',{{ $asistente->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm('asistente publico',{{ $asistente->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
+                                                            <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm('{{ $asistente->asistente_tipo->nombre }}',{{ $asistente->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
                                                         </td>
                                                         <td class="align-middle text-center">
                                                             <!--Botón Modal-->
@@ -675,99 +675,7 @@
 
         }
 
-        /** Modals Horariossss */
-        function horario_profesional_cm(tipo, id_profesional, id_lugar_atencion) {
 
-
-            $('#info_funcionario tbody').html('');
-            let url = "{{ route('adm_cm.empleado_horario_lugar_atencion') }}";
-            $.ajax({
-                url: url,
-                type: "get",
-                data: {
-                    //_token: _token,
-                    id_empleado : id_profesional,
-                    tipo_empleado : tipo.toUpperCase(),
-                    id_lugar_atencion: id_lugar_atencion,
-                    estado: 1,
-                },
-            })
-            .done(function(data) {
-                if (data.estado == 1) {
-
-                    $.each(data.registros, function(key, value){
-                        let id = value.id;
-                        var hora_ingreso = value.hora_ingreso;
-                        var hora_salida = value.hora_salida;
-                        var hora_inicio_colacion = value.hora_inicio_colacion;
-                        var hora_termino_colacion = value.hora_termino_colacion;
-                        let dia = '';
-                        dias = value.dias_laborales.split(',');
-                        for (let i = 0; i < dias.length; i++) {
-                            if (dias[i] == 1) {
-                                dia += 'Lunes '
-                            } else if (dias[i] == 2) {
-                                dia += 'Martes '
-                            } else if (dias[i] == 3) {
-                                dia += 'Miercoles '
-                            } else if (dias[i] == 4) {
-                                dia += 'Jueves '
-                            } else if (dias[i] == 5) {
-                                dia += 'Viernes '
-                            } else if (dias[i] == 6) {
-                                dia += 'Sabado '
-                            } else if (dias[i] == 7) {
-                                dia += 'Domingo '
-                            }
-
-                        }
-
-                        var fila = '';
-                        fila +='<tr>';
-                        fila +='    <th class="align-middle">Días Laborales</th>';
-                        fila +='    <th class="align-middle">' + dia + '</th>';
-                        fila +='</tr>';
-                        fila +='<tr>';
-                        fila +='    <th class="align-middle">Hora Entrada</th>';
-                        fila +='    <th class="align-middle">' + hora_ingreso + '</th>';
-                        fila +='</tr>';
-                        fila +='<tr>';
-                        fila +='    <th class="align-middle">Hora Salida</th>';
-                        fila +='    <th class="align-middle">' + hora_salida + '</th>';
-                        fila +='</tr>';
-                        fila +='<tr>';
-                        fila +='    <th class="align-middle">Hora inicio colación</th>';
-                        fila +='    <th class="align-middle">' + hora_inicio_colacion + '</th>';
-                        fila +='</tr>';
-                        fila +='<tr>';
-                        fila +='    <th class="align-middle">Hora término colación</th>';
-                        fila +='    <th class="align-middle">' + hora_termino_colacion + '</th>';
-                        fila +='</tr>';
-
-                        $('#horario_dias_laborales').val(dias).select2();
-                        $('#horario_hora_entrada').val(hora_ingreso);
-                        $('#horario_hora_salida').val(hora_salida);
-                        $('#horario_hora_entrada_colacion').val(hora_inicio_colacion);
-                        $('#horario_hora_salida_colacion').val(hora_termino_colacion);
-
-                        $('#info_funcionario tbody').append(fila);
-                    });
-
-                    $('#horario_dependiente').modal('show');
-
-                } else {
-                    swal({
-                        title: "El usuario no registra datos de horario.",
-                        icon: "error",
-                    });
-                }
-
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-        }
 
     </script>
 @endsection
@@ -779,7 +687,7 @@
     @include('app.adm_cm.modales.personal.contacto_personal')
     @include('app.adm_cm.modales.personal.permisos_rol')
     @include('app.adm_cm.modal_adm.datos_banco')
-    @include('app.adm_cm.modal_adm.horario_dependiente')
+    @include('app.adm_cm.modales.personal.horario_personal')
 
     @include('app.adm_cm.modal_adm.asociar_profesional')
 @endsection
