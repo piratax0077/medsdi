@@ -2865,17 +2865,7 @@ class EscritorioProfesional extends Controller
         return $datos;
     }
 
-    public function agregarLiquidacion(Request $request)
-    {
-        $result = LiquidacionReciboController::store( Auth::user()->id, $request->rut, $request->nombre, $request->banco, $request->cuenta, $request->email, $request->principal, $request->tipo_cuenta,1);
-        return $result;
-    }
 
-    public function modificarLiquidacion(Request $request)
-    {
-        $result = LiquidacionReciboController::edit($request->id, Auth::user()->id, $request->rut, $request->nombre, $request->banco, $request->cuenta, $request->email, $request->principal, $request->tipo_cuenta,1);
-        return $result;
-    }
 
     /** FICHA CIRUGIA DIGESTIVA TIPO */
     public function agregarFichaTipoCDG(Request $request)

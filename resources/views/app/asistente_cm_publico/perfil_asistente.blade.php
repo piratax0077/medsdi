@@ -60,6 +60,9 @@
 									<li class="nav-item">
 										<a class="btn btn-outline-info btn-sm mb-2 mx-2 active" id="personal-tab" data-toggle="tab" href="#info_personal" role="tab" aria-controls="info_personal" aria-selected="true"><i class="feather icon-user mr-2"></i>Información personal</a>
 									</li>
+                                    <li class="nav-item">
+                                        <a class="btn btn-outline-info btn-sm mb-2 mx-2" id="liquidacion-tab" data-toggle="tab" href="#info_liquidacion" role="tab" aria-controls="info_liquidacion" aria-selected="false"><i class="feather icon-lock mr-2"></i>Manejo de Liquidaciones</a>
+                                    </li>
 									<li class="nav-item">
 										<a class="btn btn-outline-info btn-sm mb-2 mx-2" id="emergencia-tab" data-toggle="tab" href="#emergencia" role="tab" aria-controls="emergencia" aria-selected="false"><i class="feather icon-user-plus mr-2"></i>Contacto de emergencia</a>
 									</li>
@@ -243,6 +246,7 @@
 										<!--(Editar) Contacto-->
 									</div>
 									<!--Cierre: Card Contacto-->
+
 									<!--Card Residencia-->
 									<div class="card">
 										<div class="card-header d-flex align-items-center justify-content-between bg-info">
@@ -344,6 +348,9 @@
 							</div>
 						</div>
 						<!--Cierre: Tab Información Personal-->
+
+                        <!--Tab info de Liquidacion -->
+                        @include('general.seccion_perfil.seccion_liquidacion')
 
 
 						<!--Tab Contactos de Emergencia-->

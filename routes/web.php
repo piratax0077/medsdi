@@ -523,8 +523,8 @@ Route::group([
     Route::get('/profesional/audifono/ver', [App\Http\Controllers\EscritorioProfesional::class, 'verAudifono'])->name('profesional.ver_audifono');
 
 	/** LIQUIDACIONES */
-    Route::post('/profesional/liquidacion/agregar', [App\Http\Controllers\EscritorioProfesional::class, 'agregarLiquidacion'])->name('profesional.agregar_liquidacion');
-	Route::post('/profesional/liquidacion/modificar', [App\Http\Controllers\EscritorioProfesional::class, 'modificarLiquidacion'])->name('profesional.modificar_liquidacion');
+    // Route::post('/profesional/liquidacion/agregar', [App\Http\Controllers\LiquidacionReciboController::class, 'agregarLiquidacion'])->name('profesional.agregar_liquidacion');
+	// Route::post('/profesional/liquidacion/modificar', [App\Http\Controllers\LiquidacionReciboController::class, 'modificarLiquidacion'])->name('profesional.modificar_liquidacion');
 
     /** Proceso de imagenes */
 	Route::post('/imagen/carga', [App\Http\Controllers\CargaImagenController::class, 'cargaImagenTemp'])->name('profesional.imagen.carga');
@@ -623,6 +623,7 @@ Route::group([
 
     Route::get('hora/confirmar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'confirmarHora'])->name('asistentecm.confirmar_hora');
     Route::get('hora/por/confirmar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'cargarConfirmarHora'])->name('asistentecm.cargar_hora_por_confirmar');
+
 });
 
 /* ASISTENTE JEFE Centro Medico*/
@@ -1145,15 +1146,23 @@ Route::group([
     Route::get('horas_disponibles_profesional_lugar_atencion_buscador', [App\Http\Controllers\EscritorioGeneral::class, 'horasDisponiblesProfesionalLugarAtencionBuscador'])->name('profesional.HorasDisponiblesProfesionalLugarAtencionBuscador');
 });
 
-/** VER LIQUIDACIONES */
+/** VER LIQUIDACIONES - DATOS DE DEPOSITO */
 Route::group([
-    'middleware' => ['role:Profesional|Contador|AsistenteAdm|admin|Adm_Institucion'],
+    'middleware' => ['role:Profesional|Contador|Asistente|AsistenteCaja|AsistenteJefaCaja|AsistenteOnline|admin|Adm_Institucion|Institucion'],
     'prefix' => 'liquidacion_recibo',
 ], function () {
     Route::get('/profesional/ver_registro', [App\Http\Controllers\LiquidacionReciboController::class, 'ver_registro_r'])->name('profesional.liquidacion_ver');
     Route::get('/profesional/ver_registros', [App\Http\Controllers\LiquidacionReciboController::class, 'ver_registros_r'])->name('profesional.liquidacion_ver_profesional');
 });
 
+/** LIQUIDACIONES - DATOS DE DEPOSITO */
+Route::group([
+    'middleware' => ['role:Profesional|Contador|Asistente|AsistenteCaja|AsistenteJefaCaja|AsistenteOnline|admin|Adm_Institucion'],
+    'prefix' => 'bodega',
+], function () {
+    Route::post('/liquidacion/agregar', [App\Http\Controllers\LiquidacionReciboController::class, 'agregarLiquidacion'])->name('liquidacion.agregar');
+    Route::post('/liquidacion/modificar', [App\Http\Controllers\LiquidacionReciboController::class, 'modificarLiquidacion'])->name('liquidacion.modificar');
+});
 
 /** PRODUCTO BODEGA */
 Route::group([
@@ -1162,7 +1171,6 @@ Route::group([
 ], function () {
     Route::post('/autocomplete/producto/categoria/ver_registros', [App\Http\Controllers\ProductoBodegaController::class, 'getProductoBodegaCategoriaAutocomplete'])->name('bodega.autocomplete.productoVerCategoria');
 });
-
 
 
 /** web */
@@ -1181,6 +1189,8 @@ Route::get('/correo/envio_test', [App\Http\Controllers\SendMailController::class
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+
 
 
 /** AUTORIZACION PARA ENLACE DE APP */
