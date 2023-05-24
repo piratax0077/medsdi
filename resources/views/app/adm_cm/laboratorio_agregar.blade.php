@@ -664,7 +664,7 @@
     </div>
 </div>
 @endsection
-@section('page-scripts')
+@section('page-script')
 <script type="text/javascript">
 
     function nueva_sucursal (){

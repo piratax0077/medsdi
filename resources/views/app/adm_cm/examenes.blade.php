@@ -74,14 +74,14 @@
                                     <i class="feather icon-edit"></i> Editar</button>
                                     <button type="button" class="btn btn-danger btn-sm">
                                     <i class="feather icon-x-circle"></i> Eliminar</button>
-                                </td>                                                                    
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    </div>  
+    </div>
 </div>
 
 <!--Modal agregar examen-->
@@ -142,11 +142,11 @@
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="sucursal_02">
                                     <label class="custom-control-label" for="sucursal_02">Nombre de sucursal</label>
-                                </div> 
+                                </div>
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="sucursal_03">
                                     <label class="custom-control-label" for="sucursal_03">Nombre de sucursal</label>
-                                </div>                             
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-12 mt-2">
@@ -161,11 +161,11 @@
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="sucursal_05">
                                     <label class="custom-control-label" for="sucursal_05">Nombre de sucursal</label>
-                                </div> 
+                                </div>
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="sucursal_06">
                                     <label class="custom-control-label" for="sucursal_06">Nombre de sucursal</label>
-                                </div>                             
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -237,11 +237,11 @@
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="sucursal_02">
                                     <label class="custom-control-label" for="sucursal_02">Nombre de sucursal</label>
-                                </div> 
+                                </div>
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="sucursal_03">
                                     <label class="custom-control-label" for="sucursal_03">Nombre de sucursal</label>
-                                </div>                             
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-12 mt-2">
@@ -256,11 +256,11 @@
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="sucursal_05">
                                     <label class="custom-control-label" for="sucursal_05">Nombre de sucursal</label>
-                                </div> 
+                                </div>
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="sucursal_06">
                                     <label class="custom-control-label" for="sucursal_06">Nombre de sucursal</label>
-                                </div>                             
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -387,7 +387,7 @@
     </div>
 </div>
 @endsection
-@section('page-scripts')
+@section('page-script')
 <script>
     $(document).ready(function() {
         $('#lista_examenes_laboratorio').DataTable({
@@ -401,7 +401,7 @@
 function editar_datos(){
         $('#editar_examen').modal('show');
     }
-    
+
 function toma_muestras(){
         $('#sucursal_toma_muestras').modal('show');
     }

@@ -1776,7 +1776,7 @@
 </div>
 @endsection
 
-@section('page-scripts')
+@section('page-script')
     <script>
         $(document).ready(function() {
             {{--  FORMATEO DE RUT AGREGAR NUEVO PROFESIONAL   --}}

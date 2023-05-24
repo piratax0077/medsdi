@@ -242,16 +242,6 @@ class EscritorioAsistente extends Controller
     }
 
     /*Asistente Centro Medico*/
-
-
-
-
-
-
-
-
-
-
     public function buscarInfoProfesional(Request $request)
     {
         $datos = array();
@@ -346,10 +336,6 @@ class EscritorioAsistente extends Controller
 
         return $datos;
     }
-
-
-
-
 
 	public function administracion_asistente()
     {

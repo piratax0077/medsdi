@@ -1007,7 +1007,7 @@ class AdministradorCmController extends Controller
         }
         /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
 
-        /** CARGA DE PROFESIONALES */
+        /** CARGA DE ASISTENTES */
         $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
         $lista_asistente = array();
         if($LugarAtencion)
@@ -1018,12 +1018,32 @@ class AdministradorCmController extends Controller
             {
                 foreach ($lista_asistente as $key => $value)
                 {
+
+                    /** roles */
+                    $usuario = User::where('id', $value->id_usuario)->first();
+                    $roles = $usuario->roles()->get();
+                    $array_roles = array();
+                    foreach ($roles as $key_2 => $value_2) {
+                        array_push($array_roles, $value_2->name);
+                    }
+
+                    if(!empty($array_roles))
+                        $lista_asistente[$key]->roles = implode(",",$array_roles);
+                    else
+                        $lista_asistente[$key]->roles = '';
+
+                    /** tipo asistente */
                     $lista_asistente[$key]->asistente_tipo = AsistenteTipo::find($value->id_asistente_tipo);
+
+                    /** info contrato */
+                    $filtro_cont = array();
+                    $filtro_cont[] = array('id_lugar_atencion', $institucion->id_lugar_atencion);
+                    $filtro_cont[] = array('id_empleado', $value->id);
+                    $lista_asistente[$key]->contrato = ContratoDependiente::select('id', 'id_empleado', 'id_lugar_atencion')->where($filtro_cont)->first();
                 }
             }
-
         }
-        /** FIN CARGA DE PROFESIONALES */
+        /** FIN CARGA DE ASISTENTES */
 
         /** LISTA CONTRATO */
         $lista_tipo_asistente = AsistenteTipo::select('id', 'nombre')->where('estado',1)->get();
@@ -1056,7 +1076,144 @@ class AdministradorCmController extends Controller
             'lista_tipo_contrato' => (object)$lista_tipo_contrato,
             'regiones' => $regiones,
             'ciudades' => $ciudades,
+            'lista_tipo_asistente' => $lista_tipo_asistente,
         ]);;
+    }
+
+    public function personal_asistentes()
+    {
+        $datos = array();
+        $errro = array();
+        $valido = 1;
+
+
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+
+        /** INFORMACION DE INSTITUCION Y RESPONSABLE */
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+
+            }
+        }
+        /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
+
+        /** CARGA DE ASISTENTES */
+        $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+        $lista_asistente = array();
+        if($LugarAtencion)
+        {
+            $lista_asistente = $LugarAtencion->AsistenteIntitucion()->get();
+
+            if($lista_asistente)
+            {
+                foreach ($lista_asistente as $key => $value)
+                {
+
+                    /** roles */
+                    $usuario = User::where('id', $value->id_usuario)->first();
+                    $roles = $usuario->roles()->get();
+                    $array_roles = array();
+                    foreach ($roles as $key_2 => $value_2) {
+                        array_push($array_roles, $value_2->name);
+                    }
+
+                    if(!empty($array_roles))
+                        $lista_asistente[$key]->roles = implode(",",$array_roles);
+                    else
+                        $lista_asistente[$key]->roles = '';
+
+                    /** tipo asistente */
+                    $lista_asistente[$key]->asistente_tipo = AsistenteTipo::find($value->id_asistente_tipo);
+
+                    $lista_asistente[$key]->direccion = $value->direccion()->first()->direccion;
+                    $lista_asistente[$key]->numero_dir = $value->direccion()->first()->numero_dir;
+                    $lista_asistente[$key]->ciudad = $value->direccion()->first()->ciudad()->first()->nombre;
+                    $lista_asistente[$key]->institucion = $institucion;
+                }
+            }
+        }
+        /** FIN CARGA DE ASISTENTES */
+
+        if($lista_asistente)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro';
+            $datos['registro'] = $lista_asistente;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registro';
+        }
+
+
+        return $datos;
     }
 
 
@@ -1081,6 +1238,103 @@ class AdministradorCmController extends Controller
 
         return view($url, $array_data);
     }
+
+    public function adm_buscar_pacientes()
+    {
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+
+        /** INFORMACION DE INSTITUCION Y RESPONSABLE */
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+
+            }
+        }
+        /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
+
+        /** CARGA DE ASISTENTES */
+        $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+        $lista_asistente = array();
+        if($LugarAtencion)
+        {
+            $url = 'app.adm_cm.pacientes'; // institucion
+            $array_data = array(
+                'lugares_atencion' => $LugarAtencion,
+            );
+            return view($url, $array_data);
+        }
+        else
+        {
+            return back()->with('warning', 'El Lugar de Atencion no se encontro');
+        }
+
+    }
+
     public function administracion_cm(){
         return view('app.adm_cm.administracion_cm');
     }
@@ -1203,6 +1457,93 @@ class AdministradorCmController extends Controller
                 if($direccion)
                     $direccion_text = $direccion->direccion.', '.$direccion->ciudad->nombre;
             }
+
+            $id_busqueda = Auth::user()->id;
+
+            /** INFORMACION DE INSTITUCION Y RESPONSABLE */
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
+
+            if($registro)
+            {
+                // var_dump($registro);
+                // var_dump($registro->UsuarioAdministrador()->first());
+                //var_dump($registro->UsuarioAdministrador()->first()->id);
+                /** INSTITUCION */
+                $institucion = $registro;
+                $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                $tipo_institucion = 'institucion';
+
+            }
+            else
+            {
+                $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+                if($registro)
+                {
+                    /** SERVICIOS */
+                    $institucion = $registro;
+                    $tipo_institucion = 'servicio';
+                }
+                else
+                {
+                    /** busqueda por responsable */
+                    $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                    if($responsable)
+                    {
+                        $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            // var_dump($registro);
+                            // var_dump($registro->UsuarioAdministrador()->first());
+                            /** INSTITUCION */
+                            $institucion = $registro;
+                            $tipo_institucion = 'institucion';
+
+                        }
+                        else
+                        {
+                            $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                            if($registro)
+                            {
+                                /** SERVICIOS */
+                                $institucion = $registro;
+                                $tipo_institucion = 'servicio';
+                            }
+                            else
+                            {
+                                return back()->with('error','Institución no encontrada');
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
+
+                }
+            }
+            /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
+
+            /** CARGA DE ASISTENTES */
+            $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+            $filtro = array();
+            $filtro[] = array('id_empleado', $asistente->id);
+            $filtro[] = array('estado', 2);
+            $filtro[] = array('id_lugar_atencion', $LugarAtencion->id);
+            $asistente->contrato = ContratoDependiente::where($filtro)->first();
+
+            $filtro_d = array();
+            $filtro_d[] = array();
+            $asistente->direccion = Direccion::with('Ciudad')->find($asistente->id_direccion);
+
             $datos['estado'] = 1;
             $datos['msj'] = 'registro';
             $datos['registro'] = $asistente;
@@ -1452,6 +1793,289 @@ class AdministradorCmController extends Controller
 
         return $datos;
     }
+
+    public function modificar_rol_asistente(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_user))
+        {
+            $error['id_user'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_tipo))
+        {
+            $error['id_tipo'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_tipo_movimiento))
+        {
+            $error['id_tipo_movimiento'] = 'campo requerido';
+            $valido = 0;
+        }
+        if($request->movimiento == '')
+        {
+            $error['movimiento'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $user = User::find($request->id_user);
+            $rol = '';
+            if($user)
+            {
+                // roles
+                // 4 - Asistente
+                // 10 - AsistenteAdm
+                // 11 - AsistenteJefaCaja
+                // 12 - AsistenteCaja
+                // 13 - AsistenteOnline
+
+                // 2 - Paciente
+                // 3 - Profesional
+                // 5 - Institucion
+                // 6 - Servicio
+
+                // 7 - Adm_Institucion
+                // 8 - Adm_Servicio
+
+                // 9 - Contador
+
+                switch (mb_strtoupper($request->id_tipo_movimiento))
+                {
+                    case 'ASISTENTE':
+                        // asistente tipo
+                        // 1 - Asistente Publico
+                        // 2 - Asistente Jefa Caja
+                        // 3 - Asistente Administrativo
+                        // 4 - Asistente Online
+                        // 5 - Asistente Consulta
+                        $rol = $request->id_tipo;
+                        break;
+                    case 'ADMINISTRADOR':
+                        // TIPO ADMINISTRADO
+                        // 1 - Administrador de CM
+                        // 2 - Administrador de Servicios
+                        $rol = $request->id_tipo;
+                        break;
+                    case 'CONTADOR':
+                        $rol = $request->id_tipo;
+                        break;
+                    // default:
+                    //     # code...
+                    //     break;
+                }
+
+                /** AGREGAR ROL */
+                if($request->movimiento == 1)
+                {
+                    try {
+                        $user->assignRole($rol);
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'perfil modificado';
+                        $datos['rol'] = $rol;
+                        $datos['user'] = $user;
+                    } catch (\Throwable $th) {
+                        $datos['estado'] = 0;
+                        $datos['error'] =$th;
+                        $datos['msj'] = 'problema modificando Perfil';
+                    }
+                }
+                /** QUITAR ROL */
+                else
+                {
+                    try {
+                        $user->removeRole($rol);
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'perfil modificado';
+                        $datos['rol'] = $rol;
+                        $datos['user'] = $user;
+                    } catch (\Throwable $th) {
+                        $datos['estado'] = 0;
+                        $datos['error'] =$th;
+                        $datos['msj'] = 'problema modificando Perfil';
+                    }
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'usuario no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function modificar_rol_asistente_bak(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_user))
+        {
+            $error['id_user'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_tipo))
+        {
+            $error['id_tipo'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_tipo_movimiento))
+        {
+            $error['id_tipo_movimiento'] = 'campo requerido';
+            $valido = 0;
+        }
+        if($request->movimiento == '')
+        {
+            $error['movimiento'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+
+            $user = User::find($request->id_user);
+            $rol = '';
+            if($user)
+            {
+                // roles
+                // 4 - Asistente
+                // 10 - AsistenteAdm
+                // 11 - AsistenteJefaCaja
+                // 12 - AsistenteCaja
+                // 13 - AsistenteOnline
+
+                // 2 - Paciente
+                // 3 - Profesional
+                // 5 - Institucion
+                // 6 - Servicio
+
+                // 7 - Adm_Institucion
+                // 8 - Adm_Servicio
+
+                // 9 - Contador
+
+                switch (mb_strtoupper($request->id_tipo_movimiento))
+                {
+                    case 'ASISTENTE':
+                        // asistente tipo
+                        // 1 - Asistente Publico
+                        // 2 - Asistente Jefa Caja
+                        // 3 - Asistente Administrativo
+                        // 4 - Asistente Online
+                        // 5 - Asistente Consulta
+                        switch ($request->id_tipo) {
+
+                            case '1':
+                                $rol = 'AsistenteCaja';
+                                break;
+                            case '2':
+                                $rol = 'AsistenteJefaCaja';
+                                break;
+                            case '3':
+                                $rol = 'AsistenteAdm';
+                                break;
+                            case '4':
+                                $rol = 'AsistenteOnline';
+                                break;
+                            case '5':
+                                $rol = 'Asistente';
+                                break;
+
+                            // default:
+                            //     $rol = '';
+                            //     break;
+                        }
+                        break;
+                    case 'ADMINISTRADOR':
+                        switch ($request->id_tipo) {
+                            // TIPO ADMINISTRADO
+                            // 1 - Administrador de CM
+                            // 2 - Administrador de Servicios
+                            case '1':
+                                $rol = 'Adm_Institucion';
+                                break;
+                            case '2':
+                                $rol = 'Adm_Servicio';
+                                break;
+                            // default:
+                            //     $rol = '';
+                            //     break;
+                        }
+                        break;
+                    case 'CONTADOR':
+                         $rol = 'Contador';
+                        break;
+                    // default:
+                    //     # code...
+                    //     break;
+                }
+
+
+
+                /** AGREGAR ROL */
+                if($request->movimiento == 1)
+                {
+                    try {
+                        $user->assignRole($rol);
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'perfil modificado';
+                        $datos['rol'] = $rol;
+                        $datos['user'] = $user;
+                    } catch (\Throwable $th) {
+                        $datos['estado'] = 0;
+                        $datos['error'] =$th;
+                        $datos['msj'] = 'problema modificando Perfil';
+                    }
+                }
+                /** QUITAR ROL */
+                else
+                {
+                    try {
+                        $user->removeRole($rol);
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'perfil modificado';
+                        $datos['rol'] = $rol;
+                        $datos['user'] = $user;
+                    } catch (\Throwable $th) {
+                        $datos['estado'] = 0;
+                        $datos['error'] =$th;
+                        $datos['msj'] = 'problema modificando Perfil';
+                    }
+
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'usuario no encontrado';
+            }
+
+
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
 
 
 }

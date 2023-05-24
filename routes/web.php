@@ -864,16 +864,21 @@ Route::group([
 	Route::get('/Profesionales/buscar', [App\Http\Controllers\AdministradorCmController::class, 'buscar_profesional'])->name('adm_cm.profesional_buscar');
 	Route::get('/Profesional/lugar_atencion/horario', [App\Http\Controllers\AdministradorCmController::class, 'mi_horario_lugar_atencion'])->name('adm_cm.prof_horario_lugar_atencion');
 	Route::post('/Personal/registro', [App\Http\Controllers\ManejoContratoController::class, 'registrarPersonal'])->name('adm_cm.registrar_personal');
+	Route::post('/Personal/editar', [App\Http\Controllers\ManejoContratoController::class, 'editarPersonal'])->name('adm_cm.editar_personal');
 	Route::post('/Personal/horario/editar', [App\Http\Controllers\ManejoContratoController::class, 'modificarHorario'])->name('adm_cm.personal.horario.editar');
+	Route::post('/Personal/finalizar', [App\Http\Controllers\ManejoContratoController::class, 'desasociarPersonalAsistente'])->name('adm_cm.personal.finalizar');
 
 	Route::get('/liquidacion_profesionales', [App\Http\Controllers\AdministradorCmController::class, 'liquidacion_profesionales'])->name('app.adm_cm.liquidacion_profesionales');
 
 	Route::get('/Personal', [App\Http\Controllers\AdministradorCmController::class, 'personal'])->name('adm_cm.personal');
+	Route::get('/Personal/Asistente', [App\Http\Controllers\AdministradorCmController::class, 'personal_asistentes'])->name('adm_cm.personal.asistente');
     Route::get('/Personal/Asistente/buscar', [App\Http\Controllers\AdministradorCmController::class, 'buscar_asistente'])->name('adm_cm.asistente_buscar');
     Route::get('/Personal/lugar_atencion/contrato/buscar', [App\Http\Controllers\ManejoContratoController::class, 'verContratoEmpleado'])->name('adm_cm.empleado_contrato_lugar_atencion');
     Route::get('/Personal/lugar_atencion/horario/buscar', [App\Http\Controllers\ManejoContratoController::class, 'verHorarioEmpleado'])->name('adm_cm.empleado_horario_lugar_atencion');
+    Route::post('/Personal/asistente/modificar/permisos', [App\Http\Controllers\AdministradorCmController::class, 'modificar_rol_asistente'])->name('adm_cm.personal.asistente.actualizar.rol');
 
-	Route::get('/Pacientes', [App\Http\Controllers\AdministradorCmController::class, 'pacientes'])->name('adm_cm.pacientes');
+	Route::get('/Pacientes', [App\Http\Controllers\AdministradorCmController::class, 'adm_buscar_pacientes'])->name('adm_cm.pacientes');
+
 	Route::get('/Adm_medico', [App\Http\Controllers\AdministradorCmController::class, 'adm_medico'])->name('adm_cm.adm_medico');
     Route::get('/Proveedores', [App\Http\Controllers\AdministradorCmController::class, 'proveedores'])->name('adm_cm.proveedores');
     Route::get('/Gastos', [App\Http\Controllers\AdministradorCmController::class, 'gastos'])->name('adm_cm.gastos');
@@ -899,6 +904,13 @@ Route::group([
     Route::get('/Administrador/responsable/contrasena/cambio', [App\Http\Controllers\AdministradorCmController::class, 'cambioContrasenaPerfilResponsable'])->name('adm_cm.cambio_contrasena_responsable');
 });
 
+Route::group([
+    'middleware' => ['role:Admin|AsistenteAdm|Institucion|AsistenteAdm|Adm_Institucion'],
+    'prefix' => 'cm/',
+], function () {
+    Route::get('Paciente/cargar_info', [App\Http\Controllers\AdministradorCmController::class, 'buscar_paciente_rut'])->name('asistente_adm.buscar_paciente_rut');
+});
+
 /** ASISTENTE ADMINISTRATIVA DE CENTRO MEDICO */
 Route::group([
     'middleware' => ['role:Admin|AsistenteAdm'],
@@ -910,12 +922,13 @@ Route::group([
     Route::get('/profesionales/buscar', [App\Http\Controllers\AdministradorCmController::class, 'asistente_adm_mis_profesionales'])->name('asistente_adm.mis_profesionales');
     Route::get('/profesionales/liquidacion', [App\Http\Controllers\AdministradorCmController::class, 'asistente_adm_liquidacion_profesionales'])->name('asistente_adm.liquidacion_profesionales');
     Route::get('/gastos', [App\Http\Controllers\AdministradorCmController::class, 'asistente_adm_gastos'])->name('asistente_adm.gastos');
-    Route::get('Paciente/cargar_info', [App\Http\Controllers\AdministradorCmController::class, 'buscar_paciente_rut'])->name('asistente_adm.buscar_paciente_rut');
+
 
     /** CONTRATOS */
     Route::get('Contratos/cargar', [App\Http\Controllers\AdministradorCmController::class, 'asistente_adm_cargar_contrato'])->name('asistente_adm.cargar_contrato');
     Route::get('Contratos/cargar/detalle', [App\Http\Controllers\AdministradorCmController::class, 'asistente_adm_detalle_contrato'])->name('asistente_adm.detalle_contrato');
 });
+
 
 /** ADMIN */
 Route::group([

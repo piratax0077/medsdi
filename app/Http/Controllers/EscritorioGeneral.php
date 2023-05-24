@@ -80,6 +80,7 @@ class EscritorioGeneral extends Controller
         }
         return $datos;
     }
+
     /**
      * BUSQUEDA DE PROFESIONAL buscador
      *
@@ -923,6 +924,7 @@ class EscritorioGeneral extends Controller
         }
         return $datos;
     }
+
     /** tipo especialidad */
     public function cargar_tipo_especialidad(Request $request)
     {
@@ -947,6 +949,7 @@ class EscritorioGeneral extends Controller
         }
         return $datos;
     }
+
     /** sub tipo especialidad */
     public function cargar_sub_tipo_especialidad(Request $request)
     {

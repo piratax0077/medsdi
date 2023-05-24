@@ -6,14 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\AdminInstServ;
 use App\Models\Asistente;
 use App\Models\AsistenteLugarAtencion;
+use App\Models\AsistenteTipo;
 use App\Models\ContratoDependiente;
 use App\Models\ContratoHistorico;
 use App\Models\Direccion;
+use App\Models\Instituciones;
+use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\Profesional;
+use App\Models\Servicios;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class ManejoContratoController extends Controller
@@ -757,6 +762,250 @@ class ManejoContratoController extends Controller
         return $datos;
     }
 
+    public function editarPersonal(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $registro_asistente = Asistente::find($request->id_empleado);
+            if($registro_asistente)
+            {
+                $registro_contrato = ContratoDependiente::find($request->id_contrato);
+                if($registro_contrato)
+                {
+                    $filtro = array();
+                    $filtro[] = array('id_asistente',$request->id_empleado);
+                    $filtro[] = array('id_lugar_atencion',$request->id_lugar_atencion);
+                    $filtro[] = array('estado',1);
+                    $registro_asis_lugar = AsistenteLugarAtencion::where($filtro)->first();
+
+
+                    /** actualizar asistente */
+                    $asistente_tipo = AsistenteTipo::where(DB::raw('UPPER(nombre)'), $request->tipo_contrato)->first();
+                    if($asistente_tipo)
+                        $registro_asistente->id_asistente_tipo = $asistente_tipo->id;
+
+                    $registro_asistente->rut = $request->rut;
+                    $registro_asistente->nombres = $request->nombre;
+                    $registro_asistente->apellido_uno = $request->apellido_uno;
+                    $registro_asistente->apellido_dos = $request->apellido_dos;
+                    $registro_asistente->telefono_uno = $request->telefono;
+                    if(!empty($request->telefono_dos))
+                        $registro_asistente->telefono_dos = $request->telefono_dos;
+                    $registro_asistente->sexo = $request->sexo;
+                    $registro_asistente->email = $request->email;
+                    $registro_asistente->fecha_nac = $request->fecha_nac;
+
+                    if($registro_asistente->save())
+                    {
+                        $datos['update_asistente']['estado'] = 1;
+                        $datos['update_asistente']['msj'] = 'Datos Asistente Actualizados';
+
+                        /** MODIFICAR DIRECCION */
+                        // $registro_asistente->id_direccion = $request->id_direccion;
+                        $registro_direccion = Direccion::find($registro_asistente->id_direccion);
+                        if($registro_direccion)
+                        {
+                            /** update de direccion */
+                            $registro_direccion->direccion = $request->direccion;
+                            $registro_direccion->numero = $request->numero;
+                            $registro_direccion->ciudad = $request->ciudad;
+
+                            if($registro_asistente->save())
+                            {
+                                $datos['update_asistente']['direccion']['estado'] = 1;
+                                $datos['update_asistente']['direccion']['msj'] = 'Datos Direccion Asistente Actualizados';
+                            }
+                            else
+                            {
+                                $datos['update_asistente']['direccion']['estado'] = 0;
+                                $datos['update_asistente']['direccion']['msj'] = 'Datos Direccion Asistente Actualizacion con falla';
+                            }
+
+                        }
+                        else
+                        {
+                            /** registro direccion */
+                            $registro_direccion = new Direccion();
+                            $registro_direccion->direccion = $request->direccion;
+                            $registro_direccion->numero = $request->numero;
+                            $registro_direccion->ciudad = $request->ciudad;
+
+                            if($registro_direccion->save())
+                            {
+                                $datos['update_asistente']['direccion']['estado'] = 1;
+                                $datos['update_asistente']['direccion']['msj'] = 'Datos Direccion Asistente Registrada';
+
+                                $registro_asistente->id_direccion = $registro_direccion->id;
+                                if($registro_asistente->save())
+                                {
+                                    $datos['update_asistente']['direccion']['registro']['estado'] = 1;
+                                    $datos['update_asistente']['direccion']['registro']['msj'] = 'Datos Asistente Direccion Actualizado';
+                                }
+                                else
+                                {
+                                    $datos['update_asistente']['direccion']['registro']['estado'] = 0;
+                                    $datos['update_asistente']['direccion']['registro']['msj'] = 'Datos Asistente Direccon con Falla';
+                                }
+
+                            }
+                            else
+                            {
+                                $datos['update_asistente']['direccion']['estado'] = 0;
+                                $datos['update_asistente']['direccion']['msj'] = 'Datos Direccion Asistente Registro con Falla';
+                            }
+
+                        }
+
+                        /** ACTUALIZACION CONTRATO */
+
+                        $registro = User::find(Auth::user()->id);
+                        $roles = $registro->roles()->get();
+                        $lista_roles = '';
+                        foreach ($roles as $key => $value)
+                            {
+                            $lista_roles = $value->id.'|';
+                        }
+                        $lista_roles = substr($lista_roles, 0, -1);
+
+                        $registro_contrato->tipo_empleado = $request->tipo_empleado;
+                        $registro_contrato->rut = $request->rut;
+                        $registro_contrato->nombres = $request->nombre;
+                        $registro_contrato->apellido_uno = $request->apellido_uno;
+                        $registro_contrato->apellido_dos = $request->apellido_dos;
+                        $registro_contrato->telefono = $request->telefono;
+                        $registro_contrato->email = $request->email;
+                        $registro_contrato->id_institucion = $request->id_institucion;
+                        $registro_contrato->id_lugar_atencion = $request->id_lugar_atencion;
+                        $registro_contrato->tipo_contrato = $request->tipo_contrato;
+                        $registro_contrato->fecha_inicio = $request->fecha_inicio;
+                        $registro_contrato->fecha_termino = $request->fecha_termino;
+                        $registro_contrato->monto_imponible = $request->monto_imponible;
+                        $registro_contrato->locomocion = $request->locomocion;
+                        $registro_contrato->locomocion_porcentaje = $request->locomocion_porcentaje;
+                        $registro_contrato->colacion = $request->colacion;
+                        $registro_contrato->colacion_porcentaje = $request->colacion_porcentaje;
+                        $registro_contrato->asignacion_familiar = $request->asignacion_familiar;
+                        $registro_contrato->asignacion_familiar_cantidad = $request->asignacion_familiar_cantidad;
+                        $registro_contrato->caja_compensacion = $request->caja_compensacion;
+                        $registro_contrato->caja_compensacion_porcentaje = $request->caja_compensacion_porcentaje;
+                        // $registro_contrato->otro = '';
+                        $registro_contrato->dias_laborales = implode(',', $request->dias_laborales);
+                        $registro_contrato->hora_ingreso = $request->hora_entrada;
+                        $registro_contrato->hora_salida = $request->hora_salida;
+                        $registro_contrato->hora_inicio_colacion = $request->hora_entrada_colacion;
+                        $registro_contrato->hora_termino_colacion = $request->hora_salida_colacion;
+                        $registro_contrato->fecha_creacion = date('Y-m-d H:i:s');
+                        $registro_contrato->id_admin_creador = Auth::user()->id;
+                        $registro_contrato->id_tipo_admin_creador = $lista_roles;
+                        // $registro_contrato->texto_contrato = '';
+                        // $registro_contrato->pdf_base = '';
+                        // $registro_contrato->estado_firmado = '';
+                        // $registro_contrato->pdf_firmado = '';
+                        // $registro_contrato->estado_inspeccion_trabajo = '';
+                        // $registro_contrato->otro_2 = '';
+                        // $registro_contrato->estado = '';
+
+                        if($registro_contrato->save())
+                        {
+
+                            $datos['estado'] = 1;
+                            $datos['msj'] = 'Exito';
+
+                            $requestHistorico = new Request(array(
+                                'id_contrato' => $registro_contrato->id,
+                                'id_user' => Auth::user()->id,
+                                'data' => json_encode($request->all()),
+                                'fecha' => date('Y-m-d'),
+                                'hora' => date('H:i:s'),
+                                'tipo_verificacion_usuario' => null,
+                                'codigo_verificacion_usuario' => null,
+                                'fecha_codigo_usuario' => null,
+                                'tipo_verificacion_tercero' => null,
+                                'codigo_verificacion_tercero' => null,
+                                'fecha_codigo_tercero' => null,
+                                'procesado' => null,
+                            ));
+                            $datos['historico'] = static::registrarHistorico($requestHistorico);
+
+                            $datos['update_contrato']['estado'] = 1;
+                            $datos['update_contrato']['msj'] = 'Datos Contrato Asistente Actualizado';
+
+                            /** ACTUALIZAR CONTRASEÑA DE ASISTENTE LUGAR DE ATENCION */
+                            if($registro_asis_lugar)
+                            {
+                                $datos['asistente_lugar_atencion']['estado'] = 1;
+                                $datos['asistente_lugar_atencion']['msj'] = 'Datos Asistente Lugar Atencion existente';
+                            }
+                            else
+                            {
+                                $asistente_lugar_atencion = new AsistenteLugarAtencion();
+                                $asistente_lugar_atencion->id_asistente = $request->id_empleado;
+                                $asistente_lugar_atencion->id_lugar_atencion = $request->id_lugar_atencion;
+                                $asistente_lugar_atencion->token = $request->clave_ingreso;
+                                $asistente_lugar_atencion->id_profesional = NULL;
+                                $asistente_lugar_atencion->id_institucion = $request->id_institucion;
+                                $asistente_lugar_atencion->estado = 1;
+
+                                if($asistente_lugar_atencion->save())
+                                {
+                                    $datos['asignacion']['estado'] = 1;
+                                    $datos['asignacion']['msj'] = 'Asignacion de asistente exitosa';
+                                }
+                                else
+                                {
+                                    $datos['estado'] = 0;
+                                    $datos['msj'] = 'Falla en Asignando Asistente a Lugar de Atencion';
+
+                                    $datos['asignacion']['estado'] = 0;
+                                    $datos['asignacion']['msj'] = 'Asignacion de asistente fallida';
+                                }
+                            }
+                        }
+                        else
+                        {
+                            $datos['estado'] = 0;
+                            $datos['msj'] = 'Falla en modificacion Contrato Asistente';
+
+                            $datos['update_contrato']['estado'] = 0;
+                            $datos['update_contrato']['msj'] = 'Datos Contrato Asistente Actualizacion con Falla';
+                        }
+
+                    }
+                    else
+                    {
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'Falla en modificacion Asistente';
+
+                        $datos['update_asistente']['estado'] = 0;
+                        $datos['update_asistente']['msj'] = 'Datos Asistente Actualizacion con Falla';
+                    }
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Contrato no encontrado';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Asistente no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
     static public function registroPerfil($registros)
     {
         $datos = array();
@@ -1083,5 +1332,196 @@ class ManejoContratoController extends Controller
         return $datos;
     }
 
+
+    public function desasociarPersonalAsistente(Request $request)
+    {
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_empleado))
+        {
+            $error['id_empleado'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->id_contrato))
+        {
+            $error['id_contrato'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            /** INFORMACION DE INSTITUCION Y RESPONSABLE */
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
+
+            if($registro)
+            {
+                // var_dump($registro);
+                // var_dump($registro->UsuarioAdministrador()->first());
+                //var_dump($registro->UsuarioAdministrador()->first()->id);
+                /** INSTITUCION */
+                $institucion = $registro;
+                $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                $tipo_institucion = 'institucion';
+
+            }
+            else
+            {
+                $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+                if($registro)
+                {
+                    /** SERVICIOS */
+                    $institucion = $registro;
+                    $tipo_institucion = 'servicio';
+                }
+                else
+                {
+                    /** busqueda por responsable */
+                    $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                    if($responsable)
+                    {
+                        $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            // var_dump($registro);
+                            // var_dump($registro->UsuarioAdministrador()->first());
+                            /** INSTITUCION */
+                            $institucion = $registro;
+                            $tipo_institucion = 'institucion';
+
+                        }
+                        else
+                        {
+                            $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                            if($registro)
+                            {
+                                /** SERVICIOS */
+                                $institucion = $registro;
+                                $tipo_institucion = 'servicio';
+                            }
+                            else
+                            {
+                                return back()->with('error','Institución no encontrada');
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
+
+                }
+            }
+            /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
+
+            if($institucion)
+            {
+                /** CARGA DE ASISTENTES */
+                $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+                $lista_asistente = array();
+                if($LugarAtencion)
+                {
+                    $filtro = array();
+                    $filtro[] = array('id_asistente',$request->id_empleado);
+                    $filtro[] = array('id_institucion',$institucion->id);
+                    $filtro[] = array('id_lugar_atencion',$LugarAtencion->id);
+                    $registro_asis_lugar = AsistenteLugarAtencion::where($filtro)->first();
+                    if($registro_asis_lugar)
+                    {
+                        if ($registro_asis_lugar->delete())
+                        {
+
+                            $registro_contrato = ContratoDependiente::find($request->id_contrato);
+                            if($registro_contrato)
+                            {
+                                $registro_contrato->estado = 4;
+                                if($registro_contrato->save())
+                                {
+                                    $datos['contrato']['estado'] = 1;
+                                    $datos['contrato']['msj'] = 'Contrato Finalizado';
+
+                                    $requestHistorico = new Request(array(
+                                        'id_contrato' => $registro_contrato->id,
+                                        'id_user' => Auth::user()->id,
+                                        'data' => json_encode($request->all()),
+                                        'fecha' => date('Y-m-d'),
+                                        'hora' => date('H:i:s'),
+                                        'tipo_verificacion_usuario' => null,
+                                        'codigo_verificacion_usuario' => null,
+                                        'fecha_codigo_usuario' => null,
+                                        'tipo_verificacion_tercero' => null,
+                                        'codigo_verificacion_tercero' => null,
+                                        'fecha_codigo_tercero' => null,
+                                        'procesado' => null,
+                                    ));
+                                    $datos['contrato']['historico'] = static::registrarHistorico($requestHistorico);
+                                }
+                                else
+                                {
+                                    $datos['contrato']['estado'] = 0;
+                                    $datos['contrato']['msj'] = 'Problema al Finalizar Contrato';
+                                }
+                            }
+                            else
+                            {
+                                $datos['contrato']['estado'] = 0;
+                                $datos['contrato']['msj'] = 'Contrato no encontrado';
+                            }
+
+                            $datos['estado'] = 1;
+                            $datos['msj'] = 'Relacion Eliminada';
+                        }
+                        else
+                        {
+                            $datos['estado'] = 0;
+                            $datos['msj'] = 'Problema al eliminar relacion';
+                        }
+                    }
+                    else
+                    {
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'Relacion no encontrada';
+                        // $datos['request'] = array(
+                        //     'id_empleado' => $request->id_empleado,
+                        //     'id_institucion' => $institucion->id,
+                        //     'id_lugar_atencion' => $LugarAtencion->id);
+                    }
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Lugar de atencion no encontrado';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Institucion no encontrado';
+            }
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
 
 }

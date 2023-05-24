@@ -68,6 +68,7 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-center align-middle">Nombre / Rut</th>
+                                                    <th class="text-center align-middle">Tipo</th>
                                                     <th class="text-center align-middle">Sucursales</th>
                                                     <th class="text-center align-middle">Contacto</th>
 													<th class="text-center align-middle">Datos</th>
@@ -80,8 +81,11 @@
                                                     @foreach ( $lista_asistente as $asistente)
                                                     <tr>
                                                         <td class="align-middle text-center">
-                                                            <span><strong>{{ $asistente->nombre.' '.$asistente->apellido_uno.' '.$asistente->apellido_dos }}</strong></span><br>
+                                                            <span><strong>{{ $asistente->nombres.' '.$asistente->apellido_uno.' '.$asistente->apellido_dos }}</strong></span><br>
                                                             <span>{{ $asistente->rut }}</span>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <span><strong>{{ $asistente->asistente_tipo->nombre }}</strong></span>
                                                         </td>
                                                         <td class="align-middle text-center">
                                                             {{ $asistente->direccion()->first()->direccion }} #{{ $asistente->direccion()->first()->numero_dir }}, {{ $asistente->direccion()->first()->ciudad()->first()->nombre }}
@@ -98,11 +102,11 @@
                                                         </td>
                                                         <td class="align-middle text-center">
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos('asistente publico',{{ $asistente->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
+                                                            <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos({{ $asistente->asistente_tipo->id }}, {{ $asistente->id_usuario }}, '{{ $asistente->roles }}');" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
                                                         </td>
                                                         <td class="align-middle text-center">
-                                                            <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_asistente('asistente publico',{{ $asistente->id }});"><i class="feather icon-edit"></i> Editar</button>
-                                                            <button type="button" class="btn btn-danger btn-sm"><i class="feather icon-x-circle"></i> Desasociar</button>
+                                                            <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_asistente({{ $asistente->id }});"><i class="feather icon-edit"></i> Editar</button>
+                                                            <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_asistente({{ $asistente->id}}, {{ $asistente->contrato->id }}, '{{ $asistente->nombres.' '.$asistente->apellido_uno.' '.$asistente->apellido_dos }}');"><i class="feather icon-x-circle"></i> Desasociar</button>
                                                         </td>
                                                     </tr>
                                                     @endforeach
@@ -275,7 +279,7 @@
 
 @endsection
 
-@section('page-scripts')
+@section('page-script')
     <script>
         $(document).ready(function() {
             {{--  FORMATEO DE RUT AGREGAR NUEVO PROFESIONAL   --}}
@@ -562,6 +566,104 @@
 
         }
 
+        function cargar_tabla_asistentes()
+        {
+            $('#asistentes_personal tbody').html('');
+            $('#asistentes_personal').DataTable().clear();
+            $('#asistentes_personal').DataTable().destroy();
+
+            let url = "{{ route('adm_cm.personal.asistente') }}";
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {},
+            })
+            .done(function(data) {
+                if (data != null) {
+                    if(data.estado == 1)
+                    {
+                        $.each(data.registro, function (indexInArray, valueOfElement) {
+                            html = '';
+                            html += '<tr>';
+                            html += '    <td class="align-middle text-center">';
+                            html += '        <span><strong>'+valueOfElement.nombres+' '+valueOfElement.apellido_uno+' '+valueOfElement.apellido_dos+'</strong></span><br>';
+                            html += '        <span>'+valueOfElement.rut+'</span>';
+                            html += '    </td>';
+                            html += '    <td class="align-middle text-center">';
+                            html += '        <span><strong>'+valueOfElement.asistente_tipo.nombre+'</strong></span>';
+                            html += '    </td>';
+                            html += '    <td class="align-middle text-center">';
+                            html += '        '+valueOfElement.direccion+' #'+valueOfElement.numero_dir+', '+valueOfElement.ciudad+'';
+                            html += '    </td>';
+                            html += '    <td class="align-middle text-center">';
+                            html += '        <!--Botón Modal-->';
+                            html += '        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto(\'asistente publico\','+valueOfElement.id+');" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>';
+                            html += '    </td>';
+                            html += '    <td class="align-middle text-center">';
+                            html += '        <!--Botón Modal-->';
+                            html += '        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos(\'asistente publico\', '+valueOfElement.id_usuario+');" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>';
+                            html += '        <!--Botón Modal-->';
+                            html += '        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm(\''+valueOfElement.asistente_tipo.nombre+'\','+valueOfElement.id+', '+valueOfElement.institucion.id_lugar_atencion+');" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>';
+                            html += '    </td>';
+                            html += '    <td class="align-middle text-center">';
+                            html += '        <!--Botón Modal-->';
+                            html += '        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos('+valueOfElement.asistente_tipo.id+', '+valueOfElement.id_usuario+', \''+valueOfElement.roles+'\');" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>';
+                            html += '    </td>';
+                            html += '    <td class="align-middle text-center">';
+                            html += '        <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_asistente('+valueOfElement.id+');"><i class="feather icon-edit"></i> Editar</button>';
+                            html += '        <button type="button" class="btn btn-danger btn-sm"><i class="feather icon-x-circle"></i> Desasociar</button>';
+                            html += '    </td>';
+                            html += '</tr>';
+
+                            $('#asistentes_personal tbody').append(html);
+
+                        });
+
+
+                        $('#asistentes_personal').DataTable({
+                            responsive: true,
+                        });
+                    }
+                    else
+                    {
+                        var mensaje = '';
+                        if(data.error)
+                        {
+                            $.each(data.error, function (indexInArray, valueOfElement)
+                            {
+                                mensaje += valueOfElement+'\n';
+                            });
+                        }
+                        else
+                        {
+                            mensaje += 'Intente nuevamente.';
+                        }
+
+                        swal({
+                            title: "Carga de Personal Asistentes",
+                            text: mensaje,
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar personal",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
     </script>
 @endsection
 
@@ -570,11 +672,13 @@
     @include('app.adm_cm.modales.personal.contacto_personal')
     @include('app.adm_cm.modales.personal.datos_banco')
     @include('app.adm_cm.modales.personal.horario_personal')
-
     @include('app.adm_cm.modales.personal.permisos_rol')
+    @include('app.adm_cm.modales.personal.editar_personal')
+
+    @include('app.adm_cm.modales.personal.finalizar_personal')
+
 
     @include('app.adm_cm.modal_adm.asociar_profesional')
     @include('app.adm_cm.modales.personal.asociar_personal')
-    @include('app.adm_cm.modales.personal.editar_personal')
 
 @endsection

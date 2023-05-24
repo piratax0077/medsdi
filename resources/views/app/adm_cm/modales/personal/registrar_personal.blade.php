@@ -12,6 +12,7 @@
                         <input type="hidden" name="add_empleado_id_lugar_atencion" id="add_empleado_id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
                         <input type="hidden" name="add_empleado_id_admin_creador" id="add_empleado_id_admin_creador" value="{{ Auth::user()->id }}">
                         <input type="hidden" name="add_empleado_id_tipo_admin_creador" id="add_empleado_id_tipo_admin_creador" value="{{ Auth::user()->Roles()->first()->id }}">
+                        <input type="hidden" name="add_empleado_clave_ingreso" id="add_empleado_clave_ingreso" value="{{ rand(11111,99999) }}">
                     <div class="row">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <script>

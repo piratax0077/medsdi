@@ -387,7 +387,7 @@
     </div>
 </div>
 @endsection
-@section('page-scripts')
+@section('page-script')
 <script>
     $(document).ready(function() {
         $('#lista_examenes_laboratorio').DataTable({

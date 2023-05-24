@@ -1795,7 +1795,7 @@
 @endsection
 
 
-@section('page-scripts')
+@section('page-script')
     <!--SCRIPT MODALS-->
     <script>
         {{--  /*-TABLAS CM-*/  --}}

@@ -178,8 +178,6 @@
                 responsive: true,
             });
 
-            console.log('{{ session('titulo_mensaje') }}');
-            console.log('{{ session('mensaje') }}');
             {{--  mensaje de al registrar ficha clinica  --}}
             @if(session('mensaje'))
                 swal({
@@ -458,7 +456,7 @@
         });
     </script>
     --}}
-    @yield('page-scripts')
+    @yield('page-script')
     @yield('js-profesionales')
 </body>
 
