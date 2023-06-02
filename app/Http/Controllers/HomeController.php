@@ -13,6 +13,7 @@ use App\Models\Paciente;
 use App\Models\Profesional;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalEspecialidad;
+use App\Models\ProfesionalInstitucionConvenio;
 use App\Models\Servicios;
 use App\Models\SubTipoEspecialidad;
 use App\Models\TipoEspecialidad;
@@ -20,6 +21,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -444,7 +446,8 @@ class HomeController extends Controller
                     $datos['invitaciones']['cant'] = $registro_invitaciones->count();
                     $datos['invitaciones']['registro_invitaciones'] = $registro_invitaciones;
 
-                    foreach ($registro_invitaciones as $key => $value) {
+                    foreach ($registro_invitaciones as $key => $value)
+                    {
                         $buscar_prof_lugar = ProfesionalesLugaresAtencion::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$value->id_lugar_atencion)->first();
                         if($buscar_prof_lugar)
                         {
@@ -457,6 +460,31 @@ class HomeController extends Controller
                             {
                                 $datos['invitacion']['inv'][$key]['estado'] = 1;
                                 $datos['invitacion']['inv'][$key]['msj'] = 'Ya pertenese al Lugar de Atencion';
+                                $datos['invitacion'] = $invitacion;
+
+                                $filtro_con = array();
+                                $filtro_con[] = array('id_invitacion', $invitacion->id);
+                                $convenio = ProfesionalInstitucionConvenio::where($filtro_con)->first();
+                                if($convenio)
+                                {
+                                    $datos['convenio'] = $convenio;
+                                    $convenio->id_profesional = $profesional->id;
+                                    if($convenio->save())
+                                    {
+                                        $datos['convenio_update']['estado'] = 1;
+                                        $datos['convenio_update']['msj'] = 'exito';
+                                    }
+                                    else
+                                    {
+                                        $datos['convenio_update']['estado'] = 0;
+                                        $datos['convenio_update']['msj'] = 'falla';
+                                    }
+
+                                }
+                                else
+                                {
+                                    $datos['convenio'] = 'sin convenio';
+                                }
                             }
                             else
                             {
@@ -483,6 +511,29 @@ class HomeController extends Controller
                                 {
                                     $datos['invitacion']['inv'][$key]['estado'] = 1;
                                     $datos['invitacion']['inv'][$key]['msj'] = 'Profesional relacionado al Lugar de Atencion';
+
+                                    $filtro_con = array();
+                                    $filtro_con[] = array('id_invitacion', $invitacion->id);
+                                    $convenio = ProfesionalInstitucionConvenio::where($filtro_con)->first();
+                                    if($convenio)
+                                    {
+                                        $datos['convenio'] = $convenio;
+                                        $convenio->id_profesional = $profesional->id;
+                                        if($convenio->save())
+                                        {
+                                            $datos['convenio_update']['estado'] = 1;
+                                            $datos['convenio_update']['msj'] = 'exito';
+                                        }
+                                        else
+                                        {
+                                            $datos['convenio_update']['estado'] = 0;
+                                            $datos['convenio_update']['msj'] = 'falla';
+                                        }
+                                    }
+                                    else
+                                    {
+                                        $datos['convenio'] = 'sin convenio';
+                                    }
                                 }
                                 else
                                 {
@@ -540,6 +591,7 @@ class HomeController extends Controller
             $datos['msj'] = 'correo de profesional ya registrado';
         }
 
+        Log::warning(json_encode($datos));
         return $datos;
     }
 

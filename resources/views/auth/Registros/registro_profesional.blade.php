@@ -73,22 +73,40 @@
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
                                                     <label class="floating-label">Rut</label>
-                                                    <input type="text" class="form-control form-control-sm" name="rut" id="rut" >{{-- onblur="verificador_rut();" onkeyup="formatoRut(this)" --}}
+                                                    @if ($invitacion)
+                                                        <input type="text" class="form-control form-control-sm" name="rut" id="rut" value="{{ $invitacion->rut }}">
+                                                    @else
+                                                        <input type="text" class="form-control form-control-sm" name="rut" id="rut" >
+                                                    @endif
+
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
                                                     <label class="floating-label">Nombre</label>
-                                                    <input type="text" class="form-control form-control-sm" name="nombre" id="nombre">
+                                                    @if ($invitacion)
+                                                        <input type="text" class="form-control form-control-sm" name="nombre" id="nombre" value="{{ $invitacion->nombre }}">
+                                                    @else
+                                                        <input type="text" class="form-control form-control-sm" name="nombre" id="nombre" >
+                                                    @endif
 
                                                 </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
                                                     <label class="floating-label">Primer apellido</label>
-                                                    <input type="text" class="form-control form-control-sm" name="primer_apellido" id="primer_apellido">
+                                                    @if ($invitacion)
+                                                        <input type="text" class="form-control form-control-sm" name="primer_apellido" id="primer_apellido" value="{{ $invitacion->apellido_uno }}">
+                                                    @else
+                                                        <input type="text" class="form-control form-control-sm" name="primer_apellido" id="primer_apellido">
+                                                    @endif
+
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
                                                     <label class="floating-label">Segundo apellido</label>
-                                                    <input type="text" class="form-control form-control-sm" name="segundo_apellido" id="segundo_apellido">
+                                                    @if ($invitacion)
+                                                        <input type="text" class="form-control form-control-sm" name="segundo_apellido" id="segundo_apellido" value="{{ $invitacion->apellido_dos }}">
+                                                    @else
+                                                        <input type="text" class="form-control form-control-sm" name="segundo_apellido" id="segundo_apellido">
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class="form-row">
@@ -109,30 +127,78 @@
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
                                                     <label class="floating-label">Profesión</label>
-                                                    <select class="form-control form-control-sm" id="profesion" name="profesion" onchange="buscar_tipo_especialidad()">
-                                                        <option selected value="0">Seleccione</option>
-                                                        @if (isset($especialidad))
-                                                            @foreach ($especialidad as $esp)
-                                                                <option value="{{ $esp->id }}">{{ $esp->nombre }}</option>
-                                                            @endforeach
-                                                        @endif
-                                                    </select>
+                                                    @if ($invitacion)
+                                                        <select class="form-control form-control-sm" id="profesion" name="profesion" onchange="buscar_tipo_especialidad()">
+                                                            <option selected value="0">Seleccione</option>
+                                                            @if (isset($especialidad))
+                                                                @foreach ($especialidad as $esp)
+                                                                    @if ($invitacion->id_especialidad == $esp->id)
+                                                                        <option value="{{ $esp->id }}" selected>{{ $esp->nombre }}</option>
+                                                                    @else
+                                                                        <option value="{{ $esp->id }}">{{ $esp->nombre }}</option>
+                                                                    @endif
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    @else
+                                                        <select class="form-control form-control-sm" id="profesion" name="profesion" onchange="buscar_tipo_especialidad()">
+                                                            <option selected value="0">Seleccione</option>
+                                                            @if (isset($especialidad))
+                                                                @foreach ($especialidad as $esp)
+                                                                    <option value="{{ $esp->id }}">{{ $esp->nombre }}</option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    @endif
+
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
                                                     <label class="floating-label">Especialidad</label>
-                                                    <select class="form-control form-control-sm" id="especialidad" name="especialidad" onchange="buscar_sub_tipo_especialidad()">
-                                                        <option selected value="0">Seleccione</option>
-                                                        <option>-</option>
-                                                    </select>
+                                                    @if ($invitacion)
+                                                        <select class="form-control form-control-sm" id="especialidad" name="especialidad" onchange="buscar_sub_tipo_especialidad()">
+                                                            <option selected value="0">Seleccione</option>
+                                                            @if (isset($tipo_especialidad))
+                                                                @foreach ($tipo_especialidad as $tipo_esp)
+                                                                    @if ($invitacion->id_tipo_especialidad == $tipo_esp->id)
+                                                                        <option value="{{ $tipo_esp->id }}" selected>{{ $tipo_esp->nombre }}</option>
+                                                                    @else
+                                                                        <option value="{{ $tipo_esp->id }}">{{ $tipo_esp->nombre }}</option>
+                                                                    @endif
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    @else
+                                                        <select class="form-control form-control-sm" id="especialidad" name="especialidad" onchange="buscar_sub_tipo_especialidad()">
+                                                            <option selected value="0">Seleccione</option>
+                                                            <option>-</option>
+                                                        </select>
+                                                    @endif
+
                                                 </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
                                                     <label class="floating-label">Tipo Especialidad</label>
-                                                    <select class="form-control form-control-sm" id="sub_tipo_especialidad" name="sub_tipo_especialidad">
-                                                        <option selected value="0">Seleccione</option>
-                                                        <option>-</option>
-                                                    </select>
+                                                    @if ($invitacion)
+                                                        <select class="form-control form-control-sm" id="sub_tipo_especialidad" name="sub_tipo_especialidad">
+                                                            <option selected value="0">Seleccione</option>
+                                                            @if (isset($sub_tipo_especialidad))
+                                                                @foreach ($sub_tipo_especialidad as $sub_tipo_esp)
+                                                                    @if ($invitacion->id_sub_tipo_especialidad == $sub_tipo_esp->id)
+                                                                        <option value="{{ $sub_tipo_esp->id }}" selected>{{ $sub_tipo_esp->nombre }}</option>
+                                                                    @else
+                                                                        <option value="{{ $sub_tipo_esp->id }}">{{ $sub_tipo_esp->nombre }}</option>
+                                                                    @endif
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    @else
+                                                        <select class="form-control form-control-sm" id="sub_tipo_especialidad" name="sub_tipo_especialidad">
+                                                            <option selected value="0">Seleccione</option>
+                                                            <option>-</option>
+                                                        </select>
+                                                    @endif
+
                                                 </div>
                                             </div>
                                             <div class="form-row">
@@ -187,7 +253,12 @@
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
                                                     <label class="floating-label">Celular</label>
-                                                    <input type="tel" class="form-control form-control-sm" name="celular" id="celular">
+                                                    @if ($invitacion)
+                                                        <input type="tel" class="form-control form-control-sm" name="celular" id="celular" value="{{ $invitacion->telefono }}">
+                                                    @else
+                                                        <input type="tel" class="form-control form-control-sm" name="celular" id="celular">
+                                                    @endif
+
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
                                                     <label class="floating-label">Teléfono</label>

@@ -83,8 +83,11 @@
                                                                 <span>{{ $prof_medico->rut }}</span>
                                                             </td>
                                                             <td class="align-middle text-center">
-                                                                <span>{{ $prof_medico->TipoEspecialidad()->first()->nombre }}</span><br>
-                                                                <span>{{ $prof_medico->SubTipoEspecialidad()->first()->nombre }}</span>
+                                                                <span>{{ $prof_medico->TipoEspecialidad()->first()->nombre }}</span>
+                                                                @if (!empty($prof_medico->id_sub_tipo_especialidad))
+                                                                    <br>
+                                                                    <span>{{ $prof_medico->SubTipoEspecialidad()->first()->nombre }}</span>
+                                                                @endif
                                                             </td>
                                                             <td class="align-middle text-center">
                                                                 @foreach($prof_medico->LugaresAtencion()->get() as $key_lugar => $value_lugar)

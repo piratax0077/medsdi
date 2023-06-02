@@ -64,6 +64,9 @@ use Illuminate\Support\Facades\Mail;
 use PDF;
 use App\Helpers\Funciones;
 use App\Models\FichaPediatriaGeneralTipo;
+use App\Models\Invitacion;
+use App\Models\SubTipoEspecialidad;
+use App\Models\TipoEspecialidad;
 
 class EscritorioProfesional extends Controller
 {
@@ -493,9 +496,21 @@ class EscritorioProfesional extends Controller
         }
 
 
+        $filtro = array();
+        $filtro[] = array('id_user_invitado', Auth::user()->id);
+        $filtro[] = array('procesado', 1);
+        // $filtro[] = array('estado', 2);
+        $invitacion = Invitacion::where($filtro)->whereNotNull('fecha_aprobacion')->first();
+
+        $tipo_especialidad = TipoEspecialidad::where('id_especialidad', $invitacion->id_especialidad)->get();
+        $sub_tipo_especialidad = SubTipoEspecialidad::where('id_tipo_especialidad', $invitacion->id_tipo_especialidad)->get();
+
         return view('auth.Registros.registro_profesional')->with([
             'region' => $region,
-            'especialidad' => $especialidad]);
+            'especialidad' => $especialidad,
+            'tipo_especialidad' => $tipo_especialidad,
+            'sub_tipo_especialidad' => $sub_tipo_especialidad,
+            'invitacion' => $invitacion]);
     }
 
 
@@ -2865,7 +2880,17 @@ class EscritorioProfesional extends Controller
         return $datos;
     }
 
+	public function agregarLiquidacion(Request $request)
+    {
+        $result = LiquidacionReciboController::store( Auth::user()->id, $request->rut, $request->nombre, $request->banco, $request->cuenta, $request->email, $request->principal, $request->tipo_cuenta,1);
+        return $result;
+    }
 
+    public function modificarLiquidacion(Request $request)
+    {
+        $result = LiquidacionReciboController::edit($request->id, Auth::user()->id, $request->rut, $request->nombre, $request->banco, $request->cuenta, $request->email, $request->principal, $request->tipo_cuenta,1);
+        return $result;
+    }
 
     /** FICHA CIRUGIA DIGESTIVA TIPO */
     public function agregarFichaTipoCDG(Request $request)

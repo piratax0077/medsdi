@@ -27,7 +27,7 @@
                 <div class="col-md-12">
                     <div class="card subir py-auto bg-info">
                         <div class="card-body text-center">
-                            <h5 class=" mb-0 text-white f-24">Centro médico</h5>
+                            <h5 class=" mb-0 text-white f-24">Centro médico {{ mb_strtoupper($institucion->nombre) }}</h5>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                             </div>
                         </a>
                     </div>
-                </div>              
+                </div>
                 <div class="col-md-4">
                     <div class="card subir py-auto">
                         <a href="{{ ROUTE('adm_cm.pacientes') }}">
@@ -91,7 +91,7 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <div class="col-md-12">
                     <div class="card subir py-auto bg-warning">
                         <div class="card-body text-center" style="cursor:pointer">
@@ -100,8 +100,8 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card subir py-auto">
-                        <a href="{{ ROUTE('adm_cm.laboratorio') }}">
+                    <div class="card subir py-auto" onclick="en_construccion()";>
+                      {{--  <a href="{{ ROUTE('adm_cm.laboratorio') }}"></a>--}}
                             <div class="card-body text-center" style="cursor:pointer">
                                 <h5 class="mt-1 mb-0">Laboratorio</h5>
                             </div>
@@ -109,8 +109,8 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card subir py-auto">
-                       <a href="{{ ROUTE('adm_cm.laboratorio') }}">
+                    <div class="card subir py-auto" onclick="en_construccion()";>
+                      {{-- <a href="{{ ROUTE('adm_cm.laboratorio') }}"></a>--}}
                             <div class="card-body text-center" style="cursor:pointer">
                                 <h5 class="mt-1 mb-0">Imagenología</h5>
                             </div>
@@ -118,8 +118,8 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card subir py-auto">
-                        <a href="{{ ROUTE('adm_cm.vacunatorio') }}">
+                    <div class="card subir py-auto" onclick="en_construccion()";>
+                       {{-- <a href="{{ ROUTE('adm_cm.vacunatorio') }}"></a>--}}
                             <div class="card-body text-center" style="cursor:pointer">
                                 <h5 class="mt-1 mb-0">Vacunatorio</h5>
                             </div>
@@ -127,8 +127,8 @@
                     </div>
                 </div>
 				<div class="col-md-12">
-					<div class="card subir">
-						<a href="suscripcion_pago_cm.php">
+					<div class="card subir py-auto" onclick="en_construccion()";>
+						<a href="#">
 							<div class="card-body text-center" style="cursor:pointer">
 								<img class="wid-70 text-center" src="{{ asset('images/iconos/usuario_asistente.svg') }}">
 								<h5 class="mt-1">Contratar Asistentes</h5>
@@ -140,4 +140,5 @@
         </div>
     </div>
     <!--Cierre: Container Completo-->
+    @include('app.adm_cm.modales.en_construccion')
 @endsection

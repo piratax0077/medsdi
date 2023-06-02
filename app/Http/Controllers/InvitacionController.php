@@ -49,11 +49,15 @@ class InvitacionController extends Controller
      * @param [type] $id_user_invitado
      * @return array
      */
-    public function store($id_tipo_usuario, $tipo_invitacion, $id_lugar_atencion, $rut, $nombre, $apellido_uno, $apellido_dos, $telefono, $email, $informado, $procesado, $fecha_informado, $fecha_procesado, $fecha_aprobacion, $fecha_rechazo, $id_user_solicitud, $id_user_invitado)
+    public function store($id_tipo_usuario, $tipo_invitacion, $id_lugar_atencion, $rut, $nombre, $apellido_uno, $apellido_dos, $telefono, $email, $id_especialidad, $id_tipo_especialidad, $id_sub_tipo_especialidad, $informado, $procesado, $fecha_informado, $fecha_procesado, $fecha_aprobacion, $fecha_rechazo, $id_user_solicitud, $id_user_invitado)
     {
         $datos = array();
 
+        $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $token_temp = substr(str_shuffle($permitted_chars), 0, 50);
+
         $registro = new Invitacion();
+        $registro->token = $token_temp;
         $registro->id_tipo_usuario = $id_tipo_usuario;
         $registro->tipo_invitacion = $tipo_invitacion;
         $registro->id_lugar_atencion = $id_lugar_atencion;
@@ -63,6 +67,12 @@ class InvitacionController extends Controller
         $registro->apellido_dos = $apellido_dos;
         $registro->telefono = $telefono;
         $registro->email = $email;
+        if(!empty($id_especialidad))
+            $registro->id_especialidad = $id_especialidad;
+        if(!empty($id_tipo_especialidad))
+            $registro->id_tipo_especialidad = $id_tipo_especialidad;
+        if(!empty($id_sub_tipo_especialidad))
+            $registro->id_sub_tipo_especialidad = $id_sub_tipo_especialidad;
         if(!empty($informado))
             $registro->informado = $informado;
         if($procesado != '')
@@ -93,7 +103,7 @@ class InvitacionController extends Controller
         return $datos;
     }
 
-    static public function registroInvtacionProfesional($id_lugar_atencion,$rut,$nombre,$apellido_uno,$apellido_dos,$telefono,$email,$id_user_solicitud,$id_user_invitado)
+    static public function registroInvtacionProfesional($id_lugar_atencion,$rut,$nombre,$apellido_uno,$apellido_dos,$telefono,$email, $id_especialidad, $id_tipo_especialidad, $id_sub_tipo_especialidad, $id_user_solicitud,$id_user_invitado,$envio_notificacion = 1)
     {
         $datos = array();
         $error = array();
@@ -142,17 +152,26 @@ class InvitacionController extends Controller
             $filtro = array();
             $filtro[] = array('email', $email );
             $filtro[] = array('id_lugar_atencion', $id_lugar_atencion);
+            $filtro[] = array('estado', 1);
             $registro_invitacion = Invitacion::where($filtro)->orderBy('id','DESC')->first();
             if($registro_invitacion)
             {
-                $datos['notificacion'] = static::envioNotificacion(1, $registro_invitacion->id);
+
+                if($envio_notificacion == 1)
+                    $datos['notificacion'] = static::envioNotificacion(1, $registro_invitacion->id);
+
+                $datos['last_id'] = $registro_invitacion->id;
             }
             else
             {
                 $role = 3; // uso del rol de profesional
-                $resultado = static::store($role, 'A PROFESIONAL', $id_lugar_atencion, $rut, $nombre, $apellido_uno, $apellido_dos, $telefono, $email, 0, 0, date('Y-m-d H:i:s'), '', '', '', $id_user_solicitud, $id_user_invitado);
+                $resultado = static::store($role, 'A PROFESIONAL', $id_lugar_atencion, $rut, $nombre, $apellido_uno, $apellido_dos, $telefono, $email, $id_especialidad, $id_tipo_especialidad, $id_sub_tipo_especialidad, 0, 0, date('Y-m-d H:i:s'), '', '', '', $id_user_solicitud, $id_user_invitado);
                 $datos = $resultado;
-                $datos['notificacion'] = static::envioNotificacion(1, $resultado['last_id']);
+
+                if($envio_notificacion == 1)
+                    $datos['notificacion'] = static::envioNotificacion(1, $resultado['last_id']);
+
+                $datos['last_id'] = $resultado['last_id'];
             }
             $datos['estado'] = 1;
         }
@@ -162,7 +181,7 @@ class InvitacionController extends Controller
             $datos['msj'] = 'campo requerido';
             $datos['error'] = $error;
         }
-        return $datos;
+        return (object)$datos;
     }
 
     static public function envioNotificacion($tipo,$id_invitacion)
@@ -244,6 +263,45 @@ class InvitacionController extends Controller
         return $datos;
     }
 
+    public function cambioContrasenaPerfilResponsable(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
 
+        if($valido)
+        {
+            $filtro = array();
+            if(!empty($request->rut))
+                $filtro[] = array('rut', $request->rut);
+            if(!empty($request->nombre))
+                $filtro[] = array('nombre', $request->nombre);
+            if(!empty($request->apellido_uno))
+                $filtro[] = array('apellido_uno', $request->apellido_uno);
+            if(!empty($request->apellido_dos))
+                $filtro[] = array('apellido_dos', $request->apellido_dos);
+
+            $registro = Invitacion::with('convenio')->where($filtro)->first();
+            if($registro)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registro'] = $registro;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
 
 }

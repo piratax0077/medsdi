@@ -39,6 +39,7 @@ Route::get('Buscar_user_email', [App\Http\Controllers\HomeController::class, 'bu
 
 /** confirmaciones  */
 Route::get('invitacion/profesional/aprobacion_rechazo', [App\Http\Controllers\EscritorioGeneral::class, 'invitacionProfesionalConfirmacionRechazo'])->name('invitacion.profesional.confirmacion_rechazo');
+Route::get('invitacion/convenio/profesional/aprobacion_rechazo', [App\Http\Controllers\EscritorioGeneral::class, 'invitacionConvenioProfesionalConfirmacionRechazo'])->name('invitacion.convenio.profesional.confirmacion_rechazo');
 
 /* profesional */
 Route::get('Registros', [App\Http\Controllers\EscritorioProfesional::class, 'registro'])->name('profesional.registro');
@@ -817,6 +818,10 @@ Route::group([
     Route::get('/Registro1', [App\Http\Controllers\ficha_atencionController::class, 'index']);
     Route::get('/Registro_paciente', [App\Http\Controllers\pacienteController::class, 'buscar_paciente'])->name('buscar_paciente');
 
+    //faltantes
+    Route::get('/Ficha_medica/registrar_consentimiento_faltante', [App\Http\Controllers\ficha_atencionController::class, 'registrar_consentimiento_faltante'])->name('ficha_medica.registrar_consentimiento_faltante');
+    Route::get('/Ficha_medica/registrar_formulario_faltante', [App\Http\Controllers\ficha_atencionController::class, 'registrar_formulario_faltante'])->name('ficha_medica.registrar_formulario_faltante');
+    Route::get('/Ficha_medica/registrar_registrar_sugerencias', [App\Http\Controllers\ficha_atencionController::class, 'registrar_sugerencia'])->name('ficha_medica.registrar_sugerencias');
 
     Route::post('/Licencia/crear', [App\Http\Controllers\ficha_atencionController::class, 'crear_licencia'])->name('crear.licencia');
     Route::post('/Interconsulta/crear', [App\Http\Controllers\ficha_atencionController::class, 'interconsulta'])->name('crear.interconsulta');
@@ -859,6 +864,7 @@ Route::group([
     Route::get('/Estadisticas', [App\Http\Controllers\AdministradorCmController::class, 'estadisticas'])->name('adm_cm.estadisticas');
 
 	Route::get('/Profesionales', [App\Http\Controllers\AdministradorCmController::class, 'profesionales'])->name('adm_cm.profesionales');
+    Route::get('/Mis/Profesionales', [App\Http\Controllers\AdministradorCmController::class, 'adm_inst_mis_profesionales'])->name('adm_cm.mis_profesionales');
 	Route::post('/Profesionales/asociar/existente', [App\Http\Controllers\AdministradorCmController::class, 'asociarProfesionalExistente'])->name('adm_cm.asociar_profesional_existente');
 	Route::post('/Profesionales/asociar/nuevo', [App\Http\Controllers\AdministradorCmController::class, 'asociarProfesionalNuevo'])->name('adm_cm.asociar_profesional_nuevo');
 	Route::get('/Profesionales/buscar', [App\Http\Controllers\AdministradorCmController::class, 'buscar_profesional'])->name('adm_cm.profesional_buscar');
@@ -866,6 +872,9 @@ Route::group([
 	Route::post('/Personal/registro', [App\Http\Controllers\ManejoContratoController::class, 'registrarPersonal'])->name('adm_cm.registrar_personal');
 	Route::post('/Personal/editar', [App\Http\Controllers\ManejoContratoController::class, 'editarPersonal'])->name('adm_cm.editar_personal');
 	Route::post('/Personal/horario/editar', [App\Http\Controllers\ManejoContratoController::class, 'modificarHorario'])->name('adm_cm.personal.horario.editar');
+	Route::get('/profesionales/liquidacion', [App\Http\Controllers\AdministradorCmController::class, 'adm_liquidacion_profesionales'])->name('adm_cm.liquidacion_profesionales');
+
+	Route::get('/liquidacion_profesionales', [App\Http\Controllers\AdministradorCmController::class, 'liquidacion_profesionales'])->name('app.adm_cm.liquidacion_profesionales');																																									  																																										  
 	Route::post('/Personal/finalizar', [App\Http\Controllers\ManejoContratoController::class, 'desasociarPersonalAsistente'])->name('adm_cm.personal.finalizar');
 
 	Route::get('/liquidacion_profesionales', [App\Http\Controllers\AdministradorCmController::class, 'liquidacion_profesionales'])->name('app.adm_cm.liquidacion_profesionales');
@@ -895,13 +904,23 @@ Route::group([
     Route::get('/Laboratorios/Agregar', [App\Http\Controllers\AdministradorCmController::class, 'laboratorio_agregar'])->name('adm_cm.laboratorio_agregar');
     Route::get('/Laboratorios/Procedimientos', [App\Http\Controllers\AdministradorCmController::class, 'procedimientos'])->name('adm_cm.procedimientos');
     Route::get('/Laboratorios/Sucursales', [App\Http\Controllers\AdministradorCmController::class, 'sucursales_cm'])->name('adm_cm.sucursales_cm');
+
     Route::get('/Administracion', [App\Http\Controllers\AdministradorCmController::class, 'administracion_cm'])->name('adm_cm.administracion_cm');
     Route::get('/Administracion/Insumos', [App\Http\Controllers\AdministradorCmController::class, 'insumos'])->name('adm_cm.insumos');
+    
 
+	Route::get('/Administracion', [App\Http\Controllers\AdministradorCmController::class, 'administracion_cm'])->name('adm_cm.administracion_cm');
+	Route::get('/Administracion/Comercial', [App\Http\Controllers\AdministradorCmController::class, 'areaComercial'])->name('adm_cm.area_comercial');
+	Route::get('/Administracion/Contabilidad', [App\Http\Controllers\AdministradorCmController::class, 'areaContabilidad'])->name('adm_cm.area_contabilidad');
+	Route::get('/Administracion/Bodega', [App\Http\Controllers\AdministradorCmController::class, 'areaBodega'])->name('adm_cm.area_bodega');
+	Route::get('/Administracion/Estadistica', [App\Http\Controllers\AdministradorCmController::class, 'areaEstadistica'])->name('adm_cm.area_estadistica');
+	Route::get('/Administracion/Insumos', [App\Http\Controllers\AdministradorCmController::class, 'insumos'])->name('adm_cm.insumos');
 	Route::get('/Administrador/ciudad/buscar', [App\Http\Controllers\AdministradorCmController::class, 'buscar_ciudad_region'])->name('adm_cm.buscar_ciudad_region');
 
 	/** CAMBIO CONTRASEÑA DEL RESPONSABLE */
     Route::get('/Administrador/responsable/contrasena/cambio', [App\Http\Controllers\AdministradorCmController::class, 'cambioContrasenaPerfilResponsable'])->name('adm_cm.cambio_contrasena_responsable');
+
+    Route::get('/invitacion/buscar/informacion', [App\Http\Controllers\InvitacionController::class, 'cambioContrasenaPerfilResponsable'])->name('invitaciones.buscar.info');
 });
 
 Route::group([
