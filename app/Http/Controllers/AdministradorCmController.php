@@ -1161,7 +1161,6 @@ class AdministradorCmController extends Controller
         $regiones = Region::all();
         $ciudades = Ciudad::where('id_region', $institucion->direccion()->first()->ciudad()->first()->Region()->first()->id)->orderBy('nombre')->get();
 
-
         return view('app.adm_cm.personal')->with([
             'responsable' => $responsable,
             'institucion' => $institucion,
@@ -2678,7 +2677,7 @@ class AdministradorCmController extends Controller
 
         return $datos;
     }
-	
+
 	public function areaComercial(Request $request)
     {
         return view('app.adm_cm.escritorio_asist_adm');

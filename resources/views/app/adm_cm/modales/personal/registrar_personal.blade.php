@@ -554,11 +554,11 @@
             valido = 0;
             mensaje += 'Campo requerido Hora salida colación\n';
         }
-        if(clave_ingreso == '')
-        {
-            valido = 0;
-            mensaje += 'Campo requerido clave_ingreso\n';
-        }
+        // if(clave_ingreso == '')
+        // {
+        //     valido = 0;
+        //     mensaje += 'Campo requerido clave_ingreso\n';
+        // }
 
         if(valido == 1)
         {

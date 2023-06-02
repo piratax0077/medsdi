@@ -678,7 +678,7 @@
     @include('app.adm_cm.modales.personal.finalizar_personal')
 
 
-    @include('app.adm_cm.modal_adm.asociar_profesional')
+    {{-- @include('app.adm_cm.modal_adm.asociar_profesional') --}}
     @include('app.adm_cm.modales.personal.asociar_personal')
 
 @endsection
