@@ -1,123 +1,228 @@
 @extends('template.adm_cm.template')
 @section('content')
-<!--Container Completo-->
+<!--****Container Completo****-->
 <div class="pcoded-main-container">
     <div class="pcoded-content">
-        <!--Header-->
         <div class="page-header">
             <div class="page-block">
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Suscripción y pagos</h5>
+                            <h5 class="m-b-10 font-weight-bold">Gastos</h5>
                         </div>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="escritorio_admin_general_laboratorio.php" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="suscripcion_pago_laboratorio.php">Suscripción y pagos</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}"data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.area_comercial') }}">Volver a Admin. Comercial</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
-        <!--Cierre: Header-->
-        <!--Plan-->
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header bg-light">
-                        <h6 class="text-primary f-18 mb-0">Plan actual</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6 mt-2 d-inline">
-                                <h6>Nombre del plan premium o básico</h6>
-                                <p class="text-secondary">Plan Mensual</p>
-                                <!--<p class="text-secondary">Plan Anual</p>-->
-                            </div>
-                            <div class="col-md-6 text-right d-inline">
-                                <button type="button" class="btn btn-outline-primary btn-sm sweet-multiple">Cancelar Suscripción</button>
-                            </div>
-                        </div>
-                        <!--Eliminar Row  de info cuando sea una cuenta básica-->
-                        <div class="row">
-                            <div class="col-md-12">
-                                <hr>
-                                <p>Su próximo pago será de <strong>23.990 CLP</strong>, a efectuarse el día <strong>10 de oct. de 2021</strong> Su pago se renovará automáticamente todos los meses.</p>
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header bg-info">
+                    <div class="row">
+                        <div class="col-md-12 align-botton">
+                            <h4 class="text-white f-20 d-inline ml-4 mt-3">Gastos y pagos del centro médico</h4>
+                            <div class="btn-group float-right" role="group" aria-label="Basic example">
+                              <button type="button" class="btn btn-outline-light btn-sm" onclick="agregar_gasto();"><i class="feather icon-plus"></i>Agregar gasto</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <!--Método de pago-->
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header bg-light">
-                        <h6 class="text-primary f-18 mb-0">Método de pago</h6>
-                    </div>
-                    <div class="card-body pro-det-edit collapse show" id="metodo_pago_1">
-                        <div class="row">
-                            <div class="col-md-6 mt-3">
-                                <p class="text-secondary">•••• •••• •••• 1244</p>
-                            </div>
-                            <div class="col-md-6 mt-3 text-right">
-                                <button type="button" class="btn btn-outline-primary btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".pro-det-edit" aria-expanded="false" aria-controls="pro-det-edit-1 pro-det-edit-2">
-                                Actualizar Tarjeta
-                                </button>
-                            </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
                         </div>
                     </div>
-                    <div class="card-body pro-det-edit collapse" id="metodo_pago_2">
-                        <form>
-                            <div class="form-row mb-0">
-                                <div class="form-group col-md-4
-                                 ">
-                                <label class="floating-label">Nombre del titular</label>
-                                <input type="text" class="form-control form-control-sm" name="num_tarjeta" id="num_tarjeta">
+                    <table id="inventario_insumos" class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="text-center align-middle">Tipo</th>
+                                <th class="text-center align-middle">Fecha de facturación</th>
+                                <th class="text-center align-middle">Fecha de pago</th>
+                                <th class="text-center align-middle">Sucursal</th>
+                                <th class="text-center align-middle">Estado</th>
+                                <th class="text-center align-middle">Pagar</th>
+                                <th class="text-center align-middle">Editar</th>
+                                <th class="text-center align-middle">Habilitar /<br> deshabilitar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="align-middle text-center">
+                                    <span>Agua</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span>18/11/2021</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span>01/12/2021</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span>Nombre sucursal cm</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="badge badge-success">Pagado</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <!--Botón pago-->
+                                    <button type="button" class="btn btn-success btn-sm">Pagar</button>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <!--Botón Modal-->
+                                    <button type="button" class="btn btn-secondary btn-sm" onclick="editar_gasto();"><i class="feather icon-edit"></i> Editar</button>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <div class="switch switch-success d-inline m-r-10">
+                                    <input type="checkbox" id="activo-1" checked="">
+                                    <label for="activo-1" class="cr"></label>
                                 </div>
-                                <div class="form-group col-md-4
-                                 ">
-                                <label class="floating-label">Nº Tarjeta de Crédito</label>
-                                <input type="text" class="form-control form-control-sm" name="num_tarjeta" id="num_tarjeta"><!--Que en este formulario aparezca la tarjeta identificada al escribir el numero con el icono de la tarjeta-->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="align-middle text-center">
+                                    <span>Luz</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span>22/11/2021</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span>05/12/2021</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span>Nombre sucursal cm</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="badge badge-danger">No Pagado</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <!--Botón pago-->
+                                    <button type="button" class="btn btn-success btn-sm">Pagar</button>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <!--Botón Modal-->
+                                    <button type="button" class="btn btn-secondary btn-sm" onclick="editar_gasto();"><i class="feather icon-edit"></i> Editar</button>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <div class="switch switch-success d-inline m-r-10">
+                                    <input type="checkbox" id="activo-2" checked="">
+                                    <label for="activo-2" class="cr"></label>
                                 </div>
-                                <div class="form-group col-md-2
-                                 ">
-                                <label class="floating-label">DD/MM</label>
-                                <input type="text" class="form-control form-control-sm" name="ddmm" id="ddmm">
-                                </div>
-                                <div class="form-group col-md-2
-                                 ">
-                                <label class="floating-label">CVC</label>
-                                <input type="text" class="form-control form-control-sm" name="cvc" id="cvc">
-                                </div>
-                            </div>
-                            <div class="form-row mb-0">
-                                <div class="col-md-12 text-right">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">Cancelar</button>
-                                    <button type="submit" class="btn btn-outline-primary btn-sm">Guardar Cambios</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <!--Facturación-->
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header bg-light">
-                        <h6 class="text-primary f-18 mb-0">Facturación</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6 mt-3">
-                                <p class="text-secondary">Último pago: 10/09/21</p>
+    </div>
+</div>
+<!--****Cierre Container Completo****-->
+<!--Modal agregar gastos cm -->
+<div id="agregar_gasto_cm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="agregar_gasto_cm" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Agregar gasto Institucional</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-row">
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Tipo de gasto</label>
+                                        <select class="form-control form-control-sm" id="tipo_gasto_inst" name="tipo_gasto_inst">
+                                            <option value="0" data-select2-id="0">Seleccione</option>
+                                            <option value="1"> Mensual</option>
+                                            <option value="2"> Semestral</option>
+                                            <option value="3"> Anual</option>
+                                            <option value="4"> Esporádico</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Nombre</label>
+                                        <input class="form-control form-control-sm" type="text" id="nombre_gasto_inst">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Vencimiento</label>
+                                        <input class="form-control form-control-sm" type="text" id="vencimiento_gasto_inst">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6 mt-3 text-right">
-                                <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#historial_facturacion">Historial de Facturación</button>
-                                <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#datos_facturacion">Modificar datos de Facturación</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-row">
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Emisor</label>
+                                        <input class="form-control form-control-sm" type="text" id="emisor_gasto_inst">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Folio</label>
+                                        <input class="form-control form-control-sm" type="text" id="folio_gasto_inst">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Cuenta Contabilidad</label>
+                                        <select class="form-control form-control-sm" id="grupo_gasto_inst" name="grupo_gasto_inst">
+                                            <option value="0" data-select2-id="0">Seleccione</option>
+                                            <option value="1"> Generales</option>
+                                            <option value="2"> Gastos Comunes</option>
+                                            <option value="3"> G. Operativos</option>
+                                            <option value="4"> Otros</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-row">
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Mes de pago</label>
+                                        <input class="form-control form-control-sm" type="text" id="mes_de_pago_gasto_inst">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Modo de pago</label>
+                                        <input class="form-control form-control-sm" type="text" id="modo_pago_gasto_inst">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Monto a pagar</label>
+                                        <input class="form-control form-control-sm" type="text" id="monto_gasto_inst">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-row">
+                        <div class="col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-danger-light btn-sm btn-block" data-dismiss="modal">Cancelar</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary-light btn-sm btn-block" >Agregar gasto</button>
                             </div>
                         </div>
                     </div>
@@ -126,149 +231,119 @@
         </div>
     </div>
 </div>
-<!--Cierre: Container Completo-->
-<!-- Modal Historial Facturación -->
-    <div id="historial_facturacion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="historial_facturacion" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                   <h5 class="modal-title text-white text-center">Historial de facturación</h5>
-                   <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="alert alert-warning" role="alert">
-                              <i class="feather icon-alert-circle"></i> La factura se generará 24 horas después de que hayamos recibido el pago.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 my-3">
-                            <h4 class="text-c-blue f-20">Facturas</h4>
-                            <hr>
-                        </div>
-                        <div class="col-md-12">
-                            <table id="tabla_facturacion" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th class="align-middle text-center">Suscripción</th>
-                                        <th class="align-middle text-center">Fecha</th>
-                                        <th class="align-middle text-center">Valor</th>
-                                        <th class="align-middle text-center">Estado</th>
-                                        <th class="align-middle text-center">Factura</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="align-middle text-center">Medichile</td>
-                                        <td class="align-middle text-center">20/11/2021</td>
-                                        <td class="align-middle text-center">$5.990 CLP</td>
-                                        <td class="align-middle text-center">
-                                            <span class="badge badge-danger">No pagado</span>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <button type="button" class="btn btn-info btn-sm"><i class="feather icon-download"></i> Descargar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="align-middle text-center">Medichile</td>
-                                        <td class="align-middle text-center">15/11/2021</td>
-                                        <td class="align-middle text-center">$5.990 CLP</td>
-                                        <td class="align-middle text-center">
-                                            <span class="badge badge-warning">Por pagar</span>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <button type="button" class="btn btn-info btn-sm"><i class="feather icon-download"></i> Descargar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="align-middle text-center">Medichile</td>
-                                        <td class="align-middle text-center">12/10/2021</td>
-                                        <td class="align-middle text-center">$5.990 CLP</td>
-                                        <td class="align-middle text-center">
-                                            <span class="badge badge-success">Pagado</span>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <button type="button" class="btn btn-info btn-sm"><i class="feather icon-download"></i> Descargar</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Modal Datos Facturación -->
-    <div id="datos_facturacion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="datos_facturacion" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                   <h5 class="modal-title text-white text-center">Datos de facturación</h5>
-                   <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div class="modal-body">
-                    <form>
+<!--Modal editar gastos cm-->
+<div id="editar_gasto_cm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editar_gasto_cm" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Editar gasto Institucional</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="alert alert-warning" role="alert">
-                                <i class="feather icon-alert-circle"></i> Los cambios en tus datos de facturación serán efectivos a partir de tu siguiente factura.
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-row">
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Tipo de gasto</label>
+                                        <select class="form-control form-control-sm" id="tipo_gasto_inst" name="tipo_gasto_inst">
+                                            <option value="0" data-select2-id="0">Seleccione</option>
+                                            <option value="1"> Mensual</option>
+                                            <option value="2"> Semestral</option>
+                                            <option value="3"> Anual</option>
+                                            <option value="4"> Esporádico</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Nombre</label>
+                                        <input class="form-control form-control-sm" type="text" id="nombre_gasto_inst">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Vencimiento</label>
+                                        <input class="form-control form-control-sm" type="text" id="vencimiento_gasto_inst">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label class="floating-label">Nombre completo</label>
-                                <input type="text" class="form-control form-control-sm" name="nombre_facturacion" id="nombre_facturacion">
+                            <div class="form-row">
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Emisor</label>
+                                        <input class="form-control form-control-sm" type="text" id="emisor_gasto_inst">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Folio</label>
+                                        <input class="form-control form-control-sm" type="text" id="folio_gasto_inst">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Cuenta Contabilidad</label>
+                                        <select class="form-control form-control-sm" id="grupo_gasto_inst" name="grupo_gasto_inst">
+                                            <option value="0" data-select2-id="0">Seleccione</option>
+                                            <option value="1"> Generales</option>
+                                            <option value="2"> Gastos Comunes</option>
+                                            <option value="3"> G. Operativos</option>
+                                            <option value="4"> Otros</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label class="floating-label">Email</label>
-                                <input type="text" class="form-control form-control-sm" name="email_facturacion" id="email_facturacion">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label class="floating-label">País</label>
-                                <select class="form-control form-control-sm" name="pais_facturacion" id="pais_facturacion">
-                                    <option>Seleccione una opción</option>>
-                                    <option value="AL">Chile</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label class="floating-label">Dirección</label>
-                                <input type="text" class="form-control form-control-sm" name="direccion_facturacion" id="direccion_facturacion">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label class="floating-label">Región / Ciudad</label>
-                                <select class="form-control form-control-sm" name="ciudad_facturacion" id="ciudad_facturacion">
-                                    <option>Seleccione</option>
-                                    <optgroup label="Valparaíso">
-                                        <option>Viña del Mar</option>
-                                        <option>La Calera</option>
-                                        <option>Valparaíso</option>
-                                    </optgroup>
-                                </select>
+                            <div class="form-row">
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Mes de pago</label>
+                                        <input class="form-control form-control-sm" type="text" id="mes_de_pago_gasto_inst">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Modo de pago</label>
+                                        <input class="form-control form-control-sm" type="text" id="modo_pago_gasto_inst">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Monto a pagar</label>
+                                        <input class="form-control form-control-sm" type="text" id="monto_gasto_inst">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer text-right">
-                   <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                   <button type="submit" class="btn btn-info">Guardar Cambios</button>
-                   </form>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-row">
+                        <div class="col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-danger-light btn-sm btn-block" data-dismiss="modal">Cancelar</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary-light btn-sm btn-block" >Guardar Edición Gasto</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 @endsection

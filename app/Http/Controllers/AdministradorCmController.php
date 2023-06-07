@@ -1436,7 +1436,7 @@ class AdministradorCmController extends Controller
     }
 
     public function insumos(){
-        return view('app.adm_cm.escritorio_bodega_insumo');
+        return view('app.bodega.escritorio_bodega_insumo');
     }
     public function proveedores(){
         return view('app.adm_cm.proveedores');

@@ -212,6 +212,7 @@
                                             <option value="4">Bono Web</option>
                                             <option value="5">Bono Web Pre-Pago</option>
 											<option value="6">Particular</option>
+											<option value="7">Copago</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6">
@@ -259,22 +260,7 @@
                     <div class="tab-pane fade" id="pills-venta" role="tabpanel" aria-labelledby="pills-venta-tab">
                         <div class="form-row">
                             <div class="col-sm-12 mt-2">
-                                <div class="form-group">
-                                    <label class="floating-label">Rut</label>
-                                    <input type="person" class="form-control" name="rut" id="rut">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Nº de serie</label>
-                                    <input type="text" class="form-control" name="serie" id="serie">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Nombre</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Valor de la Consulta</label>
-                                    <input name="valor_consulta" id="valor_consulta" type="number" class="form-control">
-                                </div>
+
                                 <div class="form-group">
                                     <label class="floating-label">Previsión</label>
                                     <select id="prevision" name="previsioon" class="form-control">
@@ -285,26 +271,48 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group mt-3">
-                                    <label class="floating-label">Folio</label>
-                                    <input type="number" class="form-control" name="folio" id="folio">
+                                <div class="form-group">
+                                    <label class="floating-label">Rut</label>
+                                    <input type="person" class="form-control" name="rut" id="rut">
                                 </div>
                                 <div class="form-group">
-                                    <label class="floating-label">Valor Consulta</label>
+                                    <label class="floating-label">Nº de serie carne</label>
+                                    <input type="text" class="form-control" name="serie" id="serie">
+                                </div>
+                                <div class="form-group">
+                                    {{-- Nombre de persona en Cita --}}
+                                    <label class="floating-label">Nombre Beneficiario</label>
+                                    <input type="text" class="form-control" name="nombre" id="nombre">
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    {{-- respuesta de api --}}
+                                    <label class="floating-label">Número de Bono</label>
+                                    <input type="number" class="form-control" name="folio" id="folio">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="floating-label">Valor Total</label>
                                     <input type="number" class="form-control" name="valor_consulta" id="valor_consulta">
                                 </div>
                                 <div class="form-group">
-                                    <label class="floating-label">Valor Pagar</label>
+                                    <label class="floating-label">Valor Bonificacion</label>
                                     <input type="number" class="form-control" name="valor_pagar" id="valor_pagar">
                                 </div>
                                 <div class="form-group">
-                                    <label class="floating-label">Valor Seguro</label>
+                                    <label class="floating-label">Aporte Seguro</label>
                                     <input type="number" class="form-control" name="valor_seguro" id="valor_seguro">
                                 </div>
                                 <div class="form-group">
-                                    <label class="floating-label">Valor Copago</label>
+                                    <label class="floating-label">Valor a Pagar</label>
                                     <input type="number" class="form-control" name="valor_copago" id="valor_copagp">
                                 </div>
+
+                                {{-- <div class="form-group">
+                                    <label class="floating-label">Valor de la Consulta</label>
+                                    <input name="valor_consulta" id="valor_consulta" type="number" class="form-control">
+                                </div> --}}
+
                                 <hr>
                                 <div class="form-group text-center my-2 pb-2">
                                     <button type="button" class="btn btn-danger close_modal_recepcion_bonos_api" data-dismiss="modal">Cerrar</button>

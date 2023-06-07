@@ -501,9 +501,13 @@ class EscritorioProfesional extends Controller
         $filtro[] = array('procesado', 1);
         // $filtro[] = array('estado', 2);
         $invitacion = Invitacion::where($filtro)->whereNotNull('fecha_aprobacion')->first();
-
-        $tipo_especialidad = TipoEspecialidad::where('id_especialidad', $invitacion->id_especialidad)->get();
-        $sub_tipo_especialidad = SubTipoEspecialidad::where('id_tipo_especialidad', $invitacion->id_tipo_especialidad)->get();
+        $tipo_especialidad = '';
+        $sub_tipo_especialidad = '';
+        if($invitacion)
+        {
+            $tipo_especialidad = TipoEspecialidad::where('id_especialidad', $invitacion->id_especialidad)->get();
+            $sub_tipo_especialidad = SubTipoEspecialidad::where('id_tipo_especialidad', $invitacion->id_tipo_especialidad)->get();
+        }
 
         return view('auth.Registros.registro_profesional')->with([
             'region' => $region,

@@ -19,7 +19,7 @@
                   <button class="btn nav-link-pill" id="v-pinscinco" data-toggle="pill" data-target="#nscinco" type="button" role="tab" aria-controls="nscinco" aria-selected="false">6 a 11 meses</button>
                   <button class="btn nav-link-pill" id="nsseis-tab" data-toggle="pill" data-target="#nsseis" type="button" role="tab" aria-controls="nsseis" aria-selected="false">12 a 23 meses</button>
                   <button class="btn nav-link-pill" id="nssiete-tab" data-toggle="pill" data-target="#nssiete" type="button" role="tab" aria-controls="nssiete" aria-selected="false">2 a 4 años</button>
-                  <button class="btn nav-link-pill" id="nsocho-tab" data-toggle="pill" data-target="#nsocho" type="button" role="tab" aria-controls="nsocho" aria-selected="false">6 a 5 meses</button>
+                  <button class="btn nav-link-pill" id="nsocho-tab" data-toggle="pill" data-target="#nsocho" type="button" role="tab" aria-controls="nsocho" aria-selected="false">6 a 9 años</button>
                 </div>
             </div>
         </div>

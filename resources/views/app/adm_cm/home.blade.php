@@ -27,7 +27,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="card subir py-auto bg-info">
                         <div class="card-body text-center">
-                            <h5 class=" mb-0 text-white f-20">Centro médico {{ mb_strtoupper($institucion->nombre) }}</h5>
+                            <h5 class=" mb-0 text-white f-24">Centro médico</h5>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                 </div>
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                     <div class="card subir py-auto">
-                        <a href="{{ ROUTE('adm_cm.administracion_cm') }}">
+                        <a href="{{ ROUTE('adm_cm.area_comercial') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center" src="{{ asset('images/iconos/adm_comercial.png') }}">
                                 <h5 class="mt-1 mb-0">Administración comercial</h5>
@@ -61,17 +61,27 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <div class="col-md-3">
                     <div class="card subir py-auto">
                         <a href="{{ ROUTE('adm_cm.profesionales') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center" src="{{ asset('images/iconos/profesional.svg') }}">
-                                <h5 class="mt-1 mb-0">Profesionales</h5>
+                                <img class="wid-60 text-center" src="{{ asset('images/iconos/profesional_2.svg') }}">
+                                <h5 class="mt-1 mb-0">Profesionales de La Institución</h5>
                             </div>
                         </a>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <div class="col-md-3">
+                    <div class="card subir py-auto">
+                        <a href="{{ ROUTE('adm_cm.mis_profesionales') }}">
+							<div class="card-body text-center" style="cursor:pointer">
+								<img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
+                                <h5 class="mt-1 mb-0">Profesionales Info Lugar de Atención</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
                     <div class="card subir py-auto">
                         <a href="{{ ROUTE('adm_cm.pacientes') }}">
                             <div class="card-body text-center" style="cursor:pointer">
@@ -81,7 +91,7 @@
                         </a>
                     </div>
                 </div>
-				<div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+				 <div class="col-md-3">
                     <div class="card subir py-auto">
                         <a href="{{ ROUTE('adm_cm.personal') }}">
                             <div class="card-body text-center" style="cursor:pointer">
@@ -92,7 +102,8 @@
                     </div>
                 </div>
 
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                <div class="col-md-12">
                     <div class="card subir py-auto bg-warning">
                         <div class="card-body text-center" style="cursor:pointer">
                             <h5 class=" mb-0 text-white f-20">Areas del centro médico</h5>

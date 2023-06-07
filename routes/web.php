@@ -874,7 +874,7 @@ Route::group([
 	Route::post('/Personal/horario/editar', [App\Http\Controllers\ManejoContratoController::class, 'modificarHorario'])->name('adm_cm.personal.horario.editar');
 	Route::get('/profesionales/liquidacion', [App\Http\Controllers\AdministradorCmController::class, 'adm_liquidacion_profesionales'])->name('adm_cm.liquidacion_profesionales');
 
-	Route::get('/liquidacion_profesionales', [App\Http\Controllers\AdministradorCmController::class, 'liquidacion_profesionales'])->name('app.adm_cm.liquidacion_profesionales');																																									  																																										  
+	Route::get('/liquidacion_profesionales', [App\Http\Controllers\AdministradorCmController::class, 'liquidacion_profesionales'])->name('app.adm_cm.liquidacion_profesionales');
 	Route::post('/Personal/finalizar', [App\Http\Controllers\ManejoContratoController::class, 'desasociarPersonalAsistente'])->name('adm_cm.personal.finalizar');
 
 	Route::get('/liquidacion_profesionales', [App\Http\Controllers\AdministradorCmController::class, 'liquidacion_profesionales'])->name('app.adm_cm.liquidacion_profesionales');
@@ -906,21 +906,25 @@ Route::group([
     Route::get('/Laboratorios/Sucursales', [App\Http\Controllers\AdministradorCmController::class, 'sucursales_cm'])->name('adm_cm.sucursales_cm');
 
     Route::get('/Administracion', [App\Http\Controllers\AdministradorCmController::class, 'administracion_cm'])->name('adm_cm.administracion_cm');
-    Route::get('/Administracion/Insumos', [App\Http\Controllers\AdministradorCmController::class, 'insumos'])->name('adm_cm.insumos');
-    
+    Route::get('/Administracion/Comercial', [App\Http\Controllers\AdministradorCmController::class, 'areaComercial'])->name('adm_cm.area_comercial');
+    Route::get('/Administracion/Comercial/sueldos', [App\Http\Controllers\AdministradorCmController::class, 'sueldos'])->name('adm_cm.sueldos');
 
-	Route::get('/Administracion', [App\Http\Controllers\AdministradorCmController::class, 'administracion_cm'])->name('adm_cm.administracion_cm');
-	Route::get('/Administracion/Comercial', [App\Http\Controllers\AdministradorCmController::class, 'areaComercial'])->name('adm_cm.area_comercial');
-	Route::get('/Administracion/Contabilidad', [App\Http\Controllers\AdministradorCmController::class, 'areaContabilidad'])->name('adm_cm.area_contabilidad');
-	Route::get('/Administracion/Bodega', [App\Http\Controllers\AdministradorCmController::class, 'areaBodega'])->name('adm_cm.area_bodega');
-	Route::get('/Administracion/Estadistica', [App\Http\Controllers\AdministradorCmController::class, 'areaEstadistica'])->name('adm_cm.area_estadistica');
-	Route::get('/Administracion/Insumos', [App\Http\Controllers\AdministradorCmController::class, 'insumos'])->name('adm_cm.insumos');
+    Route::get('/Administracion/Contabilidad', [App\Http\Controllers\AdministradorCmController::class, 'areaContabilidad'])->name('adm_cm.area_contabilidad');
+    Route::get('/Administracion/Bodega', [App\Http\Controllers\AdministradorCmController::class, 'areaBodega'])->name('adm_cm.area_bodega');
+    Route::get('/Administracion/Estadistica', [App\Http\Controllers\AdministradorCmController::class, 'areaEstadistica'])->name('adm_cm.area_estadistica');
+    Route::get('/Administracion/Insumos', [App\Http\Controllers\AdministradorCmController::class, 'insumos'])->name('adm_cm.insumos');
+
 	Route::get('/Administrador/ciudad/buscar', [App\Http\Controllers\AdministradorCmController::class, 'buscar_ciudad_region'])->name('adm_cm.buscar_ciudad_region');
 
 	/** CAMBIO CONTRASEÑA DEL RESPONSABLE */
     Route::get('/Administrador/responsable/contrasena/cambio', [App\Http\Controllers\AdministradorCmController::class, 'cambioContrasenaPerfilResponsable'])->name('adm_cm.cambio_contrasena_responsable');
 
     Route::get('/invitacion/buscar/informacion', [App\Http\Controllers\InvitacionController::class, 'cambioContrasenaPerfilResponsable'])->name('invitaciones.buscar.info');
+
+    /** FLUJO DE CAJA */
+    Route::get('/flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionCmAdm'])->name('adm_cm.flujo.caja.index');
+
+
 });
 
 Route::group([
