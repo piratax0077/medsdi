@@ -1,5 +1,5 @@
 body {
-    background: #3366CC !important;
+    background: #224892!important;
 }
 
 .bg-c-info {
@@ -10,17 +10,6 @@ body {
     background-color: #fff!important;
 }
 
-.btn.btn-icon {
-    width: 33px;
-    height: 33px;
-    padding: 0;
-    margin: 2px!important;
-    border-radius: 50%;
-    font-size: 17px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
 
 
 @media (min-width: 992px) {
