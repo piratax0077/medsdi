@@ -423,6 +423,9 @@
                         icon: "success",
                         buttons: "Aceptar",
                     });
+
+                    // window.location.href = "{{ route('adm_cm.sueldos') }}?filtro_anio="+r_ano_liq+"&filtro_mes="+r_mes_liq+"";
+
                 }
                 else
                 {
