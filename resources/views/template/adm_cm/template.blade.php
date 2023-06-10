@@ -153,6 +153,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
+    <!-- fancy box -->
+    <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
+    <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
+
     <!--select2 -->
     <script src="{{ asset('js/plugins/select2.full.min.js')}}"></script>
 

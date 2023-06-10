@@ -29,72 +29,107 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-4 mb-4">
+                            <select class="form-control form-control-sm" name="filtro_anio" id="filtro_anio" onchange="carga_por_fecha();">
+                                @for ($i = 2023;$i <= date('Y'); $i++)
+                                    @if (empty($ano_toma))
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @else
+                                        @if ($ano_toma == $i)
+                                            <option value="{{ $i }}" selected>{{ $i }}</option>
+                                        @else
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endif
+                                    @endif
+                                @endfor
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            @php $array_mes = ['', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE']; @endphp
+                            <select class="form-control form-control-sm" name="filtro_mes" id="filtro_mes" onchange="carga_por_fecha();">
+                                @foreach ($array_mes as $mes )
+                                    @if (!empty($mes))
+                                        @if ($mes_toma == $loop->index)
+                                            <option value="{{ $loop->index }}" selected>{{ $mes }}</option>
+                                        @else
+                                            <option value="{{ $loop->index }}">{{ $mes }}</option>
+                                        @endif
+                                    @endif
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <table id="liquidaciones de Sueldos" class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%">
                         <thead>
                             <tr>
                                 <th class="text-center align-middle">Nombre</th>
-                                <th class="text-center align-middle">Fecha de Pago</th>
                                 <th class="text-center align-middle">Info-empleado</th>
                                 <th class="text-center align-middle">Sucursal</th>
+                                <th class="text-center align-middle">Mes de Pago</th>
                                 <th class="text-center align-middle">Estado</th>
                                 <th class="text-center align-middle">Pagar</th>
 
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="align-middle text-center">
-                                    <span>Juana Perez</span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span>18/11/2023</span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <!--Botón Modal contacto -->
-                                    <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_asistente();" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
-                                    <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos();" data-toggle="tooltip" data-placement="top" title="Dato Deposito"><i class="fab fa-creative-commons-nc"></i></button>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span>Nombre sucursal cm</span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span class="badge badge-success">Pagado</span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <!--Botón pago-->
-                                    <button type="button" class="btn btn-secondary btn-sm" onclick="pago_sueldo();"><i class="feather icon-edit"></i>Pagar</button>
-                                </td>
+                            @if ($registro_personal)
+                                @foreach ($registro_personal as $personal)
+                                    <tr>
+                                        <td class="align-middle text-center">
+                                            {{ (empty($personal->persona->nombres)?$personal->persona->nombre:$personal->persona->nombres).' '.$personal->persona->apellido_uno.' '.$personal->persona->apellido_dos }}
+                                        </td>
 
-                            </tr>
-                            <tr>
-                                <td class="align-middle text-center">
-                                    <span>juan Perez</span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span>22/11/2023</span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <!--Botón Modal contacto -->
-                                    <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_asistente();" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
-                                    <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos();" data-toggle="tooltip" data-placement="top" title="Dato Deposito"><i class="fab fa-creative-commons-nc"></i></button>
+                                        <td class="align-middle text-center">
+                                            <!--Botón Modal contacto -->
+                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_persona('{{ $personal->tipo_empleado }}', '{{ $personal->id_empleado }}');" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
+                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('{{ $personal->tipo_empleado }}', '{{ $personal->id_empleado }}');" data-toggle="tooltip" data-placement="top" title="Dato Deposito"><i class="fab fa-creative-commons-nc"></i></button>
+                                        </td>
 
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span>Nombre sucursal cm</span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span class="badge badge-danger">No Pagado</span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <!--Botón pago-->
-                                    <button type="button" class="btn btn-secondary btn-sm" onclick="pago_sueldo();"><i class="feather icon-edit"></i>Pagar</button>
-                                </td>
+                                        <td class="align-middle text-center">
+                                            {{ $personal->Institucion->nombre }}
+                                        </td>
+
+                                        @if ($personal->remuneracion)
+                                            {{-- remuneracion existente --}}
+                                            <td class="align-middle text-center">{{ $array_mes[$personal->remuneracion->r_mes_liq].'-'.$personal->remuneracion->r_ano_liq }}</td>
+
+                                            @if($personal->remuneracion->estado == 1)
+                                                <td class="align-middle text-center">
+                                                    <span class="badge badge-info">Generada</span>
+                                                </td>
+                                                <td class="align-middle text-center">
+                                                    <!--Botón pago-->
+                                                    {{-- <button type="button" class="btn btn-secondary btn-sm" onclick="mostrar_pasar_pagado('{{ $personal->remuneracion->id }}', $('#filtro_anio').val(), $('#filtro_mes').val());"><i class="feather icon-edit"></i>Pagar</button> --}}
+                                                    <button type="button" class="btn btn-secondary btn-sm" onclick="mostrar_pasar_pagado('{{ $personal->id }}', '{{ $personal->id_empleado }}', '{{ $personal->remuneracion->id }}');"><i class="feather icon-edit"></i>Pagar</button>
+                                                </td>
+                                            @elseif($personal->remuneracion->estado == 2)
+                                                <td class="align-middle text-center">
+                                                    <span class="badge badge-success">Pagado</span>
+                                                </td>
+                                                <td class="align-middle text-center">
+                                                    <!--Botón pago-->
+                                                    {{-- <button type="button" class="btn btn-secondary btn-sm" onclick=""><i class="feather icon-edit"></i>Pagar</button> --}}
+                                                </td>
+                                            @endif
+
+                                        @else
+                                            {{-- sin remuneracion --}}
+                                            <td class="align-middle text-center">-</td>
+
+                                            <td class="align-middle text-center">
+                                                <span class="badge badge-danger">Pendiente</span>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <!--Botón pago-->
+                                                <button type="button" class="btn btn-secondary btn-sm" onclick="generar_pago('{{ $personal->tipo_empleado }}', '{{ $personal->id_empleado }}', '{{ $personal->id }}', $('#filtro_anio').val(), $('#filtro_mes').val());"><i class="feather icon-edit"></i>Generar</button>
+                                            </td>
+                                        @endif
 
 
-                            </tr>
+
+                                    </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -116,10 +151,18 @@
     @include('app.adm_cm.modal_adm.contacto')
 
     @include('app.contabilidad.modals.remuneraciones')
+    @include('app.contabilidad.modals.modal_pagado')
 
     @include('app.adm_cm.modal_adm.liquidacion_profesionales')
 @endsection
-{{--  <script>
+<script>
+    function carga_por_fecha()
+    {
+        var ano = $('#filtro_anio').val();
+        var mes = $('#filtro_mes').val();
+        window.location.href = "{{ route('adm_cm.sueldos') }}?filtro_anio="+ano+"&filtro_mes="+mes+"";
+    }
+    {{--
     function cambio_estado_personal(id) {
 
         let id_asistente = id;
@@ -202,4 +245,5 @@
             }
         }
     };
-</script>  --}}
+    --}}
+</script>

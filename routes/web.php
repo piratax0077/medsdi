@@ -714,7 +714,7 @@ Route::group([
 
 
 Route::group([
-    'middleware' => ['role:AsistenteAdm|Asistente|AsistenteCaja|AsistenteJefaCaja|AsistenteOnline|Admin'],
+    'middleware' => ['role:AsistenteAdm|Adm_Comercial|Adm_Comercial|Asistente|AsistenteCaja|AsistenteJefaCaja|AsistenteOnline|Admin'],
     'prefix' => 'Agenda/',
 ], function () {
     Route::get('BuscarInfoProfesional', [App\Http\Controllers\EscritorioAsistente::class, 'buscarInfoProfesional'])->name('agenda.buscar_info_profesional');
@@ -849,7 +849,7 @@ Route::group([
 });
 /**--CENTRO MEDICO--**/
 Route::group([
-	'middleware' => ['role:Admin|Institucion|AsistenteAdm|Adm_Institucion'],
+	'middleware' => ['role:Admin|Institucion|AsistenteAdm|Adm_Comercial|Adm_Institucion'],
     'prefix' => 'Administrador',
 ], function () {
     Route::get('/Inicio', [App\Http\Controllers\AdministradorCmController::class, 'index'])->name('adm_cm.home');
@@ -908,6 +908,8 @@ Route::group([
     Route::get('/Administracion', [App\Http\Controllers\AdministradorCmController::class, 'administracion_cm'])->name('adm_cm.administracion_cm');
     Route::get('/Administracion/Comercial', [App\Http\Controllers\AdministradorCmController::class, 'areaComercial'])->name('adm_cm.area_comercial');
     Route::get('/Administracion/Comercial/sueldos', [App\Http\Controllers\AdministradorCmController::class, 'sueldos'])->name('adm_cm.sueldos');
+    Route::post('/Administracion/Comercial/remuneracion/registrar', [App\Http\Controllers\RemuneracionesController::class, 'registrar'])->name('adm_cm.remuneracion.registrar');
+    Route::post('/Administracion/Comercial/remuneracion/pagada', [App\Http\Controllers\RemuneracionesController::class, 'pagada'])->name('adm_cm.remuneracion.pagada');
 
     Route::get('/Administracion/Contabilidad', [App\Http\Controllers\AdministradorCmController::class, 'areaContabilidad'])->name('adm_cm.area_contabilidad');
     Route::get('/Administracion/Bodega', [App\Http\Controllers\AdministradorCmController::class, 'areaBodega'])->name('adm_cm.area_bodega');
@@ -924,11 +926,15 @@ Route::group([
     /** FLUJO DE CAJA */
     Route::get('/flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionCmAdm'])->name('adm_cm.flujo.caja.index');
 
+    /** Contrato dependiente */
+    Route::get('/contrato/dependiente/ver', [App\Http\Controllers\ContratoDependienteController::class, 'verRegistro'])->name('adm_cm.contrato.dependiente.ver');
+
+
 
 });
 
 Route::group([
-    'middleware' => ['role:Admin|AsistenteAdm|Institucion|AsistenteAdm|Adm_Institucion'],
+    'middleware' => ['role:Admin|AsistenteAdm|Adm_Comercial|Institucion|Adm_Institucion'],
     'prefix' => 'cm/',
 ], function () {
     Route::get('Paciente/cargar_info', [App\Http\Controllers\AdministradorCmController::class, 'buscar_paciente_rut'])->name('asistente_adm.buscar_paciente_rut');
@@ -936,7 +942,7 @@ Route::group([
 
 /** ASISTENTE ADMINISTRATIVA DE CENTRO MEDICO */
 Route::group([
-    'middleware' => ['role:Admin|AsistenteAdm'],
+    'middleware' => ['role:Admin|AsistenteAdm|Adm_Comercial'],
     'prefix' => 'Asistente/cm/Administrativa',
 ], function () {
     Route::get('/escritorio', [App\Http\Controllers\AdministradorCmController::class, 'escritorio_asist_adm'])->name('asistente_adm.home');
@@ -1202,7 +1208,7 @@ Route::group([
 
 /** PRODUCTO BODEGA */
 Route::group([
-    'middleware' => ['role:Asistente|AsistenteAdm|admin|Contador|Bodega|Adm_Institucion'],
+    'middleware' => ['role:Asistente|AsistenteAdm|Adm_Comercial|admin|Contador|Bodega|Adm_Institucion'],
     'prefix' => 'bodega',
 ], function () {
     Route::post('/autocomplete/producto/categoria/ver_registros', [App\Http\Controllers\ProductoBodegaController::class, 'getProductoBodegaCategoriaAutocomplete'])->name('bodega.autocomplete.productoVerCategoria');

@@ -19,6 +19,7 @@ use App\Models\Paciente;
 use App\Models\Profesional;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalInstitucionConvenio;
+use App\Models\Remuneraciones;
 use App\Models\Servicios;
 use App\Models\TipoAdministrador;
 use App\Models\TipoConvenioInstitucion;
@@ -2625,8 +2626,6 @@ class AdministradorCmController extends Controller
                     //     break;
                 }
 
-
-
                 /** AGREGAR ROL */
                 if($request->movimiento == 1)
                 {
@@ -2656,7 +2655,6 @@ class AdministradorCmController extends Controller
                         $datos['error'] =$th;
                         $datos['msj'] = 'problema modificando Perfil';
                     }
-
                 }
             }
             else
@@ -2664,9 +2662,6 @@ class AdministradorCmController extends Controller
                 $datos['estado'] = 0;
                 $datos['msj'] = 'usuario no encontrado';
             }
-
-
-
         }
         else
         {
@@ -2685,7 +2680,133 @@ class AdministradorCmController extends Controller
 
     public function sueldos(Request $request)
     {
-        return view('app.adm_cm.sueldos');
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+
+        /** INFORMACION DE INSTITUCION Y RESPONSABLE */
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+
+            }
+        }
+        /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
+
+        $ano_toma = '';
+        $mes_toma = '';
+        if( empty($request->filtro_anio) && empty($request->filtro_mes))
+        {
+            $ano_toma = date('Y');
+            $mes_toma = date('m');
+        }
+        else
+        {
+            $ano_toma = $request->filtro_anio;
+            $mes_toma = $request->filtro_mes;
+        }
+
+        $filtro_contrato = array();
+        $filtro_contrato[] = array('id_institucion', $institucion->id);
+        $filtro_contrato[] = array('id_lugar_atencion', $institucion->id_lugar_atencion);
+
+        // echo json_encode($filtro_contrato);
+
+        $registro_personal = ContratoDependiente::with('Persona')
+                                                    ->with('Institucion')
+                                                    ->with('LugarAtencion')
+                                                    ->where($filtro_contrato)
+                                                    ->whereIn('estado', [2,3])
+                                                    ->filtroFechaContratoActivo($ano_toma, $mes_toma)
+                                                    ->get();
+
+        foreach ($registro_personal as $key => $value)
+        {
+            $filtro_remu = array();
+            $filtro_remu[] = array('r_ano_liq', $ano_toma);
+            $filtro_remu[] = array('r_mes_liq', $mes_toma);
+            $filtro_remu[] = array('id_contrato_dependiente', $value->id);
+            $filtro_remu[] = array('id_empleado', $value->id_empleado);
+            $remuneracion_result = Remuneraciones::where($filtro_remu)->whereIn('estado', [1,2])->first();
+            if($remuneracion_result)
+            {
+                $registro_personal[$key]->remuneracion = $remuneracion_result;
+            }
+            else
+            {
+                $registro_personal[$key]->remuneracion = array();
+            }
+        }
+
+        return view('app.adm_cm.sueldos')->with([
+            'registro_personal' => $registro_personal,
+            'institucion' => $institucion,
+            'ano_toma' => $ano_toma,
+            'mes_toma' => $mes_toma,
+        ]);
     }
 
     public function areaContabilidad(Request $request)

@@ -26,7 +26,7 @@
     </div>
 </div>
 <script>
-    *-Modals personal-*/
+    /*-Modals personal-*/
     function contacto_asistente() {
         $('#contacto_asistente_modal').modal('show');
     }
