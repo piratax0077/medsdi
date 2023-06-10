@@ -59,7 +59,10 @@ class PdfController extends Controller
             break;
             case 'G': //GUARDAR
                 $datos = array();
+                /** DESAROLLO */
                 if($pdf->save('storage/pdf/' . $nombre_pdf . '.pdf'))
+                /** PRODUCCION */
+                // if($pdf->save('public/storage/pdf/' . $nombre_pdf . '.pdf'))
                 {
                     $datos['estado'] = 1;
                     $datos['msj'] = 'pdf generado';
