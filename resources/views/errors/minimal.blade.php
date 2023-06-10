@@ -35,7 +35,7 @@
         <div class="container">
             <div class="row  relative text-center  items-top justify-center bg-image min-h-screen  sm:items-center sm:pt-0 c-sm">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                     <img class="img-fluid" src="../images/maintance/error.png" style="width:60%;">
+                     <img class="img-fluid" src="{{ asset('images/maintance/error.png') }}" style="width:60%;">
                     <div class="px-4 text-xl tracking-wider f-50 ">
                             @yield('code')
                         </div>
