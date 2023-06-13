@@ -81,8 +81,13 @@
 
                                         <td class="align-middle text-center">
                                             <!--Botón Modal contacto -->
-                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_persona('{{ $personal->tipo_empleado }}', '{{ $personal->id_empleado }}');" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
-                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('{{ $personal->tipo_empleado }}', '{{ $personal->id_empleado }}');" data-toggle="tooltip" data-placement="top" title="Dato Deposito"><i class="fab fa-creative-commons-nc"></i></button>
+                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_persona('{{ $personal->tipo_empleado }}', '', '{{ $personal->id_empleado }}');" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
+
+                                            @if(strpos(strtoupper($personal->tipo_empleado), 'ADMINISTRADOR') !== false)
+                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('{{ $personal->persona->id_admin }}');" data-toggle="tooltip" data-placement="top" title="Dato Deposito"><i class="fab fa-creative-commons-nc"></i></button>
+                                            @else
+                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('{{ $personal->persona->id_usuario }}');" data-toggle="tooltip" data-placement="top" title="Dato Deposito"><i class="fab fa-creative-commons-nc"></i></button>
+                                            @endif
                                         </td>
 
                                         <td class="align-middle text-center">
@@ -145,11 +150,12 @@
 
 
 @section('modales-profesionales_inst')
+
     @include('app.adm_cm.modal_adm.datos_banco')
     @include('app.adm_cm.modal_adm.horario_usuario')
     @include('app.adm_cm.modal_adm.convenio_usuario')
-    @include('app.adm_cm.modal_adm.contacto')
 
+    @include('app.adm_cm.modal_adm.contacto')
     @include('app.contabilidad.modals.remuneraciones')
     @include('app.contabilidad.modals.modal_pagado')
 

@@ -741,6 +741,7 @@ class AdministradorCmController extends Controller
         $id_tipo = $request->id_tipo;
         $id = $request->id;
         $id_lugar_atencion = $request->id_lugar_atencion;
+        $datos['test'] = mb_strtoupper($nombre_tipo);
         $datos['test1'] = strpos(strtoupper($nombre_tipo), 'ASISTENTE');
         $datos['test2'] = strpos(strtoupper($nombre_tipo), 'ADMINISTRADOR');
 
@@ -750,10 +751,17 @@ class AdministradorCmController extends Controller
                                     ->with(['AsistenteTipo' => function($query){
                                         $query->select('id', 'nombre', 'descripcion');
                                     }])
+                                    ->with(['Direccion' => function($query){
+                                        $query->with('Ciudad');
+                                    }])
                                     ->where('id', $id)
                                     ->first();
-            $asistente_lugar = AsistenteLugarAtencion::where('id_asistente',$id)->where('id_lugar_atencion', $id_lugar_atencion)->first();
-            $asistente->asistente_lugar = $asistente_lugar;
+
+            if(!empty($id_lugar_atencion))
+            {
+                $asistente_lugar = AsistenteLugarAtencion::where('id_asistente',$id)->where('id_lugar_atencion', $id_lugar_atencion)->first();
+                $asistente->asistente_lugar = $asistente_lugar;
+            }
 
             $datos['estado'] = 1;
             $datos['msj'] = 'registro';
@@ -766,7 +774,10 @@ class AdministradorCmController extends Controller
         {
             $administrador = AdminInstServ::select('id', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_tipo_administrador', 'id_direccion', 'id_admin')
                                     ->with(['TipoAdministrador' => function($query){
-                                        $query->select('id', 'nombre','descripcion');
+                                        $query->select('id', 'nombres','descripcion');
+                                    }])
+                                    ->with(['Direccion' => function($query){
+                                        $query->with('Ciudad');
                                     }])
                                     ->where('id', $id)
                                     ->first();
@@ -2822,6 +2833,16 @@ class AdministradorCmController extends Controller
     public function areaEstadistica(Request $request)
     {
         return view('');
+    }
+
+    /** ADMINISTRADOR COMERCIAL */
+    public function configuracion_comercial(){
+        return view('app.adm_cm.configuracion_esc_comercial');
+    }
+
+    public function escritorioAdminComercial()
+    {
+        return view('app.adm_cm.escritorio_adm_comercial_adm');
     }
 
 

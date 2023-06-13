@@ -929,6 +929,10 @@ Route::group([
     /** Contrato dependiente */
     Route::get('/contrato/dependiente/ver', [App\Http\Controllers\ContratoDependienteController::class, 'verRegistro'])->name('adm_cm.contrato.dependiente.ver');
 
+    /** admin Comercial */
+    Route::get('/comercial/escritorio', [App\Http\Controllers\AdministradorCmController::class, 'escritorioAdminComercial'])->name('administrador_comercial.home');
+    Route::get('/comercial/configuracion', [App\Http\Controllers\AdministradorCmController::class, 'configuracion_comercial'])->name('administrador_comercial.configuracion');
+
 
 
 });
