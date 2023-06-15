@@ -34,12 +34,7 @@
                     <div class="row">
                         <div class="col-md-3 mb-3">
                             <select class="form-control form-control-sm" name="filtro_anio" id="filtro_anio" onchange="carga_filtros();">
-                                @if ($ano_toma == 0)
-                                    <option value="0" selected>Todos</option>
-                                @else
-                                    <option value="0">Todos</option>
-                                @endif
-                                @for ($i = 2023;$i <= date('Y'); $i++)
+                               @for ($i = 2023;$i <= date('Y'); $i++)
                                     @if (empty($ano_toma))
                                         <option value="{{ $i }}">{{ $i }}</option>
                                     @else
@@ -92,6 +87,9 @@
                                     <option value="0" selected>Seleccione</option>
                                 @endif
                             </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button type="button" class="btn btn-info btn-sm">Descargar Reporte</button>
                         </div>
                     </div>
                     <table id="gastos_comunes_inst" class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%">

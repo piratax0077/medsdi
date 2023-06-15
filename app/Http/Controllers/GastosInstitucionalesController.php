@@ -91,15 +91,22 @@ class GastosInstitucionalesController extends Controller
         $ano_toma = '';
         $mes_toma = '';
         $emision_s = '';
-        if( empty($request->filtro_anio) && empty($request->filtro_mes) )
+        if( empty($request->filtro_anio))
         {
-            $ano_toma = 0;
-            $mes_toma = 0;
-
+            $ano_toma = date('Y');
         }
         else
         {
             $ano_toma = $request->filtro_anio;
+        }
+
+        if( $request->filtro_mes == '' )
+        {
+            $mes_toma = date('m');
+            // $mes_toma = '';
+        }
+        else
+        {
             $mes_toma = $request->filtro_mes;
 
         }
