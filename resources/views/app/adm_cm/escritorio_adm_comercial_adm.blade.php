@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card subir py-auto">
-                        <a href="{{ ROUTE('adm_cm.configuracion_esc_comercial') }}">
+                        <a href="{{ ROUTE('administrador_comercial.configuracion') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-50 text-center" src="{{ asset('images/iconos/panel_configuracion.svg') }}">
                                 <h6 class="mt-2 mb-0">Configurar mi Escritorio</h6>
@@ -84,7 +84,7 @@
 
 				<div class="col-md-4">
                     <div class="card subir">
-                        <a href="{{ ROUTE('adm_cm.gastos') }}">
+                        <a href="{{ ROUTE('gastos.home') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center" src="{{ asset('images/iconos/gastos-pagos.png') }}">
                                 <h5 class="mt-1 mb-0">Gastos y Pagos Generales</h5>

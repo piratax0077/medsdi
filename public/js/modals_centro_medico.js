@@ -84,9 +84,6 @@ function agregar_gasto() {
     $('#agregar_gasto_cm').modal('show');
 }
 
-function editar_gasto() {
-    $('#editar_gasto_cm').modal('show');
-}
 
 /*-Proveedores-*/
 function agregar_proveedor() {

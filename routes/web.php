@@ -847,6 +847,7 @@ Route::group([
     Route::get('/personas/buscar', [App\Http\Controllers\EscritorioGeneral::class, 'getPersona'])->name('personas.buscador');
 
 });
+
 /**--CENTRO MEDICO--**/
 Route::group([
 	'middleware' => ['role:Admin|Institucion|AsistenteAdm|Adm_Comercial|Adm_Institucion'],
@@ -854,6 +855,7 @@ Route::group([
 ], function () {
     Route::get('/Inicio', [App\Http\Controllers\AdministradorCmController::class, 'index'])->name('adm_cm.home');
     Route::get('/Configuracion', [App\Http\Controllers\AdministradorCmController::class, 'configuracion'])->name('adm_cm.configuracion');
+	Route::get('/Configuracion/comercial', [App\Http\Controllers\AdministradorCmController::class, 'perfiladm_conercial'])->name('adm_cm.configuracion_esc_comercial');
     Route::post('/Configuracion/perfil/datos/editar', [App\Http\Controllers\AdministradorCmController::class, 'editarDatosPerfil'])->name('adm_cm.editar_datos_perfil');
 	Route::post('/Configuracion/perfil/datos/responsable/editar', [App\Http\Controllers\AdministradorCmController::class, 'editarDatosPerfilResponsable'])->name('adm_cm.editar_datos_perfil_responsable');
 	Route::get('/Configuracion/perfil/datos/personal/persona', [App\Http\Controllers\AdministradorCmController::class, 'cargaPersonalPersona'])->name('adm_cm.cargar_personal_persona');
@@ -890,7 +892,7 @@ Route::group([
 
 	Route::get('/Adm_medico', [App\Http\Controllers\AdministradorCmController::class, 'adm_medico'])->name('adm_cm.adm_medico');
     Route::get('/Proveedores', [App\Http\Controllers\AdministradorCmController::class, 'proveedores'])->name('adm_cm.proveedores');
-    Route::get('/Gastos', [App\Http\Controllers\AdministradorCmController::class, 'gastos'])->name('adm_cm.gastos');
+    // Route::get('/Gastos', [App\Http\Controllers\AdministradorCmController::class, 'gastos'])->name('adm_cm.gastos');
 	Route::get('/At_profesionales', [App\Http\Controllers\AdministradorCmController::class, 'at_profesionales'])->name('adm_cm.at_profesionales');
 
     Route::get('/Pagos', [App\Http\Controllers\AdministradorCmController::class, 'pagos'])->name('adm_cm.pagos');
@@ -934,7 +936,17 @@ Route::group([
     Route::get('/comercial/configuracion', [App\Http\Controllers\AdministradorCmController::class, 'configuracion_comercial'])->name('administrador_comercial.configuracion');
 
 
+});
 
+Route::group([
+	'middleware' => ['role:Admin|Institucion|AsistenteAdm|Adm_Comercial|Adm_Institucion'],
+    'prefix' => 'Administrador/gastos',
+], function () {
+    Route::get('/Inicio', [App\Http\Controllers\GastosInstitucionalesController::class, 'index'])->name('gastos.home');
+    Route::post('/agregar', [App\Http\Controllers\GastosInstitucionalesController::class, 'agregar'])->name('gastos.agregar');
+    Route::post('/pagado', [App\Http\Controllers\GastosInstitucionalesController::class, 'pagado'])->name('gastos.pagado');
+    Route::get('/ver', [App\Http\Controllers\GastosInstitucionalesController::class, 'ver_registro'])->name('gastos.ver');
+    Route::post('/editar', [App\Http\Controllers\GastosInstitucionalesController::class, 'modificar'])->name('gastos.editar');
 });
 
 Route::group([

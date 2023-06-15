@@ -67,7 +67,7 @@
 
 				<div class="col-md-4">
                     <div class="card subir">
-                        <a href="{{ ROUTE('asistente_adm.gastos') }}">
+                        <a href="{{ ROUTE('gastos.home') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
                                 <h5 class="mt-1 mb-0">Gastos y Pagos Generales</h5>
@@ -97,7 +97,7 @@
                 </div>
 				<div class="col-md-4">
                     <div class="card subir">
-                         <a href="{{ ROUTE('asistente_adm.gastos') }}">
+                         <a href="{{ ROUTE('gastos.home') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
                                 <h5 class="mt-1 mb-0">Pagos Personal del Centro</h5>
