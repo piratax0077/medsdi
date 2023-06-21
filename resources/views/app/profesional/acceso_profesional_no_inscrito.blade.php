@@ -32,10 +32,6 @@
 </style>
 
 <body>
-    @php
-    if(Auth::check()) 
-    echo '<input type="hidden" id="id_usuario_login" value="{{Auth::user()->id}}" >';
-    @endphp
     
     <div class="auth-wrapper">
         <div class="container-fluid">
@@ -54,33 +50,42 @@
                                 </div>
                             </div>
                             <div class="row">
+                               <form id="form-agregar-profesional-provisorio" action="{{ route('anonymous.agregar_profesional_provisorio') }}" method="POST">
+                                    @csrf
+                                <input type="hidden" id="token_profesional_provisorio" name="token_profesional_provisorio" value="{{$token}}">
+                                <input type="hidden" id="id_registro" name="id_registro" value="{{$id_registro}}">
+    
                                 <div class="col-sm-12">
                                         <div class="form-row">
                                             <div class="form-group col-md-4">
                                                 <label class="floating-label">Rut</label>
-                                                <input type="text" class="form-control form-control-sm"
-                                                    name="rut_profesional" id="rut_profesional">
+                                                <input type="text" class="form-control form-control-sm" name="rut_profesional" id="rut_profesional" value="{{$registro->rut}}">
                                             </div>
 
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="floating-label">Nombres</label>
-                                                <input type="text" class="form-control form-control-sm"
-                                                    name="nombre_profesional" id="nombre_profesional">
+                                                <input type="text" class="form-control form-control-sm" name="nombre_profesional" id="nombre_profesional" value="{{$registro->nombre}}">
                                             </div>
                                             <div class="form-group col-md-3">
                                                 <label class="floating-label">Primer Apellido</label>
-                                                <input type="text" class="form-control form-control-sm"
-                                                    name="primer_apellido_profesional" id="primer_apellido_profesional">
+                                                <input type="text" class="form-control form-control-sm" name="primer_apellido_profesional" id="primer_apellido_profesional" value="{{$registro->apellido_uno}}">
                                             </div>
                                             <div class="form-group col-md-3">
                                                 <label class="floating-label">Segundo Apellidos</label>
-                                                <input type="text" class="form-control form-control-sm"
-                                                    name="segundo_apellido_profesional"
-                                                    id="segundo_apellido_profesional">
+                                                <input type="text" class="form-control form-control-sm" name="segundo_apellido_profesional" id="segundo_apellido_profesional" value="{{$registro->apellido_dos}}">
                                             </div>
 
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="floating-label">Sexo</label>
+                                                <select id="sexo_profesional" name="sexo_profesional" class="form-control form-control-sm">
+                                                    <option value="M">Masculino</option>
+                                                    <option value="F">Femenino</option>
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-4">
@@ -95,43 +100,36 @@
                                             <div class="form-group col-md-4">
                                                 <label class="floating-label">Especialidad</label>
                                                 <select onchange="cargarListaSubEspecialidad()" id="lista_especialidad" name="lista_especialidad" class="form-control form-control-sm">
-                                                    <option selected>Especialidad</option>
+                                                    <option value="0">Especialidad</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label class="floating-label">Sub Especialidad</label>
                                                 <select id="lista_sub_especialidad" name="lista_sub_especialidad" class="form-control form-control-sm">
-                                                    <option selected>Especialidad</option>
+                                                    <option value="0">Sub Especialidad</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label class="floating-label">Correo Electrónico</label>
-                                                <input type="text" class="form-control form-control-sm"
-                                                    name="email_profesional" id="email_profesional">
+                                                <input type="text" class="form-control form-control-sm" name="email_profesional" id="email_profesional" value="{{$registro->email}}">
                                             </div>
                                             <div class="form-group col-md-3">
                                                 <label class="floating-label">Teléfono Pricipal</label>
-                                                <input type="text" class="form-control form-control-sm"
-                                                    name="telefono_uno_profesional" id="telefono_uno_profesional">
+                                                <input type="text" class="form-control form-control-sm" name="telefono_uno_profesional" id="telefono_uno_profesional" value="{{$registro->telefono_uno}}">
                                             </div>
                                             <div class="form-group col-md-3">
                                                 <label class="floating-label">Teléfono Opcional</label>
-                                                <input type="text" class="form-control form-control-sm"
-                                                    name="telefono_dos_profesional" id="telefono_dos_profesional">
+                                                <input type="text" class="form-control form-control-sm" name="telefono_dos_profesional" id="telefono_dos_profesional" value="{{$registro->telefono_dos}}">
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="floating-label">Dirección de consulta</label>
-                                                <input type="address" class="form-control form-control-sm"
-                                                    name="direccion_consulta_profesional"
-                                                    id="direccion_consulta_profesional">
+                                                <input type="address" class="form-control form-control-sm" name="direccion_consulta_profesional" id="direccion_consulta_profesional" value="">
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label class="floating-label">N&uacute;mero / Oficina</label>
-                                                <input type="address" class="form-control form-control-sm"
-                                                    name="numero_dir_consulta_profesional"
-                                                    id="numero_dir_consulta_profesional">
+                                                <input type="address" class="form-control form-control-sm" name="numero_dir_consulta_profesional" id="numero_dir_consulta_profesional" value="">
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label class="floating-label-activo-sm">Región</label>
@@ -155,8 +153,8 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-10 mx-auto mt-2">
-                                                <button onclick="registrar()" class="btn btn-block btn-info mb-2 mx-auto">
-                                                Guardar y Atender a Paciente
+                                                <button type="submit" onclick="actualizar()" class="btn btn-block btn-info mb-2 mx-auto">
+                                                        Registrar
                                                 </button>
                                                 <!--
                                                 <p class="mb-2 text-muted text-center">¿No has recibido los códigos de
@@ -168,6 +166,7 @@
                                         </div>
                                     </form>
                                 </div>
+                                </form>
                             </div>
 
                         </div>
@@ -249,19 +248,22 @@
 
         }
 
-        function registrar(){
+        function actualizar(){
             
+            event.preventDefault()
 
             var datos = {};
 
-            var id_usuario = $.trim($('#id_usuario_login').val());
             var rut = $.trim($('#rut_profesional').val());
             var nombre  = $.trim($('#nombre_profesional').val());
             var apellido_uno  = $.trim($('#primer_apellido_profesional').val());
             var apellido_dos = $.trim($('#segundo_apellido_profesional').val());
+            var sexo = $.trim($('#sexo_profesional').val());
+
             var id_especialidad = $('#lista_profesion').val();
             var id_tipo_especialidad = $('#lista_especialidad').val();
             var id_sub_tipo_especialidad = $('#lista_sub_especialidad').val();
+
             var email = $.trim($('#email_profesional').val());
             var telefono_uno = $.trim($('#telefono_uno_profesional').val());
             var telefono_dos = $.trim($('#telefono_dos_profesional').val());
@@ -291,53 +293,85 @@
                 return false;
             }
 
+            if(apellido_dos=='')
+            {
+                msg('Validar campo','Debe ingresar el segundo apellido.','error');
+                $('#segundo_apellido_profesional').select().focus();
+                return false;
+            }
+
+            if(id_especialidad==0)
+            {
+                msg('Validar campo','debe seleccionar una profesión.','error');
+                $('#lista_profesion').select().focus();
+                return false;
+            }
+
+            if(id_tipo_especialidad==0)
+            {
+                msg('Validar campo','debe seleccionar una especialidad.','error');
+                $('#lista_especialidad').select().focus();
+                return false;
+            }
+
+            if(id_sub_tipo_especialidad==0)
+            {
+                msg('Validar campo','debe seleccionar una sub tipo especialidad.','error');
+                $('#lista_sub_especialidad').select().focus();
+                return false;
+            }
+
             if(validarEmail(email)==false)
             {
                 msg('Validar campo','Debe ingresar un email valido.','error');
                 $('#email_profesional').select().focus();
                 return false;
             }
+
+            if(telefono_uno=='')
+            {
+                msg('Validar campo','Debe ingresar el telefono uno.','error');
+                $('#telefono_uno_profesional').select().focus();
+                return false;
+            }
+
+            if(telefono_dos=='')
+            {
+                msg('Validar campo','Debe ingresar el telefono dos.','error');
+                $('#telefono_dos_profesional').select().focus();
+                return false;
+            }
+
+            if(direccion=='')
+            {
+                msg('Validar campo','Debe ingresar una dirección.','error');
+                $('#direccion_consulta_profesional').select().focus();
+                return false;
+            }
+
+            if(numero_dir=='')
+            {
+                msg('Validar campo','Debe ingresar el numero dir.','error');
+                $('#numero_dir_consulta_profesional').select().focus();
+                return false;
+            }
+
+            if(id_region==0)
+            {
+                msg('Validar campo','debe seleccionar una región.','error');
+                $('#lista_region').select().focus();
+                return false;
+            }
+
+            if(id_ciudad==0)
+            {
+                msg('Validar campo','debe seleccionar una ciudad.','error');
+                $('#lista_ciudades').select().focus();
+                return false;
+            }
+        
             
-
-            datos.id_usuario = id_usuario;
-            datos.rut = rut;
-            datos.nombre = nombre;
-            datos.apellido_uno = apellido_uno;
-            datos.apellido_dos = apellido_dos;
-            datos.id_especialidad = id_especialidad;
-            datos.id_tipo_especialidad = id_tipo_especialidad;
-            datos.id_sub_tipo_especialidad = id_sub_tipo_especialidad;
-            datos.email = email;
-            datos.telefono_uno = telefono_uno;
-            datos.telefono_dos = telefono_dos;
-            datos.direccion = direccion;
-            datos.numero_dir = numero_dir;
-            datos.id_region = id_region;
-            datos.id_ciudad = id_ciudad;
-            
-
-            let url = "/api/profesional_provisorio/registrar";
-            $.ajax({
-                    url: url,
-                    type: "post",
-                    data: datos,
-                })
-                .done(function(resp) {
-                    if (resp.estado == 1) {
-                      
-                        msg('Aviso','Registro ingresado correctamente.','success');
-                        resetForm();                        
-
-                    } else {
-
-                        msg('Error','Problemas al ingresar el registro','error');
-
-                    }
-
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+            $('#form-agregar-profesional-provisorio').submit();
         }
 
         function resetForm(){

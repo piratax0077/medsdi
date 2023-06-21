@@ -45,6 +45,7 @@ th, td {
     $grupo_sanguineo = (object) $cuerpo['grupo_sanguineo'];
     $antecedentes_paciente = (object) $cuerpo['antecedentes_paciente'];
     $antecedentes = (object) $cuerpo['antecedentes'];
+    $direccion = (object) $cuerpo['direccion'];
     @endphp
     <div class="container">
         <!-- MENU -->
@@ -84,10 +85,10 @@ th, td {
                                     <label for="inputEmail4">Teléfono: <span id="telefono">{{$paciente->telefono_uno}} / {{$paciente->telefono_dos}}</span></label>                                                                        
                                 </div>
                                 <div class="form-group fill">
-                                    <label for="inputEmail4">Dirección: <span id="direccion">{{$paciente->apellido_uno}}</span></label>                                                                        
+                                    <label for="inputEmail4">Dirección: <span id="direccion">{{$direccion->direccion}} / Nº: {{$direccion->numero}}</span></label>                                                                        
                                 </div>
                                 <div class="form-group fill">
-                                    <label for="inputEmail4">Comuna/Región: <span id="comuna">{{$paciente->apellido_uno}}</span></label>                                                                        
+                                    <label for="inputEmail4">Comuna/Región: <span id="comuna">{{$direccion->ciudad}}/{{$direccion->region}}</span></label>                                                                        
                                 </div>
                             </div>
                             <div class="col-sm-6">

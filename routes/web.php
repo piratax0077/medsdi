@@ -17,6 +17,12 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 
+//PROFESIONAL PROVISORIO
+Route::get('/Acceso_Profesional_NI/{token}', [App\Http\Controllers\EscritorioProfesional::class, 'acceso_pni'])->name('anonymous.acceso_pni');
+Route::get('/Check_sdi_external',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdi'])->name('anonymous.check_sdi'); // PARAMS OBLIGATORIOS urla=Inicio&urln=Mi_Ficha_Medica
+Route::get('/Check_sdi_token_external',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdiToken'])->name('anonymous.check_sdi_token');
+Route::post('/estado_acceso_profesional_no_inscrito', [App\Http\Controllers\EscritorioProfesional::class, 'agregar_profesional_provisorio'])->name('anonymous.agregar_profesional_provisorio');
+
 Route::get('/autocomplete', [ficha_atencionController::class, 'autocomplete'])->name('autocomplete.medicamentos');
 
 //PDF
@@ -814,6 +820,7 @@ Route::group([
     Route::get('/Ficha_medica/registrar_informe_medico', [App\Http\Controllers\ficha_atencionController::class, 'registrar_informe_medico'])->name('ficha_medica.registrar_informe_medico');
 	Route::get('/Ficha_medica/registrar_uso_personal', [App\Http\Controllers\ficha_atencionController::class, 'registrar_uso_personal'])->name('ficha_medica.registrar_uso_personal');
     Route::get('/Registro1', [App\Http\Controllers\ficha_atencionController::class, 'index']);
+    Route::get('/Ficha_medica/profesional_provisorio/{id_paciente}/{lugar_atencion_id}/{id_hora_realizar}', [App\Http\Controllers\ficha_atencionController::class, 'index2'])->name('ficha_medica.profesional_provisorio'); // PROFESIONAL PROVISORIO
     Route::get('/Registro_paciente', [App\Http\Controllers\pacienteController::class, 'buscar_paciente'])->name('buscar_paciente');
 
 

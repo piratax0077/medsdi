@@ -770,7 +770,7 @@
                                                         Sanguíneo</label>
                                                     <div class="col-sm-7 my-auto">
                                                         <select name="editar_grupo_sanguineo" id="editar_grupo_sanguineo" class="form-control">
-                                                            <option value="">Seleccione</option>
+                                                            <!--<option value="">Seleccione</option>-->
 
                                                             @if (isset($grupo_sanguineo) && $grupo_sanguineo != null && $grupo_sanguineo != '')
                                                             @foreach ($grupo_sanguineo as $gs)
@@ -2091,6 +2091,81 @@
             });
         }
     };
+
+    function editar_antecedentes_paciente(id) {
+
+let id_paciente = id;
+
+let edit_transfusion = $('input:radio[name=edit_transfusion]:checked').val();
+
+let edit_dona_sangre = $('input:radio[name=edit_dona_sangre]:checked').val();
+let editar_grupo_sanguineo = $('#editar_grupo_sanguineo').val();
+{{--  let comentarios_gruposangre = $('#comentarios_gruposangre').val();  --}}
+let edit_hepatitis = $('input:radio[name=edit_hepatitis]:checked').val();
+let comentarios_hepatitis = $('#comentarios_hepatitis').val();
+let edit_donante_total = $('input:radio[name=edit_donante_total]:checked').val();
+let edit_donante_parcial = $('input:radio[name=edit_donante_parcial]:checked').val();
+let comentarios_organo = $('#comentarios_organo').val();
+let comentarios_impedimento = $('#comentarios_impedimento').val();
+
+
+let url = "{{ route('profesional.editar_antecedentes_paciente') }}";
+
+
+$.ajax({
+
+        url: url,
+        type: "get",
+        data: {
+            id_paciente: id_paciente,
+            edit_transfusion: edit_transfusion,
+            edit_dona_sangre: edit_dona_sangre,
+            editar_grupo_sanguineo: editar_grupo_sanguineo,
+            {{--  comentarios_gruposangre: comentarios_gruposangre,  --}}
+            edit_hepatitis: edit_hepatitis,
+            comentarios_hepatitis: comentarios_hepatitis,
+            edit_donante_total: edit_donante_total,
+            edit_donante_parcial: edit_donante_parcial,
+            comentarios_organo: comentarios_organo,
+            comentarios_impedimento: comentarios_impedimento
+
+        },
+    })
+    .done(function(data) {
+
+
+
+
+        if (data != 'failed') {
+
+            swal({
+                title: "se modifico antecedentes del paciente",
+                icon: "success",
+                buttons: "Aceptar",
+                //SuccessMode: true,
+            })
+            setTimeout(function() {
+                location.reload()
+            }, 100);
+            // alert('se modifico antecedentes del paciente');
+            // location.reload();
+
+        } else {
+            swal({
+                title: "Error al modificar los antecedentes",
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            })
+            // alert('Error al modificar los antecedentes');
+        }
+
+    })
+    .fail(function(jqXHR, ajaxOptions, thrownError) {
+        console.log(jqXHR, ajaxOptions, thrownError)
+    });
+
+}
 </script>
 <script src="{{ asset('js/tabla_contactos_emergencia.js') }}"></script>
 <script src="{{ asset('js/tooltip_contacto_emergencia.js') }}"></script>

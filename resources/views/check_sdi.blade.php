@@ -16,7 +16,49 @@
 <!-- SCRIPT -->
 @section('page-script')
     <!-- Tablas ficha médica única-->
-    <script src="{{ asset('/js/check_sdi/main.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+    checkToken();
+});
+
+function checkToken(){
+    @php
+    if(Auth::check()) 
+    echo 'let url = "Check_sdi_token";';
+    else
+    echo 'let url = "Check_sdi_token_external";';
+    @endphp
+    var _token = $('input[name=_token]').val();    
+    var token = $('#token').val();    
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        data: {
+            _token: _token,
+            token:token
+        },
+        success: (resp)=>{
+            if(resp.estado==1)
+            {
+                if(resp.registro.estado==1)
+                {
+                    top.location.href=$('#url_nueva').val()+'?token='+token;
+                }else{
+                    setTimeout(checkToken,3000);
+                }
+            }else{
+                setTimeout(checkToken,3000);
+            }
+        },
+        error: (resp)=>{
+            console.warn(resp);
+        }
+    });
+    
+
+}
+    </script>
     
 @endsection
 

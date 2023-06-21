@@ -199,11 +199,13 @@ class ProfesionalProvisorioController extends Controller
             $error['rut'] = 'campo requerido';
             $campos_requeridos = 1;
         }
-        // if($request->email == '')
-        // {
-        //     $error['email'] = 'campo requerido';
-        //     $campos_requeridos = 1;
-        // }
+        /*
+         if($request->email == '')
+         {
+             $error['email'] = 'campo requerido';
+             $campos_requeridos = 1;
+         }
+         */
         // if($request->telefono_uno == '')
         // {
         //     $error['telefono_uno'] = 'campo requerido';
@@ -288,6 +290,213 @@ class ProfesionalProvisorioController extends Controller
                 $datos['estado'] = 1;
                 $datos['msg'] = 'Registros Creado';
                 $datos['request_data'] = $request->all();
+            }else{
+                $datos['estado'] = 0;
+                $datos['msg'] = 'Problemas al registrar';
+                $datos['request_data'] = $request->all();
+            }
+        }else{
+            $datos['estado'] = 0;
+            $datos['msg'] = 'Campos requeridos';
+            $datos['error'] = $error;
+            $datos['request_data'] = $request->all();
+        }
+
+        return response($datos)->header('Content-Type', 'application/json');
+    }
+
+    public function registrar_profesional_provisorio(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $campos_requeridos = 0;
+
+        $registro = new ProfesionalProvisorio();
+
+
+        /* VALIDACION CAMPOS */
+        if($request->nombre == '')
+        {
+            $error['nombre'] = 'campo requerido';
+            $campos_requeridos = 1;
+        }
+        if($request->apellido_uno == '')
+        {
+            $error['apellido_uno'] = 'campo requerido';
+            $campos_requeridos = 1;
+        }
+        // if($request->apellido_dos == '')
+        // {
+        //     $error['apellido_dos'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
+        // if($request->sexo == '')
+        // {
+        //     $error['sexo'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
+        if($request->rut == '')
+        {
+            $error['rut'] = 'campo requerido';
+            $campos_requeridos = 1;
+        }
+        
+         if($request->email == '')
+         {
+             $error['email'] = 'campo requerido';
+             $campos_requeridos = 1;
+         }
+        // if($request->telefono_uno == '')
+        // {
+        //     $error['telefono_uno'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
+        // if($request->telefono_dos == '')
+        // {
+        //     $error['telefono_dos'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
+        // if($request->id_direccion == '')
+        // {
+        //     $error['id_direccion'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
+        // if($request->id_usuario == '')
+        // {
+        //     $error['id_usuario'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
+        // if($request->id_especialidad == '')
+        // {
+        //     $error['id_especialidad'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
+        // if($request->id_tipo_especialidad == '')
+        // {
+        //     $error['id_tipo_especialidad'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
+        // if($request->id_sub_tipo_especialidad == '')
+        // {
+        //     $error['id_sub_tipo_especialidad'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
+        // if($request->supersalud == '')
+        // {
+        //     $error['supersalud'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
+        // if($request->contactado == '')
+        // {
+        //     $error['contactado'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
+        // if($request->otro == '')
+        // {
+        //     $error['otro'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
+        // if($request->estado == '')
+        // {
+        //     $error['estado'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
+
+        /* FIN - VALIDACION CAMPOS */
+
+        if($campos_requeridos==0)
+        {
+            if(!empty($request->id_user))
+            $registro->id_user = $request->id_user;
+            if(!empty($request->nombre))
+            $registro->nombre = $request->nombre;
+            if(!empty($request->apellido_uno))
+            $registro->apellido_uno = $request->apellido_uno;
+            if(!empty($request->apellido_uno))
+            $registro->apellido_dos = $request->apellido_dos;
+            if(!empty($request->sexo))
+            $registro->sexo = $request->sexo;
+            if(!empty($request->rut))
+            $registro->rut = $request->rut;
+            if(!empty($request->email))
+            $registro->email = $request->email;
+            if(!empty($request->telefono_uno))
+            $registro->telefono_uno = $request->telefono_uno;
+            if(!empty($request->telefono_dos))
+            $registro->telefono_dos = $request->telefono_dos;
+            if(!empty($request->id_direccion))
+            $registro->id_direccion = $request->id_direccion;
+            if(!empty($request->id_usuario))
+            $registro->id_usuario = $request->id_usuario;
+            if(!empty($request->id_especialidad))
+            $registro->id_especialidad = $request->id_especialidad;
+            if(!empty($request->id_tipo_especialidad))
+            $registro->id_tipo_especialidad = $request->id_tipo_especialidad;
+            if(!empty($request->id_sub_tipo_especialidad))
+            $registro->id_sub_tipo_especialidad = $request->id_sub_tipo_especialidad;
+            if(!empty($request->supersalud))
+            $registro->supersalud = $request->supersalud;
+            if(!empty($request->contactado))
+            $registro->contactado = $request->contactado;
+            if(!empty($request->otro))
+            $registro->otro = $request->otro;
+
+            $token_ = md5(uniqid());
+            $registro->token = $token_;
+            $id_recept_ = $request->id_usuario;
+            $registro->id_usuario_genera = $request->id_usuario;
+            $registro->estado_token = 0; 
+            // $registro->estado = $request->estado;
+
+            if($registro->save())
+            {
+                /* CORREO INVITADO */
+
+                $blade = 'profesional_provisorio_creado';
+                $to = array(
+                        array(
+                            'email' => $request->email,
+                            'name' => $request->nombre.' '.$request->apellido_uno.' '.$request->apellido_dos
+                        ),
+                    );
+                $cc = array();
+                $bcc = array();
+                $asunto = 'MED-SDI - Bienvenido!';
+
+                //$url_ = 'http://medichile_sistema.test'; // LOCAL
+                $url_ = 'https://med-sdi.cl'; // PRODUCCION
+
+                $link_ = '<a href="'.$url_.'/Check_sdi_external?urla='.$url_.'&urln='.$url_.'/Acceso_Profesional_NI&tipo=8&token='.$token_.'&evento=Profesional Provisorio&id_recept='.$id_recept_.'" target="_blank">Completa tus datos aquí</a>';
+
+                $body = array(
+                    'nombre'=>$request->nombre.' '.$request->apellido_uno.' '.$request->apellido_dos,
+                    'link' => $link_,
+                );
+                $archivo = '';/** pendiente */
+                $id_institucion = '';
+
+                $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                $mensaje = '';
+                if($result_mail['estado'])
+                {
+                    $mensaje .= 'Invitacion enviada.<br/>';
+                    $mensaje .= 'Recibirá un correo de Bienvenida con la información de acceso al sistema. <br/>';
+                    $datos['msg_mail'] = $mensaje;
+                }
+                else
+                {
+                    $mensaje .= 'Invitacion enviada.<br/>';
+                    $mensaje .= 'Correo de Bienvenida con la información de acceso al sistema con problema para envío. <br/>';
+                    $datos['msg_mail'] = $mensaje;
+                }
+
+                /* FIN - CORREO INVITADO */
+
+                $datos['estado'] = 1;
+                $datos['msg'] = 'Registros Creado';
+                $datos['request_data'] = $request->all();
+                $datos['link'] = $link_;
             }else{
                 $datos['estado'] = 0;
                 $datos['msg'] = 'Problemas al registrar';

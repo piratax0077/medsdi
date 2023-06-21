@@ -239,21 +239,42 @@ class EscritorioPaciente extends Controller
         $url_nueva = $request->urln;
         $id_usuario_recept = (int)$request->id_recept;
 
+        if(Auth::check()) 
         $id_usuario = Auth::user()->id;
+        else
+        $id_usuario = 0;
 
         $id_user_create = $id_usuario;
         if($id_usuario_recept!=0)
         $id_user_recept = $id_usuario_recept;
         else
         $id_user_recept = $id_usuario;
-        $evento = 'Ficha Única';
-        $nombre = Auth::user()->name;
+
+        if(!empty($request->evento))
+            $evento = $request->evento;
+        else
+            $evento = 'Ficha Única';
+
+        if(Auth::check()) 
+            $nombre = Auth::user()->name;
+        else
+            $nombre = '';
+
         $apellido_p = '';
         $apellido_m = '';
         $lugar = 'Sistema';
+
+        if(Auth::check()) 
         $profesional = Auth::user()->name;
+        else
+        $profesional = '';
+
         $tipo = 'Check SDI';
-        $id_tipo = 2; // CHECK FUM - ficha medica unica
+
+        if(!empty($request->id_tipo))
+            $id_tipo = $request->id_tipo;
+        else
+            $id_tipo = 2; // CHECK FUM - ficha medica unica
 
         if($request->token)
         {
@@ -299,6 +320,33 @@ class EscritorioPaciente extends Controller
         $edad = $ano_diferencia;
         $paciente->fecha_nac = $dia.'-'.$mes.'-'.$ano;
         $paciente->edad = $edad;
+
+        /* DIRECCION */ 
+        $direccion = Direccion::find($paciente->id_direccion);
+        
+        if($direccion)
+        {
+        $direccion_nombre = $direccion->direccion;
+        $numero_dir = $direccion->numero_dir;
+        $id_ciudad = $direccion->id_ciudad;
+
+        $ciudad = Ciudad::find($id_ciudad);
+        $ciudad_nombre = $ciudad->nombre;
+        $region = Region::find($ciudad->id_region);
+        $region_nombre = $region->nombre;
+        }else{
+            $direccion_nombre = "";
+            $numero_dir = "";
+            $ciudad_nombre = "";
+            $region_nombre = "";
+        }
+
+        $direccion = (object)$direccion = array(
+            'direccion' => $direccion_nombre,
+            'numero' => $numero_dir,
+            'ciudad' => $ciudad_nombre,
+            'region' => $region_nombre,
+        );
 
         /* CONTACTO EMERGENCIA */
         $pacientes_contacto_emergencia = PacienteContactoEmergencia::where('id_paciente',$paciente->id)->first();
@@ -392,7 +440,8 @@ class EscritorioPaciente extends Controller
             'token' => $request->token,
             'fichas' => $fichas,
             'especialidad' => $especialidad,
-            'sub_tipo_especialidad' => $sub_tipo_especialidad
+            'sub_tipo_especialidad' => $sub_tipo_especialidad,
+            'direccion' => $direccion
 
         ]);
     }
@@ -420,6 +469,33 @@ class EscritorioPaciente extends Controller
         $edad = $ano_diferencia;
         $paciente->fecha_nac = $dia.'-'.$mes.'-'.$ano;
         $paciente->edad = $edad;
+
+        /* DIRECCION */ 
+        $direccion = Direccion::find($paciente->id_direccion);
+        
+        if($direccion)
+        {
+        $direccion_nombre = $direccion->direccion;
+        $numero_dir = $direccion->numero_dir;
+        $id_ciudad = $direccion->id_ciudad;
+
+        $ciudad = Ciudad::find($id_ciudad);
+        $ciudad_nombre = $ciudad->nombre;
+        $region = Region::find($ciudad->id_region);
+        $region_nombre = $region->nombre;
+        }else{
+            $direccion_nombre = "";
+            $numero_dir = "";
+            $ciudad_nombre = "";
+            $region_nombre = "";
+        }
+
+        $direccion = (object)$direccion = array(
+            'direccion' => $direccion_nombre,
+            'numero' => $numero_dir,
+            'ciudad' => $ciudad_nombre,
+            'region' => $region_nombre,
+        );
 
         /* CONTACTO EMERGENCIA */
         $pacientes_contacto_emergencia = PacienteContactoEmergencia::where('id_paciente',$paciente->id)->first();
@@ -505,7 +581,8 @@ class EscritorioPaciente extends Controller
             'antecedentes_paciente' => $antecedentes_paciente,
             'grupo_sanguineo' => $grupo_sanguineo,
             'antecedentes' => $antecedentes,
-            'token' => $request->token
+            'token' => $request->token,
+            'direccion' => $direccion
         );
         $nombre = 'ficha_medica_'.$id_usuario;
         $template = 'pdf_mi_ficha_medica';
@@ -540,7 +617,20 @@ class EscritorioPaciente extends Controller
     {
         $regiones = Region::all();
         $ciudades = Ciudad::all();
-        return view('app.paciente.acceso_profesional_no_inscrito')->with(['regiones' => $regiones, 'ciudades' => $ciudades]);
+
+
+        $especialidades = Especialidad::where('estado',1)->get(); 
+        $tipo_especialidad = TipoEspecialidad::where('estado',1)->get(); 
+        $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get(); 
+
+        return view('app.paciente.acceso_profesional_no_inscrito')->with([
+            'regiones' => $regiones, 
+            'ciudades' => $ciudades,
+            
+            'profesion' => $especialidades,
+            'especialidad' => $tipo_especialidad,
+            'subespecialidad' => $sub_tipo_especialidad,
+        ]);
     }
 
     public function perfil()

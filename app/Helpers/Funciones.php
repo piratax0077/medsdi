@@ -110,7 +110,7 @@ class Funciones{
     public function disablePermApp($token){
         $datos = array();
         $registro = LogUsersDevices::where('token',trim($token))->first();
-        if($registro->count() > 0)
+        if($registro)
         {
             $registro->estado = 3;
             $registro->save();

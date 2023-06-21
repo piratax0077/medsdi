@@ -7,6 +7,7 @@ use App\Http\Controllers\UsersDevicesController;
 use App\Http\Controllers\LogUsersDevicesController;
 use App\Http\Controllers\AntecedenteController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ProfesionalProvisorioController;
 
 
 /*
@@ -53,6 +54,10 @@ Route::get('/antecedente/ver_registros',[AntecedenteController::class, 'verRegis
 Route::get('/antecedente/ver_registro', [AntecedenteController::class, 'verRegistro']);
 Route::post('/antecedente/estado',       [AntecedenteController::class, 'estado']);
 
+
+//PROFESIONAL PROVISORIO
+Route::post('/profesional_provisorio/registrar',    [ProfesionalProvisorioController::class, 'registrar_profesional_provisorio']);
+Route::post('/profesional_provisorio/modificar',    [ProfesionalProvisorioController::class, 'modificar_profesional_provisorio']);
 
 
 //  Escritorio Paciente

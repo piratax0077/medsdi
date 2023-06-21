@@ -235,6 +235,35 @@ class LogUsersDevicesController extends Controller
                         else
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia Cancelada</span></p><br>";
                     break;
+
+
+                    case 8: //  Profesional Provisorio
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id_rechazo_trtt;
+                        $consentimiento = $data->nombre_consentimiento;
+                        $paciente = $data->nombre_paciente;
+                        $profesional = $data->nombre_profesional;
+                        $tipo = $data->tipo;
+
+                        /** peticion */
+                        $value['msg_estado'] = "Tiene pendiente confirmar una <span class='color-azul txt_bold'>Invitación a un Profesional Provisorio</span>.";
+
+                        /** resultado */
+                        if($value['estado'] == 1)
+                            $value['msg_body'] = "Usted ha Autorizado una <span class='color-azul txt_bold'>Invitación a un Profesional Provisorio</span></span>.";
+                        elseif($value['estado'] == 2)
+                            $value['msg_body'] = "Usted ha Rechazado una <span class='color-azul txt_bold'>Invitación a un Profesional Provisorio</span>.";
+                        else
+                            $value['msg_body'] = "Se ha cancelado una <span class='color-azul txt_bold'>Invitación a un Profesional Provisorio</span>. Por sobrepasar el tiempo de aprobación.";
+
+                        /** lista log */
+                        if($value['estado'] == 1)
+                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Invitación a un Profesional Provisorio Autorizada</span></p><br>";
+                        elseif($value['estado'] == 2)
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Invitación a un Profesional Provisorio Rechazada</span></p><br>";
+                        else
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Invitación a un Profesional Provisorio Cancelada</span></p><br>";
+                    break;
                 }
 
 

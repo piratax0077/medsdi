@@ -50,10 +50,13 @@ use App\Models\ProfesionalDiagnosticoCie;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalHorario;
 use App\Models\RecetaAudifono;
+use App\Models\ProfesionalProvisorio;
 use App\Models\Region;
 use App\Models\RegistroConfirmacionHoraAgenda;
 use App\Models\SolicitudPabellonQuirurgico;
 use App\Models\TipoAntecedenteAcademico;
+use App\Models\TipoEspecialidad;
+use App\Models\SubTipoEspecialidad;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -64,6 +67,7 @@ use Illuminate\Support\Facades\Mail;
 use PDF;
 use App\Helpers\Funciones;
 use App\Models\FichaPediatriaGeneralTipo;
+use Illuminate\Support\Facades\Hash;
 
 class EscritorioProfesional extends Controller
 {
@@ -1223,6 +1227,7 @@ class EscritorioProfesional extends Controller
         $antecedente->comentarios = $request->comentarios_organo;
         $antecedente->hepatitis = $request->edit_hepatitis;
         $antecedente->comentario_hepa = $request->comentarios_hepatitis;
+        if(!empty($request->editar_grupo_sanguineo))
         $antecedente->id_grupo_sanguineo = $request->editar_grupo_sanguineo;
 
         if ($antecedente->save()) {
@@ -3489,6 +3494,333 @@ class EscritorioProfesional extends Controller
         return response()->json($response);
     }
     /** fin buscar profesionales autocomplete */
+
+     /*Acceso Profecional no Inscrito*/
+     public function acceso_pni(Request $request)
+     {
+
+        $token = $request->token;
+
+        $profesional_provisorio = ProfesionalProvisorio::where([['token',$token],['estado_token',0]])->first();
+
+        if($profesional_provisorio)
+        {
+
+           $id_registro = $profesional_provisorio->id; 
+
+        }else{
+            abort(401);
+        }
+
+         $regiones = Region::all();
+         $ciudades = Ciudad::all();
+ 
+ 
+         $especialidades = Especialidad::where('estado',1)->get(); 
+         $tipo_especialidad = TipoEspecialidad::where('estado',1)->get(); 
+         $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get(); 
+ 
+         return view('app.profesional.acceso_profesional_no_inscrito')->with([
+             'id_registro' => $id_registro,
+             'registro' => $profesional_provisorio,
+             'regiones' => $regiones, 
+             'ciudades' => $ciudades,
+             
+             'profesion' => $especialidades,
+             'especialidad' => $tipo_especialidad,
+             'subespecialidad' => $sub_tipo_especialidad,
+             'token' => $token
+         ]);
+     }
+
+     public function agregar_profesional_provisorio(Request $request)
+     {
+        $datos = array();
+        $error = array();
+        $estado = 0;
+
+        $lugar_atencion_id_ = 0;
+        $id_paciente_ = 0;
+        $id_profesional_ = 0;        
+        $id_hora_realizar_ = 0;
+        $clave_ = rand(1111,9999);
+
+        $id_registro = $request->id_registro;
+        $nombre = $request->nombre_profesional;
+        $primer_apellido = $request->primer_apellido_profesional;
+        $segundo_apellido = $request->segundo_apellido_profesional;
+        $lista_profesion = $request->lista_profesion;
+        $sexo = $request->sexo_profesional;
+        $rut = $request->rut_profesional;
+        $email = $request->email_profesional;
+        $lista_especialidad = $request->lista_especialidad;
+        $lista_sub_especialidad = $request->lista_sub_especialidad;
+        $telefono_uno = $request->telefono_uno_profesional;
+        $telefono_dos = $request->telefono_dos_profesional;
+
+        $direccion = $request->direccion_consulta_profesional;
+        $numero_dir = $request->numero_dir_consulta_profesional;
+        $lista_ciudades = $request->lista_ciudades;
+        $token_profesional_provisorio = $request->token_profesional_provisorio;
+
+        
+        //VALIDAMOS TOKEN
+        // PROFESIONAL PROVISORIO
+        $profesional_provisorio = ProfesionalProvisorio::find($request->id_registro);
+
+        if($profesional_provisorio->estado_token==1||empty($request->id_registro))
+        {         
+            return view('app.profesional.estado_acceso_profesional_no_inscrito')->with([
+                'estado' => 0,
+                'error' => 'Token invalido'                
+            ]);    
+        }
+    
+        if($profesional_provisorio)
+        {        
+
+            //ID PACIENTE INVITACION
+            $id_paciente_ = $profesional_provisorio->id_usuario_genera;
+
+            $profesional_provisorio->nombre = $nombre;
+            $profesional_provisorio->apellido_uno = $primer_apellido;
+            $profesional_provisorio->apellido_dos = $segundo_apellido;
+            $profesional_provisorio->sexo = $sexo;
+            $profesional_provisorio->rut = $rut;
+            $profesional_provisorio->email = $email;
+            $profesional_provisorio->telefono_uno = $telefono_uno;
+            $profesional_provisorio->telefono_dos = $telefono_dos;
+            //$profesional_provisorio->id_direccion = $id_direccion;
+            //$profesional_provisorio->id_usuario = $id_usuario;
+            $profesional_provisorio->id_especialidad = $lista_profesion;
+            $profesional_provisorio->id_tipo_especialidad = $lista_especialidad;
+            //desactivamos token
+            $profesional_provisorio->estado_token = 1;
+            $profesional_provisorio->save();
+        }
+
+
+        // PROFESIONAL
+        $validar_profesional = Profesional::where('email',$email)->first();
+        if($validar_profesional)
+        {
+            $id_profesional_ = $validar_profesional->id;
+            $validar_profesional->nombre = $nombre;
+            $validar_profesional->apellido_uno = $primer_apellido;
+            $validar_profesional->apellido_dos = $segundo_apellido;
+            $validar_profesional->sexo = $sexo;
+            $validar_profesional->rut = $rut;
+            $validar_profesional->email = $email;
+
+            $validar_profesional->id_especialidad = $lista_profesion; //id_especialidad
+            $validar_profesional->id_tipo_especialidad = $lista_especialidad; //id_tipo_especialidad
+            $validar_profesional->id_sub_tipo_especialidad = $lista_sub_especialidad; //id_sub_tipo_especialidad
+            
+            $validar_profesional->telefono_uno = $telefono_uno;
+            $validar_profesional->telefono_dos = $telefono_dos;
+            $validar_profesional->estado = 1;
+            $validar_profesional->certificado = 0;
+
+            $validar_profesional->provisorio = 1;
+            $validar_profesional->save();
+
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Profesional ya existe';
+
+            return view('app.profesional.estado_acceso_profesional_no_inscrito')->with([
+                'estado' => 0,
+                'error' => $datos['msj']                
+            ]);   
+
+        }else{
+            $profesionales = new Profesional();
+            
+            $profesionales->nombre = $nombre;
+            $profesionales->apellido_uno = $primer_apellido;
+            $profesionales->apellido_dos = $segundo_apellido;
+            $profesionales->sexo = $sexo;
+            $profesionales->rut = $rut;
+            $profesionales->email = $email;
+
+            $profesionales->id_especialidad = $lista_profesion; //id_especialidad
+            $profesionales->id_tipo_especialidad = $lista_especialidad; //id_tipo_especialidad
+            $profesionales->id_sub_tipo_especialidad = $lista_sub_especialidad; //id_sub_tipo_especialidad
+            
+            $profesionales->telefono_uno = $telefono_uno;
+            $profesionales->telefono_dos = $telefono_dos;
+            $profesionales->estado = 1;
+            $profesionales->certificado = 0;
+
+            $profesionales->id_direccion = NULL;
+            $profesionales->id_usuario = NULL;
+            $profesionales->provisorio = 1;
+
+            if($profesionales->save())
+            {
+
+                $id_profesional_ = $profesionales->id;
+                //DIRECCIONES
+                $direcciones = new Direccion();
+                $direcciones->direccion = $direccion;
+                $direcciones->numero_dir = $numero_dir;
+                $direcciones->id_ciudad = $lista_ciudades;
+
+                //USER           
+                $validar_user = User::where('email',$email)->first();
+                if($validar_user == NULL) 
+                {
+                    $user = new User();                    
+                    $pass = Hash::make($clave_);            
+                    $user->name = $nombre.' '.$primer_apellido.' '.$segundo_apellido;
+                    $user->email = $email;
+                    $user->password = $pass;
+
+                    if($user->save())
+                    {
+                        $user->assignRole('Profesional');
+                        $datos['user_msg'] = 'Usuario Creado';
+
+                        //AUTH USUARIO
+                        if (Auth::attempt(['email' => $email, 'password' =>  $clave_])) {
+                            $datos['login_msg'] = 'Usuario Logeado';
+                        }else{
+                            $datos['login_msg'] = 'Usuario no se pudo Logear';
+                        }
+
+                    }else{
+                        $datos['user_msg'] = 'Usuario No Creado';
+                    }
+                }else{
+                    //AUTH USUARIO
+                    if (Auth::attempt(['email' => $validar_user->email, 'password' =>  $validar_user->password])) {
+                        $datos['login_msg'] = 'Usuario Logeado';
+                    }else{
+                        $datos['login_msg'] = 'Usuario no se pudo Logear';
+                    }
+                }
+
+                if($direcciones->save())
+                {
+                    $error['direccion_msg'] = 'direccion creado';
+                    $profesionales->id_direccion = $direcciones->id;
+                    if($validar_user == NULL) 
+                    $profesionales->id_usuario = $user->id;
+                    $profesionales->save();
+
+
+                    //LUGARES ATENCION
+                    $lugar_atencion = new LugarAtencion();
+                    $lugar_atencion->nombre = $nombre.' '.$primer_apellido.' '.$segundo_apellido;
+                    $lugar_atencion->rut = $rut;
+                    $lugar_atencion->email = $email;
+                    $lugar_atencion->telefono = $telefono_uno;
+                    $lugar_atencion->id_direccion = $direcciones->id;
+
+                    if($lugar_atencion->save()){
+                        $datos['lugar_atencion_msg'] = 'Lugar Atención Creado';
+                        $lugar_atencion_id_ = $lugar_atencion->id;
+                    }else{
+                        $datos['lugar_atencion_msg'] = 'Lugar Atención No Creado';
+                    }
+
+                    //PROFESIONALES LUGARES ATENCION
+                    $profesionales_lugares_atencion = new ProfesionalesLugaresAtencion();
+                    $profesionales_lugares_atencion->id_profesional = $profesionales->id;
+                    $profesionales_lugares_atencion->id_lugar_atencion = $lugar_atencion->id;
+                    $profesionales_lugares_atencion->estado = 1;
+
+                    if($profesionales_lugares_atencion->save())
+                    {                        
+                        $datos['profesionales_lugar_atencion_msg'] = 'Profesional Lugar Atención Creado';
+                    }else{
+                        $datos['profesionales_lugar_atencion_msg'] = 'Profesional Lugar Atención No Creado';
+                    }
+
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'registro exitoso';
+
+                  
+
+                }else{
+                    $error['direccion_msg'] = 'direccion no creado';
+                }
+
+                $error['profesional_msg'] = 'Profesional creado';
+                $estado = 1;
+
+            }else{
+                $error['profesional_msg'] = 'Profesional no creado';
+                $estado = 0;
+            }
+        }
+
+        // HORA MEDICA
+        $paciente = Paciente::find($id_paciente_);        
+        $hora_medica = new HoraMedica();        
+
+        $hora_medica->id_paciente = $id_paciente_;
+        $hora_medica->id_profesional = $id_profesional_;
+        $hora_medica->id_asistente = 2;
+        $hora_medica->id_estado = 1;
+        $hora_medica->id_lugar_atencion = $lugar_atencion_id_;
+        $hora_medica->fecha_consulta = \Carbon\Carbon::parse(date('Y-m-d'))->format('Y-m-d');
+
+        $hora_medica->hora_inicio = \Carbon\Carbon::parse(date('H:i:s'))->format('H:i:s');
+        $hora_medica->hora_termino = \Carbon\Carbon::parse(date('H:i:s'))->addMinutes(15)->format('H:i:s');
+        $hora_medica->descripcion = $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
+        if($hora_medica->save()){
+            $id_hora_realizar_ = $hora_medica->id;
+            $datos['hora_medica_msg'] = 'Hora Medica Creada';
+        }else{
+            $datos['hora_medica_msg'] = 'Hora Medica no Creada';
+        }
+
+        
+
+        /** envio de correo de confirmacion  */
+        $blade = 'profesional_usuario_creado';
+        $to = array(
+                array('email' => $email,'name' => $nombre.' '.$primer_apellido.' '.$segundo_apellido),
+            );
+        $cc = array();
+        $bcc = array();
+        $asunto = 'MED-SDI - Bienvenido!';
+        $body = array(     
+            'nombre' => $nombre.' '.$primer_apellido.' '.$segundo_apellido,   
+            'user'=> $email,
+            'pass' => $clave_
+        );
+        $archivo = '';/** pendiente */
+        $id_institucion = '';
+
+        $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+        if($result_mail['estado'])
+        {
+            $datos['mail']['estado'] = 1;
+            $datos['mail']['msj'] = 'Notificacion de bienvenida enviado';
+        }else{
+            $datos['mail']['estado'] = 0;
+            $datos['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+        }
+
+
+        return view('app.profesional.estado_acceso_profesional_no_inscrito')->with([
+            'estado' => $estado,
+            'error' => $error,
+            'datos'=> $datos,
+            'token_'=> $token_profesional_provisorio,
+
+            'id_paciente' => $id_paciente_,
+            'lugar_atencion_id' => $lugar_atencion_id_,
+            'id_hora_realizar' =>$id_hora_realizar_
+
+        ]);
+
+
+     }
+
+ 
 
 
 }

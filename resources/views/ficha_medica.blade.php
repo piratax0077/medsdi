@@ -129,10 +129,10 @@
                                     <label for="inputEmail4">Teléfono: <span id="telefono">{{$paciente->telefono_uno}} / {{$paciente->telefono_dos}}</span></label>                                                                        
                                 </div>
                                 <div class="form-group fill">
-                                    <label for="inputEmail4">Dirección: <span id="direccion">{{$paciente->apellido_uno}}</span></label>                                                                        
+                                    <label for="inputEmail4">Dirección: <span id="direccion">{{$direccion->direccion}} / Nº: {{$direccion->numero}}</span></label>                                                                        
                                 </div>
                                 <div class="form-group fill">
-                                    <label for="inputEmail4">Comuna/Región: <span id="comuna">{{$paciente->apellido_uno}}</span></label>                                                                        
+                                    <label for="inputEmail4">Comuna/Región: <span id="comuna">{{$direccion->ciudad}}/{{$direccion->region}}</span></label>                                                                        
                                 </div>
                             </div>
                             <div class="col-sm-6">

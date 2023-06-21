@@ -126,3 +126,7 @@ paciente@gmail.com 123
 19. PROTOCOLO OPERATORIO
 20. CARNE DE ALTA
 21. CARNE DE VACUNA
+
+
+/* PROFESIONAL PROVISORIO */
+http://medichile_sistema.test/Acceso_Profesional_NI/847e7255aac405a25068034bb47368cf
