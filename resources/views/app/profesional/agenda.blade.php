@@ -35,6 +35,20 @@
         .fc .fc-timegrid-slot {
             height: 3.5em;
         }
+
+                .fc .fc-toolbar-title {
+            font-size: 1.3em;
+            margin: 0;
+        }
+
+        .btn-group > .btn,
+  .btn-group-vertical > .btn {
+    position: relative;
+    flex: 1 1 auto;
+  padding:5px 5px;
+  font-size:0.8rem;
+    
+}
     </style>
     <link href='{{ asset('css/estilos_boton_agen_examenes.css') }}' rel='stylesheet' />
 @endsection
@@ -48,7 +62,7 @@
                 <div class="page-block">
                     <div class="row align-items-center text-center">
                         <div class="page-header-title">
-                            <h4 class="text-white"><a href="#" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a> <strong>AGENDA</strong><br> {{ strtoupper($lugar_atencion_nombre) }}</h4>
+                            <h5 class="text-white f-22"><a href="#" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a> <strong>AGENDA</strong><br> {{ strtoupper($lugar_atencion_nombre) }}</h5>
                         </div>
                     </div>
                 </div>
@@ -76,9 +90,8 @@
                         aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
-
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="form-group">
                                 <h6 class="text-c-blue ml-2 mb-3">Ingrese el rut del paciente</h6>
                             </div>
@@ -99,11 +112,9 @@
                             </form>  --}}
                         </div>
                         <div class="col-sm-4 col-md-4 mb-3">
-
                             <button class="btn btn-info" onclick="buscar_paciente();" type="button"id="button-addon2">
                                 Buscar
                             </button>
-
                         </div>
                     </div>
 

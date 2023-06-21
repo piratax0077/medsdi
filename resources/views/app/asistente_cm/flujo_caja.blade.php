@@ -56,8 +56,14 @@
                                                 <input type="hidden" name="lista_bonos" id="lista_bonos" value="{{ $lista_bonos }}">
                                                 <div class="col-sm-6 col-md-2">
                                                     <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Número de Bonos</label>
+                                                        <label class="floating-label-activo-sm">N° de Bonos Fisicos</label>
                                                         <input type="number" class="form-control form-control-sm" id="numero_bonos" name="numero_bonos" value="{{ $total_bonos }}" readonly="readonly">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Copago</label>
+                                                        <input type="number" class="form-control form-control-sm" id="copago" name="copago" value="{{ $total_copago }}" readonly="readonly">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-2">
@@ -66,13 +72,13 @@
                                                         <input type="number" class="form-control form-control-sm" id="efectivo" name="efectivo" value="{{ $total_efectivo }}" readonly="readonly">
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-6 col-md-2">
+                                                <div class="col-sm-6 col-md-1">
                                                     <div class="form-group">
                                                         <label class="floating-label-activo-sm">Otros</label>
                                                         <input type="number" class="form-control form-control-sm" id="otros" name="otros" value="{{ $total_otros }}" readonly="readonly">
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-6 col-md-2">
+                                                <div class="col-sm-6 col-md-1">
                                                     <div class="form-group">
                                                         <label class="floating-label-activo-sm">Total Documentos</label>
                                                         <input type="number" class="form-control form-control-sm" id="total" name="total" value="{{ $total }}" readonly="readonly">
@@ -129,6 +135,8 @@
                                                                                 Bono Web Pre-Pago
                                                                             @elseif($value_b->id_clase_bono == 6)
                                                                                 Particular
+                                                                            @elseif($value_b->id_clase_bono == 7)
+                                                                                Copago
                                                                             @else
                                                                                 Otro
                                                                             @endif

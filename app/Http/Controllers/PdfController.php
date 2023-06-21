@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Storage;
 
 class PdfController extends Controller
 {
@@ -58,12 +58,27 @@ class PdfController extends Controller
                 return $pdf->stream($nombre_pdf.'.pdf', array("Attachment" => 0));
             break;
             case 'G': //GUARDAR
-                $pdf->save('../pdf/' . $nombre_pdf . '.pdf');
+                $datos = array();
+                /** DESAROLLO */
+                if($pdf->save('storage/pdf/' . $nombre_pdf . '.pdf'))
+                /** PRODUCCION */
+                // if($pdf->save('public/storage/pdf/' . $nombre_pdf . '.pdf'))
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'pdf generado';
+                    $datos['pdf'] = $nombre_pdf . '.pdf';
+                    $datos['pdf_url'] = asset('storage/pdf/').'/'.$nombre_pdf . '.pdf';
+                }
+                else
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'error pdf';
+                }
+                return (object)$datos;
             break;
             case 'D': //DESCARGAR
                 return $pdf->download($nombre_pdf.'.pdf');
             break;
-
         }
     }
 }

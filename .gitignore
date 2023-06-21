@@ -3,6 +3,8 @@ storage/framework/cache/
 
 storage/framework/views/
 
+vendor/
+
 .idea/
 
 .vs/

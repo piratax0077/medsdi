@@ -15,19 +15,19 @@ class UpdateBienvenidas extends Migration
     {
         Schema::table('admin_inst_serv', function (Blueprint $table)
         {
-            $table->string('bienvenido')->default(0)->nullable()->after('email');
+            $table->string('bienvenido')->default(1)->nullable()->after('email');
         });
         Schema::table('asistentes', function (Blueprint $table)
         {
-            $table->string('bienvenido')->default(0)->nullable()->after('email');
+            $table->string('bienvenido')->default(1)->nullable()->after('email');
         });
         Schema::table('instituciones', function (Blueprint $table)
         {
-            $table->string('bienvenido')->default(0)->nullable()->after('email');
+            $table->string('bienvenido')->default(1)->nullable()->after('email');
         });
         Schema::table('servicios', function (Blueprint $table)
         {
-            $table->string('bienvenido')->default(0)->nullable()->after('email');
+            $table->string('bienvenido')->default(1)->nullable()->after('email');
         });
     }
 

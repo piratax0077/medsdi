@@ -22,7 +22,7 @@ class EscritorioInstitucion extends Controller
             if($servicio->bienvenido == 0)
                 return view('bienvenida.inicio_instituciones')->with(['regiones' => $region ]);
             else
-                return view('app.adm_cm.home');
+                return view('app.adm_cm.home')->with(['institucion' => $servicio,]);
 
             // return view('app.profesional.escritorio_profesional')->with(['region' => $region, 'profesional' => $profesional, 'hora_dia' => $horas_dia]);
             return view('app.adm_cm.home');
@@ -33,6 +33,7 @@ class EscritorioInstitucion extends Controller
                 'region' => $region,
                 'tipo_servicio' => $tipo_servicio,
                 'tipo_institucion' => $tipo_institucion,
+
             ]);
         }
     }

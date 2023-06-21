@@ -23,7 +23,7 @@
 
     <!--Estilos base-->
     <link rel="stylesheet" href='{{ asset('css/style.css') }}'/>
-
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
     <!--Estilos escritorios-->
     <link rel="stylesheet" href='{{ asset('css/escritorios.css') }}'/>
 
@@ -153,6 +153,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
+    <!-- fancy box -->
+    <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
+    <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
+
     <!--select2 -->
     <script src="{{ asset('js/plugins/select2.full.min.js')}}"></script>
 
@@ -178,8 +182,6 @@
                 responsive: true,
             });
 
-            console.log('{{ session('titulo_mensaje') }}');
-            console.log('{{ session('mensaje') }}');
             {{--  mensaje de al registrar ficha clinica  --}}
             @if(session('mensaje'))
                 swal({
@@ -458,7 +460,7 @@
         });
     </script>
     --}}
-    @yield('page-scripts')
+    @yield('page-script')
     @yield('js-profesionales')
 </body>
 

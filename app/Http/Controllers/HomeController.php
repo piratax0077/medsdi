@@ -7,10 +7,13 @@ use App\Models\Asistente;
 use App\Models\Ciudad;
 use App\Models\Direccion;
 use App\Models\Instituciones;
+use App\Models\Invitacion;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\Profesional;
+use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalEspecialidad;
+use App\Models\ProfesionalInstitucionConvenio;
 use App\Models\Servicios;
 use App\Models\SubTipoEspecialidad;
 use App\Models\TipoEspecialidad;
@@ -18,6 +21,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -40,6 +44,9 @@ class HomeController extends Controller
                 break;
             case 'Asistente': //asistente consulta
                 return redirect()->route('asistente.home');
+                break;
+            case 'Adm_Comercial': // asistente Comercial (institucion)
+                return redirect()->route('administrador_comercial.home');
                 break;
             case 'AsistenteAdm': // asistente administrativa (institucion)
                 return redirect()->route('asistente_adm.home');
@@ -398,21 +405,27 @@ class HomeController extends Controller
             $direccion->direccion = $request->direccion;
             $direccion->numero_dir = $request->numero_dir;
             $direccion->id_ciudad = $request->id_ciudad;
-            if (!$direccion->save()) {
+            if (!$direccion->save())
+            {
                 // return 'error';
                 $profesional->id_direccion = 0;
                 $datos['direccion']['estado'] = 0;
                 $datos['direccion']['msj'] = 'falla al registrar';
-            } else {
+            }
+            else
+            {
                 $profesional->id_direccion = $direccion->id;
                 $datos['direccion']['estado'] = 1;
                 $datos['direccion']['msj'] = 'registro exitoso';
             }
 
-            if (!$profesional->save()) {
+            if (!$profesional->save())
+            {
                 $datos['estado'] = 0;
                 $datos['msj'] = 'falla al registrar profesional';
-            } else {
+            }
+            else
+            {
 
                 $user = User::find( @Auth::user()->id );
                 $user->name = $request->nombre_registro.' '.$request->primer_apellido_registro.' '.$request->segundo_apellido_registro;
@@ -422,6 +435,128 @@ class HomeController extends Controller
                     $datos['user']['msj'] = 'registro exitoso';
                 }
 
+
+                /** buscar invitacione */
+                $filtro_inv = array();
+                $filtro_inv[] = array('id_user_invitado', @Auth::user()->id);
+                $filtro_inv[] = array('estado', 0);
+                $registro_invitaciones = Invitacion::where($filtro_inv)->get();
+
+                if($registro_invitaciones)
+                {
+                    $datos['invitaciones']['estado'] = 0;
+                    $datos['invitaciones']['msj'] = 'Se encontraron Invitaciones al profesional';
+                    $datos['invitaciones']['cant'] = $registro_invitaciones->count();
+                    $datos['invitaciones']['registro_invitaciones'] = $registro_invitaciones;
+
+                    foreach ($registro_invitaciones as $key => $value)
+                    {
+                        $buscar_prof_lugar = ProfesionalesLugaresAtencion::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$value->id_lugar_atencion)->first();
+                        if($buscar_prof_lugar)
+                        {
+                            $invitacion = Invitacion::find($value->id);
+                            $invitacion->procesado = 1;
+                            $invitacion->fecha_procesado = date('Y-m-d H:i:s');
+                            $invitacion->fecha_aprobacion = date('Y-m-d H:i:s');
+                            $invitacion->estado = 1;
+                            if($invitacion->save())
+                            {
+                                $datos['invitacion']['inv'][$key]['estado'] = 1;
+                                $datos['invitacion']['inv'][$key]['msj'] = 'Ya pertenese al Lugar de Atencion';
+                                $datos['invitacion'] = $invitacion;
+
+                                $filtro_con = array();
+                                $filtro_con[] = array('id_invitacion', $invitacion->id);
+                                $convenio = ProfesionalInstitucionConvenio::where($filtro_con)->first();
+                                if($convenio)
+                                {
+                                    $datos['convenio'] = $convenio;
+                                    $convenio->id_profesional = $profesional->id;
+                                    if($convenio->save())
+                                    {
+                                        $datos['convenio_update']['estado'] = 1;
+                                        $datos['convenio_update']['msj'] = 'exito';
+                                    }
+                                    else
+                                    {
+                                        $datos['convenio_update']['estado'] = 0;
+                                        $datos['convenio_update']['msj'] = 'falla';
+                                    }
+
+                                }
+                                else
+                                {
+                                    $datos['convenio'] = 'sin convenio';
+                                }
+                            }
+                            else
+                            {
+                                $datos['invitacion']['inv'][$key]['estado'] = 0;
+                                $datos['invitacion']['inv'][$key]['msj'] = 'Ya pertenese al Lugar de Atencion, invitacion no actualizadad';
+                            }
+
+                        }
+                        else
+                        {
+                            /** profesional existente */
+                            $reg_prof_lugar = new ProfesionalesLugaresAtencion();
+                            $reg_prof_lugar->id_profesional = $profesional->id;
+                            $reg_prof_lugar->id_lugar_atencion = $value->id_lugar_atencion;
+                            $reg_prof_lugar->estado = 1;
+                            if($reg_prof_lugar->save())
+                            {
+                                $invitacion = Invitacion::find($value->id);
+                                $invitacion->procesado = 1;
+                                $invitacion->fecha_procesado = date('Y-m-d H:i:s');
+                                $invitacion->fecha_aprobacion = date('Y-m-d H:i:s');
+                                $invitacion->estado = 1;
+                                if($invitacion->save())
+                                {
+                                    $datos['invitacion']['inv'][$key]['estado'] = 1;
+                                    $datos['invitacion']['inv'][$key]['msj'] = 'Profesional relacionado al Lugar de Atencion';
+
+                                    $filtro_con = array();
+                                    $filtro_con[] = array('id_invitacion', $invitacion->id);
+                                    $convenio = ProfesionalInstitucionConvenio::where($filtro_con)->first();
+                                    if($convenio)
+                                    {
+                                        $datos['convenio'] = $convenio;
+                                        $convenio->id_profesional = $profesional->id;
+                                        if($convenio->save())
+                                        {
+                                            $datos['convenio_update']['estado'] = 1;
+                                            $datos['convenio_update']['msj'] = 'exito';
+                                        }
+                                        else
+                                        {
+                                            $datos['convenio_update']['estado'] = 0;
+                                            $datos['convenio_update']['msj'] = 'falla';
+                                        }
+                                    }
+                                    else
+                                    {
+                                        $datos['convenio'] = 'sin convenio';
+                                    }
+                                }
+                                else
+                                {
+                                    $datos['invitacion']['inv'][$key]['estado'] = 0;
+                                    $datos['invitacion']['inv'][$key]['msj'] = 'Profesional relacionado al Lugar de Atencion, invitacion no actualizadad';
+                                }
+                            }
+                            else
+                            {
+                                $datos['invitacion']['inv'][$key]['estado'] = 0;
+                                $datos['invitacion']['inv'][$key]['msj'] = 'Problema relacionando Lugar de Atencion';
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    $datos['invitaciones']['estado'] = 0;
+                    $datos['invitaciones']['msj'] = 'no tiene invitaciones pendiente que procesar';
+                }
                 /** envio de correo de confirmacion  */
                 $blade = 'bienvenida_profesional';
                 $to = array(
@@ -459,6 +594,7 @@ class HomeController extends Controller
             $datos['msj'] = 'correo de profesional ya registrado';
         }
 
+        Log::warning(json_encode($datos));
         return $datos;
     }
 

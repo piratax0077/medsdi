@@ -72,6 +72,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="tab-content" id="myTabContent">
+
                     <!--Tab Información Personal-->
                     <div class="tab-pane fade show active" id="info_personal" role="tabpanel" aria-labelledby="personal-tab">
                         <div class="row">
@@ -410,10 +411,12 @@
                         </div>
                     </div>
                     <!--Cierre: Tab Información Personal-->
+
                     <!--Tab Cambiar Contraseña-->
                     <div class="tab-pane fade" id="pass" role="tabpanel" aria-labelledby="pass-tab">
                         @include('app.general.perfil.cambio_contrasena')
                     </div>
+
                     <!--Tab perfil profesional-->
                     <div class="tab-pane fade" id="info_academico" role="tabpanel" aria-labelledby="academico-tab">
                         {{-- formulario para agregar  --}}
@@ -583,231 +586,7 @@
                     </div>
 
 
-                    <!--Tab perfil profesional liquidacion -->
-                    <div class="tab-pane fade" id="info_liquidacion" role="tabpanel" aria-labelledby="liquidacion-tab">
-                        {{-- formulario para agregar  --}}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <!--Card profesion-->
-                                <div class="card">
-                                    <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                                        <h5 class="mb-0 text-white">Agregar Datos para Liquidaciones</h5>
-                                        <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".agregar_datos_liquidacion" aria-expanded="false" aria-controls="agregar_datos_liquidacion">
-                                            <i class="feather icon-plus"></i>
-                                        </button>
-                                        <input type="hidden" class="form-control" id="liquidacion_id_profesional" value="{{ $profesional->id }}">
-                                        <input type="hidden" class="form-control" id="liquidacion_email" value="{{ $profesional->email }}">
-                                    </div>
-                                    <!--(agregar)profesion-->
-                                    @if($liquidacion == NULL)
-                                    <div class="card-body border-top collapse show agregar_datos_liquidacion" id="agregar">
-                                    @else
-                                    <div class="card-body border-top collapse agregar_datos_liquidacion" id="agregar">
-                                    @endif
-                                        <div class="form-group row">
-                                            <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
-                                            <div class="col-sm-7">
-                                                <input type="text" class="form-control" placeholder="rut" name="liquidacion_rut" id="liquidacion_rut" value="{{ $profesional->rut }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-4 col-form-label font-weight-bolder">Titular</label>
-                                            <div class="col-sm-7">
-                                                <input type="text" class="form-control" placeholder="Nombre" name="liquidacion_nombre" id="liquidacion_nombre" value="{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-4 col-form-label font-weight-bolder">Banco</label>
-                                            <div class="col-sm-7">
-                                                <select name="liquidacion_banco" id="liquidacion_banco" class="form-control control-sm">
-                                                    <option value="">Seleccione</option>
-                                                    @foreach ( $bancos as $banco)
-                                                        <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-4 col-form-label font-weight-bolder">Cuenta</label>
-                                            <div class="col-sm-7">
-                                                <input type="text" class="form-control" placeholder="Cuenta Numero" id="liquidacion_cuenta" value="">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-4 col-form-label font-weight-bolder">Tipo Cuenta</label>
-                                            <div class="col-sm-7">
-                                                <select name="liquidacion_tipo_cuenta" id="liquidacion_tipo_cuenta" class="form-control control-sm">
-                                                    <option value="">Seleccione</option>
-                                                    <option value="Corriente">Corriente</option>
-                                                    <option value="Ahorro">Ahorro</option>
-                                                    <option value="Vista">Vista</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-4 col-form-label font-weight-bolder">Principal</label>
-                                            <div class="col-sm-7 switch switch-success d-inline ">
-                                                <input type="checkbox" id="liquidacion_principal" name="liquidacion_principal" value="">
-                                                <label for="liquidacion_principal" class="cr"></label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-12 col-form-label"></label>
-                                            <div class="col-sm-12 d-flex justify-content-end">
-                                                <button class="btn btn-info" onclick="agregar_registro_liquidacion();">Guardar Cambios</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--Cierre: (agregar)profesion-->
-                                </div>
-                            </div>
-                            <div class="row">
-                                @if($liquidacion != NULL)
-                                    @foreach($liquidacion as $key_liqu => $value_liqu)
-                                        {{-- CAJA DE REGISTRO LIQUIDACION  --}}
-                                        <div class="col-md-6">
-                                            <!--Card LIQUIDACION-->
-                                            <div class="card">
-                                                <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                                                    {{-- <h5 class="mb-0 text-white">{{ $value_liqu->banco->nombre }}</h5> --}}
-                                                    <h5 class="mb-0 text-white">{{ $value_liqu->banco['nombre'] }}</h5>
-                                                    <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".u_personal_liquidacion_{{ $value_liqu->id }}" aria-expanded="false" aria-controls="u_personal_liquidacion_{{ $value_liqu->id }}_1 u_personal_liquidacion_{{ $value_liqu->id }}_2">
-                                                        <i class="feather icon-edit"></i>
-                                                    </button>
-                                                </div>
-                                                <!--LIQUIDACION-->
-                                                <div class="card-body border-top u_personal_liquidacion_{{ $value_liqu->id }} collapse show" id="u_personal_liquidacion_{{ $value_liqu->id }}_1">
-                                                    <form>
-                                                        <div class="form-group row">
-                                                            <label class="col-sm-5 col-form-label">Rut</label>
-                                                            <div class="col-sm-6 pt-2 ml-2 font-weight-bolder"> {{ $value_liqu->serie }}</div>
-                                                            <label class="col-sm-5 col-form-label">Titular</label>
-                                                            <div class="col-sm-6 pt-2 ml-2 font-weight-bolder"> {{ $value_liqu->autor }}</div>
-                                                            <label class="col-sm-5 col-form-label">Banco</label>
-                                                            <div class="col-sm-6 pt-2 ml-2 font-weight-bolder"> {{ $value_liqu->banco['nombre'] }}</div>
-                                                            <label class="col-sm-5 col-form-label">Cuenta</label>
-                                                            <div class="col-sm-6 pt-2 ml-2 font-weight-bolder"> {{  substr($value_liqu->numero_control, 0, 3) . '*******'; }}</div>
-                                                            <label class="col-sm-5 col-form-label">Tipo Cuenta</label>
-                                                            <div class="col-sm-6 pt-2 ml-2 font-weight-bolder"> {{  $value_liqu->otro; }}</div>
-                                                            <label class="col-sm-5 col-form-label">Email</label>
-                                                            <div class="col-sm-6 pt-2 ml-2 font-weight-bolder"> {{ $value_liqu->email }}</div>
-                                                            <label class="col-sm-5 col-form-label">Principal</label>
-                                                            <div class="col-sm-6 pt-2 ml-2 font-weight-bolder">
-                                                                @if ($value_liqu->principal == 1)
-                                                                    Principal
-                                                                @else
-                                                                    Opcional
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-
-                                                <!--Cierre: profesion->                                                                                                                                                                                                                                                                                                              <!--(Editar)profesion-->
-                                                <div class="card-body border-top u_personal_liquidacion_{{ $value_liqu->id }} collapse" id="u_personal_liquidacion_{{ $value_liqu->id }}_2">
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
-                                                        <div class="col-sm-7">
-                                                            <input type="text" class="form-control" placeholder="Rut" id="{{ $value_liqu->id }}_liquidacion_rut" value="{{ $value_liqu->serie }}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Titular</label>
-                                                        <div class="col-sm-7">
-                                                            <input type="text" class="form-control" placeholder="Nombre" id="{{ $value_liqu->id }}_liquidacion_nombre" value="{{ $value_liqu->autor }}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Banco</label>
-                                                        <div class="col-sm-7">
-                                                            <select name="{{ $value_liqu->id }}_liquidacion_banco" id="{{ $value_liqu->id }}_liquidacion_banco" class="form-control control-sm">
-                                                                <option value="">Seleccione</option>
-                                                                @foreach ( $bancos as $banco)
-                                                                    @if ($value_liqu->casa == $banco->id)
-                                                                    <option value="{{ $banco->id }}" selected>{{ $banco->nombre }}</option>
-                                                                    @else
-                                                                    <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
-                                                                    @endif
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Cuenta</label>
-                                                        <div class="col-sm-7">
-                                                            <input type="text" class="form-control" placeholder="Cuenta" id="{{ $value_liqu->id }}_liquidacion_cuenta" value="{{ $value_liqu->numero_control }}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Tipo Cuenta</label>
-                                                        <div class="col-sm-7">
-                                                            <select name="{{ $value_liqu->id }}_liquidacion_tipo_cuenta" id="{{ $value_liqu->id }}_liquidacion_tipo_cuenta" class="form-control control-sm">
-                                                                <option value="">Seleccione</option>
-                                                                <option value="Corriente" @if($value_liqu->tipo_cuenta == 'Corriente') selected @endif>Corriente</option>
-                                                                <option value="Ahorro" @if($value_liqu->tipo_cuenta == 'Ahorro') selected @endif>Ahorro</option>
-                                                                <option value="Vista" @if($value_liqu->tipo_cuenta == 'Vista') selected @endif>Vista</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Email</label>
-                                                        <div class="col-sm-7">
-                                                            <input type="text" class="form-control" placeholder="Email" id="{{ $value_liqu->id }}_liquidacion_email" value="{{ $value_liqu->email }}">
-                                                        </div>
-                                                    </div>
-                                                    @if($liqui_principal == 0)
-                                                        <div class="form-group row">
-                                                            <label class="col-sm-4 col-form-label font-weight-bolder">Principal</label>
-                                                            <div class="col-sm-7 switch switch-success d-inline ">
-                                                                @if ($value_liqu->principal == 1)
-                                                                <input type="checkbox" id="{{ $value_liqu->id }}_liquidacion_principal" name="{{ $value_liqu->id }}_liquidacion_principal" value="" checked>
-                                                                @else
-                                                                <input type="checkbox" id="{{ $value_liqu->id }}_liquidacion_principal" name="{{ $value_liqu->id }}_liquidacion_principal" value="">
-                                                                @endif
-                                                                <label for="{{ $value_liqu->id }}_liquidacion_principal" class="cr"></label>
-                                                            </div>
-                                                        </div>
-                                                    @else
-                                                        @if($value_liqu->principal == 0)
-                                                            <div class="form-group row">
-                                                                <label class="col-sm-4 col-form-label font-weight-bolder">Principal</label>
-                                                                <div class="col-sm-7 switch switch-success d-inline ">
-                                                                    <input type="checkbox" id="{{ $value_liqu->id }}_liquidacion_principal" name="{{ $value_liqu->id }}_liquidacion_principal" disabled="disabled" value="">
-                                                                    <label for="{{ $value_liqu->id }}_liquidacion_principal" class="cr"></label>
-                                                                </div>
-                                                            </div>
-                                                        @else
-                                                            <div class="form-group row">
-                                                                <label class="col-sm-4 col-form-label font-weight-bolder">Principal</label>
-                                                                <div class="col-sm-7 switch switch-success d-inline ">
-                                                                    <input type="checkbox" id="{{ $value_liqu->id }}_liquidacion_principal" name="{{ $value_liqu->id }}_liquidacion_principal" value="" checked>
-                                                                    <label for="{{ $value_liqu->id }}_liquidacion_principal" class="cr"></label>
-                                                                </div>
-                                                            </div>
-                                                        @endif
-
-                                                    @endif
-
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-12 col-form-label"></label>
-                                                        <div class="col-sm-12 d-flex justify-content-end">
-                                                            <button class="btn btn-info" onclick="modificar_registro_liquidacion({{ $value_liqu->id }});">Guardar Cambios</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--Cierre: (Editar)profesion-->
-                                            </div>
-                                            <!--Cierre: Card profesion-->
-                                        </div>
-                                    @endforeach
-                                @endif
-
-
-                            </div>
-
-                        </div>
-                    </div>
+                    @include('general.seccion_perfil.seccion_liquidacion')
 
                 </div>
             </div>

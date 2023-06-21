@@ -485,7 +485,7 @@
             chart.render();
         });
     </script>
-    @yield('page-scripts')
+    @yield('page-script')
 </body>
 
 </html>

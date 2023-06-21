@@ -55,6 +55,9 @@
                                     <a class="btn btn-outline-info btn-sm mb-2 mx-2 active" id="personal-tab" data-toggle="tab" href="#info_personal" role="tab" aria-controls="info_personal" aria-selected="true"><i class="feather icon-user mr-2"></i>Información Personal</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="btn btn-outline-info btn-sm mb-2 mx-2" id="liquidacion-tab" data-toggle="tab" href="#info_liquidacion" role="tab" aria-controls="info_liquidacion" aria-selected="false"><i class="feather icon-lock mr-2"></i>Manejo de Liquidaciones</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="btn btn-outline-info btn-sm mb-2 mx-2" id="emergencia-tab" data-toggle="tab" href="#emergencia" role="tab" aria-controls="emergencia" aria-selected="false"><i class="feather icon-user-plus mr-2"></i>Contacto de Emergencia</a>
                                 </li>
                                 <li class="nav-item">
@@ -102,8 +105,8 @@
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-sm-4 col-form-label font-weight-bolder font-weight-bolder">Sexo</label>
-                                                <div class="col-sm-7 my-auto ml-2"> 
-                                                    @if($asistente->sexo == 'F') Mujer @elseif ($asistente->sexo == 'M') Hombre @endif 
+                                                <div class="col-sm-7 my-auto ml-2">
+                                                    @if($asistente->sexo == 'F') Mujer @elseif ($asistente->sexo == 'M') Hombre @endif
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -278,6 +281,10 @@
                         </div>
                     </div>
                     <!--Cierre: Tab Información Personal-->
+
+                    <!--Tab info de Liquidacion -->
+                    @include('general.seccion_perfil.seccion_liquidacion')
+
                     <!--Tab Contactos de Emergencia-->
                     <div class="tab-pane fade" id="emergencia" role="tabpanel" aria-labelledby="emergencia-tab">
                         <div class="row">
@@ -328,8 +335,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>	
+                        </div>
                     </div>
+
                     <!--Tab Cambiar Contraseñas-->
                     <div class="tab-pane fade" id="pass" role="tabpanel" aria-labelledby="pass-tab">
                         <div class="row">
@@ -388,6 +396,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!--Cierre: Tab Cambiar Contraseñas-->
                     <div class="tab-pane fade" id="gallery" role="tabpanel" aria-labelledby="gallery-tab">
                     </div>
@@ -449,7 +458,7 @@
                                         <option>Viña del Mar</option>
                                         <option>La Calera</option>
                                         <option>Valparaíso</option>
-                                    </optgroup> 
+                                    </optgroup>
                                 </select>
                             </div>
                         </div>
@@ -474,13 +483,13 @@
                                     <option>Padre</option>
                                     <option>Madre</option>
                                     <option>Hermano/a</option>
-                                    <option>Abuelo/a</option>  
-                                    <option>Tío/a</option> 
-                                    <option>Primo/a</option> 
-                                    <option>Amigo/a</option> 
+                                    <option>Abuelo/a</option>
+                                    <option>Tío/a</option>
+                                    <option>Primo/a</option>
+                                    <option>Amigo/a</option>
                                     <option>Otro</option><!--Si se selecciona "otro"
                                     deberia abrirse un input text para que el usuario escriba
-                                    el parentezco-->   
+                                    el parentezco-->
                                 </select>
                             </div>
                         </div>
@@ -498,7 +507,7 @@
                                     <option>7</option>
                                     <option>8</option>
                                     <option>9</option>
-                                    <option>10</option>   
+                                    <option>10</option>
                                 </select>
                             </div>
                         </div>
@@ -605,7 +614,7 @@
                                         <option>Viña del Mar</option>
                                         <option>La Calera</option>
                                         <option>Valparaíso</option>
-                                    </optgroup> 
+                                    </optgroup>
                                 </select>
                             </div>
                         </div>
@@ -630,13 +639,13 @@
                                     <option>Padre</option>
                                     <option>Madre</option>
                                     <option>Hermano/a</option>
-                                    <option>Abuelo/a</option>  
-                                    <option>Tío/a</option> 
-                                    <option>Primo/a</option> 
-                                    <option>Amigo/a</option> 
+                                    <option>Abuelo/a</option>
+                                    <option>Tío/a</option>
+                                    <option>Primo/a</option>
+                                    <option>Amigo/a</option>
                                     <option>Otro</option><!--Si se selecciona "otro"
                                     deberia abrirse un input text para que el usuario escriba
-                                    el parentezco-->   
+                                    el parentezco-->
                                 </select>
                             </div>
                         </div>
@@ -654,7 +663,7 @@
                                     <option>7</option>
                                     <option>8</option>
                                     <option>9</option>
-                                    <option>10</option>   
+                                    <option>10</option>
                                 </select>
                             </div>
                         </div>

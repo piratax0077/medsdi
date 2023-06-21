@@ -796,6 +796,7 @@ class FlujoCajaController extends Controller
             $total = 0;
             $total_bonos = 0;
             $total_efectivo = 0;
+            $total_copago = 0;
             $total_otros = 0;
             $lista_bonos = array();
 
@@ -821,6 +822,9 @@ class FlujoCajaController extends Controller
                 // 6->Particular
                 else if($bono->id_clase_bono == 6)
                     $total_efectivo += $bono->valor_atencion;
+                // 7->copago
+                else if($bono->id_clase_bono == 7)
+                    $total_copago += $bono->valor_atencion;
                 else
                     $total_otros++;
 
@@ -839,6 +843,7 @@ class FlujoCajaController extends Controller
             $total_documentos_rendiciones = 0;
             $total_bonos_rendiciones = 0;
             $total_efectivo_rendicion = 0;
+            $total_copago_rendicion = 0;
             $total_otros_rendicion = 0;
             $lista_rendiciones = array();
 
@@ -851,6 +856,7 @@ class FlujoCajaController extends Controller
                     $total_documentos_rendiciones += $rendicion->total_documentos;
                     $total_bonos_rendiciones += $rendicion->total_bono;
                     $total_efectivo_rendicion += $rendicion->total_efectivo;
+                    $total_copago_rendicion += $rendicion->total_copago;
                     $total_otros_rendicion += $rendicion->total_otros;
                 }
             }
@@ -864,12 +870,14 @@ class FlujoCajaController extends Controller
                 'total' => $total,
                 'total_bonos' => $total_bonos,
                 'total_efectivo' => $total_efectivo,
+                'total_copago' => $total_copago,
                 'total_otros' => $total_otros,
                 'rendiciones' => $rendiciones,
                 'total_rendiciones' => $total_rendiciones,
                 'total_documentos_rendiciones' => $total_documentos_rendiciones,
                 'total_bonos_rendiciones' => $total_bonos_rendiciones,
                 'total_efectivo_rendicion' => $total_efectivo_rendicion,
+                'total_copago_rendicion' => $total_copago_rendicion,
                 'total_otros_rendicion' => $total_otros_rendicion,
                 'lista_rendiciones' => implode('|',$lista_rendiciones),
                 // 'bonos_programa' => $bonos_programa,
@@ -1039,6 +1047,100 @@ class FlujoCajaController extends Controller
         }
     }
 
+
+    public function cargaRendicionCmAdm(Request $request)
+    {
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+
+        /** INFORMACION DE INSTITUCION Y RESPONSABLE */
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+
+            }
+        }
+        /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
+
+        if($institucion)
+        {
+            $rendiciones_asistente = RendicionCaja::with('Asistente')->with('AsistenteReceptor')->where('tipo_rendicion', 1)->get();
+            $rendiciones_realizadas = RendicionCaja::with('Asistente')->with('AsistenteReceptor')->where('tipo_rendicion', 2)->get();
+
+            return view('app.adm_cm.flujo_caja')->with([
+                'rendiciones_asistente' => $rendiciones_asistente,
+                'rendiciones_realizadas' => $rendiciones_realizadas,
+            ]);
+        }
+        else
+        {
+            return back()->with('error', 'no se encontro institucion asociada');
+        }
+    }
 
 
 

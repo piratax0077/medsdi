@@ -30,4 +30,9 @@ class Invitacion extends Model
     {
         return $this->hasOne(LugarAtencion::class, 'id', 'id_lugar_atencion');
     }
+
+    public function convenio()
+    {
+        return $this->hasOne(ProfesionalInstitucionConvenio::class, 'id_invitacion', 'id');
+    }
 }

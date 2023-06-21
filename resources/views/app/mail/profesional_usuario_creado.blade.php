@@ -31,7 +31,7 @@
                             <tr>
                                 <td style="background: rgb(51,102,204); background: -moz-linear-gradient(148deg, rgba(51,102,204,1) 0%, rgba(47,177,177,1) 100%); background: -webkit-linear-gradient(148deg, rgba(51,102,204,1) 0%, rgba(47,177,177,1) 100%); background: linear-gradient(148deg, rgba(51,102,204,1) 0%, rgba(47,177,177,1) 100%); padding: 0px 24px 0px 24px;" align="center">
                                     <p style="font-family: Helvetica, Arial, sans-serif; font-size: 19px; font-weight: 500; color: #ffffff;">User: {{ $detalle['body']['user'] }}</p>
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 19px; font-weight: 500; color: #ffffff;">Passwor: {{ $detalle['body']['pass'] }}</p>
+                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 19px; font-weight: 500; color: #ffffff;">Password: {{ $detalle['body']['pass'] }}</p>
                                 </td>
                             </tr>
 

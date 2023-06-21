@@ -1,7 +1,4 @@
 /*-Modals personal-*/
-function contacto() {
-    $('#contacto_usuario').modal('show');
-}
 
 /*-Modals profesional de la salud-*/
 function registrar_profesional() {
@@ -12,9 +9,7 @@ function editar_datos_profesional() {
     $('#editar_profesional_cm').modal('show');
 }
 
-function rol_permisos_cm() {
-    $('#roles_permisos').modal('show');
-}
+
 
 function asociar_profesional() {
     $('#agregar_profesional_btn_buscar_rut').removeAttr('disabled');
@@ -26,13 +21,8 @@ function asociar_profesional() {
 
 
 /*-Modals asistentes-*/
-function registrar_asistente() {
-    $('#registrar_asistente_cm').modal('show');
-}
 
-function editar_datos_asistente() {
-    $('#editar_asistente_cm').modal('show');
-}
+
 
 function rol_permisos_asistente() {
     $('#rol_permisos_asistente_cm').modal('show');
@@ -94,9 +84,6 @@ function agregar_gasto() {
     $('#agregar_gasto_cm').modal('show');
 }
 
-function editar_gasto() {
-    $('#editar_gasto_cm').modal('show');
-}
 
 /*-Proveedores-*/
 function agregar_proveedor() {

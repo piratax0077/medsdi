@@ -67,6 +67,9 @@ use Illuminate\Support\Facades\Mail;
 use PDF;
 use App\Helpers\Funciones;
 use App\Models\FichaPediatriaGeneralTipo;
+use App\Models\Invitacion;
+use App\Models\SubTipoEspecialidad;
+use App\Models\TipoEspecialidad;
 use Illuminate\Support\Facades\Hash;
 
 class EscritorioProfesional extends Controller
@@ -497,9 +500,25 @@ class EscritorioProfesional extends Controller
         }
 
 
+        $filtro = array();
+        $filtro[] = array('id_user_invitado', Auth::user()->id);
+        $filtro[] = array('procesado', 1);
+        // $filtro[] = array('estado', 2);
+        $invitacion = Invitacion::where($filtro)->whereNotNull('fecha_aprobacion')->first();
+        $tipo_especialidad = '';
+        $sub_tipo_especialidad = '';
+        if($invitacion)
+        {
+            $tipo_especialidad = TipoEspecialidad::where('id_especialidad', $invitacion->id_especialidad)->get();
+            $sub_tipo_especialidad = SubTipoEspecialidad::where('id_tipo_especialidad', $invitacion->id_tipo_especialidad)->get();
+        }
+
         return view('auth.Registros.registro_profesional')->with([
             'region' => $region,
-            'especialidad' => $especialidad]);
+            'especialidad' => $especialidad,
+            'tipo_especialidad' => $tipo_especialidad,
+            'sub_tipo_especialidad' => $sub_tipo_especialidad,
+            'invitacion' => $invitacion]);
     }
 
 
@@ -1495,7 +1514,7 @@ class EscritorioProfesional extends Controller
 
 
         if (count($horario) == 0) {
-            return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region, 'mensaje' => 'Debe ingresar un horario']);
+            return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region, 'mensaje' => 'Para abrir Agenda debe ingresar horario de atención en el botón correspondiente']);
         }
 
         // dd($horario);
@@ -1534,7 +1553,7 @@ class EscritorioProfesional extends Controller
 
 
         if (!isset($horario)) {
-            return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region, 'mensaje' => 'Debe ingresar un horario']);
+            return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region, 'mensaje' => 'Para abrir Agenda debe ingresar horario de atención en el botón correspondiente']);
         }
 
         return view('app.profesional.agenda')->with(
@@ -2870,7 +2889,7 @@ class EscritorioProfesional extends Controller
         return $datos;
     }
 
-    public function agregarLiquidacion(Request $request)
+	public function agregarLiquidacion(Request $request)
     {
         $result = LiquidacionReciboController::store( Auth::user()->id, $request->rut, $request->nombre, $request->banco, $request->cuenta, $request->email, $request->principal, $request->tipo_cuenta,1);
         return $result;

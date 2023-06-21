@@ -13,6 +13,9 @@ class RendicionCaja extends Model
     // public function ScopeBonos(){
     //     return $this->hasOne(Prevision::class, 'id', 'id_prevision');
     // }
+    public function TipoRendicion(){
+        return $this->hasOne(RendicionTipo::class, 'id', 'tipo_rendicion');
+    }
     public function Asistente(){
         return $this->hasOne(Asistente::class, 'id', 'id_asistente');
     }

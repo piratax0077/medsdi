@@ -92,7 +92,7 @@
                                 <td class="align-middle text-center">
                                     <!--Botón Modal-->
                                     <button type="button" class="btn btn-success btn-sm btn-icon"  onclick="convenios();" data-toggle="tooltip" data-placement="top" title="Configurar"><i class="fas fa-dollar-sign"></i></button>
-                                </td>                                                                        
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -567,7 +567,7 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="row">                                     
+                    <div class="row">
                         <div class="col-sm-12">
                             <h6 class="text-c-blue mb-2">Convenios</h6>
                         </div>
@@ -632,7 +632,7 @@
     </div>
 </div>
 @endsection
-@section('page-scripts')
+@section('page-script')
 <!-- datatable Js -->
 <script src="../assets/js/plugins/jquery.dataTables.min.js"></script>
 <script src="../assets/js/plugins/dataTables.bootstrap4.min.js"></script>
@@ -667,7 +667,7 @@ function convenios (){
     $('#convenios_cm').modal('show');
 }
 
- 
+
 </script>
 
 <!--Tabla-->

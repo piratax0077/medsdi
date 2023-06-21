@@ -6,10 +6,24 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\LiquidacionRecibo;
 use App\Models\Bancos;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 
 class LiquidacionReciboController extends Controller
 {
+
+    public function agregarLiquidacion(Request $request)
+    {
+        $result = LiquidacionReciboController::store( Auth::user()->id, $request->rut, $request->nombre, $request->banco, $request->cuenta, $request->email, $request->principal, $request->tipo_cuenta,1);
+        return $result;
+    }
+
+    public function modificarLiquidacion(Request $request)
+    {
+        $result = LiquidacionReciboController::edit($request->id, Auth::user()->id, $request->rut, $request->nombre, $request->banco, $request->cuenta, $request->email, $request->principal, $request->tipo_cuenta,1);
+        return $result;
+    }
+
     public function ver_registro_r(Request $request)
     {
         return static::ver_registro($request->id);
