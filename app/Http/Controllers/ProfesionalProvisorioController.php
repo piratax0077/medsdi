@@ -340,7 +340,7 @@ class ProfesionalProvisorioController extends Controller
             $error['rut'] = 'campo requerido';
             $campos_requeridos = 1;
         }
-        
+
          if($request->email == '')
          {
              $error['email'] = 'campo requerido';
@@ -445,7 +445,7 @@ class ProfesionalProvisorioController extends Controller
             $registro->token = $token_;
             $id_recept_ = $request->id_usuario;
             $registro->id_usuario_genera = $request->id_usuario;
-            $registro->estado_token = 0; 
+            $registro->estado_token = 0;
             // $registro->estado = $request->estado;
 
             if($registro->save())

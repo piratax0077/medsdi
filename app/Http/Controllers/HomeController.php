@@ -37,7 +37,6 @@ class HomeController extends Controller
             return redirect('/Acceso');
         }
 
-
         switch ($usuario->roles()->first()->name) {
             case 'Admin':
                 return redirect('/Acceso');
@@ -95,6 +94,9 @@ class HomeController extends Controller
                 break;
             case 'Asistente': //asistente consulta
                 return redirect()->route('asistente.home');
+                break;
+            case 'Adm_Comercial': // asistente Comercial (institucion)
+                return redirect()->route('administrador_comercial.home');
                 break;
             case 'AsistenteAdm': // asistente administrativa (institucion)
                 return redirect()->route('asistente_adm.home');

@@ -29,6 +29,10 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}"/>
 
+    <!-- fileupload-custom css -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
+    <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
+
     <link rel="stylesheet" href="{{ asset('css/pills_modals.css') }}"/>
 
     {{-- estilos de atencion medica --}}
@@ -128,9 +132,14 @@
 
     <script src='{{ asset('js\fullcalendar-5.10.1\lib\main.js') }}'></script>
 	<script src='{{ asset('js\fullcalendar-5.10.1\lib\locales\es.js') }}'></script>
+
     <!-- fancy box -->
     <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
     <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
+
+    <!-- file-upload Js -->
+    <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
+    <!-- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script> -->
 
     <!-- momnent -->
     <script src="{{ asset('js/moment.min.js') }}"></script>
