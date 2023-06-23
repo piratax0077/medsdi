@@ -36,7 +36,7 @@ function checkToken(){
         type: "GET",
         data: {
             _token: _token,
-            token:token
+            token:'{{$token}}'
         },
         success: (resp)=>{
             if(resp.estado==1)
@@ -64,8 +64,9 @@ function checkToken(){
 
 <!-- CONTENT -->
 @section('content')
-@csrf
+@csrf    
     <input type="hidden" id="token_" value="{{$token_}}">
+    <input type="hidden" id="token" value="{{$token}}">
     <input type="hidden" id="url_nueva" value="{{$url_nueva}}">
     <div class="container">
         <div class="row mt-5">
@@ -84,7 +85,7 @@ function checkToken(){
                             </div>
                         </div>                        
                         <!--<a href="{{$url_nueva}}?token={{$token}}" class="btn btn-info"><b>Volver a Solicitar</b></a>-->
-                        <a href="Check_sdi?id_recept={{$id_recept}}&urla={{$url_anterior}}&urln={{$url_nueva}}&token={{$token}}" class="btn btn-info"><b>Volver a Solicitar</b></a>
+                        <a href="Check_sdi_external?id_recept={{$id_recept}}&urla={{$url_anterior}}&urln=/Acceso_Profesional_NI&tipo=8&token_={{$token_}}&evento=Profesional Provisorio&id_recept={{$id_recept}}" class="btn btn-info"><b>Volver a Solicitar</b></a>
                         <a href="{{$url_anterior}}" class="btn btn-danger"><b>Cancelar Solicitud</b></a>
                         
                     </div>

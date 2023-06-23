@@ -95,13 +95,13 @@
                                             <div class="form-group col-md-4">
                                                 <label class="floating-label">Especialidad</label>
                                                 <select onchange="cargarListaSubEspecialidad()" id="lista_especialidad" name="lista_especialidad" class="form-control form-control-sm">
-                                                    <option selected>Especialidad</option>
+                                                    <option value="0">Especialidad</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label class="floating-label">Sub Especialidad</label>
                                                 <select id="lista_sub_especialidad" name="lista_sub_especialidad" class="form-control form-control-sm">
-                                                    <option selected>Especialidad</option>
+                                                <option value="0">Sub Especialidad</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-6">
