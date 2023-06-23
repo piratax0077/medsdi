@@ -3774,6 +3774,7 @@ class EscritorioProfesional extends Controller
         $paciente = Paciente::where('id_usuario',$id_usuario_)->first();        
         $hora_medica = new HoraMedica();        
 
+        $id_paciente_ = $paciente->id;
         $hora_medica->id_paciente = $paciente->id;
         $hora_medica->id_profesional = $id_profesional_;
         $hora_medica->id_asistente = 2;
