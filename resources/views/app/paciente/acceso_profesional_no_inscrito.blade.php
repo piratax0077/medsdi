@@ -34,7 +34,7 @@
 <body>
     @php
     if(Auth::check()) 
-    echo '<input type="hidden" id="id_usuario_login" value="{{Auth::user()->id}}" >';
+    echo '<input type="hidden" id="id_usuario_login" value="'.Auth::user()->id.'" >';
     @endphp
     
     <div class="auth-wrapper">
