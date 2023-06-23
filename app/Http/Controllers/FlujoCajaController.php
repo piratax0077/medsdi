@@ -16,6 +16,7 @@ use App\Models\RendicionCaja;
 use App\Models\Servicios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class FlujoCajaController extends Controller
 {
@@ -845,11 +846,13 @@ class FlujoCajaController extends Controller
             $total_efectivo_rendicion = 0;
             $total_copago_rendicion = 0;
             $total_otros_rendicion = 0;
+            $total_archivos_rendicion = 0;
             $lista_rendiciones = array();
 
             if($rendiciones)
             {
-                foreach ($rendiciones as $rendicion){
+                foreach ($rendiciones as $rendicion)
+                {
                     $lista_rendiciones[] = $rendicion->id;
 
                     $total_rendiciones++;
@@ -858,9 +861,19 @@ class FlujoCajaController extends Controller
                     $total_efectivo_rendicion += $rendicion->total_efectivo;
                     $total_copago_rendicion += $rendicion->total_copago;
                     $total_otros_rendicion += $rendicion->total_otros;
+
+                    if(!empty($rendicion->archivos))
+                    {
+                        $archivos_array  = explode('|',$rendicion->archivos);
+                        $total_archivos_rendicion += count($archivos_array);
+                        $rendicion->cantidad_archivos = count($archivos_array);
+                    }
+                    else
+                    {
+                        $rendicion->cantidad_archivos = 0;
+                    }
                 }
             }
-
 
             return view('app.asistente_cm.flujo_caja')->with([
                 'asistente' => $asistente,
@@ -976,6 +989,136 @@ class FlujoCajaController extends Controller
         }
     }
 
+    public function rendicionDetalle(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $registro_rendicion = RendicionCaja::find($request->id_rendicion);
+            $info_bonos = array();
+            if($registro_rendicion)
+            {
+                $bonos = $registro_rendicion->bonos;
+                if(!empty($bonos))
+                {
+                    $bonos_array = explode('|',$bonos);
+                    foreach ($bonos_array as $key => $value)
+                    {
+                        $registro_bono = Bono::with('TipoBono')
+                                                ->with(['Convenio' => function($query){
+                                                    $query->select('id', 'nombre');
+                                                }])
+                                                ->with(['Paciente' => function($query){
+                                                    $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos', 'rut', 'telefono_uno', 'email');
+                                                }])
+                                                ->with(['Parametro' => function($query){
+                                                    $query->select('id', 'valor', 'color');
+                                                }])
+                                                ->with(['Profesional' => function($query){
+                                                    $query->select('id', 'nombre', 'apellido_uno', 'apellido_dos', 'rut', 'telefono_uno', 'email', 'id_especialidad', 'id_tipo_especialidad', 'id_sub_tipo_especialidad')
+                                                            ->with(['Especialidad' => function($query){
+                                                                $query->select('id', 'nombre');
+                                                            }])
+                                                            ->with(['TipoEspecialidad' => function($query){
+                                                                $query->select('id', 'nombre');
+                                                            }])
+                                                            ->with(['SubTipoEspecialidad' => function($query){
+                                                                $query->select('id', 'nombre');
+                                                            }]);
+                                                }])
+                                                ->find($value);
+                        if($registro_bono)
+                        {
+                            // $info_bonos[$key]['estado'] = 0;
+                            // $info_bonos[$key]['msj'] = 'registro';
+                            // $info_bonos[$key]['registro'] = $registro_bono;
+                            $info_bonos[$key] = $registro_bono;
+                        }
+                        else
+                        {
+                            $info_bonos[$key]['estado'] = 0;
+                            $info_bonos[$key]['msj'] = 'sin registro';
+                            $info_bonos[$key]['registro'] = '';
+                        }
+                    }
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'registros';
+                    $datos['registros'] = $info_bonos;
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Rendicion sin bonos registrados';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Rendicion no encontrada';
+            }
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function rendicionDetalleArchivos(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $registro_rendicion = RendicionCaja::find($request->id_rendicion);
+
+            if($registro_rendicion)
+            {
+                $archivos = $registro_rendicion->archivos;
+                if(!empty($archivos))
+                {
+                    $datos['estado'] = 1;
+                    $archivos_array = explode('|', $archivos);
+                    foreach ($archivos_array as $key => $value)
+                    {
+                        $url_temp = Storage::disk('archivo_archivo')->url($value);
+                        $datos['registro'][] = (object)array(
+                            'nombre' => $value,
+                            'url' => $url_temp,
+                        );
+                    }
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Sin archivos a visualizar';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Rendicion no encontrada';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
     public function historicoCajaDiaria(Request $request)
     {
 
@@ -1014,6 +1157,7 @@ class FlujoCajaController extends Controller
             $total_bonos_rendiciones = 0;
             $total_efectivo_rendicion = 0;
             $total_otros_rendicion = 0;
+            $total_archivos_rendicion = 0;
             $lista_rendiciones = array();
 
             if($rendiciones)
@@ -1026,6 +1170,17 @@ class FlujoCajaController extends Controller
                     $total_bonos_rendiciones += $rendicion->total_bono;
                     $total_efectivo_rendicion += $rendicion->total_efectivo;
                     $total_otros_rendicion += $rendicion->total_otros;
+
+                    if(!empty($rendicion->archivos))
+                    {
+                        $archivos_array  = explode('|',$rendicion->archivos);
+                        $total_archivos_rendicion += count($archivos_array);
+                        $rendicion->cantidad_archivos = count($archivos_array);
+                    }
+                    else
+                    {
+                        $rendicion->cantidad_archivos = 0;
+                    }
                 }
             }
 

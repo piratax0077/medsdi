@@ -648,6 +648,8 @@ Route::group([
     Route::get('caja/rendir/bonos', [App\Http\Controllers\FlujoCajaController::class, 'cargaBonosAsistenteDia'])->name('asistentejcm.rendicion_carga_bonos');
     Route::get('caja/cerrar/rendiciones', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionesAsistenteDia'])->name('asistentejcm.rendicion_carga_rendiciones');
     Route::get('caja/historico', [App\Http\Controllers\FlujoCajaController::class, 'historicoCajaDiaria'])->name('asistentejcm.historico_caja');
+    Route::get('caja/rendicion/detalle', [App\Http\Controllers\FlujoCajaController::class, 'rendicionDetalle'])->name('asistentejcm.rendicion.detalle');
+    Route::get('caja/rendicion/detalle/archivos', [App\Http\Controllers\FlujoCajaController::class, 'rendicionDetalleArchivos'])->name('asistentejcm.rendicion.detalle.archivos');
 
     Route::get('Administracion_asistente', [App\Http\Controllers\EscritorioAsistenteCmJefe::class, 'administracion_asistente'])->name('asistentejcm.administracion_asistente');
 
@@ -694,6 +696,10 @@ Route::group([
     Route::post('caja/desistir/rendicion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucionDesistir'])->name('asistentecm.rendicion_caja_desistir');
     Route::post('caja/extencion/validacion/rendicion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucionExtenderValidacion'])->name('asistentecm.rendicion_caja_extender_validacion');
     Route::post('caja/rendicion/autorizacion/validacion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucionValidarAutorizacion'])->name('asistentecm.rendir_caja_validar_autorizacion');
+
+    /** carga archivo rendir */
+    Route::post('caja/carga/archivo', [App\Http\Controllers\CargaArchivoController::class, 'cargaArchivoTemp'])->name('rendir.archivo.carga');
+    Route::post('caja/carga/mover_r', [App\Http\Controllers\CargaArchivoController::class, 'moverArchivo_r'])->name('rendir.archivo.mover_r');
 });
 
 

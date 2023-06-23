@@ -55,6 +55,21 @@ return [
             'url' => env('APP_URL').'/storage/imagenes/examen',
             'visibility' => 'public',
         ],
+
+        'archivo_temp' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/archivo/temp'),
+            'url' => env('APP_URL').'/storage/archivo/temp',
+            'visibility' => 'public',
+        ],
+
+        'archivo_archivo' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/archivo/archivo'),
+            'url' => env('APP_URL').'/storage/archivo/archivo',
+            'visibility' => 'public',
+        ],
+
         'pdf' => [
             'driver' => 'local',
             'root' => storage_path('app/public/pdf'),

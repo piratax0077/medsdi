@@ -54,50 +54,71 @@
                                             <hr>
                                             <div class="form-row">
                                                 <input type="hidden" name="lista_bonos" id="lista_bonos" value="{{ $lista_bonos }}">
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="form-group">
-                                                        <label class="floating-label-activo-sm">N° de Bonos Fisicos</label>
-                                                        <input type="number" class="form-control form-control-sm" id="numero_bonos" name="numero_bonos" value="{{ $total_bonos }}" readonly="readonly">
+                                                <div class="col-10">
+                                                    <div class="row">
+                                                        <div class="col-sm-6 col-md-2">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">N° de Bonos Fisicos</label>
+                                                                <input type="number" class="form-control form-control-sm" id="numero_bonos" name="numero_bonos" value="{{ $total_bonos }}" readonly="readonly">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-2">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Copago</label>
+                                                                <input type="number" class="form-control form-control-sm" id="copago" name="copago" value="{{ $total_copago }}" readonly="readonly">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-2">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Efectivo</label>
+                                                                <input type="number" class="form-control form-control-sm" id="efectivo" name="efectivo" value="{{ $total_efectivo }}" readonly="readonly">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-1">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Otros</label>
+                                                                <input type="number" class="form-control form-control-sm" id="otros" name="otros" value="{{ $total_otros }}" readonly="readonly">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-1">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Total Documentos</label>
+                                                                <input type="number" class="form-control form-control-sm" id="total" name="total" value="{{ $total }}" readonly="readonly">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-2">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Recibe Caja :</label>
+                                                                <select name="id_asistente_receptor" id="id_asistente_receptor" class="form-control form-control-sm">
+                                                                    @if($listado_recibe)
+                                                                        @foreach ( $listado_recibe as $recibe )
+                                                                            <option value="{{ $recibe->id }}">{{ strtoupper($recibe->nombres.' '.$recibe->apellido_uno.' '.$recibe->apellido_dos) }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <input type="hidden" name="input_lista_archivo" id="input_lista_archivo" value="">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-12">
+                                                                    <!-- [ Main Content ] start -->
+                                                                    <div class="dropzone" id="mis-archivos-rendicion" action="{{ route('rendir.archivo.carga') }}">
+                                                                    </div>
+                                                                    <!-- [ file-upload ] end -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Copago</label>
-                                                        <input type="number" class="form-control form-control-sm" id="copago" name="copago" value="{{ $total_copago }}" readonly="readonly">
+                                                <div class="col-2">
+                                                    <div class="row">
+                                                        <div class="col-12 text-center">
+                                                            <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja();" id="btn_rendicion_caja_diaria">Rendir Caja</button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Efectivo</label>
-                                                        <input type="number" class="form-control form-control-sm" id="efectivo" name="efectivo" value="{{ $total_efectivo }}" readonly="readonly">
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-1">
-                                                    <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Otros</label>
-                                                        <input type="number" class="form-control form-control-sm" id="otros" name="otros" value="{{ $total_otros }}" readonly="readonly">
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-1">
-                                                    <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Total Documentos</label>
-                                                        <input type="number" class="form-control form-control-sm" id="total" name="total" value="{{ $total }}" readonly="readonly">
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-2">
-                                                    <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Recibe Caja :</label>
-                                                        <select name="id_asistente_receptor" id="id_asistente_receptor" class="form-control form-control-sm">
-                                                            @if($listado_recibe)
-                                                                @foreach ( $listado_recibe as $recibe )
-                                                                    <option value="{{ $recibe->id }}">{{ strtoupper($recibe->nombres.' '.$recibe->apellido_uno.' '.$recibe->apellido_dos) }}</option>
-                                                                @endforeach
-                                                            @endif
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-12 col-md-2 text-center">
-                                                    <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja();" id="btn_rendicion_caja_diaria">Rendir Caja</button>
                                                 </div>
                                             </div>
 
@@ -219,14 +240,15 @@
                                                     <table id="tabla_rendir_rendiciones" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
                                                         <thead>
                                                             <tr>
-                                                                <th class="text-center align-middle">ID Rendicion</th>
-                                                                <th class="text-center align-middle">Asistene</th>
+                                                                <th class="text-center align-middle">ID REND</th>
+                                                                <th class="text-center align-middle">Asistente</th>
                                                                 <th class="text-center align-middle">Receptor</th>
                                                                 <th class="text-center align-middle">F/Recepción</th>
                                                                 <th class="text-center align-middle">Bonos</th>
-                                                                <th class="text-center align-middle">Efecto</th>
+                                                                <th class="text-center align-middle">Efectivo</th>
                                                                 <th class="text-center align-middle">Otros</th>
-                                                                <th class="text-center align-middle">Total Documentos</th>
+                                                                <th class="text-center align-middle">T. Doc.</th>
+                                                                <th class="text-center align-middle">T. Doc Adj.</th>
                                                                 <th class="text-center align-middle">Detalle</th>
                                                             </tr>
                                                         </thead>
@@ -248,6 +270,12 @@
                                                                         <td class="align-middle text-center">${{ number_format($value_r->total_efectivo, 0, ",", ".") }}</td>
                                                                         <td class="align-middle text-center">{{ $value_r->total_otros }}</td>
                                                                         <td class="align-middle text-center">{{ $value_r->total_documentos }}</td>
+                                                                        <td class="align-middle text-center">
+                                                                            <div>
+                                                                                <button  class="btn btn-block btn-sm btn-info" onclick="ver_archivos('{{ $value_r->id }}');">Ver</button>
+                                                                                <div style=" background-color: red; border-radius: 90px; width: 25px; height: 25px; padding: 5px; color: white; font-weight: bold; position: relative; top: -40px;">{{ $value_r->cantidad_archivos }}</div>
+                                                                            </div>
+                                                                        </td>
                                                                         <td class="align-middle text-center"><button  class="btn btn-block btn-sm btn-info" onclick="ver_datalle_rendicion('{{ $value_r->id }}');">Ver</button></td>
                                                                     </tr>
                                                                 @endforeach
@@ -278,6 +306,7 @@
     @include('app.asistente_cm.modales.modal_rendicion_caja_diaria')
     @include('app.asistente_cm.modales.modal_rendicion_cierre_dia')
     @include('app.asistente_cm.modales.modal_detalle_rendicion')
+    @include('app.asistente_cm.modales.modal_detalle_rendicion_archivo')
 @endsection
 
 @section('page-script')
@@ -389,6 +418,7 @@
                         _token: CSRF_TOKEN,
                         bonos : $('#lista_bonos').val(),
                         id_asistente_receptor : $('#id_asistente_receptor').val(),
+                        archivos : $('#input_lista_archivo').val(),
                     },
                 })
                 .done(function(data) {
@@ -494,6 +524,8 @@
                                     $('#total_bonos').html('');
                                     $('#total_efectivo').html('');
                                     $('#total_otros').html('');
+                                    $('#input_lista_archivo').html('');
+                                    myDropzone_rendicion.removeAllFiles();
 
                                     $('#aprobacion').html('En Espera de Aprobación <span id="aprobacion_tiempo"></span>');
                                     $('#rendicion_caja_diaria').modal('hide');
@@ -770,7 +802,7 @@
                             var lista_rendiciones = '';
                             var lista_rendiciones = '';
                             $('#tabla_rendir_rendiciones tbody').html('');
-                            $(data.rendiciones).each(function(index, value) { // indice, valor
+                            $(data.rendiciones).each(function(index, value) {
                                 var html = '';
                                 html +='<tr >';
                                 html +='    <td class="align-middle text-center">'+value.id+'</td>';
@@ -787,11 +819,20 @@
                                 html +='    <td class="align-middle text-center">$'+value.total_efectivo+'</td>';
                                 html +='    <td class="align-middle text-center">'+value.total_otros+'</td>';
                                 html +='    <td class="align-middle text-center">'+value.total_documentos+'</td>';
-                                html +='    <td class="align-middle text-center"><button  class="btn btn-block btn-sm btn-info" onclick="ver_datalle_rendicion(\''+value.id+'\');">Ver</button></td></td>';
+                                html +='    <td class="align-middle text-center">';
+                                html +='        <button  class="btn btn-block btn-sm btn-info" onclick="ver_archivos(\''+value.id+'\');">Ver</button>';
+                                html +='        <div>'+value.cantidad_archivos+'</div>';
+                                html +='    </td>';
+                                html +='    <td class="align-middle text-center"><button  class="btn btn-block btn-sm btn-info" onclick="ver_datalle_rendicion(\''+value.id+'\');">Ver</button></td>';
                                 html +='</tr>';
 
                                 $('#tabla_rendir_rendiciones tbody').append(html);
                                 lista_rendiciones +='|'+value.id+'' ;
+                            });
+
+                            $('#tabla_rendir_rendiciones').DataTable().destroy();
+                            $('#tabla_rendir_rendiciones').DataTable({
+                                responsive: true,
                             });
 
                             $('#lista_rendiciones').val(data.lista_rendiciones)
@@ -1109,12 +1150,136 @@
                 });
         }
 
-        function ver_datalle_rendicion(id_rendicion)
+
+
+        /** MANEJO DE ARCHIVO */
+        // mis-archivos-rendicion
+        var myDropzone_rendicion ;
+        Dropzone.options.misArchivosRendicion = {
+            init:function()
+            {
+                myDropzone_rendicion = this;
+            },
+            url: "{{ route('rendir.archivo.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "application/pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv",
+            maxFilesize: 4,
+            maxFiles: 6,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_archivo();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_archivo(myDropzone_rendicion,'rendicion');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_archivo(myDropzone_rendicion,'rendicion');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_archivo(myDropzone_rendicion,'rendicion');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var lista_archivo = {};
+        function cargar_lista_archivo(obj_dropzone, alias_archivo)
         {
-            $('#detalle_rendicion').modal('show');
+            // console.log('--------------cargar_lista_archivo----------------------');
+            lista_archivo = [];
+            let temp  = obj_dropzone.getAcceptedFiles();
+            $.each(temp, function( index, value )
+            {
+                if(value.status == "success")
+                {
+                    if(value.xhr !== undefined)
+                    {
+                        var archivo_temp = JSON.parse(value.xhr.response);
+                        lista_archivo[index] = [
+                            url = archivo_temp.archivo.url,
+                            nombre_original = archivo_temp.archivo.original_file_name,
+                            nombre_archivo = archivo_temp.archivo.nombre_archivo,
+                            file_extension = archivo_temp.archivo.file_extension,
+                        ];
+                        $('#input_lista_archivo').val('');
+                        $('#input_lista_archivo').val(JSON.stringify(lista_archivo));
+                    }
+                }
+            });
         }
-
-
 
     </script>
 

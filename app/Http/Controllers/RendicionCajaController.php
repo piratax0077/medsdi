@@ -126,6 +126,56 @@ class RendicionCajaController extends Controller
                 $datos['last_id'] = $rendicionCaja->id;
 
 
+                /** MANEJO DE ARCHIVOS */
+                $archivos = json_decode($request->archivos);
+                $info_archivos = '';
+                $resulto_img = [];
+                if($archivos)
+                {
+                    foreach ($archivos as $key => $value)
+                    {
+                        // [0] = url
+                        // [1] = nombre_original
+                        // [2] = nombre_archivo
+                        // [3] = file_extension
+                        $nombre_temp = $value[2];
+                        $file_extension = $value[3];
+
+
+                        $nombre_final = 'rendicion_'.$rendicionCaja->id.'_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+                        $resulto_img[$key] = CargaArchivoController::moverArchivo($nombre_temp, 'archivo_archivo', $nombre_final);
+
+                        $info_archivos .= $nombre_final.'|';
+                    }
+
+                    if(!empty($info_archivos))
+                    {
+                        $info_archivos = substr($info_archivos, 0, -1);
+                        $rendicionCaja->archivos = $info_archivos;
+                        if($rendicionCaja->save())
+                        {
+                            $datos['rendicion_archivo']['estado'] = 1;
+                            $datos['rendicion_archivo']['msj'] = 'archivo registrado';
+                        }
+                        else
+                        {
+                            $datos['rendicion_archivo']['estado'] = 0;
+                            $datos['rendicion_archivo']['msj'] = 'falla en registro de archivo';
+                        }
+                    }
+                    else
+                    {
+                        $datos['rendicion_archivo']['estado'] = 0;
+                        $datos['rendicion_archivo']['msj'] = 'problema en lectura de archivos';
+                    }
+                }
+                else
+                {
+                    $datos['rendicion_archivo']['estado'] = 1;
+                    $datos['rendicion_archivo']['msj'] = 'sin archivos a registrar';
+                }
+
+
                 $registro = RendicionCaja::where('id', $rendicionCaja->id)
                     ->with(['Asistente' => function($query){
                         $query->select('id','nombres','apellido_uno','apellido_dos');

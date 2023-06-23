@@ -1,6 +1,6 @@
-@extends('template.asistente_cm_publico.template')
-@section('content')
+@extends('template.adm_cm.template')
 
+@section('content')
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -37,10 +37,7 @@
                                         <div class="tab-pane fade show active " id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Rendir Caja del {{ date('d-m-Y') }}</h5>
-                                                    <a href="{{ route('asistentecm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                                        <i class="feather icon-home"></i>
-                                                    </a>
+                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Recepción Cierre Caja {{ date('d-m-Y') }}</h5>
                                                 </div>
                                             </div>
                                             <hr>
@@ -136,9 +133,7 @@
         </div>
     </div>
 </div>
-
-    <!--Cierre: Container Completo-->
-
+<!--Cierre: Container Completo-->
 @endsection
 
 @section('page-script')
