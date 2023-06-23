@@ -29,7 +29,7 @@ function checkToken(){
     echo 'let url = "Check_sdi_token_external";';
     @endphp
     var _token = $('input[name=_token]').val();    
-    var token = $('#token').val();    
+    var token_ = $('#token_').val();    
 
     $.ajax({
         url: url,
@@ -43,7 +43,7 @@ function checkToken(){
             {
                 if(resp.registro.estado==1)
                 {
-                    top.location.href=$('#url_nueva').val()+'/'+token;
+                    top.location.href=$('#url_nueva').val()+'/'+token_;
                 }else{
                     setTimeout(checkToken,3000);
                 }
@@ -65,7 +65,7 @@ function checkToken(){
 <!-- CONTENT -->
 @section('content')
 @csrf
-    <input type="hidden" id="token" value="{{$token}}">
+    <input type="hidden" id="token_" value="{{$token_}}">
     <input type="hidden" id="url_nueva" value="{{$url_nueva}}">
     <div class="container">
         <div class="row mt-5">
