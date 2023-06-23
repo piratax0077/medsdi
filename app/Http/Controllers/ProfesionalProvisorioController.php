@@ -464,7 +464,7 @@ class ProfesionalProvisorioController extends Controller
                 $asunto = 'MED-SDI - Bienvenido!';
 
                 //$url_ = 'http://medichile_sistema.test'; // LOCAL
-                $url_ = 'https://med-sdi.cl'; // PRODUCCION
+                $url_ = env('APP_URL'); // PRODUCCION
 
                 $link_ = '<a href="'.$url_.'/Check_sdi_external?urla='.$url_.'&urln='.$url_.'/Acceso_Profesional_NI&tipo=8&token='.$token_.'&evento=Profesional Provisorio&id_recept='.$id_recept_.'" target="_blank">Completa tus datos aquí</a>';
 
