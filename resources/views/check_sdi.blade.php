@@ -84,7 +84,7 @@ function checkToken(){
                             </div>
                         </div>                        
                         <!--<a href="{{$url_nueva}}?token={{$token}}" class="btn btn-info"><b>Volver a Solicitar</b></a>-->
-                        <a href="Check_sdi?id_recept={{$id_recept}}&urla={{$url_anterior}}&urln={{$url_nueva}}&token={{$token}}" class="btn btn-info"><b>Volver a Solicitar</b></a>
+                        <a href="Check_sdi?id_recept={{$id_recept}}&urla={{$url_anterior}}&urln={{$url_nueva}}/{{$token}}" class="btn btn-info"><b>Volver a Solicitar</b></a>
                         <a href="{{$url_anterior}}" class="btn btn-danger"><b>Cancelar Solicitud</b></a>
                         
                     </div>

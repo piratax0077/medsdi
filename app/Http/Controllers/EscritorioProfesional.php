@@ -3560,6 +3560,7 @@ class EscritorioProfesional extends Controller
 
         $lugar_atencion_id_ = 0;
         $id_paciente_ = 0;
+        $id_usuario_ = 0;
         $id_profesional_ = 0;        
         $id_hora_realizar_ = 0;
         $clave_ = rand(1111,9999);
@@ -3597,10 +3598,8 @@ class EscritorioProfesional extends Controller
     
         if($profesional_provisorio)
         {        
-
-            //ID PACIENTE INVITACION
-            $id_paciente_ = $profesional_provisorio->id_usuario_genera;
-
+            $id_usuario_ = $profesional_provisorio->id_usuario;
+            
             $profesional_provisorio->nombre = $nombre;
             $profesional_provisorio->apellido_uno = $primer_apellido;
             $profesional_provisorio->apellido_dos = $segundo_apellido;
@@ -3774,10 +3773,10 @@ class EscritorioProfesional extends Controller
         }
 
         // HORA MEDICA
-        $paciente = Paciente::find($id_paciente_);        
+        $paciente = Paciente::where('id_usuario',$id_usuario_)->first();        
         $hora_medica = new HoraMedica();        
 
-        $hora_medica->id_paciente = $id_paciente_;
+        $hora_medica->id_paciente = $paciente->id;
         $hora_medica->id_profesional = $id_profesional_;
         $hora_medica->id_asistente = 2;
         $hora_medica->id_estado = 1;
