@@ -288,6 +288,7 @@ class EscritorioPaciente extends Controller
             'url_nueva' => $url_nueva,
             'url_anterior' => $url_anterior,
             'token' => $permiso['app']['token'],
+            'token_' => $request->token_,
             'fecha_termino' => $permiso['app']['fecha_termino']
         ]);
     }
