@@ -16,7 +16,7 @@ class UpdateProfesionalProvisorio extends Migration
         Schema::table('profesional_provisorio', function (Blueprint $table) {
 
             /** agregar columnas */
-            $table->integer('token')->nullable()->after('otro');
+            $table->string('token')->nullable()->after('otro');
             $table->string('id_usuario_genera')->nullable()->after('token');
             $table->integer('estado_token')->nullable()->after('id_usuario_genera');
 

@@ -14,9 +14,9 @@ class UpdateInvitacionV2 extends Migration
     public function up()
     {
         Schema::table('invitacion', function (Blueprint $table) {
-            $table->string('id_especialidad')->nullable()->after('email');
-            $table->string('id_tipo_especialidad')->nullable()->after('id_especialidad');
-            $table->string('id_sub_tipo_especialidad')->nullable()->after('id_tipo_especialidad');
+            $table->integer('id_especialidad')->nullable()->after('email');
+            $table->integer('id_tipo_especialidad')->nullable()->after('id_especialidad');
+            $table->integer('id_sub_tipo_especialidad')->nullable()->after('id_tipo_especialidad');
         });
     }
 
