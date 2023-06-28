@@ -128,19 +128,30 @@
 
     <script src='{{ asset('js\fullcalendar-5.10.1\lib\main.js') }}'></script>
 	<script src='{{ asset('js\fullcalendar-5.10.1\lib\locales\es.js') }}'></script>
+
     <!-- fancy box -->
     <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
     <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
+
+    <!-- file-upload Js -->
+    <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
+    <!-- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script> -->
 
     <!-- momnent -->
     <script src="{{ asset('js/moment.min.js') }}"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
 
-    <!-- autocomplete -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+   {{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
 
+    <!-- select2 -->
+    <script src="{{ asset('js/plugins/select2.full.min.js') }}"></script>
+
+    <!-- rut -->
+    <script src="{{ asset('js/rut.js') }}"></script>
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -267,7 +278,7 @@
         {{--  CARGA AGENDE DEL PROFESIONAL  --}}
         function cargarAgendaProfesional(id_lugar_atencion, id_profesional, fecha)
         {
-
+            console.log('template/asistente');
             var evaluacion = false;
 
             var id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
@@ -284,10 +295,10 @@
                             if (data !== 'null')
                             {
                                 //data = JSON.parse(data);
-                                {{--  console.log('-----------------------');  --}}
-                                {{--  console.log(data);  --}}
-                                {{--  console.log('-----------------------');  --}}
-                                if(data.estado == 1)
+                                // console.log('-----------------------');
+                                // console.log(data.horario.length);
+                                // console.log('-----------------------');
+                                if(data.estado == 1 && data.horario.length!=0)
                                 {
                                     info_profesional_seleccionado['profesional'] = data.profesional;
                                     info_profesional_seleccionado['horario'] = data.horario;
@@ -778,6 +789,7 @@
                                         //SuccessMode: true,
                                     });
                                     evaluacion =  false;
+                                    $('#agenda').html('');
                                 }
                             }
                         }

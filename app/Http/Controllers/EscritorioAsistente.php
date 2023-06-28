@@ -20,6 +20,7 @@ use App\Models\Paciente;
 use App\Models\Prevision;
 use App\Models\Profesional;
 use App\Models\ProfesionalConvenio;
+use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalHorario;
 use App\Models\ProfesionOficio;
 use App\Models\Region;
@@ -132,11 +133,21 @@ class EscritorioAsistente extends Controller
     public function buscar_paciente()
     {
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
+        $asistente_tipo = AsistenteTipo::where('id',$asistente->id_asistente_tipo)->first();
 
-        $url = 'app.asistente.buscar_paciente';
-            $array_data = array(
-                'asistente' => $asistente,
-            );
+        $filtro = array();
+        $filtro[] = array('tipo_empleado',strtoupper($asistente_tipo->nombre));
+        $filtro[] = array('estado',2) ;
+        $contrato = ContratoDependiente::where($filtro)->first();
+        $id_lugar_atencion = $contrato->id_lugar_atencion;
+
+        $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
+
+        $url = 'app.asistente.buscar_paciente'; // institucion
+        $array_data = array(
+            'asistente' => $asistente,
+            'lugares_atencion' => $lugares_atencion,
+        );
 
         return view($url, $array_data);
     }
@@ -561,8 +572,22 @@ class EscritorioAsistente extends Controller
     public function agendaPorProfesional()
     {
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
-        $profesional = $asistente->Profesionales()->get();
         $lugares_atencion = $asistente->LugarAtencion()->get();
+        $profesional = $asistente->Profesionales()->get();
+        $conteo_prof = 0;
+        foreach ($profesional as $key => $value)
+        {
+            $conteo_prof++;
+        }
+
+        if($conteo_prof == 0)
+        {
+            $profesional_lugar_array = ProfesionalesLugaresAtencion::where('id_lugar_atencion', $lugares_atencion[0]->id)
+                                                                ->pluck('id_profesional')->toArray();
+
+            $profesional = Profesional::whereIn('id', $profesional_lugar_array)->get();
+        }
+
         $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
         $prevision = Prevision::all();
         $region = Region::all();

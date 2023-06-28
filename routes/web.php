@@ -586,6 +586,8 @@ Route::group([
     Route::get('getEspecialidad', [App\Http\Controllers\EscritorioAsistente::class, 'getEspecialidad'])->name('asistente.getEspecialidad');
     Route::get('getProfesional', [App\Http\Controllers\EscritorioAsistente::class, 'getProfesional'])->name('asistente.getProfesional');
     Route::get('getVideoConsulta', [App\Http\Controllers\EscritorioAsistente::class, 'getVideoConsulta'])->name('asistente.getVideoConsulta');
+
+    Route::get('Paciente/cargar_info', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscar_paciente_rut'])->name('asistente.buscar_paciente_rut');
 });
 
 /** ASISTENTE MANEJO DE AGENDA */
@@ -984,7 +986,7 @@ Route::group([
     Route::get('/invitacion/buscar/informacion', [App\Http\Controllers\InvitacionController::class, 'cambioContrasenaPerfilResponsable'])->name('invitaciones.buscar.info');
 
 	/** FLUJO DE CAJA */
-    Route::get('/flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionCmAdm'])->name('adm_cm.flujo.caja.index');																																		 
+    Route::get('/flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionCmAdm'])->name('adm_cm.flujo.caja.index');
 
     /** Contrato dependiente */
     Route::get('/contrato/dependiente/ver', [App\Http\Controllers\ContratoDependienteController::class, 'verRegistro'])->name('adm_cm.contrato.dependiente.ver');

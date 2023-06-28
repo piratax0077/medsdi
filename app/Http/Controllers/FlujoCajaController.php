@@ -743,10 +743,19 @@ class FlujoCajaController extends Controller
 
             $institucion = Instituciones::where('id_lugar_atencion',$id_lugar_atencion)->first();
             $lista_asistente_lugar = AsistenteLugarAtencion::where('id_lugar_atencion',$id_lugar_atencion)->where('id_institucion',$institucion->id)->pluck('id_asistente')->toArray();
-            $listado_recibe = Asistente::whereIn('id_asistente_tipo', [2,3])
+
+            /** PERSONAL QUE RECIBE */
+            /** ASISTENTE */
+            $listado_recibe_a = Asistente::select('id', 'nombres', 'apellido_uno', 'apellido_dos')->whereIn('id_asistente_tipo', [2,3])
                                             ->whereIn('id', $lista_asistente_lugar)
-                                            ->whereNotIn('id',[$asistente->id])
-                                            ->get();
+                                            ->whereNotIn('id',[$asistente->id]);
+            /** ADMINISTRADOR CENTRO, ADMINISTRADOR COMERCIAL */
+            $listado_recibe = ContratoDependiente::select('id_empleado as id', 'nombres', 'apellido_uno', 'apellido_dos')
+                                ->where('id_institucion', $institucion->id)
+                                ->where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                ->whereNotIn('id_empleado',[$asistente->id])
+                                ->union($listado_recibe_a)
+                                ->get();
 
 
             return view('app.asistente_cm_publico.flujo_caja')->with([
@@ -832,11 +841,22 @@ class FlujoCajaController extends Controller
 
             }
 
-            $lista_asistente_lugar = AsistenteLugarAtencion::where('id_lugar_atencion',$id_lugar_atencion)->pluck('id_asistente')->toArray();
-            $listado_recibe = Asistente::whereIn('id_asistente_tipo', [2,3])
+            $institucion = Instituciones::where('id_lugar_atencion',$id_lugar_atencion)->first();
+            $lista_asistente_lugar = AsistenteLugarAtencion::where('id_lugar_atencion',$id_lugar_atencion)->where('id_institucion',$institucion->id)->pluck('id_asistente')->toArray();
+
+            /** PERSONAL QUE RECIBE */
+            /** ASISTENTE */
+            $listado_recibe_a = Asistente::select('id', 'nombres', 'apellido_uno', 'apellido_dos')->whereIn('id_asistente_tipo', [2,3])
                                             ->whereIn('id', $lista_asistente_lugar)
-                                            ->whereNotIn('id',[$asistente->id])
-                                            ->get();
+                                            ->whereNotIn('id',[$asistente->id]);
+            /** ADMINISTRADOR CENTRO, ADMINISTRADOR COMERCIAL */
+            $listado_recibe = ContratoDependiente::select('id_empleado as id', 'nombres', 'apellido_uno', 'apellido_dos')
+                                ->where('id_institucion', $institucion->id)
+                                ->where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                ->whereNotIn('id_empleado',[$asistente->id])
+                                ->union($listado_recibe_a)
+                                ->get();
+
 
             /** RENDICION */
             $rendiciones = RendicionCaja::where('id_asistente_receptor', $asistente->id)->where('rendicion','0')->where('estado',2)->get();
@@ -1359,10 +1379,13 @@ class FlujoCajaController extends Controller
                  }
              }
 
-            $listado_recibe = ContratoDependiente::with('Persona')->where('id_institucion', $institucion->id)
-            ->where('tipo_empleado', 'like', '%ADMINISTRADOR%')
-            ->whereNotIn('id_empleado',[$responsable->id])
-            ->get();
+            /** PERSONAL QUE RECIBE */
+            /** ADMINISTRADOR CENTRO, ADMINISTRADOR COMERCIAL */
+            $listado_recibe = ContratoDependiente::select('id_empleado as id', 'nombres', 'apellido_uno', 'apellido_dos')
+                                ->where('id_institucion', $institucion->id)
+                                ->where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                ->whereNotIn('id_empleado',[$responsable->id])
+                                ->get();
             // var_dump($listado_recibe);
 
              return view('app.adm_cm.flujo_caja')->with([
