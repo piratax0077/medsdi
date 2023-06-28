@@ -780,7 +780,7 @@
         function cargar_registros_cierre()
         {
                 let url = "{{ route('asistentejcm.rendicion_carga_rendiciones') }}";
-
+                $('#tabla_rendir_rendiciones tbody').html('');
                 $.ajax({
                         url: url,
                         type: "GET",

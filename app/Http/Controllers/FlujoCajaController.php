@@ -741,7 +741,8 @@ class FlujoCajaController extends Controller
 
             }
 
-            $lista_asistente_lugar = AsistenteLugarAtencion::where('id_lugar_atencion',$id_lugar_atencion)->pluck('id_asistente')->toArray();
+            $institucion = Instituciones::where('id_lugar_atencion',$id_lugar_atencion)->first();
+            $lista_asistente_lugar = AsistenteLugarAtencion::where('id_lugar_atencion',$id_lugar_atencion)->where('id_institucion',$institucion->id)->pluck('id_asistente')->toArray();
             $listado_recibe = Asistente::whereIn('id_asistente_tipo', [2,3])
                                             ->whereIn('id', $lista_asistente_lugar)
                                             ->whereNotIn('id',[$asistente->id])
@@ -1268,7 +1269,40 @@ class FlujoCajaController extends Controller
                         }
                         else
                         {
-                            return back()->with('error','Institución no encontrada');
+
+                            $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->where('id_empleado', $responsable->id)
+                                    ->whereIn('estado', [2,3])
+                                    ->first();
+
+                            if($result_contrato)
+                            {
+                                $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                if($registro)
+                                {
+                                    /** INSTITUCION */
+                                    $institucion = $registro;
+                                    $tipo_institucion = 'institucion';
+                                }
+                                else
+                                {
+                                    $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** SERVICIOS */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'servicio';
+                                    }
+                                    else
+                                    {
+                                        return back()->with('error','Institución no encontrada');
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                            }
                         }
                     }
                 }
@@ -1281,15 +1315,68 @@ class FlujoCajaController extends Controller
         }
         /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
 
+
         if($institucion)
         {
-            $rendiciones_asistente = RendicionCaja::with('Asistente')->with('AsistenteReceptor')->where('tipo_rendicion', 1)->get();
-            $rendiciones_realizadas = RendicionCaja::with('Asistente')->with('AsistenteReceptor')->where('tipo_rendicion', 2)->get();
+             /** RENDICION */
+             $rendiciones = RendicionCaja::where('id_asistente_receptor', $responsable->id)
+                                    ->where('rendicion','0')
+                                    ->where('estado',2)
+                                    ->get();
 
-            return view('app.adm_cm.flujo_caja')->with([
-                'rendiciones_asistente' => $rendiciones_asistente,
-                'rendiciones_realizadas' => $rendiciones_realizadas,
-            ]);
+             $total_rendiciones = 0;
+             $total_documentos_rendiciones = 0;
+             $total_bonos_rendiciones = 0;
+             $total_efectivo_rendicion = 0;
+             $total_copago_rendicion = 0;
+             $total_otros_rendicion = 0;
+             $total_archivos_rendicion = 0;
+             $lista_rendiciones = array();
+
+             if($rendiciones)
+             {
+                 foreach ($rendiciones as $rendicion)
+                 {
+                     $lista_rendiciones[] = $rendicion->id;
+
+                     $total_rendiciones++;
+                     $total_documentos_rendiciones += $rendicion->total_documentos;
+                     $total_bonos_rendiciones += $rendicion->total_bono;
+                     $total_efectivo_rendicion += $rendicion->total_efectivo;
+                     $total_copago_rendicion += $rendicion->total_copago;
+                     $total_otros_rendicion += $rendicion->total_otros;
+
+                     if(!empty($rendicion->archivos))
+                     {
+                         $archivos_array  = explode('|',$rendicion->archivos);
+                         $total_archivos_rendicion += count($archivos_array);
+                         $rendicion->cantidad_archivos = count($archivos_array);
+                     }
+                     else
+                     {
+                         $rendicion->cantidad_archivos = 0;
+                     }
+                 }
+             }
+
+            $listado_recibe = ContratoDependiente::with('Persona')->where('id_institucion', $institucion->id)
+            ->where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+            ->whereNotIn('id_empleado',[$responsable->id])
+            ->get();
+            // var_dump($listado_recibe);
+
+             return view('app.adm_cm.flujo_caja')->with([
+                /** informacion de rendiciones */
+                'listado_recibe' => $listado_recibe,
+                'rendiciones' => $rendiciones,
+                'total_rendiciones' => $total_rendiciones,
+                'total_documentos_rendiciones' => $total_documentos_rendiciones,
+                'total_bonos_rendiciones' => $total_bonos_rendiciones,
+                'total_efectivo_rendicion' => $total_efectivo_rendicion,
+                'total_copago_rendicion' => $total_copago_rendicion,
+                'total_otros_rendicion' => $total_otros_rendicion,
+                'lista_rendiciones' => implode('|',$lista_rendiciones),
+             ]);
         }
         else
         {
