@@ -693,72 +693,72 @@
         function cargar_registros()
         {
                 let url = "{{ route('asistentecm.rendicion_carga_bonos') }}";
-
+                $('#tabla_rendir_caja').DataTable().destroy();
                 $.ajax({
-                        url: url,
-                        type: "GET",
-                        data: {},
-                    })
-                    .done(function(data) {
+                    url: url,
+                    type: "GET",
+                    data: {},
+                })
+                .done(function(data) {
 
-                        console.log(data);
-                        if (data.estado == 1)
-                        {
+                    console.log(data);
+                    if (data.estado == 1)
+                    {
 
-                            $('#numero_bonos').val(data.total_bonos);
-                            $('#efectivo').val(data.total_efectivo);
-                            $('#otros').val(data.total_otros);
-                            $('#total').val(data.total);
+                        $('#numero_bonos').val(data.total_bonos);
+                        $('#efectivo').val(data.total_efectivo);
+                        $('#otros').val(data.total_otros);
+                        $('#total').val(data.total);
 
-                            // var lista_bonos = '';
-                            $('#tabla_rendir_caja tbody').html('');
-                            $(data.bonos).each(function(index, value) { // indice, valor
-                                var html = '';
-                                let clase_bono = ['','Bono Fisico','Sencillito','Caja Vecina','Bono Web','Bono Web Pre-Pago','Particular','Otro'];
-                                html +='<tr >';
-                                html +='    <td class="align-middle text-center">'+value.TipoBono.nombre+'</td>';
-                                html +='    <td class="align-middle text-center">'+value.numero_bono+'</td>';
-                                html +='    <td class="align-middle text-center">'+clase_bono[value.id_clase_bono]+'</td>';
-                                html +='    <td class="align-middle text-center">'+value.Convenio.nombre+'</td>';
-                                html +='    <td class="align-middle text-center">'+value.fecha_atencion+'</td>';
-                                html +='    <td class="align-middle text-center">';
-                                html +='        <span>'+value.Paciente.nombres+' '+value.Paciente.apellido_uno+' '+value.Paciente.apellido_dos+'</span><br>';
-                                html +='        <span>'+value.Paciente.rut+'</span>';
-                                html +='    </td>';
-                                html +='    <td class="align-middle text-center">'+$.number( value.valor_atencion, 2, ',' )+'</td>';
-                                html +='    <td class="align-middle text-center">';
-                                html +='        <span>'+value.Profesional.nombres+' '+value.Profesional.apellido_uno+' '+value.Profesional.apellido_dos+'</span><br>';
-                                html +='        <span>'+value.Profesional.rut+'</span>';
-                                html +='    </td>';
-                                html +='</tr>';
-                                $('#tabla_rendir_caja tbody').append(html);
-                                // lista_bonos +='|'+value.id+'' ;
-                            });
+                        // var lista_bonos = '';
+                        $('#tabla_rendir_caja tbody').html('');
+                        $(data.bono).each(function(index, value) { // indice, valor
+                            var html = '';
+                            let clase_bono = ['','Bono Fisico','Sencillito','Caja Vecina','Bono Web','Bono Web Pre-Pago','Particular','Otro'];
+                            html +='<tr>';
+                            html +='    <td class="align-middle text-center">'+value.tipo_bono.nombre+'</td>';
+                            html +='    <td class="align-middle text-center">'+value.numero_bono+'</td>';
+                            html +='    <td class="align-middle text-center">'+clase_bono[value.id_clase_bono]+'</td>';
+                            html +='    <td class="align-middle text-center">'+value.convenio.nombre+'</td>';
+                            html +='    <td class="align-middle text-center">'+value.fecha_atencion+'</td>';
+                            html +='    <td class="align-middle text-center">';
+                            html +='        <span>'+value.paciente.nombres+' '+value.paciente.apellido_uno+' '+value.paciente.apellido_dos+'</span><br>';
+                            html +='        <span>'+value.paciente.rut+'</span>';
+                            html +='    </td>';
+                            html +='    <td class="align-middle text-center">'+$.number( value.valor_atencion, 2, ',' )+'</td>';
+                            html +='    <td class="align-middle text-center">';
+                            html +='        <span>'+value.profesional.nombre+' '+value.profesional.apellido_uno+' '+value.profesional.apellido_dos+'</span><br>';
+                            html +='        <span>'+value.profesional.rut+'</span>';
+                            html +='    </td>';
+                            html +='</tr>';
+                            $('#tabla_rendir_caja tbody').append(html);
+                            // lista_bonos +='|'+value.id+'' ;
+                        });
 
-                            $('#tabla_rendir_caja').DataTable().destroy();
-                            $('#tabla_rendir_caja').DataTable({
-                                responsive: true,
-                            });
 
-                            $('#lista_bonos').val(data.lista_bonos)
+                        $('#tabla_rendir_caja').DataTable({
+                            responsive: true,
+                        });
 
-                        }
-                        else
-                        {
-                            swal({
-                                title: "Problemas al cargar bonos del día",
-                                text: data.msj,
-                                icon: "error",
-                                buttons: "Aceptar",
-                                // DangerMode: true,
-                            });
-                            return '0';
-                        }
+                        $('#lista_bonos').val(data.lista_bonos)
 
-                    })
-                    .fail(function(jqXHR, ajaxOptions, thrownError) {
-                        console.log(jqXHR, ajaxOptions, thrownError)
-                    });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Problemas al cargar bonos del día",
+                            text: data.msj,
+                            icon: "error",
+                            buttons: "Aceptar",
+                            // DangerMode: true,
+                        });
+                        return '0';
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
         }
 
         /** MANEJO DE ARCHIVO */
