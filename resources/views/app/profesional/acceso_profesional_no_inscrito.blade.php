@@ -125,11 +125,11 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="floating-label">Dirección de consulta</label>
-                                                <input type="address" class="form-control form-control-sm" name="direccion_consulta_profesional" id="direccion_consulta_profesional" value="">
+                                                <input type="address" value="{{$direccion_nombre}}" class="form-control form-control-sm" name="direccion_consulta_profesional" id="direccion_consulta_profesional" value="">
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label class="floating-label">N&uacute;mero / Oficina</label>
-                                                <input type="address" class="form-control form-control-sm" name="numero_dir_consulta_profesional" id="numero_dir_consulta_profesional" value="">
+                                                <input type="address" value="{{$direccion_numero}}" class="form-control form-control-sm" name="numero_dir_consulta_profesional" id="numero_dir_consulta_profesional" value="">
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label class="floating-label-activo-sm">Región</label>
@@ -185,7 +185,17 @@
     <script src="{{ asset('js/ripple.js') }}"></script>
     <script src="{{ asset('js/pcoded.min.js') }}"></script>
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/css/inputmask.min.css" rel="stylesheet"/>
     <script>
+
+        $("#rut_profesional").inputmask({
+            mask: "9[9.999.999]-[9|K|k]",
+        });
+
+        
 
         var lista_profesion = [];
         @foreach ($profesion as $p)
@@ -207,6 +217,8 @@
             lista_ciudades.push({"id":{{$ci->id}},"nombre":"{{$ci->nombre}}","id_region":"{{$ci->id_region}}"});
         @endforeach
 
+        cargarListasProfesionEpecialidadSubespecialidad({{(int)$registro->id_especialidad}},{{(int)$registro->id_tipo_especialidad}},{{(int)$registro->id_sub_tipo_especialidad}});
+        cargarListaRegionComuna({{(int)$id_region}},{{(int)$id_ciudad}});
 
         function cargarListaEspecialidad(){
 
@@ -246,6 +258,60 @@
                 $('#lista_ciudades').append(`<option value="${e.id}">${e.nombre}</option>`);
             })
 
+        }
+
+        function cargarListasProfesionEpecialidadSubespecialidad(id_profesion,id_especialidad,id_subespecialidad)
+        {
+
+            $('#lista_profesion').val(id_profesion);
+            
+            $('#lista_especialidad').html('');
+
+            lista_especialidad.forEach(e=>{
+                if(e.id_especialidad==id_profesion)
+                {
+                    if(e.id == id_especialidad)
+                    {
+                        $('#lista_especialidad').append(`<option value="${e.id}" selected>${e.nombre}</option>`);
+                    }else{
+                        $('#lista_especialidad').append(`<option value="${e.id}">${e.nombre}</option>`);
+                    }
+                }
+            })
+
+            $('#lista_sub_especialidad').html('');
+
+            lista_subespecialidad.forEach(e=>{
+                if(e.id_tipo_especialidad==id_especialidad){
+                
+                    if(e.id == id_subespecialidad)
+                    {
+                        $('#lista_sub_especialidad').append(`<option value="${e.id}" selected>${e.nombre}</option>`);
+                    }else{
+                        $('#lista_sub_especialidad').append(`<option value="${e.id}">${e.nombre}</option>`);
+                    }
+                }
+            })
+
+
+        }
+
+        function cargarListaRegionComuna(id_region,id_ciudad){
+            $('#lista_region').val(id_region);
+
+            $('#lista_ciudades').html('');
+
+            lista_ciudades.forEach(e=>{
+                if(e.id_region==id_region)
+                {
+                    if(e.id==id_ciudad)
+                    {
+                        $('#lista_ciudades').append(`<option value="${e.id}" selected>${e.nombre}</option>`);
+                    }else{
+                        $('#lista_ciudades').append(`<option value="${e.id}">${e.nombre}</option>`);
+                    }
+            }
+            })
         }
 
         function actualizar(){
