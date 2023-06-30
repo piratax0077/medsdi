@@ -568,7 +568,7 @@ Route::group([
     Route::get('Venta_Productos', [App\Http\Controllers\EscritorioAsistente::class, 'index'])->name('asistente.venta_productos');
     Route::get('Registro_Paciente', [App\Http\Controllers\EscritorioAsistente::class, 'registroPaciente'])->name('asistente.registro_paciente');
     Route::get('AgendaPorProfesional', [App\Http\Controllers\EscritorioAsistente::class, 'agendaPorProfesional'])->name('asistente.agenda_por_profesional');
-
+	Route::get('hora/por/confirmar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'cargarConfirmarHora'])->name('asistente.cargar_hora_por_confirmar');
     /** perfil  */
     Route::post('editar_datos_personales_perfil', [App\Http\Controllers\EscritorioAsistente::class, 'editar_datos_personales_perfil'])->name('asistente.editar_datos_personales_perfil');
     Route::post('editar_datos_contacto_perfil', [App\Http\Controllers\EscritorioAsistente::class, 'editar_datos_contacto_perfil'])->name('asistente.editar_datos_contacto_perfil');
@@ -586,6 +586,53 @@ Route::group([
     Route::get('getEspecialidad', [App\Http\Controllers\EscritorioAsistente::class, 'getEspecialidad'])->name('asistente.getEspecialidad');
     Route::get('getProfesional', [App\Http\Controllers\EscritorioAsistente::class, 'getProfesional'])->name('asistente.getProfesional');
     Route::get('getVideoConsulta', [App\Http\Controllers\EscritorioAsistente::class, 'getVideoConsulta'])->name('asistente.getVideoConsulta');
+
+    Route::get('Paciente/cargar_info', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscar_paciente_rut'])->name('asistente.buscar_paciente_rut');
+});
+
+/** ASISTENTE MANEJO DE AGENDA */
+Route::group([
+    'middleware' => ['role:AsistenteManejoAgenda|Admin'],
+    'prefix' => 'Asistente/cm/manejo/agenda/',
+], function () {
+    Route::get('Inicio', [App\Http\Controllers\AdministradorCmController::class, 'escritorioAsistenteManejoAgenda'])->name('asistentecm.ma.home');
+
+    Route::get('Perfil', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'perfil'])->name('asistentecm.ma.perfil');
+    Route::get('Buscar_Paciente', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscar_paciente'])->name('asistentecm.ma.buscar_paciente');
+    Route::get('Reservar_Hora', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'reservar_hora'])->name('asistentecm.ma.reservar_hora');
+    Route::get('Mis_Profesionales', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'mis_profesionales'])->name('asistentecm.ma.mis_profesionales');
+    Route::get('caja/rendir', [App\Http\Controllers\FlujoCajaController::class, 'rendirCajaDiaria'])->name('asistentecm.ma.rendir');
+    Route::get('caja/rendir/bonos', [App\Http\Controllers\FlujoCajaController::class, 'cargaBonosAsistenteDia'])->name('asistentecm.ma.rendicion_carga_bonos');
+    Route::get('caja/historico', [App\Http\Controllers\FlujoCajaController::class, 'historicoCajaDiaria'])->name('asistentecm.ma.historico_caja');
+
+    Route::get('Subcripcion', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'index'])->name('asistentecm.ma.subcripcion');
+    Route::get('Venta_Productos', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'index'])->name('asistentecm.ma.venta_productos');
+    Route::get('Registro_Paciente', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'registroPaciente'])->name('asistentecm.ma.registro_paciente');
+	Route::get('Paciente/cargar_info', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscar_paciente_rut'])->name('asistentecm.ma.buscar_paciente_rut');
+
+    Route::get('Profesional/informacion/buscar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscarInfoProfesional'])->name('asistentecm.ma.buscar_info_profesional');
+    Route::get('Hora-Medica/buscar', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_hora_medica'])->name('asistentecm.ma.buscar_hora_medica');
+
+    /* 1.- Reservar Hora Médica */
+    Route::get('getEspecialidad', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'getEspecialidad'])->name('asistentecm.ma.getEspecialidad');
+    Route::get('getProfesional', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'getProfesional'])->name('asistentecm.ma.getProfesional');
+    Route::get('getVideoConsulta', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'getVideoConsulta'])->name('asistentecm.ma.getVideoConsulta');
+
+    /** perfil  */
+    Route::post('perfil/editar_datos/personales', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'editar_datos_personales_perfil'])->name('asistentecm.ma.editar_datos_personales_perfil');
+    Route::post('perfil/editar_datos/contacto', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'editar_datos_contacto_perfil'])->name('asistentecm.ma.editar_datos_contacto_perfil');
+    Route::post('perfil/editar_datos/direccion', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'editar_datos_direccion_perfil'])->name('asistentecm.ma.editar_datos_direccion_perfil');
+    /** contacto emergencia */
+    Route::get('perfil/contacto/emergencia/cargar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'cargar_contacto_emergencia'])->name('asistentecm.ma.cargar_contacto_emergencia');
+    Route::get('perfil/contacto/emergencia/registrar_contacto_emergencia', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'registrar_contacto_emergencia'])->name('asistentecm.ma.registrar_contacto_emergencia');
+    /** contacto */
+    Route::get('perfil/contacto/cargar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'cargar_datos_contacto'])->name('asistentecm.ma.cargar_datos_contacto');
+    Route::get('perfil/contacto/editar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'editar_contacto_emergencia'])->name('asistentecm.ma.editar_contacto');
+    Route::get('perfil/contacto/eliminar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'eliminar_contacto_asistente'])->name('asistentecm.ma.eliminar_contacto_asistente');
+    Route::get('perfil/contacto/buscar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscar_contacto'])->name('asistentecm.ma.buscar_contacto');
+
+    Route::get('hora/confirmar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'confirmarHora'])->name('asistentecm.ma.confirmar_hora');
+    Route::get('hora/por/confirmar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'cargarConfirmarHora'])->name('asistentecm.ma.cargar_hora_por_confirmar');
 });
 
 /* ASISTENTE caja Centro Medico*/
@@ -726,7 +773,7 @@ Route::group([
 
 
 Route::group([
-    'middleware' => ['role:AsistenteAdm|Adm_Comercial|Adm_Comercial|Asistente|AsistenteCaja|AsistenteJefaCaja|AsistenteOnline|Admin'],
+    'middleware' => ['role:AsistenteAdm|Adm_Comercial|AsistenteManejoAgenda|Adm_Comercial|Asistente|AsistenteCaja|AsistenteJefaCaja|AsistenteOnline|Admin'],
     'prefix' => 'Agenda/',
 ], function () {
     Route::get('BuscarInfoProfesional', [App\Http\Controllers\EscritorioAsistente::class, 'buscarInfoProfesional'])->name('agenda.buscar_info_profesional');
@@ -938,7 +985,7 @@ Route::group([
 
     Route::get('/invitacion/buscar/informacion', [App\Http\Controllers\InvitacionController::class, 'cambioContrasenaPerfilResponsable'])->name('invitaciones.buscar.info');
 
-    /** FLUJO DE CAJA */
+	/** FLUJO DE CAJA */
     Route::get('/flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionCmAdm'])->name('adm_cm.flujo.caja.index');
 
     /** Contrato dependiente */
@@ -947,6 +994,9 @@ Route::group([
     /** admin Comercial */
     Route::get('/comercial/escritorio', [App\Http\Controllers\AdministradorCmController::class, 'escritorioAdminComercial'])->name('administrador_comercial.home');
     Route::get('/comercial/configuracion', [App\Http\Controllers\AdministradorCmController::class, 'configuracion_comercial'])->name('administrador_comercial.configuracion');
+
+    /** FLUJO DE CAJA */
+    Route::get('/comercial/flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionCmAdm'])->name('adm_cm.flujo.caja.index');
 
 
 });

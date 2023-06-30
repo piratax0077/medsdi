@@ -1451,7 +1451,8 @@ class EscritorioProfesional extends Controller
 
     public function config_profesional()
     {
-        return view('app.profesional.configuracion_profesional');
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        return view('app.profesional.configuracion_profesional')->with(['profesional' => $profesional]);
     }
 
     public function mis_lugares()
@@ -3601,7 +3602,7 @@ class EscritorioProfesional extends Controller
         $lugar_atencion_id_ = 0;
         $id_paciente_ = 0;
         $id_usuario_ = 0;
-        $id_profesional_ = 0;        
+        $id_profesional_ = 0;
         $id_hora_realizar_ = 0;
         $clave_ = rand(1111,9999);
 
@@ -3637,7 +3638,7 @@ class EscritorioProfesional extends Controller
         }
 
         if($profesional_provisorio)
-        {        
+        {
             $id_usuario_ = $profesional_provisorio->id_usuario;
             $id_paciente_ = $profesional_provisorio->id_usuario_genera;
             

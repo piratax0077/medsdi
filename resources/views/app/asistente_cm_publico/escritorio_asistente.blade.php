@@ -279,7 +279,7 @@
         {{--  CARGA AGENDE DEL PROFESIONAL  --}}
         function cargarAgendaProfesional(fecha)
         {
-
+            console.log('asistente_cm_publico/escritorio_asistente');
             if(fecha != undefined && fecha != '')
             {
                 var res = fecha.split('T')[0];
@@ -307,10 +307,10 @@
                     {
 
                         //data = JSON.parse(data);
-                        console.log('-----------------------');
-                        console.log(data);
-                        console.log('-----------------------');
-                        if(data.estado == 1)
+                        // console.log('-----------------------');
+                        // console.log(data);
+                        // console.log('-----------------------');
+                        if(data.estado == 1 && data.horario.length!=0)
                         {
                             $('#tabla_info_profesional tbody').show();
                             $('#nombre_profesional_agenda').html(data.profesional.nombre.toUpperCase()  + ' ' + data.profesional.apellido_uno.toUpperCase()  + ' ' + data.profesional.apellido_dos.toUpperCase() );
@@ -825,6 +825,7 @@
                                     //SuccessMode: true,
                                 });
                                 evaluacion =  false;
+                                $('#agenda').html('');
                             }
 
                         }

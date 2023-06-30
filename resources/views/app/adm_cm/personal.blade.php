@@ -619,7 +619,7 @@
 
                         });
 
-
+                        $('#asistentes_personal').DataTable().destroy();
                         $('#asistentes_personal').DataTable({
                             responsive: true,
                         });

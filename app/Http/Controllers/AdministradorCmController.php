@@ -95,7 +95,40 @@ class AdministradorCmController extends Controller
                         }
                         else
                         {
-                            return back()->with('error','Institución no encontrada');
+
+                            $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->where('id_empleado', $responsable->id)
+                                    ->whereIn('estado', [2,3])
+                                    ->first();
+
+                            if($result_contrato)
+                            {
+                                $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                if($registro)
+                                {
+                                    /** INSTITUCION */
+                                    $institucion = $registro;
+                                    $tipo_institucion = 'institucion';
+                                }
+                                else
+                                {
+                                    $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** SERVICIOS */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'servicio';
+                                    }
+                                    else
+                                    {
+                                        return back()->with('error','Institución no encontrada');
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                            }
                         }
                     }
                 }
@@ -910,6 +943,7 @@ class AdministradorCmController extends Controller
         {
             $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
         }
+
         if($registro)
         {
             // var_dump($registro);
@@ -958,7 +992,40 @@ class AdministradorCmController extends Controller
                         }
                         else
                         {
-                            return back()->with('error','Institución no encontrada');
+
+                            $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->where('id_empleado', $responsable->id)
+                                    ->whereIn('estado', [2,3])
+                                    ->first();
+
+                            if($result_contrato)
+                            {
+                                $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                if($registro)
+                                {
+                                    /** INSTITUCION */
+                                    $institucion = $registro;
+                                    $tipo_institucion = 'institucion';
+                                }
+                                else
+                                {
+                                    $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** SERVICIOS */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'servicio';
+                                    }
+                                    else
+                                    {
+                                        return back()->with('error','Institución no encontrada');
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                            }
                         }
                     }
                 }
@@ -1100,7 +1167,40 @@ class AdministradorCmController extends Controller
                         }
                         else
                         {
-                            return back()->with('error','Institución no encontrada');
+
+                            $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->where('id_empleado', $responsable->id)
+                                    ->whereIn('estado', [2,3])
+                                    ->first();
+
+                            if($result_contrato)
+                            {
+                                $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                if($registro)
+                                {
+                                    /** INSTITUCION */
+                                    $institucion = $registro;
+                                    $tipo_institucion = 'institucion';
+                                }
+                                else
+                                {
+                                    $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** SERVICIOS */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'servicio';
+                                    }
+                                    else
+                                    {
+                                        return back()->with('error','Institución no encontrada');
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                            }
                         }
                     }
                 }
@@ -1255,7 +1355,40 @@ class AdministradorCmController extends Controller
                         }
                         else
                         {
-                            return back()->with('error','Institución no encontrada');
+
+                            $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->where('id_empleado', $responsable->id)
+                                    ->whereIn('estado', [2,3])
+                                    ->first();
+
+                            if($result_contrato)
+                            {
+                                $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                if($registro)
+                                {
+                                    /** INSTITUCION */
+                                    $institucion = $registro;
+                                    $tipo_institucion = 'institucion';
+                                }
+                                else
+                                {
+                                    $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** SERVICIOS */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'servicio';
+                                    }
+                                    else
+                                    {
+                                        return back()->with('error','Institución no encontrada');
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                            }
                         }
                     }
                 }
@@ -1409,7 +1542,40 @@ class AdministradorCmController extends Controller
                         }
                         else
                         {
-                            return back()->with('error','Institución no encontrada');
+
+                            $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->where('id_empleado', $responsable->id)
+                                    ->whereIn('estado', [2,3])
+                                    ->first();
+
+                            if($result_contrato)
+                            {
+                                $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                if($registro)
+                                {
+                                    /** INSTITUCION */
+                                    $institucion = $registro;
+                                    $tipo_institucion = 'institucion';
+                                }
+                                else
+                                {
+                                    $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** SERVICIOS */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'servicio';
+                                    }
+                                    else
+                                    {
+                                        return back()->with('error','Institución no encontrada');
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                            }
                         }
                     }
                 }
@@ -1604,7 +1770,40 @@ class AdministradorCmController extends Controller
                             }
                             else
                             {
-                                return back()->with('error','Institución no encontrada');
+
+                                $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                        ->where('id_empleado', $responsable->id)
+                                        ->whereIn('estado', [2,3])
+                                        ->first();
+
+                                if($result_contrato)
+                                {
+                                    $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** INSTITUCION */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'institucion';
+                                    }
+                                    else
+                                    {
+                                        $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                        if($registro)
+                                        {
+                                            /** SERVICIOS */
+                                            $institucion = $registro;
+                                            $tipo_institucion = 'servicio';
+                                        }
+                                        else
+                                        {
+                                            return back()->with('error','Institución no encontrada');
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                                }
                             }
                         }
                     }
@@ -1612,6 +1811,7 @@ class AdministradorCmController extends Controller
                     {
                         return back()->with('error','Institución no encontrada');
                     }
+
                 }
             }
             /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
@@ -1844,7 +2044,40 @@ class AdministradorCmController extends Controller
                             }
                             else
                             {
-                                return back()->with('error','Institución no encontrada');
+
+                                $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                        ->where('id_empleado', $responsable->id)
+                                        ->whereIn('estado', [2,3])
+                                        ->first();
+
+                                if($result_contrato)
+                                {
+                                    $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** INSTITUCION */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'institucion';
+                                    }
+                                    else
+                                    {
+                                        $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                        if($registro)
+                                        {
+                                            /** SERVICIOS */
+                                            $institucion = $registro;
+                                            $tipo_institucion = 'servicio';
+                                        }
+                                        else
+                                        {
+                                            return back()->with('error','Institución no encontrada');
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                                }
                             }
                         }
                     }
@@ -1852,6 +2085,7 @@ class AdministradorCmController extends Controller
                     {
                         return back()->with('error','Institución no encontrada');
                     }
+
                 }
             }
             /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
@@ -2043,7 +2277,40 @@ class AdministradorCmController extends Controller
                             }
                             else
                             {
-                                return back()->with('error','Institución no encontrada');
+
+                                $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                        ->where('id_empleado', $responsable->id)
+                                        ->whereIn('estado', [2,3])
+                                        ->first();
+
+                                if($result_contrato)
+                                {
+                                    $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** INSTITUCION */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'institucion';
+                                    }
+                                    else
+                                    {
+                                        $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                        if($registro)
+                                        {
+                                            /** SERVICIOS */
+                                            $institucion = $registro;
+                                            $tipo_institucion = 'servicio';
+                                        }
+                                        else
+                                        {
+                                            return back()->with('error','Institución no encontrada');
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                                }
                             }
                         }
                     }
@@ -2248,7 +2515,40 @@ class AdministradorCmController extends Controller
                         }
                         else
                         {
-                            return back()->with('error','Institución no encontrada');
+
+                            $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->where('id_empleado', $responsable->id)
+                                    ->whereIn('estado', [2,3])
+                                    ->first();
+
+                            if($result_contrato)
+                            {
+                                $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                if($registro)
+                                {
+                                    /** INSTITUCION */
+                                    $institucion = $registro;
+                                    $tipo_institucion = 'institucion';
+                                }
+                                else
+                                {
+                                    $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** SERVICIOS */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'servicio';
+                                    }
+                                    else
+                                    {
+                                        return back()->with('error','Institución no encontrada');
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                            }
                         }
                     }
                 }
@@ -2755,7 +3055,40 @@ class AdministradorCmController extends Controller
                         }
                         else
                         {
-                            return back()->with('error','Institución no encontrada');
+
+                            $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->where('id_empleado', $responsable->id)
+                                    ->whereIn('estado', [2,3])
+                                    ->first();
+
+                            if($result_contrato)
+                            {
+                                $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                if($registro)
+                                {
+                                    /** INSTITUCION */
+                                    $institucion = $registro;
+                                    $tipo_institucion = 'institucion';
+                                }
+                                else
+                                {
+                                    $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** SERVICIOS */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'servicio';
+                                    }
+                                    else
+                                    {
+                                        return back()->with('error','Institución no encontrada');
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                            }
                         }
                     }
                 }

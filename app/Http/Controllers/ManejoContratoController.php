@@ -668,7 +668,7 @@ class ManejoContratoController extends Controller
 
         if($valido)
         {
-            $lista_tipo_asitente = array('ASISTENTE PUBLICO', 'ASISTENTE JEFA CAJA', 'ASISTENTE ADMINISTRATIVO', 'ASISTENTE ONLINE', 'ASISTENTE CONSULTA');
+            $lista_tipo_asitente = array('ASISTENTE PUBLICO', 'ASISTENTE JEFA CAJA', 'ASISTENTE ADMINISTRATIVO', 'ASISTENTE ONLINE', 'ASISTENTE CONSULTA', 'ASISTENTE MANEJO DE AGENDA');
             $lista_tipo_admi_inst_serv = array('ADMINISTRADOR DE CM', 'ADMINISTRADOR DE SERVICIOS');
 
             /** registro asistente */
@@ -1078,24 +1078,40 @@ class ManejoContratoController extends Controller
             // 4 - Asistente Online
             // 5 - Asistente Consulta
             $tipo = 0;
+            $rol_asignar = '';
             $id_asistente = 0;
             $id_asistente_user = 0;
             switch ($registros->tipo_contrato) {
                 case 'ASISTENTE PUBLICO':
-                    if($tipo == 0)
+                    if($tipo == 0){
+                        $rol_asignar = 'Asistente Publico';
                         $tipo = 1;
+                    }
                 case 'ASISTENTE JEFA CAJA':
-                    if($tipo == 0)
+                    if($tipo == 0){
+                        $rol_asignar = 'Asistente Jefa Caja';
                         $tipo = 2;
+                    }
                 case 'ASISTENTE ADMINISTRATIVO':
-                    if($tipo == 0)
+                    if($tipo == 0){
+                        $rol_asignar = 'Asistente Administrativo';
                         $tipo = 3;
+                    }
                 case 'ASISTENTE ONLINE':
-                    if($tipo == 0)
+                    if($tipo == 0){
+                        $rol_asignar = 'Asistente Online';
                         $tipo = 4;
+                    }
                 case 'ASISTENTE CONSULTA':
-                    if($tipo == 0)
+                    if($tipo == 0){
+                        $rol_asignar = 'Asistente Consulta';
                         $tipo = 5;
+                    }
+                case 'ASISTENTE MANEJO DE AGENDA':
+                    if($tipo == 0){
+                        $rol_asignar = 'Asistente Manejo de Agenda';
+                        $tipo = 6;
+                    }
 
                     $validar_asistente = Asistente::where('email', $registros->email)->first();
                     if($validar_asistente)
@@ -1166,15 +1182,45 @@ class ManejoContratoController extends Controller
                             {
                                 $asistente_user = new User();
                                 $asistente_user->email = $registros->email;
-                                $asistente_user->password = Hash::make(rand(11111,99999));
+                                $pass_temp = rand(11111,99999);
+                                $asistente_user->password = Hash::make($pass_temp);
                                 $asistente_user->name = $registros->nombre.' '.$registros->apellido_uno.' '.$registros->apellido_dos;
                                 if ($asistente_user->save())
                                 {
                                     $datos['user']['estado'] = 1;
                                     $datos['user']['result'] = $asistente_user;
                                     /** asignando rol de adminstrador de institucion */
-                                    $asistente_user->assignRole('Asistente');
+                                    $asistente_user->assignRole($rol_asignar);
                                     $id_asistente_user = $asistente_user->id;
+
+                                    /** envio de correo de confirmacion  */
+                                    $blade = 'bienvenida_asistente_usuario';
+                                    $to = array(
+                                            array('email' => $asistente_user->email,'name' => $asistente_user->name),
+                                        );
+                                    $cc = array();
+                                    $bcc = array();
+                                    $asunto = 'MED-SDI - Bienvenido!';
+                                    $body = array(
+                                        'nombre' => $asistente_user->name,
+                                        'user' => $asistente_user->email,
+                                        'pass' => $pass_temp,
+                                    );
+                                    $archivo = '';/** pendiente */
+                                    $id_institucion = '';
+
+                                    $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                                    if($result_mail['estado'])
+                                    {
+                                        $datos['mail']['estado'] = 1;
+                                        $datos['mail']['msj'] = 'Notificacion de bienvenida enviado';
+                                    }
+                                    else
+                                    {
+                                        $datos['mail']['estado'] = 0;
+                                        $datos['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                                    }
                                 }
                                 else
                                 {
@@ -1416,7 +1462,40 @@ class ManejoContratoController extends Controller
                             }
                             else
                             {
-                                return back()->with('error','Institución no encontrada');
+
+                                $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                        ->where('id_empleado', $responsable->id)
+                                        ->whereIn('estado', [2,3])
+                                        ->first();
+
+                                if($result_contrato)
+                                {
+                                    $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** INSTITUCION */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'institucion';
+                                    }
+                                    else
+                                    {
+                                        $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                        if($registro)
+                                        {
+                                            /** SERVICIOS */
+                                            $institucion = $registro;
+                                            $tipo_institucion = 'servicio';
+                                        }
+                                        else
+                                        {
+                                            return back()->with('error','Institución no encontrada');
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                                }
                             }
                         }
                     }
