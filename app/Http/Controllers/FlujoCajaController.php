@@ -12,6 +12,7 @@ use App\Models\Paciente;
 use App\Models\Parametro;
 use App\Models\Prevision;
 use App\Models\Profesional;
+use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\RendicionCaja;
 use App\Models\Servicios;
 use Illuminate\Http\Request;
@@ -691,17 +692,21 @@ class FlujoCajaController extends Controller
             $id_lugar_atencion = $contrato->id_lugar_atencion;
             $filtro = array();
             $filtro[] = array('id_asistente',$asistente->id);
+            $filtro[] = array('numero_sesiones','=','0');
+            $filtro[] = array('rendido','0');
 
+
+            // echo json_encode($filtro);
+
+            /** rendicion a cm */
             /** bono  */
             $bonos = Bono::where($filtro)
-                ->where('numero_sesiones','=','0')
-                ->where('rendido','0')
-                ->whereDay('fecha_atencion', date('d'))
+                ->whereDay('fecha_atencion','<=', date('d'))
                 ->whereMonth('fecha_atencion',  date('m'))
                 ->whereYear('fecha_atencion', date('Y'))
-                ->where('id_asistente', $asistente->id)
                 ->get();
 
+            // echo json_encode($bonos);
             /** programa */
             // $bonos_programa = Bono::where($filtro)
             //     ->where('numero_sesiones','>','0')
@@ -758,6 +763,16 @@ class FlujoCajaController extends Controller
                                 ->get();
 
 
+
+            $institucion = Instituciones::where('id_lugar_atencion',$id_lugar_atencion)->first();
+            $lista_asistente_lugar = AsistenteLugarAtencion::where('id_lugar_atencion',$id_lugar_atencion)->where('id_institucion',$institucion->id)->pluck('id_lugar_atencion')->toArray();
+
+            /** PERSONAL QUE RECIBE */
+            /** profesional */
+            $lista_profesionales = ProfesionalesLugaresAtencion::whereIn('id_lugar_atencion', $lista_asistente_lugar)->pluck('id_profesional')->toArray();
+
+            $profesionales = Profesional::whereIn('id', $lista_profesionales)->orderBy('apellido_uno', 'ASC')->get();
+
             return view('app.asistente_cm_publico.flujo_caja')->with([
                 'asistente' => $asistente,
                 'lista_bonos' => implode('|',$lista_bonos),
@@ -767,7 +782,9 @@ class FlujoCajaController extends Controller
                 'total_bonos' => $total_bonos,
                 'total_efectivo' => $total_efectivo,
                 'total_otros' => $total_otros,
-                // 'bonos_programa' => $bonos_programa,
+
+                'listado_recibe_prof' => $profesionales,
+
             ]);
         }
         else
@@ -787,15 +804,17 @@ class FlujoCajaController extends Controller
             $id_lugar_atencion = $contrato->id_lugar_atencion;
             $filtro = array();
             $filtro[] = array('id_asistente',$asistente->id);
+            $filtro[] = array('numero_sesiones','=','0');
+            $filtro[] = array('rendido','0');
 
             /** bono  */
             $bonos = Bono::where($filtro)
-                ->where('numero_sesiones','=','0')
-                ->where('rendido','0')
-                ->whereDay('fecha_atencion', date('d'))
+                // ->where('numero_sesiones','=','0')
+                // ->where('rendido','0')
+                // ->where('id_asistente', $asistente->id)
+                ->whereDay('fecha_atencion','<=', date('d'))
                 ->whereMonth('fecha_atencion',  date('m'))
                 ->whereYear('fecha_atencion', date('Y'))
-                ->where('id_asistente', $asistente->id)
                 ->get();
 
             /** programa */
@@ -930,17 +949,21 @@ class FlujoCajaController extends Controller
 
         if($contrato)
         {
+            $id_lugar_atencion = $contrato->id_lugar_atencion;
             $filtro = array();
             $filtro[] = array('id_asistente',$asistente->id);
+            $filtro[] = array('numero_sesiones','=','0');
+            $filtro[] = array('rendido','0');
 
+            if(!empty($request->id_profesional))
+                $filtro[] = array('id_profesional',$request->id_profesional);
+
+            /** rendicion a cm */
             /** bono  */
             $bonos = Bono::where($filtro)
-                ->where('numero_sesiones','=','0')
-                ->where('rendido','0')
-                ->whereDay('fecha_atencion', date('d'))
+                ->whereDay('fecha_atencion','<=', date('d'))
                 ->whereMonth('fecha_atencion',  date('m'))
                 ->whereYear('fecha_atencion', date('Y'))
-                ->where('id_asistente', $asistente->id)
                 ->with(['TipoBono' => function($query){
                     $query->select('id', 'nombre');
                 }])
@@ -955,6 +978,7 @@ class FlujoCajaController extends Controller
                 }])
                 ->get();
 
+            // var_dump($bonos);
             /** programa */
             // $bonos_programa = Bono::where($filtro)
             //     ->where('numero_sesiones','>','0')

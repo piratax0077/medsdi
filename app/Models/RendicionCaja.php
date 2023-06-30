@@ -22,4 +22,7 @@ class RendicionCaja extends Model
     public function AsistenteReceptor(){
         return $this->hasOne(Asistente::class, 'id', 'id_asistente_receptor');
     }
+    public function ProfesionalReceptor(){
+        return $this->hasOne(Profesional::class, 'id', 'id_profesional_receptor');
+    }
 }

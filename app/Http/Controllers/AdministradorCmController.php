@@ -271,7 +271,7 @@ class AdministradorCmController extends Controller
                     {
                         $administrador = AdminInstServ::select('id', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_tipo_administrador', 'id_direccion', 'id_admin')
                                                 ->with(['TipoAdministrador' => function($query){
-                                                    $query->select('id', 'nombre','descripcion');
+                                                    $query->select('id', 'nombres as nombre','descripcion');
                                                 }])
                                                 ->where('id', $value_contratos->id_empleado)
                                                 ->first();
@@ -324,6 +324,8 @@ class AdministradorCmController extends Controller
         }
 
         // var_dump((object)$lista_tipo_contrato);
+
+        // echo json_encode($personal);
 
         return view('app.adm_cm.configuracion')->with([
             'tipo_institucion' => $tipo_institucion,

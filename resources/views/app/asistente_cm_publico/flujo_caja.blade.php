@@ -32,9 +32,17 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-12 col-md-12">
+                                    <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="btn btn-outline-info btn-sm mb-2 mx-2 active" id="tab_redicion_cm-tab" data-toggle="tab" href="#tab_redicion_cm" role="tab" aria-controls="tab_redicion_cm" aria-selected="true"><i class="feather icon-user mr-2"></i>Rendicion a CM</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="btn btn-outline-info btn-sm mb-2 mx-2" id="tab_redicion_prof-tab" data-toggle="tab" href="#tab_redicion_prof" role="tab" aria-controls="tab_redicion_prof" aria-selected="false"><i class="feather icon-lock mr-2"></i>Rendicion a Profesional</a>
+                                        </li>
+                                    </ul>
                                     <div class="tab-content" id="pills-tabContent">
                                         {{-- PESTAÑA RENDICION DE CAJA --}}
-                                        <div class="tab-pane fade show active " id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                        <div class="tab-pane fade show active " id="tab_redicion_cm" role="tabpanel" aria-labelledby="tab_redicion_cm-tab">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <h5 class="text-c-blue d-inline float-left f-18 pt-1">Rendir Caja del {{ date('d-m-Y') }}</h5>
@@ -107,62 +115,160 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-12">
-                                                <table id="tabla_rendir_caja" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="text-center align-middle">Tipo</th>
-                                                            <th class="text-center align-middle">Código</th>
-                                                            <th class="text-center align-middle">Clase de Pago</th>
-                                                            <th class="text-center align-middle">Convenio</th>
-                                                            <th class="text-center align-middle">F/Atención</th>
-                                                            <th class="text-center align-middle">Paciente</th>
-                                                            <th class="text-center align-middle">Valor total</th>
-                                                            <th class="text-center align-middle">Profesional</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @if( isset($bono) )
-                                                            @foreach($bono as $key_b => $value_b)
-                                                                <tr >
-                                                                    <td class="align-middle text-center">{{ $value_b->TipoBono()->first()->nombre }}</td>
-                                                                    <td class="align-middle text-center">{{ $value_b->numero_bono }}</td>
-                                                                    <td class="align-middle text-center">
-                                                                        @if($value_b->id_clase_bono == 1)
-                                                                            Bono Fisico
-                                                                        @elseif($value_b->id_clase_bono == 2)
-                                                                            Sencillito
-                                                                        @elseif($value_b->id_clase_bono == 3)
-                                                                            Caja Vecina
-                                                                        @elseif($value_b->id_clase_bono == 4)
-                                                                            Bono Web
-                                                                        @elseif($value_b->id_clase_bono == 5)
-                                                                            Bono Web Pre-Pago
-                                                                        @elseif($value_b->id_clase_bono == 6)
-                                                                            Particular
-                                                                        @else
-                                                                            Otro
-                                                                        @endif
-                                                                    </td>
-                                                                    <td class="align-middle text-center">{{ $value_b->Convenio()->first()->nombre }}</td>
-                                                                    <td class="align-middle text-center">{{ $value_b->fecha_atencion }}</td>
-                                                                    <td class="align-middle text-center">
-                                                                        <span>{{ $value_b->Paciente()->first()->nombres }} {{ $value_b->Paciente()->first()->apellido_uno }} {{ $value_b->Paciente()->first()->apellido_dos }}</span><br>
-                                                                        <span>{{ $value_b->Paciente()->first()->rut }}</span>
-                                                                    </td>
-                                                                    <td class="align-middle text-center">${{ number_format($value_b->valor_atencion, 2, ",", ".") }}</td>
-                                                                    <td class="align-middle text-center">
-                                                                        <span>{{ $value_b->Profesional()->first()->nombres }} {{ $value_b->Profesional()->first()->apellido_uno }} {{ $value_b->Profesional()->first()->apellido_dos }}</span><br>
-                                                                        <span>{{ $value_b->Profesional()->first()->rut }}</span>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        @endif
-                                                    </tbody>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12">
+                                                    <table id="tabla_rendir_caja" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center align-middle">Tipo</th>
+                                                                <th class="text-center align-middle">Código</th>
+                                                                <th class="text-center align-middle">Clase de Pago</th>
+                                                                <th class="text-center align-middle">Convenio</th>
+                                                                <th class="text-center align-middle">F/Atención</th>
+                                                                <th class="text-center align-middle">Paciente</th>
+                                                                <th class="text-center align-middle">Valor total</th>
+                                                                <th class="text-center align-middle">Profesional</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if( isset($bono) )
+                                                                @foreach($bono as $key_b => $value_b)
+                                                                    <tr >
+                                                                        <td class="align-middle text-center">{{ $value_b->TipoBono()->first()->nombre }}</td>
+                                                                        <td class="align-middle text-center">{{ $value_b->numero_bono }}</td>
+                                                                        <td class="align-middle text-center">
+                                                                            @if($value_b->id_clase_bono == 1)
+                                                                                Bono Fisico
+                                                                            @elseif($value_b->id_clase_bono == 2)
+                                                                                Sencillito
+                                                                            @elseif($value_b->id_clase_bono == 3)
+                                                                                Caja Vecina
+                                                                            @elseif($value_b->id_clase_bono == 4)
+                                                                                Bono Web
+                                                                            @elseif($value_b->id_clase_bono == 5)
+                                                                                Bono Web Pre-Pago
+                                                                            @elseif($value_b->id_clase_bono == 6)
+                                                                                Particular
+                                                                            @else
+                                                                                Otro
+                                                                            @endif
+                                                                        </td>
+                                                                        <td class="align-middle text-center">{{ $value_b->Convenio()->first()->nombre }}</td>
+                                                                        <td class="align-middle text-center">{{ $value_b->fecha_atencion }}</td>
+                                                                        <td class="align-middle text-center">
+                                                                            <span>{{ $value_b->Paciente()->first()->nombres }} {{ $value_b->Paciente()->first()->apellido_uno }} {{ $value_b->Paciente()->first()->apellido_dos }}</span><br>
+                                                                            <span>{{ $value_b->Paciente()->first()->rut }}</span>
+                                                                        </td>
+                                                                        <td class="align-middle text-center">${{ number_format($value_b->valor_atencion, 2, ",", ".") }}</td>
+                                                                        <td class="align-middle text-center">
+                                                                            <span>{{ $value_b->Profesional()->first()->nombres }} {{ $value_b->Profesional()->first()->apellido_uno }} {{ $value_b->Profesional()->first()->apellido_dos }}</span><br>
+                                                                            <span>{{ $value_b->Profesional()->first()->rut }}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @endif
+                                                        </tbody>
 
-                                                </table>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- PESTAÑA RENDICION DE CAJA A PROFESIONAL --}}
+                                        <div class="tab-pane fade" id="tab_redicion_prof" role="tabpanel" aria-labelledby="tab_redicion_prof-tab">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Rendir Caja a Profesional del {{ date('d-m-Y') }}</h5>
+                                                    <a href="{{ route('asistentecm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
+                                                        <i class="feather icon-home"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="form-row">
+                                                <input type="hidden" name="lista_bonos_prof" id="lista_bonos_prof" value="">
+                                                <div class="col-10">
+                                                    <div class="row">
+                                                        <div class="col-sm-6 col-md-2">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Número de Bonos</label>
+                                                                <input type="number" class="form-control form-control-sm" id="numero_bonos_prof" name="numero_bonos_prof" value="" readonly="readonly">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-2">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Efectivo</label>
+                                                                <input type="number" class="form-control form-control-sm" id="efectivo_prof" name="efectivo_prof" value="" readonly="readonly">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-2">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Otros</label>
+                                                                <input type="number" class="form-control form-control-sm" id="otros_prof" name="otros_prof" value="" readonly="readonly">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-2">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Total Documentos</label>
+                                                                <input type="number" class="form-control form-control-sm" id="_prof" name="_prof" value="" readonly="readonly">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-2">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Recibe Caja :</label>
+                                                                <select name="id_asistente_receptor_prof" id="id_asistente_receptor_prof" class="form-control form-control-sm" onclick="cargar_registros_prof();">
+                                                                    @if($listado_recibe_prof)
+                                                                        @foreach ( $listado_recibe_prof as $recibe )
+                                                                            <option value="{{ $recibe->id }}">{{ strtoupper($recibe->apellido_uno.' '.$recibe->apellido_dos) }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <input type="hidden" name="input_lista_archivo_prof" id="input_lista_archivo_prof" value="">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-12">
+                                                                    <!-- [ Main Content ] start -->
+                                                                    <div class="dropzone" id="mis-archivos-rendicion-prof" action="{{ route('rendir.archivo.carga') }}">
+                                                                    </div>
+                                                                    <!-- [ file-upload ] end -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-2">
+                                                    <div class="row">
+                                                        <div class="col-12 text-center">
+                                                            <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja_prof();" id="btn_rendicion_caja_diaria">Rendir Caja</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12">
+                                                    <table id="tabla_rendir_caja_prof" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center align-middle">Tipo</th>
+                                                                <th class="text-center align-middle">Código</th>
+                                                                <th class="text-center align-middle">Clase de Pago</th>
+                                                                <th class="text-center align-middle">Convenio</th>
+                                                                <th class="text-center align-middle">F/Atención</th>
+                                                                <th class="text-center align-middle">Paciente</th>
+                                                                <th class="text-center align-middle">Valor total</th>
+                                                                <th class="text-center align-middle">Profesional</th>
+                                                                <th class="text-center align-middle">Seleccion</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {{--  --}}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -194,6 +300,10 @@
             $('#tabla_rendir_caja').DataTable({
                 responsive: true,
             });
+            $('#tabla_rendir_caja_prof').DataTable({
+                responsive: true,
+            });
+            cargar_registros_prof();
         });
 
         function seleccionar_bonos_rendicion(){
@@ -355,7 +465,6 @@
             document.reload(url);
         }
 
-
         function validar_rendicion()
         {
             $('#aprobacion_tiempo').html(''+tiempo+' minutos');
@@ -396,7 +505,7 @@
                                     $('#total_efectivo').html('');
                                     $('#total_otros').html('');
                                     $('#input_lista_archivo').html('');
-                                    myDropzone_rendicion.removeAllFiles();
+                                    myDropzone_rendicion_prof.removeAllFiles();
 
                                     $('#aprobacion').html('En Espera de Aprobación <span id="aprobacion_tiempo"></span>');
                                     $('#rendicion_caja_diaria').modal('hide');
@@ -417,6 +526,7 @@
                                         console.log('confirmado');
                                         value_validacion = 1;
                                         cargar_registros();
+                                        cargar_registros_prof()
                                         return false;
                                     }
                                     else if(data.registro.estado == 2)
@@ -482,7 +592,6 @@
                 desistir_rendicion();
             }
         }
-
 
         function desistir_rendicion()
         {
@@ -601,9 +710,9 @@
                             $('#otros').val(data.total_otros);
                             $('#total').val(data.total);
 
-                            var lista_bonos = '';
+                            // var lista_bonos = '';
                             $('#tabla_rendir_caja tbody').html('');
-                            $(data.lista_bonos).each(function(index, value) { // indice, valor
+                            $(data.bonos).each(function(index, value) { // indice, valor
                                 var html = '';
                                 let clase_bono = ['','Bono Fisico','Sencillito','Caja Vecina','Bono Web','Bono Web Pre-Pago','Particular','Otro'];
                                 html +='<tr >';
@@ -623,7 +732,12 @@
                                 html +='    </td>';
                                 html +='</tr>';
                                 $('#tabla_rendir_caja tbody').append(html);
-                                lista_bonos +='|'+value.id+'' ;
+                                // lista_bonos +='|'+value.id+'' ;
+                            });
+
+                            $('#tabla_rendir_caja').DataTable().destroy();
+                            $('#tabla_rendir_caja').DataTable({
+                                responsive: true,
                             });
 
                             $('#lista_bonos').val(data.lista_bonos)
@@ -668,7 +782,7 @@
             maxFilesize: 4,
             maxFiles: 6,
             /** El texto utilizado antes de que se eliminen los archivos. */
-            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+            dictDefaultMessage: "Arrastre un Archivo PDF, XLS o CSV al recuadro para subirlo.",
 
             /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
             dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
@@ -713,7 +827,7 @@
             // },
             success: function(file, response){
                 // console.log('-------------success-----------------------');
-                cargar_lista_archivo(myDropzone_rendicion,'rendicion');
+                cargar_lista_archivo(myDropzone_rendicion, 'rendicion', 'input_lista_archivo');
 
                 if (file.previewElement) {
                     return file.previewElement.classList.add("dz-success");
@@ -738,20 +852,20 @@
             },
             removedfile(file) {
                 // console.log('-------------removedfile-----------------------');
-                cargar_lista_archivo(myDropzone_rendicion,'rendicion');
+                cargar_lista_archivo(myDropzone_rendicion, 'rendicion', 'input_lista_archivo');
                 if (file.previewElement != null && file.previewElement.parentNode != null) {
                     file.previewElement.parentNode.removeChild(file.previewElement);
                 }
                 return this._updateMaxFilesReachedClass();
             },
             canceled: function canceled(file) {
-                cargar_lista_archivo(myDropzone_rendicion,'rendicion');
+                cargar_lista_archivo(myDropzone_rendicion, 'rendicion', 'input_lista_archivo');
                 return this.emit("error", file, this.options.dictUploadCanceled);
             },
         };
 
         var lista_archivo = {};
-        function cargar_lista_archivo(obj_dropzone, alias_archivo)
+        function cargar_lista_archivo(obj_dropzone, alias_archivo, input)
         {
             // console.log('--------------cargar_lista_archivo----------------------');
             lista_archivo = [];
@@ -769,17 +883,267 @@
                             nombre_archivo = archivo_temp.archivo.nombre_archivo,
                             file_extension = archivo_temp.archivo.file_extension,
                         ];
-                        $('#input_lista_archivo').val('');
-                        $('#input_lista_archivo').val(JSON.stringify(lista_archivo));
+                        $('#'+input).val('');
+                        $('#'+input).val(JSON.stringify(lista_archivo));
                     }
                 }
             });
+        }
+
+        // ************ PROFESIONALES ************
+        /** MANEJO DE ARCHIVO */
+        // mis-archivos-rendicion-prof
+        var myDropzone_rendicion_prof ;
+        Dropzone.options.misArchivosRendicionProf = {
+            init:function()
+            {
+                myDropzone_rendicion_prof = this;
+            },
+            url: "{{ route('rendir.archivo.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "application/pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv",
+            maxFilesize: 4,
+            maxFiles: 6,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre un Archivo PDF, XLS o CSV al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_archivo();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_archivo(myDropzone_rendicion_prof, 'rendicion', 'input_lista_archivo_prof');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_archivo(myDropzone_rendicion_prof, 'rendicion', 'input_lista_archivo_prof');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_archivo(myDropzone_rendicion_prof, 'rendicion', 'input_lista_archivo_prof');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        function seleccionar_bono_prof()
+        {
+            var lista = [];
+            $('.id_check_bono').each(function(key, elemento){
+                if( $(elemento).prop('checked') ) {
+                    lista.push($(elemento).attr('data-id'));
+                }
+            });
+
+            $('#lista_bonos_prof').val(lista.join("|"));
+
+            console.log($('#lista_bonos_prof').val());
+        }
+
+        function cargar_registros_prof()
+        {
+            let url = "{{ route('asistentecm.rendicion_carga_bonos') }}";
+            $('#tabla_rendir_caja_prof').DataTable().destroy();
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    'id_profesional': $('#id_asistente_receptor_prof').val()
+                },
+            })
+            .done(function(data) {
+
+                console.log(data);
+                if (data.estado == 1)
+                {
+
+                    $('#numero_bonos_prof').val(data.total_bonos);
+                    $('#efectivo_prof').val(data.total_efectivo);
+                    $('#otros_prof').val(data.total_otros);
+                    $('#total_prof').val(data.total);
+
+                    // var lista_bonos = '';
+                    $('#tabla_rendir_caja_prof tbody').html('');
+                    $(data.bono).each(function(index, value) { // indice, valor
+                        console.log(value);
+                        var html = '';
+                        let clase_bono = ['','Bono Fisico','Sencillito','Caja Vecina','Bono Web','Bono Web Pre-Pago','Particular','Otro'];
+                        html +='<tr >';
+                        html +='    <td class="align-middle text-center">'+value.tipo_bono.nombre+'</td>';
+
+                        if(value.numero_bono == null)
+                            html +='    <td class="align-middle text-center"></td>';
+                        else
+                            html +='    <td class="align-middle text-center">'+value.numero_bono+'</td>';
+
+                        html +='    <td class="align-middle text-center">'+clase_bono[value.id_clase_bono]+'</td>';
+                        html +='    <td class="align-middle text-center">'+value.convenio.nombre+'</td>';
+                        html +='    <td class="align-middle text-center">'+value.fecha_atencion+'</td>';
+                        html +='    <td class="align-middle text-center">';
+                        html +='        <span>'+value.paciente.nombres+' '+value.paciente.apellido_uno+' '+value.paciente.apellido_dos+'</span><br>';
+                        html +='        <span>'+value.paciente.rut+'</span>';
+                        html +='    </td>';
+                        html +='    <td class="align-middle text-center">'+$.number( value.valor_atencion, 0, ',', '.' )+'</td>';
+                        html +='    <td class="align-middle text-center">';
+                        html +='        <span>'+value.profesional.nombre+' '+value.profesional.apellido_uno+' '+value.profesional.apellido_dos+'</span><br>';
+                        html +='        <span>'+value.profesional.rut+'</span>';
+                        html +='    </td>';
+                        html +='    <td>';
+                        html +='        <input type="checkbox" data-id="'+value.id+'" class="id_check_bono" name="id_check_bono_'+value.id+'" id="id_check_bono_'+value.id+'" onchange="seleccionar_bono_prof();" checked="checked">';
+                        html +='    </td>';
+                        html +='</tr>';
+                        $('#tabla_rendir_caja_prof tbody').append(html);
+                        // lista_bonos +='|'+value.id+'' ;
+                    });
 
 
+                    $('#tabla_rendir_caja_prof').DataTable({
+                        responsive: true,
+                    });
+
+                    $('#lista_bonos_prof').val(data.lista_bonos_prof)
+
+                }
+                else
+                {
+                    swal({
+                        title: "Problemas al cargar bonos del día",
+                        text: data.msj,
+                        icon: "error",
+                        buttons: "Aceptar",
+                        // DangerMode: true,
+                    });
+                    return '0';
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        function rendir_caja_prof()
+        {
+            let url = "{{ route('asistentecm.solicitar_rendir_caja.prof') }}";
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    _token: CSRF_TOKEN,
+                    bonos : $('#lista_bonos_prof').val(),
+                    id_asistente_receptor : $('#id_asistente_receptor_prof').val(),
+                    archivos : $('#input_lista_archivo_prof').val(),
+                },
+            })
+            .done(function(data) {
+
+                console.log(data);
+                if (data.estado == 1)
+                {
+                    $('#numero_rendicion_hidde').val(data.last_id);
+                    $('#numero_rendicion').html(data.last_id);
+                    $('#nombre_receptor').html(data.registro.profesional_receptor.nombres+' '+data.registro.profesional_receptor.apellido_uno+' '+data.registro.profesional_receptor.apellido_dos);
+                    $('#total_documento').html(data.registro.total_documentos);
+                    $('#total_bonos').html(data.registro.total_bono);
+                    $('#total_efectivo').html(data.registro.total_efectivo);
+                    $('#total_otros').html(data.registro.total_otros);
+
+                    $('#aprobacion').html('En Espera de Aprobación <span id="aprobacion_tiempo"></span>');
+
+                    $('#rendicion_caja_diaria').modal('show',{backdrop: 'static', keyboard: false});
+
+                    tiempo = data.autorizacion.tiempo;
+                    conteo_activo = 1;
+                    validar_rendicion();
+                }
+                else
+                {
+                    swal({
+                        title: "Solicitud de Rendicion con Problema",
+                        text: data.msj,
+                        icon: "error",
+                        buttons: "Aceptar",
+                        // DangerMode: true,
+                    });
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
         }
 
 
-    </script>
+</script>
 
 @endsection
 
