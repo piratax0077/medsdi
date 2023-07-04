@@ -74,6 +74,17 @@
 								</div>
 							</div>
 						</div>
+                        <div class="form-row">
+                            <div class="col-sm-12 d-inline text-center">
+								<div class="card">
+                                    <div class="col-sm-4 d-inline text-left pt-1 pb-0 pl-0" >
+                                        <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado"onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
+                                    </div>
+                                    <div class="col-sm-8 d-inline text-center">
+                                    </div>
+                                </div>
+                            </div>
+						</div>
                     </div>
                     <div class="card-body bg-white">
                         <div id='agenda'></div>
@@ -172,6 +183,7 @@
 @section('modales')
     @include('app.asistente_cm_manejo_agenda.modales.modal_profesional_informacion')
     @include('app.asistente.modales.modal_consulta_agenda')
+    @include('app.asistente_cm_manejo_agenda.modales.lista_espera')
 @endsection
 
 @endsection
