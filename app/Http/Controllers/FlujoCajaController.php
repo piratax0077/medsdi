@@ -793,6 +793,118 @@ class FlujoCajaController extends Controller
         }
     }
 
+    /** Asistentes CM Manejo de Agenda*/
+    public function rendirCajaDiariaMa(Request $request)
+    {
+        $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
+        $contrato = ContratoDependiente::where('id_empleado',$asistente->id)->first();
+
+        if($contrato)
+        {
+            $id_lugar_atencion = $contrato->id_lugar_atencion;
+            $filtro = array();
+            $filtro[] = array('id_asistente',$asistente->id);
+            $filtro[] = array('numero_sesiones','=','0');
+            $filtro[] = array('rendido','0');
+
+
+            // echo json_encode($filtro);
+
+            /** rendicion a cm */
+            /** bono  */
+            $bonos = Bono::where($filtro)
+                ->whereDay('fecha_atencion','<=', date('d'))
+                ->whereMonth('fecha_atencion',  date('m'))
+                ->whereYear('fecha_atencion', date('Y'))
+                ->get();
+
+            // echo json_encode($bonos);
+            /** programa */
+            // $bonos_programa = Bono::where($filtro)
+            //     ->where('numero_sesiones','>','0')
+            //     ->where('rendido','0')
+            //     ->get();
+
+            $total = 0;
+            $total_bonos = 0;
+            $total_efectivo = 0;
+            $total_otros = 0;
+            $lista_bonos = array();
+
+            foreach ($bonos as $bono){
+                $lista_bonos[] = $bono->id;
+
+                $total++;
+                // 1->Bono Fisico
+                if($bono->id_clase_bono == 1)
+                    $total_bonos++;
+                // 2->Sencillito
+                else if($bono->id_clase_bono == 2)
+                    $total_bonos++;
+                // 3->Caja Vecina
+                else if($bono->id_clase_bono == 3)
+                    $total_bonos++;
+                // 4->Bono Web
+                else if($bono->id_clase_bono == 4)
+                    $total_bonos++;
+                // 5->Bono Web Pre-Pago
+                else if($bono->id_clase_bono == 5)
+                    $total_bonos++;
+                // 6->Particular
+                else if($bono->id_clase_bono == 6)
+                    $total_efectivo += $bono->valor_atencion;
+                else
+                    $total_otros++;
+
+            }
+
+            $institucion = Instituciones::where('id_lugar_atencion',$id_lugar_atencion)->first();
+            $lista_asistente_lugar = AsistenteLugarAtencion::where('id_lugar_atencion',$id_lugar_atencion)->where('id_institucion',$institucion->id)->pluck('id_asistente')->toArray();
+
+            /** PERSONAL QUE RECIBE */
+            /** ASISTENTE */
+            $listado_recibe_a = Asistente::select('id', 'nombres', 'apellido_uno', 'apellido_dos')->whereIn('id_asistente_tipo', [2,3])
+                                            ->whereIn('id', $lista_asistente_lugar)
+                                            ->whereNotIn('id',[$asistente->id]);
+            /** ADMINISTRADOR CENTRO, ADMINISTRADOR COMERCIAL */
+            $listado_recibe = ContratoDependiente::select('id_empleado as id', 'nombres', 'apellido_uno', 'apellido_dos')
+                                ->where('id_institucion', $institucion->id)
+                                ->where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                ->whereNotIn('id_empleado',[$asistente->id])
+                                ->union($listado_recibe_a)
+                                ->get();
+
+
+
+            $institucion = Instituciones::where('id_lugar_atencion',$id_lugar_atencion)->first();
+            $lista_asistente_lugar = AsistenteLugarAtencion::where('id_lugar_atencion',$id_lugar_atencion)->where('id_institucion',$institucion->id)->pluck('id_lugar_atencion')->toArray();
+
+            /** PERSONAL QUE RECIBE */
+            /** profesional */
+            $lista_profesionales = ProfesionalesLugaresAtencion::whereIn('id_lugar_atencion', $lista_asistente_lugar)->pluck('id_profesional')->toArray();
+
+            $profesionales = Profesional::whereIn('id', $lista_profesionales)->orderBy('apellido_uno', 'ASC')->get();
+
+            return view('app.asistente_cm_manejo_agenda.flujo_caja')->with([
+                'asistente' => $asistente,
+                'lista_bonos' => implode('|',$lista_bonos),
+                'bono' => $bonos,
+                'listado_recibe' => $listado_recibe,
+                'total' => $total,
+                'total_bonos' => $total_bonos,
+                'total_efectivo' => $total_efectivo,
+                'total_otros' => $total_otros,
+
+                'listado_recibe_prof' => $profesionales,
+
+            ]);
+        }
+        else
+        {
+            return back()->with('mensaje','Contrato no encontrado');
+        }
+    }
+
     /** Asistente CM JEFA */
     public function rendirCajaDiariaJefe(Request $request)
     {
@@ -1267,9 +1379,6 @@ class FlujoCajaController extends Controller
 
         if($registro)
         {
-            // var_dump($registro);
-            // var_dump($registro->UsuarioAdministrador()->first());
-            //var_dump($registro->UsuarioAdministrador()->first()->id);
             /** INSTITUCION */
             $institucion = $registro;
             $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
@@ -1295,8 +1404,6 @@ class FlujoCajaController extends Controller
                     $registro = Instituciones::where('id_responsable',$responsable->id)->first();
                     if($registro)
                     {
-                        // var_dump($registro);
-                        // var_dump($registro->UsuarioAdministrador()->first());
                         /** INSTITUCION */
                         $institucion = $registro;
                         $tipo_institucion = 'institucion';
