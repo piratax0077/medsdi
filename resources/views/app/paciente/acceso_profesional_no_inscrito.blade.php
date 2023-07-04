@@ -179,6 +179,9 @@
 
     </div>
 
+    
+
+
     @include('template.include.nocomplatible')
 
     <script src="{{ asset('js/vendor-all.min.js') }}"></script>
@@ -186,7 +189,16 @@
     <script src="{{ asset('js/ripple.js') }}"></script>
     <script src="{{ asset('js/pcoded.min.js') }}"></script>
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/css/inputmask.min.css" rel="stylesheet"/>
     <script>
+
+        
+        $("#rut_profesional").inputmask({
+            mask: "9[9.999.999]-[9|K|k]",
+        });
 
         var lista_profesion = [];
         @foreach ($profesion as $p)
@@ -246,6 +258,41 @@
                 if(e.id_region==id_region)
                 $('#lista_ciudades').append(`<option value="${e.id}">${e.nombre}</option>`);
             })
+
+        }
+
+        function cargarListasProfesionEpecialidadSubespecialidad(id_profesion,id_especialidad,id_subespecialidad)
+        {
+            $('#lista_profesion').val(id_profesion);
+            
+            $('#lista_especialidad').html('');
+
+            lista_especialidad.forEach(e=>{
+                if(e.id_especialidad==id_profesion)
+                {
+                    if(e.id == id_especialidad)
+                    {
+                        $('#lista_especialidad').append(`<option value="${e.id}" selected>${e.nombre}</option>`);
+                    }else{
+                        $('#lista_especialidad').append(`<option value="${e.id}">${e.nombre}</option>`);
+                    }
+                }
+            })
+
+            $('#lista_sub_especialidad').html('');
+
+            lista_subespecialidad.forEach(e=>{
+                if(e.id_tipo_especialidad==id_especialidad){
+                
+                    if(e.id == id_subespecialidad)
+                    {
+                        $('#lista_sub_especialidad').append(`<option value="${e.id}" selected>${e.nombre}</option>`);
+                    }else{
+                        $('#lista_sub_especialidad').append(`<option value="${e.id}">${e.nombre}</option>`);
+                    }
+                }
+            })
+
 
         }
 

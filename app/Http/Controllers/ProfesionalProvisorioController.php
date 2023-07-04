@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ProfesionalProvisorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Direccion;
 
 class ProfesionalProvisorioController extends Controller
 {
@@ -417,15 +418,22 @@ class ProfesionalProvisorioController extends Controller
             if(!empty($request->sexo))
             $registro->sexo = $request->sexo;
             if(!empty($request->rut))
-            $registro->rut = $request->rut;
+            $registro->rut = str_replace('.','',$request->rut);
             if(!empty($request->email))
             $registro->email = $request->email;
             if(!empty($request->telefono_uno))
             $registro->telefono_uno = $request->telefono_uno;
             if(!empty($request->telefono_dos))
             $registro->telefono_dos = $request->telefono_dos;
-            if(!empty($request->id_direccion))
-            $registro->id_direccion = $request->id_direccion;
+            if(!empty($request->direccion))
+            {
+                $direcciones = new Direccion();
+                $direcciones->direccion = $request->direccion;
+                $direcciones->numero_dir = $request->numero_dir;
+                $direcciones->id_ciudad = $request->id_ciudad;
+                if($direcciones->save())
+                $registro->id_direccion = $direcciones->id;
+            }
             if(!empty($request->id_usuario))
             $registro->id_usuario = $request->id_usuario;
             if(!empty($request->id_especialidad))

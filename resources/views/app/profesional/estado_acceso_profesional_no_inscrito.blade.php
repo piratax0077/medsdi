@@ -45,7 +45,11 @@
                                         class="img-fluid mb-3 wid-60">
                                         @if($estado==1)
                                             <h5 class="text-info">Registro de Profesional Registrado</h5>
+                                            @if($profesional_nuevo == 0)
                                             <p class="alert alert-info">Se ha enviado un correo con su contraseña, verifique el spam.</p>
+                                            @else
+                                            <p class="alert alert-info">Usuario existente, entre al sistema.</p>
+                                            @endif
                                             <a class="btn btn-success" href="{{route('ficha_medica.profesional_provisorio', ['id_hora_realizar'=> $id_hora_realizar,'id_paciente' => $id_paciente,'lugar_atencion_id' => $lugar_atencion_id])}}">Ingresar al sistema</a>
                                         @else
                                             <h5 class="alert alert-danger">Problemas al Registrar al Profesional Registrado</h5>

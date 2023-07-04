@@ -3526,9 +3526,45 @@ class EscritorioProfesional extends Controller
 
            $id_registro = $profesional_provisorio->id;
 
+           if($profesional_provisorio->id_direccion)
+           {
+                $direccion = Direccion::find($profesional_provisorio->id_direccion);
+
+                
+
+                if($direccion)
+                {                    
+                    $direccion_nombre =  $direccion->direccion;
+                    $direccion_numero =  $direccion->numero_dir;            
+                    $id_ciudad = $direccion->id_ciudad;
+
+                    $ciudad = Ciudad::find($direccion->id_ciudad);
+
+                    if($ciudad)
+                    {
+                    $id_region =  $ciudad->id_region;
+                    }else{
+                        $id_region =  0;
+                    }
+                }else{
+                    $direccion_nombre =  '';
+                    $direccion_numero =  '';            
+                    $id_ciudad = 0;
+                    $id_region =  0;
+                }
+
+           }else{
+                    $direccion_nombre =  '';
+                    $direccion_numero =  '';            
+                    $id_ciudad = 0;
+                    $id_region =  0;
+           }
+
         }else{
             abort(401);
         }
+
+        
 
          $regiones = Region::all();
          $ciudades = Ciudad::all();
@@ -3536,13 +3572,18 @@ class EscritorioProfesional extends Controller
 
          $especialidades = Especialidad::where('estado',1)->get();
          $tipo_especialidad = TipoEspecialidad::where('estado',1)->get();
-         $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get();
+         $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get();         
 
          return view('app.profesional.acceso_profesional_no_inscrito')->with([
              'id_registro' => $id_registro,
              'registro' => $profesional_provisorio,
              'regiones' => $regiones,
              'ciudades' => $ciudades,
+
+             'direccion_nombre' => $direccion_nombre,
+             'direccion_numero' => $direccion_numero,
+             'id_ciudad' => $id_ciudad,
+             'id_region' => $id_region,
 
              'profesion' => $especialidades,
              'especialidad' => $tipo_especialidad,
@@ -3556,6 +3597,7 @@ class EscritorioProfesional extends Controller
         $datos = array();
         $error = array();
         $estado = 0;
+        $profesional_nuevo = 0;
 
         $lugar_atencion_id_ = 0;
         $id_paciente_ = 0;
@@ -3598,12 +3640,13 @@ class EscritorioProfesional extends Controller
         if($profesional_provisorio)
         {
             $id_usuario_ = $profesional_provisorio->id_usuario;
-
+            $id_paciente_ = $profesional_provisorio->id_usuario_genera;
+            
             $profesional_provisorio->nombre = $nombre;
             $profesional_provisorio->apellido_uno = $primer_apellido;
             $profesional_provisorio->apellido_dos = $segundo_apellido;
             $profesional_provisorio->sexo = $sexo;
-            $profesional_provisorio->rut = $rut;
+            $profesional_provisorio->rut = str_replace('.','',$rut);
             $profesional_provisorio->email = $email;
             $profesional_provisorio->telefono_uno = $telefono_uno;
             $profesional_provisorio->telefono_dos = $telefono_dos;
@@ -3620,13 +3663,13 @@ class EscritorioProfesional extends Controller
         // PROFESIONAL
         $validar_profesional = Profesional::where('email',$email)->first();
         if($validar_profesional)
-        {
+        {            
             $id_profesional_ = $validar_profesional->id;
             $validar_profesional->nombre = $nombre;
             $validar_profesional->apellido_uno = $primer_apellido;
             $validar_profesional->apellido_dos = $segundo_apellido;
             $validar_profesional->sexo = $sexo;
-            $validar_profesional->rut = $rut;
+            $validar_profesional->rut = str_replace('.','',$rut);
             $validar_profesional->email = $email;
 
             $validar_profesional->id_especialidad = $lista_profesion; //id_especialidad
@@ -3641,22 +3684,36 @@ class EscritorioProfesional extends Controller
             $validar_profesional->provisorio = 1;
             $validar_profesional->save();
 
-            $datos['estado'] = 0;
+          
+
+            //AUTH USUARIO                  
+            //var_dump($id_usuario_);                                            
+            if(Auth::loginUsingId($id_usuario_))
+            {
+                $estado = 1;
+                $datos['login_msg'] = 'Usuario Logeado';
+            }else{
+                $datos['login_msg'] = 'Usuario no se pudo Logear';
+                $error = 'Usuario no se pudo Logear';
+                $estado = 0;
+            }
+
+            //LUGAR ATENCION
+            $lugarAtencion = LugarAtencion::where('email',$email)->first();
+            $lugar_atencion_id_ = $lugarAtencion->id;
+            
+            $datos['estado'] = 1;
             $datos['msj'] = 'Profesional ya existe';
 
-            return view('app.profesional.estado_acceso_profesional_no_inscrito')->with([
-                'estado' => 0,
-                'error' => $datos['msj']
-            ]);
-
         }else{
+            $profesional_nuevo = 1;
             $profesionales = new Profesional();
 
             $profesionales->nombre = $nombre;
             $profesionales->apellido_uno = $primer_apellido;
             $profesionales->apellido_dos = $segundo_apellido;
             $profesionales->sexo = $sexo;
-            $profesionales->rut = $rut;
+            $profesionales->rut = str_replace('.','',$rut);
             $profesionales->email = $email;
 
             $profesionales->id_especialidad = $lista_profesion; //id_especialidad
@@ -3718,7 +3775,7 @@ class EscritorioProfesional extends Controller
 
                 if($direcciones->save())
                 {
-                    $error['direccion_msg'] = 'direccion creado';
+                    $error = 'direccion creado';
                     $profesionales->id_direccion = $direcciones->id;
                     if($validar_user == NULL)
                     $profesionales->id_usuario = $user->id;
@@ -3759,23 +3816,22 @@ class EscritorioProfesional extends Controller
 
 
                 }else{
-                    $error['direccion_msg'] = 'direccion no creado';
+                    $error = 'direccion no creado';
                 }
 
-                $error['profesional_msg'] = 'Profesional creado';
+                $error = 'Profesional creado';
                 $estado = 1;
 
             }else{
-                $error['profesional_msg'] = 'Profesional no creado';
+                $error = 'Profesional no creado';
                 $estado = 0;
             }
         }
 
-        // HORA MEDICA
-        $paciente = Paciente::where('id_usuario',$id_usuario_)->first();
-        $hora_medica = new HoraMedica();
-
-        $id_paciente_ = $paciente->id;
+        // HORA MEDICA        
+        $paciente = Paciente::where('id_usuario', $id_paciente_)->first();        
+        $hora_medica = new HoraMedica();        
+        
         $hora_medica->id_paciente = $paciente->id;
         $hora_medica->id_profesional = $id_profesional_;
         $hora_medica->id_asistente = 2;
@@ -3791,37 +3847,43 @@ class EscritorioProfesional extends Controller
             $datos['hora_medica_msg'] = 'Hora Medica Creada';
         }else{
             $datos['hora_medica_msg'] = 'Hora Medica no Creada';
+            $error['hora_medica_msg'] = 'Hora Medica no Creada';
         }
 
 
 
         /** envio de correo de confirmacion  */
-        $blade = 'profesional_usuario_creado';
-        $to = array(
-                array('email' => $email,'name' => $nombre.' '.$primer_apellido.' '.$segundo_apellido),
-            );
-        $cc = array();
-        $bcc = array();
-        $asunto = 'MED-SDI - Bienvenido!';
-        $body = array(
-            'nombre' => $nombre.' '.$primer_apellido.' '.$segundo_apellido,
-            'user'=> $email,
-            'pass' => $clave_
-        );
-        $archivo = '';/** pendiente */
-        $id_institucion = '';
-
-        $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
-
-        if($result_mail['estado'])
+        if($profesional_nuevo == 1) // VALIDANDO SI ES UN PROFESIONAL NUEVO O EXISTENTE
         {
-            $datos['mail']['estado'] = 1;
-            $datos['mail']['msj'] = 'Notificacion de bienvenida enviado';
-        }else{
-            $datos['mail']['estado'] = 0;
-            $datos['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
-        }
+            $blade = 'profesional_usuario_creado';
+            $to = array(
+                    array('email' => $email,'name' => $nombre.' '.$primer_apellido.' '.$segundo_apellido),
+                );
+            $cc = array();
+            $bcc = array();
+            $asunto = 'MED-SDI - Bienvenido!';
+            $body = array(
+                'nombre' => $nombre.' '.$primer_apellido.' '.$segundo_apellido,
+                'user'=> $email,
+                'pass' => $clave_
+            );
+            $archivo = '';/** pendiente */
+            $id_institucion = '';
 
+            $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+            if($result_mail['estado'])
+            {
+                $datos['mail']['estado'] = 1;
+                $datos['mail']['msj'] = 'Notificacion de bienvenida enviado';
+            }else{
+                $datos['mail']['estado'] = 0;
+                $datos['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+            }
+        }else{
+            $datos['mail']['estado'] = 1;
+            $datos['mail']['msj'] = 'Usuario existente, redirigiendo al sistema';
+        }
 
         return view('app.profesional.estado_acceso_profesional_no_inscrito')->with([
             'estado' => $estado,
@@ -3831,8 +3893,8 @@ class EscritorioProfesional extends Controller
 
             'id_paciente' => $id_paciente_,
             'lugar_atencion_id' => $lugar_atencion_id_,
-            'id_hora_realizar' =>$id_hora_realizar_
-
+            'id_hora_realizar' =>$id_hora_realizar_,
+            'profesional_nuevo' => $profesional_nuevo
         ]);
 
 
