@@ -263,116 +263,116 @@
 
             url = "{{ route('asistentecm.ma.cargar_hora_por_confirmar') }}";
             $.ajax({
-                    url: url,
-                    type: "get",
-                    data: {}
-                })
-                .done(function(data) {
+                url: url,
+                type: "get",
+                data: {}
+            })
+            .done(function(data) {
 
-                    if (data.estado == 1)
+                if (data.estado == 1)
+                {
+
+                    console.log(data.registros);
+
+                    for (i = 0; i < data.registros.length; i++)
                     {
 
-                        console.log(data.registros);
+                        var fila = '';
+                        fila += '<tr>';
+                        fila += '    <!-- <td class="text-center align-middle">'+data.registros[i].id+'</td> -->';
+                        fila += '    <td class="text-center align-middle">'+moment(data.registros[i].fecha_consulta).format('DD-MM-YYYY') +'</td>';
+                        fila += '    <td class="text-center align-middle">'+data.registros[i].hora_inicio +'</td>';
+                        fila += '    <td class="text-center align-middle">'+data.registros[i].profesional.apellido_uno+'</td>';
+                        fila += '    <td class="text-center align-middle">'+data.registros[i].paciente.nombres+' '+data.registros[i].paciente.apellido_uno+'</td>';
+                        fila += '    <td class="text-center align-middle">';
+                        fila += '        '+data.registros[i].paciente.telefono_uno;
+                        if(data.registros[i].paciente.telefono_dos != '' && data.registros[i].paciente.telefono_dos != 'null' && data.registros[i].paciente.telefono_dos != null)
+                            fila += '            <br>'+data.registros[i].paciente.telefono_dos;
+                        fila += '    </td>';
 
-                        for (i = 0; i < data.registros.length; i++)
+                        if(data.registros[i].notificacionesconfirmacion != '' && data.registros[i].notificacionesconfirmacion != 'null' && data.registros[i].notificacionesconfirmacion != null)
                         {
 
-                            var fila = '';
-                            fila += '<tr>';
-                            fila += '    <!-- <td class="text-center align-middle">'+data.registros[i].id+'</td> -->';
-                            fila += '    <td class="text-center align-middle">'+moment(data.registros[i].fecha_consulta).format('DD-MM-YYYY') +'</td>';
-                            fila += '    <td class="text-center align-middle">'+data.registros[i].hora_inicio +'</td>';
-                            fila += '    <td class="text-center align-middle">'+data.registros[i].profesional.apellido_uno+'</td>';
-                            fila += '    <td class="text-center align-middle">'+data.registros[i].paciente.nombres+' '+data.registros[i].paciente.apellido_uno+'</td>';
-                            fila += '    <td class="text-center align-middle">';
-                            fila += '        '+data.registros[i].paciente.telefono_uno;
-                            if(data.registros[i].paciente.telefono_dos != '' && data.registros[i].paciente.telefono_dos != 'null' && data.registros[i].paciente.telefono_dos != null)
-                                fila += '            <br>'+data.registros[i].paciente.telefono_dos;
-                            fila += '    </td>';
+                            var medio_notificacion_array = JSON.parse(data.registros[i].notificacionesconfirmacion.medio_notificacion);
 
-                            if(data.registros[i].notificacionesconfirmacion != '' && data.registros[i].notificacionesconfirmacion != 'null' && data.registros[i].notificacionesconfirmacion != null)
-                            {
+                            fila += '        <td class="align-middle text-center">';
+                            medio_notificacion_array.forEach((paso,key) => {
+                                if(key == 0)
+                                {
+                                    fila += '                        1°: ';
+                                    paso.forEach(noti => {
+                                        fila += ''+noti.tipo.toUpperCase()+', ';
+                                    });
+                                }
+                                else
+                                {
+                                    fila += '                        2°: ';
+                                    paso.forEach(noti => {
+                                        fila += ''+noti.tipo.toUpperCase()+', ';
+                                    });
+                                }
+                            });
+                            fila += '        </td>';
 
-                                var medio_notificacion_array = JSON.parse(data.registros[i].notificacionesconfirmacion.medio_notificacion);
-
-                                fila += '        <td class="align-middle text-center">';
-                                medio_notificacion_array.forEach((paso,key) => {
-                                    if(key == 0)
-                                    {
-                                        fila += '                        1°: ';
-                                        paso.forEach(noti => {
-                                            fila += ''+noti.tipo.toUpperCase()+', ';
-                                        });
-                                    }
-                                    else
-                                    {
-                                        fila += '                        2°: ';
-                                        paso.forEach(noti => {
-                                            fila += ''+noti.tipo.toUpperCase()+', ';
-                                        });
-                                    }
-                                });
-                                fila += '        </td>';
-
-                                fila += '        <td class="text-center align-middle">';
-                                fila += '        '+data.registros[i].notificacionesconfirmacion.fecha_notificacion+'';
-                                fila += '        </td>';
-                            }
-                            else
-                            {
-                                fila += '        <td class="align-middle text-center">Sin notificar</td>';
-                                fila += '        <td class="align-middle text-center">N/A</td>';
-                            }
-                            fila += '    <td>';
-                            fila += '        <div class="btn btn-icon btn-info" data-toggle="tooltip" data-placement="top" title="Confirmar" onclick="confirmar_hora(\''+data.registros[i].id+'\',\'Telefonica\');">';
-                            fila += '            <!-- <i class="feather icon-activity"></i> -->';
-                            fila += '            C';
-                            fila += '        </div>';
-                            fila += '        <div class="btn btn-danger btn-sm btn-icon" data-toggle="tooltip"data-placement="top" title="Cancelar" onclick="cancelar_hora(\''+data.registros[i].id+'\',\'Telefonica\');">';
+                            fila += '        <td class="text-center align-middle">';
+                            fila += '        '+data.registros[i].notificacionesconfirmacion.fecha_notificacion+'';
+                            fila += '        </td>';
+                        }
+                        else
+                        {
+                            fila += '        <td class="align-middle text-center">Sin notificar</td>';
+                            fila += '        <td class="align-middle text-center">N/A</td>';
+                        }
+                        fila += '    <td>';
+                        fila += '        <div class="btn btn-icon btn-info" data-toggle="tooltip" data-placement="top" title="Confirmar" onclick="confirmar_hora(\''+data.registros[i].id+'\',\'Telefonica\');">';
+                        fila += '            <!-- <i class="feather icon-activity"></i> -->';
+                        fila += '            C';
+                        fila += '        </div>';
+                        fila += '        <div class="btn btn-danger btn-sm btn-icon" data-toggle="tooltip"data-placement="top" title="Cancelar" onclick="cancelar_hora(\''+data.registros[i].id+'\',\'Telefonica\');">';
+                        fila += '            <!-- <i class="feather icon-edit"></i> -->';
+                        fila += '            CN';
+                        fila += '        </div>';
+                        if(data.registros[i].notificacionesconfirmacion != '' && data.registros[i].notificacionesconfirmacion != 'null' && data.registros[i].notificacionesconfirmacion != null)
+                        {
+                            fila += '        <div class="btn btn-warning btn-sm btn-icon" data-toggle="tooltip"data-placement="top" title="No contesta" onclick="no_contesta(\''+data.registros[i].id+'\', \''+data.registros[i].notificacionesconfirmacion.id+'\', \'Telefonica\');">';
                             fila += '            <!-- <i class="feather icon-edit"></i> -->';
-                            fila += '            CN';
+                            fila += '            NoC';
                             fila += '        </div>';
-                            if(data.registros[i].notificacionesconfirmacion != '' && data.registros[i].notificacionesconfirmacion != 'null' && data.registros[i].notificacionesconfirmacion != null)
-                            {
-                                fila += '        <div class="btn btn-warning btn-sm btn-icon" data-toggle="tooltip"data-placement="top" title="No contesta" onclick="no_contesta(\''+data.registros[i].id+'\', \''+data.registros[i].notificacionesconfirmacion.id+'\', \'Telefonica\');">';
-                                fila += '            <!-- <i class="feather icon-edit"></i> -->';
-                                fila += '            NoC';
-                                fila += '        </div>';
-                            }
-                            else
-                            {
-                                fila += '        <div class="btn btn-warning btn-sm btn-icon" data-toggle="tooltip"data-placement="top" title="No contesta" onclick="no_contesta(\''+data.registros[i].id+'\', \'0\', \'Telefonica\');">';
-                                fila += '            <!-- <i class="feather icon-edit"></i> -->';
-                                fila += '            NoC';
-                                fila += '        </div>';
-                            }
-
-                            fila += '    </td>';
-                            fila += '</tr>';
-
-                            body.append(fila);
-
+                        }
+                        else
+                        {
+                            fila += '        <div class="btn btn-warning btn-sm btn-icon" data-toggle="tooltip"data-placement="top" title="No contesta" onclick="no_contesta(\''+data.registros[i].id+'\', \'0\', \'Telefonica\');">';
+                            fila += '            <!-- <i class="feather icon-edit"></i> -->';
+                            fila += '            NoC';
+                            fila += '        </div>';
                         }
 
-                        $('#tabla_hora_por_confirmar').DataTable({
-                            responsive: true,
-                        });
-                    }
-                    else
-                    {
-                        body.empty();
-                        $('#tabla_hora_por_confirmar').dataTable().fnClearTable();
-                        $('#tabla_hora_por_confirmar').dataTable().fnDestroy();
-                        var fila = '<tr><td colspan="4"><span><h5>no existen registros</h5></span></td></tr>'
+                        fila += '    </td>';
+                        fila += '</tr>';
+
                         body.append(fila);
-                        $('#tabla_hora_por_confirmar').DataTable({
-                            responsive: true,
-                        });
+
                     }
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+
+                    $('#tabla_hora_por_confirmar').DataTable({
+                        responsive: true,
+                    });
+                }
+                else
+                {
+                    body.empty();
+                    $('#tabla_hora_por_confirmar').dataTable().fnClearTable();
+                    $('#tabla_hora_por_confirmar').dataTable().fnDestroy();
+                    var fila = '<tr><td colspan="4"><span><h5>no existen registros</h5></span></td></tr>'
+                    body.append(fila);
+                    $('#tabla_hora_por_confirmar').DataTable({
+                        responsive: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
         }
 
     </script>
