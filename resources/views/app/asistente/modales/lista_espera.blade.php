@@ -28,7 +28,7 @@
                                         <h5 class="text-info">Lista de Espera</h5>
                                         <hr class="mt-0">
                                     </div>
-                                    <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $lugares_atencion->id }}">
+                                    <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="">
                                     <div class="col-sm-12 col-md-12 mb-3">
                                         <div class="table-responsive">
                                             <table id="tabla_lista_espera" class="display table-bordered table table-striped dt-responsive nowrap table-xs text-wrap" style="width:100%">
@@ -302,8 +302,8 @@
     </div>
 </div>
 
-@include('app.asistente_cm_publico.modales.lista_espera_eliminar')
-@include('app.asistente_cm_publico.modales.lista_espera_agendar')
+@include('app.asistente.modales.lista_espera_eliminar')
+@include('app.asistente.modales.lista_espera_agendar')
 
 <script>
 
@@ -317,6 +317,8 @@
     {
         if($('#agenda_profesional_asistente').val()!=='')
         {
+            // var temp_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
+            // $('#id_lugar_atencion').val(temp_lugar_atencion);
             cargarListaEsperaPorProfesional();
             $('#m_lista_espera_rut').val('');
             $('.m_lista_espera_busqueda').show();

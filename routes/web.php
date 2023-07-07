@@ -750,16 +750,19 @@ Route::group([
     Route::post('caja/carga/archivo', [App\Http\Controllers\CargaArchivoController::class, 'cargaArchivoTemp'])->name('rendir.archivo.carga');
     Route::post('caja/carga/mover_r', [App\Http\Controllers\CargaArchivoController::class, 'moverArchivo_r'])->name('rendir.archivo.mover_r');
 
+});
+
+Route::group([
+    'middleware' => ['role:Asistente|AsistenteAdm|AsistenteJefaCaja|AsistenteCaja|AsistenteOnline|AsistenteManejoAgenda|Admin'],
+    'prefix' => 'Asistente/',
+], function () {
     /** lista espera */
     Route::get('lista/espera/buscar/por/profesional', [App\Http\Controllers\ListaEsperaController::class, 'buscarListaPorProfesional'])->name('lista.espera.buscar.por.profesional');
     Route::get('lista/espera/ver', [App\Http\Controllers\ListaEsperaController::class, 'verRegistro'])->name('lista.espera.ver');
     Route::post('lista/espera/registrar/existente', [App\Http\Controllers\ListaEsperaController::class, 'registrarExistente'])->name('lista.espera.registrar.existente');
     Route::post('lista/espera/registrar/nuevo', [App\Http\Controllers\ListaEsperaController::class, 'registrarNuevo'])->name('lista.espera.registrar.nuevo');
     Route::post('lista/espera/eliminar', [App\Http\Controllers\ListaEsperaController::class, 'eliminar'])->name('lista.espera.eliminar');
-
-
 });
-
 
 /* ASISTENTE Online*/
 Route::group([
@@ -851,6 +854,7 @@ Route::group([
 	Route::get('/Laboratorio/recepcion_muestras', [App\Http\Controllers\LaboratorioController::class, 'recepcion_muestras'])->name('app.laboratorio.lab_profesional.recepcion_muestras');
 	Route::get('/Laboratorio/solicitud_exam_laboratorio_profesional', [App\Http\Controllers\LaboratorioController::class, 'solicitud_exam_laboratorio_profesional'])->name('app.laboratorio.lab_profesional.solicitud_exam_laboratorio_profesional');
 });
+
 Route::group([
     'middleware' => ['auth:sanctum', 'verified'],
 ], function () {
@@ -1265,7 +1269,7 @@ Route::group([
 
 /** BUSCADOR DE PROFESIONAL */
 Route::group([
-    'middleware' => ['role:Paciente|Asistente|AsistenteManejoAgenda|Adm_Institucion|Profesional|Institucion'],
+    'middleware' => ['role:Paciente|Asistente|AsistenteAdm|AsistenteJefaCaja|AsistenteCaja|AsistenteOnline|AsistenteManejoAgenda|Adm_Institucion|Profesional|Institucion'],
     'prefix' => 'buscador',
 ], function () {
 

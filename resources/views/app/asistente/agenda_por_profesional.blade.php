@@ -7,7 +7,6 @@
 --}}
 
 @section('content')
-
     <div class="pcoded-main-container">
         <div class="pcoded-content">
             <!--Header-->
@@ -43,6 +42,7 @@
                         <div class="card-header bg-info">
                             <div class="col-md-12">
                                 <div class="row">
+
                                     <div class="col-md-12 pt-2">
                                         <div class="row">
                                             <div class="col-md-4">
@@ -60,10 +60,8 @@
                                             </select>
                                             </div>
                                         </div>
-
-
-
                                     </div>
+
                                     <div class="col-md-12 pt-2">
                                         <div class="row">
                                             <div class="col-md-4">
@@ -81,16 +79,29 @@
                                             </select>
                                             </div>
                                         </div>
-
-
-
                                     </div>
 
+                                    {{-- <div class="col-md-12 pt-2">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado"onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
+                                            </div>
+                                        </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="card-body bg-white">
+                        {{-- BOTON DE LISTA DE ESPERA --}}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado"onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
+                            </div>
+                        </div>
+
+                        {{-- AGENDA --}}
                         <div id='agenda'></div>
                     </div>
                 </div>
@@ -99,19 +110,20 @@
     </div>
 
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#reservar_hora">
+    {{-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#reservar_hora">
         Launch
-    </button>
+    </button> --}}
 
     @include('app.asistente.modales.modal_consulta_agenda')
+    @include('app.asistente.modales.lista_espera')
 @endsection
 
 @section('page-script')
    <script>
-    $(document).ready(function()
-    {
-        cargarAgendaProfesional($('#id_lugar_atencion').val(), $('#id_profesional').val());
-    });
+        $(document).ready(function()
+        {
+            cargarAgendaProfesional($('#id_lugar_atencion').val(), $('#id_profesional').val());
+        });
    </script>
 @endsection
 

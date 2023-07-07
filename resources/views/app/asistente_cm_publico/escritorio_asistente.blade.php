@@ -40,7 +40,7 @@
 								<div class="card">
 									<label class="floating-label-activo-sm">Agendas del Centro</label>
 									<select class="form-control form-control-sm" id="agenda_profesional_asistente" name="agenda_profesional_asistente" onchange="cargarAgendaProfesional('')">
-										<option>Selecione</option>
+										<option value="">Selecione</option>
                                         @if($profesionales)
                                         @foreach($profesionales as $key_pro => $value_pro)
                                             <option value="{{ $value_pro->id }}">{{ strtoupper($value_pro->nombre) }} {{ strtoupper($value_pro->apellido_uno) }} {{ strtoupper($value_pro->apellido_dos) }}</option>
