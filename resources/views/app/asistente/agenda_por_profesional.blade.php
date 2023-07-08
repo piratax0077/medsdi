@@ -96,8 +96,11 @@
                     <div class="card-body bg-white">
                         {{-- BOTON DE LISTA DE ESPERA --}}
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado"onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_extra" onclick="abrir_horas_extras()"; ><i class="fas fa-save"></i>  Cargar Hora Extra del profesional</button>
                             </div>
                         </div>
 
@@ -116,6 +119,8 @@
 
     @include('app.asistente.modales.modal_consulta_agenda')
     @include('app.asistente.modales.lista_espera')
+    @include('app.asistente.modales.horas_extras')
+    @include('app.asistente.modales.horas_extras_agendar')
 @endsection
 
 @section('page-script')

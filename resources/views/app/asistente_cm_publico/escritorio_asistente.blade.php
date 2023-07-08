@@ -54,7 +54,7 @@
 									<table class="table table-striped table-bordered nowrap table-xs" id="tabla_info_profesional">
 										<thead>
 											<tr >
-												<th colspan="2" class="text-center align-middle">Agenda Profesional:</th>
+												<th colspan="2" class="text-center align-middle">Agenda Profesionalsss:</th>
 											</tr>
 										</thead>
 										<tbody style="display: none;">
@@ -77,10 +77,16 @@
                         <div class="form-row">
                             <div class="col-sm-12 d-inline text-center">
 								<div class="card">
-                                    <div class="col-sm-4 d-inline text-left pt-1 pb-0 pl-0" >
-                                        <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado"onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
-                                    </div>
-                                    <div class="col-sm-8 d-inline text-center">
+                                    <div class="row">
+                                        <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
+                                            <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado" onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
+                                        </div>
+                                        <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
+                                            <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_extra" onclick="abrir_horas_extras()"; ><i class="fas fa-save"></i>  Cargar Hora Extra del profesional</button>
+                                        </div>
+                                        <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
+                                            {{--  --}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -91,21 +97,6 @@
                     </div>
                 </div>
             </div>
-            <!--
-            <div class="col-md-4">
-                <div class="card subir text-center h-100">
-					<a href="http://www.cronicos.cl/registro.php" target="_blank">
-                    <img class="img-fluid card-img-top" src="{{ asset('images/iconos/inscripciones_1.svg') }}" alt="Inscripciones" class="btn  btn-arrastre" type="button">
-                    <!--<a href="{{ ROUTE('asistentecm.registro_paciente') }}" class="btn" type="button">
-
-					<div class="card-body">
-						<h4 class="card-title f-20 pt-3">Inscripciones</h4>
-						<p class="card-text">Registre pacientes a Farmacrónicos</p>
-					</div>
-					</a>
-                </div>
-            </div>
-            -->
         </div>
 
         <!--Row Botones-->
@@ -184,6 +175,8 @@
     @include('app.asistente_cm.modales.modal_profesional_informacion')
     @include('app.asistente.modales.modal_consulta_agenda')
     @include('app.asistente_cm_publico.modales.lista_espera')
+    @include('app.asistente_cm_publico.modales.horas_extras')
+    @include('app.asistente_cm_publico.modales.horas_extras_agendar')
 @endsection
 
 @endsection

@@ -801,6 +801,7 @@ Route::group([
     Route::get('Hora-medica/paciente/buscar/rut', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_rut_paciente'])->name('agenda.buscar_rut_paciente');
     Route::get('Hora-medica/hora/agendar/agendar', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_horas'])->name('agenda.agendar_hora');
     Route::get('Hora-medica/hora/agendar/paciente/nuevo', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_hora_nuevo_paciente'])->name('agenda.agendar_hora_nuevo_paciente');
+    Route::post('Hora-medica/paciente/nuevo', [App\Http\Controllers\AsistenteController::class, 'AgregarNuevoPaciente'])->name('agenda.paciente.nuevo');
 
     /** motor de busqueda asistente online*/
     Route::get('perfil/configuracion/busqueda/editar', [App\Http\Controllers\EscritorioAsistente::class, 'editar_configuracion_busqueda'])->name('asistente.editar_configuracion_busqueda');
@@ -1280,6 +1281,7 @@ Route::group([
     Route::get('lugares_atencion_profesional_buscador', [App\Http\Controllers\EscritorioGeneral::class, 'lugaresAtencionProfesionalBuscador'])->name('profesional.lugaresAtencionProfesionalBuscador');
     Route::get('dias_laborales_profesiona_lugar_atencion_buscador', [App\Http\Controllers\EscritorioGeneral::class, 'diasLaboralesProfesionaLugarAtencionBuscador'])->name('profesional.DiasLaboralesProfesionaLugarAtencionBuscador');
     Route::get('horas_disponibles_profesional_lugar_atencion_buscador', [App\Http\Controllers\EscritorioGeneral::class, 'horasDisponiblesProfesionalLugarAtencionBuscador'])->name('profesional.HorasDisponiblesProfesionalLugarAtencionBuscador');
+    Route::get('horas_profesional_lugar_atencion_buscador', [App\Http\Controllers\EscritorioGeneral::class, 'horasProfesionalLugarAtencionBuscador'])->name('profesional.HorasProfesionalLugarAtencionBuscador');
     Route::get('get/informacion/{id_dependiente_activo?}', [App\Http\Controllers\EscritorioPaciente::class, 'getPacienteUser'])->name('agenda.paciente.get.informacion');
     Route::post('reservar/hora/generar/reserva', [App\Http\Controllers\EscritorioPaciente::class, 'agendar_horas'])->name('agenda.paciente.solicitar.hora');
 });

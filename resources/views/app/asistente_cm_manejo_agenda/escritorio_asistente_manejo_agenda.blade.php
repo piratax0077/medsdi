@@ -195,10 +195,16 @@
                         <div class="form-row">
                             <div class="col-sm-12 d-inline text-center">
 								<div class="card">
-                                    <div class="col-sm-4 d-inline text-left pt-1 pb-0 pl-0" >
-                                        <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado"onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
-                                    </div>
-                                    <div class="col-sm-8 d-inline text-center">
+                                    <div class="row">
+                                        <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
+                                            <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado" onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
+                                        </div>
+                                        <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
+                                            <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_extra" onclick="abrir_horas_extras()"; ><i class="fas fa-save"></i>  Cargar Hora Extra del profesional</button>
+                                        </div>
+                                        <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
+                                            {{--  --}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -233,6 +239,8 @@
     @include('app.asistente_cm_manejo_agenda.modales.modal_profesional_informacion')
     @include('app.asistente.modales.modal_consulta_agenda')
     @include('app.asistente_cm_manejo_agenda.modales.lista_espera')
+    @include('app.asistente_cm_manejo_agenda.modales.horas_extras')
+    @include('app.asistente_cm_manejo_agenda.modales.horas_extras_agendar')
 @endsection
 
 @endsection
@@ -292,6 +300,7 @@
             });
 
         });
+
         {{--  ***** INICIO FUNCIONES ******  --}}
         /** METODOS DE AGENDA */
         {{-- BUSCAR INFO PROFESIONAL --}}
