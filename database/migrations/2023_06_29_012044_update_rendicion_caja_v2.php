@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateRendicionCaja extends Migration
+class UpdateRendicionCajaV2 extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,8 @@ class UpdateRendicionCaja extends Migration
     public function up()
     {
         Schema::table('rendicion_caja', function (Blueprint $table) {
-            $table->text('archivos')->nullable()->after('rendicion');
+            $table->bigInteger('id_asistente_receptor')->nullable()->change();
+            $table->bigInteger('id_profesional_receptor')->nullable()->after('id_asistente_receptor');
         });
     }
 
@@ -26,7 +27,7 @@ class UpdateRendicionCaja extends Migration
     public function down()
     {
         Schema::table('rendicion_caja', function (Blueprint $table) {
-            $table->dropColumn('archivos');
+            $table->dropColumn('id_profesional_receptor');
         });
     }
 }

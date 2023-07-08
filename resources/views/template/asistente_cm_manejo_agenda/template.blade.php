@@ -88,8 +88,8 @@
         </div>
     </div>
     {{--  @include('template.asistente_cm.menu')  --}}
-    @include('template.asistente_cm_publico.menu')
-    @include('template.asistente_cm_publico.header')
+    @include('template.asistente_cm_manejo_agenda.menu')
+    @include('template.asistente_cm_manejo_agenda.header')
 
     @yield('content')
     @yield('modales')

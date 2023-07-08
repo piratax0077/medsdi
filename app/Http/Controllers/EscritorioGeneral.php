@@ -655,6 +655,94 @@ class EscritorioGeneral extends Controller
         return $datos;
     }
 
+    // carga de horas para profesional por profesional lugar atencion y dia (horas)
+    /**
+     * busqueda de horas del profesional en una fecha especifica en un lugar de atencion
+     * @param Request $requst
+     *
+     * @return array()
+     */
+    public function horasProfesionalLugarAtencionBuscador(Request $request){
+        // id_profesional
+        // id_lugar_atencion
+        // dia
+        $texto_dia = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+        $texto_mes = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+        $datos = array();
+
+        $dia_semana = date('N',strtotime($request->dia));
+
+        $profesional_horarios = ProfesionalHorario::where('id_profesional',$request->id_profesional)
+                                                ->where('id_lugar_atencion',$request->id_lugar_atencion)
+                                                ->where('dia','like','%'.$dia_semana.'%')
+                                                ->orderBy('dia', 'ASC')
+                                                ->first();
+        if($profesional_horarios)
+        {
+            $array_bloques = array();
+
+            $hora_inicio_turno  = $request->dia.' '.$profesional_horarios->hora_inicio;
+            $hora_termino_turno  = $request->dia.' '.$profesional_horarios->hora_termino;
+
+            /** duracion de consulta en minutos */
+            $duracion =  $profesional_horarios->duracion_consulta;
+            $array_duracion = explode(':', $duracion);
+            $duracion_total = 0;
+
+            if((int)$array_duracion[0]>0)
+                $duracion_total += (int)$array_duracion[0]*60;
+            if((int)$array_duracion[1]>0)
+                $duracion_total += (int)$array_duracion[1];
+
+            for ($hora=strtotime($hora_inicio_turno); $hora <= strtotime( '+'. $duracion_total.' minute', strtotime($hora_termino_turno) ); $hora = strtotime('+'. $duracion_total.' minute',$hora))
+            {
+                $hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))->where('hora_inicio',date('H:i:s',$hora))->first();
+                if($hora_medica)
+                {
+                    $cantidad_hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))->where('hora_inicio',date('H:i:s',$hora))->count();
+                    $reserva = 0;
+                    if($cantidad_hora_medica > 1)
+                    {
+                        $reserva = 1;
+                    }
+
+                    // con reserva
+                    $array_bloques[] = array(
+                                            'dia' => date('Y-m-d',$hora),
+                                            'hora' => date('H:i:s',$hora),
+                                            'fecha_hora' => date('Y-m-d H:i:s',$hora),
+                                            'reserva' => $reserva
+                                        );
+                }
+                else
+                {
+                    // sin reserva
+                    $array_bloques[] = array(
+                                            'dia' => date('Y-m-d',$hora),
+                                            'hora' => date('H:i:s',$hora),
+                                            'fecha_hora' => date('Y-m-d H:i:s',$hora),
+                                            'reserva' => '0'
+                                        );
+                }
+            }
+
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $array_bloques;
+            $datos['text_fecha'] = $texto_dia[(int)$dia_semana].' '. date('d',strtotime($request->dia)).' '.$texto_mes[(int)date('m',strtotime($request->dia))];
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
+            $datos['profesional_horario'] = $profesional_horarios;
+        }
+
+        return $datos;
+    }
+
     public function getPersona(Request $request)
     {
         $datos = array();

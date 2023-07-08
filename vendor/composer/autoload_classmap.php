@@ -57,6 +57,7 @@ return array(
     'App\\Http\\Controllers\\EnfermeriaController' => $baseDir . '/app/Http/Controllers/EnfermeriaController.php',
     'App\\Http\\Controllers\\EscritorioAsistente' => $baseDir . '/app/Http/Controllers/EscritorioAsistente.php',
     'App\\Http\\Controllers\\EscritorioAsistenteCmJefe' => $baseDir . '/app/Http/Controllers/EscritorioAsistenteCmJefe.php',
+    'App\\Http\\Controllers\\EscritorioAsistenteCmMnAg' => $baseDir . '/app/Http/Controllers/EscritorioAsistenteCmMnAg.php',
     'App\\Http\\Controllers\\EscritorioAsistenteCmPublico' => $baseDir . '/app/Http/Controllers/EscritorioAsistenteCmPublico.php',
     'App\\Http\\Controllers\\EscritorioDependientesController' => $baseDir . '/app/Http/Controllers/EscritorioDependientesController.php',
     'App\\Http\\Controllers\\EscritorioGeneral' => $baseDir . '/app/Http/Controllers/EscritorioGeneral.php',

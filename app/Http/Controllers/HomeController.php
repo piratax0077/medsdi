@@ -59,6 +59,9 @@ class HomeController extends Controller
             case 'AsistenteOnline': // asistente online (institucion / consulta)
                 return redirect()->route('asistenteon.home');
                 break;
+            case 'AsistenteManejoAgenda': // asistente Manejo de Agenda (institucion)
+                return redirect()->route('asistentecm.ma.home');
+                break;
             case 'Paciente':
                 return redirect()->route('paciente.home');
                 break;
@@ -109,6 +112,9 @@ class HomeController extends Controller
                 break;
             case 'AsistenteOnline': // asistente online (institucion / consulta)
                 return redirect()->route('asistenteon.home');
+                break;
+            case 'AsistenteManejoAgenda': // asistente Manejo de Agenda (institucion)
+                return redirect()->route('asistentecm.ma.home');
                 break;
             case 'Paciente':
                 return redirect()->route('paciente.home');

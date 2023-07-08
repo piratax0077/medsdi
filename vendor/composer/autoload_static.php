@@ -685,6 +685,7 @@ class ComposerStaticInit21566f332364f7353536a4fdc70876ad
         'App\\Http\\Controllers\\EnfermeriaController' => __DIR__ . '/../..' . '/app/Http/Controllers/EnfermeriaController.php',
         'App\\Http\\Controllers\\EscritorioAsistente' => __DIR__ . '/../..' . '/app/Http/Controllers/EscritorioAsistente.php',
         'App\\Http\\Controllers\\EscritorioAsistenteCmJefe' => __DIR__ . '/../..' . '/app/Http/Controllers/EscritorioAsistenteCmJefe.php',
+        'App\\Http\\Controllers\\EscritorioAsistenteCmMnAg' => __DIR__ . '/../..' . '/app/Http/Controllers/EscritorioAsistenteCmMnAg.php',
         'App\\Http\\Controllers\\EscritorioAsistenteCmPublico' => __DIR__ . '/../..' . '/app/Http/Controllers/EscritorioAsistenteCmPublico.php',
         'App\\Http\\Controllers\\EscritorioDependientesController' => __DIR__ . '/../..' . '/app/Http/Controllers/EscritorioDependientesController.php',
         'App\\Http\\Controllers\\EscritorioGeneral' => __DIR__ . '/../..' . '/app/Http/Controllers/EscritorioGeneral.php',

@@ -595,20 +595,20 @@ Route::group([
     'middleware' => ['role:AsistenteManejoAgenda|Admin'],
     'prefix' => 'Asistente/cm/manejo/agenda/',
 ], function () {
-    Route::get('Inicio', [App\Http\Controllers\AdministradorCmController::class, 'escritorioAsistenteManejoAgenda'])->name('asistentecm.ma.home');
+    Route::get('Inicio', [App\Http\Controllers\EscritorioAsistenteCmMnAg::class, 'index'])->name('asistentecm.ma.home');
 
     Route::get('Perfil', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'perfil'])->name('asistentecm.ma.perfil');
-    Route::get('Buscar_Paciente', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscar_paciente'])->name('asistentecm.ma.buscar_paciente');
+    Route::get('Buscar_Paciente', [App\Http\Controllers\EscritorioAsistenteCmMnAg::class, 'buscar_paciente'])->name('asistentecm.ma.buscar_paciente');
     Route::get('Reservar_Hora', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'reservar_hora'])->name('asistentecm.ma.reservar_hora');
-    Route::get('Mis_Profesionales', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'mis_profesionales'])->name('asistentecm.ma.mis_profesionales');
-    Route::get('caja/rendir', [App\Http\Controllers\FlujoCajaController::class, 'rendirCajaDiaria'])->name('asistentecm.ma.rendir');
+    Route::get('Mis_Profesionales', [App\Http\Controllers\EscritorioAsistenteCmMnAg::class, 'mis_profesionales'])->name('asistentecm.ma.mis_profesionales');
+    Route::get('caja/rendir', [App\Http\Controllers\FlujoCajaController::class, 'rendirCajaDiariaMa'])->name('asistentecm.ma.rendir');
     Route::get('caja/rendir/bonos', [App\Http\Controllers\FlujoCajaController::class, 'cargaBonosAsistenteDia'])->name('asistentecm.ma.rendicion_carga_bonos');
     Route::get('caja/historico', [App\Http\Controllers\FlujoCajaController::class, 'historicoCajaDiaria'])->name('asistentecm.ma.historico_caja');
 
     Route::get('Subcripcion', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'index'])->name('asistentecm.ma.subcripcion');
     Route::get('Venta_Productos', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'index'])->name('asistentecm.ma.venta_productos');
     Route::get('Registro_Paciente', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'registroPaciente'])->name('asistentecm.ma.registro_paciente');
-	Route::get('Paciente/cargar_info', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscar_paciente_rut'])->name('asistentecm.ma.buscar_paciente_rut');
+	Route::get('Paciente/cargar_info', [App\Http\Controllers\EscritorioAsistenteCmMnAg::class, 'buscar_paciente_rut'])->name('asistentecm.ma.buscar_paciente_rut');
 
     Route::get('Profesional/informacion/buscar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscarInfoProfesional'])->name('asistentecm.ma.buscar_info_profesional');
     Route::get('Hora-Medica/buscar', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_hora_medica'])->name('asistentecm.ma.buscar_hora_medica');
@@ -631,8 +631,8 @@ Route::group([
     Route::get('perfil/contacto/eliminar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'eliminar_contacto_asistente'])->name('asistentecm.ma.eliminar_contacto_asistente');
     Route::get('perfil/contacto/buscar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscar_contacto'])->name('asistentecm.ma.buscar_contacto');
 
-    Route::get('hora/confirmar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'confirmarHora'])->name('asistentecm.ma.confirmar_hora');
-    Route::get('hora/por/confirmar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'cargarConfirmarHora'])->name('asistentecm.ma.cargar_hora_por_confirmar');
+    Route::get('hora/confirmar', [App\Http\Controllers\EscritorioAsistenteCmMnAg::class, 'confirmarHora'])->name('asistentecm.ma.confirmar_hora');
+    Route::get('hora/por/confirmar', [App\Http\Controllers\EscritorioAsistenteCmMnAg::class, 'cargarConfirmarHora'])->name('asistentecm.ma.cargar_hora_por_confirmar');
 });
 
 /* ASISTENTE caja Centro Medico*/
@@ -734,12 +734,14 @@ Route::group([
 /** procesos de rendicion */
 /* ASISTENTE caja Centro Medico*/
 /* ASISTENTE JEFE Centro Medico*/
+/* ASISTENTE Manejo Agenda Centro Medico*/
 Route::group([
-    'middleware' => ['role:AsistenteCaja|AsistenteJefaCaja|Admin'],
+    'middleware' => ['role:AsistenteCaja|AsistenteJefaCaja|AsistenteManejoAgenda|Admin'],
     'prefix' => 'Asistente/cm/',
 ], function () {
     /** rendicion caja */
     Route::post('caja/crear/rendicion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucion'])->name('asistentecm.solicitar_rendir_caja');
+    Route::post('caja/crear/rendicion/prof', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucionProf'])->name('asistentecm.solicitar_rendir_caja.prof');
     Route::post('caja/desistir/rendicion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucionDesistir'])->name('asistentecm.rendicion_caja_desistir');
     Route::post('caja/extencion/validacion/rendicion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucionExtenderValidacion'])->name('asistentecm.rendicion_caja_extender_validacion');
     Route::post('caja/rendicion/autorizacion/validacion', [App\Http\Controllers\RendicionCajaController::class, 'rendirCajaDiariaInstitucionValidarAutorizacion'])->name('asistentecm.rendir_caja_validar_autorizacion');
@@ -747,8 +749,20 @@ Route::group([
     /** carga archivo rendir */
     Route::post('caja/carga/archivo', [App\Http\Controllers\CargaArchivoController::class, 'cargaArchivoTemp'])->name('rendir.archivo.carga');
     Route::post('caja/carga/mover_r', [App\Http\Controllers\CargaArchivoController::class, 'moverArchivo_r'])->name('rendir.archivo.mover_r');
+
 });
 
+Route::group([
+    'middleware' => ['role:Asistente|AsistenteAdm|AsistenteJefaCaja|AsistenteCaja|AsistenteOnline|AsistenteManejoAgenda|Admin'],
+    'prefix' => 'Asistente/',
+], function () {
+    /** lista espera */
+    Route::get('lista/espera/buscar/por/profesional', [App\Http\Controllers\ListaEsperaController::class, 'buscarListaPorProfesional'])->name('lista.espera.buscar.por.profesional');
+    Route::get('lista/espera/ver', [App\Http\Controllers\ListaEsperaController::class, 'verRegistro'])->name('lista.espera.ver');
+    Route::post('lista/espera/registrar/existente', [App\Http\Controllers\ListaEsperaController::class, 'registrarExistente'])->name('lista.espera.registrar.existente');
+    Route::post('lista/espera/registrar/nuevo', [App\Http\Controllers\ListaEsperaController::class, 'registrarNuevo'])->name('lista.espera.registrar.nuevo');
+    Route::post('lista/espera/eliminar', [App\Http\Controllers\ListaEsperaController::class, 'eliminar'])->name('lista.espera.eliminar');
+});
 
 /* ASISTENTE Online*/
 Route::group([
@@ -787,6 +801,7 @@ Route::group([
     Route::get('Hora-medica/paciente/buscar/rut', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_rut_paciente'])->name('agenda.buscar_rut_paciente');
     Route::get('Hora-medica/hora/agendar/agendar', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_horas'])->name('agenda.agendar_hora');
     Route::get('Hora-medica/hora/agendar/paciente/nuevo', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_hora_nuevo_paciente'])->name('agenda.agendar_hora_nuevo_paciente');
+    Route::post('Hora-medica/paciente/nuevo', [App\Http\Controllers\AsistenteController::class, 'AgregarNuevoPaciente'])->name('agenda.paciente.nuevo');
 
     /** motor de busqueda asistente online*/
     Route::get('perfil/configuracion/busqueda/editar', [App\Http\Controllers\EscritorioAsistente::class, 'editar_configuracion_busqueda'])->name('asistente.editar_configuracion_busqueda');
@@ -840,6 +855,7 @@ Route::group([
 	Route::get('/Laboratorio/recepcion_muestras', [App\Http\Controllers\LaboratorioController::class, 'recepcion_muestras'])->name('app.laboratorio.lab_profesional.recepcion_muestras');
 	Route::get('/Laboratorio/solicitud_exam_laboratorio_profesional', [App\Http\Controllers\LaboratorioController::class, 'solicitud_exam_laboratorio_profesional'])->name('app.laboratorio.lab_profesional.solicitud_exam_laboratorio_profesional');
 });
+
 Route::group([
     'middleware' => ['auth:sanctum', 'verified'],
 ], function () {
@@ -996,7 +1012,7 @@ Route::group([
     Route::get('/comercial/configuracion', [App\Http\Controllers\AdministradorCmController::class, 'configuracion_comercial'])->name('administrador_comercial.configuracion');
 
     /** FLUJO DE CAJA */
-    Route::get('/comercial/flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionCmAdm'])->name('adm_cm.flujo.caja.index');
+    // Route::get('/comercial/flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionCmAdm'])->name('adm_cm.comercial.flujo.caja.index');
 
 
 });
@@ -1254,7 +1270,7 @@ Route::group([
 
 /** BUSCADOR DE PROFESIONAL */
 Route::group([
-    'middleware' => ['role:Paciente|Asistente|Adm_Institucion|Profesional|Institucion'],
+    'middleware' => ['role:Paciente|Asistente|AsistenteAdm|AsistenteJefaCaja|AsistenteCaja|AsistenteOnline|AsistenteManejoAgenda|Adm_Institucion|Profesional|Institucion'],
     'prefix' => 'buscador',
 ], function () {
 
@@ -1265,6 +1281,9 @@ Route::group([
     Route::get('lugares_atencion_profesional_buscador', [App\Http\Controllers\EscritorioGeneral::class, 'lugaresAtencionProfesionalBuscador'])->name('profesional.lugaresAtencionProfesionalBuscador');
     Route::get('dias_laborales_profesiona_lugar_atencion_buscador', [App\Http\Controllers\EscritorioGeneral::class, 'diasLaboralesProfesionaLugarAtencionBuscador'])->name('profesional.DiasLaboralesProfesionaLugarAtencionBuscador');
     Route::get('horas_disponibles_profesional_lugar_atencion_buscador', [App\Http\Controllers\EscritorioGeneral::class, 'horasDisponiblesProfesionalLugarAtencionBuscador'])->name('profesional.HorasDisponiblesProfesionalLugarAtencionBuscador');
+    Route::get('horas_profesional_lugar_atencion_buscador', [App\Http\Controllers\EscritorioGeneral::class, 'horasProfesionalLugarAtencionBuscador'])->name('profesional.HorasProfesionalLugarAtencionBuscador');
+    Route::get('get/informacion/{id_dependiente_activo?}', [App\Http\Controllers\EscritorioPaciente::class, 'getPacienteUser'])->name('agenda.paciente.get.informacion');
+    Route::post('reservar/hora/generar/reserva', [App\Http\Controllers\EscritorioPaciente::class, 'agendar_horas'])->name('agenda.paciente.solicitar.hora');
 });
 
 /** VER LIQUIDACIONES - DATOS DE DEPOSITO */

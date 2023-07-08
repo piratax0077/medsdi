@@ -583,7 +583,8 @@ class EscritorioAsistente extends Controller
         if($conteo_prof == 0)
         {
             $profesional_lugar_array = ProfesionalesLugaresAtencion::where('id_lugar_atencion', $lugares_atencion[0]->id)
-                                                                ->pluck('id_profesional')->toArray();
+                                                                ->pluck('id_profesional')
+                                                                ->toArray();
 
             $profesional = Profesional::whereIn('id', $profesional_lugar_array)->get();
         }

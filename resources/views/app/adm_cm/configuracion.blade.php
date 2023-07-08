@@ -749,10 +749,17 @@
                                                                 <tr>
                                                                     <td class="text-wrap text-left align-middle">{{ $per->nombres . ' ' . $per->apellido_uno . ' ' . $per->apellido_dos }}</td>
                                                                     <td class="text-wrap text-left align-middle">{{ $per->rut }}</td>
-                                                                    <td class="align-middle text-left"><strong>{{ $per->AsistenteTipo->nombre }}</strong></td>
-                                                                    <td class="text-wrap text-center align-middle">
-                                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="anadir_permisos('{{ $per->AsistenteTipo->nombre }}', {{ $per->AsistenteTipo->id }},{{ $per->id }});" data-toggle="tooltip" data-placement="top" title="Permisos"><i class="feather icon-settings"></i></button>
-                                                                    </td>
+                                                                    @if($per->AsistenteTipo)
+                                                                        <td class="align-middle text-left"><strong>{{ $per->AsistenteTipo->nombre }}</strong></td>
+                                                                        <td class="text-wrap text-center align-middle">
+                                                                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="anadir_permisos('{{ $per->AsistenteTipo->nombre }}', {{ $per->AsistenteTipo->id }},{{ $per->id }});" data-toggle="tooltip" data-placement="top" title="Permisos"><i class="feather icon-settings"></i></button>
+                                                                        </td>
+                                                                    @else
+                                                                        <td class="align-middle text-left"><strong>{{ $per->TipoAdministrador->nombre }}</strong></td>
+                                                                        <td class="text-wrap text-center align-middle">
+                                                                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="anadir_permisos('{{ $per->TipoAdministrador->nombre }}', {{ $per->TipoAdministrador->id }},{{ $per->id }});" data-toggle="tooltip" data-placement="top" title="Permisos"><i class="feather icon-settings"></i></button>
+                                                                        </td>
+                                                                    @endif
                                                                 </tr>
                                                             @endforeach
                                                          @endif
