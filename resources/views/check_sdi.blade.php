@@ -29,20 +29,24 @@ function checkToken(){
     echo 'let url = "Check_sdi_token_external";';
     @endphp
     var _token = $('input[name=_token]').val();    
-    var token_ = $('#token_').val();    
+    var token_ = $('#token_').val();   // TOKEN EXTERNO - URL EXTERNA  
+    var token = '{{$token}}';
 
     $.ajax({
         url: url,
         type: "GET",
         data: {
             _token: _token,
-            token:'{{$token}}'
+            token: token // TOKEN INTERNO - URL CON LOGIN AUTH
         },
         success: (resp)=>{
             if(resp.estado==1)
             {
                 if(resp.registro.estado==1)
                 {
+                    if(token)
+                    top.location.href=$('#url_nueva').val()+'?token='+token;
+                    else
                     top.location.href=$('#url_nueva').val()+'/'+token_;
                 }else{
                     setTimeout(checkToken,3000);
@@ -84,8 +88,12 @@ function checkToken(){
                                 <span class="sr-only">Loading...</span>
                             </div>
                         </div>                        
-                        <!--<a href="{{$url_nueva}}?token={{$token}}" class="btn btn-info"><b>Volver a Solicitar</b></a>-->
+                        
+                        @if(trim($token_)!='')
                         <a href="Check_sdi_external?id_recept={{$id_recept}}&urla={{$url_anterior}}&urln=/Acceso_Profesional_NI&tipo=8&token_={{$token_}}&evento=Profesional Provisorio&id_recept={{$id_recept}}" class="btn btn-info"><b>Volver a Solicitar</b></a>
+                        @else
+                        <a href="{{$url_nueva}}?token={{$token}}" class="btn btn-info"><b>Volver a Solicitar</b></a>
+                        @endif
                         <a href="{{$url_anterior}}" class="btn btn-danger"><b>Cancelar Solicitud</b></a>
                         
                     </div>

@@ -17,7 +17,7 @@ class UpdateProfesionalProvisorio extends Migration
 
             /** agregar columnas */
             $table->string('token')->nullable()->after('otro');
-            $table->string('id_usuario_genera')->nullable()->after('token');
+            $table->integer('id_usuario_genera')->nullable()->after('token');
             $table->integer('estado_token')->nullable()->after('id_usuario_genera');
 
         });

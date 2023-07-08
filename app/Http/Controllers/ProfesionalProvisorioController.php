@@ -407,8 +407,8 @@ class ProfesionalProvisorioController extends Controller
 
         if($campos_requeridos==0)
         {
-            if(!empty($request->id_user))
-            $registro->id_user = $request->id_user;
+            //if(!empty($request->id_user))
+            //$registro->id_user = 0;
             if(!empty($request->nombre))
             $registro->nombre = $request->nombre;
             if(!empty($request->apellido_uno))
@@ -434,8 +434,8 @@ class ProfesionalProvisorioController extends Controller
                 if($direcciones->save())
                 $registro->id_direccion = $direcciones->id;
             }
-            if(!empty($request->id_usuario))
-            $registro->id_usuario = $request->id_usuario;
+            //if(!empty($request->id_usuario))
+            $registro->id_usuario = 0; //sin usuario // no existe aun
             if(!empty($request->id_especialidad))
             $registro->id_especialidad = $request->id_especialidad;
             if(!empty($request->id_tipo_especialidad))
@@ -474,7 +474,7 @@ class ProfesionalProvisorioController extends Controller
                 //$url_ = 'http://medichile_sistema.test'; // LOCAL
                 $url_ = env('APP_URL'); // PRODUCCION
 
-                $link_ = '<a href="'.$url_.'/Check_sdi_external?urla='.$url_.'&urln='.$url_.'/Acceso_Profesional_NI&tipo=8&token_='.$token_.'&evento=Profesional Provisorio&id_recept='.$id_recept_.'" target="_blank">Completa tus datos aquí</a>';
+                $link_ = $url_.'/Check_sdi_external?urla='.$url_.'&urln='.$url_.'/Acceso_Profesional_NI&tipo=8&token_='.$token_.'&evento=Profesional Provisorio&id_recept='.$id_recept_;
 
                 $body = array(
                     'nombre'=>$request->nombre.' '.$request->apellido_uno.' '.$request->apellido_dos,

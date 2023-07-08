@@ -466,9 +466,9 @@ class EscritorioProfesional extends Controller
         // return PdfController::generarPDF('RECETA MEDICA');
         // return $detalleReceta;
 
-        $pdf = PDF::loadView('atencion_medica.PDF.pdf_prueba', compact('$detalleReceta'));
+        $pdf = PDF::loadView('atencion_medica.PDF.pdf_prueba', compact($detalleReceta));
 
-        // return $pdf->download('ejemplo.pdf');
+        return $pdf->download('ejemplo.pdf');
 
         // return 'hola';
     }
@@ -3600,7 +3600,7 @@ class EscritorioProfesional extends Controller
         $profesional_nuevo = 0;
 
         $lugar_atencion_id_ = 0;
-        $id_paciente_ = 0;
+        $id_usuario_genera_ = 0;
         $id_usuario_ = 0;
         $id_profesional_ = 0;
         $id_hora_realizar_ = 0;
@@ -3640,7 +3640,7 @@ class EscritorioProfesional extends Controller
         if($profesional_provisorio)
         {
             $id_usuario_ = $profesional_provisorio->id_usuario;
-            $id_paciente_ = $profesional_provisorio->id_usuario_genera;
+            $id_usuario_genera_ = $profesional_provisorio->id_usuario_genera; // ID USUARIO QUE CREO INVITACION
             
             $profesional_provisorio->nombre = $nombre;
             $profesional_provisorio->apellido_uno = $primer_apellido;
@@ -3660,7 +3660,7 @@ class EscritorioProfesional extends Controller
         }
 
 
-        // PROFESIONAL
+        // PROFESIONAL EXISTENTE
         $validar_profesional = Profesional::where('email',$email)->first();
         if($validar_profesional)
         {            
@@ -3684,7 +3684,12 @@ class EscritorioProfesional extends Controller
             $validar_profesional->provisorio = 1;
             $validar_profesional->save();
 
-          
+            $id_usuario_ = $validar_profesional->id_usuario; // ID USUARIO PROFESIONAL EXISTENTE
+
+            //ACTUALIZAMOS REGISTRO PROFESIONAL PROVISORIO ID USUARIO
+            $profesional_provisorio2 = ProfesionalProvisorio::find($request->id_registro);
+            $profesional_provisorio2->id_usuario = $id_usuario_;
+            $profesional_provisorio2->save();
 
             //AUTH USUARIO                  
             //var_dump($id_usuario_);                                            
@@ -3705,7 +3710,7 @@ class EscritorioProfesional extends Controller
             $datos['estado'] = 1;
             $datos['msj'] = 'Profesional ya existe';
 
-        }else{
+        }else{ // PROFESIONAL NUEVO
             $profesional_nuevo = 1;
             $profesionales = new Profesional();
 
@@ -3751,6 +3756,13 @@ class EscritorioProfesional extends Controller
 
                     if($user->save())
                     {
+                        //ACTUALIZAMOS REGISTRO PROFESIONAL PROVISORIO ID USUARIO
+                        $profesional_provisorio2 = ProfesionalProvisorio::find($request->id_registro);
+                        $profesional_provisorio2->id_usuario = $user->id;
+                        $profesional_provisorio2->save();
+
+                        $id_usuario_ = $user->id; // GUARDAMOS ID USUARIO NUEVO
+
                         $user->assignRole('Profesional');
                         $datos['user_msg'] = 'Usuario Creado';
 
@@ -3829,7 +3841,7 @@ class EscritorioProfesional extends Controller
         }
 
         // HORA MEDICA        
-        $paciente = Paciente::where('id_usuario', $id_paciente_)->first();        
+        $paciente = Paciente::where('id_usuario', $id_usuario_genera_)->first();        
         $hora_medica = new HoraMedica();        
         
         $hora_medica->id_paciente = $paciente->id;
@@ -3891,7 +3903,7 @@ class EscritorioProfesional extends Controller
             'datos'=> $datos,
             'token_'=> $token_profesional_provisorio,
 
-            'id_paciente' => $id_paciente_,
+            'id_paciente' => $paciente->id,
             'lugar_atencion_id' => $lugar_atencion_id_,
             'id_hora_realizar' =>$id_hora_realizar_,
             'profesional_nuevo' => $profesional_nuevo

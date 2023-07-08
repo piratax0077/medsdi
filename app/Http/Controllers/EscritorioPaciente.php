@@ -237,14 +237,15 @@ class EscritorioPaciente extends Controller
     {
         $url_anterior = $request->urla;
         $url_nueva = $request->urln;
-        $id_usuario_recept = (int)$request->id_recept;
+        $id_usuario_recept = (int)$request->id_recept; // 19
 
         if(Auth::check()) 
-        $id_usuario = Auth::user()->id;
+        $id_usuario = Auth::user()->id; //interno logeado
         else
-        $id_usuario = 0;
+        $id_usuario = 0; //externo
 
         $id_user_create = $id_usuario;
+        
         if($id_usuario_recept!=0)
         $id_user_recept = $id_usuario_recept;
         else

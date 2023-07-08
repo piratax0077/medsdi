@@ -986,7 +986,7 @@ Route::group([
     Route::get('/invitacion/buscar/informacion', [App\Http\Controllers\InvitacionController::class, 'cambioContrasenaPerfilResponsable'])->name('invitaciones.buscar.info');
 
 	/** FLUJO DE CAJA */
-    Route::get('/flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionCmAdm'])->name('adm_cm.flujo.caja.index');
+    Route::get('/flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionCmAdm'])->name('flujo.caja.index');
 
     /** Contrato dependiente */
     Route::get('/contrato/dependiente/ver', [App\Http\Controllers\ContratoDependienteController::class, 'verRegistro'])->name('adm_cm.contrato.dependiente.ver');
