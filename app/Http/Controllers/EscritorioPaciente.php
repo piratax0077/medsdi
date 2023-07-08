@@ -256,7 +256,7 @@ class EscritorioPaciente extends Controller
         else
             $evento = 'Ficha Única';
 
-        if(Auth::check()) 
+        if(Auth::check())
             $nombre = Auth::user()->name;
         else
             $nombre = '';
@@ -265,7 +265,7 @@ class EscritorioPaciente extends Controller
         $apellido_m = '';
         $lugar = 'Sistema';
 
-        if(Auth::check()) 
+        if(Auth::check())
         $profesional = Auth::user()->name;
         else
         $profesional = '';
@@ -323,9 +323,9 @@ class EscritorioPaciente extends Controller
         $paciente->fecha_nac = $dia.'-'.$mes.'-'.$ano;
         $paciente->edad = $edad;
 
-        /* DIRECCION */ 
+        /* DIRECCION */
         $direccion = Direccion::find($paciente->id_direccion);
-        
+
         if($direccion)
         {
         $direccion_nombre = $direccion->direccion;
@@ -420,17 +420,17 @@ class EscritorioPaciente extends Controller
         }
 
         /* ANTECEDENTES */
-        $antecedentes = Antecedente::where('id_users',$id_usuario)->with('users','paciente','tipo_antecendente','profesional')->get();    
-        
+        $antecedentes = Antecedente::where('id_users',$id_usuario)->with('users','paciente','tipo_antecendente','profesional')->get();
+
         foreach ($antecedentes as $valor) {
             $valor['antecedente_data'] = json_decode($valor['data']);
         }
 
 
-        /* ATENCIONES MEDICAS */                
+        /* ATENCIONES MEDICAS */
         $fichas = FichaAtencion::where('id_paciente', $paciente->id)->where('finalizada', 1)->get();
-        $especialidad = Especialidad::where('estado',1)->get();   
-        $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get(); 
+        $especialidad = Especialidad::where('estado',1)->get();
+        $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get();
 
         return view('ficha_medica', [
             'id_usuario' => $id_usuario,
@@ -447,7 +447,7 @@ class EscritorioPaciente extends Controller
 
         ]);
     }
-    
+
 
     public function miFichaMedicaPdfView(Request $request)
     {
@@ -472,9 +472,9 @@ class EscritorioPaciente extends Controller
         $paciente->fecha_nac = $dia.'-'.$mes.'-'.$ano;
         $paciente->edad = $edad;
 
-        /* DIRECCION */ 
+        /* DIRECCION */
         $direccion = Direccion::find($paciente->id_direccion);
-        
+
         if($direccion)
         {
         $direccion_nombre = $direccion->direccion;
@@ -621,14 +621,14 @@ class EscritorioPaciente extends Controller
         $ciudades = Ciudad::all();
 
 
-        $especialidades = Especialidad::where('estado',1)->get(); 
-        $tipo_especialidad = TipoEspecialidad::where('estado',1)->get(); 
-        $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get(); 
+        $especialidades = Especialidad::where('estado',1)->get();
+        $tipo_especialidad = TipoEspecialidad::where('estado',1)->get();
+        $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get();
 
         return view('app.paciente.acceso_profesional_no_inscrito')->with([
-            'regiones' => $regiones, 
+            'regiones' => $regiones,
             'ciudades' => $ciudades,
-            
+
             'profesion' => $especialidades,
             'especialidad' => $tipo_especialidad,
             'subespecialidad' => $sub_tipo_especialidad,
@@ -1078,11 +1078,26 @@ class EscritorioPaciente extends Controller
         $profesional = Profesional::where('id', $request->id_profesional)->first();
         $lugar_atencion = LugarAtencion::where('id', $request->id_lugar_atencion)->first();
 
-        // validar si paciente tiene otra consulta
-        $validar = HoraMedica::where('id_paciente', $paciente->id)
-                ->where('id_profesional',$profesional->id)
-                ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
-                ->first();
+        /** HORA DE EXAMEN */
+        if($request->tipo_hora_medica == 'E')
+        {
+            // validar si paciente tiene otra consulta
+            $validar = HoraMedica::where('id_paciente', $paciente->id)
+                                ->where('id_profesional',$profesional->id)
+                                ->where('tipo_hora_medica','E')
+                                ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
+                                ->first();
+        }
+        else
+        {
+            // validar si paciente tiene otra consulta
+            $validar = HoraMedica::where('id_paciente', $paciente->id)
+                                ->where('id_profesional',$profesional->id)
+                                ->where('tipo_hora_medica','C')
+                                ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
+                                ->first();
+        }
+
         if($validar)
         {
             $datos['estado'] = 0;
@@ -1124,6 +1139,10 @@ class EscritorioPaciente extends Controller
             $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->format('H:i:s');
             $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
             $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
+
+            if(!empty($request->tipo_hora_medica))
+                $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
+
             // $hora_medica->origen = $request->origen;
 
             if ($hora_medica->save()) {
