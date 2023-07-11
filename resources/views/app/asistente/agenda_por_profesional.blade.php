@@ -96,11 +96,14 @@
                     <div class="card-body bg-white">
                         {{-- BOTON DE LISTA DE ESPERA --}}
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado"onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_extra" onclick="abrir_horas_extras()"; ><i class="fas fa-save"></i>  Cargar Hora Extra del profesional</button>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_examen" onclick="abrir_horas_examen()"; ><i class="fas fa-save"></i>  Cargar Hora Examen del profesional</button>
                             </div>
                         </div>
 
@@ -119,8 +122,14 @@
 
     @include('app.asistente.modales.modal_consulta_agenda')
     @include('app.asistente.modales.lista_espera')
+
+    {{-- horas extras --}}
     @include('app.asistente.modales.horas_extras')
     @include('app.asistente.modales.horas_extras_agendar')
+
+    {{-- hora examen --}}
+    @include('app.asistente.modales.horas_examen')
+    @include('app.asistente.modales.horas_examen_agendar')
 @endsection
 
 @section('page-script')

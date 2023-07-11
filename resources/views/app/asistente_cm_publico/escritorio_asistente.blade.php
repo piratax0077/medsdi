@@ -85,7 +85,7 @@
                                             <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_extra" onclick="abrir_horas_extras()"; ><i class="fas fa-save"></i>  Cargar Hora Extra del profesional</button>
                                         </div>
                                         <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
-                                            {{--  --}}
+                                            <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_examen" onclick="abrir_horas_examen()"; ><i class="fas fa-save"></i>  Cargar Hora Examen del profesional</button>
                                         </div>
                                     </div>
                                 </div>
@@ -175,8 +175,15 @@
     @include('app.asistente_cm.modales.modal_profesional_informacion')
     @include('app.asistente.modales.modal_consulta_agenda')
     @include('app.asistente_cm_publico.modales.lista_espera')
+
+    {{-- horas extras --}}
     @include('app.asistente_cm_publico.modales.horas_extras')
     @include('app.asistente_cm_publico.modales.horas_extras_agendar')
+
+    {{-- hora examen --}}
+    @include('app.asistente_cm_publico.modales.horas_examen')
+    @include('app.asistente_cm_publico.modales.horas_examen_agendar')
+
 @endsection
 
 @endsection
@@ -408,7 +415,7 @@
                                                         if (data !== 'null')
                                                         {
                                                             //data = JSON.parse(data);
-                                                            console.log('-----------------------');
+                                                            console.log('---------evento--------------');
                                                             console.log(data);
                                                             console.log('-----------------------');
                                                             if(data.estado == 1)
@@ -432,8 +439,7 @@
 
                                                                     arrayTemp.push({
                                                                                     id: element.id,
-                                                                                    title: element.descripcion,
-                                                                                    {{--  description: '{{ $hm->Paciente->rut }} | {{ $hm->Estado()->first()->valor }} | {{ $hm->comentarios_confirmacion }} | {{ $hm->Paciente->Prevision->nombre }}',  --}}
+                                                                                    title: element.tipo_hora_medica+' - '+element.descripcion,
                                                                                     description: descripcion ,
                                                                                     start: element.fecha_consulta + 'T' + element.hora_inicio,
                                                                                     end: element.fecha_consulta + 'T' + element.hora_termino,
@@ -454,7 +460,7 @@
 
                                     eventClick: function(info) {
                                         let id_hora_medica = info.event.id;
-                                        let url = "{{ route('agenda.buscar_hora_medica') }}"
+                                        let url = "{{ route('agenda.buscar_hora_medica') }}";
 
                                         $.ajax({
 
@@ -463,12 +469,12 @@
                                                 data: {
                                                     //_token: _token,
                                                     id_hora_medica: id_hora_medica,
-                                                },
+                                                }
                                             })
                                             .done(function(data) {
                                                 if (data != null) {
 
-                                                    {{--  // console.log(info.event);  --}}
+                                                    //{{-- console.log(info.event);  --}}
                                                     console.log(data);
                                                     // data = JSON.parse(data);
                                                     $('#datos_consulta_rut').text(data.paciente.rut);

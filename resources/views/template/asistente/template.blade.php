@@ -363,8 +363,7 @@
 
                                                                         arrayTemp.push({
                                                                                         id: element.id,
-                                                                                        title: element.descripcion,
-                                                                                        {{--  description: '{{ $hm->Paciente->rut }} | {{ $hm->Estado()->first()->valor }} | {{ $hm->comentarios_confirmacion }} | {{ $hm->Paciente->Prevision->nombre }}',  --}}
+                                                                                        title: element.tipo_hora_medica+' - '+element.descripcion,
                                                                                         description: descripcion ,
                                                                                         start: element.fecha_consulta + 'T' + element.hora_inicio,
                                                                                         end: element.fecha_consulta + 'T' + element.hora_termino,
