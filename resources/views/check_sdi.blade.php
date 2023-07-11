@@ -30,7 +30,7 @@ function checkToken(){
     @endphp
     var _token = $('input[name=_token]').val();    
     var token_ = $('#token_').val();   // TOKEN EXTERNO - URL EXTERNA  
-    var token = '{{$token}}';
+    var token = '{{$token}}'; // TOKEN APP
 
     $.ajax({
         url: url,
@@ -44,10 +44,10 @@ function checkToken(){
             {
                 if(resp.registro.estado==1)
                 {
-                    if(token)
-                    top.location.href=$('#url_nueva').val()+'?token='+token;
+                    if(token_ != '')
+                    top.location.href=$('#url_nueva').val()+'/'+token_; // TOKEN PROFESIONAL PROVISORIO
                     else
-                    top.location.href=$('#url_nueva').val()+'/'+token_;
+                    top.location.href=$('#url_nueva').val()+'?token='+token;  // TOKEN APP
                 }else{
                     setTimeout(checkToken,3000);
                 }
