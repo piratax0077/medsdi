@@ -238,12 +238,10 @@ class LogUsersDevicesController extends Controller
 
 
                     case 8: //  Profesional Provisorio
-                        $data = json_decode($value['msg'],false);
-                        $id = $data->id_rechazo_trtt;
-                        $consentimiento = $data->nombre_consentimiento;
-                        $paciente = $data->nombre_paciente;
-                        $profesional = $data->nombre_profesional;
-                        $tipo = $data->tipo;
+                         $data = json_decode($value['msg'],false);
+                        $id = $data->id;
+                        $nombre = $data->nombre;
+                        $fecha = $data->fecha;
 
                         /** peticion */
                         $value['msg_estado'] = "Tiene pendiente confirmar una <span class='color-azul txt_bold'>Invitación a un Profesional Provisorio</span>.";
