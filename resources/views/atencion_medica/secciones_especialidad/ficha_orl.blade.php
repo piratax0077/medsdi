@@ -1199,8 +1199,6 @@
             },
         };
 
-
-
         var lista_imagenes = [];
         function cargar_lista_imagenes()
         {
@@ -1228,7 +1226,6 @@
 
 
         }
-
         /** MANEJO DE IMAGENES */
 
         /** REGISTO ANTECEDENTES */

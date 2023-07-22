@@ -238,12 +238,10 @@ class LogUsersDevicesController extends Controller
 
 
                     case 8: //  Profesional Provisorio
-                        $data = json_decode($value['msg'],false);
-                        $id = $data->id_rechazo_trtt;
-                        $consentimiento = $data->nombre_consentimiento;
-                        $paciente = $data->nombre_paciente;
-                        $profesional = $data->nombre_profesional;
-                        $tipo = $data->tipo;
+                         $data = json_decode($value['msg'],false);
+                        $id = $data->id;
+                        $nombre = $data->nombre;
+                        $fecha = $data->fecha;
 
                         /** peticion */
                         $value['msg_estado'] = "Tiene pendiente confirmar una <span class='color-azul txt_bold'>Invitación a un Profesional Provisorio</span>.";
@@ -263,6 +261,31 @@ class LogUsersDevicesController extends Controller
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Invitación a un Profesional Provisorio Rechazada</span></p><br>";
                         else
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Invitación a un Profesional Provisorio Cancelada</span></p><br>";
+                    break;
+					
+					case 9: //  modificar antecedentes medicos de paciente
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id;
+                        $nombre = $data->nombre;
+                        $fecha = $data->fecha;
+                        /** peticion */
+                        $value['msg_estado'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando su autorizacion para modificar sus antecedentes médicos";
+
+                        /** resultado */
+                        if($value['estado'] == 1)
+                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> ha sido Autorizado con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        elseif($value['estado'] == 2)
+                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> ha sido Rechazado con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        else
+                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> ha cancelado su autorización con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+
+                        /** lista log */
+                        if($value['estado'] == 1)
+                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada</span> El Profesional {$nombre} ha sido autorizado con fecha {$fecha}</p><br>";
+                        elseif($value['estado'] == 2)
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Rechazada</span> El Profesional {$nombre} ha sido notificado con fecha {$fecha}</p><br>";
+                        else
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cancelada</span> El Profesional {$nombre} ha recibido la cancelacion de autorización con fecha {$fecha}</p><br>";
                     break;
                 }
 

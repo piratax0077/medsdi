@@ -795,11 +795,11 @@ class ficha_atencionController extends Controller
         $filtro_fichaAtencion[] = array('id_paciente', $request->id_paciente);
         // $filtro_fichaAtencion[] = array('confidencial', false);
         // $filtro_fichaAtencion[] = array('finalizada', 0);
-        
+
         if(!empty($hora->id_ficha_atencion))
             $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
         $fichaAtencion = FichaAtencion::where($filtro_fichaAtencion)->first();
-        
+
         $antecedentes = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
 
         if (isset($antecedentes)) {
@@ -815,10 +815,10 @@ class ficha_atencionController extends Controller
             $antecedentes_quirurgicos = [];
             $patoligias_cronicas = [];
         }
-        
+
         if( !empty($fichaAtencion) )
             $id_ficha_atencion = $fichaAtencion->id;
-        
+
 
         // 5 realizando
         // 6 realizada
@@ -836,7 +836,7 @@ class ficha_atencionController extends Controller
             {
                 $id_ficha_atencion = $nueva_ficha_atencion->id;
             }
-            
+
             $hora->id_estado = 5;
             $hora->fecha_realizacion_consulta = now();
             $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
@@ -844,7 +844,7 @@ class ficha_atencionController extends Controller
             if (!$hora->save()) {
                 return back()->with('mensaje', 'error');
             }
-            
+
         //}
 
         $prevision = Prevision::all();
@@ -3239,7 +3239,8 @@ class ficha_atencionController extends Controller
                             if( !empty( $request['diag_endos_'.$temp_value_examen_tipo[0]] ) )
                             {
 
-                                if($request['diag_endos_'.$temp_value_examen_tipo[0]] != 'Test de ureasa No tomado')
+                                // if($request['diag_endos_'.$temp_value_examen_tipo[0]] != 'Test de ureasa No tomado')
+                                if(1==1)
                                 {
                                     /** limpiar parametos */
                                     foreach( $parametro as $key => $value )

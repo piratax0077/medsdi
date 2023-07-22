@@ -1,5 +1,36 @@
+<style>
+.ui-widget-content {
+    z-index: 1100;
+}
+</style>
 <script>
-
+	
+	{{--  MEDICAMENTOS AUTOCOMPLETE --}}
+	const activarMedicamentos = (input) => {
+		$("#"+input).autocomplete({
+			source: function(request, response) {
+				$.ajax({
+					url: "{{ route('dental.getArticulo') }}",
+					type: 'post',
+					dataType: "json",
+					data: {
+						_token: CSRF_TOKEN,
+						search: request.term
+					},
+					success: function(data) {
+						console.log(data.length);
+						response(data);
+					}
+				});
+			},
+			select: function(event, ui) {
+				$('#'+input).val(ui.item.label);
+				return false;
+			}
+		});
+	}
+	
+	
     const verModalDesactivar = (fun,tipo,id) => {
         $('#id-antecedente-m-desactivar').val(id);
         $('#tipo-antecedente-m-desactivar').val(tipo);        
@@ -17,12 +48,12 @@
             case 1:
                 html+=`
                     <table>
-                    <tr>
+						<tr>
                             <td>Procedimiento</td>
                             <td><input class="form-control" type="text" id="procedimiento"></td>                            
                         </tr>                     
                         <tr>
-                            <td>Detalle</td>
+                            <td>Incidente</td>
                             <td><textarea class="form-control" id="comentario"></textarea></td>
                         </tr>
                     </table>
@@ -33,12 +64,8 @@
                 html+=`
                     <table>
                         <tr>
-                            <td>Nombre</td>
+                            <td>Nombre</td>	
                             <td><input class="form-control" type="text" id="nombre"></td>                            
-                        </tr>
-                        <tr>
-                            <td>Fecha Cirugía</td>
-                            <td><input class="form-control" type="date" id="fecha"></td>                            
                         </tr>
                         <tr>
                             <td>Comentario</td>
@@ -51,12 +78,16 @@
             case 3:
                 html+=`
                     <table>
+						<tr>
+                            <td>Fecha Cirugía</td>
+                            <td><input class="form-control" type="date" id="fecha"></td>                            
+                        </tr>
                         <tr>
                             <td>Procedimiento</td>
                             <td><input class="form-control" type="text" id="procedimiento"></td>                            
                         </tr>
                         <tr>
-                            <td>Detalle</td>
+                            <td>Incidente</td>
                             <td><textarea class="form-control" id="comentario"></textarea></td>
                         </tr>
                     </table>
@@ -80,15 +111,20 @@
 
 
             case 5:
+			
                 html+=`
                     <table>
                         <tr>
-                            <td>Nombre alergia</td>
-                            <td><input class="form-control" type="text" id="nombre"></td>                            
+                            <td>Nombre antecedente</td>
+                            <td><input class="form-control form-control-sm" type="text" id="procedimiento"></td>                            
                         </tr>
                         <tr>
-                            <td>Detalle</td>
-                            <td><textarea class="form-control" id="comentario"></textarea></td>
+                            <td>Institución</td>
+                            <td><textarea class="form-control form-control-sm" id="institucion"></textarea></td>
+                        </tr>
+						<tr>
+                            <td>Fecha Evento</td>
+                            <td><input class="form-control" type="date" id="fecha"></td>                            
                         </tr>
                     </table>
                 `;
@@ -98,20 +134,27 @@
                 html+=`
                     <table>
                         <tr>
-                            <td>Nombre Patología</td>
-                            <td><input class="form-control" type="text" id="nombre"></td>                            
+                            <td>Nombre alergia</td>
+                            <td><input class="form-control form-control-sm" type="text" id="nombre"></td>                            
                         </tr>
-                      
+                        <tr>
+                            <td>Detalle</td>
+                            <td><textarea class="form-control form-control-sm" id="comentario"></textarea></td>
+                        </tr>
                     </table>
                 `;
             break;  
-
+					                				
             case 7:
                 html+=`
                     <table>
                         <tr>
                             <td>Nombre Medicamento</td>
-                            <td><input class="form-control" type="text" id="nombre_medicamento_cronico"></td>                            
+                            <td>
+								<div class="form-group">
+									<input class="form-control form-control-sm" type="text" id="nombre_medicamento_cronico">
+								</div>
+							</td>
                         </tr>
                         <tr>
                             <td>Dosis</td>
@@ -121,9 +164,46 @@
                     </table>
                 `;
             break;  
+		    case 8:
+                html+=`
+                    <table>
+                        <tr>
+                            <td>Tipo de Discapacidad</td>
+                            <td>
+								<select class="form-control form-control-sm" name="discapacidad_tipo" id="discapacidad_tipo">
+									<option value="Auditíva">Auditíva</option>
+									<option value="Visual">Visual</option>
+									<option value="Locomotora">Locomotora </option>														
+									<option value="Neurológica">Neurológica</option>
+									<option value="Fonoarticulatoria">Fonoarticulatoria</option>
+									<option value="Cognitiva">Cognitiva</option>
+								</select>
+							</td>        
+                        </tr>
+                        <tr>
+                            <td>Grado</td>
+                            <td>
+								<input class="form-control form-control-sm" type="text" id="discapacidad_grado">
+							</td>
+                        </tr>
+						<tr>
+                            <td>Permanente</td>
+                            <td>
+								<select class="form-control form-control-sm" name="discapacidad_permanente" id="discapacidad_permanente">
+									<option value="si">SI</option>
+									<option value="no">NO</option>
+								</select>
+							</td>
+                        </tr>
+                        
+                    </table>
+                `;
+            break;  
         }
 
         $('#body-modal-inputs').html(html);
+		if( tipo == 7)
+			activarMedicamentos('nombre_medicamento_cronico');
         $('#tipo-antecedente-m').val(tipo);
         $('#modal-ingreso').modal(fun);
 
@@ -157,6 +237,10 @@
                 $('#fecha').val(resp.registros.antecedente_data.fecha);
                 $('#nombre_medicamento_cronico').val(resp.registros.antecedente_data.nombre_medicamento_cronico);
                 $('#dosis').val(resp.registros.antecedente_data.dosis);
+                $('#institucion').val(resp.registros.antecedente_data.institucion);
+                $('#discapacidad_tipo').val(resp.registros.antecedente_data.discapacidad_tipo);
+                $('#discapacidad_grado').val(resp.registros.antecedente_data.discapacidad_grado);
+                $('#discapacidad_permanente').val(resp.registros.antecedente_data.discapacidad_permanente);
             }
         },
         error: (resp)=>{
@@ -181,6 +265,10 @@
     data.nombre_medicamento_cronico = $('#nombre_medicamento_cronico').val();
     data.fecha = $('#fecha').val();
     data.dosis = $('#dosis').val();
+    data.institucion = $('#institucion').val();
+    data.discapacidad_tipo = $('#discapacidad_tipo').val();
+    data.discapacidad_grado = $('#discapacidad_grado').val();
+    data.discapacidad_permanente = $('#discapacidad_permanente').val();
     
 
 
@@ -231,6 +319,10 @@
     data.nombre_medicamento_cronico = $('#nombre_medicamento_cronico').val();
     data.fecha = $('#fecha').val();
     data.dosis = $('#dosis').val();    
+    data.institucion = $('#institucion').val();    
+	data.discapacidad_tipo = $('#discapacidad_tipo').val();
+    data.discapacidad_grado = $('#discapacidad_grado').val();
+    data.discapacidad_permanente = $('#discapacidad_permanente').val();
 
 
     data.id_paciente = $('#id_paciente').val();
@@ -343,8 +435,7 @@
                                 <tr>
                                     <td>${e.antecedente_data.procedimiento}</td>
                                     <td>${e.antecedente_data.comentario}</td>
-                                    <td>${e.antecedente_data.rut_responsable}</td>
-                                    <td>${e.antecedente_data.profesional}</td>
+                                    <td>${e.antecedente_data.profesional}<br/>${e.antecedente_data.rut_responsable}</td>
                                     <td>${e.antecedente_data.fecha_regitro}</td>
                                     <td>${permiso_}</td>
                                 </tr>
@@ -354,8 +445,8 @@
                             html_ +=`
                                 <tr>
                                     <td>${e.antecedente_data.nombre}</td>
-                                    <td>${e.antecedente_data.fecha}</td>
                                     <td>${e.antecedente_data.comentario}</td>
+									<td>${e.antecedente_data.profesional} <br/>${e.antecedente_data.rut_responsable}</td>
                                     <td>${e.antecedente_data.fecha_regitro}</td>
                                     <td>${permiso_}</td>
                                 </tr>
@@ -364,10 +455,10 @@
                         case 3:
                             html_ +=`
                                 <tr>
+									<td>${e.antecedente_data.fecha}</td>
                                     <td>${e.antecedente_data.procedimiento}</td>
                                     <td>${e.antecedente_data.comentario}</td>
-                                    <td>${e.antecedente_data.rut_responsable}</td>
-                                    <td>${e.antecedente_data.profesional}</td>
+                                    <td>${e.antecedente_data.profesional} <br/>${e.antecedente_data.rut_responsable}</td>
                                     <td>${e.antecedente_data.fecha_regitro}</td>
                                     <td>${permiso_}</td>
                                 </tr>
@@ -388,9 +479,9 @@
                         case 5:
                             html_ +=`
                                 <tr>
-                                    <td>${e.antecedente_data.nombre}</td>
-                                    <td>${e.antecedente_data.comentario}</td>
-                                    <td>${e.antecedente_data.fecha_regitro}</td>
+                                    <td>${e.antecedente_data.procedimiento}</td>
+                                    <td>${e.antecedente_data.institucion}</td>
+                                    <td>${e.antecedente_data.fecha}</td>
                                     <td>${permiso_}</td>
                                 </tr>
                             `;
@@ -399,6 +490,7 @@
                             html_ +=`
                                 <tr>
                                     <td>${e.antecedente_data.nombre}</td>
+									<td>${e.antecedente_data.comentario}</td>
                                     <td>${e.antecedente_data.fecha_regitro}</td>
                                     <td>${permiso_}</td>
                                 </tr>
@@ -409,6 +501,17 @@
                                 <tr>
                                     <td>${e.antecedente_data.nombre_medicamento_cronico}</td>
                                     <td>${e.antecedente_data.dosis}</td>
+                                    <td>${e.antecedente_data.fecha_regitro}</td>
+                                    <td>${permiso_}</td>
+                                </tr>
+                            `;
+                        break;
+						case 8:
+                            html_ +=`
+                                <tr>
+                                    <td>${e.antecedente_data.discapacidad_tipo}</td>
+                                    <td>${e.antecedente_data.discapacidad_grado}</td>
+									<td>${e.antecedente_data.discapacidad_permanente}</td>
                                     <td>${e.antecedente_data.fecha_regitro}</td>
                                     <td>${permiso_}</td>
                                 </tr>
@@ -441,7 +544,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="title-antecedente">Agregar Antecedente</h5>                                            
+                        <h5 class="modal-title" id="title-antecedente">Agregar Antecedente</h5>
                         <button type="button" class="close" onclick="verModalAgregar('hide')" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -486,7 +589,8 @@
             
 
              <div class="card-body border-top iinfo_antecedentes_patologicos collapse show row">
-                {{-- ANESTESIAS PACIENTE 1 --}}
+                
+				{{-- ANESTESIAS PACIENTE 1 --}}
                 <div class="col-sm-6 col-md-12">
                     <div class="card">
                         <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
@@ -506,60 +610,13 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Procedimiento</th>
-                                                        <th>Detalle</th>
-                                                        <th>Rut responsable</th>
+                                                        <th>Incidentes</th>
                                                         <th>Profesional</th>
                                                         <th>Fecha</th>                                                        
-                                                        <th></th>                                                        
+                                                        <th>Acción</th>                                                        
                                                     </tr>
                                                 </thead>
                                                 <tbody id="bloque-registros-1">
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>                                                
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                {{-- ANTECEDENTES CIRUGIAS 2 --}}
-                <div class="col-sm-6 col-md-6">
-                    <div class="card">
-                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
-                            <h5 class="mb-0 text-white">
-                                Patologías Crónicas
-                            </h5>
-                            @if(Auth::user()->hasRole('Profesional'))
-                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',2,0)"></button>
-                            @endif
-                        </div>
-
-                        <div class="card-body border-top collapse show" >
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row form-group">
-                                            <table class="table table-bordered table-xs">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nombre</th>
-                                                        <th>Fecha Cirugía</th>
-                                                        <th>Comentario</th>
-                                                        <th>Fecha</th>
-                                                        <th></th>                                                        
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="bloque-registros-2">
                                                     <tr>
                                                         <td></td>
                                                         <td></td>
@@ -578,11 +635,11 @@
                 </div>
 
                 {{-- ANTECEDENTES FRACTURAS PACIENTES 3 --}}
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-12">
                     <div class="card">
                         <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
                             <h5 class="mb-0 text-white">
-                                Medicamentos de uso Crónico
+                                Antecedentes Cirugias y Procedimientos	
                             </h5>
                             @if(Auth::user()->hasRole('Profesional'))
                             <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',3,0)"></button>
@@ -597,11 +654,11 @@
                                             <table class="table table-bordered table-xs">
                                                 <thead>
                                                     <tr>
+														<th>Fecha</th>
                                                         <th>Procedimiento</th>
-                                                        <th>Detalle</th>
-                                                        <th>Rut responsable</th>
+                                                        <th>Incidente</th>
                                                         <th>Profesional</th>
-                                                        <th>Fecha</th>
+                                                        <th>Fecha data</th>
                                                         <th></th>                                                        
                                                     </tr>
                                                 </thead>
@@ -623,19 +680,19 @@
 
                     </div>
                 </div>
-
-                {{-- ANTECEDENTES HEMORRAGIAS PACIENTE 4 --}}
-                <div class="col-sm-12 col-md-6">
+				
+				{{-- ANTECEDENTES CIRUGIAS 2 --}}
+                <div class="col-sm-12 col-md-12">
                     <div class="card">
                         <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
                             <h5 class="mb-0 text-white">
-                                    Antecedentes Quirúrgicos
+                                Patologías Crónicas
                             </h5>
                             @if(Auth::user()->hasRole('Profesional'))
-                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',4,0)"></button>
+                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',2,0)"></button>
                             @endif
                         </div>
-                       
+
                         <div class="card-body border-top collapse show" >
                             <div class="container">
                                 <div class="row">
@@ -644,60 +701,14 @@
                                             <table class="table table-bordered table-xs">
                                                 <thead>
                                                     <tr>
-                                                        <th>Procedimiento</th>
-                                                        <th>Detalle</th>
-                                                        <th>Rut responsable</th>
+                                                        <th>Nombre</th>
+                                                        <th>Comentario</th>
                                                         <th>Profesional</th>
                                                         <th>Fecha</th>
                                                         <th></th>                                                        
                                                     </tr>
                                                 </thead>
-                                                <tbody id="bloque-registros-4">
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>                                                        
-                                                    </tr>                                                
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                {{-- ANTECEDENTE ALERGIAS 5 --}}
-                <div class="col-sm-12 col-md-6">
-                    <div class="card">
-                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
-                            <h5 class="mb-0 text-white">
-                                    Antecedentes de Alergias
-                            </h5>
-                            @if(Auth::user()->hasRole('Profesional'))
-                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',5,0)"></button>
-                            @endif
-                        </div>
-                       
-                        <div class="card-body border-top collapse show" >
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row form-group">
-                                            <table class="table table-bordered table-xs">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nombre Alergia</th>
-                                                        <th>Comentario</th>
-                                                        <th>Fecha</th>
-                                                        <th></th>                                                        
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="bloque-registros-5">
+                                                <tbody id="bloque-registros-2">
                                                     <tr>
                                                         <td></td>
                                                         <td></td>
@@ -713,50 +724,9 @@
 
                     </div>
                 </div>
-
-                {{-- ANTECEDENTE ENFERMEDADES CRONICAS 6 --}}
-                <div class="col-sm-12 col-md-6">
-                    <div class="card">
-                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
-                            <h5 class="mb-0 text-white">
-                                    Antecedentes de Enfermedades crónicas
-                            </h5>
-                            @if(Auth::user()->hasRole('Profesional'))
-                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',6,0)"></button>
-                            @endif
-                        </div>
-                       
-                        <div class="card-body border-top collapse show" >
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row form-group">
-                                            <table class="table table-bordered table-xs">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nombre Patología Crónica</th>
-                                                        <th>Fecha</th>
-                                                        <th></th>                                                        
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="bloque-registros-6">
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>                                                
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
+               
                 {{-- ANTECEDENTE MEDICAMENTO ENFERMEDADES CRONICAS 7 --}}
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-12">
                     <div class="card">
                         <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
                             <h5 class="mb-0 text-white">
@@ -794,12 +764,141 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+				
+				{{-- ANTECEDENTE ALERGIAS 6 --}}
+				<div class="col-sm-12 col-md-12">
+                    <div class="card">
+                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
+                            <h5 class="mb-0 text-white">
+                                    Antecedentes de Alergias
+                            </h5>
+                            @if(Auth::user()->hasRole('Profesional'))
+                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',6,0)"></button>
+                            @endif
+                        </div>
+                       
+                        <div class="card-body border-top collapse show" >
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row form-group">
+                                            <table class="table table-bordered table-xs">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nombre Alergia</th>
+                                                        <th>Comentario</th>
+                                                        <th>Fecha</th>
+                                                        <th></th>                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bloque-registros-6">
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>                                                
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+				
+				{{-- ANTECEDENTE SERVICIOS ASISTENCIALES 5 --}}
+				<div class="col-sm-12 col-md-12">
+                    <div class="card">
+                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
+                            <h5 class="mb-0 text-white">
+                                   Solicitud de Antecedentes a servicios asistenciales
+                            </h5>
+                            @if(Auth::user()->hasRole('Profesional'))
+                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',5,0)"></button>
+                            @endif	
+                        </div>
+                       
+                        <div class="card-body border-top collapse show" >
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row form-group">
+                                            <table class="table table-bordered table-xs">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Patología</th>
+                                                        <th>Clínica o servicio</th>
+                                                        <th>Fecha Aproximada</th>
+                                                        <th></th>                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bloque-registros-5">
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>                                                
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+				
+				{{-- DISCAPACIDAD  8 --}}
+				<div class="col-sm-12 col-md-12">
+                    <div class="card">
+                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
+                            <h5 class="mb-0 text-white">
+                                    Presenta alguna discapacidad ?
+                            </h5>
+                            @if(Auth::user()->hasRole('Profesional'))
+                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',8,0)"></button>
+                            @endif
+                        </div>
+                        
+                        <div class="card-body border-top collapse show" >
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row form-group">
+                                            <table class="table table-bordered table-xs">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Discapacidad</th>
+                                                        <th>Grado</th>
+														<th>Reversibilidad</th>
+                                                        <th>Fecha</th>
+                                                        <th>Acción</th>                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bloque-registros-8">
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>                                                
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
                     </div>
                 </div>
-
-
 
              </div>
            

@@ -13,10 +13,8 @@
                             </div>
                             <ul class="breadcrumb mb-4">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top"
-                                        title="Volver a mi escritorio">
-                                        <i class="feather icon-home">
-                                        </i>
+                                    <a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
+                                        <i class="feather icon-home"></i>
                                     </a>
                                 </li>
                                 <li class="breadcrumb-item">
@@ -221,9 +219,11 @@
                                     <div class="card">
                                         <div class="card-header bg-danger">
                                             <h5 class="text-white d-inline float-left mt-1">Contactos de emergencia</h5>
-                                            <button type="button" onclick="modal_agregar_contacto_emergencia();" class="btn btn-outline-light btn-sm d-inline float-right mr-4">
+                                            <!--
+											<button type="button" onclick="modal_agregar_contacto_emergencia();" class="btn btn-outline-light btn-sm d-inline float-right mr-4">
                                                 <i class="feather icon-plus"></i> Agregar contacto
                                             </button>
+											-->
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
@@ -266,7 +266,7 @@
                                                                                         class="feather icon-phone-call"></i>
                                                                                 </button>
 
-                                                                                <button id="btn_editar_contacto"
+                                                                                <!--<button id="btn_editar_contacto"
                                                                                     onclick="cargar_datos_contacto({{ $c->id }})"
                                                                                     class="btn btn-warning btn-sm rounded-circle"
                                                                                     data-toggle="modal"
@@ -282,6 +282,7 @@
                                                                                     title="Eliminar contacto"><i
                                                                                         class="feather icon-x"></i>
                                                                                 </button>
+																				-->
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -842,9 +843,7 @@
                                     <!--Cierre: Datos Sangre Donación de Organos-->
                                 </div>
                             </div>
-                            @include(
-                                'app.profesional.edicion_paciente.antecedentes_paciente_dos'
-                            )
+                            @include('app.profesional.edicion_paciente.antecedentes_paciente_dos')
                         </div>
                         <!--Cierre: Tab Tab Datos médicos-->
                         <!--Tab Cambiar Contraseñas-->
