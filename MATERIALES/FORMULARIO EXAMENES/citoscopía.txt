@@ -1,13 +1,13 @@
 <!-- SOLICITADO POR -->
 <div class="col-md-12">
-    <div class="card">
-        <div class="card-header" id="solicitado_por">
+    <div class="card-a">
+        <div class="card-header-a" id="solicitado_por">
             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#solicitado_por_c" aria-expanded="false" aria-controls="solicitado_por_c">
                 Solicitado por:
             </button>
         </div>
         <div id="solicitado_por_c" class="collapse show" aria-labelledby="solicitado_por" data-parent="#solicitado_por">
-            <div class="card-body-aten shadow-none">
+            <div class="card-body-aten-a">
                 <div class="form-row">
                     <div class="form-group col-md-2" >
                         <input type="hidden" name="id_profesional_solicitado_por_cisto" id="id_profesional_solicitado_por_cisto" value="">
@@ -59,14 +59,14 @@
 <!-- FIN SOLICITADO POR -->
 <!--INFORME CITOSCOPIA-->
 <div class="col-sm-12 col-md-12">
-    <div class="card">
-        <div class="card-header" id="infor-citoscopia">
+    <div class="card-a">
+        <div class="card-header-a" id="infor-citoscopia">
             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#infor-citoscopia-c" aria-expanded="false" aria-controls="infor-citoscopia-c">
             Informe
             </button>
         </div>
         <div id="infor-citoscopia-c" class="collapse show" aria-labelledby="infor-citoscopia" data-parent="#infor-citoscopia">
-            <div class="card-body-aten shadow-none">
+            <div class="card-body-aten-a">
                 <div class="form-row">
                     <div class="col-md-3">
                         <label class="col-form-label font-weight-bolder">Meato y Uretra</label>
@@ -147,14 +147,14 @@
 </div>
 <!--DIAGNÓSTICO-->
 <div class="col-sm-12 col-md-12">
-    <div class="card">
-        <div class="card-header" id="diagn-citoscopia">
+    <div class="card-a">
+        <div class="card-header-a" id="diagn-citoscopia">
             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagn-citoscopia-c" aria-expanded="false" aria-controls="diagn-citoscopia-c">
             Diagnóstico
             </button>
         </div>
         <div id="diagn-citoscopia-c" class="collapse show" aria-labelledby="diagn-citoscopia" data-parent="#diagn-citoscopia">
-            <div class="card-body-aten shadow-none">
+            <div class="card-body-aten-a">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label class="floating-label">Diagnóstico endoscópico</label>

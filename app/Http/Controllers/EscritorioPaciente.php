@@ -239,13 +239,13 @@ class EscritorioPaciente extends Controller
         $url_nueva = $request->urln;
         $id_usuario_recept = (int)$request->id_recept; // 19
 
-        if(Auth::check()) 
+        if(Auth::check())
         $id_usuario = Auth::user()->id; //interno logeado
         else
         $id_usuario = 0; //externo
 
         $id_user_create = $id_usuario;
-        
+
         if($id_usuario_recept!=0)
         $id_user_recept = $id_usuario_recept;
         else
@@ -1141,7 +1141,10 @@ class EscritorioPaciente extends Controller
             $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
 
             if(!empty($request->tipo_hora_medica))
+            {
                 $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
+                $hora_medica->alias_examen = $request->examen;
+            }
 
             // $hora_medica->origen = $request->origen;
 
@@ -1157,6 +1160,52 @@ class EscritorioPaciente extends Controller
             }
         }
 
+        // nombre_paciente
+        // fecha
+        // hora
+        // profesional_nombre
+        // profesional_especialidad
+        // profesional_tipo_especialidad
+        // profesional_sub_tipo_especialidad
+        // profesional_sub_tipo_especialidad
+        // lugar_atencion
+        // direccion
+
+        /** envio de correo de confirmacion INSTITUCION */
+        $blade = 'hora_agendada';
+        $to = array(
+                array('email' => $paciente->email,'name' =>  $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+            );
+        $cc = array();
+        $bcc = array();
+        $asunto = 'MED-SDI - Nueva Hora Agendada';
+        $body = array(
+            'nombre_paciente'=> $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
+            'fecha'=> $hora_medica->fecha_consulta,
+            'hora'=> $hora_medica->hora_inicio,
+            'profesional_nombre'=> $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
+            'profesional_especialidad'=> $profesional->Especialidad()->first()->nombre,
+            'profesional_tipo_especialidad'=> $profesional->TipoEspecialidad()->first()->nombre,
+            'profesional_sub_tipo_especialidad'=> $profesional->SubTipoEspecialidad()->first()->nombre,
+            // 'institucion'=> $nombre_institucion,
+            'lugar_atencion'=> $lugar_atencion->nombre,
+            'direccion'=> $lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre,
+        );
+        $archivo = '';/** pendiente */
+        $id_institucion = '';
+
+        $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+        if($result_mail['estado'])
+        {
+            $datos['mail']['institucion']['estado'] = 1;
+            $datos['mail']['institucion']['msj'] = 'Notificacion de bienvenida enviado';
+        }
+        else
+        {
+            $datos['mail']['institucion']['estado'] = 0;
+            $datos['mail']['institucion']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+        }
 
         // $details = [
         //     'title' => 'Hora medica Reservada',

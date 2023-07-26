@@ -1286,6 +1286,20 @@ Route::group([
     Route::post('reservar/hora/generar/reserva', [App\Http\Controllers\EscritorioPaciente::class, 'agendar_horas'])->name('agenda.paciente.solicitar.hora');
 });
 
+
+/** TRANSCRIPCION DE EXAMEN ASISTENTE */
+Route::group([
+    'middleware' => ['role:Asistente|AsistenteJefaCaja|AsistenteCaja|AsistenteOnline|AsistenteManejoAgenda|admin'],
+    'prefix' => 'transcripcion',
+], function () {
+    Route::get('/carga/examen', [App\Http\Controllers\TranscripcionController::class, 'CargarExamen'])->name('asisten.cargar.examen.transcripcion');
+    Route::post('/registro/examen', [App\Http\Controllers\TranscripcionController::class, 'RegistrarTranscripcion'])->name('asisten.registro.examen.transcripcion');
+
+    /** Proceso de imagenes */
+	Route::post('/imagen/carga', [App\Http\Controllers\CargaImagenController::class, 'cargaImagenTemp'])->name('asistente.imagen.carga');
+});
+
+
 /** VER LIQUIDACIONES - DATOS DE DEPOSITO */
 Route::group([
     'middleware' => ['role:Profesional|Contador|Asistente|AsistenteCaja|AsistenteJefaCaja|AsistenteOnline|admin|Adm_Institucion|Institucion'],

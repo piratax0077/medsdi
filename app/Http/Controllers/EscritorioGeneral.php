@@ -65,7 +65,10 @@ class EscritorioGeneral extends Controller
 
 
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-        $registros = Profesional::where($filtro)->whereNotIn('id',[$profesional->id])->get();
+        if($profesional)
+            $registros = Profesional::where($filtro)->whereNotIn('id',[$profesional->id])->get();
+        else
+            $registros = Profesional::where($filtro)->get();
 
 
         if($registros)

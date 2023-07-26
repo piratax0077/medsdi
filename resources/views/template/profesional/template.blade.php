@@ -2321,51 +2321,7 @@
 
                 };*/
 
-            function datos_confirmar_asistente(id) {
 
-                let id_lugar_atencion = id;
-                let id_asistente = $('#id_asistente_lugar_atencion').val();
-                let url = "{{ route('profesional.agregar_asistente_lugar_atencion') }}";
-
-                $.ajax({
-
-                        url: url,
-                        type: "get",
-                        data: {
-                            id_lugar_atencion: id_lugar_atencion,
-                            id_asistente: id_asistente
-                        },
-                    })
-                    .done(function(data) {
-
-
-                        if (data !== 'null') {
-
-                            swal({
-                                title: "Se ha agregado asistente al lugar de atención",
-                                icon: "success",
-                                buttons: "Aceptar",
-                                // DangerMode: true,
-                            })
-                            // alert('se ha agregado asistente al lugar de atención')
-
-                        } else {
-
-                            swal({
-                                title: "Error al agregar asistente",
-                                icon: "error",
-                                buttons: "Aceptar",
-                                DangerMode: true,
-                            })
-
-                        }
-
-                    })
-                    .fail(function(jqXHR, ajaxOptions, thrownError) {
-                        console.log(jqXHR, ajaxOptions, thrownError)
-                    });
-
-            };
 
             function ver_lugar_atencion(id) {
 

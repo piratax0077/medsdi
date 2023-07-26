@@ -73,13 +73,13 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card subir">
-                          <a href="{{ ROUTE('adm_cm.flujo.caja.index') }}">
+                    <div class="card subir" onclick="en_construccion()">
+                        {{-- <a href="{{ ROUTE('flujo.caja.index') }}"> --}}
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/caja.png') }}">
                                 <h5 class="mt-1 mb-0"> Recepción de Cajas</h5>
                             </div>
-                        </a>
+                        {{-- </a> --}}
                     </div>
                 </div>
 
@@ -125,7 +125,7 @@
 					</div>
 				</div>
 				<div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
+                    <div class="card subir" onclick="en_construccion();">
                         {{--   <a href="{{ ROUTE('asistente_adm.cargar_contrato') }}"></a>--}}
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/proveedores.png') }}">
@@ -135,7 +135,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
+                    <div class="card subir" onclick="en_construccion();">
                          {{--  <a href="{{ ROUTE('asistente_adm.gastos') }}"></a>--}}
                         <div class="card-body text-center" style="cursor:pointer">
                             <img class="wid-60 text-center" src="{{ asset('images/iconos/estadisticas.png') }}">
@@ -144,7 +144,7 @@
                     </div>
                 </div>
 				<div class="col-md-4">
-					<div class="card subir" onclick="en_construccion()";>
+					<div class="card subir" onclick="en_construccion();">
 					   {{--  <a href="{{ ROUTE('asistente_adm.asistente_adm_pedidos') }}"></a>--}}
 							<div class="card-body text-center" style="cursor:pointer">
 								<img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/convenios.png') }}">

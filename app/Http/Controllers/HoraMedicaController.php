@@ -41,8 +41,21 @@ class HoraMedicaController extends Controller
             $filtro[] = array('id_estado',$request->id_estado);
         }
 
+        // # ESTADO HORA ATENCION
+        // 1. RESERVADA
+        // 2. CONFIRMADO
+        // 3. RECHAZADA
+        // 4. ESPERA
+        // 5. REALIZANDO
+        // 6. REALIZADA
+        // 7. INASISTIDA
+        // 8. LLAMANDO
+        // 9. EXAMEN REALIZADO SIN CARGA DE RESULTADO
+        // 10. EXAMEN REALIZADO CON CARGA DE RESULTADO
+        // 11. EXAMEN TRANSCRITO
+        // 12. EXAMEN FINALIZADO
         $registros = HoraMedica::where($filtro)
-                                ->whereIn('id_estado',[1,2,4,5,6,7,8])
+                                ->whereIn('id_estado',[1,2,4,5,6,7,8,9,10,11,12])
                                 ->with('Estado')
                                 ->with(['Paciente'=> function($query){
                                     $query->select('id','id_prevision','rut')

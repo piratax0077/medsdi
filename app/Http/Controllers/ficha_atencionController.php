@@ -3239,8 +3239,7 @@ class ficha_atencionController extends Controller
                             if( !empty( $request['diag_endos_'.$temp_value_examen_tipo[0]] ) )
                             {
 
-                                // if($request['diag_endos_'.$temp_value_examen_tipo[0]] != 'Test de ureasa No tomado')
-                                if(1==1)
+                                if($request['diag_endos_'.$temp_value_examen_tipo[0]] != 'Test de ureasa No tomado')
                                 {
                                     /** limpiar parametos */
                                     foreach( $parametro as $key => $value )
