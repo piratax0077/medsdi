@@ -53,11 +53,18 @@
                             </a>
                         </div>
                         <div class="card subir">
-                            <a href="{{ route('profesional.index_receta_online') }}">Receta
-                                Online
+                            <a href="{{ route('profesional.index_receta_online') }}">Receta Online
                                 <div class="card-body text-center" style="cursor:pointer">
                                     <img class="wid-60 text-center" src="{{ asset('images/iconos/ficha_2.svg') }}">
                                     <h5 class="mt-2">Receta Online</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card subir">
+                            <a href="{{ route('profesional.index_transcripcion_examen') }}">Transcripción Examenes
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-60 text-center" src="{{ asset('images/iconos/transcripcion_examen.svg') }}">
+                                    <h5 class="mt-2">Transcripción Examenes</h5>
                                 </div>
                             </a>
                         </div>

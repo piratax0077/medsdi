@@ -74,7 +74,7 @@
         </div>
         <div class="row">
             <div class="col-md-10 mx-auto">
-			{{ Auth::user()->Roles()->get()}}
+			{{-- {{ Auth::user()->Roles()->get()}} --}}
                 <div class="row">
 
                     @if (Auth::user()->hasRole('Paciente') )

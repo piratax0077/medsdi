@@ -406,8 +406,6 @@ Route::group([
 
     Route::get('examenes_frecuentes', [App\Http\Controllers\EscritorioProfesional::class, 'examenes_frecuentes'])->name('profesional.examenes_frecuentes');
 
-
-
     Route::post('ficha_medica_unica_auth', [App\Http\Controllers\EscritorioProfesional::class, 'ficha_medica_unica_auth'])->name('profesional.ficha_medica_unica_auth');
     Route::get('Solicitar_codigo_fmu', [App\Http\Controllers\EscritorioProfesional::class, 'Solicitar_codigo_fmu'])->name('profesional.solicitar_codigo_fmu');
 
@@ -548,6 +546,12 @@ Route::group([
 
     /** solicitud de pabellon  */
     Route::post('solicitud/pabellon/crear',[App\Http\Controllers\SolicitudPabellonQuirurgicosController::class, 'registroSolicitud'])->name('solicitud.pabellon.registrar');
+
+    /** transcripcion */
+    Route::get('transcripcion/examen',[App\Http\Controllers\TranscripcionController::class, 'verExamenTranscrito'])->name('profesional.index_transcripcion_examen');
+    Route::get('/carga/examen', [App\Http\Controllers\TranscripcionController::class, 'CargarExamenProfesional'])->name('profesional.cargar.examen.transcripcion');
+    Route::post('/registro/examen', [App\Http\Controllers\TranscripcionController::class, 'RegistrarTranscripcionProfesional'])->name('profesional.registro.examen.transcripcion');
+
 });
 
 /* ASISTENTE CONSULTA*/

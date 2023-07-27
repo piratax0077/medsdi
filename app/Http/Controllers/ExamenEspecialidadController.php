@@ -93,7 +93,10 @@ class ExamenEspecialidadController extends Controller
 
     public function generarPDF_r(Request $request)
     {
-        return static::generarPDF($request->id_examen_especialidad);
+        if(empty($request->pdf_tipo))
+            return static::generarPDF($request->id_examen_especialidad);
+        else
+            return static::generarPDF($request->id_examen_especialidad, $request->pdf_tipo);
     }
     static public function generarPDF($id_examen_especialidad, $pdf_tipo = 'V')
     {
