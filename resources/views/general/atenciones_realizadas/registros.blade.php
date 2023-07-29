@@ -44,22 +44,21 @@
                                     @if (isset($fichas) && $fichas->count() > 0)
                                         @foreach ($fichas as $f)
                                             <tr>
-
                                                 <td class="text-center align-middle">
                                                     {{ \Carbon\Carbon::parse($f->created_at)->format('d/m/Y') }}
                                                 </td>
 
                                                 <td class="text-center align-middle">{{ $f->profesional->nombre }} {{ $f->profesional->apellido_uno }} {{ $f->profesional->apellido_dos }}<br>
-                                                @foreach ($especialidad as $esp)
-                                                    @if($esp->id==$f->profesional->id_especialidad)
-                                                    <b>{{ $esp->nombre }}<b><br>
-                                                    @endif
-                                                @endforeach    
-                                                @foreach ($sub_tipo_especialidad as $sub_esp)
-                                                    @if($sub_esp->id==$f->profesional->id_sub_tipo_especialidad)
-                                                    <b>{{ $sub_esp->nombre }}<b><br>
-                                                    @endif
-                                                @endforeach 
+													@foreach ($especialidad as $esp)
+														@if($esp->id==$f->profesional->id_especialidad)
+														<b>{{ $esp->nombre }}<b><br>
+														@endif
+													@endforeach    
+													@foreach ($sub_tipo_especialidad as $sub_esp)
+														@if($sub_esp->id==$f->profesional->id_sub_tipo_especialidad)
+														<b>{{ $sub_esp->nombre }}<b><br>
+														@endif
+													@endforeach 
                                                 </td>
 
                                                 <td class="text-center align-middle">{{ $f->hipotesis_diagnostico }}</td>
@@ -71,17 +70,6 @@
                                                 <td class="text-center align-middle">
                                                     <a class="badge badge-light-success" @if (isset($f->id)) onclick="buscar_examenes({{ $f->id }});" @endif><i class="feather icon-activity"></i> Ver</a>
                                                 </td>
-                                                <!--
-                                                <td class="text-center align-middle">
-                                                    <a class="badge badge-light-purple" @if (isset($f->id)) onclick="buscar_archivos({{ $f->id }});" @endif><i class="feather icon-folder"></i> Ver</a>
-                                                </td>
-
-                                                <form action="route()"></form>
-                                                <td class="text-center align-middle">
-                                                    <a class="badge badge-light-info" @if (isset($f->id)) onclick="buscar_ficha_atencion({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</a>
-                                                </td>
-                                                -->
-
                                             </tr>
                                         @endforeach
                                     @else
@@ -259,8 +247,7 @@
     </div>
 </div>
 
-<div id="m_cons_ex" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="m_cons_exLabel"
-    aria-hidden="true">
+<div id="m_cons_ex" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="m_cons_exLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
@@ -322,8 +309,7 @@
 
 
 {{-- recetas --}}
-<div id="m_cons_receta" class="modal fade" tabindex="-1" role="dialog"
-    aria-labelledby="m_cons_recetaLabel" aria-hidden="true">
+<div id="m_cons_receta" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="m_cons_recetaLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
@@ -366,8 +352,7 @@
 </div>
 
 {{-- examenes --}}
-<div id="m_cons_examen" class="modal fade" tabindex="-1" role="dialog"
-    aria-labelledby="m_cons_examenLabel" aria-hidden="true">
+<div id="m_cons_examen" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="m_cons_examenLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
@@ -436,8 +421,6 @@
 </div>
 
 <script>
-
-
 
     function buscar_receta(id_ficha_clinica) 
     {

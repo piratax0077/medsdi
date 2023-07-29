@@ -15,12 +15,12 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?t={{ time() }}" />
     <link rel="stylesheet" href="{{ asset('css/escritorio_laboratorio.css') }}?t={{ time() }}"/>
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}"/>
-    
+
 </head>
 <body>
     <div id="app" style="margin: 0; padding: 0;">
-        
-    </div> 
+
+    </div>
 
     <!--[if lt IE 11]>
         <div class="ie-warning">
@@ -67,16 +67,19 @@
 
     <!-- Scripts -->
     <script type="text/javascript" src="{{ asset('js/vendor-all.min.js') }}"></script>
-    
+
     <script type="text/javascript" src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/plugins/bootstrap.min.js') }}" ></script>
     <script type="text/javascript" src="{{ asset('js/bootstrap.bundle.min.js') }}" ></script>
     <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}" ></script>
     <script src="{{ asset('js/pages/data-basic-custom.js') }}"></script>
-    
+    {{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+
     <script src="{{ asset('js/ripple.js') }}"></script>
     <script src="{{ asset('js/pcoded.min.js') }}"></script>
-    
+
     <!--<script src="../assets/js/menu-setting.min.js"></script>-->
     <!-- <script src="{{ asset('js/plugins/dataTables.bootstrap4.min.js') }}"></script>-->
     <script src="{{ asset('/js/esc_asis_lab.js') }}"></script>
@@ -85,6 +88,6 @@
     @else
         <script>window.code = null;</script>
     @endif
-    
+
 </body>
 </html>

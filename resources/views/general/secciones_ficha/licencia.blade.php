@@ -1,22 +1,19 @@
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
-    <div class="col-md-12 py-0 px-2 shadow-none">
+    <div class="col-md-12 py-0 px-1 shadow-none">
         <div class="row mx-0">
-            <div class="col-md-12">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             </div>
         </div>
-        <div class="row bg-white shadow-sm rounded mx-3 mt-4">
+        <div class="row mx-1 mt-2">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-6 mb-0 pt-3 d-inline">
-                        <h6 class="f-16 text-c-blue">Licencia médica</h6>
-                    </div>
-                    <div class="col-md-6 mb-0 pt-3 d-inline">
-                        <button type="button" class="btn btn-xs btn-primary-light float-right"><i class="feather icon-printer"></i> Imprimir</button>
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 pt-3 d-inline float-left">
+                        <h6 class="f-20 text-c-blue float-left mb-3">Licencia médica</h6>
+                         <button type="button" class="btn btn-xs btn-primary-light float-right"><i class="feather icon-printer"></i> Imprimir</button>
                     </div>
                 </div>
-                <hr class="mt-1">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <form>
                             <!--SWITCH TIPO ENFERMEDAD-->
                             <div class="form-row mb-3">
@@ -36,14 +33,14 @@
                             <!--INFO. DEL TRABAJADOR-->
                             <div class="form-row">
                                 <div class="col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card">
-                                        <div class="card-header" id="info-trabajador">
+                                    <div class="card-a">
+                                        <div class="card-header-a" id="info-trabajador">
                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#info-trabajador-c" aria-expanded="false" aria-controls="info-trabajador-c">
                                               Información del trabajador
                                             </button>
                                         </div>
                                         <div id="info-trabajador-c" class="collapse show" aria-labelledby="info-trabajador" data-parent="#info-trabajador">
-                                            <div class="card-body-aten shadow-none">
+                                            <div class="card-body-aten-a shadow-none">
                                                 <form>
                                                     <div class="form-row">
                                                         <div class="form-group col-md-3">
@@ -74,14 +71,14 @@
                             <!--REPOSO-->
                             <div class="form-row">
                                 <div class="col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card">
-                                        <div class="card-header" id="reposo">
+                                    <div class="card-a">
+                                        <div class="card-header-a" id="reposo">
                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#reposo-c" aria-expanded="false" aria-controls="reposo-c">
                                               Reposo
                                             </button>
                                         </div>
                                         <div id="reposo-c" class="collapse show" aria-labelledby="reposo" data-parent="#reposo">
-                                            <div class="card-body-aten shadow-none">
+                                            <div class="card-body-aten-a shadow-none">
                                                 <div class="form-row">
 
                                                     <div class="form-group col-md-3">
@@ -117,14 +114,14 @@
                             <!--INFORMACION LICENCIA-->
                             <div class="form-row">
                                 <div class="col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card">
-                                        <div class="card-header" id="menor-edad">
+                                    <div class="card-a">
+                                        <div class="card-header-a" id="menor-edad">
                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#menor-edad-c" aria-expanded="false" aria-controls="menor-edad-c">
                                               Información de licencia
                                             </button>
                                         </div>
                                         <div id="menor-edad-c" class="collapse show" aria-labelledby="menor-edad" data-parent="#menor-edad">
-                                            <div class="card-body-aten shadow-none">
+                                            <div class="card-body-aten-a shadow-none">
                                                 <form>
                                                     <div class="form-row">
                                                         <div class="form-group col-md-6">
@@ -161,14 +158,14 @@
                             <!--DIAGNÓSTICO-->
                             <div class="form-row">
                                 <div class="col-sm-12 col-md-12">
-                                    <div class="card">
-                                        <div class="card-header" id="diagnostico_lic">
+                                    <div class="card-a">
+                                        <div class="card-header-a" id="diagnostico_lic">
                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagnostico-_lic-c" aria-expanded="false" aria-controls="diagnostico-_lic-c">
                                                 Diagnóstico
                                             </button>
                                         </div>
                                         <div id="diagnostico-_lic-c" class="collapse show" aria-labelledby="diagnostico_lic" data-parent="#diagnostico_lic">
-                                            <div class="card-body-aten shadow-none">
+                                            <div class="card-body-aten-a shadow-none">
                                                 <div class="form-row">
                                                     <div class="form-group col-md-6">
                                                         @if (isset($fichaAtencion) &&
@@ -205,14 +202,14 @@
                             <!--OTROS ANTECEDENTES-->
                             <div class="form-row">
                                 <div class="col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card">
-                                        <div class="card-header" id="ot-ant-lic">
+                                    <div class="card-a">
+                                        <div class="card-header-a" id="ot-ant-lic">
                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#ot-ant-lic-c" aria-expanded="false" aria-controls="ot-ant-lic-c">
                                                 Otros antecedentes
                                             </button>
                                         </div>
                                         <div id="ot-ant-lic-c" class="collapse show" aria-labelledby="ot-ant-lic" data-parent="#ot-ant-lic">
-                                            <div class="card-body-aten shadow-none">
+                                            <div class="card-body-aten-a shadow-none">
                                             <form>
                                                 <div class="form-row">
                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -229,14 +226,14 @@
                             <!--EXAMENES DE APOYO-->
                             <div class="form-row">
                                 <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header" id="exam-apoyo">
+                                    <div class="card-a">
+                                        <div class="card-header-a" id="exam-apoyo">
                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#exam-apoyo-c" aria-expanded="false" aria-controls="exam-apoyo-c">
                                               Exámenes de apoyo
                                             </button>
                                         </div>
                                         <div id="exam-apoyo-c" class="collapse show" aria-labelledby="exam-apoyo" data-parent="#exam-apoyo">
-                                            <div class="card-body-aten shadow-none">
+                                            <div class="card-body-aten-a shadow-none">
                                                 <form>
                                                     <input type="file" class="form-control-file pb-3" id="exampleFormControlFile1">
                                                 </form>
@@ -247,18 +244,18 @@
                             </div>
                             <!--BOTONES ACCION-->
                             <div class="row pb-3">
-                                <div class="col-md-3 text-center">
-                                    <button type="button" class="btn btn-sm btn-info-light btn-block" onclick="l_autoriz_app()";><i class="feather icon-loader"></i> Solicitar autorización</button><!--profesional y paciente-->
+                                <div class="col-md-3 text-center mb-3">
+                                    <button type="button" class="btn btn-sm btn-info-light-c btn-block" onclick="l_autoriz_app()";><i class="feather icon-loader"></i> Solicitar autorización</button><!--profesional y paciente-->
                                     @include('general.secciones_ficha.modal.m_esperando_app')
                                 </div>
-                                <div class="col-md-3 text-center">
-                                    <button type="button" class="btn btn-sm btn-primary-light btn-block"><i class="feather icon-file-text"></i> Ver PDF</button>
+                                <div class="col-md-3 text-center mb-3">
+                                    <button type="button" class="btn btn-sm btn-primary-light-c btn-block"><i class="feather icon-file-text"></i> Ver PDF</button>
                                 </div>
-                                <div class="col-md-3 text-center">
-                                    <button type="button" class="btn btn-sm btn-primary-light btn-block"><i class="feather icon-mail"></i> Enviar</button>
+                                <div class="col-md-3 text-center mb-3">
+                                    <button type="button" class="btn btn-sm btn-primary-light-c btn-block"><i class="feather icon-mail"></i> Enviar</button>
                                 </div>
-                                <div class="col-md-3 text-center">
-                                    <button type="button" class="btn btn-sm btn-primary-light btn-block"><i class="feather icon-printer"></i> Imprimir</button>
+                                <div class="col-md-3 text-center mb-3">
+                                    <button type="button" class="btn btn-sm btn-primary-light-c btn-block"><i class="feather icon-printer"></i> Imprimir</button>
                                 </div>
                             </div>
                         </form>

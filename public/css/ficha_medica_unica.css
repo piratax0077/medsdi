@@ -9,16 +9,8 @@
     margin-bottom: 0px !important;
 }
 
-.card {
-    
-    box-shadow: none!important;
-    margin-bottom: 0px!important;    
-}
 
-.card .card-header {
-    border-bottom: 1px solid #FFF;
-    position: relative;
-}
+
 
 #link {
     color: #fff;

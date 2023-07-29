@@ -1,12 +1,6 @@
-<div id="fsugerencias" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="fsugerencias"" aria-hidden="true">
+<div id="fsugerencias" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="fsugerencias" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-
-        {{--  <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">  --}}
-        {{--  <input type="hidden" name="id_profesional_fc" value="{{ $profesional->nombre }}" id="nombre_fc">  --}}
-        {{--  <input type="hidden" name="id_profesional_fc" value="{{ $profesional->apellido_uno }}" id="apellido_uno_profesional_fc">  --}}
-        {{--  <input type="hidden" name="id_profesional_fc" value="{{ $profesional->apellido_dos }}" id="apellido_dos_profesional_fc">  --}}
-
-
+        <input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
         @csrf
 		<div class="modal-content">
 			<div class="modal-header bg-info">
@@ -28,16 +22,15 @@
 			        </div>
 
 				</div>
-
-
                 <div class="form-row">
 					<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
 						<label class="floating-label-activo-sm">Sugerencias</label>
-						<input type="text" class="form-control form-control-sm" id="form_sugerencias"name="form_sugerencias" value="">
+						<input type="text" class="form-control form-control-sm" id="form_sugerencia"name="form_sugerencia" value="">
 					</div>
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <label class="floating-label-activo-sm">Especialidad</label>
-                        <input type="text" class="form-control form-control-sm" id="form_sugerencias_especialidad"name="form_sugerencias_especialidad" value="">
+                        <label class="label"><strong>Especialidad: </strong>@if($profesional->SubTipoEspecialidad()->first()) {{ $profesional->SubTipoEspecialidad()->first()->nombre }} @else {{ $profesional->TipoEspecialidad()->first()->nombre }}  @endif </label>
+                        <input type="hidden" name="form_sugerencias_especialidad" id="form_sugerencias_especialidad" value="@if($profesional->SubTipoEspecialidad()->first()) {{ $profesional->SubTipoEspecialidad()->first()->id }} @else {{ $profesional->TipoEspecialidad()->first()->id }}  @endif">
+
                     </div>
                 </div>
                 <div class="form-row">
@@ -49,7 +42,7 @@
                 <div class="form-row">
 
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <button type="button" class="btn btn-info btn-sm btn-block">Solicitar</button>
+                        <button type="button" onclick="registrar_sugerencia();" class="btn btn-info">Enviar Sugerencia</button>
                     </div>
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <button type="button" class="btn btn-info btn-sm btn-block">Cerrar</button>
@@ -60,4 +53,65 @@
 		</div>
 	</div>
 </div>
+<script>
+    function sugerencias() {
+		$('#fsugerencias').modal('show');
+    }
+    function registrar_sugerencia() {
+            let id_prof_sugerencias= $('#id_profesional_fc').val();
+            {{--  let prof_sol_cons_fecha= $('#prof_sol_cons_fecha').val();  --}}
+            let form_sugerencia = $('#form_sugerencia').val();
+            let form_sugerencias_especialidad = $('#form_sugerencias_especialidad').val();
+            let obs_sugerencias = $('#obs_sugerencias').val();
+
+            let url = "{{ route('ficha_medica.registrar_sugerencias') }}";
+            let hora_medica = $('#hora_medica').val();
+            let id_lugar_atencion = $('#id_lugar_atencion').val();
+
+            $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        id_prof_sugerencias: id_prof_sugerencias,
+                        form_sugerencia: form_sugerencia,
+                        form_sugerencias_especialidad: form_sugerencias_especialidad,
+                        obs_sugerencias: obs_sugerencias,
+                    },
+                })
+                .done(function(response) {
+
+                    if (response != '') {
+                        console.log(response);
+                        if(response['estado'] == '1')
+                        {
+                            swal({
+                                title: "Registro de Sugerencia." ,
+                                text: response['msj'],
+                                icon: "success",
+                                // buttons: "Aceptar",
+                                //SuccessMode: true,
+                            })
+                            $('#fsugerencias').modal('hide');
+
+
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Registro de Sugerencia." ,
+                                text: response['msj'],
+                                icon: "error",
+                                // buttons: "Aceptar",
+                                //SuccessMode: true,
+                            })
+                        }
+                    }
+                })
+                .fail(function(e) {
+                    console.log("error");
+                    console.log(e);
+                })
+            };
+</script>
+
 

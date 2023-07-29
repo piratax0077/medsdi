@@ -80,10 +80,10 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingresohosp();"><i class="feather icon-save"></i> Orden de Hospitalización </button>
+                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingresohosp()";<i class="feather icon-save"></i> Orden de Hospitalización </button>
                         </div>
                         <div class="form-group col-md-6">
-                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="sol_pabellon();"><i class="feather icon-save"></i> Solicitar Pabellón</button>
+                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="sol_pabellon()";<i class="feather icon-save"></i> Solicitar Pabellón</button>
                         </div><Footer></Footer>
                     </div>
                 </div>

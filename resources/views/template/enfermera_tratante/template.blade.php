@@ -483,7 +483,7 @@
             chart.render();
         });
     </script>
-    @yield('page-script')
+    @yield('page-scripts')
 </body>
 
 </html>

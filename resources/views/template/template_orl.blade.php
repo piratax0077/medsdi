@@ -214,9 +214,10 @@
 					//SuccessMode: true,
 				});
 			@endif
-        });
-    </script>
-
+      
+  });
+            
+	</script>
     @yield('js_inferior')
     @yield('page-script')
     @yield('page-script-ficha-atencion'){{-- ficha_orl.blade --}}

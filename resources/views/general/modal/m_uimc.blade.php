@@ -2,84 +2,86 @@
 	<div class=" modal-dialog modal modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header bg-info">
-				<h5 class="modal-title text-white" id="modal_IMCLabel"><strong>Calculadora de índice de masa corporal (IMC)prueba </strong></h5>
+				<h5 class="modal-title text-white" id="modal_IMCLabel"><strong> Calculadora de IMC</strong></h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
-
-
-					<div class="form-row">
-						<div class="form-group col-sm-6 text-left">
-							<label class="font-weight-bolder">Ingrese el peso en Kg.</label>
-						</div>
-						<div class="form-group col-sm-6">
-							<input class="form-control form-control-sm" type="number" placeholder=" Ingrese el peso en Kg." name="peso" id="peso">
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="form-group col-sm-6 text-left">
-							<label class="font-weight-bolder">Ingrese talla en Cms.</label>
-						</div>
-						<div class="col-sm-6 text-center">
-							<input class="form-control form-control-sm" type="number" placeholder="Ingrese el talla en cms." name="altura" id="altura">
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="form-group col-sm-12">
-							<button type="button" class="btn btn-warning btn-block btn-sm" onclick="calculaIMC()">Calcular IMC </button> <br>
-						</div>
-					</div>
-                    <div class="col-sm-6 text-center">
-                        <input class="form-control form-control-sm" type="res" name="imc" id="resultado">
+                <div class="form-row">
+                    <div class="col-sm-4 col-md-4">
+                        <label class=" text-c-blue f-18 col-form-label">
+                            <strong>Altura (cm)</strong>
+                        </label>
                     </div>
-                  <!--
-					<div class="form-row">
-						<div class="form-group col-sm-6 text-left">
-							<label class="font-weight-bolder">Resultado de IMC</label>
-						</div>
-						<div class="col-sm-6 text-center">
-							<input class="form-control form-control-sm" type="text" name="imc" id="imc">
-						</div>
-					</div>
-					<div class="form-group row my-2">
-						<div class="col-sm-12 ">
-							<label class="font-weight-bolder">Recomendación</label>
-						</div>
-						<div class="col-sm-12 ">
-							<input type="text" class="form-control" name="leyenda" id="leyenda" size="50" maxlength="140" aria-multiline="True" contenteditable="true" style="background-color: #FFFFFF;text-align:center;color:red">
-						</div>
-					</div>-->
-
-			</div>
-		</div>
-	</div>
-	<script>
-        function calculaIMC() {
-
-            var peso, altura, imc, leyenda;
-
-            peso = document.getElementById("peso").value;
-            altura = document.getElementById("altura").value / 100;
-
-            imc = peso / (altura * altura);
-
-            document.getElementById("imc").value = imc.toFixed(2);
-
-            if (imc <= 20.5) {
-
-                leyenda = "Está delgado. debe engordar " + (altura * altura * 20.5 - peso).toFixed(1) + " kilos";
-            }
-            else if (imc >= 25.5) {
-
-                leyenda = "Tiene sobrepeso. debe adelgazar " + (peso - altura * altura * 25.5).toFixed(1) + " kilos";
-            }
-            else {
-                leyenda = "Esta en  peso ideal";
-            }
-
-            document.getElementById("leyenda").value = leyenda;
-        }
-	</script>
+                    <div class="col-sm-8 col-md-8">
+                        <input class="form-control" id="height" type="number">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-sm-4 col-md-4">
+                        <label class=" text-c-blue f-18 col-form-label">
+                            <strong>Peso (kg)</strong>
+                        </label>
+                    </div>
+                    <div class="col-sm-8 col-md-8">
+                        <input class="form-control" id="weight" type="number">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                        <button type="button" class="buttonimc btn btn-block btn-primary" onclick="calcularimc()">Calcular</button>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-sm-4 col-md-4">
+                        <label class=" text-c-blue f-18 col-form-label">
+                            <strong>IMC</strong>
+                        </label>
+                    </div>
+                    <div class="col-sm-8 col-md-8">
+                        <input disabled class="form-control" style="color:red; font-size: 16px;" id="resultado" type="number">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                    <h3 id="text_area"></h3>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    function imc() {
+        $('#modal_calcimc').modal('show');
+    }
+
+    function calcularimc() {
+        var height = document.getElementById("height").value / 100;
+        var weight = document.getElementById("weight").value;
+
+
+        var imc = Math.round(weight / (height ** 2));
+        var text=""
+        if (imc < 16) {
+            text="Paciente con bajo peso severo"}
+        else if (imc < 17) {
+            text="Paciente con bajo peso moderado"}
+        else if (imc < 19) {
+            text="Paciente con bajo peso leve"}
+        else if (imc < 24.9) {
+            text="Paciente con peso normal"}
+        else if (imc < 29.9) {
+            text="Paciente con  sobrepeso debe bajar de peso"}
+        else if (imc < 34.9) {
+            text="Paciente con obesidad leve"}
+        else if (imc < 39.9) {
+            text="Paciente con obesidad media"}
+        else if (imc > 39.9) {
+             text="Paciente con obesidad morbida"}
+
+        document.getElementById("text_area").innerText=text
+        document.getElementById('resultado').value = imc;
+    }
+</script>
+

@@ -5,7 +5,7 @@
 				<h5 class="modal-title text-white mt-1">Alergias</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body"> {{--  
                 @if($paciente_alergias)
                     @foreach ( $paciente_alergias as $alergia )
                         @php
@@ -19,7 +19,7 @@
                         </div>
                     @endforeach
                 @endif
-
+ --}}
 			</div>
 		</div>
 	</div>

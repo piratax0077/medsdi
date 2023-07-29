@@ -6,7 +6,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
 			<div class="modal-body">
-
+{{-- 
                 @if($pacientes_contacto_emergencia)
                     @foreach ( $pacientes_contacto_emergencia as $contacto_sos )
                         <div class="form-group">
@@ -28,7 +28,7 @@
                             <label for="direccion_contacto"><span style="font-weight:bold">PARENTEZCO</span>: <span id="direccion_contacto">{{$contacto_sos->ContactoEmergencia->parentezco}}</span></label>
                         </div>
                     @endforeach
-                @endif
+                @endif --}}
 
                 {{--  <div class="row">
                     <div class="form-group col-sm-12 col-md-12 col-lg-12">

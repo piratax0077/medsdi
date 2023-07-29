@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?t={{ time() }}" />
     <link rel="stylesheet" href="{{ asset('css/escritorio_paciente.css') }}?t={{ time() }}"/>
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}"/>
+   
     
 </head>
 <body>

@@ -1,3 +1,5 @@
+
+ingreso
 <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdrop" aria-hidden="true">
     <div class="modal-dialog">
@@ -30,7 +32,7 @@
                                 </div>
 
 
-                                    <input type="hidden" name="id_solicitud_pabellon" id="id_solicitud_pabellon" value="{{ $id_solicitud_pabellon }}">
+                                      {{--<input type="hidden" name="id_solicitud_pabellon" id="id_solicitud_pabellon" value="{{ $id_solicitud_pabellon }}">--}}
 
                                     {{--
                                     <input type="hidden" name="medicamentos_cirugia" id="medicamentos_cirugia">
@@ -38,7 +40,7 @@
                                     --}}
 
                                     <input type="hidden" name="tipo_cirugia" id="tipo_cirugia" value="quirurgica">
-                                    <input type="hidden" name="id_ingreso_paciente" id="id_ingreso_paciente" value="{{ $ingreso_paciente->id }}">
+                                     {{-- <input type="hidden" name="id_ingreso_paciente" id="id_ingreso_paciente" value="{{ $ingreso_paciente->id }}">--}}
 
                                     <div class="row">
                                         <!--Anamnesis-->
@@ -66,19 +68,19 @@
                                                 <div class="card-body shadow-none">
 
                                                     <div class="form-row">
-                                                        @if (isset($ingreso_paciente->antecedentes_examenes_fisicos))
-                                                            <div class="form-group col-md-12">
+                                                      {{--  @if (isset($ingreso_paciente->antecedentes_examenes_fisicos))
+                                                            <div class="form-group col-md-12">--}}
                                                                 <input name="antecedentes_examenes_fisicos"
                                                                     id="antecedentes_examenes_fisicos"
                                                                     class="form-control form-control-sm"
-                                                                    value="{{ $ingreso_paciente->antecedentes_examenes_fisicos }} ">
+                                                                 {{--    value="{{ $ingreso_paciente->antecedentes_examenes_fisicos }} ">--}}
                                                             </div>
-                                                        @else
+                                                            {{-- @else--}}
                                                             <div class="form-group col-md-12">
                                                                 <textarea name="antecedentes_examenes_fisicos" id="antecedentes_examenes_fisicos" class="form-control form-control-sm"
                                                                     rows="2" onfocus="this.rows=4" onblur="this.rows=2;"></textarea>
                                                             </div>
-                                                        @endif
+                                                        {{-- @endif--}}
                                                     </div>
 
                                                 </div>
@@ -93,16 +95,16 @@
                                                 <div class="card-body shadow-none">
 
                                                     <div class="form-row">
-                                                        @if (isset($ingreso_paciente->hipotesis_diagnostica))
+                                                        {{-- @if (isset($ingreso_paciente->hipotesis_diagnostica))--}}
                                                             <div class="form-group col-md-6">
                                                                 <label class="floating-label">Hipótesis
                                                                     diagnóstica</label>
                                                                 <input name="hipotesis_diagnostica"
                                                                     id="hipotesis_diagnostica"
                                                                     class="form-control form-control-sm"
-                                                                    value="{{ $ingreso_paciente->hipotesis_diagnostica }} ">
+                                                                    {{-- value="{{ $ingreso_paciente->hipotesis_diagnostica }} ">--}}
                                                             </div>
-                                                        @else
+                                                        {{-- @else--}}
                                                             <div class="form-group col-md-6">
                                                                 <label class="floating-label">Hipótesis
                                                                     diagnóstica</label>
@@ -111,16 +113,16 @@
                                                                     name="hipotesis_diagnostica"
                                                                     id="hipotesis_diagnostica">
                                                             </div>
-                                                        @endif
-                                                        @if (isset($ingreso_paciente->diagnostico_cie10))
+                                                        {{-- @endif--}}
+                                                        {{--@if (isset($ingreso_paciente->diagnostico_cie10))--}}
                                                             <div class="form-group col-md-6">
                                                                 <label class="floating-label">Diagnóstico
                                                                     CIE-10</label>
                                                                 <input name="diagnostico_cie10" id="diagnostico_cie10"
                                                                     class="form-control form-control-sm"
-                                                                    value="{{ $ingreso_paciente->diagnostico_cie10 }} ">
+                                                                 {{--   value="{{ $ingreso_paciente->diagnostico_cie10 }} ">--}}
                                                             </div>
-                                                        @else
+                                                       {{-- @else--}}
                                                             <div class="form-group col-md-6">
                                                                 <label class="floating-label">Diagnóstico
                                                                     CIE-10</label>
@@ -128,7 +130,7 @@
                                                                     class="form-control form-control-sm"
                                                                     name="diagnostico_cie10" id="diagnostico_cie10">
                                                             </div>
-                                                        @endif
+                                                       {{-- @endif--}}
                                                     </div>
 
                                                 </div>
@@ -145,20 +147,23 @@
 
                                                     <div class="form-row">
 
-                                                        @if (isset($ingreso_paciente->indicaciones_ingreso))
+                                                       {{-- @if (isset($ingreso_paciente->indicaciones_ingreso))--}}
+                                                    </div>
                                                             <div class="form-group col-md-12">
 
                                                                 <input name="indicaciones_ingreso"
                                                                     id="indicaciones_ingreso"
                                                                     class="form-control form-control-sm"
-                                                                    value="{{ $ingreso_paciente->indicaciones_ingreso }} ">
+                                                                  {{--  value="{{ $ingreso_paciente->indicaciones_ingreso }} ">--}}
+                                                                </div>
                                                             </div>
-                                                        @else
+                                                       {{-- @else--}}
+                                                            </div>
                                                             <div class="form-group col-md-12">
                                                                 <textarea name="indicaciones_ingreso" id="indicaciones_ingreso" class="form-control form-control-sm" rows="2"
                                                                     onfocus="this.rows=4" onblur="this.rows=2;"></textarea>
                                                             </div>
-                                                        @endif
+                                                        {{--@endif--}}
                                                     </div>
 
                                                     <div class="form-row">
@@ -166,28 +171,28 @@
                                                             <label class="floating-label-activo-sm">Preparar para
                                                                 operar a
                                                                 las</label>
-                                                            @if (isset($ingreso_paciente->hora_operacion))
+                                                            {{-- @if (isset($ingreso_paciente->hora_operacion))--}}
                                                                 <input type="time"
                                                                     class="form-control form-control-sm"
                                                                     name="hora_operacion" id="hora_operacion"
-                                                                    value="{{ $ingreso_paciente->hora_operacion }}">
-                                                            @else
+                                                                     {{--value="{{ $ingreso_paciente->hora_operacion }}">--}}
+                                                            {{-- @else--}}
                                                                 <input type="time"
                                                                     class="form-control form-control-sm"
                                                                     name="hora_operacion" id="hora_operacion">
-                                                            @endif
+                                                            {{-- @endif--}}
                                                         </div>
                                                         <div class="form-group col-md-4">
                                                             <label class="floating-label">Hospitalizar en</label>
                                                             <input type="text" class="form-control form-control-sm"
                                                                 name="hospitalizar_en" id="hospitalizar_en"
-                                                                value="@if (isset($ingreso_paciente->hospitalizar_en)) {{ $ingreso_paciente->hospitalizar_en }} @endif">
+                                                                {{-- value="@if (isset($ingreso_paciente->hospitalizar_en)) {{ $ingreso_paciente->hospitalizar_en }} @endif">--}}
                                                         </div>
                                                         <div class="form-group col-md-4">
                                                             <label class="floating-label">Tipo de sala</label>
                                                             <input type="text" class="form-control form-control-sm"
                                                                 name="tipo_sala" id="tipo_sala"
-                                                                value="@if (isset($ingreso_paciente->tipo_sala)) {{ $ingreso_paciente->tipo_sala }} @endif">
+                                                                 {{--value="@if (isset($ingreso_paciente->tipo_sala)) {{ $ingreso_paciente->tipo_sala }} @endif">--}}
                                                         </div>
                                                     </div>
 
@@ -201,13 +206,13 @@
                                                     <h6 class="float-left d-inline">Medicamentos</h6>
                                                 </div>
                                                 <div class="card-body shadow-none">
-                                                    @if (isset($medicamentos_ingreso_paciente))
-                                                        @foreach ($medicamentos_ingreso_paciente as $med_ip)
+                                                    {{-- @if (isset($medicamentos_ingreso_paciente))--}}
+                                                        {{-- @foreach ($medicamentos_ingreso_paciente as $med_ip)--}}
                                                             <div class="col-md-12">
-                                                                <span>{{ $med_ip->producto }}</span>
+                                                                {{-- <span>{{ $med_ip->producto }}</span>--}}
                                                             </div>
-                                                        @endforeach
-                                                    @endif
+                                                        {{-- @endforeach--}}
+                                                    {{-- @endif--}}
                                                 </div>
 
                                             </div>
@@ -255,11 +260,11 @@
                                                 <button type="submit"
                                                     onclick="agregar_medicamentos_cirugia(); agregar_examenes_cirugia();"
                                                     class="btn btn-info">
-                                                    @if (isset($ingreso_paciente))
+                                                   {{-- @if (isset($ingreso_paciente))--}}
                                                         Actualizar Ingreso
-                                                    @else
+                                                   {{-- @else--}}
                                                         Enviar ingreso
-                                                    @endif
+                                                   {{-- @endif--}}
                                                 </button>
                                             </div>
                                         </div>
