@@ -2713,6 +2713,7 @@ class EscritorioProfesional extends Controller
         $datos = array();
         $ficha_tipo = new FichaOtorrinoTipo();
         $ficha_tipo->id_profesional = $request->id_profesional;
+        $ficha_tipo->tipo = $request->tipo;
         $ficha_tipo->nombre = $request->registro_f_t_orl_nombre;
         $ficha_tipo->descripcion = $request->registro_f_t_orl_descripcion;
         $ficha_tipo->id_usa_audifono = $request->modal_agregar_tipo_usa_audifono;
@@ -2761,6 +2762,15 @@ class EscritorioProfesional extends Controller
         $ficha_tipo->obs_ex_orl = $request->observaciones_obs_ex_orl;
         $ficha_tipo->hip_diag_orl = '';
         $ficha_tipo->ind_orl = '';
+
+        $ficha_tipo->piel_tegumnto = $request->modal_agregar_tipo_piel_tegumnto;
+        $ficha_tipo->obs_piel_tegumnto = $request->observaciones_obs_piel_tegumnto;
+        $ficha_tipo->adenopatias = $request->modal_agregar_tipo_adenopatias;
+        $ficha_tipo->obs_adenopatias = $request->observaciones_obs_adenopatias;
+        $ficha_tipo->tumores_masas = $request->modal_agregar_tipo_tumores_masas;
+        $ficha_tipo->obs_tumores_masas = $request->observaciones_obs_tumores_masas;
+        $ficha_tipo->gland_anexas = $request->modal_agregar_tipo_gland_anexas;
+        $ficha_tipo->obs_gland_anexas = $request->observaciones_obs_gland_anexas;
 
         if($ficha_tipo->save())
         {

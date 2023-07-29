@@ -296,7 +296,13 @@ class ficha_atencionController extends Controller
             {
                 //otorrinolaringologia
                 $ruta_blade = 'atencion_medica.atencion_medica_otorrinolaringologia';
-                $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+
+                $fichaTipoTipos = FichaOtorrinoTipo::where('id_profesional', $profesional->id)->pluck('tipo')->toArray();
+                $fichaTipo = array();
+                foreach ($fichaTipoTipos as $key => $value)
+                {
+                    $fichaTipo[$value] = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('tipo', $value)->where('id_profesional', $profesional->id)->get();
+                }
 
                 $examen_tipo = ExamenEspecialidadTipo::where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)->with('ExamenEspecialidadTemplate')->first();
                 $examen = $examen_tipo->ExamenEspecialidadTemplate->cuerpo;
