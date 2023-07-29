@@ -315,8 +315,6 @@ class ficha_atencionController extends Controller
                 /** examenes radiologicos */
                 $examenes_radiologicos = '';
                 $examenes_radiologicos = ExamenMedico::whereIn('cod_parent',[355,356,357,358,359,360,361])->orderBy('nombre_examen', 'ASC')->get();
-
-
             }
             else if($profesional->id_sub_tipo_especialidad == 22)
             {
@@ -704,6 +702,25 @@ class ficha_atencionController extends Controller
                 /** examenes radiologicos */
                 $examenes_radiologicos = '';
             }
+
+            /** EXAMENES DE ESPECIALIDAD REALIZADOS */
+            $examenes_especialidad_realizados = ExamenEspecialidad::select('id', 'id_tipo', 'id_template', 'id_examen_tipo', 'id_sub_tipo_especialidad', 'id_ficha_atencion', 'id_ficha_especialidad', 'id_paciente', 'id_profesional', 'id_asistente', 'nombre', 'revisado', 'estado')
+                                                                ->with(['HoraMedica' => function($query){
+                                                                    $query->select('id', 'id_ficha_atencion', 'fecha_realizacion_consulta', 'id_estado');
+                                                                }])
+                                                                ->with(['ExamenEspecialidadTemplate' => function($query){
+                                                                    $query->select('id', 'nombre', 'alias');
+                                                                }])
+                                                                ->with(['ExamenEspecialidadTipo' => function($query){
+                                                                    $query->select('id', 'nombre', 'descripcion');
+                                                                }])
+                                                                ->with(['SubTipoEspecialidad' => function($query){
+                                                                    $query->select('id', 'nombre');
+                                                                }])
+                                                                ->where('id_paciente', $paciente->id)
+                                                                ->get();
+        //    echo json_encode($examenes_especialidad_realizados);
+        //    exit();
         // }
 
         // INTERCONSULTA
@@ -758,6 +775,7 @@ class ficha_atencionController extends Controller
                 'lista_examen_especial' => $lista_examen_especial,
                 'examenes_especialidad' => $examenes_especialidad,
                 'examenes_radiologicos' => $examenes_radiologicos,
+                'examenes_especialidad_realizados' => $examenes_especialidad_realizados,
 
 
                 // 'ficha_ges' => $ges,

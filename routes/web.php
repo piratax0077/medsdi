@@ -552,6 +552,10 @@ Route::group([
     Route::get('/carga/examen', [App\Http\Controllers\TranscripcionController::class, 'CargarExamenProfesional'])->name('profesional.cargar.examen.transcripcion');
     Route::post('/registro/examen', [App\Http\Controllers\TranscripcionController::class, 'RegistrarTranscripcionProfesional'])->name('profesional.registro.examen.transcripcion');
 
+    /** revision de examen especialdiad */
+    Route::get('/pdf/examen/revisado', [App\Http\Controllers\ExamenEspecialidadController::class, 'ExamenRevisado'])->name('pdf.examen.especialidad.revisado');
+    Route::get('/examen/especialidad/lista', [App\Http\Controllers\ExamenEspecialidadController::class, 'VerRegistros'])->name('examen.especialidad.ver.registros');
+
 });
 
 /* ASISTENTE CONSULTA*/
