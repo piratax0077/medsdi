@@ -1123,8 +1123,7 @@
                                                 <label class="col-sm-12 col-form-label"></label>
                                                 <div class="col-sm-12 d-flex justify-content-end">
                                                     <button type="submit" class="btn btn-danger mr-2">Cancelar</button>
-                                                    <button type="submit" class="btn btn-info">Guardar
-                                                        Cambios</button>
+                                                    <button type="submit" class="btn btn-info">Guardar Cambios</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -1227,15 +1226,15 @@
 
     $(document).ready(function () {
 
-            /* formatear rut */
-            $("#rut_nuevo_contacto").rut({
-                formatOn: 'keyup',
-                minimumLength: 2,
-                validateOn: 'change',
-                useThousandsSeparator : false
-            });
-
+        /* formatear rut */
+        $("#rut_nuevo_contacto").rut({
+            formatOn: 'keyup',
+            minimumLength: 2,
+            validateOn: 'change',
+            useThousandsSeparator : false
         });
+
+    });
 
     function buscar_contacto() {
 
@@ -1370,7 +1369,6 @@
         $("#rut_nuevo_contacto").val('');
     }
 
-
     function registrar_contacto_emergencia() {
 
         let id_paciente = $('#id_paciente').val();
@@ -1454,7 +1452,6 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
     };
-
 
     function cargar_datos_contacto(id) {
         let id_contacto = id;
@@ -2094,78 +2091,74 @@
 
     function editar_antecedentes_paciente(id) {
 
-let id_paciente = id;
+        let id_paciente = id;
 
-let edit_transfusion = $('input:radio[name=edit_transfusion]:checked').val();
+        let edit_transfusion = $('input:radio[name=edit_transfusion]:checked').val();
 
-let edit_dona_sangre = $('input:radio[name=edit_dona_sangre]:checked').val();
-let editar_grupo_sanguineo = $('#editar_grupo_sanguineo').val();
-{{--  let comentarios_gruposangre = $('#comentarios_gruposangre').val();  --}}
-let edit_hepatitis = $('input:radio[name=edit_hepatitis]:checked').val();
-let comentarios_hepatitis = $('#comentarios_hepatitis').val();
-let edit_donante_total = $('input:radio[name=edit_donante_total]:checked').val();
-let edit_donante_parcial = $('input:radio[name=edit_donante_parcial]:checked').val();
-let comentarios_organo = $('#comentarios_organo').val();
-let comentarios_impedimento = $('#comentarios_impedimento').val();
+        let edit_dona_sangre = $('input:radio[name=edit_dona_sangre]:checked').val();
+        let editar_grupo_sanguineo = $('#editar_grupo_sanguineo').val();
+        {{--  let comentarios_gruposangre = $('#comentarios_gruposangre').val();  --}}
+        let edit_hepatitis = $('input:radio[name=edit_hepatitis]:checked').val();
+        let comentarios_hepatitis = $('#comentarios_hepatitis').val();
+        let edit_donante_total = $('input:radio[name=edit_donante_total]:checked').val();
+        let edit_donante_parcial = $('input:radio[name=edit_donante_parcial]:checked').val();
+        let comentarios_organo = $('#comentarios_organo').val();
+        let comentarios_impedimento = $('#comentarios_impedimento').val();
 
+        let url = "{{ route('profesional.editar_antecedentes_paciente') }}";
 
-let url = "{{ route('profesional.editar_antecedentes_paciente') }}";
-
-
-$.ajax({
-
-        url: url,
-        type: "get",
-        data: {
-            id_paciente: id_paciente,
-            edit_transfusion: edit_transfusion,
-            edit_dona_sangre: edit_dona_sangre,
-            editar_grupo_sanguineo: editar_grupo_sanguineo,
-            {{--  comentarios_gruposangre: comentarios_gruposangre,  --}}
-            edit_hepatitis: edit_hepatitis,
-            comentarios_hepatitis: comentarios_hepatitis,
-            edit_donante_total: edit_donante_total,
-            edit_donante_parcial: edit_donante_parcial,
-            comentarios_organo: comentarios_organo,
-            comentarios_impedimento: comentarios_impedimento
-
-        },
-    })
-    .done(function(data) {
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                id_paciente: id_paciente,
+                edit_transfusion: edit_transfusion,
+                edit_dona_sangre: edit_dona_sangre,
+                editar_grupo_sanguineo: editar_grupo_sanguineo,
+                {{--  comentarios_gruposangre: comentarios_gruposangre,  --}}
+                edit_hepatitis: edit_hepatitis,
+                comentarios_hepatitis: comentarios_hepatitis,
+                edit_donante_total: edit_donante_total,
+                edit_donante_parcial: edit_donante_parcial,
+                comentarios_organo: comentarios_organo,
+                comentarios_impedimento: comentarios_impedimento
+            },
+        })
+        .done(function(data) {
 
 
 
 
-        if (data != 'failed') {
+            if (data != 'failed') {
 
-            swal({
-                title: "se modifico antecedentes del paciente",
-                icon: "success",
-                buttons: "Aceptar",
-                //SuccessMode: true,
-            })
-            setTimeout(function() {
-                location.reload()
-            }, 100);
-            // alert('se modifico antecedentes del paciente');
-            // location.reload();
+                swal({
+                    title: "se modifico antecedentes del paciente",
+                    icon: "success",
+                    buttons: "Aceptar",
+                    //SuccessMode: true,
+                })
+                setTimeout(function() {
+                    location.reload()
+                }, 100);
+                // alert('se modifico antecedentes del paciente');
+                // location.reload();
 
-        } else {
-            swal({
-                title: "Error al modificar los antecedentes",
-                icon: "error",
-                buttons: "Aceptar",
-                DangerMode: true,
-            })
-            // alert('Error al modificar los antecedentes');
-        }
+            } else {
+                swal({
+                    title: "Error al modificar los antecedentes",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                })
+                // alert('Error al modificar los antecedentes');
+            }
 
-    })
-    .fail(function(jqXHR, ajaxOptions, thrownError) {
-        console.log(jqXHR, ajaxOptions, thrownError)
-    });
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
 
-}
 </script>
 <script src="{{ asset('js/tabla_contactos_emergencia.js') }}"></script>
 <script src="{{ asset('js/tooltip_contacto_emergencia.js') }}"></script>

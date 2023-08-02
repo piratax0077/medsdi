@@ -152,7 +152,7 @@
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
     <script>
-
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         function buscar_ciudad(select_region, select_ciudad, id_ciudad=0)
         {
             let region = $('#'+select_region).val();

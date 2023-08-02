@@ -57,3 +57,55 @@
     @include("bienvenida.modal.c_pass");
     @include("bienvenida.modal.c_emerg_pac");
 @endsection
+
+@section('page-script')
+<script>
+    function liberar_bienvenida()
+    {
+        /** liberacion de bienvenida */
+        var url = '{{ route('paciente.perfil.liberar.bienvenida') }}';
+
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {},
+            dataType: "json",
+        })
+        .done(function(data) {
+            if (data != '' || data == null)
+            {
+                if(data.estado == 1)
+                {
+                    swal({
+                        title: "Liberar bienvenida.",
+                        text:"Paso de Bienvenida Exitoso",
+                        icon: "success",
+                    });
+
+                    location.reload();
+                }
+                else
+                {
+                    swal({
+                        title: "Liberar bienvenida.",
+                        text:"Paso de Bienvenida Falla",
+                        icon: "error",
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Liberar bienvenida.",
+                    text:"Paso de Bienvenida Falla",
+                    icon: "error",
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+        /** liberacion de bienvenida */
+    }
+</script>
+@endsection

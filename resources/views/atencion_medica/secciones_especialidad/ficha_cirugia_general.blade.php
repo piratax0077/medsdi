@@ -1,15 +1,15 @@
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2 shadow-none">
         <div class="row mx-0">
-            <div class="col-sm-12 col-md-12">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
                     <li class="nav-item-secciones">
                         <a class="nav-secciones active text-uppercase" id="atencion_cirugia_gen-tab" data-toggle="tab" href="#atencion_cirugia_gen" role="tab" aria-controls="atencion_orl" aria-selected="true">Atención Especialidad</a>
                     </li>
 				</ul>
             </div>
-            <div class="col-sm-12 col-md-12">
-                <form action="{{ route('fichaAtencion.registrar_ficha_cg') }}" method="POST">
+            <form action="{{ route('fichaAtencion.registrar_ficha_cg') }}" method="POST">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
                     <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
@@ -27,12 +27,11 @@
                     <div class="tab-content" id="orl-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
                         <div class="tab-pane fade show active" id="atencion_cirugia_gen" role="tabpanel" aria-labelledby="atencion_cirugia_gen-tab">
-                            <div class="row bg-white shadow-none rounded mx-1">
-                                <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="row">
-                                        <div class="col-md-12 mt-3 mb-0">
-                                            <h6 class="f-16 text-c-blue">Ficha de atención general</h6>
-                                            <hr>
+                                        <div class="col-md-12 mt-3 mb-3">
+                                            <h6 class="f-18 text-c-blue">Ficha de atención general</h6>
                                         </div>
                                     </div>
                                     <!--FORMULARIOS-->
@@ -43,14 +42,14 @@
 
                                         <!--Motivo consulta-->
                                         <div class="col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="motivo">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="motivo">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#motivo_c" aria-expanded="false" aria-controls="motivo_c">
                                                         Motivo de la consulta
                                                     </button>
                                                 </div>
                                                 <div id="motivo_c" class="collapse show" aria-labelledby="motivo" data-parent="#motivo">
-                                                    <div class="card-body-aten shadow-none">
+                                                    <div class="card-body-aten-a">
                                                         <div class="form-row">
                                                             <div class="form-group col-md-6">
                                                                 <label class="floating-label-activo-sm">Motivo de Consulta</label>
@@ -65,156 +64,21 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
-
-
 										<!--CIRUGIA GENERAL-->
                                         @include('general.secciones_ficha.cirugia_general.cirugia_adulto')
-                                        {{--
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="cirugia_general">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#cirugia_general_c" aria-expanded="false" aria-controls="cirugia_general_c">
-                                                        Cirugia General
-                                                    </button>
-                                                </div>
-                                                <div id="cirugia_general_c" class="collapse" aria-labelledby="cirugia_general" data-parent="#cirugia_general">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Carga Ficha Tipo</label>
-                                                                    <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad_cirugia" onchange="cargar_info_ficha_tipo_cg('select_ficha_tipo_especialidad_cirugia','descripcion_ficha_tipo_especialidad_cirugia');">
-                                                                        <option value="">Seleccione</option>
-                                                                        @if(!empty($fichaTipo['cg']))
-                                                                            @foreach ($fichaTipo['cg'] as $ft )
-                                                                                <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
-                                                                            @endforeach
-                                                                        @endif
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <span id="descripcion_ficha_tipo_especialidad_cirugia"></span>
-                                                            </div>
-                                                        </div>
-
-                                                        <div id="form-cg">
-                                                            <div class="form-row mb-2">
-                                                                <div class="col-md-12">
-                                                                    <h5 style="text-align:center;">Cirugía General</h5>
-                                                                </div>
-                                                            </div>
-                                                            <hr>
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Organo</label>
-                                                                            <select name="organo_cg" id="organo_cg" data-titulo="Organo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('organo_cg','div_detalle_organo','obs_organo_cg',2)">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_organo" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Organo</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Organo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_organo_cg" id="obs_organo_cg"></textarea>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Compromiso estado General</label>
-                                                                            <select name="ceg_cg" id="ceg_cg" data-titulo="Compromiso estado General" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ceg_cg','div_detalle_ceg_cg','obs_ceg_cg',2)">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_ceg_cg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Compromiso estado General</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Compromiso estado General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ceg_cg" id="obs_ceg_cg"></textarea>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Masas Palpables</label>
-                                                                            <select name="masa_cg" id="masa_cg" data-titulo="Masas Palpables" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('masa_cg','div_detalle_masa_cg','obs_masas_cg',2);">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_masa_cg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Masas Palpables</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Masas Palpables" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_masas_cg" id="obs_masas_cg"></textarea>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Es Urgencia Qx.?</label>
-                                                                            <select name="urgencia_cg" id="urgencia_cg" data-titulo="Es Urgencia Qx.?" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cg','div_detalle_urgencia_cg','obs_urgencia_cg',2);">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_urgencia_cg" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Es Urgencia Qx</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Es Urgencia Qx.?" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_urgencia_cg" id="obs_urgencia_cg"></textarea>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Sospecha de Organo</label>
-                                                                        <select name="so_cg" id="so_cg" data-titulo="Sospecha de Organo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('so_cg','div_detalle_so_cg','obs_so_cg',2);">
-                                                                            <option value="1" selected>No</option>
-                                                                            <option value="2">Si</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group col-md-12" id="div_detalle_so_cg" style="display:none">
-                                                                        <label class="floating-label-activo-sm">Sospecha de Organo</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Sospecha de Organo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_so_cg" id="obs_so_cg"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class=" col-md-12">
-                                                                <div class="row">
-                                                                    <label class="floating-label-activo-sm">Observaciones Estado General Paciente</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Estado General Paciente" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_cg" id="obs_egp_cg"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <hr>
-                                                            <div class="row">
-                                                                <div class="col-md-9">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Observaciones Examen Especialidad</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Especialidad" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_gen_ex_esp_cg" id="obs_gen_ex_esp_cg"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-3 align-middle" style="margin:auto">
-                                                                <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo('form-cg','registro_f_t_cg_detalle','cg');"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        --}}
-
-
-
                                         <!--Formulario / Signos vitales y otros-->
                                         @include('atencion_medica.generales.signos_vitales')
                                         <!--Cierre: Formulario / Signos vitales y otros-->
-
                                         <!-- control post qx -->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="Control_cirugia">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="Control_cirugia">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#cirugia_general_pc" aria-expanded="false" aria-controls="cirugia_general_pc">
                                                         Control Post Quirúrgico
                                                     </button>
                                                 </div>
                                                 <div id="cirugia_general_pc" class="collapse" aria-labelledby="cirugia_general" data-parent="#Control_cirugia">
-                                                    <div class="card-body-aten shadow-none">
+                                                    <div class="card-body-aten-a">
                                                         <div id="form-cir_digest">
                                                             <div class="form-row mb-2">
                                                                 <div class="col-md-12">
@@ -265,14 +129,14 @@
 
                                         <!--Diagnóstico-->
                                         <div class="col-sm-12">
-                                            <div class="card">
-                                                <div class="card-header" id="diagnostico">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="diagnostico">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagnostico_c" aria-expanded="false" aria-controls="diagnostico_c">
                                                         Diagnóstico
                                                     </button>
                                                 </div>
                                                 <div id="diagnostico_c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
-                                                    <div class="card-body-aten shadow-none">
+                                                    <div class="card-body-aten-a">
                                                         <div class="form-row">
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
@@ -297,24 +161,32 @@
                             </div>
                         </div>
                         <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
-                       <!--CIERRE:INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
-                        {{--  div de botones  --}}
-                        <div class="bg-white shadow-none rounded mx-1 p-15">
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                            @include('atencion_medica.generales.seccion_receta_examen_comunes')
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-                            <hr>
-                            <!--GUARDAR O IMPRIMIR FICHA-->
-                            <div class="row mb-3">
-                                <div class="col-md-12 text-center">
-                                    <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                                    <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
-                                </div>
+                    </div>
+                </div>
+
+                {{--  div de botones  --}}
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+                                @include('atencion_medica.generales.seccion_receta_examen_comunes')
+                                <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+
+                <!--GUARDAR O IMPRIMIR FICHA-->
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="row mb-3">
+                        <div class="col-md-12 text-center">
+                            <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+                            <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

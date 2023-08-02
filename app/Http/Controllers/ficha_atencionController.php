@@ -113,7 +113,7 @@ class ficha_atencionController extends Controller
 
                     $usuario->assignRole('ProfesionalBasico');
 
-                    return view('atencion_medica.atencion_medica');
+                    return view('atencion_medica.atencion_medica_general');
                 } else {
 
                     return response()->json(['success' => false]);
@@ -148,7 +148,7 @@ class ficha_atencionController extends Controller
 
     public function ficha_medica()
     {
-        return view('atencion_medica.atencion_medica');
+        return view('atencion_medica.atencion_medica_general');
     }
 
     public function imprimir()
@@ -691,7 +691,7 @@ class ficha_atencionController extends Controller
             }
             else
             {
-                $ruta_blade = 'atencion_medica.atencion_medica';
+                $ruta_blade = 'atencion_medica.atencion_medica_general';
                 $fichaTipo = '';
                 $examen = '';
                 $lista_examen_especial = '';
@@ -1319,7 +1319,7 @@ class ficha_atencionController extends Controller
             }
             else
             {
-                $ruta_blade = 'atencion_medica.atencion_medica';
+                $ruta_blade = 'atencion_medica.atencion_medica_general';
                 $fichaTipo = '';
                 $examen = '';
                 $lista_examen_especial = '';
