@@ -1713,17 +1713,49 @@ class ficha_atencionController extends Controller
             $ficha_atencion_soli = FichaAtencion::find($interconsulta->id_ficha_atencion_soli);
             $lugar_atencion_soli = LugarAtencion::find($interconsulta->id_lugar_atencion_soli);
             $profesional_soli = Profesional::find($interconsulta->id_profesional_soli);
-            $token_firma_soli = encrypt( $profesional_soli->rut.'_'.$profesional_soli->email.'_'.$lugar_atencion_soli->id );
-
-
-
+            // $token_firma_soli = encrypt( $profesional_soli->rut.'_'.$profesional_soli->email.'_'.$lugar_atencion_soli->id );
             $lugar_atencion = LugarAtencion::find($ficha_atencion_soli->id_lugar_atencion);
+
+
+            /** token receta */
+            $temp_token_soli = CertificadoController::certificadoDocumento($ficha_atencion_soli->id, $profesional_soli->id, $paciente->id, 8);
+            if($temp_token_soli['estado'] == 1)
+            {
+                $token_receta_soli = $temp_token_soli['certificado'];
+                $url_documento_soli = CertificadoController::generarUrlDocumento($token_receta_soli);
+                $qr_documento_soli = GeneradorQrController::generar($url_documento_soli);
+            }
+            else
+            {
+                $temp_token_soli = CertificadoController::certificadoDocumento($ficha_atencion_soli->id, rand(111,999), $paciente->id, 8);
+                $token_receta_soli = $temp_token_soli['certificado'];
+                $url_documento_soli = CertificadoController::generarUrlDocumento($token_receta_soli);
+                $qr_documento_soli = GeneradorQrController::generar($url_documento_soli);
+            }
+
+            /** token profesional */
+            $temp_token_soli = CertificadoController::certificadoProfesional($profesional_soli->id);
+            if($temp_token_soli['estado'] == 1)
+            {
+                $token_profesional_soli = $temp_token_soli['certificado'];
+                $url_profesional_soli = CertificadoController::generarUrlProfesional($token_profesional_soli);
+                $qr_profesional_soli = GeneradorQrController::generar($url_documento_soli);
+            }
+            else
+            {
+                $temp_token_soli = CertificadoController::certificadoProfesional(rand(1114,999));
+                $token_profesional_soli = $temp_token_soli['certificado'];
+                $url_profesional_soli = CertificadoController::generarUrlProfesional($token_profesional_soli);
+                $qr_profesional_soli = GeneradorQrController::generar($url_documento_soli);
+            }
+
 
             $array_paciente = array(
                 'id' => $paciente->id,
                 'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
                 'fecha_nac' => $paciente->fecha_nac,
                 'rut' => $paciente->rut,
+                'sexo' => $paciente->sexo,
                 'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
             );
 
@@ -1737,6 +1769,9 @@ class ficha_atencionController extends Controller
             $array_ficha_atencion_soli = array(
                 'id' => $ficha_atencion_soli->id,
                 'created_at' => $ficha_atencion_soli->created_at->format('d/m/Y'),
+                'token' => $token_receta_soli,
+                'url' => $url_documento_soli,
+                'qr' => $qr_documento_soli,
             );
             $array_lugar_atencion_soli = array(
                 'id' => $lugar_atencion_soli->id,
@@ -1746,8 +1781,10 @@ class ficha_atencionController extends Controller
                 'id' => $profesional_soli->id,
                 'nombre' => $profesional_soli->nombre.' '.$profesional_soli->apellido_uno.' '.$profesional_soli->apellido_dos,
                 'rut' => $profesional_soli->rut,
-                'especialidad' => $profesional_soli->SubTipoEspecialidad()->first()->nombre,
-                'token' =>  $token_firma_soli,
+                'especialidad' => ($profesional_soli->SubTipoEspecialidad()->first()?$profesional_soli->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
+                'token' =>  $token_profesional_soli,
+                'url' =>  $url_profesional_soli,
+                'qr' =>  $qr_profesional_soli,
             );
             $array_soli = array(
                 'id' => $interconsulta->id,
@@ -1761,23 +1798,61 @@ class ficha_atencionController extends Controller
                 $ficha_atencion_resp = FichaAtencion::find($interconsulta->id_ficha_atencion_resp);
                 $lugar_atencion_resp = LugarAtencion::find($interconsulta->id_lugar_atencion_resp);
                 $profesional_resp = Profesional::find($interconsulta->id_profesional_resp);
-                $token_firma_resp = encrypt( $profesional_resp->rut.'_'.$profesional_resp->email.'_'.$lugar_atencion_resp->id );
+                // $token_firma_resp = encrypt( $profesional_resp->rut.'_'.$profesional_resp->email.'_'.$lugar_atencion_resp->id );
 
+                /** token receta */
+                $temp_token_resp = CertificadoController::certificadoDocumento($ficha_atencion_resp->id, $profesional_resp->id, $paciente->id, 1);
+                if($temp_token_resp['estado'] == 1)
+                {
+                    $token_receta_resp = $temp_token_resp['certificado'];
+                    $url_documento_resp = CertificadoController::generarUrlDocumento($token_receta_resp);
+                    $qr_documento_resp = GeneradorQrController::generar($url_documento_resp);
+                }
+                else
+                {
+                    $temp_token_resp = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 1);
+                    $token_receta_resp = $temp_token_resp['certificado'];
+                    $url_documento_resp = CertificadoController::generarUrlDocumento($token_receta_resp);
+                    $qr_documento_resp = GeneradorQrController::generar($url_documento_resp);
+                }
+
+                /** token profesional */
+                $temp_token_resp = CertificadoController::certificadoProfesional($profesional_resp->id);
+                if($temp_token_resp['estado'] == 1)
+                {
+                    $token_profesional_resp = $temp_token_resp['certificado'];
+                    $url_profesional_resp = CertificadoController::generarUrlProfesional($token_profesional_resp);
+                    $qr_profesional_resp = GeneradorQrController::generar($url_documento_resp);
+                }
+                else
+                {
+                    $temp_token_resp = CertificadoController::certificadoProfesional(rand(1114,999));
+                    $token_profesional_resp = $temp_token_resp['certificado'];
+                    $url_profesional_resp = CertificadoController::generarUrlProfesional($token_profesional_resp);
+                    $qr_profesional_resp = GeneradorQrController::generar($url_documento_resp);
+                }
                 // array respuesta
                 $array_ficha_atencion_resp = array(
                     'id' => $ficha_atencion_resp->id,
                     'created_at' => $ficha_atencion_resp->created_at->format('d/m/Y'),
+                    'token' => $token_receta_resp,
+                    'url' => $url_documento_resp,
+                    'qr' => $qr_documento_resp,
                 );
+
                 $array_lugar_atencion_resp = array(
                     'id' => $lugar_atencion_resp->id,
                     'nombre' => $lugar_atencion_resp->nombre
                 );
+
                 $array_profesional_resp = array(
                     'id' => $profesional_resp->id,
                     'nombre' => $profesional_resp->nombre.' '.$profesional_resp->apellido_uno.' '.$profesional_resp->apellido_dos,
                     'rut' => $profesional_resp->rut,
-                    'especialidad' => $profesional_resp->SubTipoEspecialidad()->first()->nombre,
-                    'token' =>  $token_firma_resp,
+                    'especialidad' => ($profesional_resp->SubTipoEspecialidad()->first()?$profesional_resp->SubTipoEspecialidad()->first()->nombre:$profesional_resp->TipoEspecialidad()->first()->nombre),
+                    'token' =>  $token_profesional_resp,
+                    'url' =>  $url_profesional_resp,
+                    'qr' =>  $qr_profesional_resp,
                 );
                 $array_resp = array(
                     'id' => $interconsulta->id,
@@ -1805,10 +1880,7 @@ class ficha_atencionController extends Controller
                 );
             }
 
-
-
             $nombre_archivo = strtolower('interconsulta_'.$interconsulta->id);
-
             return  PdfController::generarPDF('', compact( 'array_paciente', 'array_lugar_atencion', 'array_ficha_atencion_soli', 'array_lugar_atencion_soli', 'array_profesional_soli', 'array_soli', 'array_ficha_atencion_resp', 'array_lugar_atencion_resp', 'array_profesional_resp', 'array_resp'), $nombre_archivo, 'pdf_interconsulta');
         }
         else
@@ -5858,14 +5930,59 @@ class ficha_atencionController extends Controller
         $certificadoReposo = CertificadoReposo::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
         if($certificadoReposo->count()>0)
         {
+
             $ficha_atencion = FichaAtencion::find($request->id_ficha_atencion);
             $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
             $profesional = Profesional::find($ficha_atencion->id_profesional);
             $paciente = Paciente::find($ficha_atencion->id_paciente);
 
-            $token_firma = encrypt( $profesional->rut.'_'.$profesional->email.'_'.$lugar_atencion->id );
+            /** token certificado */
+            $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 1);
+            if($temp_token['estado'] == 1)
+            {
+                $token_receta = $temp_token['certificado'];
+                $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                $qr_documento = GeneradorQrController::generar($url_documento);
+            }
+            else
+            {
+                $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 1);
+                $token_receta = $temp_token['certificado'];
+                $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                $qr_documento = GeneradorQrController::generar($url_documento);
+            }
 
-            $token_receta = '';
+            /** token profesional */
+            $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+            if($temp_token['estado'] == 1)
+            {
+                $token_profesional = $temp_token['certificado'];
+                $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                $qr_profesional = GeneradorQrController::generar($url_documento);
+            }
+            else
+            {
+                $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                $token_profesional = $temp_token['certificado'];
+                $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                $qr_profesional = GeneradorQrController::generar($url_documento);
+            }
+
+            /** token profesional */
+            $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+            if($temp_token['estado'] == 1)
+            {
+                $token_profesional = $temp_token['certificado'];
+                $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                $qr_profesional = GeneradorQrController::generar($url_documento);
+            }
+            else
+            {
+                $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                $token_profesional = $temp_token['certificado'];
+                $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                $qr_profesional = GeneradorQrController::generar($url_documento);
+            }
 
             $detalle_certificado = array(
                 'fecha_inicio' => $certificadoReposo->fecha_inicio,
@@ -5874,10 +5991,17 @@ class ficha_atencionController extends Controller
                 'comentarios' => $certificadoReposo->comentarios,
             );
 
+            // $array_ficha_atencion = array(
+            //     'id' => $ficha_atencion->id,
+            //     'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
+            //     'token' => $token_receta,
+            // );
             $array_ficha_atencion = array(
                 'id' => $ficha_atencion->id,
                 'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
                 'token' => $token_receta,
+                'url' => $url_documento,
+                'qr' => $qr_documento,
             );
             $array_lugar_atencion = array(
                 'id' => $lugar_atencion->id,
@@ -5887,14 +6011,17 @@ class ficha_atencionController extends Controller
                 'id' => $profesional->id,
                 'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
                 'rut' => $profesional->rut,
-                'especialidad' => $profesional->SubTipoEspecialidad()->first()->nombre,
-                'token' =>  $token_firma,
+                'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
+                'token' =>  $token_profesional,
+                'url' =>  $url_profesional,
+                'qr' =>  $qr_profesional,
             );
             $array_paciente = array(
                 'id' => $paciente->id,
                 'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
                 'fecha_nac' => $paciente->fecha_nac,
                 'rut' => $paciente->rut,
+                'sexo' => $paciente->sexo,
                 'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
             );
 
@@ -5926,8 +6053,8 @@ class ficha_atencionController extends Controller
             $profesional = Profesional::find($ficha_atencion->id_profesional);
             $paciente = Paciente::find($ficha_atencion->id_paciente);
 
-            /** token receta */
-            $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 1);
+            /** token documento */
+            $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 10);
             if($temp_token['estado'] == 1)
             {
                 $token_receta = $temp_token['certificado'];
@@ -5936,7 +6063,7 @@ class ficha_atencionController extends Controller
             }
             else
             {
-                $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 1);
+                $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 10);
                 $token_receta = $temp_token['certificado'];
                 $url_documento = CertificadoController::generarUrlDocumento($token_receta);
                 $qr_documento = GeneradorQrController::generar($url_documento);
@@ -6013,9 +6140,40 @@ class ficha_atencionController extends Controller
             $profesional = Profesional::find($ficha_atencion->id_profesional);
             $paciente = Paciente::find($ficha_atencion->id_paciente);
 
-            $token_firma = encrypt( $profesional->rut.'_'.$profesional->email.'_'.$lugar_atencion->id );
+            // $token_firma = encrypt( $profesional->rut.'_'.$profesional->email.'_'.$lugar_atencion->id );
 
             $token_receta = '';
+            /** token receta */
+            $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 22);
+            if($temp_token['estado'] == 1)
+            {
+                $token_receta = $temp_token['certificado'];
+                $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                $qr_documento = GeneradorQrController::generar($url_documento);
+            }
+            else
+            {
+                $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 22);
+                $token_receta = $temp_token['certificado'];
+                $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                $qr_documento = GeneradorQrController::generar($url_documento);
+            }
+
+            /** token profesional */
+            $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+            if($temp_token['estado'] == 1)
+            {
+                $token_profesional = $temp_token['certificado'];
+                $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                $qr_profesional = GeneradorQrController::generar($url_documento);
+            }
+            else
+            {
+                $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                $token_profesional = $temp_token['certificado'];
+                $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                $qr_profesional = GeneradorQrController::generar($url_documento);
+            }
 
             $detalle_uso_personal = array(
                 'dirigido' => $usoPersonal->dirigido,
@@ -6027,6 +6185,8 @@ class ficha_atencionController extends Controller
                 'id' => $ficha_atencion->id,
                 'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
                 'token' => $token_receta,
+                'url' => $url_documento,
+                'qr' => $qr_documento,
             );
             $array_lugar_atencion = array(
                 'id' => $lugar_atencion->id,
@@ -6036,23 +6196,27 @@ class ficha_atencionController extends Controller
                 'id' => $profesional->id,
                 'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
                 'rut' => $profesional->rut,
-                'especialidad' => $profesional->SubTipoEspecialidad()->first()->nombre,
-                'token' =>  $token_firma,
+                'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
+                'token' =>  $token_profesional,
+                'url' =>  $url_profesional,
+                'qr' =>  $qr_profesional,
             );
             $array_paciente = array(
                 'id' => $paciente->id,
                 'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
                 'fecha_nac' => $paciente->fecha_nac,
                 'rut' => $paciente->rut,
+                'sexo' => $paciente->sexo,
                 'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
             );
 
             $nombre_archivo = strtolower('dirigido_a_'.$usoPersonal->dirigido);
             $bad = array(" ", "ñ", "á", "é", "í", "ó","ú" );
             $god   = array("_", "n", "a", "e", "i", "o","u" );
-            $nombre_archivo = str_replace($god, $bad, $nombre_archivo);
+            $nombre_archivo = str_replace($bad, $god, $nombre_archivo);
+            // $nombre_archivo = str_replace($god, $bad, $nombre_archivo);
 
-            return  PdfController::generarPDF('', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_uso_personal'), $nombre_archivo, 'pdf_uso_personal');
+            return  PdfController::generarPDF('USO PERSONAL', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_uso_personal'), $nombre_archivo, 'pdf_uso_personal');
         }
         else
         {
