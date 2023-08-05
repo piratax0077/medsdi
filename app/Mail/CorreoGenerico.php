@@ -31,10 +31,22 @@ class CorreoGenerico extends Mailable
     {
         if(!empty($this->detalle['url_archivo']))
         {
-            return $this->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
-                        ->view('app.mail.'.$this->detalle['blade'])
-                        ->subject($this->detalle['asunto'])
-                        ->attach($this->detalle['url_archivo']);
+            if($this->detalle['url_archivo'])
+            {
+                foreach ($this->detalle['url_archivo'] as $key => $value)
+                {
+                    $this->attach($value);
+                }
+            }
+            else
+            {
+                $this->attach($this->detalle['url_archivo']);
+            }
+            $this->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
+                    ->view('app.mail.'.$this->detalle['blade'])
+                    ->subject($this->detalle['asunto']);
+
+            return $this;
         }
         else
         {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Funciones;
 use App\Models\Antecedente;
 use App\Models\AntecedenteAlergiaPaciente;
 use App\Models\AntecedenteEnferCronica;
@@ -61,11 +62,15 @@ use App\Models\FichaPediatriaGeneral;
 use App\Models\FichaPediatriaGeneralTipo;
 use App\Models\FichaUro;
 use App\Models\FichaUroTipo;
+use App\Models\GesRegistrosImg;
+use App\Models\LogUsersDevices;
+use App\Models\NotificacionConfirmacion;
 use App\Models\RecetaAudifono;
 use App\Models\TipoInforme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use PDF;
 
 class ficha_atencionController extends Controller
@@ -1491,23 +1496,13 @@ class ficha_atencionController extends Controller
 
     public function registrar_ges_ficha(Request $request)
     {
+        $datos = array();
+
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
         $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
 
         $ges = new GesRegistros();
-
-        // nombre_institucion_ficha_ges
-        // direccion_institucion_ficha_ges
-        // nombre_responsable_ficha_ges
-        // rut_responsable_ficha_ges
-        // confirmacion_diagnostica_ficha_ges
-        // paciente_tratamiento_ficha_ges
-        // nombre_ges
-        // id_paciente
-        // id_profesional
-        // id_ficha_atencion
-        // id_lugar_atencion
 
         $ges->nombre_institucion_ficha_ges = $request->nombre_institucion_ficha_ges;
         $ges->direccion_institucion_ficha_ges = $request->direccion_institucion_ficha_ges;
@@ -1516,6 +1511,7 @@ class ficha_atencionController extends Controller
         $ges->confirmacion_diagnostica_ficha_ges = $request->confirmacion_diagnostica_ficha_ges;
         $ges->paciente_tratamiento_ficha_ges = $request->paciente_tratamiento_ficha_ges;
         $ges->fecha_ficha_ges = \Carbon\Carbon::parse($request->fecha_ficha_ges)->format('Y-m-d');
+        $ges->id_ges_diagnostico = $request->id_ges;
         $ges->nombre_ges = $request->nombre_ges;
         $ges->hora_ficha_ges = \Carbon\Carbon::parse($request->hora_ficha_ges)->format('H:i:s');
         $ges->id_profesional = $profesional->id;
@@ -1524,11 +1520,170 @@ class ficha_atencionController extends Controller
         $ges->id_lugar_atencion = $request->id_lugar_atencion;
         $ges->codigo_verificacion = $request->codigo_verificacion;
 
-        if (!$ges->save()) {
-            return 'error';
+        if ($ges->save())
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro';
+
+            $archivo_correo = array();
+
+            /** REGISTROS DE ARCHIVOS */
+            if(!empty($request->lista_archivo))
+            {
+                $lista_archivo_array = json_decode($request->lista_archivo);
+
+                if(array_key_exists('ges', $lista_archivo_array))
+                {
+                    $resulto_img = array();
+                    foreach ($lista_archivo_array->ges as $key => $value)
+                    {
+                        // var_dump($value);
+                        $paciente = Paciente::find($hora_medica->id_paciente);
+
+                        $ruta_temp = $value[0];
+                        $nombre_real = $value[1];
+                        $nombre_temp = $value[2];
+                        $file_extension = $value[3];
+                        $nombre_final = $paciente->rut.'_ges_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+
+                        $resulto_img[$key] = CargaImagenController::moverArchivo($nombre_temp, 'archivo_archivo', $nombre_final);
+
+                        $ges_img = new GesRegistrosImg();
+                        $ges_img->id_registro_ges = $ges->id;
+                        $ges_img->id_paciente = $hora_medica->id_paciente;
+                        $ges_img->id_profesional = $profesional->id;
+                        $ges_img->id_ficha_atencion = $hora_medica->id_ficha_atencion;
+                        $ges_img->id_lugar_atencion = $request->id_lugar_atencion;
+                        $ges_img->url = $resulto_img[$key]['proceso']['url'];
+                        $ges_img->img = $nombre_final;
+
+                        if($ges_img->save())
+                        {
+
+                            $url_temp = Storage::disk('archivo_archivo')->url($nombre_final);
+                            $archivo_correo[] = array('url' => $url_temp, 'nombre' => $nombre_final);
+
+                            $datos['img'][$key]['estado'] = 1;
+                            $datos['img'][$key]['msj'] = 'registro';
+                            $datos['img'][$key]['url_temp'] = $url_temp;
+                            $datos['img'][$key]['archivo_correo'] = $archivo_correo;
+                            $datos['img'][$key]['resulto_img'] = $resulto_img;
+                        }
+                        else
+                        {
+                            $datos['img'][$key]['estado'] = 0;
+                            $datos['img'][$key]['msj'] = 'falla';
+                        }
+                    }
+                }
+            }
+
+            $pdf_constancia = GesRegistrosController::generarPdf($ges->id, 'G');
+
+            $datos['pdf_constancia'] = $pdf_constancia;
+
+            $archivo_constancia = array('url'=>$pdf_constancia->pdf_url, 'nombre'=>$pdf_constancia->pdf);
+
+            /** ENVIO DE CORREO  */
+            $blade = 'notificacion_ges';
+            $to = array(
+                    array('email' => $paciente->email,'name' =>  $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+                );
+            $cc = array();
+            $bcc = array();
+            $asunto = 'MED-SDI - Notificación GES';
+            $body = array(
+                'nombre_paciente'=> $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
+                'nombre_ges'=>$request->nombre_ges,
+                'archivo_correo_adjuntos'=>$archivo_correo,
+                'archivo_constancia'=>$archivo_constancia,
+            );
+            $archivo = '';
+            $id_institucion = '';
+
+            $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+            if($result_mail['estado'])
+            {
+                $datos['mail']['institucion']['estado'] = 1;
+                $datos['mail']['institucion']['msj'] = 'Notificacion de bienvenida enviado';
+            }
+            else
+            {
+                $datos['mail']['institucion']['estado'] = 0;
+                $datos['mail']['institucion']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+            }
+
+
+            $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
+
+            /** ENVIO DE NOTIFICACION APP */
+            $tipo_notificacion = '2';
+            $id_evento = $ges->id;
+            $fecha_evento = $ges->fecha_ficha_ges;
+            $hora_evento = $ges->hora_ficha_ges;
+            $fecha_primera_notificacion = date('Y-m-d H:i:s');
+            $cantidad_notificacion = '';
+            $medio_notificacion = 'email';
+            $fecha_notificacion = date('Y-m-d H:i:s');
+            $medio_confirmacion = '';
+            $fecha_confirmacion = '';
+            $estado_confirmacion = '';
+            $otros = '';
+            $otros_1 = '';
+            $notificaiconResult = NotificacionConfirmacionController::registrar($tipo_notificacion,$id_evento,$fecha_evento,$hora_evento,$fecha_primera_notificacion,$cantidad_notificacion,$medio_notificacion,$fecha_notificacion,$medio_confirmacion,$fecha_confirmacion,$estado_confirmacion,$otros,$otros_1);
+            $datos['notificacion']['notificaiconResult'] = $notificaiconResult;
+
+            if($notificaiconResult['estado'] == 1)
+            {
+                $id_notificacion_confimacion = $notificaiconResult['last_id'];
+
+                $msj = array(
+                    'id' => $ges->id,
+                    'nombre' => mb_strtoupper($paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos),
+                    'evento' => 'NOTIFICACION GES',
+                    'fecha' => $ges->fecha_ficha_ges,
+                    'hora' => $ges->hora_ficha_ges,
+                    'lugar_atencion' => $lugar_atencion->nombre,
+                    'profesional' => $profesional->apellido_uno,
+                    'tipo' => 'confirmacion',
+                );
+
+                $log_users_devices = new LogUsersDevices();
+                $log_users_devices->id_user_create = $profesional->id_usuario;
+                $log_users_devices->id_user_recept = $paciente->id_usuario;
+                $log_users_devices->msg = json_encode($msj);
+                $log_users_devices->estado = 0;
+                $log_users_devices->fecha_ingreso = date('Y-m-d H:i:s');
+                // $log_users_devices->fecha_termino = '';
+                $log_users_devices->tipo = 10; // NOTIFICACION GES
+
+                if($log_users_devices->save())
+                {
+                    $datos['notificacion']['log_users_devices'] = $log_users_devices;
+
+                    $notificacion_confirmacion_edit = NotificacionConfirmacion::find($id_notificacion_confimacion);
+                    $notificacion_confirmacion_edit->id_log_users_devices = $log_users_devices->id;
+                    $notificacion_confirmacion_edit->medio_notificacion = $notificacion_confirmacion_edit->medio_notificacion.'|APP';
+                    if($notificacion_confirmacion_edit->save())
+                    {
+                        $datos['notificacion']['notificaicon_update'] = $notificacion_confirmacion_edit;
+                    }
+                    else
+                    {
+                        $datos['notificacion']['notificaicon_update'] = $notificacion_confirmacion_edit;
+                    }
+                }
+            }
+            /** ENVIO DE NOTIFICACION APP */
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro fallido';
         }
 
-        return json_encode($hora_medica);
+        return $datos;
     }
 
     public function registrar_certificado_reposo(Request $request)

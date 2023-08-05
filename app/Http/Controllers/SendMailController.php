@@ -26,7 +26,7 @@ class SendMailController extends Controller
      * @param array $bcc -> array(['email'=>'demo@demo.com','name'=>'name'],...,['email'=>'demo@demo.com','name'=>'name'])
      * @param string $asunto
      * @param array $body -> array('nombre'=>'demo','usuario'=>'demo344','contrasena'=>'sindem0',...)
-     * @param array $archivo -> array('url'=>'../pdf/documento.pdf','mime'=>'application/pdf')
+     * @param array $archivo -> array('url'=>'../pdf/documento.pdf','mime'=>'application/pdf') ó array(array('url'=>'../pdf/documento.pdf','mime'=>'application/pdf'), array('url'=>'../pdf/documento.pdf','mime'=>'application/pdf'))
      * @param int $id_institucion -> 13
      * @return array
      */

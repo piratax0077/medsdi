@@ -535,6 +535,7 @@ Route::group([
 
     /** Proceso de imagenes */
 	Route::post('/imagen/carga', [App\Http\Controllers\CargaImagenController::class, 'cargaImagenTemp'])->name('profesional.imagen.carga');
+	Route::post('/archivo/carga', [App\Http\Controllers\CargaImagenController::class, 'cargaArchivoTemp'])->name('profesional.archivo.carga');
 
 
     /** peditria tunner */
@@ -893,7 +894,11 @@ Route::group([
     Route::post('/Ficha_medica/finalizar_atencion', [App\Http\Controllers\ficha_atencionController::class, 'finalizar_atencion'])->name('ficha_atencion.finalizar_atencion');
 
 
+    /** REGISTRO DE DIAGNOSTICO GES */
     Route::get('/Ficha_medica/registrar_ges_ficha', [App\Http\Controllers\ficha_atencionController::class, 'registrar_ges_ficha'])->name('ficha_atencion.registrar_diagnostico_ges');
+    Route::get('/Ficha_medica/ges/pdf', [App\Http\Controllers\GesRegistrosController::class, 'generarPdf_r'])->name('ficha_atencion.pdf.ges');
+    Route::get('/Ficha_medica/ges/vista/previa/pdf', [App\Http\Controllers\GesRegistrosController::class, 'vistaPreviaPdf_r'])->name('ficha_atencion.vista.previa.pdf.ges');
+
     //Formularos Generales
     Route::get('/Ficha_medica/certificado_reposo', [App\Http\Controllers\ficha_atencionController::class, 'registrar_certificado_reposo'])->name('ficha_medica.registrar_certificado_reposo');
     Route::get('/Ficha_medica/registrar_interconsulta', [App\Http\Controllers\ficha_atencionController::class, 'registrar_interconsulta'])->name('ficha_medica.registrar_interconsulta');

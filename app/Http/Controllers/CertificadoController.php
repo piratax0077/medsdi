@@ -220,6 +220,7 @@ class CertificadoController extends Controller
 
             $datos['estado'] = 1;
             $datos['certificado'] = base64_encode($certificado);
+            // $datos['certificado'] = $certificado;
 
         }
         else
@@ -422,6 +423,9 @@ class CertificadoController extends Controller
                                                 break;
                                             // 21. CARNE DE VACUNA
                                             case '21':
+                                                break;
+                                            // 22. USO INTERNO
+                                            case '22':
                                                 break;
                                             default:
                                                 # code...
