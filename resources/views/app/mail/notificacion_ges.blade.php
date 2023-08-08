@@ -3,78 +3,81 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Notificacion de Patologia GES</title>
+    <title>Exámenes</title>
 </head>
 
-<body>
-    <table border="0" width="100%" cellspacing="0" cellpadding="0">
+<body style="background-color: #f2f2f2; margin-top: 0px;">
+    <table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#F0F0F0">
         <tbody>
             <tr>
-                <td style="background-color: #ffffff;" align="center" valign="top" bgcolor="#ffffff"><br>
-                    <table style="width: 100%px; max-width: 600px;" border="0" width="100%" cellspacing="0" cellpadding="0">
-                        <tbody>
-                            <tr>
-                                <td style="height: 11px; background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); ground: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); ground: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);"></td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: center;">
-                                    <img style="width: 95px; margin-bottom: 20px; margin-top: 20px;" src="https://www.med-sdi.cl/images/logo_pais_vertical.png" alt="Medichile">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="background-color: #fff; padding: 0px 24px 0px 24px;" align="center">
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 600; color: #0071bc;">Estimado/a Paciente: <br><br>{{ $detalle['body']['nombre_paciente'] }}</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); padding: 0px 24px 0px 24px;" align="center">
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 500; color: #ffffff;">Por medio del presente correo se notifica que la Patologia "{{ $detalle['body']['nombre_ges'] }}" es cubierta bajo GES</p>
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 500; color: #ffffff;">Toma conocimiento de que tiene derecho a acceder a las "Garantías Explícitas en Salud" GES, siempre que la atención sea otorgada en la "Red de Prestadores" que me corresponde según Fonasa o la Isapre a la que me encuentro adscrito</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); padding: 0px 24px 0px 24px;" align="center">
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 500; color: #ffffff;">Link para descarga de Archivos</p>
-                                    <ul style="list-style-type: none; margin: 15px; padding: 0; color: #000; font-weight: 400;">
-                                        <li><a style="text-decoration: none; color: #000; font-weight: 700;" href="{{ $detalle['body']['archivo_constancia']['url'] }}">Constancia Notificación GES</a></li>
+                <td style="background-color: #f2f2f2;" align="center" valign="top" >
+                    <table style="width: 100%; max-width: 600px;" border="0" width="100%" cellspacing="0" cellpadding="0">
+                        <tr style="background-color: #fff;">
+                            <td style="text-align: center;" >
+                                <img style=" margin-bottom: 5px; margin-top: 0px; max-width: 100%;" src="https://med-sdi.cl/images/email/medichile-email.png" alt="Medichile">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="background-color: #fff; padding-top: 15px;" align="center">
+                                <p style="font-family: Helvetica, Arial, sans-serif; font-size: 20px; line-height: 10px; color: #3366cc; text-align: center; font-weight:600;">Estimado/a Paciente</p>
+                                <p style="font-family: Helvetica, Arial, sans-serif; font-size: 17px; line-height: 10px; color: #3366cc; text-align: center; font-weight:600;">{{ $detalle['body']['nombre_paciente'] }}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="background-color: #fff; padding-right: 20px; padding-left: 20px;  text-align: justify;">
+                                <p style="font-family: Helvetica, Arial, sans-serif; font-size: 16px; line-height: 26px; color: #424242;  ">Por medio del presente correo se notifica que la Patologia "{{ $detalle['body']['nombre_ges'] }}" es cubierta bajo GES. <br>Toma conocimiento de que tiene derecho a acceder a las "Garantías Explícitas en Salud" GES, siempre que la atención sea otorgada en la "Red de Prestadores" que me corresponde según Fonasa o la Isapre a la que me encuentro adscrito</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" style="background-color: #fff; padding-bottom: 20px;">
+                                <table style="margin-top:40px;">
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="background: rgb(98,37,136); background: -moz-linear-gradient(108deg, rgba(98,37,136,1) 0%, rgba(160,108,193,1) 100%); background: -webkit-linear-gradient(108deg, rgba(98,37,136,1) 0%, rgba(160,108,193,1) 100%); background: linear-gradient(108deg, rgba(98,37,136,1) 0%, rgba(160,108,193,1) 100%);  padding: 15px 20px; -webkit-border-radius: 30px; font-family: Helvetica, Arial, sans-serif;" align="center" bgcolor="#289CDC">
+                                                <a target="_blank" href="{{ $detalle['body']['archivo_constancia']['url'] }}" style="color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600;">DESCARGAR CONSTANCIA GES</a>
+                                            </td>
+                                        </tr>
+
                                         @if (!empty($detalle['body']['archivo_correo_adjuntos']))
                                             @foreach ( $detalle['body']['archivo_correo_adjuntos'] as $archivo )
-                                                {{-- <li>@php var_dump($archivo)@endphp</li> --}}
-                                                <li><a style="text-decoration: none; color: #000; font-weight: 700;" href="{{ $archivo['url'] }}">{{ $archivo['nombre'] }}</a></li>
+                                                <tr>
+                                                    <td style="background-color:#fff; padding:5px;">
+                                                        {{--  --}}
+                                                    </td>
+                                                </tr>
+
+                                                <tr style="margin-bottom: 1rempx;">
+                                                    <td style=" background: rgb(49,190,190); background: -moz-linear-gradient(108deg, rgba(49,190,190,1) 0%, rgba(25,159,159,1) 100%); background: -webkit-linear-gradient(108deg, rgba(49,190,190,1) 0%, rgba(25,159,159,1) 100%); background: linear-gradient(108deg, rgba(49,190,190,1) 0%, rgba(25,159,159,1) 100%);padding: 15px 20px; -webkit-border-radius: 30px; font-family: Helvetica, Arial, sans-serif;" align="center" bgcolor="#289CDC">
+                                                        <a target="_blank" href="{{ $archivo['url'] }}" style="color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600;">DESCARGAR ARCHIVO: {{ $archivo['nombre'] }}</a>
+                                                    </td>
+                                                </tr>
                                             @endforeach
                                         @endif
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="20"> </td>
-                            </tr>
-                            <tr>
-                                <td inline-block style="text-align: center;">
-                                    <img style="width: 50px; margin-bottom: 5px; margin-top: 50px; margin-right: 10px;" src="https://www.med-sdi.cl/images/logo_pais_vertical.png" alt="Medichile">
-                                    <img style="width: 90px; margin-bottom: 5px; margin-top: 50px;" src="https://www.med-sdi.cl/images/logo.png" alt="Medichile">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="height: 11px; background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: center;" align="center">
-                                    <table border="0" width="95%" cellspacing="0" cellpadding="0" align="center">
-                                        <tbody>
-                                            <tr>
-                                                <td style="font-family: Helvetica, Arial, sans-serif;" align="center" valign="top">
-                                                    <p style="text-align: center; color: #999999; font-size: 12px; font-weight: normal; line-height: 20px;">Este correo electrónico fue enviado por <a style="color: #000;" href="https://www.medichile.cl">Salud Digital Integrada</a> <br> Salud Digital Integrada <b>Todos los Derechos Reservados. ©2023</b></p>
-                                                </td>
-                                                <td width="30"> </td>
-                                                <td width="16"> </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
+
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="margin-top:50px; background-color: #fff;">
+                                <img style=" margin-bottom: 5px; margin-top: 50px; max-width: 100%;" src="https://med-sdi.cl/images/email/pie-email.png" alt="Medichile">
+                            </td>
+                        </tr>
+                            <td style="text-align: center; background-color: #fff;" align="center">
+                                <table border="0" width="95%" cellspacing="0" cellpadding="0" align="center">
+                                    <tbody>
+                                        <tr>
+                                            <td style="font-family: Helvetica, Arial, sans-serif;" align="center" valign="top">
+                                                <p style="text-align: center; color: #999999; font-size: 10px; font-weight: normal; line-height: 15px;">Este correo electrónico fue enviado por <a style="color: #000;" href="https://www.medichile.cl">Salud Digital Integrada</a> <br> Salud Digital Integrada <b>Todos los Derechos Reservados. ©2023</b></p>
+                                            </td>
+                                            <td width="30"> </td>
+                                            <td width="16"> </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
                     </table>
                 </td>
             </tr>
