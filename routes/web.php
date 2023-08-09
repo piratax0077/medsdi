@@ -899,6 +899,12 @@ Route::group([
     Route::get('/Ficha_medica/ges/pdf', [App\Http\Controllers\GesRegistrosController::class, 'generarPdf_r'])->name('ficha_atencion.pdf.ges');
     Route::get('/Ficha_medica/ges/vista/previa/pdf', [App\Http\Controllers\GesRegistrosController::class, 'vistaPreviaPdf_r'])->name('ficha_atencion.vista.previa.pdf.ges');
 
+    /** REGISTROS ENO */
+    Route::get('/diagnostico/eno', [App\Http\Controllers\DiagnosticoEnoController::class, 'verRegistros'])->name('diagnostico.eno');
+    Route::post('/diagnostico/auto/eno', [App\Http\Controllers\DiagnosticoEnoController::class, 'verRegistrosAuto'])->name('diagnostico.auto.eno');
+    Route::post('/Ficha_medica/registrar/eno', [App\Http\Controllers\ficha_atencionController::class, 'registrar_eno'])->name('ficha_atencion.registrar.eno');
+    Route::get('/Ficha_medica/cargar/eno', [App\Http\Controllers\ficha_atencionController::class, 'cargar_eno'])->name('ficha_atencion.cargar.eno');
+
     //Formularos Generales
     Route::get('/Ficha_medica/certificado_reposo', [App\Http\Controllers\ficha_atencionController::class, 'registrar_certificado_reposo'])->name('ficha_medica.registrar_certificado_reposo');
     Route::get('/Ficha_medica/registrar_interconsulta', [App\Http\Controllers\ficha_atencionController::class, 'registrar_interconsulta'])->name('ficha_medica.registrar_interconsulta');

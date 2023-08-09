@@ -12,6 +12,7 @@ use App\Models\Articulo;
 use App\Models\CertificadoReposo;
 use App\Models\Ciudad;
 use App\Models\ControlObesidad;
+use App\Models\DeclaracionEno;
 use App\Models\DetalleReceta;
 use App\Models\Diabete;
 use App\Models\Direccion;
@@ -1670,6 +1671,224 @@ class ficha_atencionController extends Controller
         {
             $datos['estado'] = 0;
             $datos['msj'] = 'registro fallido';
+        }
+
+        return $datos;
+    }
+
+    public function registrar_eno(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_lugar_atencion))
+        {
+            $error['Lugar atencion'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->nombre_establecimiento))
+        {
+            $error['nombre establecimiento'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->codigo_establecimiento))
+        {
+            $error['codigo establecimiento'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->nombre_oficina))
+        {
+            $error['nombre oficina'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->codigo_oficina))
+        {
+            $error['codigo oficina'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->id_ficha_atencion))
+        {
+            $error['ficha atencion'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->id_paciente))
+        {
+            $error['paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->nacionalidad_paciente))
+        {
+            $error['nacionalidad paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->codigo_nacionalidad_paciente))
+        {
+            $error['codigo nacionalidad paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($request->pueblo_originario_paciente == '')
+        {
+            $error['pueblo originario paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->ocupacion_paciente))
+        {
+            $error['ocupacion paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($request->condicion_paciente=='')
+        {
+            $error['condicion paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->categoria_paciente))
+        {
+            $error['categoria paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->diagnositico_confirmado))
+        {
+            $error['diagnositico_confirmado'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        // if(empty($request->diagnostico_cie))
+        // {
+        //     $error['diagnostico_cie'] = 'campo requerido';
+        //     $valido = 0;
+        // }
+
+        if(empty($request->primeros_sintomas))
+        {
+            $error['primeros sintomas'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->pais_contagio))
+        {
+            $error['pais contagio'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->pais))
+        {
+            $error['pais'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->vacunacion))
+        {
+            $error['vacunacion'] = 'campo requerido';
+            $valido = 0;
+        }
+        else if($request->vacunacion == 1)
+        {
+            if(empty($request->fecha_ultima_dosis))
+            {
+                $error['fecha ultima dosis'] = 'campo requerido';
+                $valido = 0;
+            }
+
+            if(empty($request->numero_ultima_dosis))
+            {
+                $error['numero ultima dosis'] = 'campo requerido';
+                $valido = 0;
+            }
+        }
+
+        if(empty($request->id_profesional))
+        {
+            $error['profesional'] = 'campo requerido';
+            $valido = 0;
+        }
+
+
+        if($valido)
+        {
+            $registro_eno = new DeclaracionEno();
+            $registro_eno->id_lugar_atencion = $request->id_lugar_atencion;
+
+            $registro_eno->nombre_establecimiento = $request->nombre_establecimiento;
+            $registro_eno->codigo_establecimiento = $request->codigo_establecimiento;
+            $registro_eno->nombre_oficina = $request->nombre_oficina;
+            $registro_eno->codigo_oficina = $request->codigo_oficina;
+            $registro_eno->id_ficha_atencion = $request->id_ficha_atencion;
+
+            $registro_eno->id_paciente = $request->id_paciente;
+            $registro_eno->nacionalidad_paciente = $request->nacionalidad_paciente;
+            $registro_eno->codigo_nacionalidad_paciente = $request->codigo_nacionalidad_paciente;
+            $registro_eno->pueblo_originario_paciente = $request->pueblo_originario_paciente;
+            $registro_eno->ocupacion_paciente = $request->ocupacion_paciente;
+            $registro_eno->condicion_paciente = $request->condicion_paciente;
+            $registro_eno->categoria_paciente = $request->categoria_paciente;
+
+            $registro_eno->diagnositico_confirmado = $request->diagnositico_confirmado;
+            $registro_eno->diagnostico_cie = $request->diagnostico_cie;
+            $registro_eno->primeros_sintomas = $request->primeros_sintomas;
+            $registro_eno->pais_contagio = $request->pais_contagio;
+            $registro_eno->pais = $request->pais;
+
+            $registro_eno->vacunacion = $request->vacunacion;
+            $registro_eno->fecha_ultima_dosis = $request->fecha_ultima_dosis;
+            $registro_eno->numero_ultima_dosis = $request->numero_ultima_dosis;
+            $registro_eno->tbc = $request->tbc;
+            $registro_eno->tbc_recaidas = $request->tbc_recaidas;
+
+            $registro_eno->fecha_notificacion = date('Y-m-d');
+            $registro_eno->hora_notificacion = date('H:i:s');
+            $registro_eno->id_profesional = $request->id_profesional;
+
+            if($registro_eno->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registro';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Falla registro';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function cargar_eno(Request $request)
+    {
+        $datos = array();
+
+        $registros = DeclaracionEno::with('Profesional')->where('id_paciente', $request->id_paciente)->get();
+
+        if($registros)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registros;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
         }
 
         return $datos;
@@ -6534,81 +6753,6 @@ class ficha_atencionController extends Controller
         return $datos;
     }
 
-    /*
-        public function interconsulta(Request $request)
-        {
-            $interconsulta = new interconsulta;
-
-            $interconsulta->especialidad = $request->especialidad;
-            $interconsulta->hipotesis = $request->hipotesis;
-            $interconsulta->descripcion = $request->descripcion;
-            $interconsulta->diagnostico = $request->diagnostico;
-            $interconsulta->tratamiento = $request->tratamiento;
-            $interconsulta->comentario = $request->comentario;
-            $interconsulta->fecha_control = $request->fecha_control;
-            $interconsulta->id_paciente = $request->id_paciente;
-            $interconsulta->id_profesional = $request->id_profesional;
-
-            if (!$interconsulta->save()) {
-                return 'error al ingresar la interconsulta';
-            }
-
-            return back()->with('mensaje', 'se ha registrado la interconsulta');
-        }
-
-        public function reposo(Request $request)
-        {
-            $reposo = new reposo;
-
-            $reposo->fecha_inicio = $request->fecha_inicio;
-            $reposo->fecha_termino = $request->fecha_termino;
-            $reposo->hipotesis_reposo = $request->hipotesis_reposo;
-            $reposo->comentarios_reposo = $request->comentarios_reposo;
-            $reposo->id_paciente = $request->id_paciente_reposo;
-            $reposo->id_profesional = $request->id_profesional_reposo;
-
-            if ($reposo->save()) {
-                return back()->with('mensaje', 'Error al registar el reposo del paciente');
-            }
-
-            return back()->with('mensaje', 'Exito al registar el reposo del paciente');
-        }
-
-        public function informe_medico(Request $request)
-        {
-            $informe_medico = new informe_medico;
-
-            $informe_medico->fecha_informe = $request->fecha_informe;
-            $informe_medico->descripcion_informe = $request->descripcion_informe;
-            $informe_medico->id_paciente = $request->paciente_informe;
-            $informe_medico->id_profesional = $request->profesional_informe;
-
-            if (!$informe_medico->save()) {
-                return back()->with('mensaje', 'no se pudo almacenar el informe medico');
-            }
-
-            return back()->with('mensaje', 'Informe almacenado de forma correcta');
-        }
-
-        public function constancia_ges(Request $request)
-        {
-            $ges = new constancia_ges;
-            $ges->nombre_prestador = $request->nombre_prestador;
-            $ges->direccion_prestador = $request->direccion_prestador;
-            $ges->nombre_responsable = $request->nombre_responsable;
-            $ges->rut_responsable = $request->rut_responsable;
-            $ges->confirmacion_ges = $request->confirmacion_ges;
-            $ges->paciente_tratamiento = $request->paciente_tratamiento;
-            $ges->fecha_notificacion = $request->fecha_notificacion;
-            $ges->id_paciente = $request->id_paciente_ges;
-
-            if (!$ges->save()) {
-                return back()->with('mensaje', 'Error al guardar la constancia ges');
-            }
-
-            return back()->with('mensaje', 'Constancia ges  registrada con exito');
-        }
-        */
 
 
 }
