@@ -28,19 +28,19 @@
                                 </div>
                                 <div class="form-group col-sm-6 col-md-6">
                                     <label class="floating-label-activo-sm">Nombre del establecimiento</label>
-                                    <input type="text" class="form-control form-control-sm" name="eno_nombre_establecimiento" id="eno_nombre_establecimiento" value="{{ $institucion->nombre }}" readonly>
+                                    <input type="text" class="form-control form-control-sm" name="eno_nombre_establecimiento" id="eno_nombre_establecimiento" value="{{ (!empty($institucion))?$institucion->nombre:$lugar_atencion->nombre }}" readonly>
                                 </div>
                                 <div class="form-group col-sm-6 col-md-6">
                                     <label class="floating-label-activo-sm">Código del establecimiento</label>
-                                    <input type="text" class="form-control form-control-sm" name="eno_codigo_establecimiento" id="eno_codigo_establecimiento" value="{{ $institucion->rut }}" readonly>
+                                    <input type="text" class="form-control form-control-sm" name="eno_codigo_establecimiento" id="eno_codigo_establecimiento" value="{{ (!empty($institucion))?$institucion->rut:$lugar_atencion->rut }}" readonly>
                                 </div>
                                 <div class="form-group col-sm-6 col-md-6">
                                     <label class="floating-label-activo-sm">Nombre de oficina provincial</label>
-                                    <input type="text" class="form-control form-control-sm" name="eno_nombre_oficina" id="eno_nombre_oficina" value="{{ $lugar_atencion->nombre }}" readonly>
+                                    <input type="text" class="form-control form-control-sm" name="eno_nombre_oficina" id="eno_nombre_oficina" value="">
                                 </div>
                                 <div class="form-group col-sm-6 col-md-6">
                                     <label class="floating-label-activo-sm">Código de oficina provincial</label>
-                                    <input type="text" class="form-control form-control-sm" name="eno_codigo_oficina" id="eno_codigo_oficina" value="{{ $lugar_atencion->rut }}" readonly>
+                                    <input type="text" class="form-control form-control-sm" name="eno_codigo_oficina" id="eno_codigo_oficina" value="">
                                 </div>
                                 <div class="form-group col-sm-6 col-md-6">
                                     <label class="floating-label-activo-sm">Nº de ficha clínica o código de control</label>
@@ -905,17 +905,17 @@
             valido = 0;
         }
 
-        if(nombre_oficina == '')
-        {
-            mensaje +='Nombre Oficina es un campo requerido\n';
-            valido = 0;
-        }
+        // if(nombre_oficina == '')
+        // {
+        //     mensaje +='Nombre Oficina es un campo requerido\n';
+        //     valido = 0;
+        // }
 
-        if(codigo_oficina == '')
-        {
-            mensaje +='Codigo Oficina es un campo requerido\n';
-            valido = 0;
-        }
+        // if(codigo_oficina == '')
+        // {
+        //     mensaje +='Codigo Oficina es un campo requerido\n';
+        //     valido = 0;
+        // }
 
         if(nacionalidad_paciente == '')
         {

@@ -1700,17 +1700,17 @@ class ficha_atencionController extends Controller
             $valido = 0;
         }
 
-        if(empty($request->nombre_oficina))
-        {
-            $error['nombre oficina'] = 'campo requerido';
-            $valido = 0;
-        }
+        // if(empty($request->nombre_oficina))
+        // {
+        //     $error['nombre oficina'] = 'campo requerido';
+        //     $valido = 0;
+        // }
 
-        if(empty($request->codigo_oficina))
-        {
-            $error['codigo oficina'] = 'campo requerido';
-            $valido = 0;
-        }
+        // if(empty($request->codigo_oficina))
+        // {
+        //     $error['codigo oficina'] = 'campo requerido';
+        //     $valido = 0;
+        // }
 
         if(empty($request->id_ficha_atencion))
         {
