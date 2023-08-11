@@ -145,7 +145,7 @@
                     </div>
 
                 </div>
-				<div class="card-sidebar">
+                <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_hosp">
                         <h2 class="mb-0">
                         <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_hosp" aria-expanded="false" aria-controls="collapse_hosp"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
@@ -156,14 +156,12 @@
                     <div id="collapse_hosp" class="collapse" aria-labelledby="headinghospm" data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="sol_pabellon()";>+ Solicitud Pabellón</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingreso()";>+ Hospitalización Cirugía</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingresomedico() ";>+ Hospitalización Tratamiento Médico</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingresohosp()";>+ Hospitalización </button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="r_ingreso()";>+ Requisitos de ingreso</button>
                         </div>
                     </div>
-                    @include("general.modal.in_solic_pabellon")
-                    @include("general.modal.ingreso")
-                    @include("general.modal.ingreso_medico")
+                    @include("general.hospitalizacion.modals.in_solic_pabellon")
+                    @include("general.hospitalizacion.modals.ingreso_hosp")
                     @include("general.modal.m_req_ingreso")
                 </div>
                 <div class="card-sidebar">

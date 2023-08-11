@@ -26,8 +26,8 @@ class ExamenEspecialidadController extends Controller
 
     static public function estructuraJson($id_template, $parametros)
     {
-        Log::channel('notificacion_confirmacion_hora')->info(json_encode($id_template));
-        Log::channel('notificacion_confirmacion_hora')->info(json_encode($parametros));
+        Log::channel('ExamenEspecialidad')->info(json_encode($id_template));
+        Log::channel('ExamenEspecialidad')->info(json_encode($parametros));
         $datos = array();
         $error = array();
         $campo_requerido = 1;

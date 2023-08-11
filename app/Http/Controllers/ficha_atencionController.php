@@ -11,6 +11,8 @@ use App\Models\AntecedentesPaciente;
 use App\Models\Articulo;
 use App\Models\CertificadoReposo;
 use App\Models\Ciudad;
+use App\Models\CnsTipo;
+use App\Models\CnsTipoTemplate;
 use App\Models\ControlObesidad;
 use App\Models\DeclaracionEno;
 use App\Models\DetalleReceta;
@@ -59,6 +61,7 @@ use App\Models\FichaOftBiomicroscopiaTipo;
 use App\Models\FichaOftFondoOjo;
 use App\Models\FichaOftFondoOjoTipo;
 use App\Models\FichaOftTipo;
+use App\Models\FichaPediatriaCns;
 use App\Models\FichaPediatriaGeneral;
 use App\Models\FichaPediatriaGeneralTipo;
 use App\Models\FichaUro;
@@ -67,6 +70,7 @@ use App\Models\GesRegistrosImg;
 use App\Models\Instituciones;
 use App\Models\LogUsersDevices;
 use App\Models\NotificacionConfirmacion;
+use App\Models\PacientesDependientes;
 use App\Models\RecetaAudifono;
 use App\Models\TipoInforme;
 use Illuminate\Http\Request;
@@ -169,6 +173,14 @@ class ficha_atencionController extends Controller
     {
         $hora = HoraMedica::where('id', $request->id_hora_realizar)->first();
         $paciente = Paciente::where('id', $hora->id_paciente)->first();
+
+        $pacienteDpendiente = PacientesDependientes::where('id_paciente', $paciente->id)->get()->first();
+        $responsable = '';
+        if($pacienteDpendiente)
+        {
+            $responsable = Paciente::find($pacienteDpendiente->id_responsable);
+        }
+
         $ciudades = Ciudad::where('id_region', $paciente->Direccion()->first()->Ciudad()->first()->id_region)->get();
         $regiones = Region::all();
         $examenMedico = ExamenMedico::where('cod_parent', 0)->where('habilitado', 1)->orderby('nombre_examen', 'ASC')->get();
@@ -269,6 +281,11 @@ class ficha_atencionController extends Controller
         $fichaTipo = array();
 
         $ruta_blade = '';
+
+        $cns_tipo = '';
+        $cns_tipo_template = '';
+        $cns_registros = '';
+
 
         if($profesional->id_sub_tipo_especialidad == 20)
         {
@@ -381,6 +398,24 @@ class ficha_atencionController extends Controller
 
             /** examenes radiologicos */
             $examenes_radiologicos = '';
+
+            /** CNS */
+            $cns_tipo = CnsTipo::with(['CnsTipoTemplate' => function($query){
+                                            $query->select('id', 'nombre', 'alias');
+                                        }])
+                                        ->where('estado', 1)
+                                        ->get();
+            $cns_tipo_array = CnsTipo::where('estado', 1)->pluck('id')->toArray();
+
+            $cns_tipo_template = CnsTipoTemplate::with(['CnsTipo' => function($query){
+                                                            $query->select('id', 'id_cns_template', 'nombre');
+                                                        }])
+                                                        ->whereIn('id', $cns_tipo_array)
+                                                        ->get();
+
+            $filtro_cns = array();
+            $filtro_cns[] = array('id_paciente', $paciente->id);
+            $cns_registros = FichaPediatriaCns::with(['CnsTipoTemplate' => function($query){ $query->select('id', 'nombre', 'alias');}])->where($filtro_cns)->get();
         }
         else if($profesional->id_sub_tipo_especialidad == 72)
         {
@@ -741,6 +776,7 @@ class ficha_atencionController extends Controller
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
+                'responsable' => $responsable,
                 'prevision' => $prevision,
                 'profesional' => $profesional,
                 'medicamento' => $medicamento,
@@ -772,6 +808,9 @@ class ficha_atencionController extends Controller
                 'examenes_radiologicos' => $examenes_radiologicos,
                 'examenes_especialidad_realizados' => $examenes_especialidad_realizados,
                 'institucion' => $institucion,
+                'cns_tipo' => $cns_tipo,
+                'cns_tipo_template' => $cns_tipo_template,
+                'cns_registros' => $cns_registros,
 
                 // 'ficha_ges' => $ges,
                 // 'direccion' => $direccion,

@@ -1,29 +1,29 @@
 /** TABLAS **/
 /** Exámenes **/
-$(document).ready(function() {
-    $('#bandeja_entrada').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#bandeja_entrada').DataTable({
+//         responsive: true,
+//     });
+// });
 
-$(document).ready(function() {
-    $('#exam_radiologicos').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#exam_radiologicos').DataTable({
+//         responsive: true,
+//     });
+// });
 
-$(document).ready(function() {
-    $('#exam_general').DataTable({
-        responsive: true,
-    });
-});
+// $(document).ready(function() {
+//     $('#exam_general').DataTable({
+//         responsive: true,
+//     });
+// });
 
-/** Atenciones previas **/
-$(document).ready(function() {
-    $('#aten_previas').DataTable({
-        responsive: true,
-    });
-});
+// /** Atenciones previas **/
+// $(document).ready(function() {
+//     $('#aten_previas').DataTable({
+//         responsive: true,
+//     });
+// });
 
 /** MODALS **/
 /** MODALS FORMULARIOS GENERALES **/

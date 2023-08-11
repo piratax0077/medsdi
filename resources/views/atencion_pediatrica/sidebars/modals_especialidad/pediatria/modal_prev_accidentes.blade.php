@@ -6,7 +6,7 @@
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <embed src="{{ asset('documentos\pediatria\prev. accidentes.pdf') }}" type="application/pdf" data-documento="prev. accidentes.pdf" data-url="documentos\pediatria\prev. accidentes.pdf" width="100%" height="800px"/>
+                <embed src="{{ asset('documentos\pediatria\prev. accidentes.pdf') }}" type="application/pdf" data-documento="prev. accidentes.pdf" data-url="documentos/pediatria/prev. accidentes.pdf" width="100%" height="800px"/>
               </div>
 
             <div class="modal-footer">

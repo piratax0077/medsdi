@@ -1,0 +1,334 @@
+/** 12 a 23 meses */
+<h5 class="f-16 text-c-blue">12 a 23 meses</h5>
+<hr>
+<ul class="nav nav-tabs-aten nav-fill mb-3" id="ns-123m" role="tablist">
+    {{--  <li class="nav-item">
+        <a class="nav-link-aten text-reset active" id="ficha-tipo-ns-1223m-tab" data-toggle="tab" href="#ficha-tipo-ns-1223m" role="tab" aria-controls="ficha-tipo-ns-1223m" aria-selected="true">Ficha tipo</a>
+    </li>  --}}
+    <li class="nav-item">
+        <a class="nav-link-aten text-reset active" id="pa-gen-ns-1223m-tab" data-toggle="tab" href="#pa-gen-ns-1223m" role="tab" aria-controls="pa-gen-ns-1223m" aria-selected="false">Parametros generales</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link-aten text-reset" id="est-fisica-ns-1223m-tab" data-toggle="tab" href="#est-fisica-ns-1223m" role="tab" aria-controls="est-fisica-ns-1223m" aria-selected="false">Estado fisico del menor</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link-aten text-reset" id="antropometria-ns-1223m-tab" data-toggle="tab" href="#antropometria-ns-1223m" role="tab" aria-controls="antropometria-ns-1223m" aria-selected="false">Antropometría</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link-aten text-reset" id="diagnos-ns-1223m-tab" data-toggle="tab" href="#diagnos-ns-1223m" role="tab" aria-control="diagnos-ns-1223m" aria-selected="false">Diagnósticos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link-aten text-reset" id="indicaciones-ns-1223m-tab" data-toggle="tab" href="#indicaciones-ns-1223m" role="tab" aria-control="indicaciones-ns-1223m" aria-selected="false">Indicaciones y próx. control</a>
+    </li>
+</ul>
+<div class="tab-content" id="ns-1223m">
+    <!--FICHA TIPO-->
+    {{--  <div class="tab-pane fade show active" id="ficha-tipo-ns-1223m" role="tabpanel" aria-labelledby="ficha-tipo-ns-1223m-tab">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <h6 class="f-16 text-c-blue mb-3">Ficha tipo</h6>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                <label class="floating-label-activo-sm">Carga ficha tipo</label>
+                <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad" onchange="cargar_info_ficha_tipo_ped('select_ficha_tipo_especialidad','descripcion_ficha_tipo_especialidad');">
+                    <option value="">Seleccione</option>
+                </select>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                Resultado
+            </div>
+        </div>
+    </div>  --}}
+    <!--PARAMETROS GENERALES-->
+    <div class="tab-pane fade show active" id="pa-gen-ns-1223m" role="tabpanel" aria-labelledby="pa-gen-ns-1223m-tab">
+        <div class="form-row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h6 class="f-16 text-c-blue mb-3">Parametros generales</h6>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="floating-label">Anamnesis</label>
+                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=4" onblur="this.rows=1;" id="anamnesis_1223" name="anamnesis" ></textarea>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Evaluaciones indicaciones anteriores</label>
+                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ev_anter_1223" name="ev_anter_1223" ></textarea>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Dieta</label>
+                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="dieta_1223" name="dieta_1223" ></textarea>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Hábitos</label>
+                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="habitos_1223" name="habitos_1223" ></textarea>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Rutinas de sueño alimentación</label>
+                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="sueno_alim_1223" name="sueno_alim_1223" ></textarea>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Cuidadores</label>
+                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="cuidadores_1223" name="cuidadores_1223" ></textarea>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary-light btn-block btn-sm" onclick="prev_acc();"><i class="feather icon-file-text"></i> Pauta prevensión accidentes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--ESTADO FISICO DEL MENOR-->
+    <div class="tab-pane fade show" id="est-fisica-ns-1223m" role="tabpanel" aria-labelledby="est-fisica-ns-1223m-tab">
+        <div class="form-row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h6 class="f-16 text-c-blue mb-3">Examen físico del menor</h6>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="floating-label">Inspección general y relación parental</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" id="insp_1223_gral" name="insp_1223_gral" ></textarea>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Piél</label>
+                    <select name="p__1223_p_piel" id="p_1223_p_piel" data-titulo="Piel"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1223_p_piel','div_p_1223_p_piel','obs_p_1223_p_piel',2);">
+                        <option selected value="1">Normal </option>
+                        <option value="2">Alterada</option>
+                        <option value="3">No Informadas</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_1223_p_piel" style="display:none">
+                    <label class="floating-label-activo-sm">Examen de Piél </label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Piel" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_1223_p_piel" id="obs_p_1223_p_piel"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Ganglios</label>
+                    <select name="p_1223_p_gang" id="p_1223_p_gang" data-titulo="Ganglios"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1223_p_gang','div_p_1223_p_gang','obs_p_1223_p_gang',2);">
+                        <option selected value="1">Normal </option>
+                        <option value="2">Alterado</option>
+                        <option value="3">No Informados</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_1223_p_gang" style="display:none">
+                    <label class="floating-label-activo-sm">Examen de Ganglios </label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Ganglios" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_1223_p_gang" id="obs_p_1223_p_gang"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Cardio-Pulmonar</label>
+                    <select name="p_1223_p_carpul" id="p_1223_p_carpul" data-titulo="Torax"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1223_p_carpul','div_p_1223_p_carpul','obs_p_1223_p_carpul',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alterado</option>
+                        <option value="3">No Informado</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_1223_p_carpul" style="display:none">
+                    <label class="floating-label-activo-sm">Cardio-Pulmonar</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Torax" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_1223_p_carpul" id="obs_p_1223_p_carpul"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Abdomen</label>
+                    <select name="p_1223_p_abd" id="p_1223_p_abd" data-titulo="Abdomen"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1223_p_abd','div_p_1223_p_abd','obs_p_1223_p_abd',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alterado</option>
+                        <option value="3">No Informado</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_1223_p_abd" style="display:none">
+                    <label class="floating-label-activo-sm">Abdomen</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Abdomen" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_1223_p_abda" id="obs_p_1223_p_abd"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Genito-Anal</label>
+                    <select name="p_1223_p_gen" id="p_1223_p_gen" data-titulo="Genitales"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1223_p_gen','div_p_1223_p_gen','obs_p_1223_p_gen',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alterada</option>
+                        <option value="3">No Informadas</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_1223_p_gen" style="display:none;">
+                    <label class="floating-label-activo-sm">Genito-Anal</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Genitales" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_1223_p_gen" id="obs_p_1223_p_gen"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Reflejos</label>
+                    <select name="p_1223_p_reflex" id="p_1223_p_reflex" data-titulo="Reflejos"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1223_p_reflex','div_p_1223_p_reflex','obs_p_1223_p_reflex',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alterados</option>
+                        <option value="3">No Informados</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_1223_p_reflex" style="display:none;">
+                    <label class="floating-label-activo-sm">Reflejos</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Reflejos" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_1223_p_reflex" id="obs_p_1223_p_reflex"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Tono y Motilidad</label>
+                    <select name="p_1223_p_tono" id="p_1223_p_tono" data-titulo="Tono y Motilidad"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1223_p_tono','div_p_1223_p_tono','obs_p_1223_p_tono',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alterados</option>
+                        <option value="3">No Informados</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_1223_p_tono" style="display:none;">
+                    <label class="floating-label-activo-sm">Tono y Motilidad</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Tono y Motilidad" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_1223_p_tono" id="obs_p_1223_p_tono"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Caderas</label>
+                    <select name="p_1223_p_cad" id="p_1223_p_cad" data-titulo="Caderas"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1223_p_cad','div_p_1223_p_cad','obs_p_1223_p_cad',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alteradas</option>
+                        <option value="3">No Informadas</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_1223_p_cad" style="display:none;">
+                    <label class="floating-label-activo-sm">Caderas</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Caderas" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_1223_p_cad" id="obs_p_1223_p_cad"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Extremidades</label>
+                    <select name="p_1223_p_ext" id="p_1223_p_ext" data-titulo="Extremidades"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1223_p_ext','div_p_1223_p_ext','obs_p_1223_p_ext',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alteradas</option>
+                        <option value="3">No Informadas</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_1223_p_ext" style="display:none;">
+                    <label class="floating-label-activo-sm">Extremidades</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Extremidades" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_1223_p_ext" id="obs_p_1223_p_ext"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Ex Oftalmológico</label>
+                    <select name="p_1223_p_ojo" id="p_1223_p_ojo" data-titulo="Ojos"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1223_p_ojo','div_1223_p_ojo','obs_p_1223_p_ojo',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alterado</option>
+                        <option value="3">No Informados</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_1223_p_ojo" style="display:none">
+                    <label class="floating-label-activo-sm">Ex Oftalmológico</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Ojos" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_1223_p_ojo" id="obs_p_1223_p_ojo"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Ex Auditívo</label>
+                    <select name="p_1223_p_oido" id="p_1223_p_oido" data-titulo="Oidos"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_1223_p_oido','div_p_1223_p_oido','obs_p_1223_p_oido',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alterados</option>
+                        <option value="3">No Informados</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_1223_p_oido" style="display:none">
+                    <label class="floating-label-activo-sm">Ex Auditívo</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Oidos" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_1223_p_oido" id="obs_p_1223_p_oido"></textarea>
+                </div>
+            </div>
+            {{--  <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary-light btn-block btn-sm" onclick="abrir_modal_guardar_tipo();"><i class="fas fa-save"></i> Guardar nuevo examen tipo</button>
+                </div>
+            </div>  --}}
+        </div>
+    </div>
+    <!--ANTROPOMETRÍA-->
+    <div class="tab-pane fade show" id="antropometria-ns-1223m" role="tabpanel" aria-labelledby="antropometria-ns-1223m-tab">
+        <div class="form-row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h6 class="f-16 text-c-blue mb-3">Antropometría</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <label class="floating-label">Peso en (gr.)</label>
+                <input type="number" class="form-control form-control-sm" name="peso_1223" id="peso_1223">
+            </div>
+            <div class="form-group col-md-3">
+                <label class="floating-label">Longitud (cm.)</label>
+                <input type="number" class="form-control form-control-sm" name="longitud_1223" id="longitud_1223">
+            </div>
+            <div class="form-group col-md-3">
+                <label class="floating-label">Perímetro cefálico (cm.)</label>
+                <input type="number" class="form-control form-control-sm" name="per_cefalico_1223" id="per_cefalico_1223">
+            </div>
+            <div class="form-group col-md-3">
+                <label class="floating-label">Otros (lesiones)</label>
+                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="otros_font_1223" name="otros_font_1223" ></textarea>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="floating-label">Señales de maltrato</label>
+                    <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=4" onblur="this.rows=1;" id="maltrato_1223" name="maltrato_1223" ></textarea>
+            </div>
+        </div>
+    </div>
+        <!--DIAGNÓSTICOS-->
+    <div class="tab-pane fade show" id="diagnos-ns-1223m" role="tabpanel" aria-labelledby="diagnos-ns-1223m-tab">
+        <div class="form-row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h6 class="f-16 text-c-blue mb-3">Diagnósticos</h6>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">General</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="dg_1223_general" id="dg_1223_general"></textarea>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Incremento ponderal</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="dg_1223_inscr_ponderal" id="dg_1223_inscr_ponderal"></textarea>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Lactancia</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="dg_1223_lactancia" id="dg_1223_lactancia"></textarea>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Salud del lactante</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="dg_1223_salud_lactante" id="dg_1223_salud_lactante"></textarea>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Salud de la madre</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="dg_1223_salud_madre" id="dg_1223_salud_madre"></textarea>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Salud psicosocial</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="dg_1223_sal_psico" id="dg_1223_sal_psico"></textarea>
+            </div>
+        </div>
+    </div>
+    <!--INDICACIONES Y PROX. CONTROL-->
+    <div class="tab-pane fade show" id="indicaciones-ns-1223m" role="tabpanel" aria-labelledby="indicaciones-ns-1223m-tab">
+        <div class="form-row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h6 class="f-16 text-c-blue mb-3">Indicaciones y próximo control</h6>
+            </div>
+            <div class="form-group col-md-2">
+                <label class="floating-label-activo-sm">Fecha</label>
+                <input type="date" class="form-control form-control-sm" name="p_1223_fecha_proxcontrol" id="p_1223_fecha_proxcontrol">
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Control con:</label>
+                <input type="text" class="form-control form-control-sm" name="p_1223_control_con" id="p_1223_control_con">
+            </div>
+            <div class="form-group col-md-6">
+                <label class="floating-label">Indicaciones</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="p_1223_ind" id="p_1223_ind"></textarea>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="floating-label">Sugerencias</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_1223_sugerencias" id="p_1223_sugerencias"></textarea>
+            </div>
+        </div>
+    </div>
+</div>

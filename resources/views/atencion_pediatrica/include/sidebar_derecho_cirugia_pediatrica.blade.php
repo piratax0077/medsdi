@@ -97,7 +97,6 @@
                      <div class="card-body-sidebar">
                          <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ufonasa()";>+ Buscador código FONASA</button>
                          <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ucalcimc()";>+ Calculadora de IMC</button>
-                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="apgar();"><i class="fa fa-plus"></i> APGAR</button>
                      </div>
                  </div>
                  @include("general.modal.m_ucodigofonasa")
@@ -139,14 +138,12 @@
                 <div id="collapse_hosp" class="collapse" aria-labelledby="headinghospm" data-parent="#accordion_side_bar">
                     <div class="card-body-sidebar">
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="sol_pabellon()";>+ Solicitud Pabellón</button>
-                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingreso()";>+ Hospitalización Cirugía</button>
-                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingresomedico() ";>+ Hospitalización Tratamiento Médico</button>
+                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingresohosp()";>+ Solicitud Hospitalización</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="r_ingreso()";>+ Requisitos de ingreso</button>
                     </div>
                 </div>
-                @include("general.modal.in_solic_pabellon")
-                @include("general.modal.ingreso")
-                @include("general.modal.ingreso_medico")
+                @include("general.hospitalizacion.modals.in_solic_pabellon")
+                @include("general.hospitalizacion.modals.ingreso_hosp")
                 @include("general.modal.m_req_ingreso")
             </div>
             <div class="card-sidebar">
@@ -182,7 +179,6 @@
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.adams")
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.per_cef_v")
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.modal_edimburgo")
-@include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.apgar")
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.imc_5_19v")
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.instrumentos_eval")
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.talla_edad_v519")

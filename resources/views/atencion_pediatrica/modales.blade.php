@@ -2532,7 +2532,8 @@
                 <a id="boton_1" class="fas fa-user fa-2x" data-toggle="canvas" data-target="#antecedentes_paciente" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left" style="cursor:pointer;"> </a>
                 <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left" style="cursor:pointer;"></a>
 
-                 @if($profesional->SubTipoEspecialidad()->first())
+                @if($profesional->SubTipoEspecialidad()->first())
+
                     @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Otorrinolaringología' )
                         <a id="boton_3" class="fas fa-deaf fa-2x" data-toggle="canvas" data-target="#formularios_orl" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Otorrinolaringología" data-placement="left"></a>
                     @endif
@@ -2545,15 +2546,25 @@
                     @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía Coloproctológica' )
                         <a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_colon" aria-expanded="false" aria-controls="bs-canvas-right" title="Coloproctología" data-placement="left"></a>
                     @endif
+                    @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía y Traumatología Pediatrica' )
+                        <a id="boton_3" class="fas fa-child fa-2x" data-toggle="canvas" data-target="#formularios_cir_pediatria" aria-expanded="false" aria-controls="bs-canvas-right" title="formularios_cir_pediatria" data-placement="left"></a>
+                    @endif
+                    @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Pediatría General' )
+                        <a id="boton_3" class="fas fa-child fa-2x" data-toggle="canvas" data-target="#formularios_pediatria" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Pediatria" data-placement="left"></a>
+                    @endif
                     @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Urología' )
                         <a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_uro" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Urología" data-placement="left"></a>
                     @endif
-                @endif
-                
-                @if($profesional->TipoEspecialidad()->first())
+				
+                @elseif($profesional->TipoEspecialidad()->first() && !$profesional->SubTipoEspecialidad()->first())
+					{{--
                     @if($profesional->TipoEspecialidad()->first()->nombre == 'PEDIATRÍA' )
                         <a id="boton_3" class="fas fa-child fa-2x" data-toggle="canvas" data-target="#formularios_pediatria" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Pediatria" data-placement="left"></a>
-                    @endif
+                    @endif--}}
+
+                @else
+
+                    {{--  otros profesionales  --}}
                     @if($profesional->Especialidad()->first()->nombre == 'ENFERMERA UNIVERSITARIA' )
                         <a id="boton_3" class="fas fa-bezier-curve fa-2x" data-toggle="canvas" data-target="#formularios_pediatria" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Enfermera Universitaria" data-placement="left"></a>
                     @endif
@@ -2563,7 +2574,10 @@
                     @if($profesional->Especialidad()->first()->nombre == 'MATRÓN/A' )
                         <a id="boton_3" class="fas fa-child fa-2x" data-toggle="canvas" data-target="#formularios_pediatria" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Matrón/a" data-placement="left"></a>
                     @endif
+
                 @endif
+
+
             </div>
             <div class="btn-mas">
                 <label for="btn-mas" class="fa fa-plus"></label>
