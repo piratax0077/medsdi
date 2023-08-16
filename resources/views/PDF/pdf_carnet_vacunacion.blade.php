@@ -210,16 +210,16 @@
                 bottom: -100px;
                 left: 0px;
                 right: 0px;
-                height: 150px;
+                height: 180px;
             }
 
             .texto-vertical-2 {
-                font-size: 0.75em;
+                font-size: 0.65em;
                 position: fixed;
                 writing-mode: vertical-lr;
                 transform: rotate(270deg);
                 /* right: -320px; */
-                right: -300px;
+                right: -350px;
                 top: 400px;
                 font-family: Poppins;
             }
@@ -238,58 +238,32 @@
 
         </style>
     </head>
-    <div class="texto-vertical-2">Este documento lo puedes validar en www.med-sdi.cl - Cód. Indetificador {{ $cuerpo['array_ficha_atencion']['token'] }}</div>
+    <div class="texto-vertical-2">Este documento lo puedes validar en www.med-sdi.cl - Cód. Indetificador {{ $cuerpo['array_carnet']['token'] }}</div>
 
-    @include('PDF.header')
-    @include('PDF.footer')
+    @include('PDF.header_vacuna')
+    @include('PDF.footer_vacuna')
 
     <main>
-        @foreach ($cuerpo['detalle_orden'] as $key =>$detalle)
-            @if($loop->count == 1)
-                <div class="contenido-body" style="page-break-after: auto;">
-            @else
-                @if ($cuerpo['cantidad_recetas'] == $loop->iteration)
-                    <div class="contenido-body" style="page-break-after: avoid;">
-                @else
-                    <div class="contenido-body" style="page-break-after: always;">
-                @endif
-            @endif
+        <div class="contenido-body" style="page-break-after: auto;">
 
-                <!--Inicio de información-->
-                <h4 class="text-blue">Ruego practicar los siguientes examenes:</h4>
-                <table class="tabla-receta">
-                    <thead>
-                        <tr class="t-gris">
-                            <th style="text-align: left;">Examen</th>
-                            <th style="text-align: left;">Prioridad</th>
-                            <th style="text-align: left;">Código:</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                            @foreach ($detalle as $examenes)
-                                <tr>
-                                    <td>
-                                        <strong>{{ $examenes['examen'] }}</strong>
-                                        @if(!empty($examenes['otro']))
-                                            <br/><span><strong>{{ $examenes['otro'] }}</strong></span>
-                                        @endif
-                                        @if($examenes['contraste'] == 1)
-                                            <br/><span><strong>Con Contraste</strong></span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $examenes['prioridad'] }}</td>
-                                    @if(isset($examenes['codigo']) && $examenes['codigo']!= 'NULL' )
-                                        <td>Codigo:{{ $examenes['codigo'] }}</td>
-                                    @else
-                                        <td></td>
-                                    @endif
-                                </tr>
-                            @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endforeach
+            @foreach ($cuerpo['vacunas'] as $key => $detalle)
+                <div style="width: 100%; background-color: #bed2fa; color: #272626;margin-top: 10px; font-size: 0.7rem">
+                    {{-- @php var_dump($detalle->nombre_vacuna); @endphp --}}
+                    <span style="font-weight: 600;">Tipo Vacuna:</span> {{ $detalle->tipo_vacuna }}<br/>
+                    <span style="font-weight: 600;">Vacuna:</span> {{ $detalle->nombre_vacuna }}<br/>
+                    <span style="font-weight: 600;">Dosis:</span> {{ $detalle->texto_dosis }}<br/>
+                    <span style="font-weight: 600;">Observaciones:</span>
+                    @if(!empty($detalle->indicaciones_vacuna))
+                        {{ $detalle->indicaciones_vacuna }}
+                    @endif
+                    @if(!empty($detalle->observacion_vacuna))
+                        {{ $detalle->observacion_vacuna }}
+                    @endif
+                    <span style="font-weight: 600;">Centro Atención:</span> {{ $detalle->LugarAtencion->nombre }}<br/>
+                    <span style="font-weight: 600;">Profesional:</span> {{ $detalle->profesional->nombre.' '.$detalle->profesional->apellido_uno.' '.$detalle->profesional->apellido_dos }}<br/>
+                </div>
+            @endforeach
+        </div>
     </main>
 </html>
 

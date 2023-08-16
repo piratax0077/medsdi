@@ -427,6 +427,9 @@ class CertificadoController extends Controller
                                             // 22. USO INTERNO
                                             case '22':
                                                 break;
+                                            // 23. CARNET VACUNAS
+                                            case '23':
+                                                break;
                                             default:
                                                 # code...
                                                 break;

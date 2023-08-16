@@ -576,6 +576,13 @@ Route::group([
     /** CNS */
     Route::post('/ficha/cns/registro', [App\Http\Controllers\FichaPediatriaCnsController::class, 'registrar'])->name('ficha.registro.cns');
 
+
+    /** VACUNAS PEDIATRIA */
+    Route::post('/ficha/vacuna/registro', [App\Http\Controllers\FichaPediatriaVacunaController::class, 'registrar'])->name('ficha.registro.vacuna');
+    Route::get('/ficha/vacuna/ver_registros', [App\Http\Controllers\FichaPediatriaVacunaController::class, 'verRegistros'])->name('ficha.ver.registros.vacuna');
+    Route::get('/ficha/vacuna/carnet', [App\Http\Controllers\FichaPediatriaVacunaController::class, 'generarPdfCarnet'])->name('ficha.pdf.vacuna');
+
+
 });
 
 /* ASISTENTE CONSULTA*/

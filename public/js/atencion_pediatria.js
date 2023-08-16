@@ -27,14 +27,8 @@
 
 /** MODALS **/
 /** MODALS FORMULARIOS GENERALES **/
-/** Indicar vacunas MINSAL **/
-function i_vacunas() {
-    $('#indicar_vacunas').modal('show');
-}
-/** Indicar otras vacunas **/
-function i_vacunas_otras() {
-    $('#otras_vacunas').modal('show');
-}
+
+
 /** Indicar medicamento **/
 function i_medicamento() {
     $('#indicar_medicamentos').modal('show');

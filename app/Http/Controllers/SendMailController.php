@@ -60,7 +60,7 @@ class SendMailController extends Controller
 
             $correo = new CorreoGenerico($data);
 
-            $lista_array = array('', 'jgkriman@gmail.com', 'danielasepulvedabravo@gmail.com', 'dasebraa@gmail.com');
+            $lista_array = array('', 'jgkriman@gmail.com', 'danielasepulvedabravo@gmail.com', 'dasebraa@gmail.com', 'pgajardo1012@gmail.com');
             $enviar_dev = 1;
             foreach ($to as $key => $value)
             {
