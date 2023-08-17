@@ -138,4 +138,5 @@
 
 @section('modals')
     @include('app.asistente.modales.modal_profesional_informacion')
+    @include('general.asistentes.modal_consulta_agenda')
 @endsection

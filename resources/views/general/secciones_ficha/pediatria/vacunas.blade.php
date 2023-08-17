@@ -112,9 +112,11 @@
             <div class="card-a">
                 <div class="card-header-a">
                     <div class="row">
-                        <div class="col-md-12 d-inline">
+                        <div class="col-md-9 d-inline">
                             <h6 class="text-c-blue d-inline">Estado de Vacunación</h6>
-                            <button type="button" class="btn btn-xs btn-danger-light" onclick="carnet_pdf();">CARNET</button>
+                        </div>
+						<div class="col-md-3 d-inline">
+                            <button type="button" class="btn btn-xs btn-danger-light float-right mr-2" onclick="carnet_pdf();">VER CARNE DE VACUNACIÓN</button>
                         </div>
                     </div>
                 </div>

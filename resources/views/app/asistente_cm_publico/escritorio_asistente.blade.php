@@ -173,7 +173,7 @@
 
 @section('modales')
     @include('app.asistente_cm.modales.modal_profesional_informacion')
-    @include('app.asistente.modales.modal_consulta_agenda')
+    @include('general.asistentes.modal_consulta_agenda')
     @include('app.asistente_cm_publico.modales.lista_espera')
 
     {{-- horas extras --}}

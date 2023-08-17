@@ -236,7 +236,7 @@
     <!--Cierre: Container Completo-->
 
     @include('app.asistente_cm_manejo_agenda.modales.modal_profesional_informacion')
-    @include('app.asistente.modales.modal_consulta_agenda')
+    @include('general.asistentes.modal_consulta_agenda')
     @include('app.asistente_cm_manejo_agenda.modales.lista_espera')
 
     {{-- horas extras --}}
