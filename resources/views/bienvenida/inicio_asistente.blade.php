@@ -1,5 +1,6 @@
 @extends('template.bienvenida.bienvenida')
 
+
 @section('page-styles')
     <style>
         .auth-wrapper{
