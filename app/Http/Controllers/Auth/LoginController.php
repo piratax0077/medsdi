@@ -8,6 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -80,6 +81,65 @@ class LoginController extends Controller
                 $datos['estado'] = 0;
                 $datos['msj'] = 'usuario no encotnrado';
             }
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requerido';
+            $datos['error'] = $error;
+        }
+
+
+        return $datos;
+    }
+
+    public function login_farmacia(Request $request) // farmacia
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->user)) {
+            $error['user'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->pass)) {
+            $error['pass'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $user = User::where('email', $request->user)->first();
+            if($user)
+            {
+            $rol = DB::table('model_has_roles')->whereIn('role_id',[17,7])->where('model_id',$user->id)->first();
+
+            if($user&&$rol)
+            {
+                if (Auth::attempt(['email' => $request->user, 'password' => $request->pass]))
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'registro';
+                    $datos['user'] = $user;
+                    $datos['roles'] = $user->roles()->get();
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'usuario no valido';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'usuario no encotnrado';
+            }
+        }else{
+            $datos['estado'] = 0;
+            $datos['msj'] = 'usuario no encontrado';
+        }
 
         }
         else

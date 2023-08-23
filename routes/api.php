@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 //login
 Route::post('user/login',[LoginController::class, 'login']);
+Route::post('user/login_farmacia',[LoginController::class, 'login_farmacia']);
 
 //USER DEVICES - CRUD
 Route::post('/user_devices/registrar',    [UsersDevicesController::class, 'registrar']);
@@ -61,8 +62,20 @@ Route::post('/profesional_provisorio/registrar',    [ProfesionalProvisorioContro
 Route::post('/profesional_provisorio/modificar',    [ProfesionalProvisorioController::class, 'modificar_profesional_provisorio']);
 
 //DOCUMENTOS
+Route::get('/documento/ver_registro_recetas', [DocumentoController::class, 'verRegistrosRecetas']);
+Route::get('/documento/ver_receta_pdf', [DocumentoController::class, 'verRecetaPDF']);
 Route::get('/documento/ver_registro_recetas/{id_paciente}', [DocumentoController::class, 'verRegistrosRecetas']);
 Route::get('/documento/ver_receta_pdf/{id}', [DocumentoController::class, 'verRecetaPDF']);
+Route::get('/documento/ver_registro_recetas_rut', [DocumentoController::class, 'verRegistrosRecetasRut']);
+Route::get('/documento/ver_registro_recetas_rut/{rut}', [DocumentoController::class, 'verRegistrosRecetasRut']);
+Route::get('/documento/ver_registro_recetas_id', [DocumentoController::class, 'verRegistrosRecetasId']);
+
+Route::get('/documento/ver_registro_recetas_id/{id}', [DocumentoController::class, 'verRegistrosRecetasId']);
+Route::get('/documento/ver_registro_recetas_id/{id}/{token}', [DocumentoController::class, 'verRegistrosRecetasId']);
+Route::get('/documento/ver_detalle_recetas', [DocumentoController::class, 'verDetalleRecetas']);
+Route::get('/documento/ver_detalle_recetas/{id_ficha}', [DocumentoController::class, 'verDetalleRecetas']);
+Route::get('/documento/venta_detalle_recetas', [DocumentoController::class, 'ventaDetalleRecetas']);
+Route::get('/documento/venta_detalle_recetas/{lista_productos}', [DocumentoController::class, 'ventaDetalleRecetas']);
 
 //  Escritorio Paciente
 //Route::get('/paciente/mis_profesionales', [App\Http\Controllers\PacienteController::class, 'getMisProfesionales']);
