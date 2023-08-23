@@ -26,7 +26,7 @@ class SendMailController extends Controller
      * @param array $bcc -> array(['email'=>'demo@demo.com','name'=>'name'],...,['email'=>'demo@demo.com','name'=>'name'])
      * @param string $asunto
      * @param array $body -> array('nombre'=>'demo','usuario'=>'demo344','contrasena'=>'sindem0',...)
-     * @param array $archivo -> array('url'=>'../pdf/documento.pdf','mime'=>'application/pdf')
+     * @param array $archivo -> array('url'=>'../pdf/documento.pdf','mime'=>'application/pdf') ó array(array('url'=>'../pdf/documento.pdf','mime'=>'application/pdf'), array('url'=>'../pdf/documento.pdf','mime'=>'application/pdf'))
      * @param int $id_institucion -> 13
      * @return array
      */
@@ -60,12 +60,34 @@ class SendMailController extends Controller
 
             $correo = new CorreoGenerico($data);
 
-            // desarrollo
-            $to = array(
-				['email'=>'contacto@med-sdi.cl','name'=>'Contacto MED-SDI'],
-				['email'=>'jkriman@gmail.com','name'=>'Jaime']
-				//['email'=>'johan.e.davilap@gmail.com','name'=>'Johan']
-			);
+            $lista_array = array('', 'jgkriman@gmail.com', 'danielasepulvedabravo@gmail.com', 'dasebraa@gmail.com', 'pgajardo1012@gmail.com');
+            $enviar_dev = 1;
+            foreach ($to as $key => $value)
+            {
+                if(in_array($value['email'], $lista_array) != false)
+                {
+                    $enviar_dev = 0;
+                }
+            }
+
+            if($enviar_dev)
+            {
+                // desarrollo
+                $to = array(
+                    ['email'=>'contacto@med-sdi.cl','name'=>'Contacto MED-SDI'],
+                    ['email'=>'jkriman@gmail.com','name'=>'Jaime']
+                    //['email'=>'johan.e.davilap@gmail.com','name'=>'Johan']
+                );
+            }
+            else
+            {
+                //envio correo a destino origen y copia oculta
+                $bcc = array(
+                    ['email'=>'contacto@med-sdi.cl','name'=>'Contacto MED-SDI'],
+                    ['email'=>'jkriman@gmail.com','name'=>'Jaime']
+                    //['email'=>'johan.e.davilap@gmail.com','name'=>'Johan']
+                );
+            }
 
             Mail::to($to)
                     ->cc($cc)

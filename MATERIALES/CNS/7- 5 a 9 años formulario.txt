@@ -1,0 +1,342 @@
+/** 6 a 9 años */
+<h5 class="f-16 text-c-blue">5 a 9 años</h5>
+<hr>
+<ul class="nav nav-tabs-aten nav-fill mb-3" id="ns-59a" role="tablist">
+    {{--  <li class="nav-item">
+        <a class="nav-link-aten text-reset active" id="ficha-tipo-ns-59a-tab" data-toggle="tab" href="#ficha-tipo-ns-59a" role="tab" aria-controls="ficha-tipo-ns-59a" aria-selected="true">Ficha tipo</a>
+    </li>  --}}
+    <li class="nav-item">
+        <a class="nav-link-aten text-reset active" id="pa-gen-ns-59a-tab" data-toggle="tab" href="#pa-gen-ns59a" role="tab" aria-controls="pa-gen-ns-59a" aria-selected="false">Parametros generales</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link-aten text-reset" id="est-fisica-ns-59a-tab" data-toggle="tab" href="#est-fisica-ns-59a" role="tab" aria-controls="est-fisica-ns-59a" aria-selected="false">Estado fisico del menor</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link-aten text-reset" id="antropometria-ns-59a-tab" data-toggle="tab" href="#antropometria-ns-59a" role="tab" aria-controls="antropometria-ns-59a" aria-selected="false">Antropometría</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link-aten text-reset" id="diagnos-ns-59a-tab" data-toggle="tab" href="#diagnos-ns-59a" role="tab" aria-control="diagnos-ns-59a" aria-selected="false">Diagnósticos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link-aten text-reset" id="indicaciones-ns-59a-tab" data-toggle="tab" href="#indicaciones-ns-59a" role="tab" aria-control="indicaciones-ns-59a" aria-selected="false">Indicaciones y próx. control</a>
+    </li>
+</ul>
+<div class="tab-content" id="ns-6-9a">
+    <!--FICHA TIPO-->
+    {{--  <div class="tab-pane fade show active" id="ficha-tipo-ns-59a" role="tabpanel" aria-labelledby="ficha-tipo-ns-59a-tab">
+        <div class="form-row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h6 class="f-16 text-c-blue mb-3">Ficha tipo</h6>
+            </div>
+            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                <label class="floating-label-activo-sm">Carga ficha tipo</label>
+                <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad" onchange="cargar_info_ficha_tipo_59('select_ficha_tipo_especialidad','descripcion_ficha_tipo_especialidad');">
+                    <option value="">Seleccione</option>
+                </select>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                Resultado
+            </div>
+        </div>
+    </div>  --}}
+    <!--PARAMETROS GENERALES-->
+    <div class="tab-pane fade show active" id="pa-gen-ns59a" role="tabpanel" aria-labelledby="pa-gen-ns59a-tab">
+        <div class="form-row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h6 class="f-16 text-c-blue mb-3">Control de parámetros generales</h6>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Anamnesis</label>
+                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="anamnesis_59" name="anamnesis_59" ></textarea>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Evaluaciones psicoafectivas</label>
+                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="ev_psicoa_59" name="ev_psicoa_59" ></textarea>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Otros</label>
+                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=6" onblur="this.rows=1;" id="otros_59" name="otros_59" ></textarea>
+            </div>
+        </div>
+    </div>
+    <!--ESTADO FISICO-->
+    <div class="tab-pane fade show" id="est-fisica-ns-59a" role="tabpanel" aria-labelledby="est-fisica-ns-59a-tab">
+        <div class="form-row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h6 class="f-16 text-c-blue mb-3">Estado físico del menor</h6>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="floating-label">Inspección general y relación parental</label>
+                <textarea class="form-control form-control-sm"  rows="1" onfocus="this.rows=4" onblur="this.rows=1;" id="insp_gral_59" name="insp_gral_59" ></textarea>
+            </div>
+        </div>
+    </div>
+    <!--ANTROPOMETRÍA-->
+    <div class="tab-pane fade show" id="antropometria-ns-59a" role="tabpanel" aria-labelledby="antropometria-ns-59a-tab">
+        <div class="form-row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h6 class="f-16 text-c-blue mb-3">Antropometría</h6>
+            </div>
+            <div class="form-group col-md-2">
+                <label class="floating-label">Peso (kg.)</label>
+                <input type="number" class="form-control form-control-sm" name="pesoIMC_59" id="pesoIMC_59">
+            </div>
+            <div class="form-group col-md-2">
+                <label class="floating-label">Talla (cms.)</label>
+                <input type="number" class="form-control form-control-sm" name="alturaIMC_59" id="alturaIMC_59">
+            </div>
+            <div class="form-group col-md-2">
+                <button type="button" class="btn btn-primary-light btn-block btn-sm" onclick="cimc();" >Presione para Calcular IMC</button>
+            </div>
+            <div class="form-group col-md-2">
+                <label class="floating-label-activo-sm">IMC</label>
+                <input type="number" class="form-control form-control-sm" placeholder=" Resultado IMC"  id="resultadoIMC_59" name="resultadoIMC_59"  >
+            </div>
+            <div class="form-group col-md-4">
+                <button type="button" class="btn btn-primary-light btn-block btn-sm" onclick="imc_ref()";>Valores referenciales</button>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label-activo-sm text-danger">Desarrollo puberal *</label>
+                <textarea class="form-control form-control-sm"  rows="2" onfocus="this.rows=6" onblur="this.rows=3;" id="desarr_pub_59" name="desarr_pub_59" ></textarea>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label-activo-sm  text-danger">Desarrollo puberal *</label>
+                <textarea class="form-control form-control-sm"  rows="2" onfocus="this.rows=6" onblur="this.rows=3;" id="resp_desarr_pub_59" name="resp_desarr_pub_59" placeholder="Revisar cuestionario (Completado por Padres)" ></textarea>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label-activo-sm  text-danger">Ex. Genitoanal *</label>
+                <textarea class="form-control form-control-sm"  rows="2" onfocus="this.rows=6" onblur="this.rows=3;" id="genito_anal_59" name="genito_anal_59" ></textarea>
+            </div>
+            <div class="form-group col-md-12">
+                <div class="alert alert-danger" role="alert">
+                    Este examen se debe desarrollar con la presencia del adulto responsable del menor y con el consentimiento escolar
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Presión arterial</label>
+                    <select name="p_59_p_pa" id="p_59_p_pa" data-titulo="Presion"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_59_p_pa','div_p_59_p_pa','obs_p_59_p_pa',2);">
+                        <option selected value="1">Normal </option>
+                        <option value="2">Alterada</option>
+                        <option value="3">No Informada</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_59_p_pa" style="display:none">
+                    <label class="floating-label-activo-sm">Presión arterial</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Presion" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_59_p_pa" id="obs_p_59_p_pa"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Test de Adams</label>
+                    <select name="p_59_p_tadam" id="p_59_p_tadam" data-titulo="Adams"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_59_p_tadam','div_p_59_p_tadam','obs_p_59_p_tadam',2);">
+                        <option selected value="1">Normal </option>
+                        <option value="2">Alterado</option>
+                        <option value="3">No Informado</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_59_p_tadam" style="display:none">
+                    <label class="floating-label-activo-sm">Test de Adams</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Adams" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_59_p_tadam" id="obs_p_59_p_tadam"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Cardio-Pulmonar</label>
+                    <select name="p_25_p_carpul" id="p_59_p_carpul" data-titulo="Torax"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_59_p_carpul','div_p_59_p_carpul','obs_p_59_p_carpul',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alterado</option>
+                        <option value="3">No Informado</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_59_p_carpul" style="display:none">
+                    <label class="floating-label-activo-sm">Cardio-Pulmonar</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Torax" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_59_p_carpul" id="obs_p_59_p_carpul"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Abdomen</label>
+                    <select name="p_25_p_abd" id="p_59_p_abd" data-titulo="Abdomen"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_59_p_abd','div_p_59_p_abd','obs_p_59_p_abd',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alterado</option>
+                        <option value="3">No Informado</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_59_p_abd" style="display:none">
+                    <label class="floating-label-activo-sm">Abdomen</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Abdomen" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_59_p_abda" id="obs_p_59_p_abd"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Ex. Bucodental</label>
+                    <select name="p_59_p_bd" id="p_59_p_bd" data-titulo="Bucodental"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_59_p_bd','div_p_59_p_bd','obs_p_59_p_bd',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alterada</option>
+                        <option value="3">No Informadas</option>
+                    </select>
+                </div>
+                <div class="form-group " id="div_p_59_p_bd" style="display:none;">
+                    <label class="floating-label-activo-sm">Ex. Bucodental</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Bucodental" rows="1" onfocus="this.rows=6" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_p_59_p_bd" id="obs_p_59_p_bd"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Marcha</label>
+                    <select name="p_59_p_mar" id="p_59_p_mar" data-titulo="Marcha"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_59_p_mar','div_p_59_p_mar','obs_p_59_p_mar',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alterados</option>
+                        <option value="3">No Informados</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_59_p_mar" style="display:none;">
+                    <label class="floating-label-activo-sm">Marcha</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Marcha" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_59_p_mar" id="obs_p_59_p_mar"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Pié plano flexible</label>
+                    <select name="p_59_p_ppf" id="p_59_p_ppf" data-titulo="Tono y Motilidad"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_59_p_ppf','div_p_59_p_ppf','obs_p_59_p_ppf',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alterados</option>
+                        <option value="3">No Informados</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_59_p_ppf" style="display:none;">
+                    <label class="floating-label-activo-sm">Pié plano flexible</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Tono y Motilidad" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_59_p_ppf" id="obs_p_59_p_ppf"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Pié plano doloroso</label>
+                    <select name="p_59_p_ppd" id="p_59_p_ppd" data-titulo="Caderas"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_59_p_ppd','div_p_59_p_ppd','obs_p_59_p_ppd',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alteradas</option>
+                        <option value="3">No Informadas</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_59_p_ppd" style="display:none;">
+                    <label class="floating-label-activo-sm">Pié plano doloroso</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Caderas" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_59_p_ppd" id="obs_p_59_p_ppd"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Genu valgo</label>
+                    <select name="p_59_p_gen" id="p_59_p_gen" data-titulo="genu"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_59_p_gen','div_p_59_p_gen','obs_p_59_p_gen',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alteradas</option>
+                        <option value="3">No Informadas</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_59_p_gen" style="display:none;">
+                    <label class="floating-label-activo-sm">Genu valgo</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="genu" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_59_p_gen" id="obs_p_59_p_gen"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Ex Oftalmológico</label>
+                    <select name="p_59_p_ojo" id="p_59_p_ojo" data-titulo="Ojos"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_59_p_ojo','div_p_59_p_ojo','obs_p_59_p_ojo',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alterado</option>
+                        <option value="3">No Informados</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_59_p_ojo" style="display:none">
+                    <label class="floating-label-activo-sm">Ex. Oftalmológico</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Ojos" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_59_p_ojo" id="obs_p_59_p_ojo"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Ex. Auditívo</label>
+                    <select name="p_59_p_oido" id="p_59_p_oido" data-titulo="Oidos"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_59_p_oido','div_p_59_p_oido','obs_p_59_p_oido',2);">
+                        <option selected value="1">Normal</option>
+                        <option value="2">Alterados</option>
+                        <option value="3">No Informados</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_59_p_oido" style="display:none">
+                    <label class="floating-label-activo-sm">Ex Auditívo</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Oidos" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_59_p_oido" id="obs_p_59_p_oido"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Señales de maltrato</label>
+                    <select name="p_59_p_mt" id="p_59_p_mt" data-titulo="Oidos"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('p_59_p_mt','div_p_59_p_mt','obs_p_59_p_mt',2);">
+                        <option selected value="1">No</option>
+                        <option value="2">Si</option>
+                        <option value="3">No Informados</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_p_59_p_mt" style="display:none">
+                    <label class="floating-label-activo-sm">Señales de maltrato</label>
+                    <textarea class="form-control form-control-sm"  data-titulo="Oidos" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_p_59_p_mt" id="obs_p_59_p_mt"></textarea>
+                </div>
+            </div>
+            {{--  <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary-light btn-block btn-sm" onclick="abrir_modal_guardar_tipo();"><i class="fas fa-save"></i> Guardar nuevo examen tipo</button>
+                </div>
+            </div>  --}}
+        </div>
+    </div>
+        <!--DIAGNÓSTICO-->
+    <div class="tab-pane fade show" id="diagnos-ns-59a" role="tabpanel" aria-labelledby="diagnos-ns-59a-tab">
+        <div class="form-row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h6 class="f-16 text-c-blue mb-3">Diagnóstico</h6>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="floating-label">General</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="dg_general_59" id="dg_general_59"></textarea>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="floating-label">Nutricional</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="dg_nutricional_59" id="dg_nutricional_59"></textarea>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="floating-label">Salud (General)</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="dg_sal_gnal_59" id="dg_sal_gnal_59"></textarea>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="floating-label">Salud psicosocial</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="dg_s_psicosocial_59" id="dg_s_psicosocial_59"></textarea>
+            </div>
+        </div>
+    </div>
+
+
+    <!--INDICACIONES Y PROX. CONTROL-->
+    <div class="tab-pane fade show" id="indicaciones-ns-59a" role="tabpanel" aria-labelledby="indicaciones-ns-59a-tab">
+        <div class="form-row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h6 class="f-16 text-c-blue mb-3">Indicaciones y próximo control</h6>
+            </div>
+            <div class="form-group col-md-2">
+                <label class="floating-label-activo-sm">Fecha</label>
+                <input type="date" class="form-control form-control-sm" name="p_59_fecha_proxcontrol" id="p_59_fecha_proxcontrol">
+            </div>
+            <div class="form-group col-md-4">
+                <label class="floating-label">Control con:</label>
+                <input type="text" class="form-control form-control-sm" name="p_59_control_con" id="p_59_control_con">
+            </div>
+            <div class="form-group col-md-6">
+                <label class="floating-label">Indicaciones</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_59_ind" id="p_59_ind"></textarea>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label class="floating-label">Sugerencias</label>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="p_59_sugerencias" id="p_59_sugerencias"></textarea>
+            </div>
+        </div>
+    </div>
+</div>

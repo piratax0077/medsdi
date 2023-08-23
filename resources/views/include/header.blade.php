@@ -61,6 +61,9 @@
     <link rel="stylesheet" href="{{ asset('css/estilos_atencion_medica.css') }}">
     <!--formulario sm-->
     <link rel="stylesheet" href="{{ asset('css/cara_dental.css') }}">
+
+ 
+   
     
     <style>
         .ui-front {

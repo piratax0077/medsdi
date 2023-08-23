@@ -2,40 +2,40 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Otras vacunas </h5>
+                <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Otras Vacunas </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="form-row">
-                        <h6 class="mb-3">I.- Datos del lugar vacunación ( Hospital, Clínica o Consultorio)</h6>
+                        <h6 class="mb-3">I.- Datos del Lugar Vacunación ( hospital, Clínica o Consultorio)</h6>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-3">
-                            <label class="floating-label">Establecimiento</label>
+                            <label class="floating-label-activo-sm">Establecimiento</label>
                             <input type="text" class="form-control form-control-sm" name="clinica_hospital" id="clinica_hospital">
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="floating-label">Servicio</label>
+                            <label class="floating-label-activo-sm">Servicio</label>
                             <input type="text" class="form-control form-control-sm" name="servicio" id="servicio">
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="floating-label">Rut paciente</label>
+                            <label class="floating-label-activo-sm">Rut paciente</label>
                             <input type="text" class="form-control form-control-sm" name="rut" id="rut">
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="floating-label">Edad paciente</label>
-                            <input type="number" class="form-control form-control-sm" name="edad" id="edad">
-                        </div><!--Bloquear la vacuna si no corresponde a la edad-->
+                            <label class="floating-label-activo-sm">Edad paciente</label>
+                            <input type="text" class="form-control form-control-sm" name="edad" id="edad">
+                        </div><!--hacer script que bloquee la vacuna si no corresponde a la edad?-->
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label class="floating-label">Rut responsable</label>
+                            <label class="floating-label-activo-sm">Rut Responsable</label>
                             <input type="text" class="form-control form-control-sm" name="rut_resp" id="rut_resp">
                         </div>
                         <div class="form-group col-md-8">
-                            <label class="floating-label">Observaciones </label>
+                            <label class="floating-label-activo-sm">Observaciones </label>
                             <input type="text" class="form-control form-control-sm" name="rut_resp" id="rut_resp">
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                         <div class="form-group col-md-6">
                             <label class="floating-label">Vacuna</label>
                             <select class="form-control form-control-sm" id="categoria">
-                                <option>Seleccione</option>
+                                <option>Seleccione  opci&oacute;n</option>
                                 <optgroup label="Haemophilus Influenza ">
                                     <option value="AL">ACT-HIB</option>
                                     <option value="LA">INFANRIX HEXA (Combinada)</option>
@@ -111,7 +111,7 @@
                         <div class="form-group col-md-6">
                             <label class="floating-label">Vacuna Covid</label>
                             <select class="form-control form-control-sm" id="categoria">
-                                <option>Seleccione</option>
+                                <option>Seleccione  opci&oacute;n</option>
                                 <optgroup label="Sinovac">
                                     <option value="AL">1° Dosis</option>
                                     <option value="AL">2° Dosis</option>
@@ -141,12 +141,13 @@
                     </div>
                     <div class="form-row">
                         <div class="col-sm-12">
-                            <button type="button" class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> Agregar vacuna</button>
+                            <button type="button" class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> Agregar Vacuna</button>
                         </div>
                         <div class="col-sm-12 mt-3">
+                            <!--**** Al agregar un examen, se debe cargar la tabla *****-->
                             <!--Tabla-->
                             <div class="table-responsive">
-                                <table class="table table-bordered table-xs">
+                                <table class="table table-bordered table-sm">
                                     <thead>
                                         <tr>
                                             <th class="text-center align-middle">Vacuna</th>
@@ -170,13 +171,14 @@
                             <!--Ojo pdf con codigo QR mas autentificación sdi-->
                         </div>
                     </div>
-                </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info btn-sm">
-                Guardar</button>
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-info">
+                Guardar</button>
             </div>
         </div>
     </div>
 </div>
+

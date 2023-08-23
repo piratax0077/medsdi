@@ -85,6 +85,12 @@ class Paciente extends Model
         return $this->hasMany(ConConsentimientosPcte::class, 'id_paciente', 'id')->where('confirmacion', 1);
     }
 
+    /** pacientes_dependientes */
+    public function PacienteDependiente()
+    {
+        return $this->hasMany(PacientesDependientes::class, 'id_paciente', 'id');
+    }
+
     public function scopePorLugarAtencion($query, $id_lugar_atencion)
     {
         if (!empty($id_lugar_atencion)) {

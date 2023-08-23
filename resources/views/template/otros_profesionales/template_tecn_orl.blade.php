@@ -58,7 +58,6 @@
         <!--Estilos escritorios-->
         <link rel="stylesheet"  href="{{ asset('css/escritorios.css') }}">
         <!-- SERLECT2-->
-        <link rel="stylesheet"  href="{{ asset('css\plugins\select2.min.css') }}">
 
         <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
         <style>

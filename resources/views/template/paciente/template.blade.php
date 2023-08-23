@@ -47,6 +47,9 @@
     <!--Bs-Canvas-->
     <link rel="stylesheet" href="{{ asset('css/bs_canvas.css') }}?t={{ time() }}">
 
+     <link rel="stylesheet" type="text/css" href="{{ asset('css/tabs-secciones.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/formulario_sm.css') }}">
+
 
     @yield('page-styles')
 

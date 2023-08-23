@@ -1,13 +1,13 @@
 <!-- SOLICITADO POR -->
 <div class="col-md-12">
-    <div class="card">
-        <div class="card-header" id="solicitado_por">
+    <div class="card-a">
+        <div class="card-header-a" id="solicitado_por">
             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#solicitado_por_c" aria-expanded="false" aria-controls="solicitado_por_c">
                 Solicitado por:
             </button>
         </div>
         <div id="solicitado_por_c" class="collapse show" aria-labelledby="solicitado_por" data-parent="#solicitado_por">
-            <div class="card-body-aten shadow-none">
+            <div class="card-body-aten-a">
                 <div class="form-row">
                     <div class="form-group col-md-2" >
                         <input type="hidden" name="id_profesional_solicitado_por_uro_flujo" id="id_profesional_solicitado_por_uro_flujo" value="">
@@ -57,14 +57,14 @@
 </div>
 <!--INFORME URO_FLUJOMETRIA-->
 <div class="col-sm-12 col-md-12">
-    <div class="card">
-        <div class="card-header" id="info-uro_flujo">
+    <div class="card-a">
+        <div class="card-header-a" id="info-uro_flujo">
             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#info-uro_flujo-c" aria-expanded="false" aria-controls="info-uro_flujo-c">
             Informe
             </button>
         </div>
         <div id="info-uro_flujo-c" class="collapse show" aria-labelledby="info-uro_flujo" data-parent="#info-uro_flujo">
-            <div class="card-body-aten shadow-none">
+            <div class="card-body-aten-a">
 
                 <div class="form-row">
                     <div class="col-md-3">
@@ -118,16 +118,18 @@
 </div>
 <!--IMAGENES-->
 <div class="col-sm-12 col-md-12">
-    <div class="card">
-        <div class="card-header" id="img">
+    <div class="card-a">
+        <div class="card-header-a" id="img">
             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_uro_flujo" aria-expanded="false" aria-controls="imagenes_uro_flujo">
                 Imagenes.
             </button>
         </div>
         <div id="img_uro_flujo-c" class="collapse show" aria-labelledby="img_uro_flujo" data-parent="#img_uro_flujo">
-            <div class="card-body-aten shadow-none">
+            <div class="card-body-aten-a">
                 <!-- [ Main Content ] start -->
-                <div class="dropzone" id="mis-imagenes-uro_flujo" action="{{ route('profesional.imagen.carga') }}"></div>
+                <div class="dropzone" id="mis-imagenes-uro_flujo" action="{{ route('profesional.imagen.carga') }}">
+                <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                </div>
                 <!-- [ file-upload ] end -->
             </div>
         </div>

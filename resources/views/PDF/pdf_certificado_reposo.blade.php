@@ -1,21 +1,38 @@
-    <!DOCTYPE html>
-    <html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 
     <head>
         <meta charset="UTF-8">
-        <title>ORDEN PDF</title>
+        <title>{{ $titulo }}</title>
+        <!-- <link rel="stylesheet" href="{{ asset('css/pdf.css') }}"> -->
         <style>
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6,
-            span,
-            p,
-            td,
-            th {
-                font-family: arial;
+            /*Tipografía*/
+            @font-face {
+                font-family: 'Poppins';
+                src:
+                local("Poppins"),
+                url("{{ asset('fonts/Poppins/Poppins-Bold.woff2') }}") format("woff2"),
+                url("{{ asset('fonts/Poppins/Poppins-Bold.woff') }}") format("woff"),
+                url("{{ asset('fonts/Poppins/Poppins-Bold.ttf') }}") format("truetype"),
+                url("{{ asset('fonts/Poppins/Poppins-Bold.ttf') }}") format("opentype");
+                font-style: bold;
+                font-weight: 600;
+            }
+
+            @font-face {
+                font-family: 'Poppins';
+                src:
+                local("Poppins"),
+                url("{{ asset('fonts/Poppins/Poppins-Regular.woff2') }}") format("woff2"),
+                url("{{ asset('fonts/Poppins/Poppins-Regular.woff') }}") format("woff"),
+                url("{{ asset('fonts/Poppins/Poppins-Regular.ttf') }}") format("truetype"),
+                url("{{ asset('fonts/Poppins/Poppins-Regular.ttf') }}") format("opentype");
+                font-style: regular;
+                font-weight: 400;
+            }
+
+            h1, h2, h3, h4, h5, h6, span, p, td, th{
+                font-family: Poppins, sans-serif;
             }
 
             h1 {
@@ -23,150 +40,227 @@
                 text-transform: uppercase;
             }
 
+            span {
+                text-transform: uppercase;
+            }
+
+            /*Tablas*/
+            table {
+                width: 100%;
+            }
+
+            .tabla-receta table {
+                font-size: 1rem;
+            }
+
+            .tabla-receta thead {
+                background-color: #FAFAFA;
+                font-size: 0.7rem;
+            }
+
+            .tabla-receta td, th{
+                padding: 10px 15px;
+            }
+
+            .tabla-receta tbody{
+                font-size: 0.7rem;
+            }
+
+            .tabla-receta tbody tr:nth-child(odd) {
+                background-color: #fff
+            }
+
+            .tabla-receta tbody tr:nth-child(even) {
+                background-color: #FAFAFA;
+            }
+
+            .tabla-receta tr {
+                padding: 10px;
+            }
+
+            hr {
+                border: 1px solid #3C63AD;
+                margin-bottom: 0.5rem !important;
+                margin-top: 0.5rem !important;
+            }
+
+            /*Margin*/
+            .mb-5 {
+                margin-bottom: 2rem;
+            }
+
+            .mt-3 {
+                margin-top: 1.2rem;
+            }
+
+            /*Padding*/
+            .pl-3{
+                padding-left: 1.4rem;
+            }
+
+            .pr-3{
+                padding-right: 1.4rem;
+            }
+
+            /*Colors*/
+            .text-blue {
+                color: #3C63AD;
+            }
+
+            .text-gray {
+                color: #FAFAFA;
+            }
+
+            .text-gray {
+                background-color: #FAFAFA;
+            }
+
+            /*Contenedores*/
+            .contenido-encabezado-uno{
+                /* font-size: 0.9rem; */
+                /* width: 1000px; */
+                height: 124px;
+                margin: auto;
+                margin-bottom: 0;
+            }
+
+            .contenido-encabezado-dos{
+                font-size: 0.8rem;
+                /* width: 1000px; */
+                height: 100px;
+                margin: auto;
+                padding-right: 1rem;
+                padding-left: 1rem;
+            }
+
+
+            .contenido-body {
+                margin: auto;
+                padding-right: 1rem;
+                padding-left: 1rem;
+                    /* width: 1000px; */
+                /* height: 1000px; */
+            }
+
+            .contenido-footer{
+                font-size: 0.8rem;
+                /* align-item: flex-end; */
+                /* width: 1000px; */
+                height: 100px;
+                /* margin: auto; */
+                margin: auto;
+            }
+
+
+            .contenido-infoprof{
+                float: right;
+                height: auto;
+                line-height: 3px;
+                font-size: 0.7rem;
+                margin-top: 10px;
+                padding-top: 5px;
+                padding-right: 100px;
+                padding-left: 10px;
+                width: auto;
+                border-left: 4px solid #3366CC;
+            }
+
+            .contenido-logo {
+                float: left;
+                vertical-align: middle;
+                width: 150px;
+                height: auto;
+                padding-top: 28px;
+            }
+
+            /*Otros*/
+
+            .logo {
+                width: 200px;
+                padding-left: 80px;
+            }
+
             img {
                 align-items: center;
                 width: 18%;
             }
 
-            table,
-            th,
-            td {
-                border: 0px solid black;
-                text-align: left;
-                margin-right: 10px;
-                margin-left: 10px;
-            }
-
-            table {
-                width: 80%;
-            }
-
-            hr {
-                border: 1px solid #3366CC;
-            }
-
-            #titulo-azul {
-                color: #3366CC;
+            .centrar {
                 text-align: center;
             }
 
-            .contenido {
-                font-size: 15px;
-                color: #3F3E3E;
+            .text-center {
+                text-align: center;
             }
 
-            #centro {
-                text-align: center;
+            @page {
+                margin: 285px 30px 160px 30px ;
+            }
+
+            header {
+                position: fixed;
+                top: -285px;
+                left: 0px;
+                right: 0px;
+                height: 25100;
+            }
+
+            footer {
+                position: fixed;
+                bottom: -100px;
+                left: 0px;
+                right: 0px;
+                height: 100px;
+            }
+
+            .texto-vertical-2 {
+                font-size: 0.55em;
+                position: fixed;
+                writing-mode: vertical-lr;
+                transform: rotate(270deg);
+                /* right: -320px; */
+                right: -200px;
+                top: 400px;
+                font-family: Poppins;
+            }
+            .fecha{
+                font-size: 0.9rem;
+                text-align: right;
+                font-family: Poppins;
+            }
+            .div-qr{
+                border: 4px solid #3366CC;
+                border-radius: 10px ;
+                width: 90px;
+                margin: auto;
+                padding: 2px;
             }
 
         </style>
     </head>
+    <div class="texto-vertical-2">Este documento lo puedes validar en www.med-sdi.cl - Cód. Indetificador {{ $cuerpo['array_ficha_atencion']['token'] }}</div>
 
-    <body>
-        <div class="contenido">
-            <table style="width: 100%">
-                <tr>
-                    <td style="width:25%">
-                        <img style="width: 100%;" class="logo" src="{{ asset('images/pdf/sdi-logo.svg') }}">
+    @include('PDF.header')
+    @include('PDF.footer')
 
-                    </td>
-                    <td style="width:25%">
+    <main>
+        <div class="contenido-body">
 
-                        <img style="width: 100%;" src="{{ asset('images/logo_instituciones/logo_insi.jpg') }}">
-                    </td>
-
-                    <td style="width:50%">
-                        Vicuña Mackenna 864, Quilpué<br/>
-                        Teléfono: (32) 218 8930<br/>
-                        Solicitar Hora vía Whatsapp: (+56) 9 8558 0587<br/>
-                    </td>
-                </tr>
-            </table>
-
-
-
-            <hr>
-            <table>
-                <tr>
-                    <td><strong>Paciente:</strong></td>
-                    <td>{{ $cuerpo['array_paciente']['nombre'] }}</td>
-                    <td><strong>Fecha:</strong></td>
-                    <td>{{ $cuerpo['array_ficha_atencion']['created_at'] }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Rut:</strong></td>
-                    <td>{{ $cuerpo['array_paciente']['rut'] }}</td>
-                    <td><strong>Direccion:</strong></td>
-                    <td>{{ $cuerpo['array_paciente']['direccion'] }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Edad:</strong></td>
-                    <td>{{ \Carbon\Carbon::parse($cuerpo['array_paciente']['fecha_nac'])->diff(\Carbon\Carbon::now())->format('%y') }}</td>
-                </tr>
-            </table>
-            <hr>
-            <!--Inicio de información-->
-            <p>
             <h2 id="titulo-azul">{{ $titulo }}</h2>
-            <h4>Certificado de Reposo:</h4>
-            <div>
-                {{--  'fecha_inicio'
-                'fecha_termino'
-                'hipotesis'
-                'comentarios'  --}}
-                <p>El Profesional que suscribe certifica que este paciente debe permanecer en reposo <br/>
-                    desde: {{ $cuerpo['detalle_certificado']['fecha_inicio'] }} <br/>
-                    hasta: {{ $cuerpo['detalle_certificado']['fecha_termino'] }}</p>
-                <p>Diagnóstico: {{ $cuerpo['detalle_certificado']['hipotesis'] }}</p>
-                @if($cuerpo['detalle_certificado']['comentarios'] !== '')
-                    <p>{{ $cuerpo['detalle_certificado']['comentarios'] }}</p>
-                @endif
-            </div>
 
-
-            <br>
-
-
-            </p>
-            <!--Cierre: Inicio de información-->
-            <hr>
-            <p>
-            <table style="width: 100%;">
-                <tr>
-                    <td style="width:50%">
-                        <table style="width: 100%;">
-                            <tr>
-                                <td><strong>{{ $cuerpo['array_profesional']['nombre'] }}</strong></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Rut:</strong> {{ $cuerpo['array_profesional']['rut'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ $cuerpo['array_profesional']['especialidad'] }}</td>
-                            </tr>
-                            <tr>
-                                {{--  <td style="word-wrap: break-word;">{{ $cuerpo['array_profesional']['token'] }}</td>  --}}
-                                <td style="word-wrap: break-word;"><strong>Firmado digitalmente por el profesional:</strong><br/>asdf56!4fasd.ddsf5as4dfrtTRWer#ty654fgsdfg#</td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td style="width:50%">
-                        <table style="width: 100%;">
-                            <tr>
-                                <td style="word-wrap: break-word;"><strong>Código SDI autentificación</strong></td>
-                            </tr>
-                            <tr>
-                                {{--  <td style="word-wrap: break-word;"><strong>{{ $cuerpo['array_ficha_atencion']['token'] }}</strong></td>  --}}
-                                <td style="word-wrap: break-word;"><strong>as#dfASDF.%asdfew584f4afeffr&e.</strong></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-
-            </p>
-            <hr>
+            {{--  'fecha_inicio'
+            'fecha_termino'
+            'hipotesis'
+            'comentarios'  --}}
+            <p>El Profesional que suscribe certifica que este paciente debe permanecer en reposo <br/>
+                Desde: {{ $cuerpo['detalle_certificado']['fecha_inicio'] }} <br/>
+                Hasta: {{ $cuerpo['detalle_certificado']['fecha_termino'] }}</p>
+            <p>Diagnóstico: {{ $cuerpo['detalle_certificado']['hipotesis'] }}</p>
+            @if($cuerpo['detalle_certificado']['comentarios'] !== '')
+                <p>{{ $cuerpo['detalle_certificado']['comentarios'] }}</p>
+            @endif
         </div>
-    </body>
 
-    </html>
+    </main>
+</html>
+

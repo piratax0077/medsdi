@@ -26,8 +26,8 @@ class ExamenEspecialidadController extends Controller
 
     static public function estructuraJson($id_template, $parametros)
     {
-        Log::channel('notificacion_confirmacion_hora')->info(json_encode($id_template));
-        Log::channel('notificacion_confirmacion_hora')->info(json_encode($parametros));
+        Log::channel('ExamenEspecialidad')->info(json_encode($id_template));
+        Log::channel('ExamenEspecialidad')->info(json_encode($parametros));
         $datos = array();
         $error = array();
         $campo_requerido = 1;
@@ -93,8 +93,12 @@ class ExamenEspecialidadController extends Controller
 
     public function generarPDF_r(Request $request)
     {
-        return static::generarPDF($request->id_examen_especialidad);
+        if(empty($request->pdf_tipo))
+            return static::generarPDF($request->id_examen_especialidad);
+        else
+            return static::generarPDF($request->id_examen_especialidad, $request->pdf_tipo);
     }
+
     static public function generarPDF($id_examen_especialidad, $pdf_tipo = 'V')
     {
         $datos = array();
@@ -556,6 +560,110 @@ class ExamenEspecialidadController extends Controller
             $datos['estado'] = 0;
             $datos['msj'] = 'Campo requerido';
             $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function ExamenRevisado(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_examen))
+        {
+            $error['id_examen'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = ExamenEspecialidad::find($request->id_examen);
+
+            if($registro)
+            {
+                $registro->revisado = 1;
+                if($registro->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Revisado';
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Problema al actualizar';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj']  = 'Registro no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj']  = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function VerRegistros(Request $request)
+    {
+        $datos = array();
+        $filtros = array();
+
+
+        if(!empty($request->id_template))
+            $filtros[] = array('id_template', $request->id_template);
+        if(!empty($request->id_examen_tipo))
+            $filtros[] = array('id_examen_tipo', $request->id_examen_tipo);
+        if(!empty($request->id_sub_tipo_especialidad))
+            $filtros[] = array('id_sub_tipo_especialidad', $request->id_sub_tipo_especialidad);
+        if(!empty($request->id_ficha_atencion))
+            $filtros[] = array('id_ficha_atencion', $request->id_ficha_atencion);
+        if(!empty($request->id_ficha_especialidad))
+            $filtros[] = array('id_ficha_especialidad', $request->id_ficha_especialidad);
+        if(!empty($request->id_paciente))
+            $filtros[] = array('id_paciente', $request->id_paciente);
+        if(!empty($request->id_profesional))
+            $filtros[] = array('id_profesional', $request->id_profesional);
+        if(!empty($request->id_asistente))
+            $filtros[] = array('id_asistente', $request->id_asistente);
+        if($request->revisado != '')
+            $filtros[] = array('revisado', $request->revisado);
+        if(!empty($request->estado))
+            $filtros[] = array('estado', $request->estado);
+
+        $registros = ExamenEspecialidad::where($filtros)
+                                        ->with(['HoraMedica' => function($query){
+                                            $query->select('id', 'id_ficha_atencion', 'fecha_realizacion_consulta', 'id_estado');
+                                        }])
+                                        ->with(['ExamenEspecialidadTemplate' => function($query){
+                                            $query->select('id', 'nombre', 'alias');
+                                        }])
+                                        ->with(['ExamenEspecialidadTipo' => function($query){
+                                            $query->select('id', 'nombre', 'descripcion');
+                                        }])
+                                        ->with(['SubTipoEspecialidad' => function($query){
+                                            $query->select('id', 'nombre');
+                                        }])
+                                        ->filtroEstadoHora($request->id_estado)
+                                        ->get();
+
+        if($registros)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registros;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
         }
 
         return $datos;

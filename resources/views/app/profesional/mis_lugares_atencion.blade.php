@@ -11,14 +11,15 @@
                                 <h5 class="m-b-10 font-weight-bold">Mis Lugares de Atención</h5>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip"
-                                        data-placement="top" title="Volver a mi escritorio"><i
-                                            class="feather       icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="{{ route('profesional.configuracion') }}"
-                                        data-toggle="tooltip" data-placement="top"
-                                        title="Volver a panel de configuración">Panel de Configuración</a></li>
-                                <li class="breadcrumb-item"><a href="#">Mis Lugares de
-                                        Atención</a></li>
+                                <li class="breadcrumb-item">
+                                    <a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="{{ route('profesional.configuracion') }}" data-toggle="tooltip" data-placement="top" title="Volver a panel de configuración">Panel de Configuración</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#">Mis Lugares de Atención</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -37,10 +38,8 @@
                                     <div class="col-md-6">
                                         <div class="float-right">
                                             <div class="btn-group mb-2 mr-2">
-                                                <button type="button" class="btn btn-outline-light" data-toggle="modal"
-                                                    data-target="#nuevo_lugar_atencion">
-                                                    <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Agregar nuevo
-                                                    lugar de atención
+                                                <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#nuevo_lugar_atencion">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Agregar nuevo lugar de atención
                                                 </button>
                                             </div>
                                         </div>
@@ -51,11 +50,9 @@
 
                         <div class="card-body">
                             <div class="row">
-
                                 @if (isset($mensaje))
                                     <span class="alert alert-warning"> {{ $mensaje }}</span>
                                 @endif
-
                             </div>
                             <table id="tabla_lugares_atencion"
                                 class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
@@ -95,68 +92,45 @@
                                                     <span>{{ $l->telefono }}</span>
                                                 </td>
                                                 <td class="align-middle text-center">
-                                                    <!--Botón Modal-->
-
-                                                    <button type="button"
-                                                        class="btn btn-info btn-sm btn-icon  accion_editar_lugar_atencion"
-                                                        data-toggle="modal"
-                                                        onclick="ver_lugar_atencion({{ $l->id }});"
-                                                        data-target="#editar_lugar_atencion" title="Editar Lugar Atención">
+                                                    {{-- editar lugar atencion --}}
+                                                    <button type="button" class="btn btn-info btn-sm btn-icon  accion_editar_lugar_atencion" data-toggle="modal" onclick="ver_lugar_atencion({{ $l->id }});" data-target="#editar_lugar_atencion" title="Editar Lugar Atención">
                                                         <i class="feather icon-home"></i>
                                                     </button>
-
-
                                                 </td>
                                                 <td class="align-middle text-center">
-                                                    <!--Botón Modal-->
-                                                    <button type="button"
-                                                        class="btn btn-warning btn-sm btn-icon  accion_asistentes"
-                                                        onclick="mi_asistente_lugar_atencion({{ $l->id }})"
-                                                        data-toggle="tooltip" data-placement="top" title="Configurar"><i
-                                                            class="feather icon-user"></i></button>
+                                                    {{-- ver asistente lugar de atencion --}}
+                                                    <button type="button" class="btn btn-warning btn-sm btn-icon  accion_asistentes" onclick="mi_asistente_lugar_atencion({{ $l->id }})" data-toggle="tooltip" data-placement="top" title="Configurar">
+                                                        <i class="feather icon-user"></i>
+                                                    </button>
                                                 </td>
                                                 <td class="align-middle text-center">
-                                                    <!--Botón Modal-->
-
-                                                    <button type="button"
-                                                        class="btn btn-info btn-sm btn-icon  accion_editar_horarios"
-                                                        data-toggle="modal"
-                                                        onclick="mi_horario_lugar_atencion({{ $l->id }})">
+                                                    {{-- horario --}}
+                                                    <button type="button" class="btn btn-info btn-sm btn-icon  accion_editar_horarios" data-toggle="modal" onclick="mi_horario_lugar_atencion({{ $l->id }})">
                                                         <i class="fas fa-clock"></i>
                                                     </button>
 
                                                 </td>
                                                 <td class="align-middle text-center">
-                                                    <!--Botón Modal-->
-                                                    <button type="button"
-                                                        class="btn btn-success btn-sm btn-icon accion_editar_valores"
-                                                        data-toggle="modal"
-                                                        onclick="mis_valores_lugar_atencion({{ $l->id }})"
-                                                        title="Configurar"><i class="fas fa-dollar-sign"></i></button>
+                                                    {{-- valores de lugar de atencion --}}
+                                                    <button type="button" class="btn btn-success btn-sm btn-icon accion_editar_valores" data-toggle="modal" onclick="mis_valores_lugar_atencion({{ $l->id }})" title="Configurar">
+                                                        <i class="fas fa-dollar-sign"></i>
+                                                    </button>
                                                 </td>
 
                                                 <td>
+                                                    {{-- estado de lugar de atencion --}}
                                                     @if ($l->pivot->estado == '1')
                                                         <div class="align-middle text-center">
                                                             <div class="switch switch-success d-inline m-r-10">
-                                                                <input type="checkbox"
-                                                                    onclick="cambio_estado_lugar_atencion({{ $l->id }})"
-                                                                    id="estado_lugar_atencion_{{ $l->id }}"
-                                                                    checked="true">
-                                                                <label for="estado_lugar_atencion_{{ $l->id }}"
-                                                                    class="cr">
-                                                                </label>
+                                                                <input type="checkbox" onclick="cambio_estado_lugar_atencion({{ $l->id }})" id="estado_lugar_atencion_{{ $l->id }}" checked="true">
+                                                                <label for="estado_lugar_atencion_{{ $l->id }}" class="cr"></label>
                                                             </div>
                                                         </div>
                                                     @else
                                                         <div class="align-middle text-center">
                                                             <div class="switch switch-success d-inline m-r-10">
-                                                                <input type="checkbox"
-                                                                    onclick="cambio_estado_lugar_atencion({{ $l->id }})"
-                                                                    id="estado_lugar_atencion_{{ $l->id }}">
-                                                                <label for="estado_lugar_atencion_{{ $l->id }}"
-                                                                    class="cr">
-                                                                </label>
+                                                                <input type="checkbox" onclick="cambio_estado_lugar_atencion({{ $l->id }})" id="estado_lugar_atencion_{{ $l->id }}">
+                                                                <label for="estado_lugar_atencion_{{ $l->id }}" class="cr"></label>
                                                             </div>
                                                         </div>
                                                     @endif
@@ -182,10 +156,10 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center" id="nuevo_lugar_atencion_titulo">Agregar nuevo lugar de
-                        atención&nbsp;</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">×</span></button>
+                    <h5 class="modal-title text-white text-center" id="nuevo_lugar_atencion_titulo">Agregar nuevo lugar de atención&nbsp;</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
                 </div>
                 <form action="{{ route('profesional.agregar_centro') }}" method="POST">
                     @csrf
@@ -195,8 +169,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <label class="floating-label">Nombre</label>
-                                    <input class="form-control" name="nombre_lugar_atencion" id="nombre_lugar_atencion"
-                                        type="text">
+                                    <input class="form-control" name="nombre_lugar_atencion" id="nombre_lugar_atencion" type="text">
                                 </div>
                             </div>
                             <div class="col-sm-12">
@@ -208,23 +181,20 @@
                             <div class="col-sm-8">
                                 <div class="form-group">
                                     <label class="floating-label">Direcci&oacute;n</label>
-                                    <input class="form-control" name="direccion_lugar_atencion"
-                                        id="direccion_lugar_atencion" type="text">
+                                    <input class="form-control" name="direccion_lugar_atencion" id="direccion_lugar_atencion" type="text">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="floating-label">Depto. | Ofic.</label>
-                                    <input class="form-control" name="numero_lugar_atencion" id="numero_lugar_atencion"
-                                        type="text">
+                                    <input class="form-control" name="numero_lugar_atencion" id="numero_lugar_atencion" type="text">
                                 </div>
                             </div>
 
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Regi&oacute;n</label>
-                                    <select id="region_agregar" onchange="buscar_ciudad();" name="region_agregar"
-                                        class="form-control" required>
+                                    <select id="region_agregar" onchange="buscar_ciudad();" name="region_agregar" class="form-control" required>
                                         <option value="">Seleccione una Regi&oacute;n</option>
                                         @foreach ($region as $reg)
                                             @if (isset($region))
@@ -240,7 +210,6 @@
                                     <label class="floating-label-activo-sm">Ciudad</label>
                                     <select id="ciudad_agregar" name="ciudad_agregar" class="form-control" required>
                                         <option value=""></option>
-
                                     </select>
                                 </div>
                             </div>
@@ -248,8 +217,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group ">
                                     <label class="floating-label-activo-sm">Tipo</label>
-                                    <select id="tipo_agregar_lugar_atencion" name="tipo_agregar_lugar_atencion"
-                                        class="js-example-basic-single form-control">
+                                    <select id="tipo_agregar_lugar_atencion" name="tipo_agregar_lugar_atencion" class="js-example-basic-single form-control">
                                         <option value="0">Seleccione</option>
                                         <option value="1">Centro Médico</option>
                                         <option value="2">Consulta Particular</option>
@@ -260,15 +228,13 @@
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <label class="floating-label">Correo Electr&oacute;nico</label>
-                                    <input class="form-control" name="email_lugar_atencion" id="email_lugar_atencion"
-                                        type="email">
+                                    <input class="form-control" name="email_lugar_atencion" id="email_lugar_atencion" type="email">
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <label class="floating-label">Tel&eacute;fono</label>
-                                    <input class="form-control" name="telefono_lugar_atencion"
-                                        id="telefono_lugar_atencion_1" type="text">
+                                    <input class="form-control" name="telefono_lugar_atencion" id="telefono_lugar_atencion_1" type="text">
                                 </div>
                             </div>
                             <div class="col-sm-12">
@@ -298,10 +264,10 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center" id="editar_lugar_atencion_titulo">Configurar lugar de
-                        atención</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">×</span></button>
+                    <h5 class="modal-title text-white text-center" id="editar_lugar_atencion_titulo">Configurar lugar de atención</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <form id="form_editar_lugar_atencion">
@@ -310,15 +276,13 @@
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <label class="floating-label">Nombre</label>
-                                    <input name="editar_nombre_lugar_atencion" placeholder="Ingrese Nombre"
-                                        id="editar_nombre_lugar_atencion" type="text" val="" class="form-control">
+                                    <input name="editar_nombre_lugar_atencion" placeholder="Ingrese Nombre" id="editar_nombre_lugar_atencion" type="text" val="" class="form-control">
                                 </div>
                             </div>
                             <div class="col-sm-8">
                                 <div class="form-group">
                                     <label class="floating-label">Direcci&oacute;n&nbsp;/&nbsp;Calle</label>
-                                    <input name="editar_direccion_lugar_atencion" placeholder="Ingrese Direcci&oacute;n"
-                                        id="editar_direccion_lugar_atencion" type="text" class="form-control">
+                                    <input name="editar_direccion_lugar_atencion" placeholder="Ingrese Direcci&oacute;n" id="editar_direccion_lugar_atencion" type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -330,10 +294,8 @@
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Regi&oacute;n</label>
-                                    <select id="region_lugar_atencion_modificar" onchange="buscar_ciudades();"
-                                        name="region_lugar_atencion_modificar" class="form-control" required>
+                                    <select id="region_lugar_atencion_modificar" onchange="buscar_ciudades();" name="region_lugar_atencion_modificar" class="form-control" required>
                                         <option value="0">Seleccione</option>
-
                                     </select>
                                 </div>
                             </div>
@@ -341,18 +303,15 @@
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Ciudad</label>
-                                    <select id="ciudad_lugar_atencion_modificar" name="ciudad_lugar_atencion_modificar"
-                                        class="form-control" required>
+                                    <select id="ciudad_lugar_atencion_modificar" name="ciudad_lugar_atencion_modificar" class="form-control" required>
                                         <option value="0">Seleccione</option>
-
                                     </select>
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Tipo</label>
-                                    <select id="tipo_editar_lugar_atencion" name="tipo_editar_lugar_atencion"
-                                        class="js-example-basic-single form-control">
+                                    <select id="tipo_editar_lugar_atencion" name="tipo_editar_lugar_atencion" class="js-example-basic-single form-control">
                                         <option value="0">Seleccione</option>
                                         <option value="1">Centro Médico</option>
                                         <option value="2">Consulta Particular</option>
@@ -362,22 +321,19 @@
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
-                                    <input name="editar_email_lugar_atencion" placeholder="Ingrese Email"
-                                        id="editar_email_lugar_atencion" type="text" class="form-control">
+                                    <input name="editar_email_lugar_atencion" placeholder="Ingrese Email" id="editar_email_lugar_atencion" type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Tel&eacute;fono</label>
-                                    <input name="editar_telefono_lugar_atencion" placeholder="Ingrese Tel&eacute;fono"
-                                        id="editar_telefono_lugar_atencion" type="text" class="form-control">
+                                    <input name="editar_telefono_lugar_atencion" placeholder="Ingrese Tel&eacute;fono" id="editar_telefono_lugar_atencion" type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="switch switch-success d-inline m-r-10">
-                                        <input type="checkbox" id="notificar_pacientes_modificar"
-                                            name="notificar_pacientes_modificar">
+                                        <input type="checkbox" id="notificar_pacientes_modificar" name="notificar_pacientes_modificar">
                                         <label for="notificar_pacientes_modificar" class="cr"></label>
                                         <label>Notificar a pacientes modificación</label>
                                     </div>
@@ -386,8 +342,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                            <button type="button" onclick="editar_lugar_atencion();" class="btn btn-info">Guardar
-                                Cambios</button>
+                            <button type="button" onclick="editar_lugar_atencion();" class="btn btn-info">Guardar Cambios</button>
                         </div>
                     </form>
                 </div>
@@ -402,8 +357,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-info">
                     <h5 class="modal-title text-white text-center" id="">Desasociar o Agregar lugar existente</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">×</span></button>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -472,10 +426,8 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center" id="nuevo_horario_atencion_titulo">Configurar
-                        Asistentes</h5>
-                    <button type="button" id="cerrar_editar_asistentes" class="close text-white" data-dismiss="modal"
-                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h5 class="modal-title text-white text-center" id="nuevo_horario_atencion_titulo">Configurar Asistentes</h5>
+                    <button type="button" id="cerrar_editar_asistentes" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
 
@@ -486,20 +438,14 @@
                         <input type="hidden" name="mi_asistente_id_lugar_atencion" id="mi_asistente_id_lugar_atencion">
                         <div class="row">
                             <div class="col-sm-12 mb-2">
-                                <h6 class="text-c-blue">Escriba rut de el o la asistente que desea asociar a su lugar de
-                                    atención</h6>
+                                <h6 class="text-c-blue">Escriba rut de el o la asistente que desea asociar a su lugar de atención</h6>
                             </div>
                             <div id="buscar_datos_asistente" class="col-sm-6 col-md-6 mb-3">
                                 <div class="input-group input-group-sm">
                                     <input type="text" class="form-control" placeholder="Rut" name="rut_asistente" id="rut_asistente" aria-label="Rut" aria-describedby="button-addon2" onkeyup="formatoRut(this);">
-                                    &nbsp;&nbsp;
                                     <div class="input-group-append">
-                                        <button class="btn btn-success"
-                                            {{--  @if (isset($l)) onclick="buscar_asistente({{ $l->id }});" @endif  --}}
-                                            onclick="buscar_asistente($('#mi_asistente_id_lugar_atencion').val());"
-                                            type="button" id="button-addon2">Asociar</button>
+                                        <button class="btn btn-success" onclick="buscar_asistente($('#mi_asistente_id_lugar_atencion').val());" type="button" id="button-addon2">Asociar</button>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -507,61 +453,41 @@
                                 <table class="table table-borderless table-xs" id="datos_asistente" style="display: none">
                                     <tbody>
                                         <tr>
-
                                             <td><strong>Rut:</strong></td>
                                             <td><span id="datos_rut_asistente"></span>
-                                                <input type="hidden" id="id_asistente_lugar_atencion"
-                                                    name="id_asistente_lugar_atencion">
+                                                <input type="hidden" id="id_asistente_lugar_atencion" name="id_asistente_lugar_atencion">
                                             </td>
-
                                         </tr>
                                         <tr>
-
                                             <td><strong>Nombre:</strong></td>
                                             <td><span id="datos_nombre_asistente"></span></td>
-
                                         </tr>
                                         <tr>
-
                                             <td><strong>Correo Electr&oacute;nico:</strong></td>
                                             <td id="datos_email_asistente"></td>
-
                                         </tr>
                                         <tr>
-
                                             <td> <strong>Tel&eacute;fono:</strong></td>
                                             <td><span id="datos_telefono_asistente"></span></td>
-
                                         </tr>
                                         <tr>
-                                            <th scope="row" colspan="2">
-                                                <button id="confirmar_datos_asistente" name="confirmar_datos_asistente"
-                                                    @if (isset($l)) onclick="datos_confirmar_asistente({{ $l->id }});" @endif
-                                                    class="btn btn-success btn-sm">Confirmar
-                                                    Datos</button>
-                                                <button id="limpiar_datos_asistente" name="limpiar_datos_asistente"
-                                                    onclick="datos_limpiar_asistente();"
-                                                    class="btn btn-info btn-sm">Limpiar
-                                                    Datos</button>
+                                            <td scope="row" colspan="2">
+                                                <button id="confirmar_datos_asistente" name="confirmar_datos_asistente" onclick="datos_confirmar_asistente($('#mi_asistente_id_lugar_atencion').val());" class="btn btn-success btn-sm">Confirmar Datos</button>
+                                                <button id="confirmar_datos_asistente_examen" name="confirmar_datos_asistente_examen" onclick="datos_confirmar_asistente_examen($('#mi_asistente_id_lugar_atencion').val());" class="btn btn-success btn-sm">Confirmar y Dar Permiso de carga de Examen</button>
+                                                <button id="limpiar_datos_asistente" name="limpiar_datos_asistente" onclick="datos_limpiar_asistente();" class="btn btn-info btn-sm">Limpiar Datos</button>
                                             <td>
-                                            </td>
-
-                                            </th>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
 
                             <div class="col-md-12 mb-3">
-                                <table id="mi_asistente_table"
-                                    class="display table table-striped table-hover dt-responsive nowrap"
-                                    style="width:100%">
+                                <table id="mi_asistente_table" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Habilitar / Deshabilitar</th>
                                             <th>Rut</th>
                                             <th>Nombre</th>
-
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -574,27 +500,22 @@
                 </div>
                 <div class="modal-footer pt-2">
                     <button type="button" class="btn btn-danger" id="cerrar_editar_asistentes1">Cancelar</button>
-                    <button type="button" id="cerrar_editar_asistentes2" class="btn btn-info">Guardar
-                        Cambios</button>
+                    <button type="button" id="cerrar_editar_asistentes2" class="btn btn-info">Guardar Cambios</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!--Modal editar horario atencion-->
-    <div id="modal_editar_horario_atencion" class="modal fade" tabindex="-1" role="dialog"
-        aria-labelledby="editar_horario_atencion" aria-hidden="true">
+    <div id="modal_editar_horario_atencion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editar_horario_atencion" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center" id="nuevo_horario_atencion_titulo">Configurar horario de
-                        atenci&oacute;n</h5>
-                    <button type="button" id="cerrar_modal_editar_horario_atencion" class="close text-white" onclick=""
-                        data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h5 class="modal-title text-white text-center" id="nuevo_horario_atencion_titulo">Configurar horario de atenci&oacute;n</h5>
+                    <button type="button" id="cerrar_modal_editar_horario_atencion" class="close text-white" onclick="" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
                     <form id="">
-
                         <input type="hidden" name="mi_horario_id_lugar_atencion" id="mi_horario_id_lugar_atencion">
                         <div class="row">
                             <div class="col-sm-12">
@@ -609,7 +530,6 @@
                                         <option value="00:30:00">30 minutos</option>
                                         <option value="00:45:00">45 minutos</option>
                                         <option value="01:00:00">60 minutos</option>
-
                                     </select>
                                 </div>
                             </div>
@@ -718,11 +638,8 @@
                             </div>
 
                             <div class="col-sm-12 mb-2 text-center">
-                                <button type="button" onclick="mi_horario_agregar();" class="btn btn-info btn-sm"
-                                    data-dismiss="modal">Agregar horario de
-                                    atención</button>
-                                {{-- <button type="button" id="cerrar_modal_horario2"
-                                    class="btn btn-danger btn-sm">Cancelar</button> --}}
+                                <button type="button" onclick="mi_horario_agregar();" class="btn btn-info btn-sm" data-dismiss="modal">Agregar horario de atención</button>
+                                {{-- <button type="button" id="cerrar_modal_horario2" class="btn btn-danger btn-sm">Cancelar</button> --}}
                             </div>
                             <div class="col-sm-12 mt-2 mb-2">
                                 <table id="mi_horario_table" class="table table-sm">
@@ -745,148 +662,124 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" id="cerrar_modal_horario">Cancelar</button>
                     <button type="button" class="btn btn-info" id="cerrar_modal_horario1">Cerrar</button>
-
                 </div>
             </div>
         </div>
     </div>
 
     <!--Modal Valores y Convenios-->
-    <div id="modal_editar_valor_atencion" class="modal fade" tabindex="-1" role="dialog"
-        aria-labelledby="editar_valor_atencion" aria-hidden="true">
+    <div id="modal_editar_valor_atencion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editar_valor_atencion" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center" id="nuevo_horario_atencion_titulo">Convenios y Valores
-                        de atención médica</h5>
-                    <button type="button" id="cerrar_modal_editar_valor_atencion" class="close text-white"
-                        data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h5 class="modal-title text-white text-center" id="nuevo_horario_atencion_titulo">Convenios y Valores de atención médica</h5>
+                    <button type="button" id="cerrar_modal_editar_valor_atencion" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
-                    <form id="">
-                        <input type="hidden" name="id_lugar_atencion_valor" id="id_lugar_atencion_valor">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h6 class="text-c-blue mb-3">Valores de atención médica</h6>
-                            </div>
-                            <div class="col-sm-8 mb-2">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Tipo de atención médica</label>
-                                    <select name="lugar_atencion_convenio" id="lugar_atencion_convenio"
-                                        class=" form-control">
-                                        <option value="">Seleccione una opción</option>
-                                        {{--  <option value="Particular">Particular</option>  --}}
-                                        <option value="En consulta médica">En consulta médica</option>
-                                        <option value="Domicilio">Domicilio</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 mb-2">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Valor</label>
-                                    <input name="valor_convenio" id="valor_convenio" type="number" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-sm-12">
-                                <h6 class="text-c-blue mb-2">Convenios</h6>
-                            </div>
-                            <div class="col-sm-4 mb-3">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="convenio_1">
-                                    <label class="custom-control-label" id="text_convenio_1"
-                                        for="convenio_1">Particular</label>
-                                </div>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="convenio_2">
-                                    <label class="custom-control-label" id="text_convenio_2"
-                                        for="convenio_2">Fonasa</label>
-                                </div>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="convenio_3">
-                                    <label class="custom-control-label" id="text_convenio_3" for="convenio_3">Todas las
-                                        Isapres</label>
-                                </div>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="convenio_4">
-                                    <label class="custom-control-label" id="text_convenio_4"
-                                        for="convenio_4">Banmédica</label>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 mb-3">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="convenio_5">
-                                    <label class="custom-control-label" id="text_convenio_5"
-                                        for="convenio_5">Colmena</label>
-                                </div>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="convenio_6">
-                                    <label class="custom-control-label" id="text_convenio_6" for="convenio_6">Nueva
-                                        Masvida</label>
-                                </div>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="convenio_7">
-                                    <label class="custom-control-label" id="text_convenio_7"
-                                        for="convenio_7">Consalud</label>
-                                </div>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="convenio_8">
-                                    <label class="custom-control-label" id="text_convenio_8" for="convenio_8">Cruz
-                                        Blanca</label>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 mb-3">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="convenio_9">
-                                    <label class="custom-control-label" id="text_convenio_9" for="convenio_9">Cruz del
-                                        Norte</label>
-                                </div>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="convenio_10">
-                                    <label class="custom-control-label" id="text_convenio_10" for="convenio_10">Vida
-                                        Tres</label>
-                                </div>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="convenio_11">
-                                    <label class="custom-control-label" id="text_convenio_11" for="convenio_11">Fundación
-                                    </label>
-                                </div>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="convenio_12">
-                                    <label class="custom-control-label" id="text_convenio_12"
-                                        for="convenio_12">Isalud</label>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 mb-3 mt-2 text-center">
-                                <button type="button" onclick="guardar_valores_lugar_atencion()"
-                                    class="btn btn-info btn-sm" data-dismiss="modal">Agregar convenio y
-                                    valor</button>
-                                <button type="button" id="cerrar_convenio1" class="btn btn-danger btn-sm">Cancelar</button>
-                            </div>
-                            <div class="col-sm-12 mt-3 mb-3">
-                                {{--  <table id="" class="table table-sm table-responsive">  --}}
-                                <table id="tabla_valores" class="display table table-striped table-hover dt-responsive nowrap" style="100%">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center align-middle">Atención Médica</th>
-                                            <th class="text-center align-middle">Valor</th>
-                                            <th class="text-center align-middle">Convenios</th>
-                                            <th class="text-center align-middle">Acción</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-
-                                    </tbody>
-                                </table>
+                    <input type="hidden" name="id_lugar_atencion_valor" id="id_lugar_atencion_valor">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h6 class="text-c-blue mb-3">Valores de atención médica</h6>
+                        </div>
+                        <div class="col-sm-8 mb-2">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Tipo de atención médica</label>
+                                <select name="lugar_atencion_convenio" id="lugar_atencion_convenio" class=" form-control">
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="En consulta médica">En consulta médica</option>
+                                    <option value="Domicilio">Domicilio</option>
+                                </select>
                             </div>
                         </div>
+                        <div class="col-sm-4 mb-2">
+                            <div class="form-group fill">
+                                <label class="floating-label">Valor</label>
+                                <input name="valor_convenio" id="valor_convenio" type="number" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <h6 class="text-c-blue mb-2">Convenios</h6>
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="convenio_1">
+                                <label class="custom-control-label" id="text_convenio_1" for="convenio_1">Particular</label>
+                            </div>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="convenio_2">
+                                <label class="custom-control-label" id="text_convenio_2" for="convenio_2">Fonasa</label>
+                            </div>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="convenio_3">
+                                <label class="custom-control-label" id="text_convenio_3" for="convenio_3">Todas las Isapres</label>
+                            </div>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="convenio_4">
+                                <label class="custom-control-label" id="text_convenio_4" for="convenio_4">Banmédica</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="convenio_5">
+                                <label class="custom-control-label" id="text_convenio_5" for="convenio_5">Colmena</label>
+                            </div>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="convenio_6">
+                                <label class="custom-control-label" id="text_convenio_6" for="convenio_6">Nueva Masvida</label>
+                            </div>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="convenio_7">
+                                <label class="custom-control-label" id="text_convenio_7" for="convenio_7">Consalud</label>
+                            </div>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="convenio_8">
+                                <label class="custom-control-label" id="text_convenio_8" for="convenio_8">Cruz Blanca</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="convenio_9">
+                                <label class="custom-control-label" id="text_convenio_9" for="convenio_9">Cruz del Norte</label>
+                            </div>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="convenio_10">
+                                <label class="custom-control-label" id="text_convenio_10" for="convenio_10">Vida Tres</label>
+                            </div>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="convenio_11">
+                                <label class="custom-control-label" id="text_convenio_11" for="convenio_11">Fundación </label>
+                            </div>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="convenio_12">
+                                <label class="custom-control-label" id="text_convenio_12" for="convenio_12">Isalud</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mb-3 mt-2 text-center">
+                            <button type="button" onclick="guardar_valores_lugar_atencion()" class="btn btn-info btn-sm" data-dismiss="modal">Agregar convenio y valor</button>
+                            <button type="button" id="cerrar_convenio1" class="btn btn-danger btn-sm">Cancelar</button>
+                        </div>
+                        <div class="col-sm-12 mt-3 mb-3">
+                            {{--  <table id="" class="table table-sm table-responsive">  --}}
+                            <table id="tabla_valores" class="display table table-striped table-hover dt-responsive nowrap" style="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center align-middle">Atención Médica</th>
+                                        <th class="text-center align-middle">Valor</th>
+                                        <th class="text-center align-middle">Convenios</th>
+                                        <th class="text-center align-middle">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="cerrar_convenio" class="btn btn-danger"
-                        data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="cerrar_convenio" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                     <button type="button" id="cerrar_convenio2" class="btn btn-info">Guardar Cambios</button>
-                    </form>
                 </div>
             </div>
         </div>
@@ -900,5 +793,83 @@
         $(document).ready(function() {
 
         });
+        /** modal editar_asistentes */
+        function datos_confirmar_asistente(id) {
+
+            let id_lugar_atencion = id;
+            let id_asistente = $('#id_asistente_lugar_atencion').val();
+            let url = "{{ route('profesional.agregar_asistente_lugar_atencion') }}";
+
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    id_lugar_atencion: id_lugar_atencion,
+                    id_asistente: id_asistente
+                },
+            })
+            .done(function(data) {
+                if (data !== 'null')
+                {
+                    swal({
+                        title: "Se ha agregado asistente al lugar de atención",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    });
+                }
+                else
+                {
+                    swal({
+                        title: "Error al agregar asistente",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        };
+
+        function datos_confirmar_asistente_examen(id) {
+
+            let id_lugar_atencion = id;
+            let id_asistente = $('#id_asistente_lugar_atencion').val();
+            let url = "{{ route('profesional.agregar_asistente_lugar_atencion') }}";
+
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    id_lugar_atencion: id_lugar_atencion,
+                    id_asistente: id_asistente,
+                    examen:1,
+                },
+            })
+            .done(function(data) {
+                if (data !== 'null')
+                {
+                    swal({
+                        title: "Se ha agregado asistente al lugar de atención",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    });
+                }
+                else
+                {
+                    swal({
+                        title: "Error al agregar asistente",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        };
+        /** fin modal editar_asistentes */
     </script>
 @endsection

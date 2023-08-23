@@ -12,6 +12,7 @@ use App\Models\ContactoEmergencia;
 use App\Models\ContratoDependiente;
 use App\Models\Direccion;
 use App\Models\Especialidad;
+use App\Models\ExamenEspecialidadTipo;
 use App\Models\HoraMedica;
 use App\Models\Instituciones;
 use App\Models\LiquidacionRecibo;
@@ -279,7 +280,9 @@ class EscritorioAsistente extends Controller
             $tipo_especialidad = TipoEspecialidad::find($profesional->id_tipo_especialidad);
             $sub_tipo_especialidad = '';
             if(!empty($profesional->id_sub_tipo_especialidad))
-            $sub_tipo_especialidad = SubTipoEspecialidad::find($profesional->id_sub_tipo_especialidad);
+                $sub_tipo_especialidad = SubTipoEspecialidad::find($profesional->id_sub_tipo_especialidad);
+
+
             if($horario)
             {
 
@@ -291,13 +294,18 @@ class EscritorioAsistente extends Controller
                 $hora_inicio_agenda_temp = '24:00';
                 $hora_termino_agenda = '';
                 $hora_termino_agenda_temp = 0;
-                foreach ($horario as $hor) {
+                foreach ($horario as $hor)
+                {
                     $ho = explode(',', $hor->dia);
                     // dd($ho);
-                    foreach ($ho as $h) {
-                        if ($h == '1') {
+                    foreach ($ho as $h)
+                    {
+                        if ($h == '1')
+                        {
                             $horario_agenda = str_replace($h, '', $horario_agenda);
-                        } else {
+                        }
+                        else
+                        {
                             $horario_agenda = str_replace(',' . $h, '', $horario_agenda);
                         }
                     }
@@ -320,6 +328,10 @@ class EscritorioAsistente extends Controller
                 $horario_data['hora_inicio_agenda'] = $hora_inicio_agenda;
                 $horario_data['hora_termino_agenda'] = $hora_termino_agenda;
 
+                $examen_tipo = '';
+                if($profesional->id_sub_tipo_especialidad)
+                    $examen_tipo = ExamenEspecialidadTipo::where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)->with('ExamenEspecialidadTemplate')->get();
+
                 $datos['estado'] = 1;
                 $datos['msj'] = 'registros';
                 $datos['profesional'] = $profesional;
@@ -328,6 +340,7 @@ class EscritorioAsistente extends Controller
                 $datos['especialidad'] = $especialidad;
                 $datos['tipo_especialidad'] = $tipo_especialidad;
                 $datos['sub_tipo_especialidad'] = $sub_tipo_especialidad;
+                $datos['examen_tipo'] = $examen_tipo;
                 $datos['request'] = $request->all();
             }
             else

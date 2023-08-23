@@ -9,6 +9,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <!-- Links del REG-->
+        <link rel="stylesheet" href="{{ asset('css/iconos-sdi.css') }}">
         <link rel="stylesheet" href="{{ asset('css/escritorio_profesional.css') }}?t={{ time() }}">
         <link rel="stylesheet" href="{{ asset('css/card_estilo.css') }}?t={{ time() }}">
         <link rel="stylesheet" href="{{ asset('css/boton-flotante.css') }}?t={{ time() }}">
@@ -20,8 +21,9 @@
         <!-- data tables css -->
         <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
         <!-- fileupload-custom css -->
-        <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}?t={{ time() }}">
+        <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
 
         <!--Accordion-->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
@@ -34,7 +36,7 @@
 
         <!--Tab wizard_formularios-->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/tab_wizard_formularios.css') }}?t=<?= time() ?>">
-
+        <link rel="stylesheet" href="{{ asset('css/ficha_medica_unica.css') }}?t=<?= time() ?>">
         <!--Bs-Canvas-->
         <link rel="stylesheet" href="{{ asset('css/bs_canvas.css') }}?t={{ time() }}">
 
@@ -49,10 +51,8 @@
 
         <!--formulario sm-->
         <link rel="stylesheet" href="{{ asset('css/formulario_sm.css') }}">
-
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
-
         {{--  /** agregar css */  --}}
+
         <style>
             .ui-front {
                 position: absolute;
@@ -128,7 +128,7 @@
         <script src="{{ asset('js/check_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
         <!-- file-upload Js -->
-        <script src="{{ asset('js/plugins/dropzone-amd-module.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
 
         <!-- mensajes -->
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
@@ -162,6 +162,50 @@
 
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $(document).ready(function () {
+                {{--  mensaje de exito al registrar ficha clinica  --}}
+                 @if(session('mensaje'))
+                    swal({
+                        title: "Registro de Ficha Clínica.",
+                        text:"{{ session('mensaje') }}",
+                        icon: "info",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                @endif
+                {{--  mensaje de exito al registrar ficha clinica  --}}
+                @if(session('success'))
+                    swal({
+                        title: "Registro de Ficha Clínica.",
+                        text:"{{ session('success') }}",
+                        icon: "success",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                @endif
+
+                {{--  mensaje de erro al registrar ficha clinica  --}}
+                @if(session('error'))
+                    swal({
+                        title: "Registro de Ficha Clínica.",
+                        text:"{{ session('error') }}",
+                        icon: "error",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                @endif
+
+                {{--  mensaje de warning al registrar ficha clinica  --}}
+                @if(session('warning'))
+                    swal({
+                        title: "Registro de Ficha Clínica.",
+                        text:"{{ session('warning') }}",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                @endif
+            });
 
             /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
             function  envio_indicaciones_pdf(id_modal){

@@ -7,8 +7,8 @@
     <title>Sistema || Redmedichile</title>
     <meta name="description" content="" />
     <meta name="keywords" content="">
-    <meta name="author" content="Redmedichile" />     
-    
+    <meta name="author" content="Redmedichile" />
+
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
     <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon"/>
@@ -20,12 +20,12 @@
      <!--Tags-->
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
-    
+
 </head>
 <body>
     <div id="app" style="margin: 0; padding: 0;">
-        
-    </div> 
+
+    </div>
 
     <!--[if lt IE 11]>
         <div class="ie-warning">
@@ -72,21 +72,24 @@
 
     <!-- Scripts -->
     <script type="text/javascript" src="{{ asset('js/vendor-all.min.js') }}"></script>
-    
+
     <script type="text/javascript" src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/plugins/bootstrap.min.js') }}" ></script>
     <script type="text/javascript" src="{{ asset('js/bootstrap.bundle.min.js') }}" ></script>
     <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}" ></script>
     <script src="{{ asset('js/pages/data-basic-custom.js') }}"></script>
-    
+
     <script src="{{ asset('js/ripple.js') }}"></script>
     <script src="{{ asset('js/pcoded.min.js') }}"></script>
-    
+    {{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+
     <!--<script src="../assets/js/menu-setting.min.js"></script>-->
     <!-- <script src="{{ asset('js/plugins/dataTables.bootstrap4.min.js') }}"></script>-->
     <script src="{{ asset('/js/esc_dentista.js') }}"></script>
-    
+
     <script>window.view= 'DENTAL';</script>
-    
+
 </body>
 </html>

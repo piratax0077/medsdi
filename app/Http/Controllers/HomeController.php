@@ -56,6 +56,12 @@ class HomeController extends Controller
             case 'AsistenteCaja': // asistente de caja (institucion)
                 return redirect()->route('asistentecm.home');
                 break;
+			case 'AsistenteDentalTecn':// asistente tecnico dental
+                return redirect()->route('asistentedentaltecn.home');
+                break;
+            case 'AsistenteDental':// asistente dental
+                    return redirect()->route('asistentedental.home');
+                    break;
             case 'AsistenteOnline': // asistente online (institucion / consulta)
                 return redirect()->route('asistenteon.home');
                 break;
@@ -110,6 +116,12 @@ class HomeController extends Controller
             case 'AsistenteCaja': // asistente de caja (institucion)
                 return redirect()->route('asistentecm.home');
                 break;
+			case 'AsistenteDentalTecn':// asistente tecnico dental
+                return redirect()->route('asistentedentaltecn.home');
+                break;
+            case 'AsistenteDental':// asistente dental
+                    return redirect()->route('asistentedental.home');
+                    break;
             case 'AsistenteOnline': // asistente online (institucion / consulta)
                 return redirect()->route('asistenteon.home');
                 break;
@@ -172,6 +184,36 @@ class HomeController extends Controller
                 break;
             case '6':
                 $user->assignRole('Servicio');
+                break;
+			case '7':
+                $user->assignRole('Adm_Institucion');
+                break;
+            case '8':
+                $user->assignRole('Adm_Comercial');
+                break;
+            case '9':
+                $user->assignRole('Contador');
+                break;
+            case '10':
+                $user->assignRole('AsistenteAdm');
+                break;
+            case '11':
+                $user->assignRole('AsistenteJefaCaja');
+                break;
+            case '12':
+                $user->assignRole('AsistenteCaja');
+                break;
+            case '13':
+                $user->assignRole('AsistenteOnline');
+                break;
+            case '14':
+                $user->assignRole('AsistenteManejoAgenda');
+                break;
+            case '15':
+                $user->assignRole('AsistenteDentalTecn');
+                break;
+            case '16':
+                $user->assignRole('AsistenteDental');
                 break;
             default:
                 // code...

@@ -1,18 +1,6 @@
 <div id="cfaltante" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="cfaltante" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        {{--  <input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">  --}}
-        {{--  <input type="hidden" name="id_fc" value="{{ $id_ficha_atencion }}" id="id_fc">  --}}
-        {{--  <input type="hidden" name="id_paciente_fc" value="{{ $paciente->id }}" id="id_paciente_fc">  --}}
-        {{--  <input type="hidden" name="rut_paciente_fc" value="{{ $paciente->rut }}" id="rut_paciente_fc">  --}}
-        {{--  <input type="hidden" name="email_paciente_fc" value="{{ $paciente->email }}" id="email_paciente_fc">  --}}
-        {{--  <input type="hidden" name="prevision_paciente_fc" value="{{ $paciente->prevision->id }}" id="prevision_paciente_fc">  --}}
-        {{--  <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">  --}}
-        {{--  <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">  --}}
-        {{--  <input type="hidden" name="id_profesional_fc" value="{{ $profesional->nombre }}" id="apellido_uno_profesional_fc">  --}}
-        {{--  <input type="hidden" name="id_profesional_fc" value="{{ $profesional->apellido_uno }}" id="apellido_uno_profesional_fc">  --}}
-        {{--  <input type="hidden" name="id_profesional_fc" value="{{ $profesional->apellido_dos }}" id="apellido_uno_profesional_fc">  --}}
-
-
+        <input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
         @csrf
 		<div class="modal-content">
 			<div class="modal-header bg-info">
@@ -42,8 +30,8 @@
 						<input type="text" class="form-control form-control-sm" id="form_cons_faltante"name="form_cons_faltante" value="">
 					</div>
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <label class="floating-label-activo-sm">Especialidad</label>
-                        <input type="text" class="form-control form-control-sm" id="form_cons_faltante_especialidad"name="form_cons_faltante_especialidad" value="">
+                        <input type="hidden" name="form_cons_faltante_especialidad" id="form_cons_faltante_especialidad" value="@if($profesional->SubTipoEspecialidad()->first()) {{ $profesional->SubTipoEspecialidad()->first()->id }} @else {{ $profesional->TipoEspecialidad()->first()->id }}  @endif">
+						<label class="label"><strong>Especialidad: </strong>@if($profesional->SubTipoEspecialidad()->first()) {{ $profesional->SubTipoEspecialidad()->first()->nombre }} @else {{ $profesional->TipoEspecialidad()->first()->nombre }}  @endif </label>
                     </div>
                 </div>
                 <div class="form-row">
@@ -55,15 +43,81 @@
                 <div class="form-row">
 
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <button type="button" class="btn btn-info btn-sm btn-block">Solicitar</button>
+                        <button type="button" onclick="registrar_sol_consentimiento();" class="btn btn-info">Solicitar incorporación</button>
                     </div>
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <button type="button" class="btn btn-info btn-sm btn-block">Cerrar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
+
 
             </div>
 		</div>
 	</div>
 </div>
+
+<script>
+    function c_faltante() {
+		$('#cfaltante').modal('show');
+		}
+    function registrar_sol_consentimiento() {
+        let id_prof_sol_cons= $('#id_profesional_fc').val();
+        {{--  let prof_sol_cons_fecha= $('#prof_sol_cons_fecha').val();  --}}
+        let form_cons_faltante = $('#form_cons_faltante').val();
+        let form_cons_faltante_especialidad = $('#form_cons_faltante_especialidad').val();
+        let obs_sol_cons_formulario = $('#obs_sol_cons_formulario').val();
+
+        let url = "{{ route('ficha_medica.registrar_consentimiento_faltante') }}";
+        let hora_medica = $('#hora_medica').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+
+        $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    id_prof_sol_cons: id_prof_sol_cons,
+                    form_cons_faltante: form_cons_faltante,
+                    form_cons_faltante_especialidad: form_cons_faltante_especialidad,
+                    obs_sol_cons_formulario: obs_sol_cons_formulario,
+                },
+            })
+            .done(function(response) {
+
+                if (response != '') {
+                    console.log(response);
+                    if(response['estado'] == '1')
+                    {
+                        swal({
+                            title: "Registro de Solicitud Consentimiento." ,
+                            text: response['msj'],
+                            icon: "success",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        });
+                        $('#cfaltante').modal('hide');
+
+
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Registro de Solicitud Consentimiento." ,
+                            text: response['msj'],
+                            icon: "error",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        });
+                    }
+                }
+            })
+            .fail(function(e) {
+                console.log("error");
+                console.log(e);
+            })
+    };
+</script>
+
+
+
+
 

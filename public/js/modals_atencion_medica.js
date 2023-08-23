@@ -49,6 +49,7 @@ $('#formularios_atencion').on('click', ".accion_modal_constancia_ges", function(
 /* Enfermedades enfermedades_declaracion obligatoria */
 $('#formularios_atencion').on('click', ".accion_modal_enfermedades_declaracion_obligatoria", function() {
     console.log("abrir modal accion_modal_enfermedades_declaracion_obligatoria");
+    cargar_tabla_eno();
     $('#modal_enfermedades_declaracion_obligatoria').modal();
 });
 /* Reembolso Médico */

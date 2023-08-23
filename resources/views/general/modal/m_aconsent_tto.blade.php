@@ -28,7 +28,7 @@
 						<input type="text" class="form-control form-control-sm" id="cirugia_cons" name="cirugia_cons" value="">
 					</div>
                     <div class="form-group fill col-sm-12 col-md-12 col-lg-12 col-xl-12">
-						<label class="floating-label-activo-sm">Nombre del consentimiento</label>
+						<label class="floating-label-activo-sm"> Buscar por nombre del consentimiento</label>
 						<input  type="text" class="form-control form-control-sm" id="consentimiento" name="consentimiento" value="">
 						<input  type="hidden" id="id_consentimiento" name="id_consentimiento" value="">
                         {{-- <span style="color:red; font-size: 10px" id="msj_consentimiento"></span> --}}

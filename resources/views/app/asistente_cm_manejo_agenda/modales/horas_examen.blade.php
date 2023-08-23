@@ -12,8 +12,20 @@
 
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="form-group">
+                                    <h6 class="text-c-blue ml-2 mb-3">Seleccione Examen a realizar</h6>
+                                    <select class="form-control" name="m_hora_examen_lista_examenes" id="m_hora_examen_lista_examenes">
+                                        <option value="">Seleccione</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row mt-2">
                             <div class="m_hora_examen_busqueda">
+
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="form-group">
@@ -241,6 +253,9 @@
     // CANCELAR BBUSQUEDA
     function cancelar_busqueda_horas_examen()
     {
+        /** limpiar examen seleccionado */
+        $('#m_hora_examen_lista_examenes').val('');
+
         /** LIMPIEZA BUSQEUDA */
         $('#m_hora_examen_rut').val('');
 
@@ -442,7 +457,22 @@
 
     function agendar_hex_ex()
     {
+        let examen = $('#m_hora_examen_lista_examenes').val();
+        if (examen == '')
+        {
+            swal({
+                title: "Error!",
+                text: "Debe seleccionar examen",
+                icon: "error",
+                type: "danger",
+                DangerMode: true,
+            });
+            return false;
+        }
+
         $('#m_agendar_hora_examen_agendar_id_paciente').val($('#m_hora_examen_ex_id_paciente').val());
+        $('#m_agendar_hora_examen_lista_examenes').val($('#m_hora_examen_lista_examenes').val());
+        $('#m_agendar_hora_examen_text_lista_examenes').html($('#m_hora_examen_lista_examenes option:selected').text());
         carga_calendario_profesional();
         $('#m_agendar_hora_examen').modal('show');
         $('#m_hora_examen').modal('hide');
@@ -455,6 +485,19 @@
         // $('#he_agenda_agregar_paciente').modal('show');
         let url = "{{ route('agenda.paciente.nuevo') }}";
         let _token = $('#_token').val();
+
+        let examen = $('#m_hora_examen_lista_examenes').val();
+        if (examen == '')
+        {
+            swal({
+                title: "Error!",
+                text: "Debe seleccionar examen",
+                icon: "error",
+                type: "danger",
+                DangerMode: true,
+            });
+            return false;
+        }
 
         let rut_paciente_reserva = $('#m_hora_examen_nv_rut_paciente').val();
         if (rut_paciente_reserva == '')
@@ -665,6 +708,8 @@
                         });
 
                         $('#m_agendar_hora_examen_agendar_id_paciente').val(data.paciente_final);
+                        $('#m_agendar_hora_examen_lista_examenes').val($('#m_hora_examen_lista_examenes').val());
+                        $('#m_agendar_hora_examen_text_lista_examenes').html($('#m_hora_examen_lista_examenes option:selected').text());
                         carga_calendario_profesional();
                         $('#m_agendar_hora_examen').modal('show');
                         $('#m_hora_examen').modal('hide');

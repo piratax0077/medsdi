@@ -10,11 +10,11 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio Profesional</h5>
+                                <h5 class="m-b-10 font-weight-bold">Escritorio profesional</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="#">Mi Escritorio </a>
+                                    <a href="#">Mi escritorio </a>
                                 </li>
                             </ul>
                         </div>
@@ -23,41 +23,48 @@
             </div>
             <!--Cierre: Header-->
             <!--Botones superiores-->
-            <div class="row m-b-30">
+            <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="card-deck">
                         <div class="card subir">
                             {{-- <a href="{{ route('profesional.mi_agenda') }}"> --}}
-                            <div class="card-body text-center" onclick="seleccionar_lugar_atencion();"
+                            <div class="card-body text-center px-2" onclick="seleccionar_lugar_atencion();"
                                 style="cursor:pointer">
-                                <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-                                <h5 class="mt-2">Mi Agenda</h5>
+                                <img class="wid-40 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
+                                <h6 class="mt-1">Mi <br>agenda</h6>
                             </div>
                             {{-- </a> --}}
                         </div>
                         <div class="card subir">
                             <a href="{{ route('profesional.pacientes') }}">
-                                <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-80 text-center" src="{{ asset('images/iconos/pacientes.svg') }}">
-                                    <h5 class="mt-2">Mis Pacientes</h5>
+                                <div class="card-body text-center px-2" style="cursor:pointer">
+                                    <img class="wid-40 text-center" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                    <h6 class="mt-1">Mis <br>pacientes</h6>
                                 </div>
                             </a>
                         </div>
                         <div class="card subir">
                             <a href="{{ route('profesional.configuracion') }}">
-                                <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-60 text-center"
+                                <div class="card-body text-center px-2" style="cursor:pointer">
+                                    <img class="wid-40 text-center"
                                         src="{{ asset('images/iconos/panel_configuracion.svg') }}">
-                                    <h5 class="mt-2"> Panel de Configuración</h5>
+                                    <h6 class="mt-1"> Panel de <br>configuración</h6>
                                 </div>
                             </a>
                         </div>
                         <div class="card subir">
-                            <a href="{{ route('profesional.index_receta_online') }}">Receta
-                                Online
-                                <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-60 text-center" src="{{ asset('images/iconos/ficha_2.svg') }}">
-                                    <h5 class="mt-2">Receta Online</h5>
+                            <a href="{{ route('profesional.index_receta_online') }}">
+                                <div class="card-body text-center px-2" style="cursor:pointer">
+                                    <img class="wid-40 text-center" src="{{ asset('images/iconos/receta_online.svg') }}">
+                                    <h6 class="mt-1">Receta <br>Online</h6>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card subir">
+                            <a href="{{ route('profesional.index_transcripcion_examen') }}">
+                                <div class="card-body text-center px-2" style="cursor:pointer">
+                                    <img class="wid-40 text-center" src="{{ asset('images/iconos/examenes-ro.svg') }}">
+                                    <h6 class="mt-1 f-13">Transcripción <br>examenes</h6>
                                 </div>
                             </a>
                         </div>
@@ -65,8 +72,8 @@
                 </div>
             </div>
             <!--Tabla agenda del día y Farmacrónicos-->
-            <div class="row m-b-30">
-                <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-8 mb-3">
                     <div class="card h-100 pb-0">
                         <div class="card-header text-center bg-c-info">
                             <div class="row">
@@ -128,7 +135,7 @@
                         </div>
                     </div>
                 </div>
-                 <div class="col-md-4">
+                 <div class="col-md-4 mb-3">
                     <div class="card subir text-center h-100">
                         <img class="img-fluid card-img-top" src="{{ asset('images/iconos/inscripciones_1.svg') }}"
                             alt="Farmacrónicos">

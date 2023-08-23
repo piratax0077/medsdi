@@ -3,14 +3,17 @@
 <!-- TEMPLATE AUTORIZACION -->
 <script>
     $(document).ready(function() {
-        /* formatear rut */
-        $("#rut_acompanante").rut({
-            formatOn: 'keyup',
-            minimumLength: 2,
-            validateOn: 'change',
-            useThousandsSeparator : false
-        });
-        /** fin formulario pestaña 1 */
+        if($("#rut_acompanante").length > 0)
+        {
+            /* formatear rut */
+            $("#rut_acompanante").rut({
+                formatOn: 'keyup',
+                minimumLength: 2,
+                validateOn: 'change',
+                useThousandsSeparator : false
+            });
+            /** fin formulario pestaña 1 */
+        }
     })
     /** Autorización examen menor de edad **/
     function solicitar_autorizacion ()

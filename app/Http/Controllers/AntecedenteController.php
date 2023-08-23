@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Antecedente;
+use App\Models\Articulo;
+use App\Models\MedicamentoUsoCronicoGeneral;
 use App\Models\User;
 use App\Models\Paciente;
+use App\Models\Profesional;
 use App\Models\TipoAntecedente;
 
 class AntecedenteController extends Controller
@@ -133,7 +136,6 @@ class AntecedenteController extends Controller
 
         $registro = new Antecedente();
 
-
         /* VALIDACION CAMPOS */
         if($request->id_paciente=='')
         {
@@ -172,9 +174,6 @@ class AntecedenteController extends Controller
             $campos_requeridos = 1;
         }
         
-     
-
-
         /* FIN - VALIDACION CAMPOS */
 
         if($campos_requeridos==0)
@@ -192,15 +191,45 @@ class AntecedenteController extends Controller
 
             if($registro->save())
             {
-                $datos['estado'] = 1;
+				$datos['estado'] = 1;
                 $datos['msg'] = 'Registros Creado';
                 $datos['request_data'] = $request->all();
-            }else{
+				
+				if( $request->id_tipo_antecedente == 7)
+                {
+					$profesional = Profesional::where('id_usuario', $request->id_users)->get()->first();
+
+					$registro_med_cronico = new MedicamentoUsoCronicoGeneral();
+					$registro_med_cronico->id_ficha_atencion = NULL;
+					$registro_med_cronico->id_paciente = $request->id_paciente;
+					$registro_med_cronico->id_profesional = $profesional->id;
+					$registro_med_cronico->nombre_medicamento = $request->nombre_medicamento_cronico;
+					$registro_med_cronico->cantidad = $request->dosis;
+					$registro_med_cronico->cliente = 0;
+					$registro_med_cronico->tipo_enfermedad = 'cronica';
+					$registro_med_cronico->estado = 1;
+
+					if($registro_med_cronico->save())
+					{
+						$datos['med_cronico']['estado'] = 1;
+						$datos['med_cronico']['msg'] = 'Registros Creado';
+					}
+					else
+					{
+						$datos['med_cronico']['estado'] = 0;
+						$datos['med_cronico']['msg'] = 'Falla Registros';
+					}
+                }
+            }
+			else
+			{
                 $datos['estado'] = 0;
                 $datos['msg'] = 'Problemas al registrar';
                 $datos['request_data'] = $request->all();
             }
-        }else{
+        }
+		else
+		{
             $datos['estado'] = 0;
             $datos['msg'] = 'Campos requeridos';
             $datos['error'] = $error;
@@ -381,6 +410,10 @@ class AntecedenteController extends Controller
         $nombre_medicamento_cronico = isset($nombre_medicamento_cronico)==true?$nombre_medicamento_cronico:'';
         $id_dosis = isset($id_dosis)==true?$id_dosis:'';
         $dosis = isset($dosis)==true?$dosis:'';
+        $institucion = isset($institucion)==true?$institucion:'';
+        $discapacidad_tipo = isset($discapacidad_tipo)==true?$discapacidad_tipo:'';
+        $discapacidad_grado = isset($discapacidad_grado)==true?$discapacidad_grado:'';
+        $discapacidad_permanente = isset($discapacidad_permanente)==true?$discapacidad_permanente:'';
         
         $json_data = array(
             'nombre'=>$nombre,
@@ -405,7 +438,11 @@ class AntecedenteController extends Controller
             'nombre_medicamento_cronico'=>$nombre_medicamento_cronico,
             'id_dosis'=>$id_dosis,
             'dosis'=>$dosis,
-            'fecha_regitro'=>date('d-m-Y H:i:s')
+            'institucion'=>$institucion,
+            'discapacidad_tipo'=>$discapacidad_tipo,
+            'discapacidad_grado'=>$discapacidad_grado,
+            'discapacidad_permanente'=>$discapacidad_permanente,
+            'fecha_regitro'=>date('d-m-Y')
         );
 
         /* JSON */ 
@@ -431,7 +468,11 @@ class AntecedenteController extends Controller
             "id_medicamento":"",
             "nombre_medicamento_cronico":"",
             "id_dosis":"",
-            "dosis":""
+            "dosis":"",
+            "institucion":"",
+            "discapacidad_tipo":"",
+            "discapacidad_grado":"",
+            "discapacidad_permanente":"",
           } 
         */
 

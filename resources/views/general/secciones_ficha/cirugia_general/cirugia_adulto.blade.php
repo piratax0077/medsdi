@@ -1,13 +1,13 @@
 <!--cirugia general-->
-<div class="col-sm-12 col-md-12">
-    <div class="card">
-        <div class="card-header" id="exam_esp">
+<div class="col-sm-12 col-md-12" style="background-color: #ecf0f5!important;">
+    <div class="card-a">
+        <div class="card-header-a" id="exam_esp">
             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_c" aria-expanded="false" aria-controls="exam_esp_c">
                 Examen especialidad Cirugía General
             </button>
         </div>
         <div id="exam_esp_c" class="collapse" aria-labelledby="exam_esp" data-parent="#exam_esp">
-            <div class="card-body-aten shadow-none">
+            <div class="card-body-aten-a shadow-none">
                 <div id="form-cg-adulto">
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -282,80 +282,8 @@
 
                                 <!--HOSPITALIZACION-->
                                 <div class="tab-pane fade show" id="in_hosp_cg" role="tabpanel" aria-labelledby="in_hosp_cg-tab">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="f-16 text-c-blue mb-3">Detalle hospitalización</h6>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Hospitalizar En:</label>
-                                                <select name="hospen_cg" id="hospen_cg" data-titulo="Hospitalización" data-seccion="Hospitalizacion" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('hospen_cg','div_detalle_hospen_cg','obs_hospen_cg',3);limpiar_hospitalizacion('hospen_cg',0,)">
-                                                    <option value="0" selected>No</option>
-                                                    <option value="1">Clínica</option>
-                                                    <option value="2">Hospital</option>
-                                                    <option value="3">Otro Describir</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-12" id="div_detalle_hospen_cg" style="display:none">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Otro Lugar Describir</label>
-                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Es Urgencia Qx.?" data-seccion="Hospitalizacion" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_hospen_cg" id="obs_hospen_cg"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Servicio</label>
-                                                <select name="hosp_enserv_cg" id="hosp_enserv_cg" data-titulo="En Servicio" data-seccion="Hospitalizacion" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('hosp_enserv_cg','div_detalle_hosp_enserv_cg','obs_hosp_enserv_cg',4);">
-                                                    <option value="1" selected>Servicio Cirugía</option>
-                                                    <option value="2">UTI</option>
-                                                    <option value="3">Servicio de urgencia</option>
-                                                    <option value="4">Otro</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-12" id="div_detalle_hosp_enserv_cg" style="display:none">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Otro Servicio Describir</label>
-                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. En Servicio" data-seccion="Hospitalizacion" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_hosp_enserv_cg" id="obs_hosp_enserv_cg"></textarea>
-                                                </div>
-                                            </div>
+                                    @include('general.hospitalizacion.hospitalizar')
 
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Otro Tratamiento</label>
-                                                <select name="otro_tto_cg" id="otro_tto_cg" data-titulo="Otro Tratamiento" data-seccion="Hospitalizacion" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('otro_tto_cg','div_detalle_otro_tto_cg','obs_otro_tto_cg',2);">
-                                                    <option value="1" selected>No</option>
-                                                    <option value="2">Si</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-12" id="div_detalle_otro_tto_cg" style="display:none">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Otro Tratamiento Describir</label>
-                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Otro Tratamiento" data-seccion="Hospitalizacion" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_otro_tto_cg" id="obs_otro_tto_cg"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-3">
-                                            <label class="floating-label-activo-sm">Observaciones a la Hospitalización</label>
-                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Hospitalizacion" data-seccion="Hospitalizacion" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_hospitalizacion_cg" id="obs_hospitalizacion_cg"></textarea>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingresomedico()";<i class="feather icon-save"></i> Hospitalización Tto Médico</button>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="sol_pabellon()";<i class="feather icon-save"></i> Solicitar Pabellón</button>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingreso()";<i class="feather icon-save"></i> Hospitalización Cirugía</button>
-                                        </div>
-
-
-                                    </div>
                                 </div>
                             </div>
                         </div>

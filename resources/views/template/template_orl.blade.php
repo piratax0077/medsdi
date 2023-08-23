@@ -30,8 +30,8 @@
     <!-- fileupload-custom css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
     <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
-
-
+	<!--boton azul-->
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
 
     <!--Accordion-->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
@@ -214,9 +214,10 @@
 					//SuccessMode: true,
 				});
 			@endif
-        });
-    </script>
-
+      
+  });
+            
+	</script>
     @yield('js_inferior')
     @yield('page-script')
     @yield('page-script-ficha-atencion'){{-- ficha_orl.blade --}}

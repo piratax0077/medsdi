@@ -1,103 +1,110 @@
-<!--ENFERMO CRÓNICO O GES-->
-<div class="col-sm-12 col-md-12" >
-    <div class="row" style="background-color: rgb(211, 235, 205);margin:0.5%">
-        {{-- CRONICO --}}
-        <div class="col-md-4 mx-auto">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <div class="switch switch-success d-inline m-r-10">
-                            <input type="checkbox" onchange="es_cronico();" id="enf_cronico" name="enf_cronico" data-toggle="modal" data-target="#form_enfermo_cronico" value="{!! old('enf_cronico') !!}">
-                            <label for="enf_cronico" class="cr"></label>
-                        </div>
-                        <label>¿Es enfermo crónico?</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row " hidden>
-                <div class="col-sm-12">
-                    <div class="alert alert-warning mx-auto" role="alert">
-                        <table class="table table-borderless mt-0 mb-0">
-                            <tbody>
-                                <tr id="tr_obesidad">
-                                    <td class="align-middle pb-1 pt-1">Obesidad</td>
-                                    <td class="align-middle pb-1 pt-1">
-                                        <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                            <i class="feather icon-x"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr id="tr_diabetes">
-                                    <td class="align-middle pb-1 pt-1">Diabetes</td>
-                                    <td class="align-middle pb-1 pt-1">
-                                        <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                            <i class="feather icon-x"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr id="tr_hipertesion">
-                                    <td class="align-middle pb-1 pt-1">Hipertensión</td>
-                                    <td class="align-middle pb-1 pt-1">
-                                        <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                            <i class="feather icon-x"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+    <div class="card-a" style=" border: 1px solid #6c9bd5;">
+        <div class="card-header-a" id="cgc" >
+            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open" type="button" data-toggle="collapse" data-target="#cgc-c" aria-expanded="false" aria-controls="cgc-c">
+              Crónicos / GES / Confidencial
+            </button>
         </div>
-        {{-- GES --}}
-        <div class="col-md-4">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <div class="switch switch-success d-inline m-r-10">
-                            <input type="checkbox" id="modal_ges" name="modal_ges" value="{!! old('modal_ges') !!}">
-                            {{-- <label for="modal_ges" class="cr" data-toggle="modal"
-                                    data-target="#form_ges"></label> --}}
-                            <label for="modal_ges" class="cr"></label>
+        <div id="cgc-c" class="collapse show" aria-labelledby="cgc" data-parent="#cgc">
+            <div class="card-body-aten-a">
+                <div class="row">
+                    {{-- CRONICO --}}
+                    <div class="col-md-4 mx-auto">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" onchange="es_cronico();" id="enf_cronico" name="enf_cronico" data-toggle="modal" data-target="#form_enfermo_cronico" value="{!! old('enf_cronico') !!}">
+                                        <label class="custom-control-label" for="enf_cronico">¿Es enfermo crónico?</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <label>Ges</label>
+                        <div class="row " hidden>
+                            <div class="col-sm-12">
+                                <div class="alert alert-warning mx-auto" role="alert">
+                                    <table class="table table-borderless mt-0 mb-0">
+                                        <tbody>
+                                            <tr id="tr_obesidad">
+                                                <td class="align-middle pb-1 pt-1">Obesidad</td>
+                                                <td class="align-middle pb-1 pt-1">
+                                                    <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
+                                                        <i class="feather icon-x"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr id="tr_diabetes">
+                                                <td class="align-middle pb-1 pt-1">Diabetes</td>
+                                                <td class="align-middle pb-1 pt-1">
+                                                    <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
+                                                        <i class="feather icon-x"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr id="tr_hipertesion">
+                                                <td class="align-middle pb-1 pt-1">Hipertensión</td>
+                                                <td class="align-middle pb-1 pt-1">
+                                                    <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
+                                                        <i class="feather icon-x"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="row" hidden>
-                <div class="alert alert-warning mx-auto my-0" role="alert">
-                    <table class="table table-borderless mt-0 mb-0">
-                        <tbody>
-                            <tr>
-                                <td class="align-middle pb-1 pt-1">Paciente GES<br>PS.02
-                                </td>
-                                <td class="align-middle pb-1 pt-1">
-                                    <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                        <i class="feather icon-x"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="row">
-                <div class="form-group">
-                    <div class="switch switch-success d-inline m-r-10">
-                        <input type="checkbox" id="confidencial" name="confidencial" value="{!! old('confidencial') !!}" />
-                        <label for="confidencial" class="cr"></label>
+                    {{-- GES --}}
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="modal_ges" name="modal_ges" value="{!! old('modal_ges') !!}">
+                                        {{-- <label for="modal_ges" class="cr" data-toggle="modal"
+                                                data-target="#form_ges"></label> --}}
+                                        <label class="custom-control-label" for="modal_ges">GES</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" hidden>
+                            <div class="alert alert-warning mx-auto my-0" role="alert">
+                                <table class="table table-borderless mt-0 mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="align-middle pb-1 pt-1">Paciente GES<br>PS.02
+                                            </td>
+                                            <td class="align-middle pb-1 pt-1">
+                                                <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
+                                                    <i class="feather icon-x"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <label>Confidencial</label>
-                </div>
-            </div>
-            <div class="row" id="confidencial_descripcion" style="display: none">
-                <div class="col-sm-12">
-                    <div class="alert alert-warning mx-auto" role="alert">
-                        <p class="text-dark f-14 pb-1 pt-1 mt-0 mb-0">Este registro
-                            de atención médica es confidencial
-                        </p>
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="confidencial" name="confidencial" value="{!! old('confidencial') !!}" >
+                                    <label class="custom-control-label" for="confidencial">Confidencial</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="confidencial_descripcion" style="display: none">
+                            <div class="col-sm-12">
+                                <div class="alert alert-warning mx-auto" role="alert">
+                                    <p class="text-dark f-14 pb-1 pt-1 mt-0 mb-0">Este registro
+                                        de atención médica es confidencial
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -480,56 +487,53 @@
                     <hr>
                     <div class="row bg-light mb-4 pt-4">
                         <div class="col-md-12">
-                            <form>
-
-                                <div class="form-row">
-                                    <div class="form-group col-sm-3 col-md-3">
-                                        <label class="floating-label-activo-sm">Peso</label>
-                                        <input type="text" class="form-control form-control-sm" name="peso_diabetes"
-                                            id="peso_diabetes">
-                                    </div>
-                                    <div class="form-group col-sm-3 col-md-3">
-                                        <label class="floating-label-activo-sm">Piés</label>
-                                        <input type="text" class="form-control form-control-sm" name="pies_diabetes"
-                                            id="pies_diabetes">
-                                    </div>
-                                    <div class="form-group col-sm-3 col-md-3">
-                                        <label class="floating-label-activo-sm">Hg A1c</label>
-                                        <input type="text" class="form-control form-control-sm" name="hga1c_diabetes"
-                                            id="hga1c_diabetes">
-                                    </div>
-                                    <div class="form-group col-sm-3 col-md-3">
-                                        <label class="floating-label-activo-sm">Colesterol</label>
-                                        <input type="text" class="form-control form-control-sm"
-                                            name="colesterol_diabetes" id="colesterol_diabetes">
-                                    </div>
+                            <div class="form-row">
+                                <div class="form-group col-sm-3 col-md-3">
+                                    <label class="floating-label-activo-sm">Peso</label>
+                                    <input type="text" class="form-control form-control-sm" name="peso_diabetes"
+                                        id="peso_diabetes">
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group col-sm-4 col-md-4">
-                                        <label class="floating-label-activo-sm">Creatina</label>
-                                        <input type="text" class="form-control form-control-sm"
-                                            name="creatina_diabetes" id="creatina_diabetes">
-                                    </div>
-                                    <div class="form-group col-sm-4 col-md-4">
-                                        <label class="floating-label-activo-sm">Glicosilada postprandial</label>
-                                        <input type="text" class="form-control form-control-sm"
-                                            name="glicosilada_postprandial_diabetes"
-                                            id="glicosilada_postprandial_diabetes">
-                                    </div>
-                                    <div class="form-group col-sm-4 col-md-4">
-                                        <label class="floating-label-activo-sm">Glicosilada ayuno</label>
-                                        <input type="text" class="form-control form-control-sm"
-                                            name="glicosilada_ayuno_diabetes" id="glicosilada_ayuno_diabetes">
-                                    </div>
+                                <div class="form-group col-sm-3 col-md-3">
+                                    <label class="floating-label-activo-sm">Piés</label>
+                                    <input type="text" class="form-control form-control-sm" name="pies_diabetes"
+                                        id="pies_diabetes">
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group col-sm-12 col-md-12">
-                                        <button type="button" onclick="registrar_diabetes();"
-                                            class="btn btn-success btn-sm float-right"><i
-                                                class="feather icon-plus"></i>Guardar Control</button>
-                                    </div>
+                                <div class="form-group col-sm-3 col-md-3">
+                                    <label class="floating-label-activo-sm">Hg A1c</label>
+                                    <input type="text" class="form-control form-control-sm" name="hga1c_diabetes"
+                                        id="hga1c_diabetes">
                                 </div>
-                            </form>
+                                <div class="form-group col-sm-3 col-md-3">
+                                    <label class="floating-label-activo-sm">Colesterol</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        name="colesterol_diabetes" id="colesterol_diabetes">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-sm-4 col-md-4">
+                                    <label class="floating-label-activo-sm">Creatina</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        name="creatina_diabetes" id="creatina_diabetes">
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4">
+                                    <label class="floating-label-activo-sm">Glicosilada postprandial</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        name="glicosilada_postprandial_diabetes"
+                                        id="glicosilada_postprandial_diabetes">
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4">
+                                    <label class="floating-label-activo-sm">Glicosilada ayuno</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        name="glicosilada_ayuno_diabetes" id="glicosilada_ayuno_diabetes">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-sm-12 col-md-12">
+                                    <button type="button" onclick="registrar_diabetes();"
+                                        class="btn btn-success btn-sm float-right"><i
+                                            class="feather icon-plus"></i>Guardar Control</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row">

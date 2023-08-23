@@ -1102,6 +1102,11 @@ class EscritorioProfesional extends Controller
 
     public function buscar_asistente(Request $request)
     {
+        $profesional = '';
+        $profesional_temp = Profesional::where('id_usuario', Auth::user()->id)->first();
+        if($profesional_temp)
+            $profesional = $profesional_temp;
+
         $asistente = Asistente::where('rut', $request->rut)->first();
         $lugar = LugarAtencion::where('id', $request->id_lugar)->first();
 
@@ -1109,7 +1114,10 @@ class EscritorioProfesional extends Controller
             return 'null';
         }
 
-        $asistenteL = AsistenteLugarAtencion::where('id_asistente', $asistente->id)->where('id_lugar_atencion', $lugar->id)->first();
+        if($profesional)
+            $asistenteL = AsistenteLugarAtencion::where('id_asistente', $asistente->id)->where('id_lugar_atencion', $lugar->id)->where('id_profesional', $profesional->id)->first();
+        else
+            $asistenteL = AsistenteLugarAtencion::where('id_asistente', $asistente->id)->where('id_lugar_atencion', $lugar->id)->first();
 
         if ($asistenteL == null) {
             return json_encode($asistente);
@@ -1142,6 +1150,8 @@ class EscritorioProfesional extends Controller
         $asistente_lugar_atencion->id_asistente = $request->id_asistente;
         $asistente_lugar_atencion->id_lugar_atencion = $request->id_lugar_atencion;
         $asistente_lugar_atencion->id_profesional = $profesional->id;
+        if(!empty($request->examen))
+            $asistente_lugar_atencion->examen = $request->examen;
 
         if (!$asistente_lugar_atencion->save()) {
             return 'error';
@@ -1461,6 +1471,8 @@ class EscritorioProfesional extends Controller
         //$lugarAtencion = LugarAtencion::where()
         $lugares = $profesional->LugaresAtencion()->get();
         //ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->get();
+
+        // echo json_encode($lugares);
 
         //$lugares = [];
         //
@@ -2701,6 +2713,7 @@ class EscritorioProfesional extends Controller
         $datos = array();
         $ficha_tipo = new FichaOtorrinoTipo();
         $ficha_tipo->id_profesional = $request->id_profesional;
+        $ficha_tipo->tipo = $request->tipo;
         $ficha_tipo->nombre = $request->registro_f_t_orl_nombre;
         $ficha_tipo->descripcion = $request->registro_f_t_orl_descripcion;
         $ficha_tipo->id_usa_audifono = $request->modal_agregar_tipo_usa_audifono;
@@ -2749,6 +2762,15 @@ class EscritorioProfesional extends Controller
         $ficha_tipo->obs_ex_orl = $request->observaciones_obs_ex_orl;
         $ficha_tipo->hip_diag_orl = '';
         $ficha_tipo->ind_orl = '';
+
+        $ficha_tipo->piel_tegumnto = $request->modal_agregar_tipo_piel_tegumnto;
+        $ficha_tipo->obs_piel_tegumnto = $request->observaciones_obs_piel_tegumnto;
+        $ficha_tipo->adenopatias = $request->modal_agregar_tipo_adenopatias;
+        $ficha_tipo->obs_adenopatias = $request->observaciones_obs_adenopatias;
+        $ficha_tipo->tumores_masas = $request->modal_agregar_tipo_tumores_masas;
+        $ficha_tipo->obs_tumores_masas = $request->observaciones_obs_tumores_masas;
+        $ficha_tipo->gland_anexas = $request->modal_agregar_tipo_gland_anexas;
+        $ficha_tipo->obs_gland_anexas = $request->observaciones_obs_gland_anexas;
 
         if($ficha_tipo->save())
         {
@@ -3530,12 +3552,12 @@ class EscritorioProfesional extends Controller
            {
                 $direccion = Direccion::find($profesional_provisorio->id_direccion);
 
-                
+
 
                 if($direccion)
-                {                    
+                {
                     $direccion_nombre =  $direccion->direccion;
-                    $direccion_numero =  $direccion->numero_dir;            
+                    $direccion_numero =  $direccion->numero_dir;
                     $id_ciudad = $direccion->id_ciudad;
 
                     $ciudad = Ciudad::find($direccion->id_ciudad);
@@ -3548,14 +3570,14 @@ class EscritorioProfesional extends Controller
                     }
                 }else{
                     $direccion_nombre =  '';
-                    $direccion_numero =  '';            
+                    $direccion_numero =  '';
                     $id_ciudad = 0;
                     $id_region =  0;
                 }
 
            }else{
                     $direccion_nombre =  '';
-                    $direccion_numero =  '';            
+                    $direccion_numero =  '';
                     $id_ciudad = 0;
                     $id_region =  0;
            }
@@ -3564,7 +3586,7 @@ class EscritorioProfesional extends Controller
             abort(401);
         }
 
-        
+
 
          $regiones = Region::all();
          $ciudades = Ciudad::all();
@@ -3572,7 +3594,7 @@ class EscritorioProfesional extends Controller
 
          $especialidades = Especialidad::where('estado',1)->get();
          $tipo_especialidad = TipoEspecialidad::where('estado',1)->get();
-         $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get();         
+         $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get();
 
          return view('app.profesional.acceso_profesional_no_inscrito')->with([
              'id_registro' => $id_registro,
@@ -3641,7 +3663,7 @@ class EscritorioProfesional extends Controller
         {
             $id_usuario_ = $profesional_provisorio->id_usuario;
             $id_usuario_genera_ = $profesional_provisorio->id_usuario_genera; // ID USUARIO QUE CREO INVITACION
-            
+
             $profesional_provisorio->nombre = $nombre;
             $profesional_provisorio->apellido_uno = $primer_apellido;
             $profesional_provisorio->apellido_dos = $segundo_apellido;
@@ -3663,7 +3685,7 @@ class EscritorioProfesional extends Controller
         // PROFESIONAL EXISTENTE
         $validar_profesional = Profesional::where('email',$email)->first();
         if($validar_profesional)
-        {            
+        {
             $id_profesional_ = $validar_profesional->id;
             $validar_profesional->nombre = $nombre;
             $validar_profesional->apellido_uno = $primer_apellido;
@@ -3691,8 +3713,8 @@ class EscritorioProfesional extends Controller
             $profesional_provisorio2->id_usuario = $id_usuario_;
             $profesional_provisorio2->save();
 
-            //AUTH USUARIO                  
-            //var_dump($id_usuario_);                                            
+            //AUTH USUARIO
+            //var_dump($id_usuario_);
             if(Auth::loginUsingId($id_usuario_))
             {
                 $estado = 1;
@@ -3706,7 +3728,7 @@ class EscritorioProfesional extends Controller
             //LUGAR ATENCION
             $lugarAtencion = LugarAtencion::where('email',$email)->first();
             $lugar_atencion_id_ = $lugarAtencion->id;
-            
+
             $datos['estado'] = 1;
             $datos['msj'] = 'Profesional ya existe';
 
@@ -3840,10 +3862,10 @@ class EscritorioProfesional extends Controller
             }
         }
 
-        // HORA MEDICA        
-        $paciente = Paciente::where('id_usuario', $id_usuario_genera_)->first();        
-        $hora_medica = new HoraMedica();        
-        
+        // HORA MEDICA
+        $paciente = Paciente::where('id_usuario', $id_usuario_genera_)->first();
+        $hora_medica = new HoraMedica();
+
         $hora_medica->id_paciente = $paciente->id;
         $hora_medica->id_profesional = $id_profesional_;
         $hora_medica->id_asistente = 2;

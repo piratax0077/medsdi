@@ -39,35 +39,35 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <table id="res-config" class="display table table-striped  dt-responsive nowrap table-xs"
+                                <table id="res-config" class="display table table-striped dt-responsive nowrap table-xs"
                                     style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th class="text-center align-middle">Paciente</th>
-                                            <th class="text-center align-middle">Nacimiento</th>
-                                            <th class="text-center align-middle">Convenio</th>
-                                            <th class="text-center align-middle">Contacto</th>
-                                            <th class="text-center align-middle">Acción</th>
-                                            <th class="text-center align-middle">Usuario</th>
+                                            <th>Paciente</th>
+                                            <th>Nacimiento</th>
+                                            <th>Convenio</th>
+                                            <th>Contacto</th>
+                                            <th>Acción</th>
+                                            <th>Usuario</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @if (isset($paciente) && count($paciente) > 0 && $paciente != null && $paciente != '')
                                             @foreach ($paciente as $p)
                                                 <tr>
-                                                    <td class="text-center align-middle">
+                                                    <td>
                                                         {{ $p->nombres . ' ' . $p->apellido_uno . ' ' . $p->apellido_dos }}<br>
                                                         {{ $p->rut }}<br>
                                                     </td>
-                                                    <td class="text-center align-middle">
+                                                    <td>
                                                         {{ \Carbon\Carbon::parse($p->fecha_nac)->format('d/m/Y') }}</td>
                                                     <td class="text-center align-middle">{{ $p->Prevision()->first()->nombre }}
                                                     </td>
-                                                    <td class="text-center align-middle">
+                                                    <td>
                                                         {{ $p->email }}<br>
                                                         {{ $p->telefono_uno }}
                                                     </td>
-                                                    <td class="text-center align-middle">
+                                                    <td>
                                                         @if($p->id_usuario)
                                                         <a href="{{ ROUTE('check_sdi', ['id_recept' => $p->id_usuario,'urla'=> 'Profesional/Mis_pacientes','urln' => 'Mi_Ficha_Medica']) }}" 
                                                             class="btn btn-primary btn-icon" data-toggle="tooltip"
@@ -82,22 +82,29 @@
                                                             class="btn btn-warning btn-sm btn-icon" data-toggle="tooltip"
                                                             data-placement="top" title="Ficha Médica Única"><i
                                                                 class="feather icon-file-plus"></i></a>-->
-
-                                                        <a href="{{ ROUTE('profesional.editar_paciente', $p->id) }}"
+														@if($p->id_usuario)
+                                                        <a href="{{ ROUTE('check_sdi', ['id_recept' => $p->id_usuario,'urla'=> 'Profesional/Mis_pacientes','urln' => 'Profesional/Editar_paciente/'.$p->id, 'id_tipo' => 9]) }}" 
                                                             class="btn btn-secondary btn-sm btn-icon" data-toggle="tooltip"
                                                             data-placement="top" title="Editar datos medicos del paciente"><i
                                                                 class="feather icon-edit"></i></a>
-
+                                                        @endif 
+                                                        {{-- 
+															<a href="{{ ROUTE('profesional.editar_paciente', $p->id) }}"
+                                                            class="btn btn-secondary btn-sm btn-icon" data-toggle="tooltip"
+                                                            data-placement="top" title="Editar datos medicos del paciente"><i
+                                                                class="feather icon-edit"></i></a>
+														--}}
+		
                                                         <!--<a target="_blank" class="btn btn-icon btn-success text-white"
                                                             data-toggle="modal" data-target="#modal_correo" data-placement="top"
                                                             title="Enviar Email"><i class="fas feather icon-mail"></i></a>-->
                                                     </td>
                                                     @if ($p->id_premium == null)
-                                                        <td class="text-left align-middle"><span
+                                                        <td><span
                                                                 class="badge badge-primary">Normal</span>
                                                         </td>
                                                     @else
-                                                        <td class="text-left align-middle"><span
+                                                        <td><span
                                                                 class="badge badge-success">Premium</span>
                                                         </td>
                                                     @endif

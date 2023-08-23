@@ -1,243 +1,242 @@
 @extends('template.asistente_cm_manejo_agenda.template')
 @section('content')
-<!--Container Completo-->
-<div class="pcoded-main-container">
-    <div class="pcoded-content">
-        <!--Header-->
-        <div class="page-header">
-            <div class="page-block">
-                <div class="row align-items-center">
-                    <div class="col-md-12">
-                        <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Escritorio confirmación de agenda</h5>
+    <!--Container Completo-->
+    <div class="pcoded-main-container">
+        <div class="pcoded-content">
+            <!--Header-->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h5 class="m-b-10 font-weight-bold">Escritorio confirmación de agenda</h5>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ route('asistentecm.ma.home') }}">Mi escritorio </a>
+                                </li>
+                            </ul>
                         </div>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('asistentecm.ma.home') }}">Mi escritorio </a>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--Cierre: Header-->
+            <!--Cierre: Header-->
 
 
-        <div class="row">
-            <div class="col-md-12 mb-3">
-                <div class="card-deck">
-                    <div class="card subir px-4 py-2">
-                        <a href="{{ ROUTE('asistentecm.ma.confirmar_hora') }}">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <div class="card-deck">
+                        <div class="card subir px-4 py-2">
+                            <a href="{{ ROUTE('asistentecm.ma.confirmar_hora') }}">
+
+                                    <div class="row d-inline my-auto">
+                                        <div class="col-sm-4 d-inline">
+                                            <img class="wid-40 mt-0 " src="{{ asset('images/iconos/agenda.svg') }}">
+                                        </div>
+                                        <div class="col-sm-8 d-inline">
+                                            <h5 class="text-left d-inline">Confirmar hora</h5>
+                                        </div>
+                                    </div>
+
+                            </a>
+                        </div>
+                        <div class="card subir px-4 py-2">
+                            <a href="{{ ROUTE('asistentecm.ma.buscar_paciente') }}">
 
                                 <div class="row d-inline my-auto">
                                     <div class="col-sm-4 d-inline">
-                                        <img class="wid-40 mt-0 " src="{{ asset('images/iconos/agenda.svg') }}">
+                                        <img class="wid-40 mt-0 " src="{{ asset('images/iconos/pacientes.svg') }}">
                                     </div>
                                     <div class="col-sm-8 d-inline">
-                                        <h5 class="text-left d-inline">Confirmar hora</h5>
+                                        <h5 class="text-left d-inline">Buscar pacientes</h5>
                                     </div>
                                 </div>
 
-                        </a>
-                    </div>
-                    <div class="card subir px-4 py-2">
-                        <a href="{{ ROUTE('asistentecm.ma.buscar_paciente') }}">
+                            </a>
+                        </div>
 
-                            <div class="row d-inline my-auto">
-                                <div class="col-sm-4 d-inline">
-                                    <img class="wid-40 mt-0 " src="{{ asset('images/iconos/pacientes.svg') }}">
+                        <div class="card subir px-4 py-2">
+                            <a href="{{ ROUTE('asistentecm.ma.mis_profesionales') }}">
+
+                                <div class="row d-inline my-auto">
+                                    <div class="col-sm-4 d-inline">
+                                        <img class="wid-40 mt-40" src="{{ asset('images/iconos/profesionales.svg') }}">
+                                    </div>
+                                    <div class="col-sm-8 d-inline">
+                                        <h5 class="mt-3 text-left d-inline">Profesionales</h5>
+                                    </div>
                                 </div>
-                                <div class="col-sm-8 d-inline">
-                                    <h5 class="text-left d-inline">Buscar pacientes</h5>
-                                </div>
-                            </div>
 
-                        </a>
-                    </div>
-
-                    <div class="card subir px-4 py-2">
-                        <a href="{{ ROUTE('asistentecm.ma.mis_profesionales') }}">
-
-                            <div class="row d-inline my-auto">
-                                <div class="col-sm-4 d-inline">
-                                    <img class="wid-40 mt-40" src="{{ asset('images/iconos/profesionales.svg') }}">
-                                </div>
-                                <div class="col-sm-8 d-inline">
-                                    <h5 class="mt-3 text-left d-inline">Profesionales</h5>
-                                </div>
-                            </div>
-
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--Row Botones
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="card-deck">
-
-                    <div class="card  subir py-auto">
-                        <a href="{{ ROUTE('asistentecm.ma.confirmar_hora') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
-                                <h5 class="mt-1 mb-0">Confirmar Hora</h5>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="card  subir py-auto">
-                        <a href="{{ ROUTE('asistentecm.ma.buscar_paciente') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
-                                <h5 class="mt-1 mb-0">Buscar Pacientes</h5>
-                            </div>
-                        </a>
-                    </div>
-                    {{--  <div class="card  subir py-auto">
-                        <a href="{{ ROUTE('asistente.reservar_hora') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/profesional_2.svg') }}">
-                                <h5 class="mt-1 mb-0">Reservar Hora Médica</h5>
-                            </div>
-                        </a>
-                    </div>  --}}
-                    <div class="card subir py-auto">
-                        <a href="{{ ROUTE('asistentecm.ma.mis_profesionales') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-30 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-                                <h5 class="mt-1 mb-0">Profesionales</h5>
-                            </div>
-                        </a>
-                    </div>
-                    {{--  <div class="card subir py-auto">
-                        <a href="{{ ROUTE('asistente.administracion_asistente') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                <h5 class="mt-1 mb-0">Administración</h5>
-                            </div>
-                        </a>
-                    </div>  --}}
-                    {{-- <div class="card subir py-auto">
-                        <a href="{{ ROUTE('asistentecm.ma.rendir') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                <h5 class="mt-1 mb-0">Entrega de Caja</h5>
-                            </div>
-                        </a>
-                    </div> --}}
-                    {{--
-                    <div class="card py-auto subir">
-                        <a href="{{ ROUTE('asistente.venta_productos') }}">
-                        <a href="{{ ROUTE('asistente.registro_paciente') }}" class="btn" type="button">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/otros_servicios_1.svg') }}">
-                                <h5 class="mt-1 mb-0"> Venta de Productos</h5>
-                            </div>
-                        </a>
-                    </div>
-                    --}}
-                </div>
-            </div>
-        </div>-->
-
-        <!--Tabla agenda del día y flujo de caja-->
-        <div class="row m-b-10">
-            <div class="col-md-12">
-                <div class="card h-100 pb-1">
-                    <div class="card-header bg-c-info">
-                        <div class="row">
-                            <div class="col-sm-12 d-inline text-center">
-                                <h5 class="text-white my-1" style="font-size: 1.2rem;">Agendas Profesionales</h5>
-                            </div>
+                            </a>
                         </div>
                     </div>
-                    <input type="hidden" name="agenda_lugar_atencion_asistente" id="agenda_lugar_atencion_asistente" value="{{ $lugares_atencion->id }}">
-                    <div class="card-body pt-4 pb-0">
-						<div class="form-row">
-							<div class="col-sm-3 d-inline text-center">
-								<div class="card">
-									<label class="floating-label-activo-sm">Agendas del Centro</label>
-									<select class="form-control form-control-sm" id="agenda_profesional_asistente" name="agenda_profesional_asistente" onchange="cargarAgendaProfesional('')">
-										<option value="">Selecione</option>
-                                        @if($profesionales)
-                                        @foreach($profesionales as $key_pro => $value_pro)
-                                            <option value="{{ $value_pro->id }}">{{ strtoupper($value_pro->nombre) }} {{ strtoupper($value_pro->apellido_uno) }} {{ strtoupper($value_pro->apellido_dos) }}</option>
-                                        @endforeach
-                                    @endif
-									</select>
-								</div>
-							</div>
-							<div class="col-sm-9 d-inline text-center">
-								<div class="dt-responsive table-responsive" >
-									<table class="table table-striped table-bordered nowrap table-xs" id="tabla_info_profesional">
-										<thead>
-											<tr >
-												<th colspan="2" class="text-center align-middle">Agenda Profesional:</th>
-											</tr>
-										</thead>
-										<tbody style="display: none;">
-                                            <tr>
-                                                <td class="text-center align-middle">
-                                                    <span><strong id="nombre_profesional_agenda"></strong></span><br>
-                                                    <span id="especialidad_porfesional_agenda">
-                                                    </span>
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                        {{--  <button type="button" class="btn btn-info btn-sm" id="btn_ver_info_profesional_seleccionado"  onclick="info_profesional({{ $profesional->id }});"><i class="fa fa-plus"></i> Ver Información</button>  --}}
-                                                        <button type="button" class="btn btn-info btn-sm" id="btn_ver_info_profesional_seleccionado"  onclick=""><i class="fa fa-plus"></i> Ver Información</button>
-                                                </td>
-                                            </tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-                        <div class="form-row">
-                            <div class="col-sm-12 d-inline text-center">
-								<div class="card">
-                                    <div class="row">
-                                        <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
-                                            <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado" onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
-                                        </div>
-                                        <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
-                                            <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_extra" onclick="abrir_horas_extras()"; ><i class="fas fa-save"></i>  Cargar Hora Extra del profesional</button>
-                                        </div>
-                                        <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
-                                            <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_examen" onclick="abrir_horas_examen()"; ><i class="fas fa-save"></i>  Cargar Hora Examen del profesional</button>
+                </div>
+            </div>
+            <!--Row Botones
+            <div class="row m-b-5">
+                <div class="col-md-12">
+                    <div class="card-deck">
+
+                        <div class="card  subir py-auto">
+                            <a href="{{ ROUTE('asistentecm.ma.confirmar_hora') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                    <h5 class="mt-1 mb-0">Confirmar Hora</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card  subir py-auto">
+                            <a href="{{ ROUTE('asistentecm.ma.buscar_paciente') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                    <h5 class="mt-1 mb-0">Buscar Pacientes</h5>
+                                </div>
+                            </a>
+                        </div>
+                        {{--  <div class="card  subir py-auto">
+                            <a href="{{ ROUTE('asistente.reservar_hora') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/profesional_2.svg') }}">
+                                    <h5 class="mt-1 mb-0">Reservar Hora Médica</h5>
+                                </div>
+                            </a>
+                        </div>  --}}
+                        <div class="card subir py-auto">
+                            <a href="{{ ROUTE('asistentecm.ma.mis_profesionales') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-30 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
+                                    <h5 class="mt-1 mb-0">Profesionales</h5>
+                                </div>
+                            </a>
+                        </div>
+                        {{--  <div class="card subir py-auto">
+                            <a href="{{ ROUTE('asistente.administracion_asistente') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                                    <h5 class="mt-1 mb-0">Administración</h5>
+                                </div>
+                            </a>
+                        </div>  --}}
+                        {{-- <div class="card subir py-auto">
+                            <a href="{{ ROUTE('asistentecm.ma.rendir') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                                    <h5 class="mt-1 mb-0">Entrega de Caja</h5>
+                                </div>
+                            </a>
+                        </div> --}}
+                        {{--
+                        <div class="card py-auto subir">
+                            <a href="{{ ROUTE('asistente.venta_productos') }}">
+                            <a href="{{ ROUTE('asistente.registro_paciente') }}" class="btn" type="button">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/otros_servicios_1.svg') }}">
+                                    <h5 class="mt-1 mb-0"> Venta de Productos</h5>
+                                </div>
+                            </a>
+                        </div>
+                        --}}
+                    </div>
+                </div>
+            </div>-->
+
+            <!--Tabla agenda del día y flujo de caja-->
+            <div class="row m-b-10">
+                <div class="col-md-12">
+                    <div class="card h-100 pb-1">
+                        <div class="card-header bg-c-info">
+                            <div class="row">
+                                <div class="col-sm-12 d-inline text-center">
+                                    <h5 class="text-white my-1" style="font-size: 1.2rem;">Agendas Profesionales</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="agenda_lugar_atencion_asistente" id="agenda_lugar_atencion_asistente" value="{{ $lugares_atencion->id }}">
+                        <div class="card-body pt-4 pb-0">
+                            <div class="form-row">
+                                <div class="col-sm-3 d-inline text-center">
+                                    <div class="card">
+                                        <label class="floating-label-activo-sm">Agendas del Centro</label>
+                                        <select class="form-control form-control-sm" id="agenda_profesional_asistente" name="agenda_profesional_asistente" onchange="cargarAgendaProfesional('')">
+                                            <option value="">Selecione</option>
+                                            @if($profesionales)
+                                            @foreach($profesionales as $key_pro => $value_pro)
+                                                <option value="{{ $value_pro->id }}">{{ strtoupper($value_pro->nombre) }} {{ strtoupper($value_pro->apellido_uno) }} {{ strtoupper($value_pro->apellido_dos) }}</option>
+                                            @endforeach
+                                        @endif
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9 d-inline text-center">
+                                    <div class="dt-responsive table-responsive" >
+                                        <table class="table table-striped table-bordered nowrap table-xs" id="tabla_info_profesional">
+                                            <thead>
+                                                <tr >
+                                                    <th colspan="2" class="text-center align-middle">Agenda Profesional:</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="display: none;">
+                                                <tr>
+                                                    <td class="text-center align-middle">
+                                                        <span><strong id="nombre_profesional_agenda"></strong></span><br>
+                                                        <span id="especialidad_porfesional_agenda">
+                                                        </span>
+                                                    </td>
+                                                    <td class="text-center align-middle">
+                                                            {{--  <button type="button" class="btn btn-info btn-sm" id="btn_ver_info_profesional_seleccionado"  onclick="info_profesional({{ $profesional->id }});"><i class="fa fa-plus"></i> Ver Información</button>  --}}
+                                                            <button type="button" class="btn btn-info btn-sm" id="btn_ver_info_profesional_seleccionado"  onclick=""><i class="fa fa-plus"></i> Ver Información</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-sm-12 d-inline text-center">
+                                    <div class="card">
+                                        <div class="row">
+                                            <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
+                                                <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado" onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
+                                            </div>
+                                            <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
+                                                <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_extra" onclick="abrir_horas_extras()"; ><i class="fas fa-save"></i>  Cargar Hora Extra del profesional</button>
+                                            </div>
+                                            <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
+                                                <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_examen" onclick="abrir_horas_examen()"; ><i class="fas fa-save"></i>  Cargar Hora Examen del profesional</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-						</div>
-                    </div>
-                    <div class="card-body bg-white">
-                        <div id='agenda'></div>
+                        </div>
+                        <div class="card-body bg-white">
+                            <div id='agenda'></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!--
-            <div class="col-md-4">
-                <div class="card subir text-center h-100">
-					<a href="http://www.cronicos.cl/registro.php" target="_blank">
-                    <img class="img-fluid card-img-top" src="{{ asset('images/iconos/inscripciones_1.svg') }}" alt="Inscripciones" class="btn  btn-arrastre" type="button">
-                    <!--<a href="{{ ROUTE('asistentecm.registro_paciente') }}" class="btn" type="button">
+                <!--
+                <div class="col-md-4">
+                    <div class="card subir text-center h-100">
+                        <a href="http://www.cronicos.cl/registro.php" target="_blank">
+                        <img class="img-fluid card-img-top" src="{{ asset('images/iconos/inscripciones_1.svg') }}" alt="Inscripciones" class="btn  btn-arrastre" type="button">
+                        <!- -<a href="{{ ROUTE('asistentecm.registro_paciente') }}" class="btn" type="button">
 
-					<div class="card-body">
-						<h4 class="card-title f-20 pt-3">Inscripciones</h4>
-						<p class="card-text">Registre pacientes a Farmacrónicos</p>
-					</div>
-					</a>
+                        <div class="card-body">
+                            <h4 class="card-title f-20 pt-3">Inscripciones</h4>
+                            <p class="card-text">Registre pacientes a Farmacrónicos</p>
+                        </div>
+                        </a>
+                    </div>
                 </div>
+                -->
             </div>
-            -->
         </div>
     </div>
-</div>
-<!--Cierre: Container Completo-->
+    <!--Cierre: Container Completo-->
 
-@section('modales')
     @include('app.asistente_cm_manejo_agenda.modales.modal_profesional_informacion')
-    @include('app.asistente.modales.modal_consulta_agenda')
+    @include('general.asistentes.modal_consulta_agenda')
     @include('app.asistente_cm_manejo_agenda.modales.lista_espera')
 
     {{-- horas extras --}}
@@ -247,8 +246,27 @@
     {{-- hora examen --}}
     @include('app.asistente_cm_manejo_agenda.modales.horas_examen')
     @include('app.asistente_cm_manejo_agenda.modales.horas_examen_agendar')
+
+    {{-- transcribir examen por asistente --}}
+    @include('app.asistente_cm_manejo_agenda.modales.transcribir_examen');
+
 @endsection
 
+@section('modales')
+    {{-- @include('app.asistente_cm_manejo_agenda.modales.modal_profesional_informacion') --}}
+    {{-- @include('app.asistente.modales.modal_consulta_agenda') --}}
+    {{-- @include('app.asistente_cm_manejo_agenda.modales.lista_espera') --}}
+
+    {{-- horas extras --}}
+    {{-- @include('app.asistente_cm_manejo_agenda.modales.horas_extras') --}}
+    {{-- @include('app.asistente_cm_manejo_agenda.modales.horas_extras_agendar') --}}
+
+    {{-- hora examen --}}
+    {{-- @include('app.asistente_cm_manejo_agenda.modales.horas_examen') --}}
+    {{-- @include('app.asistente_cm_manejo_agenda.modales.horas_examen_agendar') --}}
+
+    {{-- transcribir examen por asistente --}}
+    {{-- @include('app.asistente_cm_manejo_agenda.modales.transcribir_examen'); --}}
 @endsection
 
 @section('page-script')
@@ -410,7 +428,17 @@
                             {
                                 evaluacion =  false;
                             }
-                            {{--  console.log(evaluacion);  --}}
+
+                            // carga de examenes posibles por el profesional
+                            $('#m_hora_examen_lista_examenes').html('<option value="">Seleccione</option>');
+                            if(data.examen_tipo != null)
+                            {
+                                data.examen_tipo.forEach(element => {
+                                    $('#m_hora_examen_lista_examenes').append('<option value="'+element.id+'">'+element.nombre+'</option>');
+                                });
+                            }
+
+
                             if(evaluacion)
                             {
                                 var calendarEl = document.getElementById('agenda');
@@ -456,7 +484,6 @@
                                         meridiem: 'medium'
                                     },
                                     eventDidMount: function(info) {
-                                        {{--   console.log(info.el);  --}}
                                         $(info.el).tooltip({
                                             title: info.event.extendedProps.description,
                                             placement: "top",
@@ -476,49 +503,42 @@
                                                 id_profesional: id_profesional
                                             },
                                             success:function(data){
-                                                        if (data !== 'null')
-                                                        {
-                                                            //data = JSON.parse(data);
-                                                            console.log('-----------------------');
-                                                            console.log(data);
-                                                            console.log('-----------------------');
-                                                            if(data.estado == 1)
-                                                            {
-                                                                // var arraytemp = [];
-                                                                // arraytemp.push([id=>'11']);
-                                                                // console.log(arraytemp)
-                                                                var arrayTemp = [];
-                                                                data.registros.forEach(element => {
-                                                                    var rut = element.paciente.rut+' | '
-                                                                    var valor = element.estado.valor+' | '
-                                                                    var comentarios_confirmacion = '';
-                                                                    if(comentarios_confirmacion != 'null')
-                                                                        comentarios_confirmacion = element.comentarios_confirmacion+' | '
-                                                                    var nombre = element.paciente.prevision.nombre
-                                                                    var descripcion = '';
-                                                                    descripcion += rut;
-                                                                    descripcion += valor;
-                                                                    descripcion += comentarios_confirmacion;
-                                                                    descripcion += nombre;
+                                                if (data !== 'null')
+                                                {
+                                                    if(data.estado == 1)
+                                                    {
+                                                        var arrayTemp = [];
+                                                        data.registros.forEach(element => {
+                                                            var rut = element.paciente.rut+' | '
+                                                            var valor = element.estado.valor+' | '
+                                                            var comentarios_confirmacion = '';
+                                                            if(comentarios_confirmacion != 'null')
+                                                                comentarios_confirmacion = element.comentarios_confirmacion+' | '
+                                                            var nombre = element.paciente.prevision.nombre
+                                                            var descripcion = '';
+                                                            descripcion += rut;
+                                                            descripcion += valor;
+                                                            descripcion += comentarios_confirmacion;
+                                                            descripcion += nombre;
 
-                                                                    arrayTemp.push({
-                                                                                    id: element.id,
-                                                                                    title: element.tipo_hora_medica+' - '+element.descripcion,
-                                                                                    description: descripcion ,
-                                                                                    start: element.fecha_consulta + 'T' + element.hora_inicio,
-                                                                                    end: element.fecha_consulta + 'T' + element.hora_termino,
-                                                                                    backgroundColor: element.estado.color
-                                                                    });
-                                                                });
-                                                                console.log(arrayTemp);
-                                                            }
-                                                            else
-                                                            {
-                                                                console.log('falla en carga');
-                                                            }
-                                                        }
-                                                        end(arrayTemp);
+                                                            arrayTemp.push({
+                                                                            id: element.id,
+                                                                            title: element.tipo_hora_medica+' - '+element.descripcion,
+                                                                            description: descripcion ,
+                                                                            start: element.fecha_consulta + 'T' + element.hora_inicio,
+                                                                            end: element.fecha_consulta + 'T' + element.hora_termino,
+                                                                            backgroundColor: element.estado.color
+                                                            });
+                                                        });
+                                                        console.log(arrayTemp);
                                                     }
+                                                    else
+                                                    {
+                                                        console.log('falla en carga');
+                                                    }
+                                                }
+                                                end(arrayTemp);
+                                            }
                                         });
                                     },
 
@@ -534,199 +554,198 @@
                                                     //_token: _token,
                                                     id_hora_medica: id_hora_medica,
                                                 },
-                                            })
-                                            .done(function(data) {
-                                                if (data != null) {
+                                        })
+                                        .done(function(data) {
+                                            if (data != null)
+                                            {
+                                                // data = JSON.parse(data);
+                                                $('#datos_consulta_rut').text(data.paciente.rut);
+                                                $('#datos_consulta_nombre').text(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
+                                                $('#datos_consulta_edad').text(data.paciente.fecha_nac);
 
-                                                    {{--  // console.log(info.event);  --}}
-                                                    console.log(data);
-                                                    // data = JSON.parse(data);
-                                                    $('#datos_consulta_rut').text(data.paciente.rut);
-                                                    $('#datos_consulta_nombre').text(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
-                                                    $('#datos_consulta_edad').text(data.paciente.fecha_nac);
+                                                if (data.paciente.sexo == 'M') {
+                                                    $('#datos_consulta_sexo').text('Masculino');
+                                                } else {
+                                                    $('#datos_consulta_sexo').text('Femenino');
+                                                }
 
-                                                    if (data.paciente.sexo == 'M') {
-                                                        $('#datos_consulta_sexo').text('Masculino');
-                                                    } else {
-                                                        $('#datos_consulta_sexo').text('Femenino');
-                                                    }
+                                                $('#estado_id_profesional').val(data.profesional.id);
+                                                $('#estado_id_paciente').val(data.paciente.id);
+                                                $('#id_hora_medica').val(id_hora_medica);
 
-                                                    $('#estado_id_profesional').val(data.profesional.id);
-                                                    $('#estado_id_paciente').val(data.paciente.id);
-                                                    $('#id_hora_medica').val(id_hora_medica);
+                                                //celeste
+                                                //Reservada
+                                                if (data.estado_hora == 1) //else if (info.event.backgroundColor == '#FEAA32')
+                                                {
+                                                    //'Reservada') //Hora pendiente
+                                                    $('#hm_anular_hora').show();
+                                                    $('#hm_atender_hora').hide();
+                                                    $('#hm_confirmar_hora').show();
+                                                    $('#hm_ver_hora').hide();
+                                                    $('#hm_espera_paciente_hora').hide();
+                                                    $('#confirmar_anulacion_hora').hide();
+                                                    $('#confirmacion_hora').hide();
 
-                                                    //celeste
-                                                    //Reservada
-                                                    if (data.estado_hora == 1) //else if (info.event.backgroundColor == '#FEAA32')
-                                                    {
-                                                        //'Reservada') //Hora pendiente
-                                                        $('#hm_anular_hora').show();
-                                                        $('#hm_atender_hora').hide();
-                                                        $('#hm_confirmar_hora').show();
-                                                        $('#hm_ver_hora').hide();
-                                                        $('#hm_espera_paciente_hora').hide();
-                                                        $('#confirmar_anulacion_hora').hide();
-                                                        $('#confirmacion_hora').hide();
+                                                    $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                                    $('#consulta').modal('show');
+                                                    // $('#id_hora_medica').val(id_hora_medica);
+                                                    // console.log(data);
+                                                    // $('#reservar_hora').modal('hide');
+                                                    //location.reload();
+                                                }
+                                                //verde
+                                                // CONFIRMADO
+                                                else if(data.estado_hora == 2)//if (info.event.backgroundColor == '#94BF61')
+                                                {
+                                                    //'Confirmada')//Hora confirmada
+                                                    // $('#hm_confirmar_hora').hide();
+                                                    // $('#hm_anular_hora').show();
+                                                    // $('#hm_atender_hora').show();
+                                                    // // $('#hm_espera_paciente_hora').show();
+                                                    // $('#hm_espera_paciente_hora').hide();
+                                                    // $('#hm_ver_hora').hide();
+                                                    // $('#confirmar_anulacion_hora').hide();
+                                                    // $('#confirmacion_hora').hide();
+                                                    $('#modal_recepcion_bonos_api').modal('show');
+                                                    $('#bono_paciente_rut').val(data.paciente.rut);
+                                                    $('#bono_paciente_nombre').val(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
+                                                    $('#bono_profesional_nombre').val(data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos);
+                                                    $('#bono_profesional_rut').val( data.profesional.rut);
+                                                    $('#bono_hora_medica').val(info.event.id);
+                                                    $('#bono_id_profesional').val(data.profesional.id);
+                                                    $('#bono_id_paciente').val(data.paciente.id);
 
-                                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
-                                                        $('#consulta').modal('show');
-                                                        // $('#id_hora_medica').val(id_hora_medica);
-                                                        // console.log(data);
-                                                        // $('#reservar_hora').modal('hide');
-                                                        //location.reload();
-                                                    }
-                                                    //verde
-                                                    // CONFIRMADO
-                                                    else if(data.estado_hora == 2)//if (info.event.backgroundColor == '#94BF61')
-                                                    {
-                                                        //'Confirmada')//Hora confirmada
-                                                        // $('#hm_confirmar_hora').hide();
-                                                        // $('#hm_anular_hora').show();
-                                                        // $('#hm_atender_hora').show();
-                                                        // // $('#hm_espera_paciente_hora').show();
-                                                        // $('#hm_espera_paciente_hora').hide();
-                                                        // $('#hm_ver_hora').hide();
-                                                        // $('#confirmar_anulacion_hora').hide();
-                                                        // $('#confirmacion_hora').hide();
-                                                        $('#modal_recepcion_bonos_api').modal('show');
-                                                        $('#bono_paciente_rut').val(data.paciente.rut);
-                                                        $('#bono_paciente_nombre').val(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
-                                                        $('#bono_profesional_nombre').val(data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos);
-                                                        $('#bono_profesional_rut').val( data.profesional.rut);
-                                                        $('#bono_hora_medica').val(info.event.id);
-                                                        $('#bono_id_profesional').val(data.profesional.id);
-                                                        $('#bono_id_paciente').val(data.paciente.id);
+                                                }
+                                                //rojo
+                                                //Rechazada
+                                                else if(data.estado_hora == 3)//else if (info.event.backgroundColor == '#FF3D3D')
+                                                {
+                                                    // 'Rechazada')//Hora cancelada
+                                                    $('#hm_anular_hora').hide();
+                                                    $('#hm_atender_hora').hide();
+                                                    $('#hm_confirmar_hora').hide();
+                                                    $('#hm_espera_paciente_hora').hide();
+                                                    $('#hm_ver_hora').hide();
+                                                    $('#confirmar_anulacion_hora').hide();
+                                                    $('#confirmacion_hora').hide();
 
-                                                    }
-                                                    //rojo
-                                                    //Rechazada
-                                                    else if(data.estado_hora == 3)//else if (info.event.backgroundColor == '#FF3D3D')
-                                                    {
-                                                        // 'Rechazada')//Hora cancelada
-                                                        $('#hm_anular_hora').hide();
-                                                        $('#hm_atender_hora').hide();
-                                                        $('#hm_confirmar_hora').hide();
-                                                        $('#hm_espera_paciente_hora').hide();
-                                                        $('#hm_ver_hora').hide();
-                                                        $('#confirmar_anulacion_hora').hide();
-                                                        $('#confirmacion_hora').hide();
+                                                    $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                                    $('#consulta').modal('show');
+                                                    // $('#id_hora_medica').val(id_hora_medica);
+                                                    // console.log(data);
+                                                    // $('#reservar_hora').modal('hide');
+                                                    //location.reload();
+                                                }
+                                                //morado
+                                                // Espera -- Llamando
+                                                else if (data.estado_hora == 4 || data.estado_hora == 8) //else if (info.event.backgroundColor == '#A06CC1')
+                                                {
+                                                    // 'Espera')//Esperando atención
+                                                    // 'Llamando')//Esperando atención
+                                                    $('#hm_anular_hora').hide();
+                                                    $('#hm_atender_hora').hide();
+                                                    $('#hm_confirmar_hora').hide();
+                                                    $('#hm_ver_hora').hide();
+                                                    $('#hm_espera_paciente_hora').hide();
+                                                    $('#confirmar_anulacion_hora').hide();
+                                                    $('#confirmacion_hora').hide();
 
-                                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
-                                                        $('#consulta').modal('show');
-                                                        // $('#id_hora_medica').val(id_hora_medica);
-                                                        // console.log(data);
-                                                        // $('#reservar_hora').modal('hide');
-                                                        //location.reload();
-                                                    }
-                                                    //morado
-                                                    // Espera -- Llamando
-                                                    else if (data.estado_hora == 4 || data.estado_hora == 8) //else if (info.event.backgroundColor == '#A06CC1')
-                                                    {
-                                                        // 'Espera')//Esperando atención
-                                                        // 'Llamando')//Esperando atención
-                                                        $('#hm_anular_hora').hide();
-                                                        $('#hm_atender_hora').hide();
-                                                        $('#hm_confirmar_hora').hide();
-                                                        $('#hm_ver_hora').hide();
-                                                        $('#hm_espera_paciente_hora').hide();
-                                                        $('#confirmar_anulacion_hora').hide();
-                                                        $('#confirmacion_hora').hide();
+                                                    $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                                    $('#consulta').modal('show');
+                                                    // $('#id_hora_medica').val(id_hora_medica);
+                                                    // console.log(data);
+                                                    // $('#reservar_hora').modal('hide');
+                                                    //location.reload();
+                                                }
+                                                //rosa
+                                                //Realizando
+                                                else if (data.estado_hora == 5) //else if (info.event.backgroundColor == '#EDBB99')
+                                                {
+                                                    //'Realizando')
+                                                    $('#hm_anular_hora').hide();
+                                                    $('#hm_atender_hora').hide();
+                                                    $('#hm_confirmar_hora').hide();
+                                                    $('#hm_ver_hora').hide();
+                                                    $('#hm_espera_paciente_hora').hide();
+                                                    $('#confirmar_anulacion_hora').hide();
+                                                    $('#confirmacion_hora').hide();
 
-                                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
-                                                        $('#consulta').modal('show');
-                                                        // $('#id_hora_medica').val(id_hora_medica);
-                                                        // console.log(data);
-                                                        // $('#reservar_hora').modal('hide');
-                                                        //location.reload();
-                                                    }
-                                                    //rosa
-                                                    //Realizando
-                                                    else if (data.estado_hora == 5) //else if (info.event.backgroundColor == '#EDBB99')
-                                                    {
-                                                        //'Realizando')
-                                                        $('#hm_anular_hora').hide();
-                                                        $('#hm_atender_hora').hide();
-                                                        $('#hm_confirmar_hora').hide();
-                                                        $('#hm_ver_hora').hide();
-                                                        $('#hm_espera_paciente_hora').hide();
-                                                        $('#confirmar_anulacion_hora').hide();
-                                                        $('#confirmacion_hora').hide();
+                                                    $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                                    $('#consulta').modal('show');
+                                                    // $('#id_hora_medica').val(id_hora_medica);
+                                                    // console.log(data);
+                                                    // $('#reservar_hora').modal('hide');
+                                                    //location.reload();
+                                                }
+                                                //azul
+                                                // Realizada
+                                                else if (data.estado_hora == 6)//else if (info.event.backgroundColor == '#17C1C1')
+                                                {
+                                                    //'Realizada')//Paciente atendido
+                                                    $('#hm_anular_hora').hide();
+                                                    $('#hm_atender_hora').hide();
+                                                    $('#hm_confirmar_hora').hide();
+                                                    $('#hm_ver_hora').hide();
+                                                    $('#hm_espera_paciente_hora').hide();
+                                                    $('#confirmar_anulacion_hora').hide();
+                                                    $('#confirmacion_hora').hide();
 
-                                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
-                                                        $('#consulta').modal('show');
-                                                        // $('#id_hora_medica').val(id_hora_medica);
-                                                        // console.log(data);
-                                                        // $('#reservar_hora').modal('hide');
-                                                        //location.reload();
-                                                    }
-                                                    //azul
-                                                    // Realizada
-                                                    else if (data.estado_hora == 6)//else if (info.event.backgroundColor == '#17C1C1')
-                                                    {
-                                                        //'Realizada')//Paciente atendido
-                                                        $('#hm_anular_hora').hide();
-                                                        $('#hm_atender_hora').hide();
-                                                        $('#hm_confirmar_hora').hide();
-                                                        $('#hm_ver_hora').hide();
-                                                        $('#hm_espera_paciente_hora').hide();
-                                                        $('#confirmar_anulacion_hora').hide();
-                                                        $('#confirmacion_hora').hide();
-
-                                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
-                                                        $('#consulta').modal('show');
-                                                        // $('#id_hora_medica').val(id_hora_medica);
-                                                        // console.log(data);
-                                                        // $('#reservar_hora').modal('hide');
-                                                        //location.reload();
-                                                    }
-                                                    //naranjo
-                                                    //Inasistida
-                                                    else if (data.estado_hora == 7)//else if (info.event.backgroundColor == '#F9A825')
-                                                    {
-
-                                                        //'Inasistida')
-                                                        $('#hm_anular_hora').hide();
-                                                        $('#hm_atender_hora').hide();
-                                                        $('#hm_confirmar_hora').hide();
-                                                        $('#hm_ver_hora').hide();
-                                                        $('#hm_espera_paciente_hora').hide();
-                                                        $('#confirmar_anulacion_hora').hide();
-                                                        $('#confirmacion_hora').hide();
-
-                                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
-                                                        $('#consulta').modal('show');
-                                                        // $('#id_hora_medica').val(id_hora_medica);
-                                                        // console.log(data);
-                                                        // $('#reservar_hora').modal('hide');
-                                                        //location.reload();
-
-                                                    }
-
+                                                    abrir_transcripcion_examen(id_hora_medica);
                                                     // $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                     // $('#consulta').modal('show');
-                                                    // $('#id_hora_medica').val(id_hora_medica);
-                                                    // // console.log(data);
-                                                    // // $('#reservar_hora').modal('hide');
-                                                    // //location.reload();
 
+
+                                                    // $('#id_hora_medica').val(id_hora_medica);
+                                                    // console.log(data);
+                                                    // $('#reservar_hora').modal('hide');
+                                                    //location.reload();
                                                 }
-                                                else
+                                                //naranjo
+                                                //Inasistida
+                                                else if (data.estado_hora == 7)//else if (info.event.backgroundColor == '#F9A825')
                                                 {
 
-                                                    swal({
-                                                        title: "Paciente no encontrado en el sistema",
-                                                        icon: "error",
-                                                        buttons: "Aceptar",
-                                                        DangerMode: true,
-                                                    })
-                                                    // alert('Paciente no encontrado en el sistema');
+                                                    //'Inasistida')
+                                                    $('#hm_anular_hora').hide();
+                                                    $('#hm_atender_hora').hide();
+                                                    $('#hm_confirmar_hora').hide();
+                                                    $('#hm_ver_hora').hide();
+                                                    $('#hm_espera_paciente_hora').hide();
+                                                    $('#confirmar_anulacion_hora').hide();
+                                                    $('#confirmacion_hora').hide();
+
+                                                    $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                                    $('#consulta').modal('show');
+                                                    // $('#id_hora_medica').val(id_hora_medica);
+                                                    // console.log(data);
+                                                    // $('#reservar_hora').modal('hide');
+                                                    //location.reload();
+
                                                 }
 
-                                            })
-                                            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                                                console.log(jqXHR, ajaxOptions, thrownError)
-                                            });
+                                                // $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                                // $('#consulta').modal('show');
+                                                // $('#id_hora_medica').val(id_hora_medica);
+                                                // // console.log(data);
+                                                // // $('#reservar_hora').modal('hide');
+                                                // //location.reload();
 
+                                            }
+                                            else
+                                            {
+                                                swal({
+                                                    title: "Paciente no encontrado en el sistema",
+                                                    icon: "error",
+                                                    buttons: "Aceptar",
+                                                    DangerMode: true,
+                                                });
+                                                // alert('Paciente no encontrado en el sistema');
+                                            }
+
+                                        })
+                                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                                            console.log(jqXHR, ajaxOptions, thrownError)
+                                        });
 
                                         $('#datos_hora_medica').show();
                                         $('#cancelacion_hora_medica').hide();
@@ -863,8 +882,8 @@
                                 var tem_hiddenDays = info_profesional_seleccionado.horario_data.horario_agenda.split(",");
                                 var tem_hiddenDays2 =[];
 
-                                $.each(tem_hiddenDays, function(key, value){
-                                    {{--  console.log(value);  --}}
+                                $.each(tem_hiddenDays, function(key, value)
+                                {
                                     tem_hiddenDays2.push(parseInt(value));
                                 });
 
@@ -872,23 +891,12 @@
                                 CalendarEl.setOption('businessHours', data_businessHours );
                                 CalendarEl.setOption('slotMinTime', info_profesional_seleccionado.horario_data.hora_inicio_agenda );
                                 CalendarEl.setOption('slotMaxTime', info_profesional_seleccionado.horario_data.hora_termino_agenda );
-                                {{--  console.log(CalendarEl.getOption('hiddenDays'));  --}}
-                                {{--  console.log(CalendarEl.getOption('businessHours'));  --}}
-                                {{--  console.log(CalendarEl.getOption('slotMinTime'));  --}}
-                                {{--  console.log(CalendarEl.getOption('slotMaxTime'));  --}}
 
                                 CalendarEl.render();
 
                                 if(fecha != '' && fecha != null)
                                     CalendarEl.gotoDate(fecha);
 
-
-                                {{--   console.log(calendarEl);  --}}
-
-                                // var event = calendarEl.getEventById('107');
-                                {{--   console.log(event);  --}}
-                                // var start = event.start;
-                                {{--   console.log(start.toISOString());  --}}
                             }
                             else
                             {

@@ -12,12 +12,10 @@
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ ROUTE('asistente_adm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                        <i class="feather icon-home"></i>
-                                    </a>
+                                     <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
                                 </li>
                                 <li class="breadcrumb-item">
-                                    <a href="{{ ROUTE('asistente_adm.buscar_paciente') }}">Buscar Pacientes Institucion</a>
+                                    <a href="#">Buscar Pacientes Institucion</a>
                                 </li>
                             </ul>
                         </div>
