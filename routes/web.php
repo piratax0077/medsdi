@@ -946,20 +946,21 @@ Route::group([
     'middleware' => ['auth:sanctum', 'verified'],
 ], function () {
     /*Ficha Medica*/
-    Route::post('Ficha_medica_no_inscrito', [ficha_atencionController::class, 'atencion_profesional_no_inscrito'])->name('atencion_medica.ficha_atencion_profesional_no_inscrito');
+    Route::post('Ficha_medica_no_inscrito', [App\Http\Controllers\ficha_atencionController::class, 'atencion_profesional_no_inscrito'])->name('atencion_medica.ficha_atencion_profesional_no_inscrito');
 
-    Route::post('Ficha_Atencion/crear', [ficha_atencionController::class, 'store'])->name('fichaAtencion.registrar_ficha');
-	Route::post('Ficha_Atencion/crear/orl', [ficha_atencionController::class, 'store_orl'])->name('fichaAtencion.registrar_ficha_orl');
-    Route::post('Ficha_Atencion/crear/cg', [ficha_atencionController::class, 'store_cg'])->name('fichaAtencion.registrar_ficha_cg');
-    Route::post('Ficha_Atencion/crear/cdg', [ficha_atencionController::class, 'store_cdg'])->name('fichaAtencion.registrar_ficha_cdg');
-    Route::post('Ficha_Atencion/crear/uro', [ficha_atencionController::class, 'store_uro'])->name('fichaAtencion.registrar_ficha_uro');
-    Route::post('Ficha_Atencion/crear/oft', [ficha_atencionController::class, 'store_oft'])->name('fichaAtencion.registrar_ficha_oft');
-	Route::post('Ficha_Atencion/crear/dermo', [ficha_atencionController::class, 'store_dermo'])->name('fichaAtencion.registrar_ficha_dermo');
-	Route::post('Ficha_Atencion/crear/pediatria/general', [ficha_atencionController::class, 'store_pediatria_general'])->name('fichaAtencion.registrar_ficha_ped_gen');
-    //Route::post('Ficha_atencion/Registro_ficha', [ficha_atencionController::class, 'store'])->name('crear.ficha_atencion');
-    //Route::post('Ficha_atencion/Registro_ficha', [ficha_atencionController::class, 'store'])->name('crear.ficha_atencion');
+    Route::post('Ficha_Atencion/crear', [App\Http\Controllers\ficha_atencionController::class, 'store'])->name('fichaAtencion.registrar_ficha');
+	Route::post('Ficha_Atencion/crear/orl', [App\Http\Controllers\ficha_atencionController::class, 'store_orl'])->name('fichaAtencion.registrar_ficha_orl');
+    Route::post('Ficha_Atencion/crear/cg', [App\Http\Controllers\ficha_atencionController::class, 'store_cg'])->name('fichaAtencion.registrar_ficha_cg');
+    Route::post('Ficha_Atencion/crear/cdg', [App\Http\Controllers\ficha_atencionController::class, 'store_cdg'])->name('fichaAtencion.registrar_ficha_cdg');
+    Route::post('Ficha_Atencion/crear/uro', [App\Http\Controllers\ficha_atencionController::class, 'store_uro'])->name('fichaAtencion.registrar_ficha_uro');
+    Route::post('Ficha_Atencion/crear/oft', [App\Http\Controllers\ficha_atencionController::class, 'store_oft'])->name('fichaAtencion.registrar_ficha_oft');
+	Route::post('Ficha_Atencion/crear/dermo', [App\Http\Controllers\ficha_atencionController::class, 'store_dermo'])->name('fichaAtencion.registrar_ficha_dermo');
+	Route::post('Ficha_Atencion/crear/trumatologia/ortopedia', [App\Http\Controllers\ficha_atencionController::class, 'store_tru_ort'])->name('fichaAtencion.registrar_ficha_trau_ort');
+	Route::post('Ficha_Atencion/crear/pediatria/general', [App\Http\Controllers\FichaPediatriaController::class, 'storePediatriaGeneral'])->name('fichaAtencion.registrar_ficha_ped_gen');
+	Route::post('Ficha_Atencion/crear/pediatria/cirugia/general', [App\Http\Controllers\FichaPediatriaController::class, 'storePediatriaCirugiaGeneral'])->name('fichaAtencion.registrar_ficha_ped_cir_trum_quem');
+    //Route::post('Ficha_atencion/Registro_ficha', [App\Http\Controllers\ficha_atencionController::class, 'store'])->name('crear.ficha_atencion');
 
-    Route::post('/getArticulo', [ficha_atencionController::class, 'getArticulo'])->name('ficha_medica.getArticulo');
+    Route::post('/getArticulo', [App\Http\Controllers\ficha_atencionController::class, 'getArticulo'])->name('ficha_medica.getArticulo');
 
 
     Route::get('/Ficha_medica', [App\Http\Controllers\ficha_atencionController::class, 'index']);
