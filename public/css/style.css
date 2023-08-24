@@ -19,7 +19,7 @@ File: style.css
     font-style: bold;
     font-weight: 600;
   }
-  
+
   @font-face {
     font-family: 'Nunito';
     src: url(../fonts/nunito/Nunito-Regular.ttf) format("truetype");
@@ -33050,7 +33050,7 @@ font-family: 'Nunito', sans-serif;
 /*--- Colores nuevos --*/
 
 .t-red {
-  color: #d8002c!important;  
+  color: #d8002c!important;
 }
 
 .t-blue {
@@ -33061,7 +33061,7 @@ font-family: 'Nunito', sans-serif;
 
 .floating-label-activo-sm {
     font-family: 'Nunito', sans-serif;
-  position: absolute;
+    position: absolute;
     top: -10px;
     left: 3px!important;
     font-size: 0.75rem;
@@ -33418,7 +33418,7 @@ font-family: 'Nunito', sans-serif;
   .btn-success-light-c:focus, .btn-success.focus {
     color: #319e6a;
     background-color: #daefe3;
-    border-color: #daefe3;
+    border-color: #319e6a;
     box-shadow: 0 0 0 0rem rgba(255, 108, 108, 0.5);
   }
 
@@ -33457,7 +33457,7 @@ font-family: 'Nunito', sans-serif;
   .btn-info-light-c:focus, .btn-info.focus {
     color: #1daaa6;
     background-color: #d2f0f7;
-    border-color: #d2f0f7;
+    border-color: #1daaa6;
     box-shadow: 0 0 0 0rem rgba(255, 108, 108, 0.5);
   }
 
@@ -33490,7 +33490,7 @@ text-align: left;
 }
 
 /*Bordes Card*/
-    
+
 .border-card-info {
     border-left: 3px solid #1CBEBE!important;
 }
@@ -33557,7 +33557,7 @@ box-shadow: 0 2px 4px -2px rgba(54, 80, 138, 0.3) !important;
     right: 25px;
     padding-top: 10px;
     color: #1a49a3!important;
-   
+
 
 }
 
@@ -33576,7 +33576,7 @@ box-shadow: 0 2px 4px -2px rgba(54, 80, 138, 0.3) !important;
   transition: 0.4s;
   padding: 5px 0px 0px 3px;
   color: #1a49a3!important;
-  
+
 }
 
 .accor-closed:after {
@@ -33650,10 +33650,10 @@ box-shadow: 0 2px 4px -2px rgba(54, 80, 138, 0.3) !important;
 }
 
 .t-aten-dos {
-    font-size: 0.9rem!important;
+    font-size: 0.85rem!important;
     color: #1a49a3!important;
     font-weight: 800!important;
-    margin-bottom: 0.5rem!important;
+    margin-bottom: 0.6rem!important;
     margin-top:0.6rem!important;
     text-transform: uppercase!important;
 }
@@ -33668,7 +33668,7 @@ box-shadow: 0 2px 4px -2px rgba(54, 80, 138, 0.3) !important;
     padding:3px!important;
 }
 
-.label-perfil{
+.label-perfil {
     margin-left: 0px;
     margin-bottom: 0px;
 }
