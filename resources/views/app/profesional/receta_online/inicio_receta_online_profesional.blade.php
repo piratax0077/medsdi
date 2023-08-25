@@ -9,7 +9,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio Profesional</h5>
+                                <h5 class="m-b-10 font-weight-bold">Receta Online</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip"
@@ -25,56 +25,61 @@
             </div>
             <!--Cierre: Header-->
             <!--Botones-->
-            <div class="row m-b-30">
-                <div class="col-md-12">
-                    <div class="card-deck">
-                        <div class="card subir py-5">
-                            <a href="{{ route('profesional.mis_recetas') }}">
-                                <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/recetas.svg') }}"
-                                        alt="Mis Recetas">
-                                    <h4 class="titulos_tarjetas">
-                                        Mis Recetas
-                                    </h4>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="card subir py-5">
-                            <a href="{{ route('profesional.mis_examenes') }}">
-                                <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/examen.svg') }}"
-                                        alt="Mis Examenes">
-                                    <h4 class="titulos_tarjetas">
-                                        Mis Exámenes
-                                    </h4>
-                                </div>
-                            </a>
-                        </div>
-						<div class="card subir py-5">
-                            <a href="{{ route('profesional.mis_certificados') }}">
-                                <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-100 text-center mb-3"
-                                        src="{{ asset('images/iconos/certificado.svg') }}" alt="Mis Certificados">
-                                    <h4 class="titulos_tarjetas">
-                                        Mis Certificados
-                                    </h4>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="card subir py-5">
-                            <a href="#">
-                                <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-100 text-center mb-3"
-                                        src="{{ asset('images/iconos/certificado.svg') }}" alt="Mis Certificados">
-                                    <h4 class="titulos_tarjetas">
-                                        Mis Documentos
-                                    </h4>
-                                </div>
-                            </a>
-                        </div>
+            <div class="row row-cols-1 row-cols-md-2">
+                <div class="col">
+                    <div class="card subir">
+                        <a href="{{ route('profesional.mis_recetas') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center mb-3" src="{{ asset('images/iconos/recetas-ro.svg') }}"
+                                    alt="Mis recetas">
+                                <h5 class="titulos_tarjetas">
+                                    Mis recetas
+                                </h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card subir">
+                        <a href="{{ route('profesional.mis_examenes') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center mb-3" src="{{ asset('images/iconos/examenes-ro.svg') }}"
+                                    alt="Mis exámenes">
+                                <h5 class="titulos_tarjetas">
+                                    Mis exámenes
+                                </h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card subir">
+                        <a href="{{ route('profesional.mis_certificados') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center mb-3"
+                                    src="{{ asset('images/iconos/certificados-ro.svg') }}" alt="Mis certificados">
+                                <h5 class="titulos_tarjetas">
+                                    Mis certificados
+                                </h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card subir">
+                        <a href="#">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center mb-3"
+                                    src="{{ asset('images/iconos/documentos-ro.svg') }}" alt="Mis documentos">
+                                <h5 class="titulos_tarjetas">
+                                    Mis documentos
+                                </h5>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
+
             <!--CIERRE:Botones-->
             <!--Botones-->
             <!--<div class="row m-b-10">

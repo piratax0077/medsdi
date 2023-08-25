@@ -9,12 +9,12 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis Certificados</h5>
+                                <h5 class="m-b-10 font-weight-bold">Mis certificados</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.index_receta_online') }}" data-toggle="tooltip" data-placement="top" title="Volver a inicio de receta online">Receta Online</a></li>
-                                <li class="breadcrumb-item"><a href="mis_certificados_profesional.php">Mis Certificados</a></li>
+                                <li class="breadcrumb-item"><a href="mis_certificados_profesional.php">Mis certificados</a></li>
                             </ul>
                         </div>
                     </div>
@@ -24,137 +24,131 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h4 class="text-c-blue f-22 d-inline ml-4 my-1 py-1">Mis Certificados</h4>
-                                    <!--<button type="button" class="btn btn-success btn-sm d-inline float-right mr-4 my-1" data-toggle="modal" data-target="#agregar_certificado_profesional_ro"> <i class="feather icon-plus"></i> Agregar certificado</button>-->
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-6 col-md-12">
-                                    <table id="tabla_certificado_profesional_ro"
-                                        class="display table table-striped table-hover dt-responsive nowrap table-sm"
-                                        style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-wrap text-center align-middle">Fecha</th>
-                                                <th class="text-center align-middle">Paciente</th>
-                                                <th class="text-center align-middle">Tipo de certificado</th>
-                                                <!--<th class="text-center align-middle">Acción</th>-->
-                                                <!--<th class="text-center align-middle">Estado</th>-->
-                                                <th class="text-center align-middle">Certificado</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if ($reposo)
-                                                @foreach ($reposo as $rep)
-                                                    <tr>
-                                                        <td class="text-wrap text-center align-middle">{{ $rep->created_at }}
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            {{ $rep->Paciente()->first()->nombres }}<br>
-                                                            {{ $rep->Paciente()->first()->rut }}
-                                                        </td>
-                                                        <td class="align-middle text-center">Certificado Reposo</td>
-                                                        <!--
-                                                        <td class="align-middle text-center">
-                                                            <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Certificado a Paciente"><i class="feather icon-navigation"></i></button>
-                                                        </td>
-                                                        <td class="align-middle text-center">Enviado</td>
-                                                        -->
-                                                        <td class="align-middle text-center"> <div onclick="ver_pdf_certificado_reposo('{{ $rep->id_ficha_atencion }}')"><img src="{{ asset('images/documento.svg') }}" alt="Documento" height="20px"> Ver </div></td>
-                                                        <!--
-                                                        <td class="align-middle text-center"><a href="#" download="Certificado_NombrePaciente"><img src="{{ asset('images/documento.svg') }}" alt="Documento" height="20px"> Ver</a></td>-->
-                                                    </tr>
-                                                @endforeach
-                                            @endif
-
-                                            @if ($interconsulta)
-                                                @foreach ($interconsulta as $inter)
-                                                    <tr>
-                                                        <td class="text-wrap text-center align-middle">
-                                                            {{ $inter->created_at }}
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            {{ $inter->Paciente()->first()->nombres }}<br>
-                                                            {{ $inter->Paciente()->first()->rut }}
-                                                        </td>
-                                                        <td class="align-middle text-center">Interconsulta</td>
-                                                        <!--<td class="align-middle text-center">
+                        <div class="card-header bg-light">
+                            <h4 class="text-c-blue f-22">Mis certificados</h4>
+                            <!--<button type="button" class="btn btn-success btn-sm d-inline float-right mr-4 my-1" data-toggle="modal" data-target="#agregar_certificado_profesional_ro"> <i class="feather icon-plus"></i> Agregar certificado</button>-->
+                        </div>
+                            <div class="card-body">
+                                <table id="tabla_certificado_profesional_ro"
+                                    class="display table table-striped dt-responsive nowrap table-xs"
+                                    style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="align-middle">Fecha</th>
+                                            <th class="text-center align-middle">Paciente</th>
+                                            <th class="text-center align-middle">Tipo de certificado</th>
+                                            <!--<th class="text-center align-middle">Acción</th>-->
+                                            <!--<th class="text-center align-middle">Estado</th>-->
+                                            <th class="text-center align-middle">Certificado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if ($reposo)
+                                            @foreach ($reposo as $rep)
+                                                <tr>
+                                                    <td class="text-wrap">{{ $rep->created_at }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $rep->Paciente()->first()->nombres }}<br>
+                                                        {{ $rep->Paciente()->first()->rut }}
+                                                    </td>
+                                                    <td>Certificado Reposo</td>
+                                                    <!--
+                                                    <td class="align-middle text-center">
                                                         <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Certificado a Paciente"><i class="feather icon-navigation"></i></button>
                                                     </td>
-                                                    <td class="align-middle text-center">Enviado</td>-->
-                                                        <td class="align-middle text-center"> <div onclick="ver_pdf_interconsulta('{{ $inter->id }}')"><img src="{{ asset('images/documento.svg') }}" alt="Documento" height="20px"> Ver </div></td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
+                                                    <td class="align-middle text-center">Enviado</td>
+                                                    -->
+                                                    <td class="align-middle"> <div onclick="ver_pdf_certificado_reposo('{{ $rep->id_ficha_atencion }}')"><img src="{{ asset('images/documento.png') }}" alt="Documento" height="35px"></div></td>
+                                                    <!--
+                                                    <td class="align-middle text-center"><a href="#" download="Certificado_NombrePaciente"><img src="{{ asset('images/documento.svg') }}" alt="Documento" height="20px"> Ver</a></td>-->
+                                                </tr>
+                                            @endforeach
+                                        @endif
 
-                                            @if ($informesMedicos)
-                                                @foreach ($informesMedicos as $informe)
-                                                    <tr>
-                                                        <td class="text-wrap text-center align-middle">
-                                                            {{ $informe->created_at }}
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            {{ $informe->Paciente()->first()->nombres }}<br>
-                                                            {{ $informe->Paciente()->first()->rut }}
-                                                        </td>
-                                                        <td class="align-middle text-center">Informe Medico</td>
-                                                        <!--<td class="align-middle text-center">
+                                        @if ($interconsulta)
+                                            @foreach ($interconsulta as $inter)
+                                                <tr>
+                                                    <td class="text-wrap">
+                                                        {{ $inter->created_at }}
+                                                    </td>
+                                                    <td class="">
+                                                        {{ $inter->Paciente()->first()->nombres }}<br>
+                                                        {{ $inter->Paciente()->first()->rut }}
+                                                    </td>
+                                                    <td>Interconsulta</td>
+                                                    <!--<td class="align-middle text-center">
+                                                    <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Certificado a Paciente"><i class="feather icon-navigation"></i></button>
+                                                </td>
+                                                <td class="align-middle text-center">Enviado</td>-->
+                                                    <td> <div onclick="ver_pdf_interconsulta('{{ $inter->id }}')"><img src="{{ asset('images/documento.png') }}" alt="Documento" height="35px"></div></td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+
+                                        @if ($informesMedicos)
+                                            @foreach ($informesMedicos as $informe)
+                                                <tr>
+                                                    <td>
+                                                        {{ $informe->created_at }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $informe->Paciente()->first()->nombres }}<br>
+                                                        {{ $informe->Paciente()->first()->rut }}
+                                                    </td>
+                                                    <td>Informe Medico</td>
+                                                    <!--<td class="align-middle text-center">
+                                                    <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Certificado a Paciente"><i class="feather icon-navigation"></i></button>
+                                                </td>
+                                                <td class="align-middle text-center">Enviado</td>-->
+                                                    <td class="align-middle"> <div onclick="ver_pdf_informe_medico('{{ $informe->id_ficha_atencion }}')"><img src="{{ asset('images/documento.png') }}" alt="Documento" height="35px"></div></td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+
+                                        {{--  @if ($controlObesidad)
+                                            @foreach ($controlObesidad as $obesidad)
+                                                <tr>
+                                                    <td>
+                                                        {{ $obesidad->created_at }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $obesidad->Paciente()->first()->nombres }}<br>
+                                                        {{ $obesidad->Paciente()->first()->rut }}
+                                                    </td>
+                                                    <td>Control Obesidad</td>
+                                                    <!--<td class="align-middle text-center">
+                                                    <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Certificado a Paciente"><i class="feather icon-navigation"></i></button>
+                                                </td>
+                                                <td class="align-middle text-center">Enviado</td>-->
+                                                    <td class="align-middle"><a href="#" download="Certificado_NombrePaciente"><img src="{{ asset('images/documento.png') }}" alt="Documento" height="35px"> Ver </a></td>
+                                                </tr>
+                                            @endforeach
+                                        @endif  --}}
+
+                                        {{--  @if ($hipertensiones)
+                                            @foreach ($hipertensiones as $hipertension)
+                                                <tr>
+                                                    <td>
+                                                        {{ $hipertension->created_at }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $hipertension->Paciente()->first()->nombres }}<br>
+                                                        {{ $hipertension->Paciente()->first()->rut }}
+                                                    </td>
+                                                    <td>Control Hipertensión</td>
+                                                    <!--
+                                                    <td class="align-middle text-center">
                                                         <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Certificado a Paciente"><i class="feather icon-navigation"></i></button>
                                                     </td>
-                                                    <td class="align-middle text-center">Enviado</td>-->
-                                                        <td class="align-middle text-center"> <div onclick="ver_pdf_informe_medico('{{ $informe->id_ficha_atencion }}')"><img src="{{ asset('images/documento.svg') }}" alt="Documento" height="20px"> Ver </div></td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
-
-                                            {{--  @if ($controlObesidad)
-                                                @foreach ($controlObesidad as $obesidad)
-                                                    <tr>
-                                                        <td class="text-wrap text-center align-middle">
-                                                            {{ $obesidad->created_at }}
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            {{ $obesidad->Paciente()->first()->nombres }}<br>
-                                                            {{ $obesidad->Paciente()->first()->rut }}
-                                                        </td>
-                                                        <td class="align-middle text-center">Control Obesidad</td>
-                                                        <!--<td class="align-middle text-center">
-                                                        <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Certificado a Paciente"><i class="feather icon-navigation"></i></button>
-                                                    </td>
-                                                    <td class="align-middle text-center">Enviado</td>-->
-                                                        <td class="align-middle text-center"><a href="#" download="Certificado_NombrePaciente"><img src="{{ asset('images/documento.svg') }}" alt="Documento" height="20px"> Ver </a></td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif  --}}
-
-                                            {{--  @if ($hipertensiones)
-                                                @foreach ($hipertensiones as $hipertension)
-                                                    <tr>
-                                                        <td class="text-wrap text-center align-middle">
-                                                            {{ $hipertension->created_at }}
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            {{ $hipertension->Paciente()->first()->nombres }}<br>
-                                                            {{ $hipertension->Paciente()->first()->rut }}
-                                                        </td>
-                                                        <td class="align-middle text-center">Control Hipertensión</td>
-                                                        <!--
-                                                        <td class="align-middle text-center">
-                                                            <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Certificado a Paciente"><i class="feather icon-navigation"></i></button>
-                                                        </td>
-                                                        <td class="align-middle text-center">Enviado</td>
-                                                        -->
-                                                        <td class="align-middle text-center"><a href="#" download="Certificado_NombrePaciente"><img src="{{ asset('images/documento.svg') }}" alt="Documento" height="20px"> Ver </a></td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif  --}}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                    <td class="align-middle text-center">Enviado</td>
+                                                    -->
+                                                    <td class="align-middle"><a href="#" download="Certificado_NombrePaciente"><img src="{{ asset('images/documento.png') }}" alt="Documento" height="35px"></a></td>
+                                                </tr>
+                                            @endforeach
+                                        @endif  --}}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
