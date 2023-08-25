@@ -9,7 +9,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Mis Certificados</h5>
+                            <h5 class="m-b-10 font-weight-bold">Mis certificados</h5>
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.home') }}"
@@ -20,7 +20,7 @@
                                     title="Volver a inicio de receta online">Receta Online</a></li>
                             <li class="breadcrumb-item"><a
                                     href="{{ ROUTE('paciente.receta.certificado') }}">Mis
-                                    Certificados</a>
+                                    certificados</a>
                             </li>
                         </ul>
                     </div>
@@ -29,55 +29,48 @@
         </div>
         <!--Cierre: Header-->
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="card">
+                    <div class="card-header">
+                        <h4 class="text-c-blue f-20 ">Mis certificados</h4>
+                    </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h4 class="text-c-blue f-20 d-inline ml-4">Mis Certificados</h4>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-6 col-md-12">
-                                <table id="tabla_certificado_paciente_ro"
-                                    class="display table table-striped table-hover dt-responsive nowrap table-sm"
-                                    style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-wrap text-center align-middle">Fecha</th>
-                                            <th class="text-center align-middle">Profesional</th>
-                                            <th class="text-center align-middle">Tipo de certificado</th>
-                                            <th class="text-center align-middle">Estado</th>
-                                            <th class="text-center align-middle">Certificado</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if(isset($fichas))
-                                            @foreach( $fichas as $f )
-                                                @foreach( $f->licencias()->get() as $l)
-                                                    <tr>
-                                                        <td class="text-wrap text-center align-middle">{{ \Carbon\Carbon::parse($l->created_at)->format('d/m/Y') }}</td>
-                                                        <td class="align-middle text-center">
-                                                            <strong>{{ $f->Profesional()->first()->nombre }} {{ $f->Profesional()->first()->apellido_uno }} {{ $f->Profesional()->first()->apellido_dos }} </strong>
-                                                            <br>
-                                                            {{ $f->Profesional()->first()->especialidad()->first()->txt_esp }}
-                                                        </td>
-                                                        <td class="text-wrap text-center align-middle">{{ $l->diagnostico_principal }}</td>
-                                                        <td class="align-middle text-center">Enviado</td>
-                                                        <td class="text-center align-middle">
-                                                            <button type="button" class="btn btn-primary btn-sm"
-                                                                data-toggle="modal" data-target="#m_cons_ex">
-                                                                <i class="feather icon-file-plus"></i> Ver Certificado</button>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                        <table id="tabla_certificado_paciente_ro"
+                            class="display table table-striped dt-responsive nowrap table-xs"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Profesional</th>
+                                    <th>Tipo de certificado</th>
+                                    <th>Estado</th>
+                                    <th>Certificado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(isset($fichas))
+                                    @foreach( $fichas as $f )
+                                        @foreach( $f->licencias()->get() as $l)
+                                            <tr>
+                                                <td>{{ \Carbon\Carbon::parse($l->created_at)->format('d/m/Y') }}</td>
+                                                <td>
+                                                    <strong>{{ $f->Profesional()->first()->nombre }} {{ $f->Profesional()->first()->apellido_uno }} {{ $f->Profesional()->first()->apellido_dos }} </strong>
+                                                    <br>
+                                                    {{ $f->Profesional()->first()->especialidad()->first()->txt_esp }}
+                                                </td>
+                                                <td class="text-wrap">{{ $l->diagnostico_principal }}</td>
+                                                <td>Enviado</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary btn-sm"
+                                                        data-toggle="modal" data-target="#m_cons_ex">
+                                                        <i class="feather icon-file-plus"></i> Ver certificado</button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
