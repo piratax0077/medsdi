@@ -25,63 +25,61 @@
         </div>
         <!--Cierre: Header-->
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-header">
                         <div class="row">
                             <div class="col-md-12">
-                                <h4 class="text-c-blue f-20 d-inline ml-4">Mis Exámenes</h4>
+                                <h4 class="text-c-blue f-20 d-inline ml-4">Mis exámenes</h4>
                                 <!--<button type="button" class="btn btn-success btn-sm d-inline float-right mr-4"
                                     data-toggle="modal" data-target="#agregar_examen_profesional_ro">
                                     <i class="feather icon-plus"></i> Agregar examen
                                 </button>-->
                             </div>
                         </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-6 col-md-12">
-                                <table id="tabla_examenes_paciente_ro"
-                                    class="display table table-striped table-hover dt-responsive nowrap table-sm"
-                                    style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center align-middle">Fecha</th>
-                                            <th class="text-center align-middle">Nº de Orden</th>
-                                            <th class="text-center align-middle">Profesional</th>
-                                            <th class="text-center align-middle">Nombre del examen</th>
-                                            <th class="text-center align-middle">Comentarios</th>
-                                            <th class="text-center align-middle">Estado</th>
-                                            <th class="text-center align-middle">Examen</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Pendiente
-                                        <tr>
-                                            <td class="text-wrap text-center align-middle">11/09/2020</td>
-                                            <td class="text-wrap text-center align-middle">12344434</td>
-                                            <td class="align-middle text-center">
-                                                <strong>Jaime Kriman Astorga</strong><br>
-                                                Otorrinolaringólogo</td>
-                                            <td class="align-middle text-center">Hemograma Completo</td>
-                                            <td class="align-middle text-center">Comentarios
-                                            <td class="align-middle text-center">Enviado</td>
-                                            <td class="text-center align-middle">
-                                                <button type="button" class="btn btn-secondary btn-sm"
-                                                    data-toggle="modal" data-target="#m_cons_ex"><i
-                                                        class="feather icon-file-plus"></i> Ver Examen</button>
-                                            </td>
-                                        </tr>
-                                        -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="tabla_examenes_paciente_ro"
+                            class="display table table-striped dt-responsive nowrap table-xs"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Nº de Orden</th>
+                                    <th>Profesional</th>
+                                    <th>Nombre del examen</th>
+                                    <th>Comentarios</th>
+                                    <th>Estado</th>
+                                    <th>Examen</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Pendiente
+                                <tr>
+                                    <td class="text-wrap text-center align-middle">11/09/2020</td>
+                                    <td class="text-wrap text-center align-middle">12344434</td>
+                                    <td class="align-middle text-center">
+                                        <strong>Jaime Kriman Astorga</strong><br>
+                                        Otorrinolaringólogo</td>
+                                    <td class="align-middle text-center">Hemograma Completo</td>
+                                    <td class="align-middle text-center">Comentarios
+                                    <td class="align-middle text-center">Enviado</td>
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-secondary btn-sm"
+                                            data-toggle="modal" data-target="#m_cons_ex"><i
+                                                class="feather icon-file-plus"></i> Ver Examen</button>
+                                    </td>
+                                </tr>
+                                -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <!--Cierre: Container Completo-->
 <!-- Modal examen profesional-->
 <div id="agregar_examen_profesional_ro" class="modal fade" tabindex="-1" role="dialog"

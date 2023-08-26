@@ -9,7 +9,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis Exámenes</h5>
+                                <h5 class="m-b-10 font-weight-bold">Mis exámenes</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip"
@@ -18,7 +18,7 @@
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.index_receta_online') }}"
                                         data-toggle="tooltip" data-placement="top"
                                         title="Volver a inicio de receta online">Receta Online</a></li>
-                                <li class="breadcrumb-item"><a href="#">Mis Exámenes</a></li>
+                                <li class="breadcrumb-item"><a href="#">Mis exámenes</a></li>
                             </ul>
                         </div>
                     </div>
@@ -26,65 +26,54 @@
             </div>
             <!--Cierre: Header-->
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="card">
+                        <div class="card-header bg-light">
+                            <h4 class="text-c-blue f-22">Mis exámenes</h4>
+                        </div>
                         <div class="card-body">
-                          <div class="row">
-                                <div class="col-md-12">
-                                    <h4 class="text-c-blue f-22 d-inline ml-4 my-1 py-1">Mis Exámenes</h4>
-                                    <!--<button type="button" class="btn btn-success btn-sm d-inline float-right mr-4 my-1"
-                                        data-toggle="modal" data-target="#agregar_examen_profesional_ro">
-                                        <i class="feather icon-plus"></i> Agregar examen
-                                    </button>-->
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-6 col-md-12">
-                                    <table id="tabla_examenes_profesional_ro"
-                                        class="display table table-striped table-hover dt-responsive nowrap table-sm"
-                                        style="width:100%">
-                                        <thead>
+                            <table id="tabla_examenes_profesional_ro"
+                                class="display table table-striped dt-responsive nowrap table-xs"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        {{--  <th class="text-wrap text-center align-middle" hidden="hidden">Nº de Orden</th>  --}}
+                                        <th class="text-wrap text-center align-middle">Fecha</th>
+                                        <th class=" align-middle">Paciente</th>
+                                        <th class=" align-middle">Nombre del examen</th>
+                                        <th class=" align-middle">Tipo</th>
+                                        {{-- <th class=" align-middle">Comentarios</th> --}}
+                                        {{--<th class=" align-middle">Acción</th>--}}
+                                        {{--<th class=" align-middle">Estado</th>--}}
+                                        <th class=" align-middle">Examen</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @if (isset($examenes) && count($examenes) > 0)
+                                        @foreach ($examenes as $examen)
                                             <tr>
-                                                {{--  <th class="text-wrap text-center align-middle" hidden="hidden">Nº de Orden</th>  --}}
-                                                <th class="text-wrap text-center align-middle">Fecha</th>
-                                                <th class="text-center align-middle">Paciente</th>
-                                                <th class="text-center align-middle">Nombre del examen</th>
-                                                <th class="text-center align-middle">Tipo</th>
-                                                {{-- <th class="text-center align-middle">Comentarios</th> --}}
-                                                {{--<th class="text-center align-middle">Acción</th>--}}
-                                                {{--<th class="text-center align-middle">Estado</th>--}}
-                                                <th class="text-center align-middle">Examen</th>
+                                                {{--  <td class="text-wrap align-middle">{{ $examen->id }}</td>  --}}
+                                                <td class="text-wrap text-center align-middle" style="font-size:12px">
+                                                    {{ $examen['created_at'] }}
+                                                </td>
+
+                                                <td class="align-middle" style="font-size:12px">
+                                                    {{ $examen['Paciente']['nombre'] }}<br>
+                                                    {{ $examen['Paciente']['rut'] }}
+                                                </td>
+                                                <td class="align-middle text-wrap" style="font-size:10px"><label>{{ $examen['examen'] }}</label></td>
+                                                <td class="align-middle text-wrap" style="font-size:10px"><label>{{ $examen['tipo_examen'] }}</label></td>
+                                                <!--<td class="align-middle text-center">
+                                                    <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Examen a Paciente"><i class="feather icon-navigation"></i></button>
+                                                </td>-->
+                                                 <!--<td class="align-middle text-center">Enviado</td>-->
+                                               <td class="align-middle"> <div onclick="ver_pdf_orden_examenes('{{ $examen['id_ficha_atencion']  }}')"><img src="{{ asset('images/documento.png') }}" alt="Documento" height="35px"></div></td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            @if (isset($examenes) && count($examenes) > 0)
-                                                @foreach ($examenes as $examen)
-                                                    <tr>
-                                                        {{--  <td class="text-wrap text-center align-middle">{{ $examen->id }}</td>  --}}
-                                                        <td class="text-wrap text-center align-middle">
-                                                            {{ $examen['created_at'] }}
-                                                        </td>
-
-                                                        <td class="align-middle text-center">
-                                                            {{ $examen['Paciente']['nombre'] }}<br>
-                                                            {{ $examen['Paciente']['rut'] }}
-                                                        </td>
-                                                        <td class="align-middle text-center" style="font-size:10px"><label>{{ $examen['examen'] }}</label></td>
-                                                        <td class="align-middle text-center" style="font-size:10px"><label>{{ $examen['tipo_examen'] }}</label></td>
-                                                        <!--<td class="align-middle text-center">
-                                                            <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Examen a Paciente"><i class="feather icon-navigation"></i></button>
-                                                        </td>-->
-                                                         <!--<td class="align-middle text-center">Enviado</td>-->
-                                                       <td class="align-middle text-center"> <div onclick="ver_pdf_orden_examenes('{{ $examen['id_ficha_atencion']  }}')"><img src="{{ asset('images/documento.svg') }}" alt="Documento" height="20px"> Ver </div></td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
