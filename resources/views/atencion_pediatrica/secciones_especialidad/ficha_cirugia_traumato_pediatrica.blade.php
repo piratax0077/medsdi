@@ -2366,7 +2366,7 @@
                                 @include('general.secciones_ficha.signos_vitales')
 
                                 <!--CRONICOS / GES / CONFIDENCIAL -->
-                                @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
+                                @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
 
                                 <!--DIAGNÓSTICO -->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">

@@ -733,7 +733,7 @@
 
                                         <!-- ENFERMEDADES CRONICAS -->
                                         <!--ENFERMO CRÓNICO O GES-->
-                                        @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
+                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
                                         <hr>
 
                                         <!--Diagnóstico-->

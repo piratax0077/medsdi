@@ -124,7 +124,7 @@
                                         </div>
                                         <!-- cierre control post qx -->
 
-                                        @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
+                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
                                         <hr>
 
                                         <!--Diagnóstico-->

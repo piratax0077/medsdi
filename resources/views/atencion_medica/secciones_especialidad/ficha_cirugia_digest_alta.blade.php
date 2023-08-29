@@ -290,7 +290,7 @@
                                          @include('atencion_medica.generales.signos_vitales')
                                         <!--Cierre: Formulario / Signos vitales y otros-->
 
-                                        @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
+                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
                                         <hr>
 
                                         <!--Diagnóstico-->

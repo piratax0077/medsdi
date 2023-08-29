@@ -1192,6 +1192,8 @@ class ficha_atencionController extends Controller
 
             $archivo_correo = array();
 
+            $paciente = Paciente::find($hora_medica->id_paciente);
+
             /** REGISTROS DE ARCHIVOS */
             if(!empty($request->lista_archivo))
             {
@@ -1202,9 +1204,6 @@ class ficha_atencionController extends Controller
                     $resulto_img = array();
                     foreach ($lista_archivo_array->ges as $key => $value)
                     {
-                        // var_dump($value);
-                        $paciente = Paciente::find($hora_medica->id_paciente);
-
                         $ruta_temp = $value[0];
                         $nombre_real = $value[1];
                         $nombre_temp = $value[2];

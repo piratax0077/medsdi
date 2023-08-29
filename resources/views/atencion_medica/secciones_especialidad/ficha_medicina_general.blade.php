@@ -143,7 +143,7 @@
                                         <!--Formulario / Signos vitales y otros-->
                                         @include('atencion_medica.generales.signos_vitales')
                                         <!--Cierre: Formulario / Signos vitales y otros-->
-                                        @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
+                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
 
                                         <!--Formulario / Diagnóstico-->
                                         <div class="col-sm-12 col-md-12">

@@ -124,7 +124,7 @@
         <script src="{{ asset('js/check_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
         <!-- file-upload Js -->
-        <script src="{{ asset('js/plugins/dropzone-amd-module.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
 
         <!-- mensajes -->
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>

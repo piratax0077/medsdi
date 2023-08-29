@@ -857,6 +857,10 @@
                             </div>
                         </div>
                         <!--CIERRE: INFORME RINOFIBROLARINGOSCOPÍA-->
+
+                        <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
+                        <button type="button" id="guardar_reserva_paciente" onclick="recetario();" class="btn btn-info"> RECETARIO </button>
+
                     </div>
                 </form>
             </div>
@@ -864,6 +868,7 @@
     </div>
 </div>
 
+@include('general.asistentes.modal_recetario_sdi')
 
 @section('page-script-ficha-atencion')
     <script>
@@ -1141,8 +1146,6 @@
                 return this.emit("error", file, this.options.dictUploadCanceled);
             },
         };
-
-
 
         var lista_imagenes = [];
         function cargar_lista_imagenes()

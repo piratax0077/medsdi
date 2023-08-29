@@ -772,7 +772,7 @@
                                         </div>
 
                                         <!--ENFERMO CRÓNICO O GES-->
-                                        @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
+                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
 
                                         <!--Plan de tratamiento-->
                                         <div class="col-sm-12 col-md-12">

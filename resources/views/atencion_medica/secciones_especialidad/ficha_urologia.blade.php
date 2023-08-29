@@ -671,7 +671,7 @@
                             </div>
                             <!--Cierre: Formulario / Signos vitales y otros-->
                             <!--ENFERMO CRÓNICO O GES-->
-                            @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
+                            @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
                             <!--Diagnóstico-->
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">

@@ -21,7 +21,7 @@
         <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
         <!-- fileupload-custom css -->
-        <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}?t={{ time() }}">
+        <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
        <!-- autocomplete-->
         <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}?t={{ time() }}">
         <!--Accordion-->
@@ -127,7 +127,7 @@
         <script src="{{ asset('js/check_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
         <!-- file-upload Js -->
-        <script src="{{ asset('js/plugins/dropzone-amd-module.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
 
         <!-- mensajes -->
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
@@ -159,8 +159,7 @@
 
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-        </script>
-        <script>
+
             /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
             function  envio_indicaciones_pdf(id_modal){
                 let url = "{{ route('indicacion.medica.registro.envio') }}";
