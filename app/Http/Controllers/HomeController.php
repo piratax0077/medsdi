@@ -1149,4 +1149,102 @@ class HomeController extends Controller
 
         return $datos;
     }
+
+    /** RECUPERAR CONTRASEÑA */
+    public function recuperarcontrasena(Request $request)
+    {
+
+        $email = $request->email;
+
+        if(!empty($email))
+        {
+            if(static::validarEmail($email))
+            {
+                $user = User::where('email', $email)->get()->first();
+                if($user)
+                {
+                    $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                    // Output: iNCHNGzByPjhApvn7XBD
+                    $contrasena = static::generate_string($permitted_chars, 5);
+
+                    $user->password = Hash::make($contrasena);
+                    if ($user->save())
+                    {
+                        /** envio de correo de confirmacion  */
+                        $blade = 'recuperacion_contrasena';
+                        $to = array(
+                                array('email' => $user->email,'name' => $user->name),
+                            );
+                        $cc = array();
+                        $bcc = array();
+                        $asunto = 'MED-SDI - Recuperacion Contraseña';
+                        $body = array(
+                            'nombre'=>$user->name,
+                            'pass'=>$contrasena,
+                        );
+                        $archivo = '';/** pendiente */
+                        $id_institucion = '';
+
+                        $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                        if($result_mail['estado'])
+                        {
+                            // return view('auth.Registros.ingreso_registro')->with('mensaje', 'Se a actualizado la contraseña.\n Se ha enviado un correo con la nueva contraseña.');
+                            return back()->with('mensaje', 'Se a actualizado la contraseña. Se ha enviado un correo con la nueva contraseña.');
+                        }
+                        else
+                        {
+                            // return view('auth.Registros.ingreso_registro')->with('mensaje', 'Se a actualizado la contraseña.\n El envio de correo con la nueva contraseña a fallado.');
+                            return back()->with('mensaje', 'Se a actualizado la contraseña. El envio de correo con la nueva contraseña a fallado.');
+                        }
+                    }
+                    else
+                    {
+                        // return view('auth.Registros.ingreso_registro')->with('mensaje', 'Se a presentado una falla al actualizar la contraseña.');
+                        return back()->with('mensaje', 'Se a presentado una falla al actualizar la contraseña.');
+                    }
+                }
+                else
+                {
+                    // return view('auth.Registros.ingreso_registro')->with('mensaje', 'El correo indicado no se encuentra en nuestra base de datos.\n Por favor verifique el correo.');
+                    return back()->with('mensaje', 'El correo indicado no se encuentra en nuestra base de datos. Por favor verifique el correo.');
+                }
+            }
+            else
+            {
+                // return view('auth.Registros.ingreso_registro')->with('mensaje', 'Email no es valido.');
+                return back()->with('mensaje', 'Email no es valido.');
+            }
+        }
+        else
+        {
+            // return view('auth.Registros.ingreso_registro')->with('mensaje', 'Debe ingresar Email.');
+            return back()->with('mensaje', 'Debe ingresar Email.');
+        }
+    }
+
+    static public function validarEmail($email)
+    {
+        // Patrón de expresión regular para validar correos electrónicos
+        $patron = '/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/';
+
+        // Utilizar la función preg_match para verificar si el correo cumple con el patrón
+        if (preg_match($patron, $email)) {
+            return true; // El correo es válido
+        } else {
+            return false; // El correo no es válido
+        }
+    }
+
+
+    static public function generate_string($input, $strength = 16) {
+        $input_length = strlen($input);
+        $random_string = '';
+        for($i = 0; $i < $strength; $i++) {
+            $random_character = $input[mt_rand(0, $input_length - 1)];
+            $random_string .= $random_character;
+        }
+        return $random_string;
+    }
+
 }

@@ -45,14 +45,14 @@
     <div class="auth-wrapper">
         <div class="auth-content">
             <!-- Ingreso a Medichile -->
-            <div class="card text-center" id="ingreso">
+            <div class="card text-center">
                 <div class="card-body">
                     <img src="{{ asset('images/logo_pais_vertical.png') }}" alt="" class="img-fluid mb-4 wid-100">
                     <h5 class="mb-3 f-w-400">¡Bienvenido a Medichile!</h5>
                     <!-- mensaje -->
-                    <div class="row div_mensaje">
+                    <div class="div_mensaje">
                         @if(session('mensaje'))
-                            <span class="col-sm-12 alert alert-success"> {{ session('mensaje') }}</span>
+                            <span class="alert alert-success"> {{ session('mensaje') }}</span>
                         @endif
                     </div>
                     <!-- Ingreso -->
@@ -67,11 +67,11 @@
                             <form method="POST" action="{{ route('login') }}">
                                 @csrf
                                 <div class="form-group mb-3">
-                                    <label class="floating-label-activo-sm">Ingrese su correo electrónico</label>
+                                    <label class="floating-label-activo-sm">Ingrese su Email</label>
                                     <input type="email" class="form-control" name="email" id="email" value="">
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label class="floating-label-activo-sm">Ingrese su contraseña</label>
+                                    <label class="floating-label-activo-sm">Ingrese contraseña</label>
                                     <input type="password" class="form-control" name="password" id="password"
                                         value="">
                                 </div>
@@ -79,7 +79,7 @@
                                 <button id="registrar" class="btn btn-outline-info mb-4 toggle-btn">¡Quiero registrarme!</button>
                             </form>
 
-                            <p class="mb-2 text-muted">¿Olvidó su contraseña? <div style="cursor: pointer;" onclick="activar_recuperacion();" class="f-w-400">¡Recuperela!</div></p>
+                            <p class="mb-2 text-muted">¿Olvidó su contraseña? <a href="#" class="f-w-400">¡Recuperela!</a></p>
                         </div>
 
                     </div>
@@ -135,47 +135,11 @@
 
                     </div>
                     <!-- Registro -->
+
                 </div>
             </div>
-            <!-- Cierre: Ingreso a Medichile -->
-
-
-            <!-- recuperar contraseña usuario -->
-            <div class="card text-center" id="recuperar" style="display: none;">
-                <div class="card-body">
-                    <img src="{{ asset('images/logo_pais_vertical.png') }}" alt="" class="img-fluid mb-4 wid-100">
-                    <h5 class="mb-3 f-w-400">¡Recuperación Contraseña!</h5>
-                    <!-- mensaje -->
-                    <div class="row div_mensaje">
-                        @if(session('mensaje'))
-                            <span class="col-sm-12 alert alert-success"> {{ session('mensaje') }}</span>
-                        @endif
-                    </div>
-                    <!-- recupeación contraseña -->
-                    <div class="">
-                        <div class="form-group mb-3">
-
-                            <form method="POST" action="{{ route('home.recuperar_contrasena') }}">
-                                @csrf
-                                <div class="form-group mb-3">
-                                    <label class="floating-label-activo-sm">Ingrese su correo electrónico</label>
-                                    <input type="email" class="form-control" name="email" id="email" value="">
-                                </div>
-
-                                <button type="submit" class="btn btn-success mb-4" id="btn-solicitar">Solicitar</button>
-
-                                <button type="button" class="btn btn-outline-info mb-4" id="btn-regresar" onclick="regresar_ingreso();">Regresar</button>
-
-                            </form>
-                        </div>
-
-                    </div>
-                    <!-- Cierre:recupeación contraseña -->
-                </div>
-            </div>
-            <!-- Cierre: recuperar contraseña usuario -->
-
         </div>
+        <!-- Cierre: Ingreso a Medichile -->
     </div>
     </div>
     <script src="{{ asset('js/jquery.js') }}"></script>
@@ -194,19 +158,6 @@
         $("#registrar").on("click", function(e) {
             e.preventDefault();
         });
-
-        function activar_recuperacion()
-        {
-            $('#ingreso').hide();
-            $('#recuperar').show();
-        }
-
-        function regresar_ingreso()
-        {
-            $('#ingreso').show();
-            $('#recuperar').hide();
-        }
-
         $(document).ready(function() {
             var $validacion = $("#form_registro").validate({
                 rules: {
@@ -314,7 +265,6 @@
             }, "En correo ya tiene un usuario asociado, seleccione otro tipo de usuario");
 
         });
-
     </script>
 
 </body>

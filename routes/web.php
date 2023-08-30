@@ -42,6 +42,9 @@ Route::get('/', function () {
 Route::get('Ingreso', [App\Http\Controllers\HomeController::class, 'ingreso'])->name('home.ingreso');
 Route::post('Registro', [App\Http\Controllers\HomeController::class, 'registro'])->name('home.registro');
 Route::get('Buscar_user_email', [App\Http\Controllers\HomeController::class, 'buscar_user_email'])->name('home.buscar_user_email');
+Route::post('recuperar_contrasena', [App\Http\Controllers\HomeController::class, 'recuperarcontrasena'])->name('home.recuperar_contrasena');
+
+
 
 /** confirmaciones  */
 Route::get('invitacion/profesional/aprobacion_rechazo', [App\Http\Controllers\EscritorioGeneral::class, 'invitacionProfesionalConfirmacionRechazo'])->name('invitacion.profesional.confirmacion_rechazo');
