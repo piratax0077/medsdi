@@ -164,7 +164,8 @@
                                         <div class="form-group">
                                             <label class="floating-label">Ingrese Nombre Medicamento</label>
                                             <input type="text" id="manual_nombre_medicamento_ficha_dental" name="manual_nombre_medicamento_ficha_dental" class="form-control form-control-sm">
-                                            <input type="hidden" id="manual_id_medicamento_ficha_dental" name="manual_id_medicamento_ficha_dental" class="form-control" value="0">
+                                            <input type="hidden" id="manual_id_medicamento_ficha_dental" name="manual_id_medicamento_ficha_dental" value="0">
+                                            <input type="hidden" id="med_faltante" value="">
                                         </div>
                                     </div>
 
