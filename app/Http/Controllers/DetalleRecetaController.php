@@ -154,11 +154,11 @@ class DetalleRecetaController extends Controller
             $error['id'] = "Campo (id_ficha o id_ingreso_paciente o id_recuperacion o id_sala) requerido";
         }
 
-        if(empty($id_articulo))
-        {
-            $validos = 1;
-            $error['id_articulo'] = 'Campo requerido id_articulo';
-        }
+        // if(empty($id_articulo))
+        // {
+        //     $validos = 1;
+        //     $error['id_articulo'] = 'Campo requerido id_articulo';
+        // }
         if(empty($producto))
         {
             $validos = 1;

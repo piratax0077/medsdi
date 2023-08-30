@@ -42,7 +42,8 @@
 
 
 @section('Modals-med-exa')
-    @include('app.cirugia.modals.modals_cesarea.modal_indicar_medicamentos')
+    {{-- @include('app.cirugia.modals.modals_cesarea.modal_indicar_medicamentos') --}}
+    @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
     @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
 @endsection
 
@@ -193,11 +194,11 @@
         });
 
         {{--  METODOS DE RECETA  --}}
-        function i_medicamento() {
-            {{--  $('#indicar_medicamentos').modal('show');  --}}
-            ver_medicamento_ficha_medica();
-            $('#indicar_medicamentos').modal({backdrop: 'static', keyboard: false});
-        }
+        // function i_medicamento() {
+        //     {{--  $('#indicar_medicamentos').modal('show');  --}}
+        //     ver_medicamento_ficha_medica();
+        //     $('#indicar_medicamentos').modal({backdrop: 'static', keyboard: false});
+        // }
 
         function cerrarModalMedicamentosFicha()
         {
@@ -527,7 +528,7 @@
                 if(valido == 0)
                 {
                     $('.medicamentos_sin_registros').remove()
-                    {{--  var i = 1; //contador para asignar id al boton que borrara la fila  --}}
+
                     var i = $('#tabla_medicamento_cirugia tr').length; //contador para asignar id al boton que borrara la fila
                     var fila = '<tr class="tabla_medicamento_cirugia" id="row' + i + '">' +
                                     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_medicamento + '</td>' +
@@ -713,6 +714,7 @@
             $('#indicar_examenes').modal({backdrop: 'static', keyboard: false});
 
         }
+
         function ver_examenes_ficha_medica_esp() {
 
         }
@@ -774,7 +776,7 @@
             if(valido == 0)
             {
                 $('.examenes_sin_registros').remove();
-                {{--  var i = 1; //contador para asignar id al boton que borrara la fila  --}}
+
                 var i = $('#tabla_examen_cirugia tr').length; //contador para asignar id al boton que borrara la fila
                 var fila = '';
                     fila += '<tr class="tr_examen_cirugia" id="row' + i + '">';
@@ -844,7 +846,7 @@
                 $('#imagenologia_con_contraste').prop('checked', false);
                 $('#mensaje_imagenologia_con_contraste').hide();
 
-                {{--  $("#adicionados1").text(""); //esta instruccion limpia el div adicioandos para que no se vayan acumulando  --}}
+                {{--  $("#adicionados1").text(""); --}}//esta instruccion limpia el div adicioandos para que no se vayan acumulando
                 {{--  var nFilas = $("#tabla_examen_cirugia tr").length;  --}}
                 {{--  $("#adicionados1").append(nFilas - 1);  --}}
                 {{--  $("#sub_tipo_examen").empty();  --}}

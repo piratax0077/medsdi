@@ -9,6 +9,7 @@ use App\Models\AntecedenteEnferCronica;
 use App\Models\AntecedenteMedicamentoCronico;
 use App\Models\AntecedentesPaciente;
 use App\Models\Articulo;
+use App\Models\ArticuloFaltante;
 use App\Models\CertificadoReposo;
 use App\Models\ConsentimientoFaltante;
 use App\Models\FormularioFaltante;
@@ -5538,20 +5539,51 @@ class ficha_atencionController extends Controller
                 // var_dump($value_detalle_receta);
                 $producto = Articulo::where('nombre',$value_detalle_receta->producto)->first();
 
-                $array_medicamento = array(
-                    'nombre_medicamento' => $producto->nombre,
-                    'droga'=>$producto->droga,
-                    'presentacion' => $value_detalle_receta->presentacion,
-                    'posologia' => $value_detalle_receta->posologia,
-                    'via_administracion' => $value_detalle_receta->via_administracion,
-                    'periodo' => $value_detalle_receta->periodo,
-                    'uso_cronico' => $value_detalle_receta->uso_cronico,
-                    'cantidad_compra' => $value_detalle_receta->cantidad_compra,
-                    'receta_token' => $value_detalle_receta->receta_token,
-                );
+                if($producto)
+                {
+                    $array_medicamento = array(
+                        'nombre_medicamento' => $producto->nombre,
+                        'droga'=>$producto->droga,
+                        'presentacion' => $value_detalle_receta->presentacion,
+                        'posologia' => $value_detalle_receta->posologia,
+                        'via_administracion' => $value_detalle_receta->via_administracion,
+                        'periodo' => $value_detalle_receta->periodo,
+                        'uso_cronico' => $value_detalle_receta->uso_cronico,
+                        'cantidad_compra' => $value_detalle_receta->cantidad_compra,
+                        'receta_token' => $value_detalle_receta->receta_token,
+                    );
 
-                $nombre_control = $producto->RecetaControl()->first()->descripcion;
-                $id_control = $producto->RecetaControl()->first()->cod_control;
+                    $nombre_control = $producto->RecetaControl()->first()->descripcion;
+                    $id_control = $producto->RecetaControl()->first()->cod_control;
+                }
+                else
+                {
+                    $med_faltante = ArticuloFaltante::where('nombre', $value_detalle_receta->producto)->orderBy('id', 'DESC')->get()->first();
+
+                    $droga = '';
+                    if($med_faltante)
+                    {
+                        $droga = '('.$med_faltante->droga.')';
+                    }
+                    else
+                    {
+                        $droga = '(Droga no indicada)';
+                    }
+                    $array_medicamento = array(
+                        'nombre_medicamento' => $value_detalle_receta->producto,
+                        'droga'=>$droga,
+                        'presentacion' => $value_detalle_receta->presentacion,
+                        'posologia' => $value_detalle_receta->posologia,
+                        'via_administracion' => $value_detalle_receta->via_administracion,
+                        'periodo' => $value_detalle_receta->periodo,
+                        'uso_cronico' => $value_detalle_receta->uso_cronico,
+                        'cantidad_compra' => $value_detalle_receta->cantidad_compra,
+                        'receta_token' => $value_detalle_receta->receta_token,
+                    );
+
+                    $nombre_control = 'Receta Simple';
+                    $id_control = 6;
+                }
 
                 // 4 - Receta retenida
                 // 6 - Receta Simple
