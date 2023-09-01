@@ -550,7 +550,7 @@
                         </div>
                     </div>
 
-                    
+
                     @include('general.seccion_perfil.seccion_liquidacion')
                 </div>
             </div>
@@ -560,5 +560,5 @@
     <!--MODALS-->
     @include('app.profesional.modales.info_academica')
     @include('app.profesional.modales.datos_bancarios')
-      
+
 @endsection

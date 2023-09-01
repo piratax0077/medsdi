@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Models\Ciudad;
 use App\Models\ContactoEmergencia;
 use App\Models\DiagnosticoCie;
@@ -12,6 +13,7 @@ use App\Models\Prevision;
 use App\Models\Profesional;
 use App\Models\Region;
 use App\Models\User;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -204,18 +206,23 @@ class UtilsController extends Controller
         if($valido == 1)
         {
             $user->password = Hash::make($request->password_registro);
-            if($user->save())
-            {
-                $datos['estado'] = 1 ;
-                $datos['msj'] = 'Contraseña actualizada' ;
-                $mensaje_success = 'Contraseña Actualizada';
-            }
-            else
-            {
-                $datos['estado'] = 0 ;
-                $datos['msj'] = 'Problemas al Actualizar la Contraseña' ;
-                $mensaje_error = 'Problemas al Actualizar la Contraseña';
-            }
+            $user->save();
+            return redirect()->route('home.ingreso',['mensaje' => 'Contraseña actualizada'])->with('mensaje', 'Contraseña actualizada');
+
+            // if($user->save())
+            // {
+            //     $datos['estado'] = 1 ;
+            //     $datos['msj'] = 'Contraseña actualizada' ;
+            //     $mensaje_success = 'Contraseña Actualizada';
+            //     return back()->with('mensaje', 'Contraseña actualizada');
+            //     // return redirect()->route('home.ingreso',['mensaje' => 'Contraseña actualizada'])->with('mensaje', 'Contraseña actualizada');
+            // }
+            // else
+            // {
+            //     $datos['estado'] = 0 ;
+            //     $datos['msj'] = 'Problemas al Actualizar la Contraseña' ;
+            //     $mensaje_error = 'Problemas al Actualizar la Contraseña';
+            // }
         }
         else
         {

@@ -119,28 +119,17 @@
 <!--******* Modal: ¿Enfermo crónico? *******-->
 <div id="form_enfermedad_cronica" class="modal fade" tabindex="-1" role="dialog"
     aria-labelledby="form_enfermedad_cronica" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content bg-light">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
             <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white">Controles de enfermedades crónicas
-                    <select class="form-control form-control-sm" onchange="cambiar_enfermedad_cronica();" id="cronicos" name="cronicos" onchange="mostrar(this.value);">
-                            <option value="n_C">Seleccione control</option>
-                            <option value="cpeso">Obesidad</option>
-                            <option value="chipertension">Hipertensión arterial</option>
-                            <option value="cdiabet">Diabetes</option>
-                            <option value="cinsufren">Insuficiencia renal</option>
-                            <option value="cmtumorales">Marcadores tumorales</option>
-                            <option value="creumato">Reumatología</option>
-                            <option value="clitemia">Litemia</option>
-                        </select>
-                  </h5>
+                <h5 class="modal-title text-white">Controles de enfermedades crónicas</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <!--*******MODAL***-->
-                <!--<div class="medicamento_cronico">
+
+                <div class="medicamento_cronico">
                     <div class="row">
                         <div class="col-md-12">
                             <h5 class="text-c-blue text-center mt-1 mb-0" onclick="mostrar_div('medicamento_cronico_div');">Agregar/Consultar Medicamentos de Uso Crónico <i class="fas fa-angle-down" id="senal_med_cronico"></i></h5>
@@ -225,22 +214,22 @@
                 </div>
 
 
-                <hr>-->
+                <hr>
 
                 {{--  seleccion de patoliga  --}}
-                <!--<div class="row">
-                    <div class="col-sm-12 col-md-4 float-right">
-                        <div class="form-group">
-                            <label class="floating-label-activo-sm">Controles</label>
+                <div class="form-group row">
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group fill">
+                            <label class="floating-label-activo-sm">Controles de enfermedades crónicas</label>
                             <select class="form-control form-control-sm" onchange="cambiar_enfermedad_cronica();" id="cronicos" name="cronicos" onchange="mostrar(this.value);">
-                                <option value="n_C">Seleccione control</option>
-                                <option value="cpeso">Obesidad</option>
-                                <option value="chipertension">Hipertensión arterial</option>
-                                <option value="cdiabet">Diabetes</option>
-                                <option value="cinsufren">Insuficiencia renal</option>
-                                <option value="cmtumorales">Marcadores tumorales</option>
-                                <option value="creumato">Reumatología</option>
-                                <option value="clitemia">Litemia</option>
+                                <option value="n_C">Seleccione una opción</option>
+                                <option value="cpeso">OBESIDAD</option>
+                                <option value="chipertension">HIPERTENSIÓN ARTERIAL</option>
+                                <option value="cdiabet">DIABETES</option>
+                                <option value="cinsufren">INSUFICIENCIA RENAL</option>
+                                <option value="cmtumorales">MARCADORES TUMORALES</option>
+                                <option value="creumato">REUMATOLOGÍA</option>
+                                <option value="clitemia">LITEMIA</option>
                             </select>
                         </div>
                     </div>
@@ -252,632 +241,439 @@
                             </script>
                         </div>
                     </div>
-                </div>-->
+                </div>
 
-
-                <!--CONTROL DE OBESIDAD-->
-                <div id="control_peso_div"  style="display:">
+                {{--  medicamentos de patologia  --}}
+                <div class="medicamento_patologia" style="display:none;">
+                    {{--  titulo  --}}
                     <div class="row">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h5 class="t-aten-dos text-center">Control obesidad</h5>
+                        <div class="col-md-12">
+                            <h5 class="text-c-blue text-center mt-1 mb-0" id="titulo_med_patologia">Medicamentos Patologia</h5>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-                                    <ul class="nav nav-tabs-aten nav-fill" id="orl_adulto" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link-aten text-reset active" id="obes-ctrl-tab" data-toggle="tab" href="#obes-ctrl" role="tab" aria-controls="obes-ctrl" aria-selected="true">Control</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link-aten text-reset" id="obes-hist-tab" data-toggle="tab" href="#obes-hist" role="tab" aria-controls="obes-hist" aria-selected="true">Historial de controles</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link-aten text-reset" id="obes-med-tab" data-toggle="tab" href="#obes-med" role="tab" aria-controls="obes-med" aria-selected="true">Medicamentos</a>
-                                        </li>
-                                    </ul>
+                    <hr>
+                    {{--  formulario  --}}
+                    <div class="form-row">
+                        <div class="col-sm-10 col-md-10 div_contenedor_medicamento_cronico_patologia">
+                            <div class="row ">
+                                <div class="form-group col-sm-4 col-md-4">
+                                    <label class="floating-label-activo-sm">Nombre medicamento</label>
+                                    <input type="text" class="form-control form-control-sm" name="nombre_medicamentocron_patologia" id="nombre_medicamentocron_patologia">
+                                    <input type="hidden" name="id_medicamentocron_patologia" id="id_medicamentocron_patologia" value=""/>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="tab-content" id="orl_adulto">
-                                        <!--CONTROL-->
-                                        <div class="tab-pane fade show active" id="obes-ctrl" role="tabpanel" aria-labelledby="obes-ctrl-tab">
-                                             <form>
-                                                <!--<div class="form-row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <h5 class="t-aten">Control</h5>
-                                                    </div>
-                                                </div>-->
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <h5 class="t-aten">Control</h5>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">Peso</label>
-                                                        <input type="text" class="form-control form-control-sm" name="registro_peso" id="registro_peso">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">Variación</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="registro_peso_variacion" id="registro_peso_variacion">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">Peso Ideal</label>
-                                                        <input type="text" class="form-control form-control-sm" name="registro_peso_ideal"
-                                                            id="registro_peso_ideal">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <button type="button" onclick="registrar_control_obesidad();"
-                                                        class="btn btn-info-light-c btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <!--HISTORIAL DE CONTROLES-->
-                                        <div class="tab-pane fade show" id="obes-hist" role="tabpanel" aria-labelledby="obes-hist-tab">
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                    <h5 class="t-aten">Historial de controles</h5>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <table id="control_obesidad"
-                                                        class="display table table-striped dt-responsive nowrap pb-4 table-xs"
-                                                        style="width:100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Nº Control</th>
-                                                                <th>Fecha</th>
-                                                                <th>Peso</th>
-                                                                <th>Variación</th>
-                                                                <th>Peso Ideal</th>
-                                                                <!-- <th class="text-center align-middle">Acción</th>-->
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-
-                                                            @if (isset($control_peso))
-                                                                @foreach ($control_peso as $cp)
-                                                                    <tr>
-                                                                        <td>{{ $cp->id }}</td>
-                                                                        <td>
-                                                                            {{ \Carbon\Carbon::parse($cp->created_at)->format('d-m-Y') }}
-                                                                        </td>
-                                                                        <td>{{ $cp->peso }}</td>
-                                                                        <td>{{ $cp->variacion }}
-                                                                        </td>
-                                                                        <td>{{ $cp->ideal }}</td>
-                                                                        <!--<td class="text-center align-middle">
-                                                                            <button href="#!" class="btn btn-danger btn-sm">
-                                                                                <i class="feather icon-x"></i> Eliminar</button>
-                                                                        </td>-->
-                                                                    </tr>
-
-                                                                @endforeach
-                                                            @else
-                                                                <span>NO EXISTEN REGISTROS</span>
-
-                                                            @endif
-
-
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--MEDICAMENTOS-->
-                                        <div class="tab-pane fade show" id="obes-med" role="tabpanel" aria-labelledby="obes-med-tab">
-
-                                        </div>
-                                    </div>
+                                <div class="form-group col-sm-4 col-md-4">
+                                    <label class="floating-label-activo-sm">Presentación</label>
+                                    <select class="form-control form-control-sm" id="dosis_medicamentocron_patologia" name="dosis_medicamentocron_patologia" onchange="getCantCompCronica('dosis_medicamentocron_patologia', 'med_cronicomes_patologia');">
+                                        <option>Seleccione</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4">
+                                    <label class="floating-label-activo-sm">Cantidad mensual</label>
+                                    <select class="form-control form-control-sm" id="med_cronicomes_patologia" name="med_cronicomes_patologia" >
+                                        <option value="0">Seleccione</option>
+                                        <option value="999">Otra Cantidad</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-2 col-md-2 p-0">
+                            <button class="btn btn-primary" type="button" onclick="" id="btn_registro_med_patologia"><i class="fa fa-plus"></i>Registrar</button>
+                        </div>
                     </div>
-                </div>
 
-                <!--CONTROL DE HIPERTENSIÓN-->
-                <div id="hipertension_div" style="display: none">
+                    {{--  tabla  --}}
+                    <hr>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h5 class="t-aten-dos text-center">Control hipertensión</h5>
+                        <div class="col-md-12">
+                            <table id="tabla_med_patologia" class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center align-middle">Nombre Medicamento</th>
+                                        <th class="text-center align-middle">Cantidad Mensual</th>
+                                        <th class="text-center align-middle">Acción</th>
+                                        <th class="text-center align-middle">Check</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-                                    <ul class="nav nav-tabs-aten nav-fill" id="orl_adulto" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link-aten text-reset active" id="hiper-ctrl-tab" data-toggle="tab" href="#hiper-ctrl" role="tab" aria-controls="hiper-ctrl" aria-selected="true">Control</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link-aten text-reset" id="hiper-hist-tab" data-toggle="tab" href="#hiper-hist" role="tab" aria-controls="hiper-hist" aria-selected="true">Historial de controles</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link-aten text-reset" id="hiper-med-tab" data-toggle="tab" href="#hiper-med" role="tab" aria-controls="hiper-med" aria-selected="true">Medicamentos</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="tab-content" id="orl_adulto">
-                                        <!--CONTROL-->
-                                        <div class="tab-pane fade show active" id="hiper-ctrl" role="tabpanel" aria-labelledby="hiper-ctrl-tab">
-                                             <form>
-                                                <!--<div class="form-row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <h5 class="t-aten">Control</h5>
-                                                    </div>
-                                                </div>-->
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <h5 class="t-aten">Control</h5>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">Presión Sistólica</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="presion_sistolica_hipertension" id="presion_sistolica_hipertension">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">Presión Diastólica</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="presion_diastolica_hipertension" id="presion_diastolica_hipertension">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">Presión Ideal</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="ideal_hipertension" id="ideal_hipertension">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <button type="button" onclick="registrar_hipertension();"
-                                                        class="btn btn-info-light-c btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <!--HISTORIAL DE CONTROLES-->
-                                        <div class="tab-pane fade show" id="hiper-hist" role="tabpanel" aria-labelledby="hiper-hist-tab">
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                    <h5 class="t-aten">Historial de controles</h5>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                    <table id="control_hipertension"
-                                                        class="display table table-striped dt-responsive nowrap pb-4 table-xs"
-                                                        style="width:100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Nº Control</th>
-                                                                <th>Fecha</th>
-                                                                <th>Presión Sistólica</th>
-                                                                <th>Presión Diastólica</th>
-                                                                <th>Presión Ideal</th>
-                                                                <!-- <th class="text-center align-middle">Acción</th>-->
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @if (isset($hipertension))
-                                                                @foreach ($hipertension as $h)
-                                                                <tr>
-                                                                    <td>{{ $h->id }}</td>
-                                                                    <td>
-                                                                        {{ \Carbon\Carbon::parse($h->created_at)->format('d-m-Y H:i') }}
-                                                                    </td>
-                                                                    <td>{{ $h->sistolica }}</td>
-                                                                    <td>{{ $h->diastolica }}
-                                                                    </td>
-                                                                    <td>{{ $h->ideal }}</td>
-                                                                    <!--<td class="text-center align-middle">
-                                                                        <button href="#!" class="btn btn-danger btn-sm">
-                                                                            <i class="feather icon-x"></i> Eliminar</button>
-                                                                    </td>-->
-                                                                </tr>
-                                                                @endforeach
-                                                            @else
-                                                                <span>NO EXISTEN REGISTROS</span>
-                                                            @endif
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--MEDICAMENTOS-->
-                                        <div class="tab-pane fade show" id="hiper-med" role="tabpanel" aria-labelledby="hiper-med-tab">
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-success" type="button" onclick="">Generar Receta medicamentos Patologia</button>
                         </div>
                     </div>
                 </div>
-                <!--CONTROL DE DIABETES-->
-                <div id="diabetes_div"  style="display: none">
-                     <div class="row">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h5 class="t-aten-dos text-center">Control diabetes</h5>
+
+                <div id="control_peso_div" class="card-row" style="display: ">
+                    <!--CONTROL DE OBESIDAD-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="text-c-blue text-center mt-1 mb-0">Control de obesidad</h5>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-                                    <ul class="nav nav-tabs-aten nav-fill" id="orl_adulto" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link-aten text-reset active" id="diabet-ctrl-tab" data-toggle="tab" href="#diabet-ctrl" role="tab" aria-controls="diabet-ctrl" aria-selected="true">Control</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link-aten text-reset" id="diabet-hist-tab" data-toggle="tab" href="#diabet-hist" role="tab" aria-controls="diabet-hist" aria-selected="true">Historial de controles</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link-aten text-reset" id="diabet-med-tab" data-toggle="tab" href="#diabet-med" role="tab" aria-controls="diabet-med" aria-selected="true">Medicamentos</a>
-                                        </li>
-                                    </ul>
+                    <hr>
+                    <div class="row bg-light mb-4 pt-4">
+                        <div class="col-md-12">
+                            <div class="form-row">
+                                <div class="form-group col-sm-2 col-md-2">
+                                    <label class="floating-label-activo-sm">Peso</label>
+                                    <input type="text" class="form-control form-control-sm" name="registro_peso" id="registro_peso">
+                                </div>
+                                <div class="form-group col-sm-2 col-md-2">
+                                    <label class="floating-label-activo-sm">Variación</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        name="registro_peso_variacion" id="registro_peso_variacion">
+                                </div>
+                                <div class="form-group col-sm-2 col-md-2">
+                                    <label class="floating-label-activo-sm">Peso Ideal</label>
+                                    <input type="text" class="form-control form-control-sm" name="registro_peso_ideal"
+                                        id="registro_peso_ideal">
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4">
+                                    <button type="button" onclick="registrar_control_obesidad();"
+									class="btn btn-success btn-sm float-right"><i class="feather icon-plus"></i>Guardar Control</button>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="tab-content" id="orl_adulto">
-                                        <!--CONTROL-->
-                                        <div class="tab-pane fade show active" id="diabet-ctrl" role="tabpanel" aria-labelledby="diabet-ctrl-tab">
-                                             <form>
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <label class="floating-label-activo-sm">Peso</label>
-                                                        <input type="text" class="form-control form-control-sm" name="peso_diabetes"
-                                                            id="peso_diabetes">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <label class="floating-label-activo-sm">Piés</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pies_diabetes"
-                                                            id="pies_diabetes">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <label class="floating-label-activo-sm">Hg A1c</label>
-                                                        <input type="text" class="form-control form-control-sm" name="hga1c_diabetes"
-                                                            id="hga1c_diabetes">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <label class="floating-label-activo-sm">Colesterol</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="colesterol_diabetes" id="colesterol_diabetes">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <label class="floating-label-activo-sm">Creatina</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="creatina_diabetes" id="creatina_diabetes">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <label class="floating-label-activo-sm">Glicosilada postprandial</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="glicosilada_postprandial_diabetes"
-                                                            id="glicosilada_postprandial_diabetes">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <label class="floating-label-activo-sm">Glicosilada ayuno</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="glicosilada_ayuno_diabetes" id="glicosilada_ayuno_diabetes">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <button type="button" onclick="registrar_diabetes();"
-                                                            class="btn btn-info-light-c btn-sm btn-block"><i
-                                                                class="feather icon-save"></i> Guardar control</button>
-                                                    </div>
-                                                </div>
-                                            </form>
 
-                                        </div>
-                                        <!--HISTORIAL DE CONTROLES-->
-                                        <div class="tab-pane fade show" id="diabet-hist" role="tabpanel" aria-labelledby="diabet-hist-tab">
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                    <h5 class="t-aten">Historial de controles</h5>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                     <div style="overflow-x:auto;">
-                                                        <table id="control_diabetes"
-                                                            class="display table table-striped dt-responsive nowrap table-xs"
-                                                            style="width:100%">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Nº Control</th>
-                                                                    <th>Fecha</th>
-                                                                    <th>Peso</th>
-                                                                    <th>Piés</th>
-                                                                    <th>Hg A1c</th>
-                                                                    <th>Colesterol</th>
-                                                                    <th>Creatina</th>
-                                                                    <th>Glicosilada ayuno</th>
-                                                                    <th>Glicosilada postprandial</th>
-                                                                    <th>Acción</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="text-c-blue mt-2 mb-0">Controles previos de obesidad</h5>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="control_obesidad"
+                                class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center align-middle">Nº Control</th>
+                                        <th class="text-center align-middle">Fecha</th>
+                                        <th class="text-center align-middle">Peso</th>
+                                        <th class="text-center align-middle">Variación</th>
+                                        <th class="text-center align-middle">Peso Ideal</th>
+                                        <!-- <th class="text-center align-middle">Acción</th>-->
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                                                                @if (isset($diabetes))
-                                                                    @foreach ($diabetes as $d)
-                                                                        <tr>
-                                                                            <td class="text-center align-middle">{{ $d->id }}</td>
-                                                                            <td class="text-center align-middle">
-                                                                                {{ \Carbon\Carbon::parse($d->created_at)->format('d-m-Y') }}
-                                                                            </td>
-                                                                            <td class="text-center align-middle">{{ $d->peso }}</td>
-                                                                            <td class="text-center align-middle">{{ $d->pies }}</td>
-                                                                            <td class="text-center align-middle">{{ $d->hgac1 }}</td>
-                                                                            <td class="text-center align-middle">{{ $d->colesterol }}</td>
-                                                                            <td class="text-center align-middle">{{ $d->creatina }}</td>
-                                                                            <td class="text-center align-middle">
-                                                                                {{ $d->glicosilada_postprandial }}</td>
-                                                                            <td class="text-center align-middle">{{ $d->glicosinada_ayuno }}
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                <button href="#!" class="btn btn-danger btn-sm">
-                                                                                    <i class="feather icon-x"></i>
-                                                                                    Eliminar
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    @endforeach
-                                                                @else
-                                                                    <span>NO EXISTEN REGISTROS</span>
+                                    @if (isset($control_peso))
+                                        @foreach ($control_peso as $cp)
+                                            <tr>
+                                                <td class="text-center align-middle">{{ $cp->id }}</td>
+                                                <td class="text-center align-middle">
+                                                    {{ \Carbon\Carbon::parse($cp->created_at)->format('d-m-Y') }}
+                                                </td>
+                                                <td class="text-center align-middle">{{ $cp->peso }}</td>
+                                                <td class="text-center align-middle">{{ $cp->variacion }}
+                                                </td>
+                                                <td class="text-center align-middle">{{ $cp->ideal }}</td>
+                                                <!--<td class="text-center align-middle">
+                                                    <button href="#!" class="btn btn-danger btn-sm">
+                                                        <i class="feather icon-x"></i> Eliminar</button>
+                                                </td>-->
+                                            </tr>
 
-                                                                @endif
+                                        @endforeach
+                                    @else
+                                        <span>NO EXISTEN REGISTROS</span>
 
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--MEDICAMENTOS-->
-                                        <div class="tab-pane fade show" id="diabet-med" role="tabpanel" aria-labelledby="diabet-med-tab">
-                                                    {{--  medicamentos de patologia  --}}
-                                                <div class="medicamento_patologia" style="display:none;">
-                                                    {{--  titulo  --}}
+                                    @endif
 
-                                                    {{--  formulario  --}}
 
-                                                        <div class=" div_contenedor_medicamento_cronico_patologia">
-                                                            <div class="form-row ">
-                                                                <div class="form-group col-sm-12 col-md-12 col-lg-9 col-xl-9 ">
-                                                                    <label class="floating-label-activo-sm">Nombre medicamento</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="nombre_medicamentocron_patologia" id="nombre_medicamentocron_patologia">
-                                                                    <input type="hidden" name="id_medicamentocron_patologia" id="id_medicamentocron_patologia" value=""/>
-                                                                </div>
-                                                                <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3 ">
-                                                                    <label class="floating-label-activo-sm">Presentación</label>
-                                                                    <select class="form-control form-control-sm" id="dosis_medicamentocron_patologia" name="dosis_medicamentocron_patologia" onchange="getCantCompCronica('dosis_medicamentocron_patologia', 'med_cronicomes_patologia');">
-                                                                        <option>Seleccione</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
-                                                                    <label class="floating-label-activo-sm">Cantidad mensual</label>
-                                                                    <select class="form-control form-control-sm" id="med_cronicomes_patologia" name="med_cronicomes_patologia" >
-                                                                        <option value="0">Seleccione</option>
-                                                                        <option value="999">Otra Cantidad</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-6  col-lg-6 col-xl-6 p-0">
-                                                                    <button class="btn btn-success-light-c btn-block btn-sm" type="button" onclick="" id="btn_registro_med_patologia"><i class="fa fa-plus"></i> Registrar</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-                                                    {{--  tabla  --}}
-
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <table id="tabla_med_patologia" class="display table table-striped dt-responsive nowrap pb-4 table-xs" style="width:100%">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Nombre Medicamento</th>
-                                                                        <th>Cantidad Mensual</th>
-                                                                        <th>Acción</th>
-                                                                        <th>Check</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12 text-center">
-                                                            <button class="btn btn-success" type="button" onclick="">Generar Receta medicamentos Patologia</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                        </div>
+                <div id="hipertension_div" class="card-row" style="display: none">
+                    <!--CONTROL DE HIPERTENSIÓN-->
+					<div class="row">
+                        <div class="col-md-12">
+                            <h5 class="text-c-blue text-center mt-1 mb-0">Control de hipertensi&oacute;n</h5>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row bg-light mb-4 pt-4">
+                        <div class="col-md-12">
+                                <div class="form-row">
+                                    <div class="form-group col-sm-4 col-md-4">
+                                        <label class="floating-label-activo-sm">Presión Sistólica</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="presion_sistolica_hipertension" id="presion_sistolica_hipertension">
+                                    </div>
+                                    <div class="form-group col-sm-4 col-md-4">
+                                        <label class="floating-label-activo-sm">Presión Diastólica</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="presion_diastolica_hipertension" id="presion_diastolica_hipertension">
+                                    </div>
+                                    <div class="form-group col-sm-4 col-md-4">
+                                        <label class="floating-label-activo-sm">Presión Ideal</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="ideal_hipertension" id="ideal_hipertension">
                                     </div>
                                 </div>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-12">
+                                        <button type="button" onclick="registrar_hipertension();" class="btn btn-success btn-sm float-right"><i class="feather icon-plus"></i>Guardar Control</button>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="text-c-blue mt-2 mb-0">Controles previos de hipertensión</h5>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="control_hipertension"
+                                class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center align-middle">Nº Control</th>
+                                        <th class="text-center align-middle">Fecha</th>
+                                        <th class="text-center align-middle">Presión Sistólica</th>
+                                        <th class="text-center align-middle">Presión Diastólica</th>
+                                        <th class="text-center align-middle">Presión Ideal</th>
+                                        <!-- <th class="text-center align-middle">Acción</th>-->
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @if (isset($hipertension))
+                                        @foreach ($hipertension as $h)
+                                            <tr>
+                                                <td class="text-center align-middle">{{ $h->id }}</td>
+                                                <td class="text-center align-middle">
+                                                    {{ \Carbon\Carbon::parse($h->created_at)->format('d-m-Y H:i') }}
+                                                </td>
+                                                <td class="text-center align-middle">{{ $h->sistolica }}</td>
+                                                <td class="text-center align-middle">{{ $h->diastolica }}
+                                                </td>
+                                                <td class="text-center align-middle">{{ $h->ideal }}</td>
+                                                <!--<td class="text-center align-middle">
+                                                    <button href="#!" class="btn btn-danger btn-sm">
+                                                        <i class="feather icon-x"></i> Eliminar</button>
+                                                </td>-->
+                                            </tr>
+
+                                        @endforeach
+                                    @else
+                                        <span>NO EXISTEN REGISTROS</span>
+
+                                    @endif
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="diabetes_div" class="card-row" style="display: none">
+                    <!--CONTROL DE DIABETES-->
+					<div class="row">
+                        <div class="col-md-12">
+                            <h5 class="text-c-blue text-center mt-1 mb-0">Control de diabetes</h5>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row bg-light mb-4 pt-4">
+                        <div class="col-md-12">
+                            <form>
+
+                                <div class="form-row">
+                                    <div class="form-group col-sm-3 col-md-3">
+                                        <label class="floating-label-activo-sm">Peso</label>
+                                        <input type="text" class="form-control form-control-sm" name="peso_diabetes"
+                                            id="peso_diabetes">
+                                    </div>
+                                    <div class="form-group col-sm-3 col-md-3">
+                                        <label class="floating-label-activo-sm">Piés</label>
+                                        <input type="text" class="form-control form-control-sm" name="pies_diabetes"
+                                            id="pies_diabetes">
+                                    </div>
+                                    <div class="form-group col-sm-3 col-md-3">
+                                        <label class="floating-label-activo-sm">Hg A1c</label>
+                                        <input type="text" class="form-control form-control-sm" name="hga1c_diabetes"
+                                            id="hga1c_diabetes">
+                                    </div>
+                                    <div class="form-group col-sm-3 col-md-3">
+                                        <label class="floating-label-activo-sm">Colesterol</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="colesterol_diabetes" id="colesterol_diabetes">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-4 col-md-4">
+                                        <label class="floating-label-activo-sm">Creatina</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="creatina_diabetes" id="creatina_diabetes">
+                                    </div>
+                                    <div class="form-group col-sm-4 col-md-4">
+                                        <label class="floating-label-activo-sm">Glicosilada postprandial</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="glicosilada_postprandial_diabetes"
+                                            id="glicosilada_postprandial_diabetes">
+                                    </div>
+                                    <div class="form-group col-sm-4 col-md-4">
+                                        <label class="floating-label-activo-sm">Glicosilada ayuno</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="glicosilada_ayuno_diabetes" id="glicosilada_ayuno_diabetes">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-12">
+                                        <button type="button" onclick="registrar_diabetes();"
+                                            class="btn btn-success btn-sm float-right"><i
+                                                class="feather icon-plus"></i>Guardar Control</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="text-c-blue mt-2 mb-0">Controles previos de diabetes</h5>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div style="overflow-x:auto;">
+                                <table id="control_diabetes"
+                                    class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm"
+                                    style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center align-middle">Nº Control</th>
+                                            <th class="text-center align-middle">Fecha</th>
+                                            <th class="text-center align-middle">Peso</th>
+                                            <th class="text-center align-middle">Piés</th>
+                                            <th class="text-center align-middle">Hg A1c</th>
+                                            <th class="text-center align-middle">Colesterol</th>
+                                            <th class="text-center align-middle">Creatina</th>
+                                            <th class="text-center align-middle">Glicosilada ayuno</th>
+                                            <th class="text-center align-middle">Glicosilada postprandial</th>
+                                            <th class="text-center align-middle">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @if (isset($diabetes))
+                                            @foreach ($diabetes as $d)
+                                                <tr>
+                                                    <td class="text-center align-middle">{{ $d->id }}</td>
+                                                    <td class="text-center align-middle">
+                                                        {{ \Carbon\Carbon::parse($d->created_at)->format('d-m-Y') }}
+                                                    </td>
+                                                    <td class="text-center align-middle">{{ $d->peso }}</td>
+                                                    <td class="text-center align-middle">{{ $d->pies }}</td>
+                                                    <td class="text-center align-middle">{{ $d->hgac1 }}</td>
+                                                    <td class="text-center align-middle">{{ $d->colesterol }}</td>
+                                                    <td class="text-center align-middle">{{ $d->creatina }}</td>
+                                                    <td class="text-center align-middle">
+                                                        {{ $d->glicosilada_postprandial }}</td>
+                                                    <td class="text-center align-middle">{{ $d->glicosinada_ayuno }}
+                                                    </td>
+                                                    <td class="text-center align-middle">
+                                                        <button href="#!" class="btn btn-danger btn-sm">
+                                                            <i class="feather icon-x"></i>
+                                                            Eliminar
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <span>NO EXISTEN REGISTROS</span>
+
+                                        @endif
+
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!--INSUFICIENCIA RENAL-->
                 <div class="cinsufren" style="display:none;">
+                    <!--CONTROL DE insuficiencia renal-->
+                    {{--  titulo  --}}
                     <div class="row">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h5 class="t-aten-dos text-center">Insuficiencia renal</h5>
+                        <div class="col-md-12">
+                            <h5 class="text-c-blue text-center mt-1 mb-0">Control de insuficiencia renal</h5>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-                                    <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl_adulto" role="tablist">
-                                        <li class="nav-item-secciones">
-                                            <a class="nav-secciones text-reset active" id="renal-ctrl-tab" data-toggle="tab" href="#renal-ctrl" role="tab" aria-controls="renal-ctrl" aria-selected="true">Control</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-secciones text-reset" id="renal-hist-tab" data-toggle="tab" href="#renal-hist" role="tab" aria-controls="renal-hist" aria-selected="true">Historial de controles</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-secciones text-reset" id="renal-med-tab" data-toggle="tab" href="#renal-med" role="tab" aria-controls="renal-med" aria-selected="true">Medicamentos</a>
-                                        </li>
-                                    </ul>
+                    <hr>
+
+                    {{--  fromulario  --}}
+                    <div class="row bg-light mb-4 pt-4">
+                        <div class="col-md-12">
+
+                            <div class="form-row">
+                                <div class="form-group col-sm-2 col-md-2">
+                                    <label class="floating-label-activo-sm">Peso</label>
+                                    <input type="text" class="form-control form-control-sm" name="registro_peso" id="registro_peso">
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4">
+                                    <button type="button" onclick="registrar_control_insuficiencia_renal();"
+									class="btn btn-success btn-sm float-right"><i class="feather icon-plus"></i>Guardar Control</button>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="tab-content" id="orl_adulto">
-                                        <!--CONTROL-->
-                                        <div class="tab-pane fade show active" id="renal-ctrl" role="tabpanel" aria-labelledby="renal-ctrl-tab">
-                                             <form>
-                                                <!--<div class="form-row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <h5 class="t-aten">Control</h5>
-                                                    </div>
-                                                </div>-->
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <h5 class="t-aten">Control</h5>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-2 col-md-2">
-                                                        <label class="floating-label-activo-sm">Peso</label>
-                                                        <input type="text" class="form-control form-control-sm" name="registro_peso" id="registro_peso">
-                                                    </div>
-                                                    <div class="form-group col-sm-4 col-md-4">
-                                                        <button type="button" onclick="registrar_control_insuficiencia_renal();"
-                                                        class="btn btn-success btn-sm float-right"><i class="feather icon-plus"></i>Guardar Control</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <!--HISTORIAL DE CONTROLES-->
-                                        <div class="tab-pane fade show" id="renal-hist" role="tabpanel" aria-labelledby="renal-hist-tab">
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                    <h5 class="t-aten">Historial de controles</h5>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                     <table id="control_obesidad"
-                                                        class="display table table-striped dt-responsive nowrap pb-4 table-xs"
-                                                        style="width:100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Nº Control</th>
-                                                                <th>Fecha</th>
-                                                                <!-- <th class="text-center align-middle">Acción</th>-->
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
 
-                                                            @if (isset($contro))
-                                                                @foreach ($contro as $cp)
-                                                                    <tr>
-                                                                        <td>{{ $cp->id }}</td>
-                                                                        <!--<td class="text-center align-middle">
-                                                                            <button href="#!" class="btn btn-danger btn-sm">
-                                                                                <i class="feather icon-x"></i> Eliminar</button>
-                                                                        </td>-->
-                                                                    </tr>
+                        </div>
+                    </div>
 
-                                                                @endforeach
-                                                            @else
-                                                                <span>No existen registros</span>
+                    {{--  tabla de control  --}}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="text-c-blue mt-2 mb-0">Controles previos de obesidad</h5>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="control_obesidad"
+                                class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center align-middle">Nº Control</th>
+                                        <th class="text-center align-middle">Fecha</th>
+                                        <!-- <th class="text-center align-middle">Acción</th>-->
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                                                            @endif
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--MEDICAMENTOS-->
-                                        <div class="tab-pane fade show" id="hiper-med" role="tabpanel" aria-labelledby="hiper-med-tab">
-                                            {{--  medicamentos de patologia  --}}
-                                            <div class="medicamento_patologia" style="display:none;">
-                                                {{--  titulo  --}}
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <h5 class="text-c-blue text-center mt-1 mb-0" id="titulo_med_patologia">Medicamentos Patologia</h5>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                                {{--  formulario  --}}
-                                                <div class="form-row">
-                                                    <div class="col-sm-10 col-md-10 div_contenedor_medicamento_cronico_patologia">
-                                                        <div class="row ">
-                                                            <div class="form-group col-sm-4 col-md-4">
-                                                                <label class="floating-label-activo-sm">Nombre medicamento</label>
-                                                                <input type="text" class="form-control form-control-sm" name="nombre_medicamentocron_patologia" id="nombre_medicamentocron_patologia">
-                                                                <input type="hidden" name="id_medicamentocron_patologia" id="id_medicamentocron_patologia" value=""/>
-                                                            </div>
-                                                            <div class="form-group col-sm-4 col-md-4">
-                                                                <label class="floating-label-activo-sm">Presentación</label>
-                                                                <select class="form-control form-control-sm" id="dosis_medicamentocron_patologia" name="dosis_medicamentocron_patologia" onchange="getCantCompCronica('dosis_medicamentocron_patologia', 'med_cronicomes_patologia');">
-                                                                    <option>Seleccione</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group col-sm-4 col-md-4">
-                                                                <label class="floating-label-activo-sm">Cantidad mensual</label>
-                                                                <select class="form-control form-control-sm" id="med_cronicomes_patologia" name="med_cronicomes_patologia" >
-                                                                    <option value="0">Seleccione</option>
-                                                                    <option value="999">Otra Cantidad</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-2 col-md-2 p-0">
-                                                        <button class="btn btn-primary" type="button" onclick="" id="btn_registro_med_patologia"><i class="fa fa-plus"></i>Registrar</button>
-                                                    </div>
-                                                </div>
+                                    @if (isset($contro))
+                                        @foreach ($contro as $cp)
+                                            <tr>
+                                                <td class="text-center align-middle">{{ $cp->id }}</td>
+                                                <!--<td class="text-center align-middle">
+                                                    <button href="#!" class="btn btn-danger btn-sm">
+                                                        <i class="feather icon-x"></i> Eliminar</button>
+                                                </td>-->
+                                            </tr>
 
-                                                {{--  tabla  --}}
-                                                <hr>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <table id="tabla_med_patologia" class="display table table-striped dt-responsive nowrap pb-4 table-xs" style="width:100%">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Nombre Medicamento</th>
-                                                                    <th>Cantidad Mensual</th>
-                                                                    <th>Acción</th>
-                                                                    <th>Check</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
+                                        @endforeach
+                                    @else
+                                        <span>NO EXISTEN REGISTROS</span>
 
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <button class="btn btn-success" type="button" onclick="">Generar Receta medicamentos Patologia</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    @endif
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-
-
-
-
 
                 {{--  <div class="cmtumorales" style="display:none;">
 
@@ -892,13 +688,11 @@
                 </div>  --}}
 
 
-
-
             </div>
-            <!--Cierre modal body
+            <!--Cierre modal body-->
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-            </div>-->
+            </div>
         </div>
     </div>
 </div>
@@ -1003,6 +797,108 @@
                 }
             });
     });
+
+    // /************** GES **************/
+    // var myDropzone_ges ;
+    // Dropzone.options.misArchivosGes = {
+    //     init:function()
+    //     {
+    //         myDropzone_ges = this;
+    //     },
+    //     url: "{{ route('profesional.archivo.carga') }}",
+    //     method: 'post',
+    //     createImageThumbnails: true,
+    //     addRemoveLinks: true,
+    //     headers:{
+    //         'X-CSRF-TOKEN' : CSRF_TOKEN,
+    //     },
+
+    //     acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*",
+    //     maxFilesize: 4,
+    //     maxFiles: 4,
+    //     /** El texto utilizado antes de que se eliminen los archivos. */
+    //     dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
+
+    //     /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+    //     dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+    //     /**
+    //      * El texto que se agregará antes del formulario alternativo.
+    //      * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+    //      * ser ignorado.
+    //      */
+    //     dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+    //     /**
+    //      * Si el tamaño del archivo es demasiado grande.
+    //      * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+    //      */
+    //     dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+    //     /** Si el archivo no coincide con el tipo de archivo. */
+    //     dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+    //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+    //     dictCancelUpload: "Cancelar carga",
+
+    //     /** El texto que se muestra si una carga se canceló manualmente */
+    //     dictUploadCanceled: "Subida cancelada.",
+
+    //     /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+    //     dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+    //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+    //     dictRemoveFile: "Eliminar archivo",
+
+    //     /**
+    //      * Se muestra si `maxFiles` es st y se excede.
+    //      */
+    //     dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+    //     // accept(file, done) {
+    //     //     console.log('-------------accept-----------------------');
+    //     //     cargar_lista_archivo();
+    //     //     return done();
+    //     // },
+    //     success: function(file, response){
+    //         // console.log('-------------success-----------------------');
+    //         cargar_lista_archivo(myDropzone_ges,'ges');
+
+    //         if (file.previewElement) {
+    //             return file.previewElement.classList.add("dz-success");
+    //         }
+    //     },
+    //     error(file, message) {
+    //         // console.log('-------------error-----------------------');
+    //         if (file.previewElement) {
+    //             file.previewElement.classList.add("dz-error");
+    //             if (typeof message !== "string" && message.error)
+    //             {
+    //                 message = message.error;
+    //             }
+    //             else
+    //             {
+    //                 message = message.message;
+    //             }
+    //             for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+    //                 node.textContent = message;
+    //             }
+    //         }
+    //     },
+    //     removedfile(file) {
+    //         // console.log('-------------removedfile-----------------------');
+    //         cargar_lista_archivo(myDropzone_ges,'ges');
+    //         if (file.previewElement != null && file.previewElement.parentNode != null) {
+    //             file.previewElement.parentNode.removeChild(file.previewElement);
+    //         }
+    //         return this._updateMaxFilesReachedClass();
+    //     },
+    //     canceled: function canceled(file) {
+    //         cargar_lista_archivo(myDropzone_ges,'ges');
+    //         return this.emit("error", file, this.options.dictUploadCanceled);
+    //     },
+    // };
+    // /************** GES **************/
 
     /** CRONICO */
     function getDosis_cronico(id_medicamento, div_dosis) {
