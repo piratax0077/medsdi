@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-		
+
         <!--Cierre: Header-->
         <!--Botones superiores-->
         <div class="row">
@@ -125,7 +125,7 @@
                 <div class="col-md-4">
                     <div class="card subir text-center h-100">
 						<img class="img-fluid card-img-top" src="{{ asset('images/iconos/inscripciones_1.svg') }}" alt="Inscripciones" class="btn  btn-arrastre" type="button">
-                        <a href="{{ ROUTE('app.laboratorio.lab_asistente.resultados_examenes_laboratorio') }}" class="btn" type="button"> 
+                        <a href="{{ ROUTE('app.laboratorio.lab_asistente.resultados_examenes_laboratorio') }}" class="btn" type="button">
                             <div class="card-body">
                                 <h4 class="card-title f-20 pt-3">Resultado de exámenes</h4>
                                 <p class="card-text">Acceda a los resultados de los exámenes de los pacientes</p>

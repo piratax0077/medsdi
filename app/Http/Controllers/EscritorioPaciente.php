@@ -1352,5 +1352,38 @@ class EscritorioPaciente extends Controller
         return $datos;
     }
 
+    public function buscarPacientePorRut(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        $rut = $request->rut;
+
+        if($valido)
+        {
+            $paciente = Paciente::where('rut','like', ''.$rut.'%')->get()->first();
+            if($paciente)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registro'] = $paciente;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
 }
 

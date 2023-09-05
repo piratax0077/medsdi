@@ -31,11 +31,11 @@ class CorreoGenerico extends Mailable
     {
         if(!empty($this->detalle['url_archivo']))
         {
-            if($this->detalle['url_archivo'])
+            if(is_array($this->detalle['url_archivo']))
             {
                 foreach ($this->detalle['url_archivo'] as $key => $value)
                 {
-                    $this->attach($value);
+                    $this->attach($value['url'], ['mime' => $value['mime']]);
                 }
             }
             else

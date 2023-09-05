@@ -156,11 +156,6 @@ function boca_completa_inf() {
 function i_examen() {
 	$('#indicar_examen').modal('show');
 }
-
-function i_medicamento() {
-	$('#indicar_medicamentos').modal('show');
-}
-
 /* derivacion a tratamiento */
 
 function d_deriv_tto() {

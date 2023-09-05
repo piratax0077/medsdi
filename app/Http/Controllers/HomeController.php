@@ -60,13 +60,16 @@ class HomeController extends Controller
                 return redirect()->route('asistentedentaltecn.home');
                 break;
             case 'AsistenteDental':// asistente dental
-                    return redirect()->route('asistentedental.home');
-                    break;
+                return redirect()->route('asistentedental.home');
+                break;
             case 'AsistenteOnline': // asistente online (institucion / consulta)
                 return redirect()->route('asistenteon.home');
                 break;
             case 'AsistenteManejoAgenda': // asistente Manejo de Agenda (institucion)
                 return redirect()->route('asistentecm.ma.home');
+                break;
+            case 'AsistenteCargaExamenExterno': // asistente externo caga de examen (usuario para lab - temporal)
+                return redirect()->route('lab.exa.asistente.home');
                 break;
             case 'Paciente':
                 return redirect()->route('paciente.home');

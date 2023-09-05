@@ -906,8 +906,9 @@ Route::group([
     Route::get('/Enfermera_tens', [App\Http\Controllers\EnfermeriaController::class, 'enfermera_tens'])->name('app.enfermeria.enfermera_tens');
 
 });
-  /** LABORATORIO  */
- Route::group([
+
+/** LABORATORIO  */
+Route::group([
     'middleware' => ['role:Laboratorio|Admin'],
     'prefix' => 'Laboratorio',
 ], function () {
@@ -932,7 +933,7 @@ Route::group([
 	Route::get('/Laboratorio/pacientes_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'pacientes_laboratorio'])->name('app.laboratorio.lab_asistente.pacientes_laboratorio');
 	Route::get('/Laboratorio/resultados_examenes_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'resultados_examenes_laboratorio'])->name('app.laboratorio.lab_asistente.resultados_examenes_laboratorio');
 
-    Route::get('/Laboratorio/lab_asistente', [App\Http\Controllers\LaboratorioController::class, 'escritorio_asistente_laboratorio'])->name('app.laboratorio.lab_asistente.escritorio_asistente_laboratorio');
+    Route::get('/Laboratorio/lab_asistente', [App\Http\Controllers\LaboratorioController::class, 'escritorio_asistente_laboratorio'])->name('app.laboratorio.lab_asistente');
     Route::get('/Laboratorio/escritorio_profesional_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'escritorio_profesional_laboratorio'])->name('app.laboratorio.lab_profesional.escritorio_profesional_laboratorio');
 	Route::get('/Laboratorio/pacientes_laboratoriop', [App\Http\Controllers\LaboratorioController::class, 'pacientes_laboratorio'])->name('app.laboratorio.lab_profesional.pacientes_laboratorio');
 
@@ -944,6 +945,34 @@ Route::group([
 	Route::get('/Laboratorio/recepcion_muestras', [App\Http\Controllers\LaboratorioController::class, 'recepcion_muestras'])->name('app.laboratorio.lab_profesional.recepcion_muestras');
 	Route::get('/Laboratorio/solicitud_exam_laboratorio_profesional', [App\Http\Controllers\LaboratorioController::class, 'solicitud_exam_laboratorio_profesional'])->name('app.laboratorio.lab_profesional.solicitud_exam_laboratorio_profesional');
 });
+
+
+/** CARGA DE RESULTADOS LABORATORIO */
+Route::group([
+    'middleware' => ['role:AsistenteCargaExamenExterno|Admin'],
+    'prefix' => 'Asistente/laboratorio/examen',
+], function () {
+    Route::get('/home', [App\Http\Controllers\LaboratorioController::class, 'escritorio_asistente_laboratorio_subir_examan'])->name('lab.exa.asistente.home');
+    Route::get('/agenda', [App\Http\Controllers\LaboratorioController::class, 'agenda_laboratorio_subir_examan'])->name('lab.exa.asistente.agenda_laboratorio');
+    Route::get('/cotizar', [App\Http\Controllers\LaboratorioController::class, 'cotizar_laboratorio_subir_examan'])->name('lab.exa.asistente.cotizar_laboratorio');
+    Route::get('/orden/ver', [App\Http\Controllers\LaboratorioController::class, 'orden_laboratorio_subir_examan'])->name('lab.exa.asistente.orden_laboratorio');
+    Route::get('/pacientes', [App\Http\Controllers\LaboratorioController::class, 'pacientes_laboratorio_subir_examan'])->name('lab.exa.asistente.pacientes_laboratorio');
+    Route::get('/resultados/ver', [App\Http\Controllers\LaboratorioController::class, 'resultados_examenes_laboratorio_subir_examan'])->name('lab.exa.asistente.resultados_examenes_laboratorio');
+
+    Route::get('/resultados/cargar', [App\Http\Controllers\LaboratorioController::class, 'cargar_resultados_examenes_laboratorio_subir_examan'])->name('lab.exa.asistente.cargar_resultados_examenes_laboratorio');
+    Route::get('/resultados/registrar', [App\Http\Controllers\LaboratorioController::class, 'registrar_resultados_examenes_laboratorio_subir_examan'])->name('lab.exa.asistente.registrar_resultados_examenes_laboratorio');
+    Route::get('/resultados/ver/resultado/rut', [App\Http\Controllers\ResultadoExamenController::class, 'verRegistrosRut'])->name('lab.exa.asistente.ver_resultados_examenes_rut_laboratorio');
+
+    /** Proceso de examen */
+	Route::post('/examen/carga', [App\Http\Controllers\CargaExamenController::class, 'cargaArchivoTemp'])->name('examen.imagen.carga');
+
+    Route::get('Paciente/buscar', [App\Http\Controllers\EscritorioPaciente::class, 'buscarPacientePorRut'])->name('lab.exa.asistente.buscar_paciente_rut');
+});
+
+
+Route::get('testarchivo',[App\Http\Controllers\ResultadoExamenController::class, 'testArchivo']);
+Route::get('notificar',[App\Http\Controllers\ResultadoExamenController::class, 'notificar_r']);
+
 
 Route::group([
     'middleware' => ['auth:sanctum', 'verified'],
@@ -1397,6 +1426,7 @@ Route::group([
 
     /** Proceso de imagenes */
 	Route::post('/imagen/carga', [App\Http\Controllers\CargaImagenController::class, 'cargaImagenTemp'])->name('asistente.imagen.carga');
+
 });
 
 
