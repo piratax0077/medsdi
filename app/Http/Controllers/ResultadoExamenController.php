@@ -139,6 +139,82 @@ class ResultadoExamenController extends Controller
         return $datos;
     }
 
+    static public function  verArchivos(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id))
+        {
+            $error['id_examen'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registros = ResultadoExamenArchivo::where('id_resultado_examen', $request->id)->get();
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registro';
+                $datos['registros'] = $registros;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registro';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    static public function resultadoRevisado(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $registro = ResultadoExamen::find($request->id);
+            if($registro)
+            {
+                $registro->revisado = 1;
+                if($registro->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'registro exitoso';
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'falla en registro';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
     public function notificar_r(Request $request)
     {
         return static::notificar($request->id);
@@ -253,6 +329,12 @@ class ResultadoExamenController extends Controller
         $filtro = array();
         $valido = 1;
 
+        if(empty($request->rut))
+        {
+            $error['rut'] = 'campo requerido';
+            $valido = 0;
+        }
+
         if($valido)
         {
             $filtro[] = array('rut', $request->rut);
@@ -287,5 +369,94 @@ class ResultadoExamenController extends Controller
 
         return $datos;
 
+    }
+
+    public function resultadoVer(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $filtro = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            if(!empty($request->id))
+                $filtro[] = array('id', $request->id);
+
+            if(!empty($request->id_lugar_atencion))
+                $filtro[] = array('id_lugar_atencion', $request->id_lugar_atencion);
+
+            if(!empty($request->id_institucion))
+                $filtro[] = array('id_institucion', $request->id_institucion);
+
+            if(!empty($request->id_user))
+                $filtro[] = array('id_user', $request->id_user);
+
+            if(!empty($request->tipo_examen))
+                $filtro[] = array('tipo_examen', $request->tipo_examen);
+
+            if(!empty($request->id_paciente))
+                $filtro[] = array('id_paciente', $request->id_paciente);
+
+            if(!empty($request->rut))
+                $filtro[] = array('rut', $request->rut);
+
+            if(!empty($request->nombre))
+                $filtro[] = array('nombre', 'like', $request->nombre.'%');
+
+            if(!empty($request->apellido_paterno))
+                $filtro[] = array('apellido_paterno', 'like', $request->apellido_paterno.'%');
+
+            if(!empty($request->apellido_materno))
+                $filtro[] = array('apellido_materno', 'like', $request->apellido_materno.'%');
+
+            if(!empty($request->email))
+                $filtro[] = array('email', $request->email);
+
+            if(!empty($request->observacion))
+                $filtro[] = array('observacion', 'like', $request->observacion.'%');
+
+            if(!empty($request->cantidad))
+                $filtro[] = array('cantidad', $request->cantidad);
+
+            if(!empty($request->fecha_registro))
+                $filtro[] = array('fecha_registro', $request->fecha_registro);
+
+            if($request->revisado != '')
+                $filtro[] = array('revisado', $request->revisado);
+
+            if($request->estado != '')
+                $filtro[] = array('estado', $request->estado);
+
+
+            $registros = ResultadoExamen::where($filtro)->get();
+            if($registros)
+            {
+                if($registros)
+                {
+                    foreach ($registros as $key => $value)
+                    {
+                        $result_tipo_ex = ExamenMedico::where('id', $value->tipo_examen)->get()->first();
+                        $registros[$key]['obj_tipo_examen'] = $result_tipo_ex;
+                    }
+                }
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
     }
 }

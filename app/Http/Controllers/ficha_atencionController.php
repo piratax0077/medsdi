@@ -79,6 +79,7 @@ use App\Models\LogUsersDevices;
 use App\Models\NotificacionConfirmacion;
 use App\Models\PacientesDependientes;
 use App\Models\RecetaAudifono;
+use App\Models\ResultadoExamen;
 use App\Models\TipoInforme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -984,6 +985,18 @@ class ficha_atencionController extends Controller
                                                             ->where('id_paciente', $paciente->id)
                                                             ->get();
 
+        /** resultado de examenes */
+        // $resultado_examen = ResultadoExamen::where('id_paciente', $paciente->id)->get();
+        $resultado_examen = ResultadoExamen::with('ResultadoExamenArchivo')->where('id_paciente', $paciente->id)->get();
+        if($resultado_examen)
+        {
+            foreach ($resultado_examen as $key => $value)
+            {
+                $result_tipo_ex = ExamenMedico::where('id', $value->tipo_examen)->get()->first();
+                $resultado_examen[$key]['obj_tipo_examen'] = $result_tipo_ex;
+            }
+        }
+
         // INTERCONSULTA
         $filtro_inter = array();
         $filtro_inter[] = array('id_paciente', $paciente->id);
@@ -1044,6 +1057,7 @@ class ficha_atencionController extends Controller
                 'cns_tipo' => $cns_tipo,
                 'cns_tipo_template' => $cns_tipo_template,
                 'cns_registros' => $cns_registros,
+                'resultado_examen' => $resultado_examen,
 
                 // 'ficha_ges' => $ges,
                 // 'direccion' => $direccion,

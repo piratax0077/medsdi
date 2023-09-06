@@ -55,12 +55,41 @@
                                                                 @endif
                                                             </td>
                                                             <td>
-                                                                <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad('{{ $exam->id }}');"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad('{{ $exam->id }}',1);"><i class="feather icon-file-text"></i> Ver examen</button>
                                                             </td>
                                                         </tr>
                                                     @endif
                                                 @endforeach
                                             @endif
+
+                                            {{-- RESULTADODE DE EXAMENES LABORATORIO --}}
+                                            @if ($resultado_examen)
+                                                @foreach ( $resultado_examen as $result_ex)
+                                                    @if ($result_ex->revisado == 0)
+                                                        <tr>
+                                                            <td>{{ date('d-m-Y',strtotime($result_ex->fecha_registro)) }}</td>
+                                                            <td>{{ $result_ex->id }}</td>
+                                                            {{-- <td>{{ $result_ex->nombre.' '.$result_ex->apellido_paterno.' '.$result_ex->apellido_materno }}</td> --}}
+                                                            <td>LABORATORIO</td>
+                                                            <td>
+                                                                @if ($result_ex->obj_tipo_examen)
+                                                                    {{ $result_ex->obj_tipo_examen->nombre_examen }}
+                                                                @else
+                                                                    -
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                @if ($result_ex->ResultadoExamenArchivo->count()>0)
+                                                                    <button type="button" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',1);"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                @else
+                                                                    <button type="button" disabled="disabled" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -101,7 +130,7 @@
                                                                 @endif
                                                             </td>
                                                             <td>
-                                                                <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad('{{ $exam->id }}');"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad('{{ $exam->id }}',0);"><i class="feather icon-file-text"></i> Ver examen</button>
                                                             </td>
                                                         </tr>
                                                     @endif
@@ -120,31 +149,47 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h6 class="text-c-blue">Exámenes radiológicos</h6>
-                                     <hr>
+                                    <hr>
                                     <table id="exam_radiologicos" class="display table dt-responsive nowrap table-xs" style="width:100%">
                                         <thead>
                                         <tr>
                                             <th>Fecha</th>
                                             <th>Nº de Orden</th>
                                             <th>Nombre del Examen</th>
-                                            <th>TIpo de Examen</th>
+                                            <th>Tipo de Examen</th>
                                             <th>Examen</th>
-                                            <th>Acción</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>23/05/2019</td>
-                                                <td>782638</td>
-                                                <td>Hemograma completo</td>
-                                                <td>Examen Sangre</td>
-                                                <td>
-                                                <button href="#!" class="btn btn btn-primary-light btn-xs"><i class="feather icon-file-text"></i> Ver Examen</button>
-                                                </td>
-                                                <td>
-                                                    <button href="#!" class="btn btn-danger btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="feather icon-x"></i></button>
-                                                </td>
-                                            </tr>
+                                            {{-- RESULTADODE DE EXAMENES LABORATORIO RADIOLOGIA--}}
+                                            @if ($resultado_examen)
+                                                @foreach ( $resultado_examen as $result_ex)
+                                                    @if ($result_ex->revisado == 1)
+                                                        @if ($result_ex->tipo_examen == 354)
+                                                            <tr>
+                                                                <td>{{ date('d-m-Y',strtotime($result_ex->fecha_registro)) }}</td>
+                                                                <td>{{ $result_ex->id }}</td>
+                                                                {{-- <td>{{ $result_ex->nombre.' '.$result_ex->apellido_paterno.' '.$result_ex->apellido_materno }}</td> --}}
+                                                                <td>LABORATORIO</td>
+                                                                <td>
+                                                                    @if ($result_ex->obj_tipo_examen)
+                                                                        {{ $result_ex->obj_tipo_examen->nombre_examen }}
+                                                                    @else
+                                                                        -
+                                                                    @endif
+                                                                </td>
+                                                                <td>
+                                                                    @if ($result_ex->ResultadoExamenArchivo->count()>0)
+                                                                        <button type="button" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',0);"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                    @else
+                                                                        <button type="button" disabled="disabled" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                    @endif
+                                                                </td>
+                                                            </tr>
+                                                        @endif
+                                                    @endif
+                                                @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>
@@ -163,27 +208,43 @@
                                         <table id="exam_general" class="display table dt-responsive nowrap table-xs align-middle" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                <th>Fecha</th>
-                                                <th>Nº de Orden</th>
-                                                <th>Nombre del Examen</th>
-                                                <th>Tipo de Examen</th>
-                                                <th>Examen</th>
-                                                <th>Acción</th>
+                                                    <th>Fecha</th>
+                                                    <th>Nº de Orden</th>
+                                                    <th>Nombre del Examen</th>
+                                                    <th>Tipo de Examen</th>
+                                                    <th>Examen</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>23/05/2019</td>
-                                                    <td>782638</td>
-                                                    <td>Hemograma completo</td>
-                                                    <td>Examen Sangre</td>
-                                                    <td>
-                                                        <button href="#!" class="btn btn-primary-light btn-xs"><i class="feather icon-file-text"></i> Ver examen</button>
-                                                    </td>
-                                                    <td>
-                                                        <button href="#!" class="btn btn-danger btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="feather icon-x"></i></button>
-                                                    </td>
-                                                </tr>
+                                                {{-- RESULTADODE DE EXAMENES LABORATORIO RADIOLOGIA--}}
+                                                @if ($resultado_examen)
+                                                    @foreach ( $resultado_examen as $result_ex)
+                                                        @if ($result_ex->revisado == 1)
+                                                            @if ($result_ex->tipo_examen != 354)
+                                                                <tr>
+                                                                    <td>{{ date('d-m-Y',strtotime($result_ex->fecha_registro)) }}</td>
+                                                                    <td>{{ $result_ex->id }}</td>
+                                                                    {{-- <td>{{ $result_ex->nombre.' '.$result_ex->apellido_paterno.' '.$result_ex->apellido_materno }}</td> --}}
+                                                                    <td>LABORATORIO</td>
+                                                                    <td>
+                                                                        @if ($result_ex->obj_tipo_examen)
+                                                                            {{ $result_ex->obj_tipo_examen->nombre_examen }}
+                                                                        @else
+                                                                            -
+                                                                        @endif
+                                                                    </td>
+                                                                    <td>
+                                                                        @if ($result_ex->ResultadoExamenArchivo->count()>0)
+                                                                            <button type="button" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',0);"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                        @else
+                                                                            <button type="button" disabled="disabled" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                        @endif
+                                                                    </td>
+                                                                </tr>
+                                                            @endif
+                                                        @endif
+                                                    @endforeach
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
@@ -199,7 +260,8 @@
 </div>
 
 <script>
-    function verExamenEspecialidad(id_examen)
+    {{-- ABRIR ARCHIVOS --}}
+    function verExamenEspecialidad(id_examen, cambio_estado)
     {
         if(id_examen != '')
         {
@@ -212,15 +274,62 @@
                 }]
             );
 
-            var estado_consulta = $('#rinde_estado_consulta').val();
+            if(cambio_estado == 1)
+            {
+                var estado_consulta = $('#rinde_estado_consulta').val();
 
-            let url = "{{ route('pdf.examen.especialidad.revisado') }}";
+                let url = "{{ route('pdf.examen.especialidad.revisado') }}";
+                $.ajax({
+
+                    url: url,
+                    type: "GET",
+                    data: {
+                        id_examen : id_examen
+                    },
+                })
+                .done(function(data) {
+
+                    console.log(data);
+                    if (data.estado == 1)
+                    {
+                        console.log('examen revisado');
+                        carga_bandeja_entrada();
+                        carga_bandeja_revisados();
+                        carga_bandeja_radiologia();
+                        carga_bandeja_general();
+                    }
+                    else
+                    {
+                        console.log('examen no revisado');
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
+        }
+        else
+        {
+            swal({
+                title: "Ver Examen Especialidad",
+                text:"No Se encuentra examen",
+                icon: "error"
+            });
+        }
+    }
+
+    function verResultadoExamen(id_examen, cambio_estado)
+    {
+        if(id_examen != '')
+        {
+            let url = "{{ route('resultado.examen.lab.archivo.ver') }}";
+            var archivos = [];
             $.ajax({
 
                 url: url,
                 type: "GET",
                 data: {
-                    id_examen : id_examen
+                    id : id_examen
                 },
             })
             .done(function(data) {
@@ -228,9 +337,60 @@
                 console.log(data);
                 if (data.estado == 1)
                 {
-                    console.log('examen revisado');
-                    carga_bandeja_entrada();
-                    carga_bandeja_revisados();
+                    $.each(data.registros, function (key, value)
+                    {
+                        var temp_type = 'image';
+                        console.log(value.url.indexOf('.pdf'));
+                        if(value.url.indexOf('.pdf') != -1)
+                        {
+                            temp_type = 'iframe';
+                        }
+                        else
+                        {
+                            temp_type = 'image';
+                        }
+                        archivos.push({
+                            src: value.url,
+                            type: temp_type,
+                            preload: false,
+                        });
+                    });
+
+                    if(archivos.length > 0)
+                        Fancybox.show(archivos);
+
+                    if(cambio_estado == 1)
+                    {
+                        var estado_consulta = $('#rinde_estado_consulta').val();
+                        let url = "{{ route('resultado.examen.lab.revisado') }}";
+                        $.ajax({
+
+                            url: url,
+                            type: "GET",
+                            data: {
+                                id : id_examen
+                            },
+                        })
+                        .done(function(data) {
+
+                            console.log(data);
+                            if (data.estado == 1)
+                            {
+                                console.log('examen revisado');
+                                carga_bandeja_entrada();
+                                carga_bandeja_revisados();
+                                carga_bandeja_radiologia();
+                                carga_bandeja_general();
+                            }
+                            else
+                            {
+                                console.log('examen no revisado');
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            console.log(jqXHR, ajaxOptions, thrownError)
+                        });
+                    }
                 }
                 else
                 {
@@ -244,8 +404,8 @@
         else
         {
             swal({
-                title: "Ver Examen Especialidad",
-                text:"No Se encuentra examen",
+                title: "Ver Resultado de Examen Laboratorio",
+                text:"No Se encuentra resultado de examen Laboratorio",
                 icon: "error"
             });
         }
@@ -253,12 +413,18 @@
 
     function carga_bandeja_entrada()
     {
+        $('#bandeja_entrada tbody').html('');
+        carga_bandeja_entrada_examen_especialidad();
+        carga_bandeja_entrada_resultado_examen();
+    }
+
+    {{-- INICIO BANDEJA DE ENTRADA --}}
+    function carga_bandeja_entrada_examen_especialidad()
+    {
         let url = "{{ route('examen.especialidad.ver.registros') }}";
         var id_paciente = $('#id_paciente_fc').val();
         var estado = 6;
         var revisado = 0;
-
-        $('#bandeja_entrada tbody').html('');
 
         $.ajax({
 
@@ -275,17 +441,15 @@
             console.log(data);
             if (data.estado == 1)
             {
-                // $('#bandeja_entrada tbody').html('');
                 $.each(data.registros, function (index, value)
                 {
                     var fila = '';
                     fila += '<tr >';
-                    fila += '<tr>';
                     fila += '    <td>'+value.hora_medica.fecha_realizacion_consulta+'</td>';
                     fila += '    <td>'+value.id+'</td>';
                     fila += '    <td>'+value.nombre+'</td>';
                     fila += '    <td>';
-                    if (value.sub_tipo_especialidad!='null')
+                    if (value.sub_tipo_especialidad!='null' && value.sub_tipo_especialidad!=null)
                     {
                         fila += ''+value.sub_tipo_especialidad.nombre+'';
                     }
@@ -295,24 +459,80 @@
                     }
                     fila += '    </td>';
                     fila += '    <td>';
-                    fila += '        <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad(\''+value.id+'\');"><i class="feather icon-file-text"></i> Ver examen</button>';
+                    fila += '        <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad(\''+value.id+'\', 1);"><i class="feather icon-file-text"></i> Ver examen</button>';
                     fila += '    </td>';
                     fila += '</tr>';
 
                     $('#bandeja_entrada tbody').append(fila);
                 });
-
             }
-            else
-            {
 
-            }
         })
         .fail(function(jqXHR, ajaxOptions, thrownError) {
             console.log(jqXHR, ajaxOptions, thrownError)
         });
     }
 
+    function carga_bandeja_entrada_resultado_examen()
+    {
+        let url = "{{ route('resultado.examen.ver') }}";
+        var id_paciente = $('#id_paciente_fc').val();
+        var estado = 1;
+        var revisado = 0;
+
+        $.ajax({
+
+            url: url,
+            type: "GET",
+            data: {
+                id_paciente : id_paciente,
+                id_estado : estado,
+                revisado : revisado,
+            },
+        })
+        .done(function(data) {
+
+            console.log(data);
+            if (data.estado == 1)
+            {
+                $.each(data.registros, function (index, value)
+                {
+                    var fila = '';
+                    fila += '<tr >';
+                    fila += '    <td>'+value.fecha_registro+'</td>';
+                    fila += '    <td>'+value.id+'</td>';
+                    fila += '    <td>LABORATORIO</td>';
+                    fila += '    <td>';
+                    if (value.obj_tipo_examen!='null')
+                    {
+                        fila += ''+value.obj_tipo_examen.nombre_examen+'';
+                    }
+                    else
+                    {
+                        fila += '-';
+                    }
+                    fila += '    </td>';
+                    fila += '    <td>';
+                    if(value.cantidad > 0)
+                        fila += '        <button type="button" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_'+value.id+'" onclick="verResultadoExamen(\''+value.id+'\',1);"><i class="feather icon-file-text"></i> Ver examen</button>';
+                    else
+                        fila += '        <button type="button" disabled="disabled" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_'+value.id+'"><i class="feather icon-file-text"></i> Ver examen</button>';
+
+                    fila += '    </td>';
+                    fila += '</tr>';
+
+                    $('#bandeja_entrada tbody').append(fila);
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+    {{-- FIN BANDEJA DE ENTRADA --}}
+
+    {{-- BANDEJA EXAMENES ESPECIALES --}}
     function carga_bandeja_revisados()
     {
         let url = "{{ route('examen.especialidad.ver.registros') }}";
@@ -357,7 +577,7 @@
                     }
                     fila += '    </td>';
                     fila += '    <td>';
-                    fila += '        <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad(\''+value.id+'\');"><i class="feather icon-file-text"></i> Ver examen</button>';
+                    fila += '        <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad(\''+value.id+'\',0);"><i class="feather icon-file-text"></i> Ver examen</button>';
                     fila += '    </td>';
                     fila += '</tr>';
 
@@ -374,4 +594,135 @@
             console.log(jqXHR, ajaxOptions, thrownError)
         });
     }
+
+    {{-- BANDEJA EXAMENES RADIOLOGIA --}}
+    function carga_bandeja_radiologia()
+    {
+        let url = "{{ route('resultado.examen.ver') }}";
+        var id_paciente = $('#id_paciente_fc').val();
+        var estado = 1;
+        var revisado = 1;
+        var tipo_examen = 354;
+
+        $('#exam_radiologicos tbody').html('');
+
+        $.ajax({
+
+            url: url,
+            type: "GET",
+            data: {
+                id_paciente : id_paciente,
+                id_estado : estado,
+                revisado : revisado,
+                tipo_examen : tipo_examen,
+            },
+        })
+        .done(function(data) {
+
+            console.log(data);
+            if (data.estado == 1)
+            {
+                $.each(data.registros, function (index, value)
+                {
+                    var fila = '';
+                    fila += '<tr >';
+                    fila += '    <td>'+value.fecha_registro+'</td>';
+                    fila += '    <td>'+value.id+'</td>';
+                    fila += '    <td>LABORATORIO</td>';
+                    fila += '    <td>';
+                    if (value.obj_tipo_examen!='null')
+                    {
+                        fila += ''+value.obj_tipo_examen.nombre_examen+'';
+                    }
+                    else
+                    {
+                        fila += '-';
+                    }
+                    fila += '    </td>';
+                    fila += '    <td>';
+                    if(value.cantidad > 0)
+                        fila += '        <button type="button" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_'+value.id+'" onclick="verResultadoExamen(\''+value.id+'\',0);"><i class="feather icon-file-text"></i> Ver examen</button>';
+                    else
+                        fila += '        <button type="button" disabled="disabled" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_'+value.id+'"><i class="feather icon-file-text"></i> Ver examen</button>';
+
+                    fila += '    </td>';
+                    fila += '</tr>';
+
+                    $('#exam_radiologicos tbody').append(fila);
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    {{-- BANDEJA EXAMENES GENERALES --}}
+    function carga_bandeja_general()
+    {
+        let url = "{{ route('resultado.examen.ver') }}";
+        var id_paciente = $('#id_paciente_fc').val();
+        var estado = 1;
+        var revisado = 1;
+
+        $('#exam_general tbody').html('');
+
+        $.ajax({
+
+            url: url,
+            type: "GET",
+            data: {
+                id_paciente : id_paciente,
+                id_estado : estado,
+                revisado : revisado,
+            },
+        })
+        .done(function(data) {
+
+            console.log(data);
+            if (data.estado == 1)
+            {
+                $.each(data.registros, function (index, value)
+                {
+                    if(value.tipo_examen != 354)
+                    {
+                        var fila = '';
+                        fila += '<tr >';
+                        fila += '    <td>'+value.fecha_registro+'</td>';
+                        fila += '    <td>'+value.id+'</td>';
+                        fila += '    <td>LABORATORIO</td>';
+                        fila += '    <td>';
+                        if (value.obj_tipo_examen!='null')
+                        {
+                            fila += ''+value.obj_tipo_examen.nombre_examen+'';
+                        }
+                        else
+                        {
+                            fila += '-';
+                        }
+                        fila += '    </td>';
+                        fila += '    <td>';
+                        if(value.cantidad > 0)
+                            fila += '        <button type="button" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_'+value.id+'" onclick="verResultadoExamen(\''+value.id+'\',0);"><i class="feather icon-file-text"></i> Ver examen</button>';
+                        else
+                            fila += '        <button type="button" disabled="disabled" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_'+value.id+'"><i class="feather icon-file-text"></i> Ver examen</button>';
+
+                        fila += '    </td>';
+                        fila += '</tr>';
+
+                        $('#exam_general tbody').append(fila);
+                    }
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+
+
+
 </script>

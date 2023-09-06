@@ -11,6 +11,11 @@ class ResultadoExamen extends Model
     use HasFactory;
     protected $table = 'resultado_examen';
 
+    public function ResultadoExamenArchivo()
+    {
+        return $this->hasMany(ResultadoExamenArchivo::class, 'id_resultado_examen', 'id')->where('estado', 1);
+    }
+
     public function scopeRangoFecha($query, $rango_dias)
     {
         $date = Carbon::now();
@@ -29,5 +34,7 @@ class ResultadoExamen extends Model
 
         $query->whereBetween('fecha_registro', [$Ftermino, $Finicio]);
     }
+
+
 
 }
