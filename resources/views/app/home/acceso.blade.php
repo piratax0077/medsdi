@@ -252,7 +252,7 @@
                     </div>
 					<div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
-                            <a href="{{ ROUTE('app.laboratorio.lab_asistente.escritorio_asistente_laboratorio') }}">
+                            <a href="{{ ROUTE('lab.exa.asistente.home') }}">
                                 <div class="card-body pb-0 pt-0">
                                     <img class="wid-40 mt-3"
                                         src="{{ asset('images/iconos_ingreso/laboratorio.svg') }}" alt="">
