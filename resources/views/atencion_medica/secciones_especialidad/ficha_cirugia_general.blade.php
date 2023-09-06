@@ -108,6 +108,17 @@
                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="masas_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="masas_cpq_cg" id="masas_cpq_cg"></textarea>
                                                                     </div>
                                                                 </div>
+																 <!-- botones modal -->
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                       <button type="button" class="btn btn-outline-primary btn-sm btn-block mb-2" onclick="no_disponible();"></i> Ver Protocolo Cirugía</button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                       <button type="button" class="btn btn-outline-primary btn-sm btn-block mb-2" onclick="no_disponible();"></i> Ver Epicrisis</button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <!-- Observaciones Estado General Paciente -->
                                                             <div class="form-row">
@@ -163,20 +174,16 @@
                         <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
                     </div>
                 </div>
-
-                {{--  div de botones  --}}
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                                @include('atencion_medica.generales.seccion_receta_examen_comunes')
-                                <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+				{{--  div de botones  --}}
+				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+					<div class="card">
+						<div class="card-body">
+							<!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+							 @include('general.secciones_ficha.seccion_receta_examen_comunes')
+							<!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+						</div>
+					</div>
+				</div>
                 <!--GUARDAR O IMPRIMIR FICHA-->
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="row mb-3">

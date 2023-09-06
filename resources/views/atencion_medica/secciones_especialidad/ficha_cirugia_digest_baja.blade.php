@@ -1,8 +1,8 @@
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
-    <div class="col-md-12 py-0 px-2 shadow-none">
+    <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
-                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
+                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="cir_dig" role="tablist">
                     <li class="nav-item-secciones">
                         <a class="nav-secciones active text-uppercase" id="atencion_cirugia_gen-tab" data-toggle="tab" href="#atencion_cirugia_gen" role="tab" aria-controls="atencion_orl" aria-selected="true">Atención Especialidad</a>
                     </li>
@@ -31,10 +31,10 @@
                     <div class="tab-content" id="orl-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
                         <div class="tab-pane fade show active" id="atencion_cirugia_gen" role="tabpanel" aria-labelledby="atencion_cirugia_gen-tab">
-                            <div class="row bg-white shadow-none rounded mx-1">
-                                <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
                                     <div class="row">
-                                        <div class="col-md-12 mt-3 mb-0">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-0">
                                             <h6 class="f-16 text-c-blue">Ficha de atención general</h6>
                                             <hr>
                                         </div>
@@ -47,14 +47,14 @@
 
                                         <!--Motivo consulta-->
                                         <div class="col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="motivo">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="motivo">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#motivo_c" aria-expanded="false" aria-controls="motivo_c">
                                                         Motivo de la consulta
                                                     </button>
                                                 </div>
                                                 <div id="motivo_c" class="collapse show" aria-labelledby="motivo" data-parent="#motivo">
-                                                    <div class="card-body-aten shadow-none">
+                                                    <div class="card-body-aten-a">
                                                         <div class="form-row">
                                                             <div class="form-group col-md-6">
                                                                 <label class="floating-label-activo-sm">Motivo de Consulta</label>
@@ -72,14 +72,14 @@
 
                                         <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
                                         <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="exam_esp_cdb">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="exam_esp_cdb">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_cdb_c" aria-expanded="false" aria-controls="exam_esp_cdb_c">
                                                         Examen especialidad
                                                     </button>
                                                 </div>
                                                 <div id="exam_esp_cdb_c" class="collapse" aria-labelledby="exam_esp_cdb" data-parent="#exam_esp_cdb">
-                                                    <div class="card-body-aten shadow-none">
+                                                    <div class="card-body-aten-a">
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
@@ -253,14 +253,14 @@
 										<!--cierre CIRUGIA GENERAL-->
                                           <!-- control post qx -->
                                         <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="Control_cirugia">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="Control_cirugia">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#cirugia_general_pc" aria-expanded="false" aria-controls="cirugia_general_pc">
                                                         Control Post Quirúrgico
                                                     </button>
                                                 </div>
                                                 <div id="cirugia_general_pc" class="collapse" aria-labelledby="cirugia_general" data-parent="#Control_cirugia">
-                                                    <div class="card-body-aten shadow-none">
+                                                    <div class="card-body-aten-a">
                                                         <div id="form-cir_digest">
                                                             <div class="form-row mb-2">
                                                                 <div class="col-md-12">
@@ -290,6 +290,17 @@
                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="masas_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="masas_cpq_cg" id="masas_cpq_cg"></textarea>
                                                                     </div>
                                                                 </div>
+																 <!-- botones modal -->
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                       <button type="button" class="btn btn-outline-primary btn-sm btn-block mb-2" onclick="no_disponible();"></i> Ver Protocolo Cirugía</button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                       <button type="button" class="btn btn-outline-primary btn-sm btn-block mb-2" onclick="no_disponible();"></i> Ver Epicrisis</button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <!-- Observaciones Estado General Paciente -->
                                                             <div class="form-row">
@@ -316,18 +327,18 @@
 
                                         <!--Diagnóstico-->
                                         <div class="col-sm-12">
-                                            <div class="card">
-                                                <div class="card-header" id="diagnostico">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="diagnostico">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagnostico_c" aria-expanded="false" aria-controls="diagnostico_c">
                                                         Diagnóstico
                                                     </button>
                                                 </div>
                                                 <div id="diagnostico_c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
-                                                    <div class="card-body-aten shadow-none">
+                                                    <div class="card-body-aten-a">
                                                         <div class="form-row">
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;"data-input_igual="lic_descripcion_hipotesis,sospecha_diagnostica_eda,sospecha_diagnostica_edb" name="hip_diag_spec" id="hip_diag_spec" onChange="cargarIgual('hip_diag_spec')"></textarea>
+															  <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;"data-input_igual="lic_descripcion_hipotesis,sospecha_diagnostica_eda,sospecha_diagnostica_edb" name="hip_diag_spec" id="hip_diag_spec" onChange="cargarIgual('hip_diag_spec')"></textarea>
                                                             </div>
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Indicaciones</label>
@@ -348,7 +359,6 @@
                             </div>
                         </div>
                         <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
-
                         <!--INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
                        <div class="tab-pane fade" id="colonoscopia" role="tabpanel" aria-labelledby="colonoscopia-tab">
                            <div class="row bg-white shadow-none rounded mx-1">
@@ -366,30 +376,31 @@
                            </div>
                        </div>
                        <!--CIERRE:INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
-
-                        {{--  div de botones  --}}
-                        <div class="bg-white shadow-none rounded mx-1 p-15">
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                            @include('atencion_medica.generales.seccion_receta_examen_comunes')
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
-                            {{--  @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')  --}}
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD FIN  -->
-
-                            <hr>
-
-                            <!--GUARDAR O IMPRIMIR FICHA-->
-                            <div class="row mb-3">
-                                <div class="col-md-12 text-center">
-                                    <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                                    <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </form>
             </div>
+              {{--  div de botones  --}}
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+                            @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--GUARDAR O IMPRIMIR FICHA-->
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="row mb-3">
+                    <div class="col-md-12 text-center">
+                        <input type="submit" class="btn btn-info-light-c mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+                        <input type="submit" class="btn btn-success-light-c mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+                    </div>
+                </div>
+            </div>
+            <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
         </div>
     </div>
 </div>
@@ -1455,4 +1466,3 @@
 @endsection
 
 
-S

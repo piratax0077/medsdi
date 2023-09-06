@@ -1,8 +1,8 @@
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
-    <div class="col-md-12 py-0 px-2 shadow-none">
+    <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
-                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
+                <ul class="nav nav-tabs-secciones mb-2 mt-3" id="orl" role="tablist">
                     <li class="nav-item-secciones">
                         <a class="nav-secciones active text-uppercase" id="atencion_cirugia_gen-tab" data-toggle="tab" href="#atencion_cirugia_gen" role="tab" aria-controls="atencion_orl" aria-selected="true">Atención Especialidad</a>
                     </li>
@@ -53,30 +53,29 @@
                     <div class="tab-content" id="orl-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
                         <div class="tab-pane fade show active" id="atencion_cirugia_gen" role="tabpanel" aria-labelledby="atencion_cirugia_gen-tab">
-                            <div class="row bg-white shadow-none rounded mx-1">
+                            <div class="row">
                                 <div class="col-md-12">
                                     <div class="row">
-                                        <div class="col-md-12 mt-3 mb-0">
-                                            <h6 class="f-16 text-c-blue">Ficha de atención general</h6>
-                                            <hr>
+                                        <div class="col-md-12 mt-2 mb-2">
+                                            <h6 class="f-20 text-c-blue">Ficha de atención general</h6>
                                         </div>
                                     </div>
                                     <!--FORMULARIOS-->
                                     <div class="row">
                                         <!--Formulario / Menor de edad-->
-                                        @include('atencion_medica.generales.seccion_menor')
+                                        @include('general.secciones_ficha.seccion_menor')
                                         <!--Cierre: Formulario / Menor de edad-->
 
                                         <!--Motivo consulta-->
                                         <div class="col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="motivo">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="motivo">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#motivo_c" aria-expanded="false" aria-controls="motivo_c">
                                                         Motivo de la consulta
                                                     </button>
                                                 </div>
                                                 <div id="motivo_c" class="collapse show" aria-labelledby="motivo" data-parent="#motivo">
-                                                    <div class="card-body-aten shadow-none">
+                                                    <div class="card-body-aten-a">
                                                         <div class="form-row">
                                                             <div class="form-group col-md-6">
                                                                 <label class="floating-label-activo-sm">Motivo de Consulta</label>
@@ -94,14 +93,14 @@
 
                                         <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
                                         <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="exam_esp_cdg">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="exam_esp_cdg">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_cdg_c" aria-expanded="false" aria-controls="exam_esp_cdg_c">
                                                         Examen especialidad
                                                     </button>
                                                 </div>
                                                 <div id="exam_esp_cdg_c" class="collapse" aria-labelledby="exam_esp_cdg" data-parent="#exam_esp_cdg">
-                                                    <div class="card-body-aten shadow-none">
+                                                    <div class="card-body-aten-a">
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
@@ -403,14 +402,14 @@
 										--}}
                                         <!-- control post qx -->
                                         <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="Control_cirugia">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="Control_cirugia">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#cirugia_general_pc" aria-expanded="false" aria-controls="cirugia_general_pc">
                                                         Control Post Quirúrgico
                                                     </button>
                                                 </div>
                                                 <div id="cirugia_general_pc" class="collapse" aria-labelledby="cirugia_general" data-parent="#Control_cirugia">
-                                                    <div class="card-body-aten shadow-none">
+                                                    <div class="card-body-aten-a">
                                                         <div id="form-cir_digest">
                                                             <div class="form-row mb-2">
                                                                 <div class="col-md-12">
@@ -440,6 +439,17 @@
                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="masas_cda" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="masas_cpq_cg" id="masas_cpq_cg"></textarea>
                                                                     </div>
                                                                 </div>
+																 <!-- botones modal -->
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                       <button type="button" class="btn btn-outline-primary btn-sm btn-block mb-2" onclick="no_disponible();"></i> Ver Protocolo Cirugía</button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                       <button type="button" class="btn btn-outline-primary btn-sm btn-block mb-2" onclick="no_disponible();"></i> Ver Epicrisis</button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <!-- Observaciones Estado General Paciente -->
                                                             <div class="form-row">
@@ -457,182 +467,7 @@
                                         <!-- cierre control post qx -->
 
                                         <!--Formulario / Signos vitales y otros-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="signosvit-otros">
-                                                    <button class="accor-open btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#signosvit-otros-c" aria-expanded="false" aria-controls="signosvit-otros-c">
-                                                        Signos vitales y otros
-                                                    </button>
-                                                </div>
-                                                <div id="signosvit-otros-c" class="collapse" aria-labelledby="signosvit-otros" data-parent="#signosvit-otros">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-1">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->temperatura != null)
-                                                                    <label class="floating-label-activo-sm">Tº</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="temperatura" id="temperatura" value="{{ $fichaAtencion->temperatura }}">
-                                                                @else
-                                                                    <label class="floating-label-activo-sm">Tº</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="temperatura" id="temperatura" value="{!! old('temperatura') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-1">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->pulso != null)
-                                                                    <label class="floating-label-activo-sm">Pulso</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="pulso" id="pulso" value="{{ $fichaAtencion->pulso }}">
-                                                                @else
-                                                                    <label class="floating-label-activo-sm">Pulso</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="pulso" id="pulso" value="{!! old('pulso') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->frecuencia_reposo != null)
-                                                                <label class="floating-label-activo-sm">Frec.
-                                                                    Reposo</label>
-                                                                <input type="text" class="form-control form-control-sm" name="frecuencia_reposo" id="frecuencia_reposo" value="{{ $fichaAtencion->frecuencia_reposo }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Frec.
-                                                                    Reposo</label>
-                                                                <input type="text" class="form-control form-control-sm" name="frecuencia_reposo" id="frecuencia_reposo" value="{!! old('frecuencia_reposo') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->peso != null)
-                                                                <label class="floating-label-activo-sm">Peso</label>
-                                                                <input type="text" class="form-control form-control-sm" name="peso" id="peso" value="{{ $fichaAtencion->peso }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Peso</label>
-                                                                <input type="text" class="form-control form-control-sm" name="peso" id="peso" value="{!! old('peso') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->talla != null)
-                                                                <label class="floating-label-activo-sm">Talla</label>
-                                                                <input type="text" class="form-control form-control-sm" name="talla" id="talla" value="{{ $fichaAtencion->talla }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Talla</label>
-                                                                <input type="text" class="form-control form-control-sm" name="talla" id="talla" value="{!! old('talla') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->imc != null)
-                                                                <label class="floating-label-activo-sm">IMC</label>
-                                                                <input type="text" class="form-control form-control-sm" name="imc" id="imc" value="{{ $fichaAtencion->imc }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">IMC</label>
-                                                                <input type="text" class="form-control form-control-sm" name="imc" id="imc" value="{!! old('imc') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->estado_nutricional != null)
-                                                                <label class="floating-label-activo-sm">Estado
-                                                                    Nutricional</label>
-                                                                <input type="text" class="form-control form-control-sm" name="estado_nutricional" id="estado_nutricional" value="{{ $fichaAtencion->estado_nutricional }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Estado
-                                                                    Nutricional</label>
-                                                                <input type="text" class="form-control form-control-sm" name="estado_nutricional" id="estado_nutricional" value="{!! old('estado_nutricional') !!}">
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="form-group mb-1">
-                                                                <label><strong>Presión Arterial</strong></label>
-                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                    <input type="checkbox" id="p_arterial" value="{!! old('p_arterial') !!}">
-                                                                    <label for="p_arterial" class="cr"></label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row" id="form_1" style="display:none">
-                                                            <div class="form-group col-md-3">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->presion_bi !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">BI</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_bi" id="presion_bi" value="{{ $fichaAtencion->presion_bi }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">BI</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_bi" id="presion_bi" value="{!! old('presion_bi') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->presion_bd !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">BD</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_bd" id="presion_bd" value="{{ $fichaAtencion->presion_bd }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">BD</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_bd" id="presion_bd" value="{!! old('presion_bd') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->presion_de_pie !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">De pié</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_de_pie" id="presion_de_pie" value="{{ $fichaAtencion->presion_de_pie }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">De pié</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_de_pie" id="presion_de_pie" value="{!! old('presion_de_pie') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->presion_sentado !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">Sentado</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_sentado" id="presion_sentado" value="{{ $fichaAtencion->presion_sentado }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Sentado</label>
-                                                                <input type="text" class="form-control form-control-sm" name="presion_sentado" id="presion_sentado" value="{!! old('presion_sentado') !!}">
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="form-group mb-1">
-                                                                <label><strong>Comunicación y traslado</strong></label>
-                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                    <input type="checkbox" id="com_trasl" value="{!! old('com_trasl') !!}">
-                                                                    <label for="com_trasl" class="cr"></label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row" id="form_2" style="display:none">
-                                                            <div class="form-group col-md-4">
-                                                                @if (isset($fichaAtencion) &&
-                                                                $fichaAtencion->ct_estado_conciencia != null)
-                                                                <label class="floating-label-activo-sm">Estado de
-                                                                    conciencia</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_estado_conciencia" id="ct_estado_conciencia" value="{{ $fichaAtencion->ct_estado_conciencia }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Estado de
-                                                                    conciencia</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_estado_conciencia" id="ct_estado_conciencia" value="{!! old('ct_estado_conciencia') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->ct_lenguaje !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">Lenguaje</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_lenguaje" id="ct_lenguaje" value="{{ $fichaAtencion->ct_lenguaje }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Lenguaje</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_lenguaje" id="ct_lenguaje" value="{!! old('ct_lenguaje') !!}">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->ct_traslado !=
-                                                                null)
-                                                                <label class="floating-label-activo-sm">Traslado</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_traslado" id="ct_traslado" value="{{ $fichaAtencion->ct_traslado }}">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Traslado</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ct_traslado" id="ct_traslado" value="{!! old('ct_traslado') !!}">
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @include('general.secciones_ficha.signos_vitales')
                                         <!--Cierre: Formulario / Signos vitales y otros-->
 
                                         @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
@@ -640,14 +475,14 @@
 
                                         <!--Diagnóstico-->
                                         <div class="col-sm-12">
-                                            <div class="card">
-                                                <div class="card-header" id="diagnostico">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="diagnostico">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagnostico_c" aria-expanded="false" aria-controls="diagnostico_c">
                                                         Diagnóstico
                                                     </button>
                                                 </div>
                                                 <div id="diagnostico_c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
-                                                    <div class="card-body-aten shadow-none">
+                                                    <div class="card-body-aten-a">
                                                         <div class="form-row">
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
@@ -671,18 +506,18 @@
                                 </div>
 
                                 {{--  div de botones  --}}
-                                <div class="col-md-12 bg-white shadow-none rounded mx-1 p-15">
-                                    <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                                    @include('atencion_medica.generales.seccion_receta_examen_comunes')
-                                    <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+                                             @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+                                        </div>
+                                    </div>
+                                </div>
 
-                                    <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
-                                    {{--  @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')  --}}
-                                    <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD FIN  -->
-
-                                    <hr>
-
-                                    <!--GUARDAR O IMPRIMIR FICHA-->
+                                <!--GUARDAR O IMPRIMIR FICHA-->
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="row mb-3">
                                         <div class="col-md-12 text-center">
                                             <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
@@ -730,23 +565,254 @@
                                            <hr>
                                        </div>
                                    </div>
-                                   <div class="row div_form_examen_edb">
-                                        <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_edb" id="id_examen_especialidad_tipo_edb" value="{{ $array_examen_especialidad_tipo['edb'] }}">
-                                        {!! $examen['edb'] !!}
-                                   </div>
-                                   <!--GUARDAR EXAMEN-->
-                                   <div class="row">
+                                </div>
+                                {{--  <div class="col-md-12">
+                                    <div class="row">
+                                        <!-- SOLICITADO POR -->
+                                        <div class="col-md-12">
+                                        <div class="card-a">
+                                            <div class="card-header-a" id="solicitado_por">
+                                                <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#solicitado_por_c" aria-expanded="false" aria-controls="solicitado_por_c">
+                                                    Solicitado por:
+                                                </button>
+                                            </div>
+                                            <div id="solicitado_por_c" class="collapse show" aria-labelledby="solicitado_por" data-parent="#solicitado_por">
+                                                <div class="card-body-aten-a">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-2" >
+                                                            <input type="hidden" name="id_profesional_solicitado_por_edb" id="id_profesional_solicitado_por_edb" value="">
+                                                            <label class="floating-label-activo-sm">RUT</label>
+                                                            <input type="text" class="form-control form-control-sm" name="solicitado_por_rut_edb" id="solicitado_por_rut_edb"
+                                                                onblur="cargar_profesional(this,'solicitado_por_edb', 'id_profesional_solicitado_por_edb', 'div_profesional_no_inscrito_edb', 'solicitado_por_nombre_edb', 'solicitado_por_apellido_edb', 'solicitado_por_telefono_edb', 'solicitado_por_email_edb', 'div_mensaje_edb', 'mensaje_solicitado_por_edb');"
+                                                                onchange="cargar_profesional(this,'solicitado_por_edb', 'id_profesional_solicitado_por_edb', 'div_profesional_no_inscrito_edb', 'solicitado_por_nombre_edb', 'solicitado_por_apellido_edb', 'solicitado_por_telefono_edb', 'solicitado_por_email_edb', 'div_mensaje_edb', 'mensaje_solicitado_por_edb');"
+                                                                onkeyup="cargar_profesional(this,'solicitado_por_edb', 'id_profesional_solicitado_por_edb', 'div_profesional_no_inscrito_edb', 'solicitado_por_nombre_edb', 'solicitado_por_apellido_edb', 'solicitado_por_telefono_edb', 'solicitado_por_email_edb', 'div_mensaje_edb', 'mensaje_solicitado_por_edb');">
+                                                        </div>
+                                                        <div class="form-group col-md-2" >
+                                                            <label class="floating-label-activo-sm">Solicitado por</label>
+                                                            <input type="text" class="form-control form-control-sm" name="solicitado_por_edb" id="solicitado_por_edb" readonly="readonly">
+                                                        </div>
+
+                                                        <div class="form-group col-md-4">
+                                                            <label class="floating-label-activo-sm">H.Diagnóstica</label>
+                                                            <input type="text" class="form-control form-control-sm" data-input_igual="hip_diag_spec" name="sospecha_diagnostica_edb" id="sospecha_diagnostica_edb"  onchange="cargarIgual('sospecha_diagnostica_edb')">
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label class="floating-label-activo-sm">Premedicación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="premed_edb" id="premed_edb">
+                                                        </div>
+
+                                                        <div class="form-group col-md-12" id="div_mensaje_edb"  style="display: none;">
+                                                            <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por_edb"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" id="div_profesional_no_inscrito_edb" style="display: none;">
+
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Nombre</label>
+                                                            <input type="text" class="form-control form-control-sm"  name="solicitado_por_nombre_edb" id="solicitado_por_nombre_edb" onchange="actualizar_solicitado_por('solicitado_por_edb', 'solicitado_por_nombre_edb', 'solicitado_por_apellido_edb');">
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Apellido</label>
+                                                            <input type="text" class="form-control form-control-sm"  name="solicitado_por_apellido_edb" id="solicitado_por_apellido_edb" onchange="actualizar_solicitado_por('solicitado_por_edb', 'solicitado_por_nombre_edb', 'solicitado_por_apellido_edb');">
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Telefono</label>
+                                                            <input type="text" class="form-control form-control-sm"  name="solicitado_por_telefono_edb" id="solicitado_por_telefono_edb" >
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Email</label>
+                                                            <input type="text" class="form-control form-control-sm"  name="solicitado_por_email_edb" id="solicitado_por_email_edb" >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                        <!--ANTECEDENTES-->
+
+                                        <div class="col-sm-12 col-md-12">
+                                        <div class="card-a">
+                                            <div class="card-header-a" id="antec_coloprocto">
+                                                <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#antec_endosc_colo" aria-expanded="false" aria-controls="antec_endosc_colo">
+                                                    Antecedentes
+                                                </button>
+                                            </div>
+                                            <div id="antec_endosc_colo" class="collapse show" aria-labelledby="antec_coloprocto" data-parent="#antec_coloprocto">
+                                                <div class="card-body-aten-a">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-12 mx-auto">
+                                                            <label class="floating-label-activo-sm">Antecedentes Tránsito Intestinal</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_transito_edb" id="antec_endo_transito_edb"></textarea>
+                                                        </div>
+                                                        <div class="form-group col-md-12 mx-auto">
+                                                            <label class="floating-label-activo-sm">Antecedentes Gastroenterológicos y de la Especialidad</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_gastrica_go_edb" id="antec_endo_gastrica_go_edb"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                        <!--TACTO RECTAL-->
+                                        <div class="col-sm-12 col-md-12">
+                                        <div class="card-a">
+                                            <div class="card-header-a" id="tacto_rectal">
+                                                <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#tacto_rectal_endo_edb" aria-expanded="false" aria-controls="tacto_rectal_endo_edb">
+                                                Tacto Rectal y Preparación para el examen
+                                                </button>
+                                            </div>
+                                            <div id="tacto_rectal_endo" class="collapse show" aria-labelledby="tacto_rectal" data-parent="#tacto_rectal">
+                                                <div class="card-body-aten-ae">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-12 mx-auto">
+                                                            <label class="floating-label-activo-sm">Tacto</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="tacto_endos_rectal_edb" id="tacto_endos_rectal_edb"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group fill">
+                                                                <label class="floating-label-activo-sm">Preparación de Boston Comentarios</label>
+                                                                <input id="com_prep_boston_cdb" name="com_prep_boston_cdb" type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-4">
+                                                            <label id="" name="" class="floating-label-activo-sm">colon derecho</label>
+                                                            <select class="form-control form-control-sm" name="colon_derecho_edb" id="colon_derecho_edb">
+                                                                <option value="0">0</option>
+                                                                <option value="1">1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3" selected>3</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label id="" name="" class="floating-label-activo-sm">colon transverso</label>
+                                                            <select class="form-control form-control-sm" name="colon_transv_edb" id="colon_transv_edb">
+                                                                <option value="0">0</option>
+                                                                <option value="1">1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3" selected>3</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label id="" name="" class="floating-label-activo-sm">colon izquierdo</label>
+                                                            <select class="form-control form-control-sm" name="colon_izq_edb" id="colon_izq_edb">
+                                                                <option value="0">0</option>
+                                                                <option value="1">1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3" selected>3</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                        <!-- EXPLORACION -->
+                                        <div class="col-sm-12 col-md-12">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="exploracion">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#exploracion_endo_edb" aria-expanded="false" aria-controls="exploracion_endo_edb">
+                                                        Exploración
+                                                    </button>
+                                                </div>
+                                                <div id="exploracion_endo" class="collapse show" aria-labelledby="exploracion" data-parent="#exploracion">
+                                                    <div class="card-body-aten-a">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-12 mx-auto">
+                                                                <label class="floating-label-activo-sm">Exploración y Procedimientos </label>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=5" onblur="this.rows=1;" name="Tacto_endos_rectal_edb" id="Tacto_endos_rectal_edb"></textarea>
+                                                            </div>
+                                                            <div class="form-group col-md-6 " style="margin:auto">
+                                                                <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_clasificacion_colon();"><i class="me-2" data-feather="thumbs-up"></i>Ver Clasificación de Colon<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <input type="hidden" id="biopsia_edb" name="biopsia_edb" value="0">
+                                                                        <div class="switch switch-success d-inline m-r-10">
+                                                                            <input type="checkbox" onchange="biopsia('edb');" id="biopsia_check_edb" name="biopsia_check_edb" value="">
+                                                                            <label for="biopsia_check_edb" class="cr"></label>
+                                                                        </div>
+                                                                        <label>biopsia</label>
+                                                                    </div>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--IMAGENES-->
+                                        <div class="col-sm-12 col-md-12">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="img_edb">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#img_edb" aria-expanded="false" aria-controls="img_edb">
+                                                        Imagenes.
+                                                    </button>
+                                                </div>
+                                                <div id="img_edb-c" class="collapse show" aria-labelledby="img_edb" data-parent="#img_edb">
+                                                    <div class="card-body-aten-a">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-sm-12 col-md-12">
+                                                                <!-- [ Main Content ] start -->
+                                                                <div class="dropzone" id="mis-imagenes-edb" action="{{ route('profesional.imagen.carga') }}">
+                                                                <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                                </div>
+                                                                <!-- [ file-upload ] end -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--DIAGNÓSTICO-->
+                                        <div class="col-sm-12 col-md-12">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="diag-endosc_bajo">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diag-endosc_bajo-c" aria-expanded="false" aria-controls="diag-endosc_bajo-c">
+                                                        Diagnóstico
+                                                    </button>
+                                                </div>
+                                                <div id="diag-endosc_bajo-c" class="collapse show" aria-labelledby="diag-endosc_bajo" data-parent="#diag-endosc_bajo">
+                                                    <div class="card-body-aten-a">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-sm-12 col-md-6">
+                                                                <label class="floating-label-activo-sm">Diagnóstico endoscópico</label>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" data-input_seccion="Diagnóstico endoscópico" data-input_igual="hip_diag_spec" name="diag_endos_edb" id="diag_endos_edb" onchange="cargarCompletar('diag_endos_edb')"></textarea>
+                                                            </div>
+                                                            <div class="form-group col-sm-12 col-md-6">
+                                                                <label class="floating-label-activo-sm">Observaciones</label>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_edb" id="observaciones_edb"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>  --}}
+                                <div class="row div_form_examen_edb">
+                                    <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_edb" id="id_examen_especialidad_tipo_edb" value="{{ $array_examen_especialidad_tipo['edb'] }}">
+                                    {!! $examen['edb'] !!}
+                                </div>
+                                <!--GUARDAR EXAMEN-->
+                                <div class="col-md-12">
+                                    <div class="row">
                                         <div class="col-md-12 text-center mb-3">
                                             <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
                                             <bottom type="bottom" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('edb');">Ver Examen PDF</bottom>
                                         </div>
                                     </div>
-                               </div>
-                           </div>
+                                </div>
+                            </div>
                         </div>
                         <!--CIERRE:INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
-
-
                     </div>
                 </form>
             </div>
