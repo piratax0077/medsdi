@@ -38,6 +38,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 use App\Helpers\Funciones;
+use App\Models\ExamenEspecialidad;
+use App\Models\ExamenMedico;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -46,6 +48,7 @@ use App\Models\PacienteControlPeso;
 use App\Models\PacienteControlPresion;
 use App\Models\PacienteControlOxigeno;
 use App\Models\PacienteControlOrina;
+use App\Models\ResultadoExamen;
 
 class EscritorioPaciente extends Controller
 {
@@ -922,7 +925,44 @@ class EscritorioPaciente extends Controller
 
     public function receta_misexamenes()
     {
-        return view('app.paciente.receta.mis_examenes');
+        $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
+
+        /** EXAMENES DE ESPECIALIDAD REALIZADOS */
+        $examenes_especialidad_realizados = ExamenEspecialidad::select('id', 'id_tipo', 'id_template', 'id_examen_tipo', 'id_sub_tipo_especialidad', 'id_ficha_atencion', 'id_ficha_especialidad', 'id_paciente', 'id_profesional', 'id_asistente', 'nombre', 'revisado', 'estado')
+                                                            ->with(['HoraMedica' => function($query){
+                                                                $query->select('id', 'id_ficha_atencion', 'fecha_realizacion_consulta', 'id_estado');
+                                                            }])
+                                                            ->with(['ExamenEspecialidadTemplate' => function($query){
+                                                                $query->select('id', 'nombre', 'alias');
+                                                            }])
+                                                            ->with(['ExamenEspecialidadTipo' => function($query){
+                                                                $query->select('id', 'nombre', 'descripcion');
+                                                            }])
+                                                            ->with(['SubTipoEspecialidad' => function($query){
+                                                                $query->select('id', 'nombre');
+                                                            }])
+                                                            ->with(['Profesional' => function($query){
+                                                                $query->select('id', 'nombre', 'apellido_uno', 'apellido_dos');
+                                                            }])
+                                                            ->where('id_paciente', $paciente->id)
+                                                            ->get();
+
+        /** resultado de examenes */
+        // $resultado_examen = ResultadoExamen::where('id_paciente', $paciente->id)->get();
+        $resultado_examen = ResultadoExamen::with('ResultadoExamenArchivo')->where('id_paciente', $paciente->id)->get();
+        if($resultado_examen)
+        {
+            foreach ($resultado_examen as $key => $value)
+            {
+                $result_tipo_ex = ExamenMedico::where('id', $value->tipo_examen)->get()->first();
+                $resultado_examen[$key]['obj_tipo_examen'] = $result_tipo_ex;
+            }
+        }
+
+        return view('app.paciente.receta.mis_examenes')->with([
+            'examenes_especialidad_realizados' => $examenes_especialidad_realizados,
+            'resultado_examen' => $resultado_examen,
+        ]);
     }
 
     public function receta_miscertificados()
