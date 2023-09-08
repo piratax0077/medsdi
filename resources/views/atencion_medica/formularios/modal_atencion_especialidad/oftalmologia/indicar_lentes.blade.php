@@ -42,7 +42,7 @@
 					                <a class="nav-link-wizard" id="lentes_intermedio_tab" data-toggle="pill" href="#lentes_intermedio" role="tab" aria-controls="pills-home" aria-selected="true">Lentes intermedios</a>
 					            </li>
 					            <li class="nav-item">
-					                <a class="nav-link-wizard" id="lentes_lejos_tab" data-toggle="pill" href="#lentes_lejos" role="tab" aria-controls="pills-home" aria-selected="true">Lentes de lejos</a>
+					                <a class="nav-link-wizard" id="lentes_lejos_tab" data-toggle="pill" href="#lentes_lejos" role="tab" aria-controls="pills-home" aria-selected="true">Lentes ópticos</a>
 					            </li>
 					        </ul>
 					    </div>

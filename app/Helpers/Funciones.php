@@ -12,7 +12,7 @@ use App\Models\AdminInstServ;
 class Funciones{
     function __construct()
     {
-     
+
     }
 
     public function userData($id_usuario)
@@ -43,7 +43,7 @@ class Funciones{
             'telefono_dos' => '',
             'profesion' => '',
             'fecha_nac' => '',
-         );         
+         );
 
          $profesional_ = Profesional::with('Especialidad')->where('id_usuario',$id_usuario)->first();
          if($profesional_)
@@ -101,7 +101,7 @@ class Funciones{
             //$usuario['profesion'] = $adminInstServ_->profesion;
             $usuario['fecha_nac'] = $adminInstServ_->fecha_nac;
          }
-         
+
      /* FIN DATOS USUARIO - LOGEADO */
 
         return $usuario;
@@ -116,13 +116,13 @@ class Funciones{
             $registro->save();
             $datos['estado'] = 1;
             $datos['msj'] = 'registro encontrado';
-           
+
         }else{
             $datos['estado'] = 0;
             $datos['msj'] = 'registros no encontrados';
         }
 
-        return $datos;
+                   return $datos;
     }
 
     public function checkStatePermApp($token)
@@ -156,13 +156,13 @@ class Funciones{
     {
         if($token)
         {
-            $state = Funciones::checkStatePermApp($token);   
+            $state = Funciones::checkStatePermApp($token);
             if($state['registro']['estado'] != 1)
             {
              abort(401);
             }else{
                 return $state['registro'];
-            }
+               }
         }else{
             abort(401);
         }
@@ -199,10 +199,17 @@ class Funciones{
         $log_users_devices->id_user_create = $id_user_create;
         $log_users_devices->id_user_recept = $id_user_recept;
         $log_users_devices->msg = json_encode($msj);
-        if($id_user_create == $id_user_recept)
-        $log_users_devices->estado = 1;
+        if($tipo_id != 12)
+        {
+            if($id_user_create == $id_user_recept)
+                $log_users_devices->estado = 1;
+            else
+                $log_users_devices->estado = 0;
+        }
         else
-        $log_users_devices->estado = 0;
+        {
+            $log_users_devices->estado = 0;
+        }
         $log_users_devices->fecha_ingreso = $fecha_actual;
         $log_users_devices->fecha_termino = $fecha_vencimiento;
         $log_users_devices->tipo = $tipo_id; // check sdi // ESTRUCTURA DE TEXTO

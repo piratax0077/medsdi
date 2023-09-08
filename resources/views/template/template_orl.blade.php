@@ -226,6 +226,7 @@
     @yield('page-script-med-exa') {{--  seccion receta y exmaenes --}}
     @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
     @yield('js-sidebar') {{-- seccion js side bar --}}
+    @yield('js-lic') {{-- seccion js side bar --}}
 </body>
 
 </html>

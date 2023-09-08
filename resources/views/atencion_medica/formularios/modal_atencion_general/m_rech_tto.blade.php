@@ -16,23 +16,23 @@
         @csrf
 		<div class="modal-content">
 			<div class="modal-header bg-info">
-				<h5 class="modal-title text-white text-center">Rechazo Voluntario de tratamiento Médico o Quirúrgico </h5>
+				<h5 class="modal-title text-white text-center">Rechazo voluntario de tratamiento médico o quirúrgico X </h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 				</button>
             </div>
 			<div class="modal-body">
 				<div class="form-row" hidden>
-					<div class="form-group fill col-sm-4">
-			            <label class="floating-label">Rut</label>
+					<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+			            <label class="floating-label-activo-sm">Rut</label>
 			            <input type="text" class="form-control form-control-sm" name="nom_pcte" id="rut">
 			        </div>
-					<div class="form-group fill col-sm-6">
-			            <label class="floating-label">Nombre del paciente</label>
+					<div class="form-group col-sm-6">
+			            <label class="floating-label-activo-sm">Nombre del paciente</label>
 			            <input type="text" class="form-control form-control-sm" name="nom_pcte" id="nom_pcte">
 			        </div>
-					<div class="form-group fill col-sm-2">
-			            <label class="floating-label">Edad</label>
+					<div class="form-group col-sm-2">
+			            <label class="floating-label-activo-sm">Edad</label>
 			            <input type="text" class="form-control form-control-sm" name="edad_pcte" id="edad_pcte">
 			        </div>
 
@@ -46,14 +46,14 @@
 				</div>
 				<div class="form-row">
 
-                    <div class="form-group fill col-sm-4">
-                        <label class="floating-label">Fecha de Hospitalización</label>
-                        <input  type="text" class="form-control form-control-sm" id="consentimiento"name="consentimiento" value="">
+                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                        <label class="floating-label-activo-sm">Fecha de hospitalización</label>
+                        <input  type="date" class="form-control form-control-sm" id="consentimiento"name="consentimiento" value="">
                     </div>
                 </div>
                 <div class="form-row">
 
-					<div class="form-group fill col-sm-12">
+					<div class="form-group col-sm-12">
 						<p>Soy paciente del profesional <strong>Dr.{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }} </strong>.</p>
                         <p>Rechazo Voluntariamente el tratamiento indicado y propuesto por mi equipo médico.</p>
 					</div>
@@ -61,30 +61,30 @@
 				</div>
                 <div class="form-row">
 
-					<div class="form-group fill col-sm-6">
-						<label class="floating-label">Diagnóstico</label>
+					<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+						<label class="floating-label-activo-sm">Diagnóstico</label>
 						<input type="text" class="form-control form-control-sm" id="diagnostico_pre"name="diagnostico_pre" value="">
 					</div>
 
 
-                    <div class="form-group col-sm-6">
-                        <label class="floating-label-activo-sm">Situaciones o Motivos</label>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <label class="floating-label-activo-sm">Situaciones o motivos</label>
                         <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="situaciones Especiales del paciente" id="situaciones Especiales del paciente"></textarea>
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-sm-4">
-                        <button type="button" class="btn btn-danger btn-sm btn-block">Ver PDF</button>
+                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                        <button type="button" class="btn btn-danger-light btn-sm btn-block">Ver PDF</button>
                     </div>
-                    <div class="form-group col-sm-4">
-                        <button type="button" class="btn btn-info btn-sm btn-block">Solicitar Alta</button>
+                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                        <button type="button" class="btn btn-info btn-sm btn-block">Solicitar alta</button>
                     </div>
-                    <div class="form-group col-sm-4">
+                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <button type="button" class="btn btn-info btn-sm btn-block">Enviar</button>
                     </div>
                 </div>
 				<div class="form-row">
-					<div class="col-md-12">
+					<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 						<p>2. Al autorizar mediante email o por la app.,Me hago responsable de esta solicitud y asumo las consecuencias que ésta implica</p>
 					</div>
 				</div>

@@ -3228,8 +3228,6 @@ class ficha_atencionController extends Controller
         }
         else
         {
-            var_dump($mensaje);
-            exit();
             return back()->with('error', $mensaje)->withInput();
         }
     }
@@ -5104,105 +5102,316 @@ class ficha_atencionController extends Controller
 
     public function crear_licencia(Request $request)
     {
-        /*  $request->validate([
-               'nombre_trabajador' => ' required|max:32',
-               'prevision'=> 'required',
-               'rut_trabajador' => 'required|max:12',
-               'nombre_empleador' => 'required|max:500',
-               'rut_empleador' => 'required|max:12',
-               'cantidad_dias' => 'required|number|max:365',
-               'direccion' => 'required|max:250',
-               'telefono' => ' required|max:11',
-               'direccion_alternavitva' => ' required',
-               'diagnostico_descripcion' => ' required',
-               'diagnostico_descripcion_alternativo' => ' required',
-               'otros_antecedentes' => ' required',
-           ]);*/
+        $datos = array();
+        $error = array();
+        $valido = 1;
 
-        $licencia = new licencia();
-
-        $laboral = 0;
-        if ($request->laboral == 'on') {
-            $laboral = 1;
-        } else {
-            $laboral = 0;
+        if(empty($request->id_hora_medica))
+        {
+            $error['Hora Medica'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_ficha_atencion))
+        {
+            $error['Ficha Atencion'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_paciente))
+        {
+            $error['Paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['Profesional'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_lugar_atencion))
+        {
+            $error['Lugar Atencion'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->enfermedad_comun) && empty($request->laboral) )
+        {
+            $error['Enfermedad común o maternal'] = 'campo requerido';
+            $error['Laboral'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->paciente_prevision))
+        {
+            $error['Tabajador Prevision'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->paciente_prevision_text))
+        {
+            $error['Tabajador Prevision'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->rut_paciente))
+        {
+            $error['Trabajador Rut'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->empleador_id))
+        {
+            $error['Empleador'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->empleador_nombre))
+        {
+            $error['Empleador Nombre'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->empleador_rut))
+        {
+            $error['Empleador rut'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->empleador_direccion))
+        {
+            $error['Empleador Direccion'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->empleador_email))
+        {
+            $error['Empleador email'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->num_dias_reposo))
+        {
+            $error['N° Días'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->fecha_inicio))
+        {
+            $error['Desde'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->fecha_termino))
+        {
+            $error['Hasta'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->tipo_reposo))
+        {
+            $error['Tipo de Reposo'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->lugar_reposo))
+        {
+            $error['Lugar de Reposo'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->tipo_licencia))
+        {
+            $error['Tipo de Licencia'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->info_licencia_1) && empty($request->info_licencia_2) )
+        {
+            $error['Recuperabilidad laboral'] = 'campo requerido';
+            $error['Inicio trámite de invalidez'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->descripcion_hipotesis))
+        {
+            $error['Hipotesis Diagnostica'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->descripcion_cie))
+        {
+            $error['Diagnostico CIE-10'] = 'campo requerido';
+            $valido = 0;
+        }
+        if( empty($request->id_descripcion_cie))
+        {
+            $error['Diagnostico CIE-10'] = 'campo requerido';
+            $valido = 0;
         }
 
-        $enfermedad_comun_maternal = 0;
-        if ($request->enfermedad_comun_maternal == 'on') {
-            $enfermedad_comun_maternal = 1;
-        } else {
-            $enfermedad_comun_maternal = 0;
-        }
+        if($valido)
+        {
+            /** proceso de archivos */
+            $registro_archivo = '';
+            if(!empty($request->input_lista_archivo_lic))
+            {
+                $paciente = Paciente::find($request->id_paciente);
+                $lista_archivo_array = json_decode($request->input_lista_archivo_lic);
+                $registro_archivo = array();
+                foreach ($lista_archivo_array as $key => $value)
+                {
+                    $ruta_temp = $value[0];
+                    $nombre_real = $value[1];
+                    $nombre_temp = $value[2];
+                    $file_extension = $value[3];
+                    $nombre_final = $paciente->rut.'_examen_apoyo_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
 
-        $recuperabilidad_laboral = 0;
-        if ($request->recuperabilidad_laboral == 'on') {
-            $recuperabilidad_laboral = 1;
-        } else {
-            $recuperabilidad_laboral = 0;
-        }
+                    $resulto_archivo[$key] = CargaArchivoController::moverArchivo($nombre_temp, 'archivo_archivo', $nombre_final);
+                    $url = $resulto_archivo[$key]['proceso']['url'];
 
-        $tramite_invalidez = 0;
-        if ($request->tramite_invalidez == 'on') {
-            $tramite_invalidez = 1;
-        } else {
-            $tramite_invalidez = 0;
-        }
+                    $url_temp = Storage::disk('archivo_archivo')->url($nombre_final);
+                    $archivo_correo[] = array('url' => $url_temp, 'nombre' => $nombre_final);
 
-        $licencia->enfermedad_comun_maternal = $enfermedad_comun_maternal;
-        $licencia->laboral = $laboral;
-        $licencia->nombre_empleador = $request->nombre_empleador;
-        $licencia->rut_empleador = $request->rut_empleador;
-        $licencia->reposo_inicio = $request->reposo_inicio;
-        $licencia->reposo_fin = $request->reposo_fin;
-        $licencia->tipo_reposo = $request->tipo_reposo;
-        $licencia->lugar_reposo = $request->lugar_reposo;
-        $licencia->direccion_reposo = $request->direccion_reposo;
-        $licencia->region_reposo = $request->region_reposo;
-        $licencia->tipo_licencia = $request->tipo_licencia;
-        $licencia->recuperabilidad_laboral = $recuperabilidad_laboral;
-        $licencia->tramite_invalidez = $tramite_invalidez;
-        $licencia->diagnostico_c10 = $request->diagnostico_c10;
-        $licencia->diagnostico = $request->diagnostico;
-        $licencia->antecedentes = $request->antecedentes;
-        //$licencia->telefono = $request->telefono;
-        //$licencia->direccion_alternavitva = $request->direccion_alternavitva;
-        //$licencia->diagnostico_alternativo = $request->diagnostico_alternativo;
-        //$licencia->diagnostico_descripcion_alternativo = $request->diagnostico_descripcion_alternativo;
+                    array_push($registro_archivo, array(
+                        'nombre' => $nombre_final,
+                        'url' => $url
+                    ));
+                }
 
-        /*
-        $file=$request->file("examen_apoyo");
-
-        $nombre = "pdf_examen_apoyo=".$licencia->rut_paciente.".".$file->guessExtension();
-
-        $ruta = public_path("pdf/examenes_apoyo/".$nombre);*/
-        //$licencia->examenes_apoyo = $request->examenes_apoyo;
-
-        if (!$licencia->save()) {
-            $mensajeLicencia = 'Error al crear la licencia';
-
-            return back()->with('mensajeLicencia', $mensajeLicencia);
-        } else {
-            //copy($file, $ruta);
-
-            $licenciaPPF = new LicenciaPPF();
-            $licenciaPPF->id_paciente = $request->id_paciente_li;
-            $licenciaPPF->id_profesional = $request->id_profesional_li;
-            $licenciaPPF->id_licencia = $licencia->id;
-            $licenciaPPF->id_ficha_atencion = $request->id_ficha_li;
-
-            if (!$licenciaPPF->save()) {
-                $mensajeLicencia = 'Error al crear la licencia';
-
-                return back()->with('mensajeLicencia', $mensajeLicencia);
+                $registro_archivo = json_encode($registro_archivo);
             }
-            $mensajeLicencia = 'Se Registro la licencia de forma correcta';
 
-            return back()->with('mensajeLicencia', $mensajeLicencia);
+            $registro = new Licencia();
+            $registro->id_hora_medica = $request->id_hora_medica;
+            $registro->id_ficha_atencion = $request->id_ficha_atencion;
+            $registro->id_paciente = $request->id_paciente;
+            $registro->id_profesional = $request->id_profesional;
+            $registro->id_lugar_atencion = $request->id_lugar_atencion;
+            $registro->enfermedad_comun = $request->enfermedad_comun;
+            $registro->laboral = $request->laboral;
+            $registro->paciente_prevision = $request->paciente_prevision;
+            $registro->paciente_prevision_text = $request->paciente_prevision_text;
+            $registro->rut_paciente = $request->rut_paciente;
+            $registro->empleador_id = $request->empleador_id;
+            $registro->empleador_nombre = $request->empleador_nombre;
+            $registro->empleador_rut = $request->empleador_rut;
+            $registro->empleador_direccion = $request->empleador_direccion;
+            $registro->empleador_email = $request->empleador_email;
+            $registro->num_dias_reposo = $request->num_dias_reposo;
+            $registro->fecha_inicio = date('Y-m-d', strtotime($request->fecha_inicio));
+            $registro->fecha_termino = date('Y-m-d', strtotime($request->fecha_termino));
+            $registro->tipo_reposo = $request->tipo_reposo;
+            $registro->lugar_reposo = $request->lugar_reposo;
+            $registro->tipo_licencia = $request->tipo_licencia;
+            $registro->recuperabilidad_laboral = $request->info_licencia_1;
+            $registro->tramite_invalidez = $request->info_licencia_2;
+            $registro->descripcion_hipotesis = $request->descripcion_hipotesis;
+            $registro->descripcion_cie = $request->descripcion_cie;
+            $registro->id_descripcion_cie = $request->id_descripcion_cie;
+            $registro->otros_ant_desc = $request->otros_ant_desc;
+            $registro->examen_apoyo = $registro_archivo;
 
-            //return $mensajeLicencia;
+            if($registro->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+                $datos['registro'] = $registro;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'falla';
+            }
         }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
     }
+    // public function crear_licencia(Request $request)
+    // {
+    //     /*  $request->validate([
+    //            'nombre_trabajador' => ' required|max:32',
+    //            'prevision'=> 'required',
+    //            'rut_trabajador' => 'required|max:12',
+    //            'nombre_empleador' => 'required|max:500',
+    //            'rut_empleador' => 'required|max:12',
+    //            'cantidad_dias' => 'required|number|max:365',
+    //            'direccion' => 'required|max:250',
+    //            'telefono' => ' required|max:11',
+    //            'direccion_alternavitva' => ' required',
+    //            'diagnostico_descripcion' => ' required',
+    //            'diagnostico_descripcion_alternativo' => ' required',
+    //            'otros_antecedentes' => ' required',
+    //        ]);*/
+
+    //     $licencia = new licencia();
+
+    //     $laboral = 0;
+    //     if ($request->laboral == 'on') {
+    //         $laboral = 1;
+    //     } else {
+    //         $laboral = 0;
+    //     }
+
+    //     $enfermedad_comun_maternal = 0;
+    //     if ($request->enfermedad_comun_maternal == 'on') {
+    //         $enfermedad_comun_maternal = 1;
+    //     } else {
+    //         $enfermedad_comun_maternal = 0;
+    //     }
+
+    //     $recuperabilidad_laboral = 0;
+    //     if ($request->recuperabilidad_laboral == 'on') {
+    //         $recuperabilidad_laboral = 1;
+    //     } else {
+    //         $recuperabilidad_laboral = 0;
+    //     }
+
+    //     $tramite_invalidez = 0;
+    //     if ($request->tramite_invalidez == 'on') {
+    //         $tramite_invalidez = 1;
+    //     } else {
+    //         $tramite_invalidez = 0;
+    //     }
+
+    //     $licencia->enfermedad_comun_maternal = $enfermedad_comun_maternal;
+    //     $licencia->laboral = $laboral;
+    //     $licencia->nombre_empleador = $request->nombre_empleador;
+    //     $licencia->rut_empleador = $request->rut_empleador;
+    //     $licencia->reposo_inicio = $request->reposo_inicio;
+    //     $licencia->reposo_fin = $request->reposo_fin;
+    //     $licencia->tipo_reposo = $request->tipo_reposo;
+    //     $licencia->lugar_reposo = $request->lugar_reposo;
+    //     $licencia->direccion_reposo = $request->direccion_reposo;
+    //     $licencia->region_reposo = $request->region_reposo;
+    //     $licencia->tipo_licencia = $request->tipo_licencia;
+    //     $licencia->recuperabilidad_laboral = $recuperabilidad_laboral;
+    //     $licencia->tramite_invalidez = $tramite_invalidez;
+    //     $licencia->diagnostico_c10 = $request->diagnostico_c10;
+    //     $licencia->diagnostico = $request->diagnostico;
+    //     $licencia->antecedentes = $request->antecedentes;
+    //     //$licencia->telefono = $request->telefono;
+    //     //$licencia->direccion_alternavitva = $request->direccion_alternavitva;
+    //     //$licencia->diagnostico_alternativo = $request->diagnostico_alternativo;
+    //     //$licencia->diagnostico_descripcion_alternativo = $request->diagnostico_descripcion_alternativo;
+
+    //     /*
+    //     $file=$request->file("examen_apoyo");
+
+    //     $nombre = "pdf_examen_apoyo=".$licencia->rut_paciente.".".$file->guessExtension();
+
+    //     $ruta = public_path("pdf/examenes_apoyo/".$nombre);*/
+    //     //$licencia->examenes_apoyo = $request->examenes_apoyo;
+
+    //     if (!$licencia->save()) {
+    //         $mensajeLicencia = 'Error al crear la licencia';
+
+    //         return back()->with('mensajeLicencia', $mensajeLicencia);
+    //     } else {
+    //         //copy($file, $ruta);
+
+    //         $licenciaPPF = new LicenciaPPF();
+    //         $licenciaPPF->id_paciente = $request->id_paciente_li;
+    //         $licenciaPPF->id_profesional = $request->id_profesional_li;
+    //         $licenciaPPF->id_licencia = $licencia->id;
+    //         $licenciaPPF->id_ficha_atencion = $request->id_ficha_li;
+
+    //         if (!$licenciaPPF->save()) {
+    //             $mensajeLicencia = 'Error al crear la licencia';
+
+    //             return back()->with('mensajeLicencia', $mensajeLicencia);
+    //         }
+    //         $mensajeLicencia = 'Se Registro la licencia de forma correcta';
+
+    //         return back()->with('mensajeLicencia', $mensajeLicencia);
+
+    //         //return $mensajeLicencia;
+    //     }
+    // }
 
     /**
      * creado 20220809

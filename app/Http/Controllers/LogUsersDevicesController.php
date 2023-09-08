@@ -73,6 +73,7 @@ class LogUsersDevicesController extends Controller
                         else
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cancelada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}</p><br>";
                     break;
+
                     case 2: // ficha única
                         $data = json_decode($value['msg'],false);
                         $id = $data->id;
@@ -97,6 +98,7 @@ class LogUsersDevicesController extends Controller
                         else
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cancelada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
                     break;
+
                     case 3: // reserva de hora
                         $data = json_decode($value['msg'],false);
                         $id = $data->id;
@@ -126,6 +128,7 @@ class LogUsersDevicesController extends Controller
                         else
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Reserva Cancelada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
                     break;
+
                     case 4: // consentimiento informado
                         $data = json_decode($value['msg'],false);
                         $id = $data->id_consentimiento_pcte;
@@ -181,6 +184,7 @@ class LogUsersDevicesController extends Controller
                         else
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Revocación de Consentimiento Cancelada</span> {$consentimiento}.<br>";
                     break;
+
                     case 6: //  solicitud alta voluntaria
                         $data = json_decode($value['msg'],false);
                         $id = $data->id_sol_alta;
@@ -208,6 +212,7 @@ class LogUsersDevicesController extends Controller
                         else
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud de Alta Voluntaria Cancelada</span></p><br>";
                     break;
+
                     case 7: //  rechazo de tratamiento
                         $data = json_decode($value['msg'],false);
                         $id = $data->id_rechazo_trtt;
@@ -313,6 +318,60 @@ class LogUsersDevicesController extends Controller
                         else
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Notificación GES</span> El Profesional {$profesional} le ha notificado Patologia GES con fecha {$fecha}</p><br>";
                     break;
+
+                    case 11: //  autorizacion compin paciente
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id;
+                        $nombre = $data->nombre;
+                        $fecha = $data->fecha;
+                        $profesional = $data->profesional;
+                        /** peticion */
+                        $value['msg_estado'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> Notificación COMPIN";
+
+                        /** resultado */
+                        if($value['estado'] == 1)
+                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> solicita Notificación COMPIN con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        elseif($value['estado'] == 2)
+                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> solicita Notificación COMPIN con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        else
+                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> solicita Notificación COMPIN con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+
+                        /** lista log */
+                        if($value['estado'] == 1)
+                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Notificación COMPIN</span> El Profesional {$profesional} solicita Notificación COMPIN con fecha {$fecha}</p><br>";
+                        elseif($value['estado'] == 2)
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Notificación COMPIN</span> El Profesional {$profesional} solicita Notificación COMPIN con fecha {$fecha}</p><br>";
+                        else
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Notificación COMPIN</span> El Profesional {$profesional} solicita Notificación COMPIN con fecha {$fecha}</p><br>";
+                    break;
+
+                    case 12: //  autorizacion compin profesional
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id;
+                        $nombre = $data->nombre;
+                        $fecha = $data->fecha;
+                        $profesional = $data->profesional;
+                        /** peticion */
+                        $value['msg_estado'] = "Profesional esta por Iniciar Licencia";
+
+                        /** resultado */
+                        if($value['estado'] == 1)
+                            $value['msg_body'] = "Profesional por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        elseif($value['estado'] == 2)
+                            $value['msg_body'] = "Profesional por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        else
+                            $value['msg_body'] = "Profesional por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+
+                        /** lista log */
+                        if($value['estado'] == 1)
+                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Creacion de Licencia</span> con fecha {$fecha}</p><br>";
+                        elseif($value['estado'] == 2)
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Creacion de Licencia</span> con fecha {$fecha}</p><br>";
+                        else
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Creacion de Licencia</span> con fecha {$fecha}</p><br>";
+                    break;
+
+
                 }
 
 

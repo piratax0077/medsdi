@@ -1,10 +1,10 @@
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
-    <div class="col-md-12 py-0 px-2 shadow-none">
+    <div class="col-md-12 py-0 px-2 ">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
-                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
+                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="oft" role="tablist">
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones active text-uppercase" id="atencion_oft-tab" data-toggle="tab" href="#atencion_oft" role="tab" aria-controls="atencion_oft" aria-selected="true">Atención Especialidad</a>
+                        <a class="nav-secciones active text-uppercase" id="atencion_oft-tab" data-toggle="tab" href="#atencion_oft" role="tab" aria-controls="atencion_oft" aria-selected="true">Atención especialidad</a>
                     </li>
                 </ul>
             </div>
@@ -21,17 +21,19 @@
                     <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
                     <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
                     <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
+                    <input type="hidden" name="mostrarpdf" id="mostrarpdf" value="0">
+                    <input type="hidden" name="tipopdf" id="tipopdf" value="0">
+                    <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
 
                     @csrf
-                    <div class="tab-content" id="orl-contenido">
+                    <div class="tab-content" id="oftalmo-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
                         <div class="tab-pane fade show active" id="atencion_oft" role="tabpanel" aria-labelledby="atencion_oft-tab">
-                            <div class="row bg-white shadow-none rounded mx-1">
-                                <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
                                     <div class="row">
-                                        <div class="col-md-12 mt-3 mb-0">
-                                            <h6 class="f-16 text-c-blue">Ficha de atención general</h6>
-                                            <hr>
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-0">
+                                            <h6 class="f-18 text-c-blue mb-3">Ficha de atención general</h6>
                                         </div>
                                     </div>
                                     <!--FORMULARIOS-->
@@ -39,20 +41,21 @@
                                         <!--Formulario / Menor de edad-->
                                         @include('atencion_medica.generales.seccion_menor')
                                         <!--Cierre: Formulario / Menor de edad-->
+
                                         <!--Motivo consulta-->
-                                        <div class="col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="motivo">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="motivo">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#motivo_c" aria-expanded="false" aria-controls="motivo_c">
                                                         Motivo de la consulta
                                                     </button>
                                                 </div>
                                                 <div id="motivo_c" class="collapse show" aria-labelledby="motivo" data-parent="#motivo">
-                                                    <div class="card-body-aten shadow-none">
+                                                    <div class="card-body-aten-a shadow-none">
                                                         <div class="form-row">
                                                             <div class="form-group col-md-6">
                                                                 <label class="floating-label-activo-sm">Motivo de consulta</label>
-                                                                <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_consulta" name="descripcion_consulta_oftalmo" id="descripcion_consulta_oftalmo" onchange="cargarIgual('descripcion_consulta_oftalmo');">
+                                                               <input type="text" class="form-control form-control-sm" name="descripcion_consulta_oftalmo" id="descripcion_consulta_oftalmo">
                                                             </div>
                                                             <div class="form-group col-md-6">
                                                                 <label class="floating-label-activo-sm">Antecedentes oftalmológicos</label>
@@ -65,696 +68,1161 @@
                                         </div>
 
                                         <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="examen_oft_general">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open"  type="button" data-toggle="collapse" data-target="#examen_oft_generalc" aria-expanded="false" aria-controls="examen_oft_generalc">
-                                                        Examen general de la especialidad
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="exam_esp">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_c" aria-expanded="false" aria-controls="exam_esp_c">
+                                                        Examen especialidad
                                                     </button>
                                                 </div>
-                                                <div id="examen_oft_generalc" class="collapse" aria-labelledby="" data-parent="#examen_oft_general" style="examen_oft_general">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Carga ficha tipo</label>
-                                                                    <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad" onchange="cargar_info_ficha_tipo_oft('select_ficha_tipo_especialidad','descripcion_ficha_tipo_especialidad');">
-                                                                        <option value="">Seleccione</option>
-                                                                        @if(!empty($fichaTipo['oft']))
-                                                                            @foreach ($fichaTipo['oft'] as $ft )
-                                                                                <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
-                                                                            @endforeach
-                                                                        @endif
-                                                                    </select>
+                                                <div id="exam_esp_c" class="collapse" aria-labelledby="exam_esp" data-parent="#exam_esp">
+                                                    <div class="card-body-aten-a shadow-none">
+                                                        <div id="form-oftalmologia-adulto">
+                                                            <div class="row">
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <ul class="nav nav-tabs-aten nav-fill mb-3" id="cg_adulto" role="tablist">
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link-aten text-reset active" id="oft_examen_gen_tab" data-toggle="tab" href="#oft_examen_gen" role="tab" aria-controls="oft_examen_gen" aria-selected="true">Examen general</a>
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link-aten text-reset" id="examen_biomicroscop-tab" data-toggle="tab" href="#examen_biomicroscop" role="tab" aria-controls="examen_biomicroscop" aria-selected="true">Biomicroscopía</a>
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link-aten text-reset" id="fondo_ojo-tab" data-toggle="tab" href="#fondo_ojo" role="tab" aria-controls="fondo_ojo" aria-selected="true">Fondo de ojo</a>
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link-aten text-reset" id="ex_plan_tto-tab" data-toggle="tab" href="#ex_plan_tto" role="tab" aria-controls="ex_plan_tto" aria-selected="false">Planificación de Tratamiento</a>
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link-aten text-reset" id="in-hosp-tab" data-toggle="tab" href="#in-hosp" role="tab" aria-control="in-hosp" aria-selected="false">Hospitalización</a>
+                                                                        </li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6">
-                                                                <span id="descripcion_ficha_tipo_especialidad"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row" id="form-oft-g">
-                                                            <div class="col-md-12">
-                                                                <h6>Parámetros generales</h6>
-                                                            </div>
-                                                            <hr>
-                                                            <div class="col-sm-12 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm" style="color:#CE0909;">Agudeza visual Subj. OD</label>
-                                                                    <select name="agudeza_visual_subj_od" data-titulo="Agudeza visual Subj. OD"  data-seccion="Parámetros Generales" id="agudeza_visual_subj_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('agudeza_visual_subj_od','div_agudeza_visual_subj_od','obs_agudeza_visual_subj_od',2);">
-                                                                        <option selected  value="1">Normal</option>
-                                                                        <option value="2">Anormal</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group" id="div_agudeza_visual_subj_od" style="display:none;">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Agudeza visual Subj. OD(describir)</label>
-                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Agudeza visual Subj. OD" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_agudeza_visual_subj_od" id="obs_agudeza_visual_subj_od"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;">Agudeza visual Subj. OI</label>
-                                                                    <select name="agudeza_visual_subj_oi" data-titulo="Agudeza visual Subj. OI" data-seccion="Parámetros Generales"  id="agudeza_visual_subj_oi"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('agudeza_visual_subj_oi','div_agudeza_visual_subj_oi','obs_agudeza_visual_subj_oi',2);">
-                                                                        <option selected  value="1">Normal</option>
-                                                                        <option value="2">Anormal</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group" id="div_agudeza_visual_subj_oi" style="display:none;">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;">Agudeza visual Subj. OI(describir)</label>
-                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Agudeza visual Subj. OI" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_agudeza_visual_subj_oi" id="obs_agudeza_visual_subj_oi"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Agudeza visual Obj. OD</label>
-                                                                    <select name="agudeza_visual_obj_od" data-titulo="Agudeza visual Obj. OD" data-seccion="Parámetros Generales" id="agudeza_visual_obj_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('agudeza_visual_obj_od','div_agudeza_visual_obj_od','obs_agudeza_visual_obj_od',2);">
-                                                                        <option selected  value="1">Normal</option>
-                                                                        <option value="2">Anormal</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group" id="div_agudeza_visual_obj_od" style="display:none;">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Agudeza visual Obj. OD(describir)</label>
-                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Agudeza visual Obj. OD" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_agudeza_visual_obj_od" id="obs_agudeza_visual_obj_od"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm"  style="color:rgb(41, 90, 189);font-weight: bold;">Agudeza visual Obj. OI</label>
-                                                                    <select name="agudeza_visual_obj_oi" data-titulo="Agudeza visual Obj. OI" data-seccion="Parámetros Generales" id="agudeza_visual_obj_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('agudeza_visual_obj_oi','div_agudeza_visual_obj_oi','obs_agudeza_visual_obj_oi',2);">
-                                                                        <option selected  value="1">Normal</option>
-                                                                        <option value="2">Anormal</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group" id="div_agudeza_visual_obj_oi" style="display:none;">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;" >Agudeza visual Obj. OI(describir)</label>
-                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Agudeza visual Obj. OI" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_agudeza_visual_obj_oi" id="obs_agudeza_visual_obj_oi"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-4">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Movimientos Oculares</label>
-                                                                    <select name="mov_oculares" data-titulo="Movimientos Oculares" data-seccion="Parámetros Generales" id="mov_oculares" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mov_oculares','div_mov_oculares','obs_mov_oculares',2);">
-                                                                        <option selected  value="1">Normal</option>
-                                                                        <option value="2">Anormal</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group" id="div_mov_oculares" style="display:none;">
-                                                                    <label class="floating-label-activo-sm">Movimientos Oculares</label>
-                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Movimientos Oculares" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mov_oculares" id="obs_mov_oculares"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-4">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Autorrefractometría OD</label>
-                                                                    <select name="autorefracto_od" data-titulo="Autorrefractometría OD" data-seccion="Parámetros Generales" id="autorefracto_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('autorefracto_od','div_autorefracto_od','obs_autorefracto_od',2);">
-                                                                        <option selected  value="1">Normal</option>
-                                                                        <option value="2">Anormal</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group" id="div_autorefracto_od" style="display:none;">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Autorrefractometría OD</label>
-                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-4">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;" >Autorrefractometría OI</label>
-                                                                    <select name="autorefracto_oi" data-titulo="Autorrefractometría OI" data-seccion="Parámetros Generales" id="autorefracto_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('autorefracto_oi','div_autorefracto_oi','obs_autorefracto_oi',2);">
-                                                                        <option selected  value="1">Normal</option>
-                                                                        <option value="2">Anormal</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group" id="div_autorefracto_oi" style="display:none;">
-                                                                    <label class="floating-label-activo-sm"  style="color:rgb(41, 90, 189);font-weight: bold;">Autorrefractometría OI</label>
-                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OI"data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_autorefracto_oi" id="obs_autorefracto_oi"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Presión Ocular OD</label>
-                                                                    <select name="presion_ocular_od" data-titulo="Presion Ocular OD" id="presion_ocular_od" data-seccion="Parámetros Generales"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('presion_ocular_od','div_presion_ocular_od','obs_presion_ocular_od',2);">
-                                                                        <option selected  value="1">Normal</option>
-                                                                        <option value="2">Anormal</option>
-                                                                        <option value="3">No Examinada</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group" id="div_presion_ocular_od" style="display:none;">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Presión Ocular(describir)</label>
-                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Presion Ocular OD" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_presion_ocular_od" id="obs_presion_ocular_od"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-3">
-                                                                <div class="form-group">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >P/O (Valor)</label>
-                                                                        <input type="text" class="form-control form-control-sm" data-titulo="Obs. Valor OD" data-seccion="Parámetros Generales" name="valor_presion_ocular_od" id="valor_presion_ocular_od">
+                                                            <div class="row">
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <div class="tab-content" id="oftalmologia_adulto">
+                                                                        <!--EXAMEN  GEN-->
+                                                                        <div class="tab-pane fade show active" id="oft_examen_gen" role="tabpanel" aria-labelledby="oft_examen_gen_tab">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-2">
+                                                                                    <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                                                                        <a class="nav-link-aten text-reset active" id="agudeza_vis-tab" data-toggle="tab" href="#agudeza_vis" role="tab" aria-controls="agudeza_vis" aria-selected="true">Agudeza Visual</a>
+                                                                                        <a class="nav-link-aten text-reset" id="ex_mov_oculares-tab" data-toggle="tab" href="#ex_mov_oculares" role="tab" aria-controls="ex_mov_oculares" aria-selected="false">Ex neurológico</a>
+                                                                                        <a class="nav-link-aten text-reset" id="presion_ocular-tab" data-toggle="tab" href="#presion_ocular" role="tab" aria-controls="presion_ocular" aria-selected="false">Presión Ocular</a>
+                                                                                        <a class="nav-link-aten text-reset" id="v_colores-tab" data-toggle="tab" href="#v_colores" role="tab" aria-controls="v_colores" aria-selected="false">Test Visión de Colores</a>
+                                                                                        <a class="nav-link-aten text-reset" id="campo_visual-tab" data-toggle="tab" href="#campo_visual" role="tab" aria-controls="campo_visual" aria-selected="false">Cover-Test</a>
+                                                                                        <a class="nav-link-aten text-reset" id="campo_visual-tab" data-toggle="tab" href="#campo_visual" role="tab" aria-controls="campo_visual" aria-selected="false">Estereopsis</a>
+                                                                                        <a class="nav-link-aten text-reset" id="campo_visual-tab" data-toggle="tab" href="#campo_visual" role="tab" aria-controls="campo_visual" aria-selected="false">Convergencia</a>
+                                                                                        <a class="nav-link-aten text-reset" id="campo_visual-tab" data-toggle="tab" href="#campo_visual" role="tab" aria-controls="campo_visual" aria-selected="false">Campo Visual</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-10">
+                                                                                    <div class="tab-content" id="v-pills-tabContent">
+                                                                                        <div class="tab-pane fade show active" id="agudeza_vis" role="tabpanel" aria-labelledby="agudeza_vis-tab">
+                                                                                            <div class="col-sm-12 col-md-12">
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Agudeza visual Subj.S/C OD</label>
+                                                                                                            <select name="agudeza_visual_subj_od" data-titulo="Agudeza visual Subj. OD"  data-seccion="Parámetros Generales" id="agudeza_visual_subj_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('agudeza_visual_subj_od','div_agudeza_visual_subj_od','obs_agudeza_visual_subj_od',2);">
+                                                                                                                <option   value="1">1.5</option>
+                                                                                                                <option   value="1">1.2</option>
+                                                                                                                <option selected  value="1">1</option>
+                                                                                                                <option   value="1">0.9</option>
+                                                                                                                <option   value="1">0.8</option>
+                                                                                                                <option   value="1">0.7</option>
+                                                                                                                <option   value="1">0.6</option>
+                                                                                                                <option   value="1">0.5</option>
+                                                                                                                <option   value="1">0.4</option>
+                                                                                                                <option   value="1">0.3</option>
+                                                                                                                <option   value="1">0.2</option>
+                                                                                                                <option   value="1">0.1</option>
+                                                                                                                <option   value="1">0.05</option>
+                                                                                                                <option   value="1">Cuenta Dedos</option>
+                                                                                                                <option   value="1">Mov manos</option>
+                                                                                                                <option   value="1">Luz buena proyección</option>
+                                                                                                                <option   value="1">Luz mala proyección</option>
+                                                                                                                <option   value="1">No percibe Luz</option>
+                                                                                                                <option value="2">Otros (anotar)</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_agudeza_visual_subj_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Agudeza visual Subj.S/C OD <i>(describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Agudeza visual Subj. OD" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_agudeza_visual_subj_od" id="obs_agudeza_visual_subj_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Agudeza visual Subj.S/C OI</label>
+                                                                                                            <select name="agudeza_visual_subj_od" data-titulo="Agudeza visual Subj. OD"  data-seccion="Parámetros Generales" id="agudeza_visual_subj_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('agudeza_visual_subj_od','div_agudeza_visual_subj_od','obs_agudeza_visual_subj_od',2);">
+                                                                                                                <option   value="1">1.5</option>
+                                                                                                                <option   value="1">1.2</option>
+                                                                                                                <option selected  value="1">1</option>
+                                                                                                                <option   value="1">0.9</option>
+                                                                                                                <option   value="1">0.8</option>
+                                                                                                                <option   value="1">0.7</option>
+                                                                                                                <option   value="1">0.6</option>
+                                                                                                                <option   value="1">0.5</option>
+                                                                                                                <option   value="1">0.4</option>
+                                                                                                                <option   value="1">0.3</option>
+                                                                                                                <option   value="1">0.2</option>
+                                                                                                                <option   value="1">0.1</option>
+                                                                                                                <option   value="1">0.05</option>
+                                                                                                                <option   value="1">Cuenta Dedos</option>
+                                                                                                                <option   value="1">Mov manos</option>
+                                                                                                                <option   value="1">Luz buena proyección</option>
+                                                                                                                <option   value="1">Luz mala proyección</option>
+                                                                                                                <option   value="1">No percibe Luz</option>
+                                                                                                                <option value="2">Otros (anotar)</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_agudeza_visual_subj_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Agudeza visual Subj.S/C OI <i>(describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Agudeza visual Subj. OI" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_agudeza_visual_subj_oi" id="obs_agudeza_visual_subj_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Agudeza visual C/C. OD</label>
+                                                                                                            <select name="agudeza_visual_subj_od" data-titulo="Agudeza visual Subj. OD"  data-seccion="Parámetros Generales" id="agudeza_visual_subj_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('agudeza_visual_subj_od','div_agudeza_visual_subj_od','obs_agudeza_visual_subj_od',2);">
+                                                                                                                <option   value="1">1.5</option>
+                                                                                                                <option   value="1">1.2</option>
+                                                                                                                <option selected  value="1">1</option>
+                                                                                                                <option   value="1">0.9</option>
+                                                                                                                <option   value="1">0.8</option>
+                                                                                                                <option   value="1">0.7</option>
+                                                                                                                <option   value="1">0.6</option>
+                                                                                                                <option   value="1">0.5</option>
+                                                                                                                <option   value="1">0.4</option>
+                                                                                                                <option   value="1">0.3</option>
+                                                                                                                <option   value="1">0.2</option>
+                                                                                                                <option   value="1">0.1</option>
+                                                                                                                <option   value="1">0.05</option>
+                                                                                                                <option   value="1">Cuenta Dedos</option>
+                                                                                                                <option   value="1">Mov manos</option>
+                                                                                                                <option   value="1">Luz buena proyección</option>
+                                                                                                                <option   value="1">Luz mala proyección</option>
+                                                                                                                <option   value="1">No percibe Luz</option>
+                                                                                                                <option value="2">Otros (anotar)</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_agudeza_visual_obj_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Agudeza visual Obj. OD <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Agudeza visual Obj. OD" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_agudeza_visual_obj_od" id="obs_agudeza_visual_obj_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Agudeza visual Obj. C/C OI</label>
+                                                                                                            <select name="agudeza_visual_subj_od" data-titulo="Agudeza visual Subj. OD"  data-seccion="Parámetros Generales" id="agudeza_visual_subj_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('agudeza_visual_subj_od','div_agudeza_visual_subj_od','obs_agudeza_visual_subj_od',2);">
+                                                                                                                <option   value="1">1.5</option>
+                                                                                                                <option   value="1">1.2</option>
+                                                                                                                <option selected  value="1">1</option>
+                                                                                                                <option   value="1">0.9</option>
+                                                                                                                <option   value="1">0.8</option>
+                                                                                                                <option   value="1">0.7</option>
+                                                                                                                <option   value="1">0.6</option>
+                                                                                                                <option   value="1">0.5</option>
+                                                                                                                <option   value="1">0.4</option>
+                                                                                                                <option   value="1">0.3</option>
+                                                                                                                <option   value="1">0.2</option>
+                                                                                                                <option   value="1">0.1</option>
+                                                                                                                <option   value="1">0.05</option>
+                                                                                                                <option   value="1">Cuenta Dedos</option>
+                                                                                                                <option   value="1">Mov manos</option>
+                                                                                                                <option   value="1">Luz buena proyección</option>
+                                                                                                                <option   value="1">Luz mala proyección</option>
+                                                                                                                <option   value="1">No percibe Luz</option>
+                                                                                                                <option value="2">Otros (anotar)</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_agudeza_visual_obj_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Agudeza visual Obj. OI <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Agudeza visual Obj. OI" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_agudeza_visual_obj_oi" id="obs_agudeza_visual_obj_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Autorrefractometría OD</label>
+                                                                                                            <select name="autorefracto_od" data-titulo="Autorrefractometría OD" data-seccion="Parámetros Generales" id="autorefracto_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('autorefracto_od','div_autorefracto_od','obs_autorefracto_od',2);">
+                                                                                                                <option selected  value="1">Normal</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_autorefracto_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Autorrefractometría OD</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Autorrefractometría OI</label>
+                                                                                                            <select name="autorefracto_oi" data-titulo="Autorrefractometría OI" data-seccion="Parámetros Generales" id="autorefracto_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('autorefracto_oi','div_autorefracto_oi','obs_autorefracto_oi',2);">
+                                                                                                                <option selected  value="1">Normal</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_autorefracto_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Autorrefractometría OI</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OI"data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_autorefracto_oi" id="obs_autorefracto_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Retinoscopía OD C/Ciclo</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_autorefracto_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Autorrefractometría OD</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Retinoscopía OI C/Ciclo</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_autorefracto_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Autorrefractometría OI</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OI"data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_autorefracto_oi" id="obs_autorefracto_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Retinoscopía OD S/Ciclo</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_autorefracto_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Autorrefractometría OD</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Retinoscopía OI S/Ciclo</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_autorefracto_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Autorrefractometría OI</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OI"data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_autorefracto_oi" id="obs_autorefracto_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
 
+                                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">ADD</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
+                                                                                                        </div>
+
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">DIP</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
+                                                                                                        </div>
+
+                                                                                                    </div><!--boton para abrir prisma  va a la receta de lentes retinoscopia i y d (solo las sin ciclo) el add el dip y el  prima si esta seleccionado para lentes de cerca y lejos intermedio va en blanco-->
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Prisma OD</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_autorefracto_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Autorrefractometría OD</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">RPrisma OI</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_autorefracto_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Autorrefractometría OI</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OI"data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_autorefracto_oi" id="obs_autorefracto_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>{{--
+                                                                                                <div class="form-row">
+                                                                                                    <div class="form-group col-md-12">
+                                                                                                        <label class="floating-label-activo-sm">Observaciones Examen Auditívo</label>
+                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Auditívo" data-seccion="Oídos Audición" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oidos" id="obs_ex_oidos"></textarea>
+                                                                                                    </div>
+                                                                                                </div> --}}
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="tab-pane fade " id="ex_mov_oculares" role="tabpanel" aria-labelledby="ex_mov_oculares-tab">
+                                                                                            <div class="col-sm-12 col-md-12">
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm">Movimientos Oculares</label>
+                                                                                                            <select name="mov_oculares" data-titulo="Movimientos Oculares" data-seccion="Parámetros Generales" id="mov_oculares" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mov_oculares','div_mov_oculares','obs_mov_oculares',2);">
+                                                                                                                <option selected  value="1">Normal</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_mov_oculares" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm">Movimientos Oculares</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Movimientos Oculares" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mov_oculares" id="obs_mov_oculares"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm">Pupilas</label>
+                                                                                                            <select name="mov_oculares" data-titulo="Movimientos Oculares" data-seccion="Parámetros Generales" id="mov_oculares_onj" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mov_oculares_onj','div_mov_oculares_onj','obs_mov_oculares_onj',2);">
+                                                                                                                <option selected  value="1">Isocoricas</option>
+                                                                                                                <option value="2">Anisocoricas</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_mov_oculares_onj" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm">Describir</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Movimientos Oculares" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mov_oculares_onj" id="obs_mov_oculares_onj"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm">Reflejo FM</label>
+                                                                                                            <select name="mov_oculares" data-titulo="Movimientos Oculares" data-seccion="Parámetros Generales" id="mov_oculares_rfm" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mov_oculares_rfm','div_mov_oculares_rfm','obs_mov_oculares_rfm',2);">
+                                                                                                                <option selected  value="1">Positivo</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_mov_oculares_rfm" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm">Describir</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Movimientos Oculares" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mov_oculares_rfm" id="obs_mov_oculares_rfm"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm">DPAR</label>
+                                                                                                            <select name="mov_oculares" data-titulo="Movimientos Oculares" data-seccion="Parámetros Generales" id="mov_oculares_dpar" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mov_oculares_dpar','div_mov_oculares_dpar','obs_mov_oculares_dpar',2);">
+                                                                                                                <option selected  value="1">Negativo</option>
+                                                                                                                <option value="2">Positivo</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_mov_oculares_dpar" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm">Describir</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Movimientos Oculares" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mov_oculares_dpar" id="obs_mov_oculares_dpar"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm">Diplopia</label>
+                                                                                                            <select name="mov_oculares" data-titulo="Movimientos Oculares" data-seccion="Parámetros Generales" id="mov_oculares_dipl" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mov_oculares_dipl','div_mov_oculares_dipl','obs_mov_oculares_dipl',2);">
+                                                                                                                <option selected  value="1">Negativo</option>
+                                                                                                                <option value="2">Positivo</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_mov_oculares_dipl" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm">Describir</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Movimientos Oculares" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mov_oculares_dipl" id="obs_mov_oculares_dipl"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+
+
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="tab-pane fade" id="presion_ocular" role="tabpanel" aria-labelledby="presion_ocular-tab">
+                                                                                            <div class="col-sm-12 col-md-12">
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Presión Ocular OD</label>
+                                                                                                            <select name="presion_ocular_od" data-titulo="Presion Ocular OD" id="presion_ocular_od" data-seccion="Parámetros Generales"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('presion_ocular_od','div_presion_ocular_od','obs_presion_ocular_od',2);">
+                                                                                                                <option selected  value="1">Normal</option>
+                                                                                                                <option value="2">Describir</option>
+                                                                                                                <option value="3">No Examinada</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_presion_ocular_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Presión Ocular<i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Presion Ocular OD" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_presion_ocular_od" id="obs_presion_ocular_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">P/O <i>(Valor)</i></label>
+                                                                                                            <input type="text" class="form-control form-control-sm" data-titulo="Obs. Valor OD" data-seccion="Parámetros Generales" name="valor_presion_ocular_od" id="valor_presion_ocular_od">
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Presión Ocular OI</label>
+                                                                                                            <select name="presion_ocular_oi" data-titulo="Presion_Ocular_OI" data-seccion="Parámetros Generales" id="presion_ocular_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('presion_ocular_oi','div_presion_ocular_oi','obs_presion_ocular_oi',2);">
+                                                                                                                <option selected  value="1">Normal</option>
+                                                                                                                <option value="2">Describir</option>
+                                                                                                                <option value="3">No Examinada</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_presion_ocular_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Presión Ocular <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Presion_Ocular_OI" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_presion_ocular_oi" id="obs_presion_ocular_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">P/I <i>(Valor)</i></label>
+                                                                                                            <input type="text" class="form-control form-control-sm" data-titulo="Obs. Valor OI" data-seccion="Parámetros Generales" name="valor_presion_ocular_oi" id="valor_presion_ocular_oi">
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="tab-pane fade" id="v_colores" role="tabpanel" aria-labelledby="v_colores-tab">
+                                                                                            <div class="col-sm-12 col-md-12">
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Visión de colores</label>
+                                                                                                            <select name="v_colores_test" data-titulo="Presion Ocular OD" id="v_colores_test" data-seccion="Parámetros Generales"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('v_colores_test','div_v_colores_test','obs_v_colores_test',2);">
+                                                                                                                <option selected  value="1">Normal</option>
+                                                                                                                <option value="2"> Anormal Describir</option>
+                                                                                                                <option value="3">No Examinada</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_v_colores_test" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Visión de colores<i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Presion Ocular OD" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_v_colores_test" id="obs_v_colores_test"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Tipos</label>
+                                                                                                            <select name="tipo_v_col" data-titulo="Presion_Ocular_OI" data-seccion="Parámetros Generales" id="tipo_v_col" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tipo_v_col','div_tipo_v_col','obs_tipo_v_col',2);">
+                                                                                                                <option selected  value="1">ISHIHARA</option>
+                                                                                                                <option value="2"> Otros</option>
+
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_tipo_v_col" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Otros Tipos <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Presion_Ocular_OI" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tipo_v_col" id="obs_tipo_v_col"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="tab-pane fade" id="campo_visual" role="tabpanel" aria-labelledby="campo_visual-tab">
+                                                                                            <div class="col-sm-12 col-md-12">
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Campo Visual OD</label>
+                                                                                                            <select name="campo_visual_od" data-titulo="Campo Visual OD" data-seccion="Parámetros Generales" id="campo_visual_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('campo_visual_od','div_campo_visual_od','obs_campo_visual_od',2);">
+                                                                                                                <option selected  value="1">Normal</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                                <option value="3">No Examinado</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_campo_visual_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Campo Visual OD</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Campo Visual OD" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_campo_visual_od" id="obs_campo_visual_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Campo Visual OI</label>
+                                                                                                            <select name="campo_visual_oi" data-titulo="Campo Visual OI" data-seccion="Parámetros Generales" id="campo_visual_oi"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('campo_visual_oi','div_campo_visual_oi','obs_campo_visual_oi',2);">
+                                                                                                                <option selected  value="1">Normal</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                                <option value="3">No Examinado</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_campo_visual_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Campo Visual OI</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Campo Visual OI" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_campo_visual_oi" id="obs_campo_visual_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group fill">
+                                                                                                            <label class="floating-label-activo-sm">Otros antecedentes importantes</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Otros Antecedentes Importantes" data-seccion="Parámetros Generales" id="campo_otros_ex_general" name="campo_otros_ex_general"  rows="1" onfocus="this.rows=4"  onblur="this.rows=1;"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="col-sm-4 col-md-4">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm">Carga ficha tipo</label>
+                                                                                        <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad" onchange="cargar_info_ficha_tipo_oft('select_ficha_tipo_especialidad','descripcion_ficha_tipo_especialidad');">
+                                                                                            <option value="">Seleccione</option>
+                                                                                            @if(!empty($fichaTipo['oft']))
+                                                                                                @foreach ($fichaTipo['oft'] as $ft )
+                                                                                                    <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
+                                                                                                @endforeach
+                                                                                            @endif
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-4 col-md-4">
+                                                                                    <span id="descripcion_ficha_tipo_especialidad"></span>
+                                                                                </div>
+
+                                                                                <div class="col-sm-4 col-md-4 mb-3">
+                                                                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="abrir_modal_guardar_tipo('form-oft-g','registro_f_t_oft_detalle','oft_g');"><i class="fas fa-save"></i> Guardar nueva ficha tipo</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!--EXAMEN  BIOMICROSCOPIA-->
+                                                                        <div class="tab-pane fade show" id="examen_biomicroscop" role="tabpanel" aria-labelledby="examen_biomicroscop-tab">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-2">
+                                                                                    <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                                                                        <a class="nav-link-aten-red text-reset active" id="bio_ojo_der-tab" data-toggle="tab" href="#bio_ojo_der" role="tab" aria-controls="bio_ojo_der" aria-selected="true">Ojo Derecho</a>
+                                                                                        <a class="nav-link-aten text-reset" id="bio_ojo_izq-tab" data-toggle="tab" href="#bio_ojo_izq" role="tab" aria-controls="bio_ojo_izq" aria-selected="false">Ojo Izquierdo</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-10">
+                                                                                    <div class="tab-content" id="v-pills-tabContent">
+                                                                                        <div class="tab-pane fade show active" id="bio_ojo_der" role="tabpanel" aria-labelledby="bio_ojo_der-tab"><br>
+                                                                                            <div class="col-sm-12 col-md-12">
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Párpados</label>
+                                                                                                            <select name="parpbiood" data-titulo="Párpados OD" data-seccion="Biomicroscopía" id="parpbiood" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('parpbiood','div_parpbiood','obs_parpbiood',2);">
+                                                                                                                <option selected  value="1">Normales</option>
+                                                                                                                <option value="2">Anormales</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_parpbiood" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Párpados <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Bio Párpados OD" data-seccion="Biomicroscopía"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_parpbiood" id="obs_parpbiood"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Conjuntivas</label>
+                                                                                                            <select name="conjuntiva_bio_od" data-titulo="Conjuntivas OB" data-seccion="Biomicroscopía" id="conjuntiva_bio_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('conjuntiva_bio_od','div_conjuntiva_bio_od','obs_conjuntiva_bio_od',2);">
+                                                                                                                <option selected  value="1">Normal</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_conjuntiva_bio_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Conjuntivas <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Bio Conjuntivas OD" data-seccion="Biomicroscopía"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_conjuntiva_bio_od" id="obs_conjuntiva_bio_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Córneas</label>
+                                                                                                            <select name="biocornea_od" data-titulo="Córneas OD" id="biocornea_od" data-seccion="Biomicroscopía"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('biocornea_od','div_biocornea_od','obs_biocornea_od',2);">
+                                                                                                                <option selected  value="1">Claras y completamente epitelizadas</option>
+                                                                                                                <option value="2">Anormales</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_biocornea_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Córneas</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Córneas bio OD" data-seccion="Biomicroscopía"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_biocornea_od" id="obs_biocornea_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Camara Anterior</label>
+                                                                                                            <select name="camara_ant_od" data-titulo="Camara anterior OD" data-seccion="Biomicroscopía"   id="camara_ant_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('camara_ant_od','div_camara_ant_od','obs_camara_ant_od',2);">
+                                                                                                                <option selected  value="1">Normal</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_camara_ant_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Camara Anterior <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Camara anterior OD" data-seccion="Biomicroscopía"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_camara_ant_od" id="obs_camara_ant_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Tyndall</label>
+                                                                                                            <select name="tyndall_od" data-titulo="Tyndall OD" data-seccion="Biomicroscopía"   id="tyndall_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tyndall_od','div_tyndall_od','obs_tyndall_od',2);">
+                                                                                                                <option selected  value="1">Negativo</option>
+                                                                                                                <option value="2">Positivo</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_tyndall_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Tyndall</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Tyndall OD" data-seccion="Biomicroscopía"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tyndall_od" id="obs_tyndall_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Cristalino</label>
+                                                                                                            <select name="cristalino_bio_od" data-titulo="Cristalino OD" data-seccion="Biomicroscopía"   id="cristalino_bio_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cristalino_bio_od','div_cristalino_bio_od','obs_cristalino_bio_od',2);">
+                                                                                                                <option selected  value="1">Claro</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_cristalino_bio_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Cristalino</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Cristalino OD"  data-seccion="Biomicroscopía"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cristalino_bio_od" id="obs_cristalino_bio_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="tab-pane fade " id="bio_ojo_izq" role="tabpanel" aria-labelledby="bio_ojo_izq-tab">
+                                                                                            <br>
+                                                                                            <div class="col-sm-12 col-md-12">
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Párpados</label>
+                                                                                                            <select name="parpbiooi" data-titulo="Párpados OI" data-titulo="Párpados OI" data-seccion="Biomicroscopía"  id="parpbiooi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('parpbiooi','div_parpbiooi','obs_parpbiooi',2);">
+                                                                                                                <option selected  value="1">Normales</option>
+                                                                                                                <option value="2">Anormales</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_parpbiooi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Párpados <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Párpados OI" data-seccion="Biomicroscopía"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_parpbiooi" id="obs_parpbiooi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Conjuntivas</label>
+                                                                                                            <select name="conjuntiva_bio_oi" data-titulo="Conjuntivas OI" data-seccion="Biomicroscopía"  id="conjuntiva_bio_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('conjuntiva_bio_oi','div_conjuntiva_bio_oi','obs_conjuntiva_bio_oi',2);">
+                                                                                                                <option selected  value="1">Normal</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_conjuntiva_bio_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Conjuntivas <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Bio Conjuntivas OI" data-seccion="Biomicroscopía" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_conjuntiva_bio_oi" id="obs_conjuntiva_bio_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue t-blue">Córneas</label>
+                                                                                                            <select name="biocornea_oi" data-titulo="Córneas OI" data-titulo="Córneas OI" data-seccion="Biomicroscopía" id="biocornea_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('biocornea_oi','div_biocornea_oi','obs_biocornea_oi',3);">
+                                                                                                                <option value="1">Claras y completamente epitelizadas</option>
+                                                                                                                <option value="2">Anormales</option>
+                                                                                                                <option value="3">Otros</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_biocornea_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Córneas</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Córneas OI" data-seccion="Biomicroscopía"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_biocornea_oi" id="obs_biocornea_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Camara Anterior</label>
+                                                                                                            <select name="camara_ant_oi" data-titulo="Camara Anterior OI" data-seccion="Biomicroscopía" id="camara_ant_oi"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('camara_ant_oi','div_camara_ant_oi','obs_camara_ant_oi',2);">
+                                                                                                                <option selected  value="1">Normal</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_camara_ant_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Camara Anterior <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Camara Anterior OI" data-seccion="Biomicroscopía" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_camara_ant_oi" id="obs_camara_ant_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Tyndall</label>
+                                                                                                            <select name="tyndall_oi"  data-titulo="Tyndall OI" data-seccion="Biomicroscopía" id="tyndall_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tyndall_oi','div_tyndall_oi','obs_tyndall_oi',2);">
+                                                                                                                <option selected  value="1">Negativo</option>
+                                                                                                                <option value="2">Positivo</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_tyndall_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Tyndall</label>
+                                                                                                            <textarea class="form-control form-control-sm"  data-titulo="Obs. Tyndall OI" data-seccion="Biomicroscopía" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tyndall_oi" id="obs_tyndall_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Cristalino</label>
+                                                                                                            <select name="cristalino_bio_oi"  data-titulo="Cristalino OI" data-seccion="Biomicroscopía" id="cristalino_bio_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cristalino_bio_oi','div_cristalino_bio_oi','obs_cristalino_bio_oi',2);">
+                                                                                                                <option selected  value="1">Claro</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_cristalino_bio_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Cristalino</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Cristalino OI" data-seccion="Biomicroscopía"rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cristalino_bio_oi" id="obs_cristalino_bio_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <div class="form-group" id="div_tyndall_oi" >
+                                                                                            <label class="floating-label-activo-sm t-blue">observaciones</label>
+                                                                                            <textarea class="form-control form-control-sm"  data-titulo="Obs. Tyndall OI" data-seccion="Biomicroscopía" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tyndall_oi" id="obs_tyndall_oi"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            <br>
+                                                                            <div class="row">
+                                                                                <div class="col-sm-4 col-md-4">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm">Carga ficha tipo</label>
+                                                                                        <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad_bio" onchange="cargar_info_ficha_tipo_oft_bio('select_ficha_tipo_especialidad_bio','descripcion_ficha_tipo_especialidad_bio');">
+                                                                                            <option value="">Seleccione</option>
+                                                                                            @if(!empty($fichaTipo['bio']))
+                                                                                                @foreach ($fichaTipo['bio'] as $ft )
+                                                                                                    <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
+                                                                                                @endforeach
+                                                                                            @endif
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-4 col-md-4">
+                                                                                    <span id="descripcion_ficha_tipo_especialidad_bio"></span>
+                                                                                </div>
+
+                                                                                <div class="col-sm-4 col-md-4 mb-3">
+                                                                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="abrir_modal_guardar_tipo('form-bio','registro_f_t_oft_detalle','bio');"><i class="fas fa-save"></i> Guardar nueva biomicroscopía tipo</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <!--EXAMEN  FONDO DE OJO-->
+                                                                        <div class="tab-pane fade show" id="fondo_ojo" role="tabpanel" aria-labelledby="fondo_ojo-tab">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-2">
+                                                                                    <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                                                                        <a class="nav-link-aten-red text-reset active" id="fondo_ojo_der-tab" data-toggle="tab" href="#fondo_ojo_der" role="tab" aria-controls="fondo_ojo_der" aria-selected="true">Ojo Derecho</a>
+                                                                                        <a class="nav-link-aten text-reset" id="fondo_ojo_izq-tab" data-toggle="tab" href="#fondo_ojo_izq" role="tab" aria-controls="fondo_ojo_izq" aria-selected="false">Ojo Izquierdo</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-12 col-md-10 col-xl-10">
+                                                                                    <div class="tab-content" id="v-pills-tabContent">
+                                                                                        <div class="tab-pane fade show active" id="fondo_ojo_der" role="tabpanel" aria-labelledby="fondo_ojo_der-tab"><br>
+                                                                                            <div class="col-sm-12 col-md-12">
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Papilas</label>
+                                                                                                            <select name="papilas_fo_od" data-titulo="Papilas" data-seccion="Fondo de Ojo"  id="papilas_fo_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('papilas_fo_od','div_papilas_fo_od','obs_papilas_fo_od',2);">
+                                                                                                                <option selected  value="1">Normales</option>
+                                                                                                                <option value="2">Anormales</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_papilas_fo_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Papilas <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Papilas OD"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_papilas_fo_od" id="obs_papilas_fo_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Excavación</label>
+                                                                                                            <select name="excavacion_fo_od" data-titulo="Excavación OD" data-seccion="Fondo de Ojo"  id="excavacion_fo_od" style="color:rgb(241, 13, 74);font-weight: bold;" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('excavacion_fo_od','div_excavacion_fo_od','obs_excavacion_fo_od',12);">
+                                                                                                                <option value="1">0</option>
+                                                                                                                <option value="2">0.1</option>
+                                                                                                                <option value="3">0.2</option>
+                                                                                                                <option selected value="4">0.3</option>
+                                                                                                                <option value="5">0.4</option>
+                                                                                                                <option value="6">0.5</option>
+                                                                                                                <option value="7">0.6</option>
+                                                                                                                <option value="8">0.7</option>
+                                                                                                                <option value="9">0.8</option>
+                                                                                                                <option value="10">0.9</option>
+                                                                                                                <option value="11">Total</option>
+                                                                                                                <option value="12">Otros</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_excavacion_fo_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Excavación <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Excavacion OD" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_excavacion_fo_od" id="obs_excavacion_fo_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Bordes</label>
+                                                                                                            <select name="bordes_od" data-titulo="Bordes_OD" data-seccion="Fondo de Ojo"  id="bordes_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('bordes_od','div_bordes_od','obs_bordes_od',2);">
+                                                                                                                <option value="1">Bordes netos y Normales</option>
+                                                                                                                <option value="2">Anormales</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_bordes_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Bordes</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Bordes OD"  data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_bordes_od" id="obs_bordes_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Máculas</label>
+                                                                                                            <select name="maculas_fo_od" data-titulo="Maculas_OD" data-seccion="Fondo de Ojo"  id="maculas_fo_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('maculas_fo_od','div_maculas_fo_od','obs_maculas_fo_od',2);">
+                                                                                                                <option selected  value="1">Normales</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_maculas_fo_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Máculas (describir)</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Maculas OD"  data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_maculas_fo_od" id="obs_maculas_fo_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Vasos</label>
+                                                                                                            <select name="vasos_fo_od" data-titulo="Vasos_OD" data-seccion="Fondo de Ojo"id="vasos_fo_od"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('vasos_fo_od','div_vasos_fo_od','obs_vasos_fo_od',2);">
+                                                                                                                <option selected  value="1">Normal</option>
+                                                                                                                <option value="2">Anormal</option>vasos_fo_od
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_vasos_fo_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Vasos</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Vasos OD" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_vasos_fo_od" id="obs_vasos_fo_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-red">Periféria</label>
+                                                                                                            <select name="periferia_fo_od" data-titulo="Periferia_OD" data-seccion="Fondo de Ojo" id="periferia_fo_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('periferia_fo_od','div_periferia_fo_od','obs_periferia_fo_od',2);">
+                                                                                                                <option selected  value="1">Sana</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_periferia_fo_od" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-red">Periféria</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Periferia OD" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_periferia_fo_od" id="obs_periferia_fo_od"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="col-sm-12 col-md-12">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm">Otros Antecedentes Importantes</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Otros Antec. Importantes OD" data-seccion="Fondo de Ojo" id="campo_fo_otros_od" name="campo_fo_otros_od"  rows="1" onfocus="this.rows=2"  onblur="this.rows=1;"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="tab-pane fade " id="fondo_ojo_izq" role="tabpanel" aria-labelledby="fondo_ojo_izq-tab">
+                                                                                            <br>
+                                                                                            <div class="col-sm-12 col-md-12">
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Papilas</label>
+                                                                                                            <select name="papilas_fo_oi" data-titulo="Papilas OI" id="papilas_fo_oi" data-seccion="Fondo de Ojo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('papilas_fo_oi','div_papilas_fo_oi','obs_papilas_fo_oi',2);">
+                                                                                                                <option selected  value="1">Normales</option>
+                                                                                                                <option value="2">Anormales</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_papilas_fo_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Papilas <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Papilas OI" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_papilas_fo_oi" id="obs_papilas_fo_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Excavación</label>
+                                                                                                            <select name="excavacion_fo_oi" data-titulo="Excavacion OI" data-seccion="Fondo de Ojo" id="excavacion_fo_oi" style="color:rgb(41, 90, 189);font-weight: bold;" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('excavacion_fo_oi','div_excavacion_fo_oi','obs_excavacion_fo_oi',12);">
+                                                                                                                <option value="1">0</option>
+                                                                                                                <option value="2">0.1</option>
+                                                                                                                <option value="3">0.2</option>
+                                                                                                                <option selected value="4">0.3</option>
+                                                                                                                <option value="5">0.4</option>
+                                                                                                                <option value="6">0.5</option>
+                                                                                                                <option value="7">0.6</option>
+                                                                                                                <option value="8">0.7</option>
+                                                                                                                <option value="9">0.8</option>
+                                                                                                                <option value="10">0.9</option>
+                                                                                                                <option value="11">Total</option>
+                                                                                                                <option value="12">Otros</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_excavacion_fo_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Excavación <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Excavacion OI" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_excavacion_fo_oi" id="obs_excavacion_fo_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Bordes</label>
+                                                                                                            <select name="bordes_oi" data-titulo="Bordes_OI" data-seccion="Fondo de Ojo" id="bordes_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('bordes_oi','div_bordes_oi','obs_bordes_oi',2);">
+                                                                                                                <option value="1">Bordes netos y Normales</option>
+                                                                                                                <option value="2">Anormales</option>
+
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_bordes_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue" >Bordes</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Bordes OI" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_bordes_oi" id="obs_bordes_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm" t-blue  >Máculas</label>
+                                                                                                            <select name="maculas_fo_oi" data-titulo="Maculas OI" id="maculas_fo_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('maculas_fo_oi','div_maculas_fo_oi','obs_maculas_fo_oi',2);">
+                                                                                                                <option selected  value="1">Normales</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_maculas_fo_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue" >Máculas <i>(Describir)</i></label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Maculas OI" data-seccion="Fondo de Ojo" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_maculas_fo_oi" id="obs_maculas_fo_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Vasos</label>
+                                                                                                            <select name="vasos_fo_oi" data-titulo="Vasos_OI" id="vasos_fo_oi" data-seccion="Fondo de Ojo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('vasos_fo_oi','div_vasos_fo_oi','obs_vasos_fo_oi',2);">
+                                                                                                                <option selected  value="1">Normal</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_vasos_fo_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Vasos</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Vasos OI" data-seccion="Fondo de Ojo"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_vasos_fo_oi" id="obs_vasos_fo_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Periféria</label>
+                                                                                                            <select name="periferia_fo_oi" data-titulo="Periferia OI" data-seccion="Fondo de Ojo" id="periferia_fo_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('periferia_fo_oi','div_periferia_fo_oi','obs_periferia_fo_oi',2);">
+                                                                                                                <option selected  value="1">Sana</option>
+                                                                                                                <option value="2">Anormal</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="div_periferia_fo_oi" style="display:none;">
+                                                                                                            <label class="floating-label-activo-sm t-blue">Periféria</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Periferia OI" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_periferia_fo_oi" id="obs_periferia_fo_oi"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-12">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm">Otros Antecedentes Importantes</label>
+                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Otros Antec. Importantes OI" data-seccion="Fondo de Ojo" id="campo_fo_otros_oi" name="campo_fo_otros_oi"  rows="1" onfocus="this.rows=2"  onblur="this.rows=1;"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <br>
+                                                                            <div class="row">
+                                                                                <div class="col-sm-4 col-md-4">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm">Carga ficha tipo</label>
+                                                                                        <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad_of" onchange="cargar_info_ficha_tipo_oft_fo('select_ficha_tipo_especialidad_of','descripcion_ficha_tipo_especialidad_of');">
+                                                                                            <option value="">Seleccione</option>
+                                                                                            @if(!empty($fichaTipo['fo']))
+                                                                                                @foreach ($fichaTipo['fo'] as $ft )
+                                                                                                    <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
+                                                                                                @endforeach
+                                                                                            @endif
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-4 col-md-4">
+                                                                                    <span id="descripcion_ficha_tipo_especialidad_of"></span>
+                                                                                </div>
+
+                                                                                <div class="col-sm-4 col-md-4 mb-3">
+                                                                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="abrir_modal_guardar_tipo('form-fo','registro_f_t_oft_detalle','fo');"><i class="fas fa-save"></i> Guardar nuevo fondo de ojo tipo</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!--PLAN DE TRATAMIENTO-->
+                                                                        <div class="tab-pane fade show" id="ex_plan_tto" role="tabpanel" aria-labelledby="ex_plan_tto-tab">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                    <h6 class="f-16 text-c-blue mb-3">Plan de Tratamiento</h6>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-row">
+                                                                                <div class="form-group col-md-3">
+                                                                                    <div class="row">
+                                                                                        <div class="col-sm-12">
+                                                                                            <div class="form-group">
+                                                                                                <input type="hidden" name="tratamiento" id="tratamiento" value="">
+                                                                                                <div class="switch switch-success d-inline m-r-10">
+                                                                                                    <input type="checkbox" id="tratamiento_check" name="tratamiento_check" value="" />
+                                                                                                    <label for="tratamiento_check" class="cr"></label>
+                                                                                                </div>
+                                                                                                <label>Solo Tratamiento Médico</label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group col-md-3">
+                                                                                    <div class="row">
+                                                                                        <div class="col-sm-12">
+                                                                                            <div class="form-group">
+                                                                                                <input type="hidden" name="lentes" id="lentes" value="">
+                                                                                                <div class="switch switch-success d-inline m-r-10">
+                                                                                                    <input type="checkbox" id="lentes_check" name="lentes_check" value="" />
+                                                                                                    <label for="lentes_check" class="cr"></label>
+                                                                                                </div>
+                                                                                                <label>Lentes</label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group col-md-3">
+                                                                                    <div class="row">
+                                                                                        <div class="col-sm-12">
+                                                                                            <div class="form-group">
+                                                                                                <input type="hidden" name="procedimiento" id="procedimiento" value="">
+                                                                                                <div class="switch switch-success d-inline m-r-10">
+                                                                                                    <input type="checkbox" id="procedimiento_check" name="procedimiento_check" value="" />
+                                                                                                    <label for="procedimiento_check" class="cr"></label>
+                                                                                                </div>
+                                                                                                <label>Procedimiento</label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group col-md-3">
+                                                                                    <div class="row">
+                                                                                        <div class="col-sm-12">
+                                                                                            <div class="form-group">
+                                                                                                <input type="hidden" name="cirugia" id="cirugia" value="">
+                                                                                                <div class="switch switch-success d-inline m-r-10">
+                                                                                                    <input type="checkbox" id="cirugia_check" name="cirugia_check" value="" />
+                                                                                                    <label for="cirugia_check" class="cr"></label>
+                                                                                                </div>
+                                                                                                <label>Cirugía</label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-row">
+                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm">Obs. Plan de tratamiento</label>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Plan de tratamiento" data-seccion=" Plan de tratamiento" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_plan_tratamiento" id="obs_plan_tratamiento"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!--HOSPITALIZACION-->
+                                                                        @include('general.hospitalizacion.hospitalizar')
+                                                                        {{--  <div class="tab-pane fade show" id="in_hosp_oftalmo" role="tabpanel" aria-labelledby="in_hosp_oftalmo-tab">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                    <h6 class="f-16 text-c-blue mb-3">Detalle hospitalización</h6>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-row">
+                                                                                <div class="col-md-4">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm">Hospitalizar En:</label>
+                                                                                        <select name="hospen_cg" id="hospen_cg" data-titulo="Hospitalización" data-seccion="Hospitalizacion" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('hospen_cg','div_detalle_hospen_cg','obs_hospen_cg',3);limpiar_hospitalizacion('hospen_cg',0,)">
+                                                                                            <option value="0" selected>No</option>
+                                                                                            <option value="1">Clínica</option>
+                                                                                            <option value="2">Hospital</option>
+                                                                                            <option value="3">Otro Describir</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="col-md-12" id="div_detalle_hospen_cg" style="display:none">
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm">Otro Lugar Describir</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Es Urgencia Qx.?" data-seccion="Hospitalizacion" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_hospen_cg" id="obs_hospen_cg"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-4">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm">Servicio</label>
+                                                                                        <select name="hosp_enserv_cg" id="hosp_enserv_cg" data-titulo="En Servicio" data-seccion="Hospitalizacion" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('hosp_enserv_cg','div_detalle_hosp_enserv_cg','obs_hosp_enserv_cg',4);">
+                                                                                            <option value="1" selected>Servicio Cirugía</option>
+                                                                                            <option value="2">UTI</option>
+                                                                                            <option value="3">Servicio de urgencia</option>
+                                                                                            <option value="4">Otro</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="col-md-12" id="div_detalle_hosp_enserv_cg" style="display:none">
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm">Otro Servicio Describir</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. En Servicio" data-seccion="Hospitalizacion" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_hosp_enserv_cg" id="obs_hosp_enserv_cg"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                </div>
+                                                                                <div class="col-md-4">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm">Otro Tratamiento</label>
+                                                                                        <select name="otro_tto_cg" id="otro_tto_cg" data-titulo="Otro Tratamiento" data-seccion="Hospitalizacion" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('otro_tto_cg','div_detalle_otro_tto_cg','obs_otro_tto_cg',2);">
+                                                                                            <option value="1" selected>No</option>
+                                                                                            <option value="2">Si</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="col-md-12" id="div_detalle_otro_tto_cg" style="display:none">
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm">Otro Tratamiento Describir</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Otro Tratamiento" data-seccion="Hospitalizacion" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_otro_tto_cg" id="obs_otro_tto_cg"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-row">
+                                                                                <div class="form-group col-md-12">
+                                                                                    <label class="floating-label-activo-sm">Observaciones a la Hospitalización</label>
+                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Hospitalizacion" data-seccion="Hospitalizacion" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_hospitalizacion_cg" id="obs_hospitalizacion_cg"></textarea>
+                                                                                </div>
+                                                                                <div class="form-group col-md-6">
+                                                                                    <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingresohosp()";<i class="feather icon-save"></i> Orden de Hospitalización </button>
+                                                                                </div>
+                                                                                <div class="form-group col-md-6">
+                                                                                    <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="sol_pabellon()";<i class="feather icon-save"></i> Solicitar Pabellón</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>  --}}
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm" style="color:#144799;">Presión Ocular OI</label>
-                                                                    <select name="presion_ocular_oi" data-titulo="Presion_Ocular_OI" data-seccion="Parámetros Generales" id="presion_ocular_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('presion_ocular_oi','div_presion_ocular_oi','obs_presion_ocular_oi',2);">
-                                                                        <option selected  value="1">Normal</option>
-                                                                        <option value="2">Anormal</option>
-                                                                        <option value="3">No Examinada</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group" id="div_presion_ocular_oi" style="display:none;">
-                                                                    <label class="floating-label-activo-sm"  style="color:#295aa8;" >Presión Ocular <i>(describir)</i></label>
-                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Presion_Ocular_OI" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_presion_ocular_oi" id="obs_presion_ocular_oi"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-3">
-                                                                <div class="form-group">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;"  >P/I (Valor)</label>
-                                                                        <input type="text" class="form-control form-control-sm" data-titulo="Obs. Valor OI" data-seccion="Parámetros Generales" name="valor_presion_ocular_oi" id="valor_presion_ocular_oi">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Campo Visual OD</label>
-                                                                    <select name="campo_visual_od" data-titulo="Campo Visual OD" data-seccion="Parámetros Generales" id="campo_visual_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('campo_visual_od','div_campo_visual_od','obs_campo_visual_od',2);">
-                                                                        <option selected  value="1">Normal</option>
-                                                                        <option value="2">Anormal</option>
-                                                                        <option value="3">No Examinado</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group" id="div_campo_visual_od" style="display:none;">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;">Campo Visual OD</label>
-                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Campo Visual OD" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_campo_visual_od" id="obs_campo_visual_od"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;" >Campo Visual OI</label>
-                                                                    <select name="campo_visual_oi" data-titulo="Campo Visual OI" data-seccion="Parámetros Generales" id="campo_visual_oi"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('campo_visual_oi','div_campo_visual_oi','obs_campo_visual_oi',2);">
-                                                                        <option selected  value="1">Normal</option>
-                                                                        <option value="2">Anormal</option>
-                                                                        <option value="3">No Examinado</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group" id="div_campo_visual_oi" style="display:none;">
-                                                                    <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;" >Campo Visual OI</label>
-                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Campo Visual OI" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_campo_visual_oi" id="obs_campo_visual_oi"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-6">
-                                                                <div class="form-group fill">
-                                                                    <label class="floating-label-activo-sm">Otros antecedentes importantes</label>
-                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Otros Antecedentes Importantes" data-seccion="Parámetros Generales" id="campo_otros_ex_general" name="campo_otros_ex_general"  rows="1" onfocus="this.rows=4"  onblur="this.rows=1;"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="text-center col-md-12 mb-3">
-                                                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="abrir_modal_guardar_tipo('form-oft-g','registro_f_t_oft_detalle','oft_g');"><i class="fas fa-save"></i> Guardar nueva ficha tipo</button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- control post qx -->
+                                        @include('general.secciones_ficha.cirugia_control.control_cirugia_general')
+                                       <!-- cierre control post qx -->
+										<!--FORMULARIO / SIGNOS VITALES Y OTROS-->
+                                        @include('atencion_medica.generales.signos_vitales')
 
-                                        <!--Biomicroscopía-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="bio_esp_oftalmo">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#bio_oftalmo" aria-expanded="false" aria-controls="bio_oftalmo">
-                                                       Biomicroscopía
-                                                    </button>
-                                                </div>
-                                                <div id="bio_oftalmo" class="collapse show" aria-labelledby="bio_oftalmo" data-parent="#bio_oftalmo">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Carga ficha tipo</label>
-                                                                    <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad_bio" onchange="cargar_info_ficha_tipo_oft_bio('select_ficha_tipo_especialidad_bio','descripcion_ficha_tipo_especialidad_bio');">
-                                                                        <option value="">Seleccione</option>
-                                                                        @if(!empty($fichaTipo['bio']))
-                                                                            @foreach ($fichaTipo['bio'] as $ft )
-                                                                                <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
-                                                                            @endforeach
-                                                                        @endif
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <span id="descripcion_ficha_tipo_especialidad_bio"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div id="form-bio">
-                                                            <div class="form-row">
-                                                                <div class="col-md-12">
-                                                                    <h6 style="color:rgb(241, 13, 74);font-weight: bold;">OJO DERECHO</h6>
-                                                                </div>
-                                                                <hr>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Párpados</label>
-                                                                        <select name="parpbiood" data-titulo="Párpados OD" data-seccion="Biomicroscopía" id="parpbiood" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('parpbiood','div_parpbiood','obs_parpbiood',2);">
-                                                                            <option selected  value="1">Normales</option>
-                                                                            <option value="2">Anormales</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_parpbiood" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Párpados (describir)</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Bio Párpados OD" data-seccion="Biomicroscopía"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_parpbiood" id="obs_parpbiood"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;">Conjuntivas</label>
-                                                                        <select name="conjuntiva_bio_od" data-titulo="Conjuntivas OB" data-seccion="Biomicroscopía" id="conjuntiva_bio_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('conjuntiva_bio_od','div_conjuntiva_bio_od','obs_conjuntiva_bio_od',2);">
-                                                                            <option selected  value="1">Normal</option>
-                                                                            <option value="2">Anormal</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_conjuntiva_bio_od" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;">Conjuntivas (describir)</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Bio Conjuntivas OD" data-seccion="Biomicroscopía"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_conjuntiva_bio_od" id="obs_conjuntiva_bio_od"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Córneas</label>
-                                                                        <select name="biocornea_od" data-titulo="Córneas OD" id="biocornea_od" data-seccion="Biomicroscopía"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('biocornea_od','div_biocornea_od','obs_biocornea_od',3);">
-                                                                            <option value="1">Claras y completamente epitelizadas</option>
-                                                                            <option value="2">Anormales</option>
-                                                                            <option value="3">Otros</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_biocornea_od" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Córneas</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Córneas bio OD" data-seccion="Biomicroscopía"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_biocornea_od" id="obs_biocornea_od"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm"  style="color:rgb(241, 13, 74);font-weight: bold;" >Camara Anterior</label>
-                                                                        <select name="camara_ant_od" data-titulo="Camara anterior OD" data-seccion="Biomicroscopía"   id="camara_ant_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('camara_ant_od','div_camara_ant_od','obs_camara_ant_od',2);">
-                                                                            <option selected  value="1">Normal</option>
-                                                                            <option value="2">Anormal</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_camara_ant_od" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;"  >Camara Anterior (describir)</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Camara anterior OD" data-seccion="Biomicroscopía"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_camara_ant_od" id="obs_camara_ant_od"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;">Tyndall</label>
-                                                                        <select name="tyndall_od" data-titulo="Tyndall OD" data-seccion="Biomicroscopía"   id="tyndall_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tyndall_od','div_tyndall_od','obs_tyndall_od',2);">
-                                                                            <option selected  value="1">Normal</option>
-                                                                            <option value="2">Anormal</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_tyndall_od" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;">Tyndall</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Tyndall OD" data-seccion="Biomicroscopía"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tyndall_od" id="obs_tyndall_od"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Cristalino</label>
-                                                                        <select name="cristalino_bio_od" data-titulo="Cristalino OD" data-seccion="Biomicroscopía"   id="cristalino_bio_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cristalino_bio_od','div_cristalino_bio_od','obs_cristalino_bio_od',2);">
-                                                                            <option selected  value="1">Normal</option>
-                                                                            <option value="2">Anormal</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_cristalino_bio_od" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Cristalino</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Cristalino OD"  data-seccion="Biomicroscopía"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cristalino_bio_od" id="obs_cristalino_bio_od"></textarea>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-sm-12">
-                                                                    <div class="form-group fill">
-                                                                        <label class="floating-label-activo-sm">Otros antecedentes importantes</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Otros Antecedentes Importantes OD" data-seccion="Biomicroscopía" id="campo_otros_bio_od" name="campo_otros_bio_od"  rows="1" onfocus="this.rows=2"  onblur="this.rows=1;"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-row">
-                                                                <div class="col-md-12">
-                                                                    <h6 style="color:rgb(12, 122, 241);font-weight: bold;">OJO IZQUIERDO</h6>
-                                                                </div>
-                                                                <hr>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(12, 122, 241);font-weight: bold;" >Párpados</label>
-                                                                        <select name="parpbiooi" data-titulo="Párpados OI" data-titulo="Párpados OI" data-seccion="Biomicroscopía"  id="parpbiooi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('parpbiooi','div_parpbiooi','obs_parpbiooi',2);">
-                                                                            <option selected  value="1">Normales</option>
-                                                                            <option value="2">Anormales</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_parpbiooi" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(12, 122, 241);font-weight: bold;" >Párpados (describir)</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Párpados OI" data-seccion="Biomicroscopía"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_parpbiooi" id="obs_parpbiooi"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(12, 122, 241);font-weight: bold;">Conjuntivas</label>
-                                                                        <select name="conjuntiva_bio_oi" data-titulo="Conjuntivas OI" data-seccion="Biomicroscopía"  id="conjuntiva_bio_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('conjuntiva_bio_oi','div_conjuntiva_bio_oi','obs_conjuntiva_bio_oi',2);">
-                                                                            <option selected  value="1">Normal</option>
-                                                                            <option value="2">Anormal</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_conjuntiva_bio_oi" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(12, 122, 241);font-weight: bold;">Conjuntivas (describir)</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Bio Conjuntivas OI" data-seccion="Biomicroscopía" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_conjuntiva_bio_oi" id="obs_conjuntiva_bio_oi"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(12, 122, 241);font-weight: bold;" >Córneas</label>
-                                                                        <select name="biocornea_oi" data-titulo="Córneas OI" data-titulo="Córneas OI" data-seccion="Biomicroscopía" id="biocornea_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('biocornea_oi','div_biocornea_oi','obs_biocornea_oi',3);">
-                                                                            <option value="1">Claras y completamente epitelizadas</option>
-                                                                            <option value="2">Anormales</option>
-                                                                            <option value="3">Otros</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_biocornea_oi" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(12, 122, 241);font-weight: bold;">Córneas</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Córneas OI" data-seccion="Biomicroscopía"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_biocornea_oi" id="obs_biocornea_oi"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm"  style="color:rgb(12, 122, 241);font-weight: bold;" >Camara Anterior</label>
-                                                                        <select name="camara_ant_oi" data-titulo="Camara Anterior OI" data-seccion="Biomicroscopía" id="camara_ant_oi"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('camara_ant_oi','div_camara_ant_oi','obs_camara_ant_oi',2);">
-                                                                            <option selected  value="1">Normal</option>
-                                                                            <option value="2">Anormal</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_camara_ant_oi" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(12, 122, 241);font-weight: bold;" >Camara Anterior (describir)</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Camara Anterior OI" data-seccion="Biomicroscopía" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_camara_ant_oi" id="obs_camara_ant_oi"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(12, 122, 241);font-weight: bold;">Tyndall</label>
-                                                                        <select name="tyndall_oi"  data-titulo="Tyndall OI" data-seccion="Biomicroscopía" id="tyndall_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tyndall_oi','div_tyndall_oi','obs_tyndall_oi',2);">
-                                                                            <option selected  value="1">Normal</option>
-                                                                            <option value="2">Anormal</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_tyndall_oi" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(12, 122, 241);font-weight: bold;">Tyndall</label>
-                                                                        <textarea class="form-control form-control-sm"  data-titulo="Obs. Tyndall OI" data-seccion="Biomicroscopía" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tyndall_oi" id="obs_tyndall_oi"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(12, 122, 241);font-weight: bold;" >Cristalino</label>
-                                                                        <select name="cristalino_bio_oi"  data-titulo="Cristalino OI" data-seccion="Biomicroscopía" id="cristalino_bio_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cristalino_bio_oi','div_cristalino_bio_oi','obs_cristalino_bio_oi',2);">
-                                                                            <option selected  value="1">Normal</option>
-                                                                            <option value="2">Anormal</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_cristalino_bio_oi" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(12, 122, 241);font-weight: bold;" >Cristalino</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Cristalino OI" data-seccion="Biomicroscopía"rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cristalino_bio_oi" id="obs_cristalino_bio_oi"></textarea>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-sm-12">
-                                                                    <div class="form-group fill">
-                                                                        <label class="floating-label-activo-sm">Otros antecedentes importantes</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Otros Antecedentes Importantes OI" data-seccion="Biomicroscopía" id="campo_otros_bio_oi" name="campo_otros_bio_oi"  rows="1" onfocus="this.rows=2"  onblur="this.rows=1;"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-12 text-center mb-3">
-                                                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="abrir_modal_guardar_tipo('form-bio','registro_f_t_oft_detalle','bio');"><i class="fas fa-save"></i> Guardar nueva biomicroscopía tipo</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!--fondo de ojo-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="fo-esp_oftalmo">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#fo-oftalmo" aria-expanded="false" aria-controls="fo-oftalmo">
-                                                       Fondo de ojo
-                                                    </button>
-                                                </div>
-                                                <div id="fo-oftalmo" class="collapse show" aria-labelledby="fo-oftalmo" data-parent="#fo-oftalmo">
-                                                    <div class="card-body-aten shadow-none">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Carga ficha tipo</label>
-                                                                    <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad_of" onchange="cargar_info_ficha_tipo_oft_fo('select_ficha_tipo_especialidad_of','descripcion_ficha_tipo_especialidad_of');">
-                                                                        <option value="">Seleccione</option>
-                                                                        @if(!empty($fichaTipo['fo']))
-                                                                            @foreach ($fichaTipo['fo'] as $ft )
-                                                                                <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
-                                                                            @endforeach
-                                                                        @endif
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <span id="descripcion_ficha_tipo_especialidad_of"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div id="form-fo">
-                                                            <div class="form-row">
-                                                                <div class="col-md-12">
-                                                                    <h6 style="color:rgb(241, 13, 74);font-weight: bold;">OJO DERECHO</h6>
-                                                                </div>
-                                                                <hr>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Papilas</label>
-                                                                        <select name="papilas_fo_od" data-titulo="Papilas" data-seccion="Fondo de Ojo"  id="papilas_fo_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('papilas_fo_od','div_papilas_fo_od','obs_papilas_fo_od',2);">
-                                                                            <option selected  value="1">Normales</option>
-                                                                            <option value="2">Anormales</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_papilas_fo_od" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Papilas (describir)</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Papilas OD"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_papilas_fo_od" id="obs_papilas_fo_od"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;">Excavación</label>
-                                                                        <select name="excavacion_fo_od" data-titulo="Excavación OD" data-seccion="Fondo de Ojo"  id="excavacion_fo_od" style="color:rgb(241, 13, 74);font-weight: bold;" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('excavacion_fo_od','div_excavacion_fo_od','obs_excavacion_fo_od',12);">
-                                                                            <option value="1">0</option>
-                                                                            <option value="2">0.1</option>
-                                                                            <option value="3">0.2</option>
-                                                                            <option selected value="4">0.3</option>
-                                                                            <option value="5">0.4</option>
-                                                                            <option value="6">0.5</option>
-                                                                            <option value="7">0.6</option>
-                                                                            <option value="8">0.7</option>
-                                                                            <option value="9">0.8</option>
-                                                                            <option value="10">0.9</option>
-                                                                            <option value="11">Total</option>
-                                                                            <option value="12">Otros</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_excavacion_fo_od" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;">Excavación (describir)</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Excavacion OD" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_excavacion_fo_od" id="obs_excavacion_fo_od"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Bordes</label>
-                                                                        <select name="bordes_od" data-titulo="Bordes_OD" data-seccion="Fondo de Ojo"  id="bordes_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('bordes_od','div_bordes_od','obs_bordes_od',2);">
-                                                                            <option value="1">Bordes netos y Normales</option>
-                                                                            <option value="2">Anormales</option>
-
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_bordes_od" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Bordes</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Bordes OD"  data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_bordes_od" id="obs_bordes_od"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm"  style="color:rgb(241, 13, 74);font-weight: bold;" >Máculas</label>
-                                                                        <select name="maculas_fo_od" data-titulo="Maculas_OD" data-seccion="Fondo de Ojo"  id="maculas_fo_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('maculas_fo_od','div_maculas_fo_od','obs_maculas_fo_od',2);">
-                                                                            <option selected  value="1">Normales</option>
-                                                                            <option value="2">Anormal</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_maculas_fo_od" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;"  >Máculas (describir)</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Maculas OD"  data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_maculas_fo_od" id="obs_maculas_fo_od"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;">Vasos</label>
-                                                                        <select name="vasos_fo_od" data-titulo="Vasos_OD" data-seccion="Fondo de Ojo"id="vasos_fo_od"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('vasos_fo_od','div_vasos_fo_od','obs_vasos_fo_od',2);">
-                                                                            <option selected  value="1">Normal</option>
-                                                                            <option value="2">Anormal</option>vasos_fo_od
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_vasos_fo_od" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;">Vasos</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Vasos OD" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_vasos_fo_od" id="obs_vasos_fo_od"></textarea>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Periféria</label>
-                                                                        <select name="periferia_fo_od" data-titulo="Periferia_OD" data-seccion="Fondo de Ojo" id="periferia_fo_od" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('periferia_fo_od','div_periferia_fo_od','obs_periferia_fo_od',2);">
-                                                                            <option selected  value="1">Sana</option>
-                                                                            <option value="2">Anormal</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_periferia_fo_od" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(241, 13, 74);font-weight: bold;" >Periféria</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Periferia OD" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_periferia_fo_od" id="obs_periferia_fo_od"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-12">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Otros Antecedentes Importantes</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Otros Antec. Importantes OD" data-seccion="Fondo de Ojo" id="campo_fo_otros_od" name="campo_fo_otros_od"  rows="1" onfocus="this.rows=2"  onblur="this.rows=1;"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-row">
-                                                                <div class="col-md-12">
-                                                                    <h6 style="color:rgb(41, 90, 189);font-weight: bold;">OJO IZQUIERDO</h6>
-                                                                </div>
-                                                                <hr>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;">Papilas</label>
-                                                                        <select name="papilas_fo_oi" data-titulo="Papilas OI" id="papilas_fo_oi" data-seccion="Fondo de Ojo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('papilas_fo_oi','div_papilas_fo_oi','obs_papilas_fo_oi',2);">
-                                                                            <option selected  value="1">Normales</option>
-                                                                            <option value="2">Anormales</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_papilas_fo_oi" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;">Papilas (describir)</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Papilas OI" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_papilas_fo_oi" id="obs_papilas_fo_oi"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;">Excavación</label>
-                                                                        <select name="excavacion_fo_oi" data-titulo="Excavacion OI" data-seccion="Fondo de Ojo" id="excavacion_fo_oi" style="color:rgb(41, 90, 189);font-weight: bold;" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('excavacion_fo_oi','div_excavacion_fo_oi','obs_excavacion_fo_oi',12);">
-                                                                            <option value="1">0</option>
-                                                                            <option value="2">0.1</option>
-                                                                            <option value="3">0.2</option>
-                                                                            <option selected value="4">0.3</option>
-                                                                            <option value="5">0.4</option>
-                                                                            <option value="6">0.5</option>
-                                                                            <option value="7">0.6</option>
-                                                                            <option value="8">0.7</option>
-                                                                            <option value="9">0.8</option>
-                                                                            <option value="10">0.9</option>
-                                                                            <option value="11">Total</option>
-                                                                            <option value="12">Otros</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_excavacion_fo_oi" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;">Excavación (describir)</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Excavacion OI" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_excavacion_fo_oi" id="obs_excavacion_fo_oi"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;">Bordes</label>
-                                                                        <select name="bordes_oi" data-titulo="Bordes_OI" data-seccion="Fondo de Ojo" id="bordes_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('bordes_oi','div_bordes_oi','obs_bordes_oi',2);">
-                                                                            <option value="1">Bordes netos y Normales</option>
-                                                                            <option value="2">Anormales</option>
-
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_bordes_oi" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;" >Bordes</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Bordes OI" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_bordes_oi" id="obs_bordes_oi"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm"  style="color:rgb(41, 90, 189);font-weight: bold;" >Máculas</label>
-                                                                        <select name="maculas_fo_oi" data-titulo="Maculas OI" id="maculas_fo_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('maculas_fo_oi','div_maculas_fo_oi','obs_maculas_fo_oi',2);">
-                                                                            <option selected  value="1">Normales</option>
-                                                                            <option value="2">Anormal</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_maculas_fo_oi" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;" >Máculas (describir)</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Maculas OI" data-seccion="Fondo de Ojo" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_maculas_fo_oi" id="obs_maculas_fo_oi"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;">Vasos</label>
-                                                                        <select name="vasos_fo_oi" data-titulo="Vasos_OI" id="vasos_fo_oi" data-seccion="Fondo de Ojo" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('vasos_fo_oi','div_vasos_fo_oi','obs_vasos_fo_oi',2);">
-                                                                            <option selected  value="1">Normal</option>
-                                                                            <option value="2">Anormal</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_vasos_fo_oi" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;">Vasos</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Vasos OI" data-seccion="Fondo de Ojo"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_vasos_fo_oi" id="obs_vasos_fo_oi"></textarea>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-sm-12 col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;" >Periféria</label>
-                                                                        <select name="periferia_fo_oi" data-titulo="Periferia OI" data-seccion="Fondo de Ojo" id="periferia_fo_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('periferia_fo_oi','div_periferia_fo_oi','obs_periferia_fo_oi',2);">
-                                                                            <option selected  value="1">Sana</option>
-                                                                            <option value="2">Anormal</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group" id="div_periferia_fo_oi" style="display:none;">
-                                                                        <label class="floating-label-activo-sm" style="color:rgb(41, 90, 189);font-weight: bold;">Periféria</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Periferia OI" data-seccion="Fondo de Ojo" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_periferia_fo_oi" id="obs_periferia_fo_oi"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-12">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Otros Antecedentes Importantes</label>
-                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Otros Antec. Importantes OI" data-seccion="Fondo de Ojo" id="campo_fo_otros_oi" name="campo_fo_otros_oi"  rows="1" onfocus="this.rows=2"  onblur="this.rows=1;"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-12 text-center mb-3">
-                                                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="abrir_modal_guardar_tipo('form-fo','registro_f_t_oft_detalle','fo');"><i class="fas fa-save"></i> Guardar nuevo fondo de ojo tipo</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <!--CRONICOS / GES / CONFIDENCIAL -->
+                                        @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
 
                                         <!--Diagnóstico-->
-                                        <div class="col-sm-12">
-                                            <div class="card">
-                                                <div class="card-header" id="diagnostico">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-a">
+                                                <div class="card-header-a " id="diagnostico">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagnostico_c" aria-expanded="false" aria-controls="diagnostico_c">
                                                         Diagnóstico
                                                     </button>
                                                 </div>
                                                 <div id="diagnostico_c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
-                                                    <div class="card-body-aten shadow-none">
+                                                    <div class="card-body-aten-a  shadow-none">
                                                         <div class="form-row">
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
-                                                                <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" >
+                                                                 <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" >
                                                             </div>
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Indicaciones</label>
@@ -771,119 +1239,45 @@
                                             </div>
                                         </div>
 
-                                        <!--ENFERMO CRÓNICO O GES-->
-                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
-
-                                        <!--Plan de tratamiento-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-header" id="plan_oftalmo">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#plan_oft" aria-expanded="false" aria-controls="plan_oft">
-                                                    Planificación de tratamiento
-                                                    </button>
-                                                </div>
-                                                <div id="plan_oft" class="collapse show" aria-labelledby="plan_oft" data-parent="#plan_oft">
-                                                    <div class="card-body-aten shadow-none">
-
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-3">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12">
-                                                                        <div class="form-group">
-                                                                            <input type="hidden" name="tratamiento" id="tratamiento" value="">
-                                                                            <div class="switch switch-success d-inline m-r-10">
-                                                                                <input type="checkbox" id="tratamiento_check" name="tratamiento_check" value="" />
-                                                                                <label for="tratamiento_check" class="cr"></label>
-                                                                            </div>
-                                                                            <label>Solo Tratamiento<br>Médico</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12">
-                                                                        <div class="form-group">
-                                                                            <input type="hidden" name="lentes" id="lentes" value="">
-                                                                            <div class="switch switch-success d-inline m-r-10">
-                                                                                <input type="checkbox" id="lentes_check" name="lentes_check" value="" />
-                                                                                <label for="lentes_check" class="cr"></label>
-                                                                            </div>
-                                                                            <label>Lentes</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12">
-                                                                        <div class="form-group">
-                                                                            <input type="hidden" name="procedimiento" id="procedimiento" value="">
-                                                                            <div class="switch switch-success d-inline m-r-10">
-                                                                                <input type="checkbox" id="procedimiento_check" name="procedimiento_check" value="" />
-                                                                                <label for="procedimiento_check" class="cr"></label>
-                                                                            </div>
-                                                                            <label>Procedimiento</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12">
-                                                                        <div class="form-group">
-                                                                            <input type="hidden" name="cirugia" id="cirugia" value="">
-                                                                            <div class="switch switch-success d-inline m-r-10">
-                                                                                <input type="checkbox" id="cirugia_check" name="cirugia_check" value="" />
-                                                                                <label for="cirugia_check" class="cr"></label>
-                                                                            </div>
-                                                                            <label>Cirugía</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
+                    </div>
 
-                        {{--  div de botones  --}}
-                        <div class="bg-white shadow-none rounded mx-1 p-15">
+
+                    <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
+                </form>
+            </div>
+            {{--  div de botones  --}}
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                            @include('atencion_medica.generales.seccion_receta_examen_comunes')
+                            @include('general.secciones_ficha.seccion_receta_examen_comunes')
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
 
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
                             @include('atencion_medica.secciones_especialidad.seccion_receta_examenes_esp_oftalmo')
-
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD FIN  -->
-
-                            <hr>
-
-                            <!--GUARDAR O IMPRIMIR FICHA-->
-                            <div class="row mb-3">
-                                <div class="col-md-12 text-center">
-                                    <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                                    <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </form>
+                </div>
+            </div>
+            <!--GUARDAR O IMPRIMIR FICHA-->
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="row mb-3">
+                    <div class="col-md-12 text-center">
+                        <input type="submit" class="btn btn-info-light-c mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+                        <input type="submit" class="btn btn-success-light-c mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!--MODALES modal_enfermedades_cronicas-->
-@include('atencion_medica.formularios.modal_atencion_general.modal_enfermedades_cronicas')
 
 @section('page-script-ficha-atencion')
     <script>

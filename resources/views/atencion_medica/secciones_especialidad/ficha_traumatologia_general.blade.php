@@ -411,24 +411,35 @@
                                                             </div>
                                                         </div>
                                                         <!-- Masas Palpables -->
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="floating-label-activo-sm">Estado Inmovilización</label>
                                                                 <textarea class="form-control caja-texto form-control-sm" data-titulo="Estado Inmovilización" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="estado_inmovil_cpq_cg" id="estado_inmovil_cpq_cg"></textarea>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="floating-label-activo-sm">Masas Palpables</label>
                                                                 <textarea class="form-control caja-texto form-control-sm" data-titulo="Masas Palpables" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="masas_cpq_cg" id="masas_cpq_cg"></textarea>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="floating-label-activo-sm">Estudio Rx.</label>
                                                                 <textarea class="form-control caja-texto form-control-sm" data-titulo="Estudio Rx." rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="estudios_rx_cpq_cg" id="estudios_rx_cpq_cg"></textarea>
                                                             </div>
                                                         </div>
+														 <!-- botones modal -->
+														<div class="col-md-3">
+															<div class="form-group">
+															   <button type="button" class="btn btn-outline-primary btn-sm btn-block mb-2" onclick="no_disponible();"></i> Ver Protocolo Cirugía</button>
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+															   <button type="button" class="btn btn-outline-primary btn-sm btn-block mb-2" onclick="no_disponible();"></i> Ver Epicrisis</button>
+															</div>
+														</div>
                                                     </div>
                                                     <!-- Observaciones Estado General Paciente -->
                                                     <div class="form-row">
@@ -902,7 +913,7 @@
                         {{--  div de botones  --}}
                         <div class="bg-white shadow-none rounded mx-1 p-15">
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                            @include('atencion_medica.generales.seccion_receta_examen_comunes')
+                            @include('general.secciones_ficha.seccion_receta_examen_comunes')
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
                             <hr>
                             <!--GUARDAR O IMPRIMIR FICHA-->

@@ -1,4 +1,5 @@
-<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+    <!--INDICACIONES-->
     <div class="row">
         <div class="col-sm-12 col-md-12 text-center">
             <p class="my-0">Completar diagnóstico para activar botones</p>
@@ -8,35 +9,34 @@
         @if (isset($fichaAtencion) && $fichaAtencion->hipotesis_diagnostico != null)
         <div class="col-sm-12 col-md-6 text-center">
             <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
-                <button type="button" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info-light btn-sm mt-1" onclick="i_medicamento();"><i class="feather icon-plus"></i> Indicar
+                <button type="button" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-primary-light-c btn-sm mt-1" onclick="i_medicamento();"><i class="feather icon-plus"></i> Indicar
                     medicamento</button>
-                <button type="button" onclick="ver_pdf_receta($('#id_fc').val());" class=" btn_medicamento_pdf btn btn-primary-light  btn-sm mt-1" id="btn_medicamento_pdf"><i class="feather icon-file"></i>Ver PDF</button>
+                <button type="button" onclick="ver_pdf_receta($('#id_fc').val());" class=" btn_medicamento_pdf btn btn-info-light-c  btn-sm mt-1" id="btn_medicamento_pdf"><i class="feather icon-file"></i>Ver PDF</button>
             </div>
         </div>
         <div class="col-sm-12 col-md-6">
             <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
-                <button type="button" id="btn_agregar_examen" class=" btn_agregar_examen btn btn-info btn-sm mt-1" onclick="mostrar_modal_examen_cirguria();"><i class="feather icon-plus"></i>
+                <button type="button" id="btn_agregar_examen" class=" btn_agregar_examen btn btn-primary-light-c btn-sm mt-1" onclick="mostrar_modal_examen_cirguria();"><i class="feather icon-plus"></i>
                     Indicar examen</button>
-                <button type="button" onclick="ver_pdf_orden_examenes($('#id_fc').val());" class=" btn_examenes_pdf btn btn-primary-light  btn-sm mt-1" id="btn_examenes_pdf"><i class="feather icon-file"></i>Ver PDF</button>
+                <button type="button" onclick="ver_pdf_orden_examenes($('#id_fc').val());" class=" btn_examenes_pdf btn btn-info-light-c btn-sm mt-1" id="btn_examenes_pdf"><i class="feather icon-file"></i>Ver PDF</button>
             </div>
         </div>
         @else
         <div class="col-sm-12 col-md-6 text-center">
             <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
-                <button type="button" disabled="disabled" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-sm mt-1" onclick="i_medicamento();"><i class="feather icon-plus"></i>
+                <button type="button" disabled="disabled" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-primary-light-c btn-sm mt-1" onclick="i_medicamento();"><i class="feather icon-plus"></i>
                     Indicar medicamento</button>
-                <button type="button" onclick="ver_pdf_receta($('#id_fc').val());" class=" btn_medicamento_pdf btn btn-primary-light  btn-sm mt-1" id="btn_medicamento_pdf"><i class="feather icon-file"></i>Ver PDF</button>
+                <button type="button" onclick="ver_pdf_receta($('#id_fc').val());" class=" btn_medicamento_pdf btn btn-info-light-c g btn-sm mt-1" id="btn_medicamento_pdf"><i class="feather icon-file"></i>Ver PDF</button>
             </div>
         </div>
         <div class="col-sm-12 col-md-6">
             <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
-                <button type="button" disabled="disabled" id="btn_agregar_examen" class=" btn_agregar_examen btn btn-info btn-sm mt-1" onclick="mostrar_modal_examen_cirguria();"><i class="feather icon-plus"></i> Indicar examen</button>
-                <button type="button" onclick="ver_pdf_orden_examenes($('#id_fc').val());" class=" btn_examenes_pdf btn btn-primary-light  btn-sm mt-1" id="btn_examenes_pdf"><i class="feather icon-file"></i>Ver PDF</button>
+                <button type="button" disabled="disabled" id="btn_agregar_examen" class=" btn_agregar_examen btn btn-primary-light-c btn-sm mt-1" onclick="mostrar_modal_examen_cirguria();"><i class="feather icon-plus"></i> Indicar examen</button>
+                <button type="button" onclick="ver_pdf_orden_examenes($('#id_fc').val());" class=" btn_examenes_pdf btn btn-info-light-c  btn-sm mt-1" id="btn_examenes_pdf"><i class="feather icon-file"></i>Ver PDF</button>
             </div>
         </div>
         @endif
     </div>
-</div>
 
 @section('Modals-med-exa')
     @include('app.cirugia.modals.modals_cesarea.modal_indicar_medicamentos')
@@ -110,7 +110,6 @@
             {{--  EXAMENES  --}}
             {{--  funcion para capturar el tipo de examen y buscar los subtipo que estan relacionados con el  --}}
             $('#tipo_examen').change(function(e) {
-                console.log('tipo examen examen comun');
                 e.preventDefault();
                 tipo_examen = $('#tipo_examen').val();
 
@@ -135,7 +134,7 @@
                         }
 
                         /** ACTIVAR CHECHBOK DE CON  CONTRASTE */
-                        if($('#tipo_examen').val() == 354) $('#imagenologia_con_contraste').removeAttr('disabled');
+                        if($('#tipo_examen').val() == 362) $('#imagenologia_con_contraste').removeAttr('disabled');
                         else  $('#imagenologia_con_contraste').attr('disabled','disabled');
                     })
                     .fail(function() {
@@ -353,12 +352,10 @@
         {
             if($('#via_administracion_ficha_dental').val() == 11)
             {
-                $('#div_observaciones_medicamento_ficha_dental').show();
                 $('#observaciones_medicamento_ficha_dental').removeAttr('disabled');
             }
             else
             {
-                $('#div_observaciones_medicamento_ficha_dental').hide();
                 $('#observaciones_medicamento_ficha_dental').attr('disabled','disabled');
                 $('#observaciones_medicamento_ficha_dental').val('');
             }
@@ -368,12 +365,10 @@
         {
             if($('#periodo_ficha_dental').val() == 11)
             {
-                $('#div_observaciones_periodo_ficha_dental').show();
                 $('#observaciones_periodo_ficha_dental').removeAttr('disabled');
             }
             else
             {
-                $('#div_observaciones_periodo_ficha_dental').hide();
                 $('#observaciones_periodo_ficha_dental').attr('disabled','disabled');
                 $('#observaciones_periodo_ficha_dental').val('');
             }
@@ -383,12 +378,10 @@
         {
             if($('#cantidad_comprar').val() == 999)
             {
-                $('#div_otra_cantidad_a_comprar').show();
                 $('#otra_cantidad_a_comprar').removeAttr('disabled');
             }
             else
             {
-                $('#div_otra_cantidad_a_comprar').hide();
                 $('#otra_cantidad_a_comprar').attr('disabled','disabled');
                 $('#otra_cantidad_a_comprar').val('');
             }
@@ -620,7 +613,7 @@
             var med_faltante = $.trim($('#med_faltante').val());
             if(med_faltante != ''){
                 /** registro */
-                let url = "{{ route('medicamentoFaltante.registro')}}";
+                let url = "{{ route('medicamentoFaltante.registro') }}";
 
 
                 var _token = CSRF_TOKEN;
@@ -711,9 +704,6 @@
             $('#indicar_examenes').modal({backdrop: 'static', keyboard: false});
 
         }
-        function ver_examenes_ficha_medica_esp() {
-
-        }
 
         function cerrarModalExamenesFicha()
         {
@@ -740,9 +730,7 @@
             var id_tipo_examen = $("#tipo_examen").val();
             var sub_tipo_examen = $("#sub_tipo_examen option:selected").text();
             var examen = $("#examen option:selected").text();
-            var id_examen = $("#examen").val();
             var prioridad = $("#prioridad option:selected").text();
-            var lado = $("#lado option:selected").text();
 
             // var imagenologia_con_contraste = 'N/C';
             // if($('#imagenologia_con_contraste').is(':checked'))
@@ -776,13 +764,7 @@
                 var i = $('#tabla_examen_cirugia tr').length; //contador para asignar id al boton que borrara la fila
                 var fila = '';
                     fila += '<tr class="tr_examen_cirugia" id="row' + i + '">';
-                    fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + id_examen + '</td>';
-                    fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + examen + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">' + examen + '</td>';
-                    if(lado == 'Seleccione')
-                        fila +=     '<td class="text-center align-middle text-wrap"> </td>';
-                    else
-                        fila +=     '<td class="text-center align-middle text-wrap">' + lado + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">' + tipo_examen + '</td>';
                     //fila =     '<td>' + sub_tipo_examen + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">' + prioridad + '</td>';
@@ -815,10 +797,7 @@
                     {
                         fila = '';
                         fila += '<tr class="tr_examen_cirugia" id="row' + i + '">';
-                        fila +=     '<td class="text-center align-middle text-wrap" style="display:none">78</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap" style="display:none">CREATININA EN SANGRE</td>';
                         fila +=     '<td class="text-center align-middle text-wrap">CREATININA EN SANGRE</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap"> </td>';
                         fila +=     '<td class="text-center align-middle text-wrap">SANGRE</td>';
                         //fila =     '<td>' + sub_tipo_examen + '</td>';
                         fila +=     '<td class="text-center align-middle text-wrap">Media</td>';
@@ -837,7 +816,6 @@
                 $("#tipo_examen").val('');
                 $("#sub_tipo_examen").val('');
                 $("#examen").val('');
-                $("#lado").val(0);
                 $("#prioridad").val(2);
                 $('#imagenologia_con_contraste').prop('checked', false);
                 $('#mensaje_imagenologia_con_contraste').hide();
@@ -895,14 +873,11 @@
                 if (i > 0) {
                     rol = {};
                     var data = $(this).find("td");
-                    rol["id_examen"] = $.trim($(data[0]).text().split("\n").join(""));
-                    rol["nombre_examen"] = $.trim($(data[1]).text().split("\n").join(""));
-                    rol["lado"] = $.trim($(data[3]).text().split("\n").join(""));
-                    rol["nombre_examen_especialidad"] = $.trim($(data[2]).text().split("\n").join(""));
-                    rol["tipo"] = $.trim($(data[4]).text().split("\n").join(""));
+                    rol["nombre_examen"] = $.trim($(data[0]).text().split("\n").join(""));
+                    rol["tipo"] = $.trim($(data[1]).text().split("\n").join(""));
                     // rol["subtipo"] = $.trim($(data[2]).text().split("\n").join(""));
-                    rol["prioridad"] = $.trim($(data[5]).text().split("\n").join(""));
-                    rol["con_contraste"] = $.trim($(data[6]).text().split("\n").join(""));
+                    rol["prioridad"] = $.trim($(data[2]).text().split("\n").join(""));
+                    rol["con_contraste"] = $.trim($(data[3]).text().split("\n").join(""));
                     rows1.push(rol);
                 }
             });
@@ -1115,10 +1090,7 @@
 
                     html += '<thead>';
                     html += '    <tr>';
-                    html += '        <th class="text-center align-middle" style="display:none">ID</th>';
-                    html += '        <th class="text-center align-middle" style="display:none">NOMBRE</th>';
                     html += '        <th class="text-center align-middle">Nombre Examen</th>';
-                    html += '        <th class="text-center align-middle">Lado</th>';
                     html += '        <th class="text-center align-middle">Tipo</th>';
                     {{--  html += '        <th class="text-center align-middle">Sub-Tipo</th>';  --}}
                     html += '        <th class="text-center align-middle">Prioridad</th>';
@@ -1137,13 +1109,7 @@
                             if(value.examen == 'CREATININA EN SANGRE')
                             {
                                 html += '<tr class="tr_examen_cirugia" id="row' + index + '">';
-                                html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.id_examen+'</td>';
-                                html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+value.examen+'</td>';
-                                if(value.otro == 0 || value.otro == 'null' || value.otro == ' ')
-                                    html += '    <td class="text-center align-middle text-wrap"> </td>';
-                                else
-                                    html += '    <td class="text-center align-middle text-wrap">'+value.otro+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+value.tipo_examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+prioridad[value.id_prioridad]+'</td>';
                                 var text_con_contraste = 'N/C';
@@ -1156,13 +1122,7 @@
                             else
                             {
                                 html += '<tr class="tr_examen_cirugia" id="row' + index + '">';
-                                html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.id_examen+'</td>';
-                                html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+value.examen+'</td>';
-                                if(value.otro == 0 || value.otro == 'null' || value.otro == ' ')
-                                    html += '    <td class="text-center align-middle text-wrap"> </td>';
-                                else
-                                    html += '    <td class="text-center align-middle text-wrap">'+value.otro+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+value.tipo_examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+prioridad[value.id_prioridad]+'</td>';
                                 var text_con_contraste = 'N/C';
@@ -1179,7 +1139,7 @@
                     {
 
                         html += '<tr class="examenes_sin_registros">';
-                        html += '    <td class="text-center align-middle " colspan="6">'+data.msj+'</td>';
+                        html += '    <td class="text-center align-middle " colspan="5">'+data.msj+'</td>';
                         html += '</tr>';
 
                     }

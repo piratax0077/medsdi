@@ -3,9 +3,6 @@
     <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
-
-            </div>
-            <div class="col-sm-12 col-md-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_cg') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
@@ -28,8 +25,7 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12 mt-3 mb-0">
-                                            <h6 class="f-16 text-c-blue">Ficha de Atención Medicina General</h6>
-
+                                            <h6 class="f-20 text-c-blue mb-2">Ficha de Atención Medicina General</h6>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -78,7 +74,7 @@
                                         </div>
                                         <!--Cierre: Formulario /Motivo de la Consulta-->
 
-                                        <!--Formulario / Antecedentes-->
+                                         <!--Formulario / Antecedentes-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card-a">
                                                 <div class="card-header-a" id="antecedentes">
@@ -143,10 +139,10 @@
                                         <!--Formulario / Signos vitales y otros-->
                                         @include('atencion_medica.generales.signos_vitales')
                                         <!--Cierre: Formulario / Signos vitales y otros-->
-                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                                       @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
 
                                         <!--Formulario / Diagnóstico-->
-                                        <div class="col-sm-12 col-md-12">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="card-a">
                                                 <div class="card-header-a" id="diagnostico">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagnostico-c" aria-expanded="false" aria-controls="diagnostico-c">
@@ -169,8 +165,7 @@
                                                                 @endif
                                                             </div>
                                                             <div class="form-group col-md-6">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->diagnostico_ce10
-                                                                != null)
+                                                                @if (isset($fichaAtencion) && $fichaAtencion->diagnostico_ce10 != null)
                                                                 <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
                                                                 <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie_esp,lic_descripcion_cie" name="descripcion_cie" id="descripcion_cie" value="{{ $fichaAtencion->diagnostico_ce10 }}" onchange="cargarIgual('descripcion_cie')">
                                                                 <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie_esp,lic_descripcion_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="{{ $fichaAtencion->diagnostico_ce10 }}" onchange="cargarIgual('id_descripcion_cie')">
@@ -186,40 +181,36 @@
                                             </div>
                                         </div>
                                         <!--Cierre: Formulario / Diagnóstico-->
-                                    </div>
 
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+                                                    @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                                    <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                         <div class="col-md-12 text-center">
+                                                <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
+                                                <input type="submit" class="btn btn-purple mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
+                                            </div>
+
+
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
                 </form>
             </div>
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                            @include('atencion_medica.generales.seccion_receta_examen_comunes')
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--GUARDAR O IMPRIMIR FICHA-->
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="row mb-3">
-                    <div class="col-md-12 text-center">
-                        <input type="submit" class="btn btn-info-light-c mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                        <input type="submit" class="btn btn-success-light-c mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
-                    </div>
-                </div>
-            </div>
-            <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
+
         </div>
     </div>
 </div>
-                        <!--CIERRE: FICHA ATENCION GENERAL-->
+<!--CIERRE: FICHA ATENCION GENERAL-->
 
 @section('modal-ficha-general-espc')
     @include('atencion_medica.formularios.modal_atencion_general.modal_enfermedades_cronicas')
@@ -1515,6 +1506,329 @@
                     console.log(e);
                 })
         };
+
+        /** GES */
+        function registrar_ges_ficha() {
+
+            var validar = 0;
+            var mensaje ='';
+            let nombre_institucion_ficha_ges = $('#nombre_institucion_ficha_ges').val();
+            let direccion_institucion_ficha_ges = $('#direccion_institucion_ficha_ges').val();
+            let nombre_responsable_ficha_ges = $('#nombre_responsable_ficha_ges').val();
+            let rut_responsable_ficha_ges = $('#rut_responsable_ficha_ges').val();
+            let confirmacion_diagnostica_ficha_ges = $('#confirmacion_diagnostica_ficha_ges').val();
+            let paciente_tratamiento_ficha_ges = $('#paciente_tratamiento_ficha_ges').val();
+            let nombre_ges = $('#nombre_ges').val();
+            let id_paciente = $('#id_paciente_fc').val();
+            let id_profesional = $('#id_profesional').val();
+            let id_ficha_atencion = $('#id_fc').val();
+            let id_lugar_atencion = $('#id_lugar_atencion').val();
+            let hora_medica = $('#hora_medica').val();
+            let codigo_validacion_informe_ges = $('#codigo_validacion_informe_ges').val();
+
+
+            {{--  if(nombre_institucion_ficha_ges == '')
+            {
+                $('#nombre_institucion_ficha_ges').focus();
+                validar = 1;
+
+            }
+            if(direccion_institucion_ficha_ges == '')
+            {
+                $('#direccion_institucion_ficha_ges').focus();
+                validar = 1;
+
+            }  --}}
+            {{--
+            if(nombre_responsable_ficha_ges == '')
+            {
+                $('#nombre_responsable_ficha_ges').focus();
+                validar = 1;
+
+            }
+            if(rut_responsable_ficha_ges == '')
+            {
+                $('#rut_responsable_ficha_ges').focus();
+                validar = 1;
+
+            }
+            --}}
+            if(confirmacion_diagnostica_ficha_ges == '')
+            {
+                $('#confirmacion_diagnostica_ficha_ges').focus();
+                mensaje += ' Debe ingresar Confirmación diagnóstica GES.\n' ;
+                validar = 1;
+
+            }
+            if(paciente_tratamiento_ficha_ges == '')
+            {
+                $('#paciente_tratamiento_ficha_ges').focus();
+                mensaje += ' Debe Confimar si el paciente se encuentra en tratamiento.\n' ;
+                validar = 1;
+
+            }
+            if(nombre_ges == '')
+            {
+                $('#nombre_ges').focus();
+                mensaje += ' Debe ingresar el Diagnóstico GES.\n' ;
+                validar = 1;
+            }
+            {{--  if(id_paciente == '')
+            {
+                $('#id_paciente').focus();
+                validar = 1;
+
+            }
+            if(id_profesional == '')
+            {
+                $('#id_profesional').focus();
+                validar = 1;
+
+            }
+            if(id_ficha_atencion == '')
+            {
+                $('#id_ficha_atencion').focus();
+                validar = 1;
+
+            }
+            if(id_lugar_atencion == '')
+            {
+                $('#id_lugar_atencion').focus();
+                validar = 1;
+
+            }
+            if(hora_medica == '')
+            {
+                $('#hora_medica').focus();
+                validar = 1;
+
+            }  --}}
+
+            if(validar == 1)
+            {
+                swal({
+                    title: "Debe ingresar todos los datos requeridos." ,
+                    text: mensaje,
+                    icon: "error",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                })
+                return false;
+            }
+            else
+            {
+
+                $.ajax({
+                    url: "{{ route('ficha_atencion.registrar_diagnostico_ges') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+
+                        nombre_institucion_ficha_ges :nombre_institucion_ficha_ges,
+                        direccion_institucion_ficha_ges :direccion_institucion_ficha_ges,
+                        nombre_responsable_ficha_ges :nombre_responsable_ficha_ges,
+                        rut_responsable_ficha_ges :rut_responsable_ficha_ges,
+                        confirmacion_diagnostica_ficha_ges :confirmacion_diagnostica_ficha_ges,
+                        paciente_tratamiento_ficha_ges :paciente_tratamiento_ficha_ges,
+                        nombre_ges :nombre_ges,
+                        id_paciente :id_paciente,
+                        id_profesional :id_profesional,
+                        id_ficha_atencion :id_ficha_atencion,
+                        id_lugar_atencion :id_lugar_atencion,
+                        hora_medica :hora_medica,
+                        codigo_verificacion :codigo_validacion_informe_ges,
+
+                    },
+                })
+                .done(function(response) {
+                    console.log(response);
+
+                    if (response != '') {
+                        console.log(response);
+                        //$('#form_control_obesidad').trigger("reset");
+                        $('#mensaje').text('Se ha creado Diagnostico GES de forma correcta');
+                        $('#mensaje').show();
+                        $('#form_ges').modal('hide');
+
+
+                        swal({
+                            title: "Constancia GES (Artículo 24 Ley 19.966).",
+                            text: 'Registro Exitoso.\n El paciente ha sido Notificado\n La constancia puede ser recuperada desde su escritorio (Documentos).',
+                            icon: "success",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        })
+                    }
+
+                })
+                .fail(function(e) {
+                    console.log("error");
+                    console.log(e);
+                })
+
+            }
+
+
+
+        };
+
+        function validar_codigo_ges(){
+            let codigo_validacion_informe_ges = $('#codigo_validacion_informe_ges').val();
+            if(codigo_validacion_informe_ges!='')
+            {
+                var id_ficha_atencion = $('#id_fc').val();
+
+                var valido = 1;
+                var mensaje = '';
+
+
+                let url = "{{ route('cod_autorizacion.validar_codigo') }}";
+
+                var _token = CSRF_TOKEN;
+                $.ajax({
+
+                    url: url,
+                    type: "POST",
+                    data: {
+                        _token: _token,
+                        codigo:codigo_validacion_informe_ges,
+                        id_control:id_ficha_atencion,
+                    },
+                })
+                .done(function(data)
+                {
+
+                    if (data !== 'null')
+                    {
+                        //data = JSON.parse(data);
+                        console.log('-----------------------');
+                        console.log(data);
+                        console.log('-----------------------');
+                        if(data.estado == 1)
+                        {
+                            registrar_ges_ficha();
+                        }
+                        else{
+
+                            swal({
+                                title: "Problema solicitar Autorizacion.",
+                                text: data.msj,
+                                icon: "warning",
+                                // buttons: "Aceptar",
+                                //SuccessMode: true,
+                            })
+                        }
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+
+
+            }
+            else
+            {
+                swal({
+					title: "Constancia GES (Artículo 24 Ley 19.966).",
+					text:"Debe ingresar Código de notificación entrago por el Paciente.",
+					icon: "error",
+					// buttons: "Aceptar",
+					//SuccessMode: true,
+				});
+            }
+        }
+
+        function envio_codigo_validacion_ges()
+        {
+            let url = "{{ route('cod_autorizacion.agregar') }}";
+
+            var _token = CSRF_TOKEN;
+            var id_profesional = 0;
+            var id_ficha_atencion = 0;
+
+            // Autorizacion Licencia
+            id_profesional = '{{ Auth::user()->id }}';
+            id_ficha_atencion = $('#id_fc').val();
+
+            var id_tipo_autorizacion_acompanante = 7;
+            @if (\Carbon\Carbon::parse($paciente->fecha_nac)->age < 18)
+                var rut_acompanante = $('#rut_acompanante').val();
+                var nombre_acompanante = $('#nombre_acompanante').val();
+                var apell_acompanante = $('#apell_acompanante').val();
+                var relacion_acompanante = $('#relacion_acompanante').val();
+                var tipo_medio_acompanante = $('#tipo_medio_acompanante').val();
+                var tel_acompanante = $('#tel_acompanante').val();
+                var email_acompanante = $('#email_acompanante').val();
+            @else
+                var rut_acompanante = '{{ $paciente->rut }}';
+                var nombre_acompanante = '{{ $paciente->nombres }}';
+                var apell_acompanante = '{{ $paciente->apellido_uno }}';
+                var relacion_acompanante = '99';
+                var tipo_medio_acompanante = 3;
+                var tel_acompanante = '{{ $paciente->telefono_uno}}';
+                var email_acompanante = '{{ $paciente->email }}';
+            @endif
+            var medio = '';
+            if(tipo_medio_acompanante == 1)
+                medio = tel_acompanante;
+            else
+                medio = email_acompanante;
+
+            $.ajax({
+
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+
+                    id_tipo_autorizacion:id_tipo_autorizacion_acompanante,
+                    id_profesional:id_profesional,
+                    id_control:id_ficha_atencion,
+                    id_tipo_medio:tipo_medio_acompanante,
+                    medio:medio,
+                    nombre_autoriza:nombre_acompanante,
+                    apellido_autoriza:apell_acompanante,
+                    rut_autoriza:rut_acompanante,
+                    id_parentezco_autoriza:relacion_acompanante,
+                    telefono_autoriza:tel_acompanante,
+                    email_autoriza:email_acompanante,
+                },
+            })
+            .done(function(data)
+            {
+
+                if (data !== 'null')
+                {
+                    //data = JSON.parse(data);
+                    console.log('-----------------------');
+                    console.log(data);
+                    console.log('-----------------------');
+                    if(data.estado == 1)
+                    {
+                        swal({
+                            title: "Código Autorizacion enviado al Paciente.",
+                            icon: "success",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        })
+                    }
+                    else{
+
+                        swal({
+                            title: "Problema al Registrar Codigo de autorizacion.",
+                            icon: "warning",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        })
+                    }
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+
 
     </script>
 @endsection

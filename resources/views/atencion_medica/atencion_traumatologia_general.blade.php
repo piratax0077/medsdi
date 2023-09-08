@@ -118,6 +118,7 @@
 
     </div>
     <!--Cierre: Container Completo-->
+	@include("general.modal.modal_no_disponible")
 	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
     @include("general.hospitalizacion.modals.ingreso_hosp")
     @include("atencion_medica.include.sidebar_derecho_traumato")

@@ -14,7 +14,7 @@
                     <div class="col-sm-12 mt-2">
                         <div class="form-group fill">
                             <label class="floating-label">Tipo Examen</label>
-                            <select class="form-control form-control-sm" name="tipo_examen_rx" id="tipo_examen_rx">
+                            <select class="form-control form-control-sm" name="tipo_examen_esp_cdg" id="tipo_examen_esp_cdg">
                                 <option value="0">Seleccione</option>
                                 <option selected value="5">IMAGENOLOGÍA</option>
 
@@ -24,7 +24,7 @@
                     <div class="col-sm-12 mt-2">
                         <div class="form-group fill">
                             <label class="floating-label-activo-sm">Sub-tipo de Examen</label>
-                            <select class="form-control form-control-sm" id="sub_tipo_examen_rx" name="sub_tipo_examen_rx">
+                            <select class="form-control form-control-sm" id="sub_tipo_examen_esp_cdg" name="sub_tipo_examen_esp_cdg">
 
                             </select>
                         </div>
@@ -32,7 +32,7 @@
                     <div class="col-sm-12 mt-2">
                         <div class="form-group fill">
                             <label class="floating-label-activo-sm">Examen</label>
-                            <select class="form-control form-control-sm" id="examen_rx" name="examen_rx">
+                            <select class="form-control form-control-sm" id="examen_esp_cdg" name="examen_esp_cdg">
 
                             </select>
                         </div>
@@ -40,7 +40,7 @@
                     <div class="col-sm-12 mt-2">
                         <div class="form-group fill">
                             <label class="floating-label">Prioridad</label>
-                            <select class="form-control form-control-sm" id="prioridad_rx" name="prioridad_rx">
+                            <select class="form-control form-control-sm" id="prioridad_esp_cdg" name="prioridad_esp_cdg">
                                 <option value="0">Seleccione</option>
                                 <option value="1">Baja</option>
                                 <option value="2">Media</option>
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <button type="button" id="agregar_examen_tabla" class="btn btn-success btn-sm float-right">
+                        <button type="button" id="agregar_examen_tabla_esp_cdg" class="btn btn-success btn-sm float-right">
                             <i lass="fa fa-plus"></i>
                             Agregar Examen
                         </button>

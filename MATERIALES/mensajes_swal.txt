@@ -40,3 +40,25 @@
 					//SuccessMode: true,
 				});
 			@endif
+
+
+            var mensaje = '';
+            if(data.error)
+            {
+                $.each(data.error, function (indexInArray, valueOfElement)
+                {
+                    mensaje += valueOfElement+'\n';
+                });
+            }
+            else
+            {
+                mensaje += 'Intente nuevamente.';
+            }
+
+            swal({
+                title: "Edicion de Personal",
+                text: mensaje,
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
