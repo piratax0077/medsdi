@@ -35,7 +35,7 @@
                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         @php
                             $url_temp_2 = ('Profesional/Paciente/Ficha_consulta?_token='.request('_token').'&id_hora_realizar='.request('id_hora_realizar').'&lugar_atencion_id='.request('lugar_atencion_id').'');
-                            $ruta = ROUTE('check_sdi', ['id_recept' => $paciente->id_usuario,'urla'=> $url_temp_2.'&lic='.request('lic').'&compin=0','urln' => $url_temp_2.'&lic='.request('lic').'&compin=1', 'id_tipo' => 11]);
+                            $ruta = ROUTE('check_sdi', ['id_recept' => $paciente->id_usuario,'urla'=> $url_temp_2.'&lic='.request('lic').'&compin=0','urln' => $url_temp_2.'&lic='.request('lic').'&compin=1&tab=licencia-tab', 'id_tipo' => 11]);
                         @endphp
                         <a href="{{ $ruta }}" class="btn btn-info btn-sm btn-block">Solicitar</a>
                     </div>

@@ -395,6 +395,10 @@ Route::group([
     Route::get('bienvenida/liberar', [App\Http\Controllers\EscritorioPaciente::class, 'liberarBienvenida'])->name('paciente.perfil.liberar.bienvenida');
 });
 
+/** INICIO DE LICENCIA */
+Route::get('/aprobar/licencia/aceptar', [App\Http\Controllers\LicenciaAprobacionController::class, 'licenciaEvaluacion'])->name('paciente.licencia.evalueacion.aceptar');
+Route::get('/aprobar/licencia/rechazar', [App\Http\Controllers\LicenciaAprobacionController::class, 'licenciaEvaluacion'])->name('paciente.licencia.evalueacion.rechazar');
+
 Route::group(
     [
         'middleware' => ['role:Profesional|Admin|Paciente'],
@@ -608,6 +612,10 @@ Route::group([
     Route::post('/ficha/vacuna/registro', [App\Http\Controllers\FichaPediatriaVacunaController::class, 'registrar'])->name('ficha.registro.vacuna');
     Route::get('/ficha/vacuna/ver_registros', [App\Http\Controllers\FichaPediatriaVacunaController::class, 'verRegistros'])->name('ficha.ver.registros.vacuna');
     Route::get('/ficha/vacuna/carnet', [App\Http\Controllers\FichaPediatriaVacunaController::class, 'generarPdfCarnet'])->name('ficha.pdf.vacuna');
+
+    /** INICIO DE LICENCIA */
+    Route::get('/aprobar/licencia/aceptar', [App\Http\Controllers\LicenciaAprobacionController::class, 'licenciaEvaluacion'])->name('profesional.licencia.evalueacion.aceptar');
+    Route::get('/aprobar/licencia/rechazar', [App\Http\Controllers\LicenciaAprobacionController::class, 'licenciaEvaluacion'])->name('profesional.licencia.evalueacion.rechazar');
 
 });
 

@@ -216,6 +216,11 @@
 				});
 			@endif
 
+            @if (request('tab'))
+                let li = $('a[id="{{ request('tab') }}"]');
+                li.tab('show');
+            @endif
+
         });
 
 	</script>

@@ -48,7 +48,7 @@
                                             @php
                                                 $url_temp = 'Profesional/Paciente/Ficha_consulta?_token='.request('_token').'&id_hora_realizar='.request('id_hora_realizar').'&lugar_atencion_id='.request('lugar_atencion_id').'';
                                             @endphp
-                                            <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $profesional->id_usuario,'urla'=> $url_temp.'&lic=0','urln' => $url_temp.'&lic=1', 'id_tipo' => 12]) }}">Licencia</a>
+                                            <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $profesional->id_usuario,'urla'=> $url_temp.'&lic=0','urln' => $url_temp.'&lic=1&tab=licencia-tab', 'id_tipo' => 12]) }}">Licencia</a>
                                         @endif
 
                                     </li>
@@ -114,7 +114,7 @@
         <!-- SIDE BAR ORL -->
         @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
         @include("atencion_medica.include.sidebar_derecho_orl"){{-- modales y data de sidebar especialidad --}}
-		 @include("general.modal.modal_no_disponible")
+        @include("general.modal.modal_no_disponible")
     </div>
     <!--Cierre: Container Completo-->
 @endsection

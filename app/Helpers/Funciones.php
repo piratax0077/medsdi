@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Http\Controllers\SendMailController;
 use Illuminate\Support\Facades\DB;
 use App\Models\LogUsersDevices;
 use App\Models\Profesional;
@@ -125,7 +126,7 @@ class Funciones{
                    return $datos;
     }
 
-    public function checkStatePermApp($token)
+    static public function checkStatePermApp($token)
     {
         $datos = array();
         $registro = LogUsersDevices::where('token',trim($token))->first();
@@ -213,7 +214,8 @@ class Funciones{
         $log_users_devices->fecha_ingreso = $fecha_actual;
         $log_users_devices->fecha_termino = $fecha_vencimiento;
         $log_users_devices->tipo = $tipo_id; // check sdi // ESTRUCTURA DE TEXTO
-        $log_users_devices->token = md5(uniqid());
+        $token_temp = md5(uniqid());
+        $log_users_devices->token = $token_temp;
         $log_users_devices->fecha_exp = $fecha_expira;
 
         if($log_users_devices->save())
@@ -227,6 +229,7 @@ class Funciones{
             $datos['app']['last_id'] = $log_users_devices->id;
             $datos['app']['token'] = $log_users_devices->token;
 
+            Funciones::envioCorreoNotificacion($tipo_id, $id_user_create, $id_user_recept, $token_temp);
         }
         else
         {
@@ -236,4 +239,116 @@ class Funciones{
 
         return $datos;
     }
+
+    public function envioCorreoNotificacion($tipo_id, $id_user_create, $id_user_recept, $token_temp)
+    {
+        $tipo_con_correo = array('999999','11', '12');
+        if( array_search($tipo_id, $tipo_con_correo) )
+        {
+            $datos_create = '';
+            $datos_recept = '';
+            $datos_create = Funciones::userData($id_user_create);
+            $datos_recept = Funciones::userData($id_user_recept);
+
+            $blade_correo = 'correo_log_autorizacion';
+            $asunto_correo = '';
+            $body_correo = array();
+            switch ($tipo_id) {
+                case '11':
+                    $asunto_correo = 'MED-SDI - Solicitud de permiso de Inicio de Licencia por Profesional';
+                    $body_correo = array(
+                        'titulo' => 'Solicitud Permiso para Licencia',
+                        'cuerpo' => 'El profesional '.$datos_create['nombre'].' '.$datos_create['apellido_uno'].' '.$datos_create['apellido_dos'].' esta solicitando permiso para Iniciar Licencia.<br>
+                                    <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td height="20" colspan="2"><hr/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center;">
+                                                <a target="_blank" href="'.route('paciente.licencia.evalueacion.aceptar', array('token='.$token_temp, 'proceso=aceptar')).'" style="color: #ffffff; text-decoration: none; font-size: 18px; ">
+                                                    <div style="background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); padding: 15px 18px; -webkit-border-radius: 30px; font-family: Helvetica, Arial, sans-serif;" align="center" bgcolor="#289CDC">
+                                                       ACEPTAR LICENCIA
+                                                    </div>
+                                                </a>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <a target="_blank" href="'.route('paciente.licencia.evalueacion.rechazar', array('token='.$token_temp, 'proceso=rechazar')).'" style="color: #ffffff; text-decoration: none; font-size: 18px; ">
+                                                    <div style="background: rgb(204,65,51); background: -moz-linear-gradient(81deg, rgba(204,65,51,1) 0%, rgba(190,28,28,1) 100%); background: -webkit-linear-gradient(81deg, rgba(204,65,51,1) 0%, rgba(190,28,28,1) 100%); background: linear-gradient(81deg, rgba(204,65,51,1) 0%, rgba(190,28,28,1) 100%); padding: 15px 18px; -webkit-border-radius: 30px; font-family: Helvetica, Arial, sans-serif;" align="center" bgcolor="#289CDC">
+                                                        RECHAZAR LICENCIA
+                                                    </div>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>'
+                    );
+                    break;
+                case '12':
+                    $asunto_correo = 'MED-SDI - Permiso para Inicio de Licencia';
+                    $body_correo = array(
+                        'titulo' => 'Solicitud Permiso para Licencia',
+                        'cuerpo' => 'Profesional usted esta Iniciando una Licencia<br>
+                                    <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td height="20" colspan="2"><hr/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center;">
+                                                <a target="_blank" href="'.route('profesional.licencia.evalueacion.aceptar', array('token='.$token_temp, 'proceso=aceptar')).'" style="color: #ffffff; text-decoration: none; font-size: 18px; ">
+                                                    <div style="background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); padding: 15px 18px; -webkit-border-radius: 30px; font-family: Helvetica, Arial, sans-serif;" align="center" bgcolor="#289CDC">
+                                                    ACEPTAR LICENCIA
+                                                    </div>
+                                                </a>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <a target="_blank" href="'.route('profesional.licencia.evalueacion.rechazar', array('token='.$token_temp, 'proceso=rechazar')).'" style="color: #ffffff; text-decoration: none; font-size: 18px; ">
+                                                    <div style="background: rgb(204,65,51); background: -moz-linear-gradient(81deg, rgba(204,65,51,1) 0%, rgba(190,28,28,1) 100%); background: -webkit-linear-gradient(81deg, rgba(204,65,51,1) 0%, rgba(190,28,28,1) 100%); background: linear-gradient(81deg, rgba(204,65,51,1) 0%, rgba(190,28,28,1) 100%); padding: 15px 18px; -webkit-border-radius: 30px; font-family: Helvetica, Arial, sans-serif;" align="center" bgcolor="#289CDC">
+                                                        RECHAZAR LICENCIA
+                                                    </div>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>'
+                    );
+                    break;
+
+                default:
+                    $blade_correo = '';
+                    $asunto_correo = '';
+                    $body_correo = array();
+                    break;
+            }
+
+            if(!empty($blade_correo) && !empty($asunto_correo))
+            {
+                if( !empty($datos_create['email']) && !empty($datos_recept['email']) )
+                {
+
+                    $blade = $blade_correo;
+                    $to = array(
+                            array('email' => $datos_recept['email'], 'name' =>  $datos_recept['nombre'] . ' ' . $datos_recept['apellido_uno'] . ' ' . $datos_recept['apellido_dos']),
+                        );
+                    $cc = array();
+                    $bcc = array();
+                    $asunto = $asunto_correo;
+                    $body = $body_correo;
+                    $archivo = '';
+                    $id_institucion = '';
+
+                    $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                    if($result_mail['estado'])
+                    {
+                        $datos['mail']['institucion']['estado'] = 1;
+                        $datos['mail']['institucion']['msj'] = 'Notificacion de bienvenida enviado';
+                    }
+                    else
+                    {
+                        $datos['mail']['institucion']['estado'] = 0;
+                        $datos['mail']['institucion']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                    }
+                }
+            }
+        }
+    }
+
 }
