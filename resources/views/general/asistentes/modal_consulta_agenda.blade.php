@@ -265,32 +265,37 @@
                             </div>
                         </div>
                     </div>
+
                     {{--  PESTAÑA DE VENTA DE BONO  --}}
                     <div class="tab-pane fade" id="pills-venta" role="tabpanel" aria-labelledby="pills-venta-tab">
                         <div class="form-row">
                             <div class="col-sm-6">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Rut</label>
-                                    <input type="person" class="form-control form-control-sm" name="rut" id="rut">
+                                    <label class="floating-label-activo-sm">Rut</label>
+                                    <input type="person" class="form-control form-control-sm" name="venta_rut" id="venta_rut">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Nº de serie carne</label>
-                                    <input type="text" class="form-control form-control-sm" name="serie" id="serie">
-                                    </div>
+                                    <label class="floating-label-activo-sm">Nº de serie carne</label>
+                                    <input type="text" class="form-control form-control-sm" name="venta_serie" id="venta_serie">
+                                </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Nombre</label>
-                                    <input type="text" class="form-control form-control-sm" name="nombre" id="nombre">
+                                    <label class="floating-label-activo-sm">Nombre</label>
+                                    <input type="text" class="form-control form-control-sm" name="venta_nombre" id="venta_nombre">
+                                    <input type="hidden" class="form-control form-control-sm" name="venta_paciente_nombre" id="venta_paciente_nombre">
+                                    <input type="hidden" class="form-control form-control-sm" name="venta_paciente_apellido_uno" id="venta_paciente_apellido_uno">
+                                    <input type="hidden" class="form-control form-control-sm" name="venta_paciente_apellido_dos" id="venta_paciente_apellido_dos">
+                                    <input type="hidden" class="form-control form-control-sm" name="venta_paciente_email" id="venta_paciente_email">
                                 </div>
                             </div>
 
                             <div class="col-sm-6">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Previsión</label>
-                                    <select id="prevision" name="previsioon" class="form-control form-control-sm">
+                                    <label class="floating-label-activo-sm">Previsión</label>
+                                    <select id="venta_prevision" name="venta_prevision" class="form-control form-control-sm">
                                         <option value="0">Selecione una opción</option>
                                         @foreach ($prevision as $prev)
                                             <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
@@ -298,51 +303,56 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-6" id="div_btn_pedir_autorizacion">
                                 <div class="form-group fill">
-                                    <button type="submit" onclick="conectar_api()"; class="btn btn-info btn-sm has-ripple">Pedir Autorización</button>
+                                    <button type="button" onclick="conectar_api();" class="btn btn-info btn-sm has-ripple">Pedir Autorización</button>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Folio</label>
-                                    <input type="number" class="form-control form-control-sm" name="folio" id="folio">
+
+                            {{-- seccion autorizado --}}
+                            <div class="venta_autorizada row" style="display: none;">
+
+                                <div class="col-sm-6">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Folio</label>
+                                        <input type="number" class="form-control form-control-sm" name="venta_folio" id="venta_folio">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Valor Bono</label>
-                                    <input type="number" class="form-control form-control-sm" name="valor_consulta" id="valor_consulta">
+                                <div class="col-sm-6">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Valor Bono</label>
+                                        <input type="number" class="form-control form-control-sm" name="venta_valor_consulta" id="venta_valor_consulta">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Valor Bonificación</label>
-                                    <input type="number" class="form-control form-control-sm" name="valor_pagar" id="valor_pagar">
+                                <div class="col-sm-6">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Valor Bonificación</label>
+                                        <input type="number" class="form-control form-control-sm" name="venta_valor_pagar" id="venta_valor_pagar">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Aporte Seguro</label>
-                                    <input type="number" class="form-control form-control-sm" name="valor_seguro" id="valor_seguro">
+                                <div class="col-sm-6">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Aporte Seguro</label>
+                                        <input type="number" class="form-control form-control-sm" name="venta_valor_seguro" id="venta_valor_seguro">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Valor a pagar</label>
-                                    <input type="number" class="form-control form-control-sm" name="valor_copago" id="valor_copagp">
+                                <div class="col-sm-6">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Valor a pagar</label>
+                                        <input type="number" class="form-control form-control-sm" name="venta_valor_copago" id="venta_valor_copago">
+                                    </div>
                                 </div>
-                            </div>
-                            <hr>
-                            <div class="col-sm-6">
-                                <div class="form-group fill">
-                                    <button type="submit" class="btn btn-info btn-sm has-ripple left-0">Pagar Atención Médica</button>
-                                    {{--  <button type="button" class="btn btn-danger btn-sm has-ripple " data-dismiss="modal">Cerrar</button>  --}}
+                                <hr>
+                                <div class="col-sm-6">
+                                    <div class="form-group fill">
+                                        <button type="button" class="btn btn-info btn-sm has-ripple left-0" onclick="pago_venta_bono();">Generar Bono de Atención</button>
+                                    </div>
                                 </div>
+
                             </div>
+
                             <div class="col-sm-6">
                                 <div class="form-group fill text-left">
-                                    {{--  <button type="submit" class="btn btn-info btn-sm has-ripple">Pagar Atención Médica</button>  --}}
                                     <button type="button" class="btn btn-danger btn-sm has-ripple " data-dismiss="modal">Cerrar</button>
                                 </div>
                             </div>
@@ -632,5 +642,7 @@
         </div>
     </div>
 </div>
-@include('app.asistente.modales.m_esperando_api')
+
+@include('general.asistentes.m_esperando_api')
+@include('general.asistentes.m_pago')
 <!-- FIN MODAL AGREGAR HORA MEDICA -->

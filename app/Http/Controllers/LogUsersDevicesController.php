@@ -371,6 +371,32 @@ class LogUsersDevicesController extends Controller
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Creacion de Licencia</span> con fecha {$fecha}</p><br>";
                     break;
 
+                    case 13: //  autorizacion de paciente para compra de bono
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id;
+                        $nombre = $data->nombre;
+                        $fecha = $data->fecha;
+                        $profesional = $data->profesional;
+                        /** peticion */
+                        $value['msg_estado'] = "Autorizacion para compra de bono";
+
+                        /** resultado */
+                        if($value['estado'] == 1)
+                            $value['msg_body'] = "Autorizacion para compra de bono con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        elseif($value['estado'] == 2)
+                            $value['msg_body'] = "Autorizacion para compra de bono con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        else
+                            $value['msg_body'] = "Autorizacion para compra de bono con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+
+                        /** lista log */
+                        if($value['estado'] == 1)
+                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Autorizacion para compra de bono</span> con fecha {$fecha}</p><br>";
+                        elseif($value['estado'] == 2)
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Autorizacion para compra de bono</span> con fecha {$fecha}</p><br>";
+                        else
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Autorizacion para compra de bono</span> con fecha {$fecha}</p><br>";
+                    break;
+
 
                 }
 

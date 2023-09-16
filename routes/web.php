@@ -890,6 +890,14 @@ Route::group([
     Route::post('lista/espera/registrar/existente', [App\Http\Controllers\ListaEsperaController::class, 'registrarExistente'])->name('lista.espera.registrar.existente');
     Route::post('lista/espera/registrar/nuevo', [App\Http\Controllers\ListaEsperaController::class, 'registrarNuevo'])->name('lista.espera.registrar.nuevo');
     Route::post('lista/espera/eliminar', [App\Http\Controllers\ListaEsperaController::class, 'eliminar'])->name('lista.espera.eliminar');
+
+    /** solicitud de permiso al paciente para venta de bono  */
+    Route::post('solicitud/autorizacion/bono/venta', [App\Http\Controllers\VentaBonoController::class, 'solicitarAutorizacionPaciente'])->name('asistente.solicitud.auto.paciente.venta.bono');
+    Route::post('solicitud/autorizacion/validar', [App\Http\Controllers\VentaBonoController::class, 'validarAutorizacion'])->name('asistente.solicitud.auto.validar');
+    Route::post('conectar/prevision', [App\Http\Controllers\VentaBonoController::class, 'conectarIsapreFonasa'])->name('asistente.conectar.prevision');
+    Route::post('venta/bono/pago', [App\Http\Controllers\VentaBonoController::class, 'procesarPagoVenta'])->name('asistente.venta.bono.pago');
+    Route::get('venta/bono/pdf', [App\Http\Controllers\VentaBonoController::class, 'generarPdf_r'])->name('asistente.venta.bono.pdf');
+
 });
 
 /* ASISTENTE Online*/
