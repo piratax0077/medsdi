@@ -401,9 +401,9 @@
                     {
 
                         //data = JSON.parse(data);
-                        console.log('-----------------------');
-                        console.log(data);
-                        console.log('-----------------------');
+                        // console.log('-----------------------');
+                        // console.log(data);
+                        // console.log('-----------------------');
                         if(data.estado == 1)
                         {
                             $('#tabla_info_profesional tbody').show();
