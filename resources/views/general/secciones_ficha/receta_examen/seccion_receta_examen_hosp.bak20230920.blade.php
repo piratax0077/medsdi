@@ -1,48 +1,40 @@
-<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+<!--INDICACIONES-->
 
-    <!--INDICACIONES-->
-    <div class="row">
-        <div class="col-sm-12 col-md-12 text-center">
-            <p class="my-0">Completar diagnóstico para activar botones</p>
+<div class="row">
+    @if (isset($fichaAtencion) && $fichaAtencion->hipotesis_diagnostico != null)
+    <div class="col-sm-12 col-md-6 text-center">
+        <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
+            <button type="button" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-sm mt-1" onclick="i_medicamento();"><i class="feather icon-plus"></i> Indicar
+                medicamento</button>
+            <button type="button" onclick="ver_pdf_receta($('#id_fc').val());" class=" btn_medicamento_pdf btn btn-warning btn-sm mt-1" id="btn_medicamento_pdf"><i class="feather icon-file"></i>Ver PDF</button>
         </div>
     </div>
-    <div class="row">
-        @if (isset($fichaAtencion) && $fichaAtencion->hipotesis_diagnostico != null)
-            <div class="col-sm-12 col-md-6 text-center">
-                <div class="btn-group btn-group-xs w-100" data-toggle="buttons">
-                    <button type="button" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info-light btn-xs mt-1" onclick="i_medicamento();"><i class="feather icon-plus"></i> Indicar medicamento</button>
-                    <button type="button" onclick="ver_pdf_receta($('#id_fc').val());" class=" btn_medicamento_pdf btn btn-primary-light  btn-xs mt-1" id="btn_medicamento_pdf"><i class="feather icon-file"></i>PDF Receta</button>
-                    <button type="button" onclick="ver_pdf_receta_retenido($('#id_fc').val());" class="btn btn-warning-light btn-xs mt-1" id=""><i class="feather icon-file"></i> PDF Retenida</button>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6">
-                <div class="btn-group btn-group-xs w-100" data-toggle="buttons">
-                    <button type="button" id="btn_agregar_examen" class="btn_agregar_examen btn btn-info btn-sm mt-1" onclick="mostrar_modal_examen_cirguria();"><i class="feather icon-plus"></i> Indicar examen</button>
-                    <button type="button" onclick="ver_pdf_orden_examenes($('#id_fc').val());" class=" btn_examenes_pdf btn btn-primary-light  btn-xs mt-1" id="btn_examenes_pdf"><i class="feather icon-file"></i>Ver Receta</button>
-                </div>
-            </div>
-        @else
-            <div class="col-sm-12 col-md-6 text-center">
-                <div class="btn-group btn-group-xs w-100" data-toggle="buttons">
-                    <button type="button" disabled="disabled" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-xs mt-1" onclick="i_medicamento();"><i class="feather icon-plus"></i> Indicar medicamento</button>
-                    <button type="button" disabled="disabled" onclick="ver_pdf_receta($('#id_fc').val());" class=" btn_medicamento_pdf btn btn-primary-light  btn-xs mt-1" id="btn_medicamento_pdf"><i class="feather icon-file"></i> Ver Receta</button>
-                    <button type="button" disabled="disabled" onclick="ver_pdf_receta_retenido($('#id_fc').val());" class="btn_medicamento_pdf btn btn-warning-light btn-xs mt-1" id="btn_medicamento_retenida_pdf"><i class="feather icon-file"></i> PDF Retenida</button>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6">
-                <div class="btn-group btn-group-xs w-100" data-toggle="buttons">
-                    <button type="button" disabled="disabled" id="btn_agregar_examen" class=" btn_agregar_examen btn btn-info btn-xs mt-1" onclick="mostrar_modal_examen_cirguria();"><i class="feather icon-plus"></i> Indicar examen</button>
-                    <button type="button" disabled="disabled" onclick="ver_pdf_orden_examenes($('#id_fc').val());" class=" btn_examenes_pdf btn btn-primary-light  btn-xs mt-1" id="btn_examenes_pdf"><i class="feather icon-file"></i> Ver PDF</button>
-                </div>
-            </div>
-        @endif
+    <div class="col-sm-12 col-md-6">
+        <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
+            <button type="button" id="btn_agregar_examen" class=" btn_agregar_examen btn btn-info btn-sm mt-1" onclick="mostrar_modal_examen_cirguria();"><i class="feather icon-plus"></i>
+                Indicar examen</button>
+            <button type="button" onclick="ver_pdf_orden_examenes($('#id_fc').val());" class=" btn_examenes_pdf btn btn-warning btn-sm mt-1" id="btn_examenes_pdf"><i class="feather icon-file"></i>Ver PDF</button>
+        </div>
     </div>
+    @else
+    <div class="col-sm-12 col-md-6 text-center">
+        <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
+            <button type="button" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-sm mt-1" onclick="i_medicamento();"><i class="feather icon-plus"></i>
+                Indicar medicamento</button>
+            <button type="button" onclick="ver_pdf_receta($('#id_fc').val());" class=" btn_medicamento_pdf btn btn-warning btn-sm mt-1" id="btn_medicamento_pdf"><i class="feather icon-file"></i>Ver PDF</button>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6">
+        <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
+            <button type="button" id="btn_agregar_examen" class=" btn_agregar_examen btn btn-info btn-sm mt-1" onclick="mostrar_modal_examen_cirguria();"><i class="feather icon-plus"></i> Indicar examen</button>
+            <button type="button" onclick="ver_pdf_orden_examenes($('#id_fc').val());" class=" btn_examenes_pdf btn btn-warning btn-sm mt-1" id="btn_examenes_pdf"><i class="feather icon-file"></i>Ver PDF</button>
+        </div>
+    </div>
+    @endif
 </div>
 
-
 @section('Modals-med-exa')
-    {{-- @include('app.cirugia.modals.modals_cesarea.modal_indicar_medicamentos') --}}
-    @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
+    @include('app.cirugia.modals.modals_cesarea.modal_indicar_medicamentos')
     @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
 @endsection
 
@@ -51,10 +43,68 @@
     <script>
         var creatinina = 0;
         $(document).ready(function() {
+            {{--  MEDICAMENTOS  --}}
+            $("#nombre_medicamento_ficha_dental").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getArticulo') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            console.log(data.length);
+                            if( data.length == 0 )
+                            {
+                                $('.medicamento_activo').hide();
+                                $('.medicamento_inactivo').show();
+                                $('#dosis_medicamento_ficha_dental_2').val('');
+                                $('#frecuencia_medicamento_ficha_dental_2').val('');
+                                $('#id_medicamento_ficha_dental').val('');
+                            }
+                            else
+                            {
+                                $('.medicamento_activo').show();
+                                $('.medicamento_inactivo').hide();
+                                $('#dosis_medicamento_ficha_dental_2').val('');
+                                $('#frecuencia_medicamento_ficha_dental_2').val('');
+                                $('#id_medicamento_ficha_dental').val('');
+                            }
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    // Set selection
+                    $('#nombre_medicamento_ficha_dental').val(ui.item.label); // display the selected text
+                    $('#id_medicamento_ficha_dental').val(ui.item.value); // save selected id to input
+                    $('#nombre_composicion_farmaco').html(ui.item.droga); // save selected id to input
+
+                    return false;
+                }
+            });
+
+            {{--  mostrar ocultar mensaje de medicamento de uso cronico en receta de ficha  --}}
+            $('#medicamento_uso_cronico').change(function(){
+                if($('#medicamento_uso_cronico').is(':checked') )
+                {
+                    $('#mensaje_uso_cronico').show();
+                }
+                else
+                {
+                    $('#mensaje_uso_cronico').hide();
+                }
+
+            });
+
+
+
             {{--  EXAMENES  --}}
             {{--  funcion para capturar el tipo de examen y buscar los subtipo que estan relacionados con el  --}}
             $('#tipo_examen').change(function(e) {
-                console.log('tipo examen examen comun');
                 e.preventDefault();
                 tipo_examen = $('#tipo_examen').val();
 
@@ -79,7 +129,7 @@
                         }
 
                         /** ACTIVAR CHECHBOK DE CON  CONTRASTE */
-                        if($('#tipo_examen').val() == 354) $('#imagenologia_con_contraste').removeAttr('disabled');
+                        if($('#tipo_examen').val() == 362) $('#imagenologia_con_contraste').removeAttr('disabled');
                         else  $('#imagenologia_con_contraste').attr('disabled','disabled');
                     })
                     .fail(function() {
@@ -105,7 +155,8 @@
                     })
                     .done(function(response) {
 
-                        $('#examen').append( `<option value="0">Seleccione... </option>`);
+                        $('#examen').append(
+                            `<option value="0">Seleccione... </option>`);
                         for (var i = 0; i < response.length; i++) {
                             $('#examen').append(`<option value="${response[i].cod_examen}">
                                         ${response[i].nombre_examen}
@@ -134,208 +185,202 @@
         });
 
         {{--  METODOS DE RECETA  --}}
-        // function i_medicamento() {
-        //     {{--  $('#indicar_medicamentos').modal('show');  --}}
-        //     ver_medicamento_ficha_medica();
-        //     $('#indicar_medicamentos').modal({backdrop: 'static', keyboard: false});
-        // }
+        function i_medicamento() {
+            {{--  $('#indicar_medicamentos').modal('show');  --}}
+            ver_medicamento_ficha_medica();
+            $('#indicar_medicamentos').modal({backdrop: 'static', keyboard: false});
+        }
 
-        // function cerrarModalMedicamentosFicha()
-        // {
-        //     swal({
-        //         title: "Ingreso de medicamento(s).",
-        //         text: 'Al "Aceptar" cierra la ventana sin aplicar cambios.\n Debe "Generar Receta" para guardar cambios.',
-        //         icon: "warning",
-        //         buttons: ["Aceptar", 'Cancelar'],
-        //     }).then((result) => {
-        //         if (result == true)
-        //         {
-        //             console.log('regresar');
-        //         } else {
+        function cerrarModalMedicamentosFicha()
+        {
+            swal({
+                title: "Ingreso de medicamento(s).",
+                text: 'Al "Aceptar" cierra la ventana sin aplicar cambios.\n Debe "Generar Receta" para guardar cambios.',
+                icon: "warning",
+                buttons: ["Aceptar", 'Cancelar'],
+            }).then((result) => {
+                if (result == true)
+                {
+                    console.log('regresar');
+                } else {
 
-        //             $('#indicar_medicamentos').modal('hide');
-        //         }
-        //     })
-        // }
+                    $('#indicar_medicamentos').modal('hide');
+                }
+            })
+        }
 
-        // function getDosis() {
+        function getDosis() {
 
-        //     let id_medicamento = $('#id_medicamento_ficha_dental').val();
-        //     console.log(id_medicamento);
+            let id_medicamento = $('#id_medicamento_ficha_dental').val();
+            console.log(id_medicamento);
 
-        //     let url = "{{ route('dental.getDosis') }}";
-        //     $.ajax({
+            let url = "{{ route('dental.getDosis') }}";
+            $.ajax({
 
-        //             url: url,
-        //             type: "get",
-        //             data: {
+                    url: url,
+                    type: "get",
+                    data: {
 
-        //                 id_medicamento: id_medicamento,
+                        id_medicamento: id_medicamento,
 
-        //             },
-        //         })
-        //         .done(function(data) {
-        //             console.log(data)
+                    },
+                })
+                .done(function(data) {
+                    console.log(data)
 
-        //             if (data != null) {
+                    if (data != null) {
 
-        //                 data = JSON.parse(data);
-        //                 console.log(data)
-        //                 let dosis = $('#dosis_medicamento_ficha_dental');
+                        data = JSON.parse(data);
+                        console.log(data)
+                        let dosis = $('#dosis_medicamento_ficha_dental');
 
-        //                 dosis.find('option').remove();
-        //                 dosis.append('<option value="0">Seleccione</option>');
-        //                 $(data).each(function(i, v) { // indice, valor
-        //                     dosis.append('<option value="' + v.dosis + '" data-id="'+v.id+'" data-cant_comp="'+v.cant_comp+'">' + v.present +
-        //                         '</option>');
-        //                 })
+                        dosis.find('option').remove();
+                        dosis.append('<option value="0">Seleccione</option>');
+                        $(data).each(function(i, v) { // indice, valor
+                            dosis.append('<option value="' + v.dosis + '" data-id="'+v.id+'" data-cant_comp="'+v.cant_comp+'">' + v.present +
+                                '</option>');
+                        })
 
-        //             } else {
-
-
-
-        //             }
-
-        //         })
-        //         .fail(function(jqXHR, ajaxOptions, thrownError) {
-        //             console.log(jqXHR, ajaxOptions, thrownError)
-        //         });
-        // };
-
-
-        // function getFrecuencia() {
-
-        //     let id_dosis = $('#dosis_medicamento_ficha_dental').val();
-        //     //console.log(dosis);
-
-        //     let url = "{{ route('dental.getFrecuencia') }}";
-        //     $.ajax({
-
-        //             url: url,
-        //             type: "get",
-        //             data: {
-
-        //                 id_dosis: id_dosis,
-
-        //             },
-        //         })
-        //         .done(function(data) {
-        //             console.log(data)
-
-        //             if (data != null) {
-
-        //                 data = JSON.parse(data);
-        //                 console.log(data)
-        //                 let dosis = $('#frecuencia_medicamento_ficha_dental');
-
-        //                 dosis.find('option').remove();
-        //                 dosis.append('<option value="0">Seleccione</option>');
-        //                 $(data).each(function(i, v) { // indice, valor
-        //                     dosis.append('<option value="' + v.id + '">' + v.indic +
-        //                         '</option>');
-        //                 })
-
-        //             } else {
+                    } else {
 
 
 
-        //             }
+                    }
 
-        //         })
-        //         .fail(function(jqXHR, ajaxOptions, thrownError) {
-        //             console.log(jqXHR, ajaxOptions, thrownError)
-        //         });
-        // };
-
-        // function getCantComp() {
-
-        //     var cant_comp = $('#dosis_medicamento_ficha_dental option:selected').attr('data-cant_comp');
-        //     console.log(cant_comp);
-
-        //     let url = "{{ route('presentacion.getCantComp') }}";
-        //     $.ajax({
-
-        //             url: url,
-        //             type: "get",
-        //             data: {
-
-        //                 cant_comp: cant_comp,
-
-        //             },
-        //         })
-        //         .done(function(data) {
-        //             console.log(data)
-
-        //             if (data != null) {
-
-        //                 data = JSON.parse(data);
-        //                 console.log(data)
-        //                 let select_cant_comp = $('#cantidad_comprar');
-        //                 let select_cant_comp2 = $('#med_cronicomes');
-
-        //                 select_cant_comp.find('option').remove();
-        //                 select_cant_comp.append('<option value="0">Seleccione</option>');
-        //                 $(data).each(function(i, v) { // indice, valor
-        //                     select_cant_comp.append('<option value="' + v.id + '">' + v.cant +'</option>');
-        //                 })
-        //                 select_cant_comp.append('<option value="999">Otra Cantidad</option>');
-        //             } else {
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        };
 
 
+        function getFrecuencia() {
 
-        //             }
+            let id_dosis = $('#dosis_medicamento_ficha_dental').val();
+            //console.log(dosis);
 
-        //         })
-        //         .fail(function(jqXHR, ajaxOptions, thrownError) {
-        //             console.log(jqXHR, ajaxOptions, thrownError)
-        //         });
+            let url = "{{ route('dental.getFrecuencia') }}";
+            $.ajax({
 
-        // };
+                    url: url,
+                    type: "get",
+                    data: {
 
-        // function validar_via_administracion()
-        // {
-        //     if($('#via_administracion_ficha_dental').val() == 11)
-        //     {
-        //         $('#div_observaciones_medicamento_ficha_dental').show();
-        //         $('#observaciones_medicamento_ficha_dental').removeAttr('disabled');
-        //     }
-        //     else
-        //     {
-        //         $('#div_observaciones_medicamento_ficha_dental').hide();
-        //         $('#observaciones_medicamento_ficha_dental').attr('disabled','disabled');
-        //         $('#observaciones_medicamento_ficha_dental').val('');
-        //     }
-        // }
+                        id_dosis: id_dosis,
 
-        // function validar_periodo()
-        // {
-        //     if($('#periodo_ficha_dental').val() == 11)
-        //     {
-        //         $('#div_observaciones_periodo_ficha_dental').show();
-        //         $('#observaciones_periodo_ficha_dental').removeAttr('disabled');
-        //     }
-        //     else
-        //     {
-        //         $('#div_observaciones_periodo_ficha_dental').hide();
-        //         $('#observaciones_periodo_ficha_dental').attr('disabled','disabled');
-        //         $('#observaciones_periodo_ficha_dental').val('');
-        //     }
-        // }
+                    },
+                })
+                .done(function(data) {
+                    console.log(data)
 
-        // function validar_cantidad_comprar()
-        // {
-        //     if($('#cantidad_comprar').val() == 999)
-        //     {
-        //         $('#div_otra_cantidad_a_comprar').show();
-        //         $('#otra_cantidad_a_comprar').removeAttr('disabled');
-        //     }
-        //     else
-        //     {
-        //         $('#div_otra_cantidad_a_comprar').hide();
-        //         $('#otra_cantidad_a_comprar').attr('disabled','disabled');
-        //         $('#otra_cantidad_a_comprar').val('');
-        //     }
-        // }
+                    if (data != null) {
+
+                        data = JSON.parse(data);
+                        console.log(data)
+                        let dosis = $('#frecuencia_medicamento_ficha_dental');
+
+                        dosis.find('option').remove();
+                        dosis.append('<option value="0">Seleccione</option>');
+                        $(data).each(function(i, v) { // indice, valor
+                            dosis.append('<option value="' + v.id + '">' + v.indic +
+                                '</option>');
+                        })
+
+                    } else {
+
+
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        };
+
+        function getCantComp() {
+
+            var cant_comp = $('#dosis_medicamento_ficha_dental option:selected').attr('data-cant_comp');
+            console.log(cant_comp);
+
+            let url = "{{ route('presentacion.getCantComp') }}";
+            $.ajax({
+
+                    url: url,
+                    type: "get",
+                    data: {
+
+                        cant_comp: cant_comp,
+
+                    },
+                })
+                .done(function(data) {
+                    console.log(data)
+
+                    if (data != null) {
+
+                        data = JSON.parse(data);
+                        console.log(data)
+                        let select_cant_comp = $('#cantidad_comprar');
+                        let select_cant_comp2 = $('#med_cronicomes');
+
+                        select_cant_comp.find('option').remove();
+                        select_cant_comp.append('<option value="0">Seleccione</option>');
+                        $(data).each(function(i, v) { // indice, valor
+                            select_cant_comp.append('<option value="' + v.id + '">' + v.cant +'</option>');
+                        })
+                        select_cant_comp.append('<option value="999">Otra Cantidad</option>');
+                    } else {
+
+
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+
+        };
+
+        function validar_via_administracion()
+        {
+            if($('#via_administracion_ficha_dental').val() == 11)
+            {
+                $('#observaciones_medicamento_ficha_dental').removeAttr('disabled');
+            }
+            else
+            {
+                $('#observaciones_medicamento_ficha_dental').attr('disabled','disabled');
+                $('#observaciones_medicamento_ficha_dental').val('');
+            }
+        }
+
+        function validar_periodo()
+        {
+            if($('#periodo_ficha_dental').val() == 11)
+            {
+                $('#observaciones_periodo_ficha_dental').removeAttr('disabled');
+            }
+            else
+            {
+                $('#observaciones_periodo_ficha_dental').attr('disabled','disabled');
+                $('#observaciones_periodo_ficha_dental').val('');
+            }
+        }
+
+        function validar_cantidad_comprar()
+        {
+            if($('#cantidad_comprar').val() == 999)
+            {
+                $('#otra_cantidad_a_comprar').removeAttr('disabled');
+            }
+            else
+            {
+                $('#otra_cantidad_a_comprar').attr('disabled','disabled');
+                $('#otra_cantidad_a_comprar').val('');
+            }
+        }
 
         function indicar_medicamento_cirugia() {
 
@@ -468,7 +513,7 @@
                 if(valido == 0)
                 {
                     $('.medicamentos_sin_registros').remove()
-
+                    {{--  var i = 1; //contador para asignar id al boton que borrara la fila  --}}
                     var i = $('#tabla_medicamento_cirugia tr').length; //contador para asignar id al boton que borrara la fila
                     var fila = '<tr class="tabla_medicamento_cirugia" id="row' + i + '">' +
                                     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_medicamento + '</td>' +
@@ -553,81 +598,81 @@
             }
         }
 
-        // function eliminar_medicamento(id_row)
-        // {
-        //     $('#tabla_medicamento_cirugia [id='+id_row+']').remove();
-        // }
+        function eliminar_medicamento(id_row)
+        {
+            $('#tabla_medicamento_cirugia [id='+id_row+']').remove();
+        }
 
-        // function enviar_medicamento_faltante()
-        // {
-        //     var med_faltante = $.trim($('#med_faltante').val());
-        //     if(med_faltante != ''){
-        //         /** registro */
-        //         let url = "{{ route('medicamentoFaltante.registro')}}";
+        function enviar_medicamento_faltante()
+        {
+            var med_faltante = $.trim($('#med_faltante').val());
+            if(med_faltante != ''){
+                /** registro */
+                let url = "{{ route('medicamentoFaltante.registro') }}";
 
 
-        //         var _token = CSRF_TOKEN;
-        //         var id_profesional = $('#id_profesional').val();
+                var _token = CSRF_TOKEN;
+                var id_profesional = $('#id_profesional').val();
 
-        //         $.ajax({
+                $.ajax({
 
-        //             url: url,
-        //             type: "POST",
-        //             data: {
-        //                 _token: _token,
-        //                 id_profesional: id_profesional,
-        //                 nombre: med_faltante,
-        //             },
-        //         })
-        //         .done(function(data)
-        //         {
+                    url: url,
+                    type: "POST",
+                    data: {
+                        _token: _token,
+                        id_profesional: id_profesional,
+                        nombre: med_faltante,
+                    },
+                })
+                .done(function(data)
+                {
 
-        //             if (data !== 'null')
-        //             {
-        //                 //data = JSON.parse(data);
-        //                 console.log('-----------------------');
-        //                 console.log(data);
-        //                 console.log('-----------------------');
-        //                 if(data.estado == 1)
-        //                 {
-        //                     swal({
-        //                         title: "Medicamento/Dispositivo Faltante enviado.\n Proximamente se agregará el Medicamento/Dispositivo Faltante en los registros",
-        //                         icon: "success",
-        //                         // buttons: "Aceptar",
-        //                         //SuccessMode: true,
-        //                     });
-        //                     $('#med_faltante').val('');
-        //                     $('#no_existe_switch').prop( "checked", false );
-        //                     $('#no_existe').hide();
+                    if (data !== 'null')
+                    {
+                        //data = JSON.parse(data);
+                        console.log('-----------------------');
+                        console.log(data);
+                        console.log('-----------------------');
+                        if(data.estado == 1)
+                        {
+                            swal({
+                                title: "Medicamento/Dispositivo Faltante enviado.\n Proximamente se agregará el Medicamento/Dispositivo Faltante en los registros",
+                                icon: "success",
+                                // buttons: "Aceptar",
+                                //SuccessMode: true,
+                            });
+                            $('#med_faltante').val('');
+                            $('#no_existe_switch').prop( "checked", false );
+                            $('#no_existe').hide();
 
-        //                 }
-        //                 else{
+                        }
+                        else{
 
-        //                     swal({
-        //                         title: "Problema al Enviar solicitud.",
-        //                         icon: "warning",
-        //                         // buttons: "Aceptar",
-        //                         //SuccessMode: true,
-        //                     })
-        //                 }
-        //             }
-        //         })
-        //         .fail(function(jqXHR, ajaxOptions, thrownError) {
-        //             console.log(jqXHR, ajaxOptions, thrownError)
-        //         });
+                            swal({
+                                title: "Problema al Enviar solicitud.",
+                                icon: "warning",
+                                // buttons: "Aceptar",
+                                //SuccessMode: true,
+                            })
+                        }
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
 
-        //     }
-        //     else
-        //     {
-        //         swal({
-        //             title: "Debe Indicar el nombre del Medicamento/Dispositivo Faltante.",
-        //             icon: "error",
-        //             // buttons: "Aceptar",
-        //             //SuccessMode: true,
-        //         })
-        //     }
+            }
+            else
+            {
+                swal({
+                    title: "Debe Indicar el nombre del Medicamento/Dispositivo Faltante.",
+                    icon: "error",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                })
+            }
 
-        // }
+        }
 
         function ver_pdf_receta(id_ficha_atencion)
         {
@@ -636,22 +681,7 @@
             Fancybox.show(
                 [
                     {
-                    src: "{{ route('pdf.receta_medicamentos') }}?id_ficha_atencion="+id_ficha_atencion,
-                    type: "iframe",
-                    preload: false,
-                    },
-                ]
-            );
-        }
-
-        function ver_pdf_receta_retenido(id_ficha_atencion)
-        {
-
-            let url = "{{ route('pdf.receta_medicamentos') }}";
-            Fancybox.show(
-                [
-                    {
-                    src: "{{ route('pdf.receta_medicamentos') }}?id_ficha_atencion="+id_ficha_atencion+'&tipo_control=1',
+                    src: '{{ route('pdf.receta_medicamentos') }}?id_ficha_atencion='+id_ficha_atencion,
                     type: "iframe",
                     preload: false,
                     },
@@ -667,10 +697,6 @@
             ver_examenes_ficha_medica();
             ver_examenes_ficha_medica_esp();
             $('#indicar_examenes').modal({backdrop: 'static', keyboard: false});
-
-        }
-
-        function ver_examenes_ficha_medica_esp() {
 
         }
 
@@ -699,9 +725,7 @@
             var id_tipo_examen = $("#tipo_examen").val();
             var sub_tipo_examen = $("#sub_tipo_examen option:selected").text();
             var examen = $("#examen option:selected").text();
-            var id_examen = $("#examen").val();
             var prioridad = $("#prioridad option:selected").text();
-            var lado = $("#lado option:selected").text();
 
             // var imagenologia_con_contraste = 'N/C';
             // if($('#imagenologia_con_contraste').is(':checked'))
@@ -731,17 +755,11 @@
             if(valido == 0)
             {
                 $('.examenes_sin_registros').remove();
-
+                {{--  var i = 1; //contador para asignar id al boton que borrara la fila  --}}
                 var i = $('#tabla_examen_cirugia tr').length; //contador para asignar id al boton que borrara la fila
                 var fila = '';
                     fila += '<tr class="tr_examen_cirugia" id="row' + i + '">';
-                    fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + id_examen + '</td>';
-                    fila +=     '<td class="text-center align-middle text-wrap" style="display:none">' + examen + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">' + examen + '</td>';
-                    if(lado == 'Seleccione')
-                        fila +=     '<td class="text-center align-middle text-wrap"> </td>';
-                    else
-                        fila +=     '<td class="text-center align-middle text-wrap">' + lado + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">' + tipo_examen + '</td>';
                     //fila =     '<td>' + sub_tipo_examen + '</td>';
                     fila +=     '<td class="text-center align-middle text-wrap">' + prioridad + '</td>';
@@ -774,10 +792,7 @@
                     {
                         fila = '';
                         fila += '<tr class="tr_examen_cirugia" id="row' + i + '">';
-                        fila +=     '<td class="text-center align-middle text-wrap" style="display:none">78</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap" style="display:none">CREATININA EN SANGRE</td>';
                         fila +=     '<td class="text-center align-middle text-wrap">CREATININA EN SANGRE</td>';
-                        fila +=     '<td class="text-center align-middle text-wrap"> </td>';
                         fila +=     '<td class="text-center align-middle text-wrap">SANGRE</td>';
                         //fila =     '<td>' + sub_tipo_examen + '</td>';
                         fila +=     '<td class="text-center align-middle text-wrap">Media</td>';
@@ -796,12 +811,11 @@
                 $("#tipo_examen").val('');
                 $("#sub_tipo_examen").val('');
                 $("#examen").val('');
-                $("#lado").val(0);
                 $("#prioridad").val(2);
                 $('#imagenologia_con_contraste').prop('checked', false);
                 $('#mensaje_imagenologia_con_contraste').hide();
 
-                {{--  $("#adicionados1").text(""); --}}//esta instruccion limpia el div adicioandos para que no se vayan acumulando
+                {{--  $("#adicionados1").text(""); //esta instruccion limpia el div adicioandos para que no se vayan acumulando  --}}
                 {{--  var nFilas = $("#tabla_examen_cirugia tr").length;  --}}
                 {{--  $("#adicionados1").append(nFilas - 1);  --}}
                 {{--  $("#sub_tipo_examen").empty();  --}}
@@ -854,14 +868,11 @@
                 if (i > 0) {
                     rol = {};
                     var data = $(this).find("td");
-                    rol["id_examen"] = $.trim($(data[0]).text().split("\n").join(""));
-                    rol["nombre_examen"] = $.trim($(data[1]).text().split("\n").join(""));
-                    rol["lado"] = $.trim($(data[3]).text().split("\n").join(""));
-                    rol["nombre_examen_especialidad"] = $.trim($(data[2]).text().split("\n").join(""));
-                    rol["tipo"] = $.trim($(data[4]).text().split("\n").join(""));
+                    rol["nombre_examen"] = $.trim($(data[0]).text().split("\n").join(""));
+                    rol["tipo"] = $.trim($(data[1]).text().split("\n").join(""));
                     // rol["subtipo"] = $.trim($(data[2]).text().split("\n").join(""));
-                    rol["prioridad"] = $.trim($(data[5]).text().split("\n").join(""));
-                    rol["con_contraste"] = $.trim($(data[6]).text().split("\n").join(""));
+                    rol["prioridad"] = $.trim($(data[2]).text().split("\n").join(""));
+                    rol["con_contraste"] = $.trim($(data[3]).text().split("\n").join(""));
                     rows1.push(rol);
                 }
             });
@@ -956,90 +967,90 @@
 
 
         {{--  CARGAR MEDICAMENTOS DE FICHA MEDICA  --}}
-        // function ver_medicamento_ficha_medica()
-        // {
+        function ver_medicamento_ficha_medica()
+        {
 
-        //     let url = "{{ route('detalle_receta.ver_medicamentos') }}";
+            let url = "{{ route('detalle_receta.ver_medicamentos') }}";
 
 
-        //     var _token = CSRF_TOKEN;
-        //     var id_ficha = $('#id_fc').val();
-        //     $('#tabla_medicamento_cirugia').html('');
+            var _token = CSRF_TOKEN;
+            var id_ficha = $('#id_fc').val();
+            $('#tabla_medicamento_cirugia').html('');
 
-        //     $.ajax({
+            $.ajax({
 
-        //         url: url,
-        //         type: "GET",
-        //         data: {
-        //             _token: _token,
-        //             id_ficha:id_ficha
-        //         },
-        //     })
-        //     .done(function(data)
-        //     {
+                url: url,
+                type: "GET",
+                data: {
+                    _token: _token,
+                    id_ficha:id_ficha
+                },
+            })
+            .done(function(data)
+            {
 
-        //         if (data !== 'null')
-        //         {
-        //             //data = JSON.parse(data);
-        //             console.log('----------ver_medicamento_ficha_medica-------------');
-        //             console.log(data);
-        //             console.log('-----------------------');
-        //             var html = '';
+                if (data !== 'null')
+                {
+                    //data = JSON.parse(data);
+                    console.log('----------ver_medicamento_ficha_medica-------------');
+                    console.log(data);
+                    console.log('-----------------------');
+                    var html = '';
 
-        //             html += '<thead>';
-        //             html += '    <tr>';
-        //             html += '        <th class="text-center align-middle hidden" hidden="hidden">id_producto</th>';
-        //             html += '        <th class="text-center align-middle hidden" hidden="hidden">uso_cronico</th>';
-        //             html += '        <th class="text-center align-middle">Medicamento</th>';
-        //             html += '        <th class="text-center align-middle">Presentación</th>';
-        //             html += '        <th class="text-center align-middle">Posología</th>';
-        //             html += '        <th class="text-center align-middle">Vía Adm.</th>';
-        //             html += '        <th class="text-center align-middle">Periodo</th>';
-        //             html += '        <th class="text-center align-middle">Comprar</th>';
-        //             html += '        <th class="text-center align-middle">Eliminar</th>';
-        //             html += '    </tr>';
-        //             html += '</thead>';
-        //             html += '<tbody>';
-        //             if(data.estado == 1)
-        //             {
+                    html += '<thead>';
+                    html += '    <tr>';
+                    html += '        <th class="text-center align-middle hidden" hidden="hidden">id_producto</th>';
+                    html += '        <th class="text-center align-middle hidden" hidden="hidden">uso_cronico</th>';
+                    html += '        <th class="text-center align-middle">Medicamento</th>';
+                    html += '        <th class="text-center align-middle">Presentación</th>';
+                    html += '        <th class="text-center align-middle">Posología</th>';
+                    html += '        <th class="text-center align-middle">Vía Adm.</th>';
+                    html += '        <th class="text-center align-middle">Periodo</th>';
+                    html += '        <th class="text-center align-middle">Comprar</th>';
+                    html += '        <th class="text-center align-middle">Eliminar</th>';
+                    html += '    </tr>';
+                    html += '</thead>';
+                    html += '<tbody>';
+                    if(data.estado == 1)
+                    {
 
-        //                 $.each(data.registros, function(index, value)
-        //                 {
-        //                     {{--  var f_temp = (value.created_at).replace('T',' ').replace('Z','').replace('.000000','');
-        //                     var fecha = new Date(f_temp);
-        //                     fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear()+' '+fecha.getHours()+':'+fecha.getMinutes();  --}}
+                        $.each(data.registros, function(index, value)
+                        {
+                            {{--  var f_temp = (value.created_at).replace('T',' ').replace('Z','').replace('.000000','');
+                            var fecha = new Date(f_temp);
+                            fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear()+' '+fecha.getHours()+':'+fecha.getMinutes();  --}}
 
-        //                     html += '<tr class="tabla_medicamento_cirugia" id="row' + index + '">';
-        //                     html += '    <td class="text-center align-middle text-wrap hidden" hidden="hidden">'+value.id_articulo+'</td>';
-        //                     html += '    <td class="text-center align-middle text-wrap hidden" hidden="hidden">'+value.uso_cronico+'</td>';
-        //                     html += '    <td class="text-center align-middle text-wrap">'+value.producto+'</td>';
-        //                     html += '    <td class="text-center align-middle text-wrap">'+value.presentacion+'</td>';
-        //                     html += '    <td class="text-center align-middle text-wrap">'+value.posologia+'</td>';
-        //                     html += '    <td class="text-center align-middle text-wrap">'+value.via_administracion+'</td>';
-        //                     html += '    <td class="text-center align-middle text-wrap">'+value.periodo+'</td>';
-        //                     html += '    <td class="text-center align-middle text-wrap">'+value.cantidad_compra+'</td>';
-        //                     html += '    <td class="text-center align-middle text-wrap"><div name="remove" id="' + index +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento(\'row' + index + '\');">Quitar</div></td>';
-        //                     html += '</tr>';
-        //                 });
+                            html += '<tr class="tabla_medicamento_cirugia" id="row' + index + '">';
+                            html += '    <td class="text-center align-middle text-wrap hidden" hidden="hidden">'+value.id_articulo+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap hidden" hidden="hidden">'+value.uso_cronico+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap">'+value.producto+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap">'+value.presentacion+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap">'+value.posologia+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap">'+value.via_administracion+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap">'+value.periodo+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap">'+value.cantidad_compra+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap"><div name="remove" id="' + index +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento(\'row' + index + '\');">Quitar</div></td>';
+                            html += '</tr>';
+                        });
 
-        //             }
-        //             else
-        //             {
+                    }
+                    else
+                    {
 
-        //                 html += '<tr class="medicamentos_sin_registros">';
-        //                 html += '    <td class="text-center align-middle " colspan="9">'+data.msj+'</td>';
-        //                 html += '</tr>';
+                        html += '<tr class="medicamentos_sin_registros">';
+                        html += '    <td class="text-center align-middle " colspan="9">'+data.msj+'</td>';
+                        html += '</tr>';
 
-        //             }
-        //             html += '</tbody>';
-        //             $('#tabla_medicamento_cirugia').html(html);
-        //         }
-        //     })
-        //     .fail(function(jqXHR, ajaxOptions, thrownError) {
-        //         console.log(jqXHR, ajaxOptions, thrownError)
-        //     });
+                    }
+                    html += '</tbody>';
+                    $('#tabla_medicamento_cirugia').html(html);
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
 
-        // }
+        }
 
         {{--  CARGAR EXAMENES DE FICHA MEDICA  --}}
         function ver_examenes_ficha_medica()
@@ -1074,10 +1085,7 @@
 
                     html += '<thead>';
                     html += '    <tr>';
-                    html += '        <th class="text-center align-middle" style="display:none">ID</th>';
-                    html += '        <th class="text-center align-middle" style="display:none">NOMBRE</th>';
                     html += '        <th class="text-center align-middle">Nombre Examen</th>';
-                    html += '        <th class="text-center align-middle">Lado</th>';
                     html += '        <th class="text-center align-middle">Tipo</th>';
                     {{--  html += '        <th class="text-center align-middle">Sub-Tipo</th>';  --}}
                     html += '        <th class="text-center align-middle">Prioridad</th>';
@@ -1096,13 +1104,7 @@
                             if(value.examen == 'CREATININA EN SANGRE')
                             {
                                 html += '<tr class="tr_examen_cirugia" id="row' + index + '">';
-                                html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.id_examen+'</td>';
-                                html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+value.examen+'</td>';
-                                if(value.otro == 0 || value.otro == 'null' || value.otro == ' ')
-                                    html += '    <td class="text-center align-middle text-wrap"> </td>';
-                                else
-                                    html += '    <td class="text-center align-middle text-wrap">'+value.otro+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+value.tipo_examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+prioridad[value.id_prioridad]+'</td>';
                                 var text_con_contraste = 'N/C';
@@ -1115,13 +1117,7 @@
                             else
                             {
                                 html += '<tr class="tr_examen_cirugia" id="row' + index + '">';
-                                html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.id_examen+'</td>';
-                                html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+value.examen+'</td>';
-                                if(value.otro == 0 || value.otro == 'null' || value.otro == ' ')
-                                    html += '    <td class="text-center align-middle text-wrap"> </td>';
-                                else
-                                    html += '    <td class="text-center align-middle text-wrap">'+value.otro+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+value.tipo_examen+'</td>';
                                 html += '    <td class="text-center align-middle text-wrap">'+prioridad[value.id_prioridad]+'</td>';
                                 var text_con_contraste = 'N/C';
@@ -1138,7 +1134,7 @@
                     {
 
                         html += '<tr class="examenes_sin_registros">';
-                        html += '    <td class="text-center align-middle " colspan="6">'+data.msj+'</td>';
+                        html += '    <td class="text-center align-middle " colspan="5">'+data.msj+'</td>';
                         html += '</tr>';
 
                     }

@@ -19,9 +19,7 @@
                             <li class="nav-item">
                                 <a class="nav-link-wizard" id="rec_manual_tab" data-toggle="pill" href="#rec_manual" role="tab" aria-controls="rec_manual" aria-selected="true" toogle="true" tooltip="No encontró medicamento">Receta Manual</a>
                             </li>
-							<li class="nav-item">
-                                <a class="nav-link-wizard" id="rec_magistral_tab" data-toggle="pill" href="#rec_magistral" role="tab" aria-controls="rec_magistral" aria-selected="true" toogle="true" tooltip="No encontró medicamento">Recetario Magistral</a>
-                            </li>
+
                         </ul>
                     </div>
                 </div>
@@ -35,9 +33,8 @@
                                         <div class="form-group">
                                             <label class="floating-label">Medicamento</label>
                                             <input type="text" id="nombre_medicamento_ficha_dental" name="nombre_medicamento_ficha_dental" onblur="getDosis_sdi();" class="form-control form-control-sm">
-                                            <input type="hidden" id="id_medicamento_ficha_dental" name="id_medicamento_ficha_dental" class="form-control " value="">
-                                            <input type="hidden" id="id_medicamento_cant_comp" name="id_medicamento_cant_comp" class="form-control " value="">
-                                            <input type="hidden" id="id_medicamento_tipo_control" name="id_medicamento_tipo_control" class="form-control" value="">
+                                            <input type="hidden" id="id_medicamento_ficha_dental" name="id_medicamento_ficha_dental" class="form-control ">
+                                            <input type="hidden" id="id_medicamento_cant_comp" name="id_medicamento_cant_comp" class="form-control ">
                                         </div>
                                     </div>
 
@@ -45,8 +42,6 @@
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm">Composición:</label>
                                             <div id="nombre_composicion_farmaco" name="nombre_composicion_farmaco" class="p-t-5"></div>
-                                            <div id="mensaje_med_control" name="mensaje_med_control" class="alert-warning"></div>
-
                                         </div>
                                     </div>
                                     {{--  CUANDO SE ENCUENTRA MEDICAMENTO EN BUSQUEDA  --}}
@@ -273,107 +268,6 @@
                                 </div>
                             </div>
 
-							<!--TAB 3-->
-							<div class="tab-pane fade show" id="rec_magistral" role="tabpanel" aria-labelledby="rec_magistral_tab">
-                                <div class="form-row">
-
-                                    <div class="col-sm-12 mt-2">
-                                        <div class="form-group">
-                                            <label class="floating-label">Ingrese Los Compuestos y cantidad</label>
-                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="magistral_nombre_medicamento_ficha_dental" id="magistral_nombre_medicamento_ficha_dental"></textarea>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6 mt-2">
-                                        <div class="form-group fill">
-                                            <label class="floating-label">Presentacion</label>
-                                            <input type="text" id="magistral_dosis_medicamento_ficha_dental" name="magistral_dosis_medicamento_ficha_dental" class="form-control form-control-sm">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6 mt-2">
-                                        <div class="form-group fill">
-                                            <label class="floating-label">Ingrese Posología</label>
-                                            <input type="text" id="magistral_frecuencia_medicamento_ficha_dental" name="magistral_frecuencia_medicamento_ficha_dental" class="form-control form-control-sm">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6 mt-2">
-                                        <div class="form-group fill">
-                                            <label class="floating-label">Vía de Administración</label>
-                                            <select class="form-control form-control-sm" id="magistral_via_administracion_ficha_dental" name="magistral_via_administracion_ficha_dental" onchange="validar_via_administracion_manual_sdi();">
-                                                <option value="0">Seleccione</option>
-                                                <option value="1">V&iacute;a Oral</option>
-                                                <option value="2">V&iacute;a Sublingual</option>
-                                                <option value="3">V&iacute;a T&oacute;pica</option>
-                                                <option value="4">V&iacute;a Oftalmol&oacute;gica</option>
-                                                <option value="5">V&iacute;a &Oacute;tica</option>
-                                                <option value="6">V&iacute;a Inhalatoria</option>
-                                                <option value="7">V&iacute;a Nasal</option>
-                                                <option value="8">V&iacute;a Rectal</option>
-                                                <option value="9">V&iacute;a Vaginal</option>
-                                                <option value="10">V&iacute;a parental</option>
-                                                <option value="11">Otra Vía</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group fill" id="div_magistral_observaciones_via_administracion_ficha_dental" style="display: none;">
-                                            <label class="floating-label">Otra vía de Administración</label>
-                                            <input type="text" id="magistral_observaciones_via_administracion_ficha_dental" name="magistral_observaciones_via_administracion_ficha_dental" class="form-control form-control-sm " disabled >
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6 mt-2">
-                                        <div class="form-group fill">
-                                            <label class="floating-label">Periodo</label>
-                                            <select class="form-control form-control-sm" id="magistral_periodo_ficha_dental" name="magistral_periodo_ficha_dental" onchange="validar_periodo_manual_sdi();">
-                                                <option value="0">Seleccione</option>
-                                                <option value="1">SOS</option>
-                                                <option value="2">Dosis unica</option>
-                                                <option value="3">3 d&iacute;as</option>
-                                                <option value="4">5 d&iacute;as</option>
-                                                <option value="5">7 d&iacute;as</option>
-                                                <option value="6">10 d&iacute;as</option>
-                                                <option value="7">15 d&iacute;as</option>
-                                                <option value="8">30 d&iacute;as</option>
-                                                <option value="9">Permanente</option>
-                                                <option value="10">V&iacute;a parental</option>
-                                                <option value="11">Otro Periodo</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group fill" id="div_magistral_observaciones_periodo_ficha_dental" style="display: none;">
-                                            <label class="floating-label">Otro Periodo</label>
-                                            <input type="text" id="magistral_observaciones_periodo_ficha_dental" name="magistral_observaciones_periodo_ficha_dental" class="form-control form-control-sm " disabled >
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6 mt-2">
-                                        <div class="form-group fill">
-                                            <label class="floating-label">Cantidad a Despachar</label>
-                                            <input type="text" id="magistral_cantidad_comprar" name="magistral_cantidad_comprar" class="form-control form-control-sm">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-12">
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="form-group mb-1">
-                                                    <label><strong>Uso Crónico</strong></label>
-                                                    <div class="switch switch-success d-inline m-r-10">
-                                                        <input type="checkbox" id="magistral_medicamento_uso_cronico">
-                                                        <label for="magistral_medicamento_uso_cronico" class="cr"></label>
-                                                    </div>
-                                                    <div class="alert-primary" id="magistral_mensaje_uso_cronico" style="display:none;">Acaba de seleccionar medicamento como USO CRÓNICO </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <button type="button" onclick="indicar_medicamento_magistral_sdi()"
-                                                    class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> Agregar Medicamento Magistral</button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
                             <!--DIV DE TABLA -->
                             <div class="row">
                                 <div class="col-sm-12">
@@ -512,8 +406,6 @@
                             $('#dosis_medicamento_ficha_dental_2').val('');
                             $('#frecuencia_medicamento_ficha_dental_2').val('');
                             $('#id_medicamento_ficha_dental').val('');
-                            $('#id_medicamento_tipo_control').val('');
-                            $('#mensaje_med_control').val('');
                         }
                         else
                         {
@@ -522,8 +414,6 @@
                             $('#dosis_medicamento_ficha_dental_2').val('');
                             $('#frecuencia_medicamento_ficha_dental_2').val('');
                             $('#id_medicamento_ficha_dental').val('');
-                            $('#id_medicamento_tipo_control').val('');
-                            $('#mensaje_med_control').val('');
                         }
                         response(data);
                     }
@@ -534,11 +424,6 @@
                 $('#nombre_medicamento_ficha_dental').val(ui.item.label); // display the selected text
                 $('#id_medicamento_ficha_dental').val(ui.item.value); // save selected id to input
                 $('#nombre_composicion_farmaco').html(ui.item.droga); // save selected id to input
-                $('#id_medicamento_tipo_control').val(ui.item.control); // save selected id to input
-                if(ui.item.control == 1 || ui.item.control == 1 || ui.item.control == 2 || ui.item.control == 3 || ui.item.control == 4 || ui.item.control == 5 )
-                    $('#mensaje_med_control').html('Este Paciente ha tenido 3 Recetas retenidas este año<br>Consulte en "Ranking de recetas controladas del paciente"');
-                else
-                    $('#mensaje_med_control').html('');
 
                 return false;
             }
@@ -784,7 +669,6 @@
 
         let nombre_medicamento_ficha_dental = $('#nombre_medicamento_ficha_dental').val();
         let id_medicamento = $('#id_medicamento_ficha_dental').val();
-        let id_tipo_control = $('#id_medicamento_tipo_control').val();
         let dosis_medicamento_ficha_dental = $('#dosis_medicamento_ficha_dental option:selected').text();
         let frecuencia_medicamento_ficha_dental = $('#frecuencia_medicamento_ficha_dental option:selected').text();
         let dosis_medicamento_ficha_dental_2 = $('#dosis_medicamento_ficha_dental_2').val();
@@ -806,9 +690,9 @@
             }
         });
 
-        // console.log('indicar_medicamento');
-        // console.log('lista_med');
-        // console.log(lista_med);
+        console.log('indicar_medicamento');
+        console.log('lista_med');
+        console.log(lista_med);
 
         if($.inArray(id_medicamento,lista_med) == -1)
         {
@@ -971,8 +855,6 @@
                 $('#otra_cantidad_a_comprar').val('');
                 $('#otra_cantidad_a_comprar').attr('disabled','disabled');
 
-                $('#mensaje_med_control').html('');
-
 
                 $( "#medicamento_uso_cronico" ).prop( "checked", false ).change();
                 //$("#adicionados").append(nFilas - 1);
@@ -1085,6 +967,7 @@
 
     // function ver_pdf_receta(id_ficha_atencion)
     // {
+
     //     let url = "{{ route('pdf.receta_medicamentos') }}";
     //     Fancybox.show(
     //         [
@@ -1472,155 +1355,6 @@
                 $('#manual_observaciones_periodo_ficha_dental').val('');
 
                 $( "#medicamento_uso_cronico" ).prop( "checked", false ).change();
-
-            }
-            else
-            {
-                swal({
-                    title: "Ingreso de medicamento(s).",
-                    text:mensaje,
-                    icon: "error",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
-                });
-            }
-        }
-        else
-        {
-            swal({
-                title: "Ingreso de medicamento(s).",
-                text:'El medicamento está Recetado',
-                icon: "warning",
-                // buttons: "Aceptar",
-                //SuccessMode: true,
-            });
-        }
-    }
-
-    function indicar_medicamento_magistral_sdi()
-    {
-
-        let id_medicamento = 0;
-        let farmaco = '';
-        let nombre_medicamento_ficha_dental = $('#magistral_nombre_medicamento_ficha_dental').val();
-        let dosis_medicamento_ficha_dental = $('#magistral_dosis_medicamento_ficha_dental').val();
-        let frecuencia_medicamento_ficha_dental = $('#magistral_frecuencia_medicamento_ficha_dental').val();
-        let via_administracion_ficha_dental = $('#magistral_via_administracion_ficha_dental option:selected').text();
-        let observaciones_medicamento_ficha_dental = $('#magistral_observaciones_via_administracion_ficha_dental').val();
-        let periodo_ficha_dental = $('#magistral_periodo_ficha_dental option:selected').text();
-        let observaciones_periodo_ficha_dental = $('#magistral_observaciones_periodo_ficha_dental').val();
-        let cantidad_comprar = $('#magistral_cantidad_comprar').val();
-        // $('#magistral_medicamento_uso_cronico').val();
-
-        var lista_med = [];
-        $('#tabla_medicamento_cirugia_sdi tr').each(function(i, n) {
-            if (i > 0) {
-                rol = {};
-                var data = $(this).find("td");
-                lista_med.push($.trim($(data[2]).text().split("\n").join("")));
-            }
-        });
-
-        if($.inArray(nombre_medicamento_ficha_dental,lista_med) == -1)
-        {
-
-            var medicamento_uso_cronico = 0;
-            if($('#magistral_medicamento_uso_cronico').is(':checked'))
-                medicamento_uso_cronico = 1;
-
-            var valido = 0;
-            var mensaje = '';
-
-            if($.trim(nombre_medicamento_ficha_dental) == '')
-            {
-                valido = 1;
-                mensaje += 'Debe completar el campo Medicamento.\n';
-            }
-
-            if($.trim(dosis_medicamento_ficha_dental) == '')
-            {
-                valido = 1;
-                mensaje += 'Debe completar el campo Presentación.\n';
-            }
-
-            if($.trim(frecuencia_medicamento_ficha_dental) == '')
-            {
-                valido = 1;
-                mensaje += 'Debe completar el campo Posología.\n';
-            }
-
-            if($.trim(via_administracion_ficha_dental) == '' || via_administracion_ficha_dental == 0 || $.trim(via_administracion_ficha_dental) == 'Seleccione')
-            {
-                valido = 1;
-                mensaje += 'Debe completar el campo Via de Administración.\n';
-            }
-            else if($('#via_administracion_ficha_dental').val() == 11)
-            {
-                if( $.trim(observaciones_medicamento_ficha_dental) == '')
-                {
-                    valido = 1;
-                    mensaje += 'Debe ingresar Otra Vía Administración\n';
-                }
-                else
-                {
-                    via_administracion_ficha_dental = observaciones_medicamento_ficha_dental;
-                }
-            }
-
-            if($.trim(periodo_ficha_dental) == '' || periodo_ficha_dental == 0 || $.trim(periodo_ficha_dental) == 'Seleccione')
-            {
-                valido = 1;
-                mensaje += 'Debe completar el campo Periodo.\n';
-            }
-            else if($('#magistral_periodo_ficha_dental').val() == 11)
-            {
-                if( $.trim(observaciones_periodo_ficha_dental) == '')
-                {
-                    valido = 1;
-                    mensaje += 'Debe ingresar Otro Periodo\n';
-                }
-                else
-                {
-                    periodo_ficha_dental = observaciones_periodo_ficha_dental;
-                }
-            }
-
-            if($.trim(cantidad_comprar) == '')
-            {
-                valido = 1;
-                mensaje += 'Debe completar el campo Cantidad a Comprar.\n';
-            }
-
-            if(valido == 0)
-            {
-                $('.medicamentos_sin_registros').remove()
-
-                var i = $('#tabla_medicamento_cirugia_sdi tr').length; //contador para asignar id al boton que borrara la fila
-                var fila = '<tr class="tabla_medicamento_cirugia_sdi" id="row' + i + '">' +
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_medicamento + '</td>' +
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + medicamento_uso_cronico + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + nombre_medicamento_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + dosis_medicamento_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + frecuencia_medicamento_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + via_administracion_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + periodo_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + cantidad_comprar + '</td>' +
-                                '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento_sdi(\'row' + i + '\');">Quitar</div></td>'+
-                            '</tr>'; //esto seria lo que contendria la fila
-
-                i++;
-
-                $('#tabla_medicamento_cirugia_sdi tr:first').after(fila);
-
-                $('#magistral_nombre_medicamento_ficha_dental').val('');
-                $('#magistral_frecuencia_medicamento_ficha_dental').val('');
-                $('#magistral_via_administracion_ficha_dental').val('');
-                $('#magistral_observaciones_via_administracion_ficha_dental').val('');
-                $('#magistral_periodo_ficha_dental').val('');
-                $('#magistral_observaciones_periodo_ficha_dental').val('');
-                $('#magistral_cantidad_comprar').val('');
-
-                $( "#magistral_medicamento_uso_cronico" ).prop( "checked", false ).change();
 
             }
             else

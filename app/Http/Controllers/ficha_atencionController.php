@@ -996,7 +996,7 @@ class ficha_atencionController extends Controller
                 $resultado_examen[$key]['obj_tipo_examen'] = $result_tipo_ex;
             }
         }
-
+		
         // INTERCONSULTA
         $filtro_inter = array();
         $filtro_inter[] = array('id_paciente', $paciente->id);
@@ -5099,7 +5099,7 @@ class ficha_atencionController extends Controller
             return back()->with('error', $mensaje)->withInput();
         }
     }
-
+	
     public function crear_licencia(Request $request)
     {
         $datos = array();
@@ -5706,7 +5706,11 @@ class ficha_atencionController extends Controller
 
     public function pdf_receta_medicamentos(Request $request)
     {
+        $tipo_control = 0;
         $datos = array();
+
+        if(!empty($request->tipo_control))
+            $tipo_control = 1;
 
         $ficha_atencion = FichaAtencion::find($request->id_ficha_atencion);
         $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
@@ -5753,59 +5757,76 @@ class ficha_atencionController extends Controller
         /** detalle de receta */
         $detalle_receta = (object)array();
 
+
+        /** TIPO DE CONTROL */
+        // 1	Receta retenida con control de Psicotrópicos
+        // 2	Receta retenida con control de Estupefacientes
+        // 3	Receta Cheque
+        // 4	Receta retenida
+        // 5	Receta retenida con control de Codeína
+        // 6	Receta Simple
+        // 7	Venta Directa
+        $med = array(0,6,7);
+        $med_ret = array(0,1,2,3,4,5);
+        $control = array($med, $med_ret);
         /** MEDICAMENTOS */
         $detalleReceta = DetalleReceta::where('id_ficha', $request->id_ficha_atencion)->get();
         if($detalleReceta->count()>0)
         {
             foreach ($detalleReceta as $key_detalle_receta => $value_detalle_receta)
             {
-                // var_dump($value_detalle_receta);
+                $array_medicamento = array();
                 $producto = Articulo::where('nombre',$value_detalle_receta->producto)->first();
 
                 if($producto)
                 {
-                    $array_medicamento = array(
-                        'nombre_medicamento' => $producto->nombre,
-                        'droga'=>$producto->droga,
-                        'presentacion' => $value_detalle_receta->presentacion,
-                        'posologia' => $value_detalle_receta->posologia,
-                        'via_administracion' => $value_detalle_receta->via_administracion,
-                        'periodo' => $value_detalle_receta->periodo,
-                        'uso_cronico' => $value_detalle_receta->uso_cronico,
-                        'cantidad_compra' => $value_detalle_receta->cantidad_compra,
-                        'receta_token' => $value_detalle_receta->receta_token,
-                    );
-
                     $nombre_control = $producto->RecetaControl()->first()->descripcion;
                     $id_control = $producto->RecetaControl()->first()->cod_control;
+                    if( array_search( $id_control, $control[$tipo_control] ) != false )
+                    {
+                        $array_medicamento = array(
+                            'nombre_medicamento' => $producto->nombre,
+                            'droga'=>$producto->droga,
+                            'presentacion' => $value_detalle_receta->presentacion,
+                            'posologia' => $value_detalle_receta->posologia,
+                            'via_administracion' => $value_detalle_receta->via_administracion,
+                            'periodo' => $value_detalle_receta->periodo,
+                            'uso_cronico' => $value_detalle_receta->uso_cronico,
+                            'cantidad_compra' => $value_detalle_receta->cantidad_compra,
+                            'receta_token' => $value_detalle_receta->receta_token,
+                        );
+                    }
                 }
                 else
                 {
-                    $med_faltante = ArticuloFaltante::where('nombre', $value_detalle_receta->producto)->orderBy('id', 'DESC')->get()->first();
-
-                    $droga = '';
-                    if($med_faltante)
+                    if(!empty($tipo_control))
                     {
-                        $droga = '('.$med_faltante->droga.')';
-                    }
-                    else
-                    {
-                        $droga = '(Droga no indicada)';
-                    }
-                    $array_medicamento = array(
-                        'nombre_medicamento' => $value_detalle_receta->producto,
-                        'droga'=>$droga,
-                        'presentacion' => $value_detalle_receta->presentacion,
-                        'posologia' => $value_detalle_receta->posologia,
-                        'via_administracion' => $value_detalle_receta->via_administracion,
-                        'periodo' => $value_detalle_receta->periodo,
-                        'uso_cronico' => $value_detalle_receta->uso_cronico,
-                        'cantidad_compra' => $value_detalle_receta->cantidad_compra,
-                        'receta_token' => $value_detalle_receta->receta_token,
-                    );
+                        $med_faltante = ArticuloFaltante::where('nombre', $value_detalle_receta->producto)->orderBy('id', 'DESC')->get()->first();
 
-                    $nombre_control = 'Receta Simple';
-                    $id_control = 6;
+                        $droga = '';
+                        if($med_faltante)
+                        {
+                            $droga = '('.$med_faltante->droga.')';
+                        }
+                        else
+                        {
+                            $droga = '(Droga no indicada)';
+                        }
+                        $array_medicamento = array(
+                            'nombre_medicamento' => $value_detalle_receta->producto,
+                            'droga'=>$droga,
+                            'presentacion' => $value_detalle_receta->presentacion,
+                            'posologia' => $value_detalle_receta->posologia,
+                            'via_administracion' => $value_detalle_receta->via_administracion,
+                            'periodo' => $value_detalle_receta->periodo,
+                            'uso_cronico' => $value_detalle_receta->uso_cronico,
+                            'cantidad_compra' => $value_detalle_receta->cantidad_compra,
+                            'receta_token' => $value_detalle_receta->receta_token,
+                        );
+
+                        $nombre_control = 'Receta Simple';
+                        $id_control = 6;
+                    }
                 }
 
                 // 4 - Receta retenida
@@ -5816,44 +5837,49 @@ class ficha_atencionController extends Controller
                 // 2 - Receta retenida con control de Estupefacientes
                 // 3 - Receta Cheque
                 // 5 - Receta retenida con control de Codeína
-
-
-                if(trim($nombre_control) == 'Receta retenida' || trim($nombre_control) == 'Receta Simple' || trim($nombre_control) == 'Venta Directa')
+                if(!empty($array_medicamento))
                 {
-                    $nombre_control = 'Receta';
-                    if(!isset($detalle_receta->$nombre_control))
-                        $cantidad_recetas ++;
+                    // if(trim($nombre_control) == 'Receta retenida' || trim($nombre_control) == 'Receta Simple' || trim($nombre_control) == 'Venta Directa')
+                    if(trim($nombre_control) == 'Receta Simple' || trim($nombre_control) == 'Venta Directa')
+                    {
+                        $nombre_control = 'Receta';
+                        if(!isset($detalle_receta->$nombre_control))
+                            $cantidad_recetas ++;
+                    }
+                    else
+                    {
+                        $nombre_control = trim($nombre_control).'_'.$key_detalle_receta;
+                        if(!isset($detalle_receta->$nombre_control))
+                            $cantidad_recetas ++;
+                    }
+                    $detalle_receta->$nombre_control[] = $array_medicamento;
                 }
-                else
-                {
-                    $nombre_control = trim($nombre_control).'_'.$key_detalle_receta;
-                    if(!isset($detalle_receta->$nombre_control))
-                        $cantidad_recetas ++;
-                }
-                $detalle_receta->$nombre_control[] = $array_medicamento;
             }
 
             // return  PdfController::generarPDF('RECETA MEDICA', compact('array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'detalle_receta','cantidad_recetas'), 'Receta Medica '.$paciente->rut, 'pdf_receta_medica');
         }
 
-        /** ESPECIALIDAD OTORRINOLARINGOLOGÍA (AUDIFONOS) */
-        $detalleOrlAudifono = RecetaAudifono::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
-        if($detalleOrlAudifono)
+        if($tipo_control == 0)
         {
-            $cantidad_recetas ++;
-            $arrayTipo = array('','Intracanal', 'Retroauricular', 'Audigafas', 'Implante', 'Otro Tipo');
-            $array_medicamento = array(
-                'tipo' => $arrayTipo[$detalleOrlAudifono->tipo],
-                'od' => $detalleOrlAudifono->od,
-                'especificacion_od' => $detalleOrlAudifono->especificacion_od,
-                'oi' => $detalleOrlAudifono->oi,
-                'especificacion_oi' => $detalleOrlAudifono->especificacion_oi,
-                'bi' => $detalleOrlAudifono->bi,
-                'especificacion_bi' => $detalleOrlAudifono->especificacion_bi,
-                'especificacion_general' => $detalleOrlAudifono->especificacion_general,
-            );
-            $nombre_control = 'ORL_AUDIFONO';
-            $detalle_receta->$nombre_control[] = $array_medicamento;
+            /** ESPECIALIDAD OTORRINOLARINGOLOGÍA (AUDIFONOS) */
+            $detalleOrlAudifono = RecetaAudifono::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+            if($detalleOrlAudifono)
+            {
+                $cantidad_recetas ++;
+                $arrayTipo = array('','Intracanal', 'Retroauricular', 'Audigafas', 'Implante', 'Otro Tipo');
+                $array_medicamento = array(
+                    'tipo' => $arrayTipo[$detalleOrlAudifono->tipo],
+                    'od' => $detalleOrlAudifono->od,
+                    'especificacion_od' => $detalleOrlAudifono->especificacion_od,
+                    'oi' => $detalleOrlAudifono->oi,
+                    'especificacion_oi' => $detalleOrlAudifono->especificacion_oi,
+                    'bi' => $detalleOrlAudifono->bi,
+                    'especificacion_bi' => $detalleOrlAudifono->especificacion_bi,
+                    'especificacion_general' => $detalleOrlAudifono->especificacion_general,
+                );
+                $nombre_control = 'ORL_AUDIFONO';
+                $detalle_receta->$nombre_control[] = $array_medicamento;
+            }
         }
 
         $array_ficha_atencion = array(

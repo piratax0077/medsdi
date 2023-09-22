@@ -3770,13 +3770,13 @@ class DentalController extends Controller
 
         if ($search == '') {
 
-            $employees = Articulo::orderby('nombre', 'asc')->select('id', 'nombre', 'droga', 'cant_comp')->limit(15)->get();
+            $employees = Articulo::orderby('nombre', 'asc')->select('id', 'nombre', 'droga', 'cant_comp', 'tipo_cont')->limit(15)->get();
 
         } else {
 
            //  $employees = Articulo::orderby('nombre', 'asc')->select('id', 'nombre')->where('nombre', 'like', '%' . $search . '%')->limit(15)->get();
 
-            $employees = Articulo::orderby('nombre', 'asc')->select('id', 'nombre','droga', 'cant_comp')->where('nombre', 'like', $search . '%')->limit(15)->get();
+            $employees = Articulo::orderby('nombre', 'asc')->select('id', 'nombre','droga', 'cant_comp', 'tipo_cont')->where('nombre', 'like', $search . '%')->limit(15)->get();
 
         }
 
@@ -3786,7 +3786,7 @@ class DentalController extends Controller
 
         foreach ($employees as $employee) {
 
-            $response[] = array("value" => $employee->id, "label" => $employee->nombre,"droga" => $employee->droga);
+            $response[] = array("value" => $employee->id, "label" => $employee->nombre,"droga" => $employee->droga, "control" => $employee->tipo_cont);
 
         }
 
