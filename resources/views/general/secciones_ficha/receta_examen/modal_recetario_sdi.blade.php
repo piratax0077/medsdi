@@ -642,7 +642,6 @@
             });
     };
 
-
     function getFrecuencia_sdi()
     {
 

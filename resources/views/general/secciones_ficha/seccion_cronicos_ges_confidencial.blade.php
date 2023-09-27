@@ -2,15 +2,62 @@
     <div class="card-a" style=" border: 1px solid #6c9bd5;">
         <div class="card-header-a" id="cgc" >
             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open" type="button" data-toggle="collapse" data-target="#cgc-c" aria-expanded="false" aria-controls="cgc-c">
-              Crónicos / GES / Confidencial
+              Crónicos / GES / Nuevo Antecedente / Confidencial
             </button>
         </div>
         <div id="cgc-c" class="collapse show" aria-labelledby="cgc" data-parent="#cgc">
             <div class="card-body-aten-a">
                 <form>
                     <div class="row">
+                        <!--NUEVO ANTECEDENTE-->
+                        <div class="col-md-3 mx-auto">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" onchange="ag_antecendente();" id="check_antecedentes" name="check_antecedentes" value="{!! old('check_antecedentes') !!}">
+                                            <label class="custom-control-label" for="check_antecedentes">Agregar antecedente</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" hidden>
+                                <div class="col-sm-12">
+                                    <div class="alert alert-warning mx-auto" role="alert">
+                                        <table class="table table-borderless mt-0 mb-0">
+                                            <tbody>
+                                                <tr id="tr_obesidad">
+                                                    <td class="align-middle pb-1 pt-1">Obesidad</td>
+                                                    <td class="align-middle pb-1 pt-1">
+                                                        <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
+                                                            <i class="feather icon-x"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr id="tr_diabetes">
+                                                    <td class="align-middle pb-1 pt-1">Diabetes</td>
+                                                    <td class="align-middle pb-1 pt-1">
+                                                        <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
+                                                            <i class="feather icon-x"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr id="tr_hipertesion">
+                                                    <td class="align-middle pb-1 pt-1">Hipertensión</td>
+                                                    <td class="align-middle pb-1 pt-1">
+                                                        <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
+                                                            <i class="feather icon-x"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         {{-- CRONICO --}}
-                        <div class="col-md-4 mx-auto">
+                        <div class="col-md-3 mx-auto">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
@@ -21,7 +68,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row " hidden>
+                            <div class="row" hidden>
                                 <div class="col-sm-12">
                                     <div class="alert alert-warning mx-auto" role="alert">
                                         <table class="table table-borderless mt-0 mb-0">
@@ -57,7 +104,7 @@
                             </div>
                         </div>
                         {{-- GES --}}
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
@@ -88,7 +135,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="row">
                                 <div class="form-group">
                                     <div class="custom-control custom-switch">
@@ -117,13 +164,16 @@
 
 <!-- MODAL CRONICO -->
 <!--******* Modal: ¿Enfermo crónico? *******-->
-<div id="form_enfermedad_cronica" class="modal fade" tabindex="-1" role="dialog"
-    aria-labelledby="form_enfermedad_cronica" aria-hidden="true">
+<div id="form_enfermedad_cronica" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="form_enfermedad_cronica" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content bg-light">
             <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white">Controles de enfermedades crónicas
-                    <select class="form-control form-control-sm" onchange="cambiar_enfermedad_cronica();" id="cronicos" name="cronicos" onchange="mostrar(this.value);">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5 class="modal-title text-white">Controles de enfermedades crónicas</h5>
+                    </div>
+                    <div class="col-md-8">
+                        <select class="form-control form-control-sm" onchange="cambiar_enfermedad_cronica();" id="cronicos" name="cronicos" >
                             <option value="n_C">Seleccione control</option>
                             <option value="cpeso">Obesidad</option>
                             <option value="chipertension">Hipertensión arterial</option>
@@ -133,128 +183,13 @@
                             <option value="creumato">Reumatología</option>
                             <option value="clitemia">Litemia</option>
                         </select>
-                  </h5>
+                    </div>
+                </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <!--*******MODAL***-->
-                <!--<div class="medicamento_cronico">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h5 class="text-c-blue text-center mt-1 mb-0" onclick="mostrar_div('medicamento_cronico_div');">Agregar/Consultar Medicamentos de Uso Crónico <i class="fas fa-angle-down" id="senal_med_cronico"></i></h5>
-                        </div>
-                    </div>
-                    <hr>
-
-                    <div class="medicamento_cronico_div" style="display:block">
-                        <div class="form-row">
-                            <div class="col-sm-10 col-md-10 div_contenedor_medicamento_cronico">
-                                <div class="row ">
-                                    <div class="form-group col-sm-6 col-md-6">
-                                        <label class="floating-label-activo-sm">Nombre medicamento</label>
-                                        <input type="text" class="form-control form-control-sm" name="nombre_medicamentocron" id="nombre_medicamentocron">
-                                        <input type="hidden" name="id_medicamento_cronico" id="id_medicamento_cronico" value=""/>
-                                    </div>
-
-                                    <div class="form-group col-sm-6 col-md-6">
-                                        <label class="floating-label-activo-sm">Presentación</label>
-                                        <select class="form-control form-control-sm" id="dosis_cronicomes" name="dosis_cronicomes" onchange="getCantCompCronica('dosis_cronicomes', 'med_cronicomes');">
-                                            <option>Seleccione una opción</option>
-                                        </select>
-
-                                    </div>
-                                    <div class="form-group col-sm-6 col-md-6">
-                                        <label class="floating-label-activo-sm">Cantidad mensual</label>
-                                        <select class="form-control form-control-sm" id="med_cronicomes" name="med_cronicomes" >
-                                            <option value="0">Seleccione</option>
-                                            <option value="999">Otra Cantidad</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-md-2 p-0">
-                                <button class="btn btn-primary" type="button" onclick="agregar_medicamento_cronico();"><i class="fa fa-plus"></i>Registrar</button>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table id="tabla_medicamento_cronico" class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center align-middle">Nombre Medicamento</th>
-                                            <th class="text-center align-middle">Cantidad Mensual</th>
-                                            <th class="text-center align-middle">Acción</th>
-                                            <th class="text-center align-middle">Check</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        @if (isset($medicamentos_cronicos))
-                                            @foreach ($medicamentos_cronicos as $med_cronicos)
-                                                <tr><td class="align-left align-middle">{{ $med_cronicos->nombre }}</td>
-                                                    <td class="text-center align-middle">{{ $med_cronicos->cantidad }}</td>
-                                                    <td class="text-center align-middle">
-                                                        <button href="#!" class="btn btn-danger btn-sm"><i class="feather icon-x"></i></button>
-                                                    </td>
-                                                    <td class="text-center align-middle">
-                                                        <input type="checkbox" name="medicamento_cronico_general" id="medicamento_cronico_general_{{ $med_cronicos->id }}">
-                                                    </td>
-                                                </tr>
-
-                                            @endforeach
-                                        @else
-                                            <span>NO EXISTEN REGISTROS</span>
-                                        @endif
-
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <button class="btn btn-success" type="button" onclick="">Generar Receta medicamentos</button>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-
-
-                <hr>-->
-
-                {{--  seleccion de patoliga  --}}
-                <!--<div class="row">
-                    <div class="col-sm-12 col-md-4 float-right">
-                        <div class="form-group">
-                            <label class="floating-label-activo-sm">Controles</label>
-                            <select class="form-control form-control-sm" onchange="cambiar_enfermedad_cronica();" id="cronicos" name="cronicos" onchange="mostrar(this.value);">
-                                <option value="n_C">Seleccione control</option>
-                                <option value="cpeso">Obesidad</option>
-                                <option value="chipertension">Hipertensión arterial</option>
-                                <option value="cdiabet">Diabetes</option>
-                                <option value="cinsufren">Insuficiencia renal</option>
-                                <option value="cmtumorales">Marcadores tumorales</option>
-                                <option value="creumato">Reumatología</option>
-                                <option value="clitemia">Litemia</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 mt-2 floating right">
-                        <div class="form-group fill">
-                            <script>
-                                var f = new Date();
-                                document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
-                            </script>
-                        </div>
-                    </div>
-                </div>-->
-
-
                 <!--CONTROL DE OBESIDAD-->
                 <div id="control_peso_div"  style="display:">
                     <div class="row">
@@ -285,11 +220,6 @@
                                         <!--CONTROL-->
                                         <div class="tab-pane fade show active" id="obes-ctrl" role="tabpanel" aria-labelledby="obes-ctrl-tab">
                                              <form>
-                                                <!--<div class="form-row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <h5 class="t-aten">Control</h5>
-                                                    </div>
-                                                </div>-->
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <h5 class="t-aten">Control</h5>
@@ -372,7 +302,126 @@
                                         </div>
                                         <!--MEDICAMENTOS-->
                                         <div class="tab-pane fade show" id="obes-med" role="tabpanel" aria-labelledby="obes-med-tab">
+                                            <div id="obes_med_formulario">
+                                                <div class="form-row ">
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group">
+                                                            <label class="floating-label">Medicamento</label>
+                                                            <input type="text" id="nombre_medicamento_cpeso" name="nombre_medicamento_cpeso" onblur="getDosis_cronico('cpeso');" class="form-control form-control-sm">
+                                                            <input type="hidden" id="id_medicamento_cpeso" name="id_medicamento_cpeso" class="form-control " value="">
+                                                            <input type="hidden" id="id_medicamento_tipo_control_cpeso" name="id_medicamento_tipo_control_cpeso" class="form-control" value="">
+                                                        </div>
+                                                    </div>
 
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Composición:</label>
+                                                            <div id="nombre_composicion_farmaco_cpeso" name="nombre_composicion_farmaco_cpeso" class="p-t-5"></div>
+                                                        </div>
+                                                    </div>
+                                                    {{--  CUANDO SE ENCUENTRA MEDICAMENTO EN BUSQUEDA  --}}
+                                                    <div class="col-sm-6 mt-2 medicamento_activo">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Presentación</label>
+                                                            <select class="form-control form-control-sm" id="dosis_medicamento_cpeso" name="dosis_medicamento_cpeso" onchange="getFrecuencia_cronico('cpeso');getCantComp_cronico('cpeso');">
+                                                                <option>Seleccione una opción</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 mt-2 medicamento_activo">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Posología</label>
+                                                            <select class="form-control form-control-sm" id="frecuencia_medicamento_cpeso"
+                                                                name="frecuencia_medicamento_cpeso">
+                                                                <option>Seleccione una opción</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    {{--  SI NO SE ENCUENTRA EL MEDICAMENTO EN LA BUSQUEDA  --}}
+                                                    <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Presentación</label>
+                                                            <input type="text" name="dosis_medicamento_cpeso_2" id="dosis_medicamento_cpeso_2" class="form-control form-control-sm ">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Posología</label>
+                                                            <input type="text" name="frecuencia_medicamento_cpeso_2" id="frecuencia_medicamento_cpeso_2" class="form-control form-control-sm ">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Vía de Administración</label>
+                                                            <select class="form-control form-control-sm" id="via_administracion_cpeso" name="via_administracion_cpeso" onchange="validar_via_administracion_cronico('cpeso');">
+                                                                <option value="0">Seleccione</option>
+                                                                <option value="1">V&iacute;a Oral</option>
+                                                                <option value="2">V&iacute;a Sublingual</option>
+                                                                <option value="3">V&iacute;a T&oacute;pica</option>
+                                                                <option value="4">V&iacute;a Oftalmol&oacute;gica</option>
+                                                                <option value="5">V&iacute;a &Oacute;tica</option>
+                                                                <option value="6">V&iacute;a Inhalatoria</option>
+                                                                <option value="7">V&iacute;a Nasal</option>
+                                                                <option value="8">V&iacute;a Rectal</option>
+                                                                <option value="9">V&iacute;a Vaginal</option>
+                                                                <option value="10">V&iacute;a parental</option>
+                                                                <option value="11">Otra Vía</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group fill" id="div_observaciones_medicamento_cpeso" style="display: none;">
+                                                            <label class="floating-label">Otra vía de Administración</label>
+                                                            <input type="text" id="observaciones_medicamento_cpeso" name="observaciones_medicamento_cpeso" class="form-control form-control-sm " disabled >
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Periodo</label>
+                                                            <select class="form-control form-control-sm" id="periodo_cpeso" name="periodo_cpeso" onchange="validar_periodo_cronico('cpeso');">
+                                                                <option value="0">Seleccione</option>
+                                                                <option value="1">SOS</option>
+                                                                <option value="2">Dosis unica</option>
+                                                                <option value="3">3 d&iacute;as</option>
+                                                                <option value="4">5 d&iacute;as</option>
+                                                                <option value="5">7 d&iacute;as</option>
+                                                                <option value="6">10 d&iacute;as</option>
+                                                                <option value="7">15 d&iacute;as</option>
+                                                                <option value="8">30 d&iacute;as</option>
+                                                                <option value="9">Permanente</option>
+                                                                <option value="10">V&iacute;a parental</option>
+                                                                <option value="11">Otro Periodo</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group fill" id="div_observaciones_periodo_cpeso" style="display: none;">
+                                                            <label class="floating-label">Otro Periodo</label>
+                                                            <input type="text" id="observaciones_periodo_cpeso" name="observaciones_periodo_cpeso" class="form-control form-control-sm " disabled >
+                                                        </div>
+                                                    </div>
+                                                    {{-- cantidad de medicamento a despachar o comprar    --}}
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Cantidad Comprar/Despachar</label>
+                                                            <select class="form-control form-control-sm" id="cantidad_comprar_cpeso" name="cantidad_comprar_cpeso" onchange="validar_cantidad_comprar_cronico('cpeso');">
+                                                                <option value="0">Seleccione</option>
+                                                                <option value="999">Otra Cantidad</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group fill" id="div_otra_cantidad_a_comprar_cpeso" style="display: none;">
+                                                            <label class="floating-label">Otra Cantidad</label>
+                                                            <input type="text" id="otra_cantidad_a_comprar_cpeso" name="otra_cantidad_a_comprar_cpeso" class="form-control form-control-sm " disabled >
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-12 col-md-6  col-lg-6 col-xl-6 p-0">
+                                                        <button class="btn btn-success-light-c btn-block btn-sm" type="button" onclick="agregar_medicamento_cronico_patologia('cpeso')" id="btn_registro_med_cpeso"><i class="fa fa-plus"></i> Registrar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="cpeso-med">
+                                            </div>
+                                            <div>
+                                                <button type="button" class="btn btn-success-light-c btn-block btn-sm" onclick="agregar_a_receta('cpeso')">Agregar Medicamento a Receta</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -411,11 +460,6 @@
                                         <!--CONTROL-->
                                         <div class="tab-pane fade show active" id="hiper-ctrl" role="tabpanel" aria-labelledby="hiper-ctrl-tab">
                                              <form>
-                                                <!--<div class="form-row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <h5 class="t-aten">Control</h5>
-                                                    </div>
-                                                </div>-->
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <h5 class="t-aten">Control</h5>
@@ -494,7 +538,125 @@
                                         </div>
                                         <!--MEDICAMENTOS-->
                                         <div class="tab-pane fade show" id="hiper-med" role="tabpanel" aria-labelledby="hiper-med-tab">
+                                            <div id="hiper_med_formulario">
+                                                <div class="form-row ">
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group">
+                                                            <label class="floating-label">Medicamento</label>
+                                                            <input type="text" id="nombre_medicamento_chipertension" name="nombre_medicamento_chipertension" onblur="getDosis_cronico('chipertension');" class="form-control form-control-sm">
+                                                            <input type="hidden" id="id_medicamento_chipertension" name="id_medicamento_chipertension" class="form-control " value="">
+                                                            <input type="hidden" id="id_medicamento_tipo_control_chipertension" name="id_medicamento_tipo_control_chipertension" class="form-control" value="">
+                                                        </div>
+                                                    </div>
 
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Composición:</label>
+                                                            <div id="nombre_composicion_farmaco_chipertension" name="nombre_composicion_farmaco_chipertension" class="p-t-5"></div>
+                                                        </div>
+                                                    </div>
+                                                    {{--  CUANDO SE ENCUENTRA MEDICAMENTO EN BUSQUEDA  --}}
+                                                    <div class="col-sm-6 mt-2 medicamento_activo">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Presentación</label>
+                                                            <select class="form-control form-control-sm" id="dosis_medicamento_chipertension" name="dosis_medicamento_chipertension" onchange="getFrecuencia_cronico('chipertension');getCantComp_cronico('chipertension');">
+                                                                <option>Seleccione una opción</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 mt-2 medicamento_activo">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Posología</label>
+                                                            <select class="form-control form-control-sm" id="frecuencia_medicamento_chipertension"
+                                                                name="frecuencia_medicamento_chipertension">
+                                                                <option>Seleccione una opción</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    {{--  SI NO SE ENCUENTRA EL MEDICAMENTO EN LA BUSQUEDA  --}}
+                                                    <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Presentación</label>
+                                                            <input type="text" name="dosis_medicamento_chipertension_2" id="dosis_medicamento_chipertension_2" class="form-control form-control-sm ">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Posología</label>
+                                                            <input type="text" name="frecuencia_medicamento_chipertension_2" id="frecuencia_medicamento_chipertension_2" class="form-control form-control-sm ">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Vía de Administración</label>
+                                                            <select class="form-control form-control-sm" id="via_administracion_chipertension" name="via_administracion_chipertension" onchange="validar_via_administracion_cronico('chipertension');">
+                                                                <option value="0">Seleccione</option>
+                                                                <option value="1">V&iacute;a Oral</option>
+                                                                <option value="2">V&iacute;a Sublingual</option>
+                                                                <option value="3">V&iacute;a T&oacute;pica</option>
+                                                                <option value="4">V&iacute;a Oftalmol&oacute;gica</option>
+                                                                <option value="5">V&iacute;a &Oacute;tica</option>
+                                                                <option value="6">V&iacute;a Inhalatoria</option>
+                                                                <option value="7">V&iacute;a Nasal</option>
+                                                                <option value="8">V&iacute;a Rectal</option>
+                                                                <option value="9">V&iacute;a Vaginal</option>
+                                                                <option value="10">V&iacute;a parental</option>
+                                                                <option value="11">Otra Vía</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group fill" id="div_observaciones_medicamento_chipertension" style="display: none;">
+                                                            <label class="floating-label">Otra vía de Administración</label>
+                                                            <input type="text" id="observaciones_medicamento_chipertension" name="observaciones_medicamento_chipertension" class="form-control form-control-sm " disabled >
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Periodo</label>
+                                                            <select class="form-control form-control-sm" id="periodo_chipertension" name="periodo_chipertension" onchange="validar_periodo_cronico('chipertension');">
+                                                                <option value="0">Seleccione</option>
+                                                                <option value="1">SOS</option>
+                                                                <option value="2">Dosis unica</option>
+                                                                <option value="3">3 d&iacute;as</option>
+                                                                <option value="4">5 d&iacute;as</option>
+                                                                <option value="5">7 d&iacute;as</option>
+                                                                <option value="6">10 d&iacute;as</option>
+                                                                <option value="7">15 d&iacute;as</option>
+                                                                <option value="8">30 d&iacute;as</option>
+                                                                <option value="9">Permanente</option>
+                                                                <option value="10">V&iacute;a parental</option>
+                                                                <option value="11">Otro Periodo</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group fill" id="div_observaciones_periodo_chipertension" style="display: none;">
+                                                            <label class="floating-label">Otro Periodo</label>
+                                                            <input type="text" id="observaciones_periodo_chipertension" name="observaciones_periodo_chipertension" class="form-control form-control-sm " disabled >
+                                                        </div>
+                                                    </div>
+                                                    {{-- cantidad de medicamento a despachar o comprar    --}}
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Cantidad Comprar/Despachar</label>
+                                                            <select class="form-control form-control-sm" id="cantidad_comprar_chipertension" name="cantidad_comprar_chipertension" onchange="validar_cantidad_comprar_cronico('chipertension');">
+                                                                <option value="0">Seleccione</option>
+                                                                <option value="999">Otra Cantidad</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group fill" id="div_otra_cantidad_a_comprar_chipertension" style="display: none;">
+                                                            <label class="floating-label">Otra Cantidad</label>
+                                                            <input type="text" id="otra_cantidad_a_comprar_chipertension" name="otra_cantidad_a_comprar_chipertension" class="form-control form-control-sm " disabled >
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-12 col-md-6  col-lg-6 col-xl-6 p-0">
+                                                        <button class="btn btn-success-light-c btn-block btn-sm" type="button" onclick="agregar_medicamento_cronico_patologia('chipertension')" id="btn_registro_med_chipertension"><i class="fa fa-plus"></i> Registrar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="chipertension-med">
+                                            </div>
+                                            <div>
+                                                <button type="button" class="btn btn-success-light-c btn-block btn-sm" onclick="agregar_a_receta('chipertension')">Agregar Medicamento a Receta</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -502,6 +664,7 @@
                         </div>
                     </div>
                 </div>
+
                 <!--CONTROL DE DIABETES-->
                 <div id="diabetes_div"  style="display: none">
                      <div class="row">
@@ -644,63 +807,125 @@
                                         </div>
                                         <!--MEDICAMENTOS-->
                                         <div class="tab-pane fade show" id="diabet-med" role="tabpanel" aria-labelledby="diabet-med-tab">
-                                                    {{--  medicamentos de patologia  --}}
-                                                <div class="medicamento_patologia" style="display:none;">
-                                                    {{--  titulo  --}}
-
-                                                    {{--  formulario  --}}
-
-                                                        <div class=" div_contenedor_medicamento_cronico_patologia">
-                                                            <div class="form-row ">
-                                                                <div class="form-group col-sm-12 col-md-12 col-lg-9 col-xl-9 ">
-                                                                    <label class="floating-label-activo-sm">Nombre medicamento</label>
-                                                                    <input type="text" class="form-control form-control-sm" name="nombre_medicamentocron_patologia" id="nombre_medicamentocron_patologia">
-                                                                    <input type="hidden" name="id_medicamentocron_patologia" id="id_medicamentocron_patologia" value=""/>
-                                                                </div>
-                                                                <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3 ">
-                                                                    <label class="floating-label-activo-sm">Presentación</label>
-                                                                    <select class="form-control form-control-sm" id="dosis_medicamentocron_patologia" name="dosis_medicamentocron_patologia" onchange="getCantCompCronica('dosis_medicamentocron_patologia', 'med_cronicomes_patologia');">
-                                                                        <option>Seleccione</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
-                                                                    <label class="floating-label-activo-sm">Cantidad mensual</label>
-                                                                    <select class="form-control form-control-sm" id="med_cronicomes_patologia" name="med_cronicomes_patologia" >
-                                                                        <option value="0">Seleccione</option>
-                                                                        <option value="999">Otra Cantidad</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-6  col-lg-6 col-xl-6 p-0">
-                                                                    <button class="btn btn-success-light-c btn-block btn-sm" type="button" onclick="" id="btn_registro_med_patologia"><i class="fa fa-plus"></i> Registrar</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    {{--  tabla  --}}
-
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <table id="tabla_med_patologia" class="display table table-striped dt-responsive nowrap pb-4 table-xs" style="width:100%">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Nombre Medicamento</th>
-                                                                        <th>Cantidad Mensual</th>
-                                                                        <th>Acción</th>
-                                                                        <th>Check</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-
-                                                                </tbody>
-                                                            </table>
+                                            <div id="diabet_med_formulario">
+                                                <div class="form-row ">
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group">
+                                                            <label class="floating-label">Medicamento</label>
+                                                            <input type="text" id="nombre_medicamento_cdiabet" name="nombre_medicamento_cdiabet" onblur="getDosis_cronico('cdiabet');" class="form-control form-control-sm">
+                                                            <input type="hidden" id="id_medicamento_cdiabet" name="id_medicamento_cdiabet" class="form-control " value="">
+                                                            <input type="hidden" id="id_medicamento_tipo_control_cdiabet" name="id_medicamento_tipo_control_cdiabet" class="form-control" value="">
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12 text-center">
-                                                            <button class="btn btn-success" type="button" onclick="">Generar Receta medicamentos Patologia</button>
+
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Composición:</label>
+                                                            <div id="nombre_composicion_farmaco_cdiabet" name="nombre_composicion_farmaco_cdiabet" class="p-t-5"></div>
                                                         </div>
+                                                    </div>
+                                                    {{--  CUANDO SE ENCUENTRA MEDICAMENTO EN BUSQUEDA  --}}
+                                                    <div class="col-sm-6 mt-2 medicamento_activo">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Presentación</label>
+                                                            <select class="form-control form-control-sm" id="dosis_medicamento_cdiabet" name="dosis_medicamento_cdiabet" onchange="getFrecuencia_cronico('cdiabet');getCantComp_cronico('cdiabet');">
+                                                                <option>Seleccione una opción</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 mt-2 medicamento_activo">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Posología</label>
+                                                            <select class="form-control form-control-sm" id="frecuencia_medicamento_cdiabet"
+                                                                name="frecuencia_medicamento_cdiabet">
+                                                                <option>Seleccione una opción</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    {{--  SI NO SE ENCUENTRA EL MEDICAMENTO EN LA BUSQUEDA  --}}
+                                                    <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Presentación</label>
+                                                            <input type="text" name="dosis_medicamento_cdiabet_2" id="dosis_medicamento_cdiabet_2" class="form-control form-control-sm ">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Posología</label>
+                                                            <input type="text" name="frecuencia_medicamento_cdiabet_2" id="frecuencia_medicamento_cdiabet_2" class="form-control form-control-sm ">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Vía de Administración</label>
+                                                            <select class="form-control form-control-sm" id="via_administracion_cdiabet" name="via_administracion_cdiabet" onchange="validar_via_administracion_cronico('cdiabet');">
+                                                                <option value="0">Seleccione</option>
+                                                                <option value="1">V&iacute;a Oral</option>
+                                                                <option value="2">V&iacute;a Sublingual</option>
+                                                                <option value="3">V&iacute;a T&oacute;pica</option>
+                                                                <option value="4">V&iacute;a Oftalmol&oacute;gica</option>
+                                                                <option value="5">V&iacute;a &Oacute;tica</option>
+                                                                <option value="6">V&iacute;a Inhalatoria</option>
+                                                                <option value="7">V&iacute;a Nasal</option>
+                                                                <option value="8">V&iacute;a Rectal</option>
+                                                                <option value="9">V&iacute;a Vaginal</option>
+                                                                <option value="10">V&iacute;a parental</option>
+                                                                <option value="11">Otra Vía</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group fill" id="div_observaciones_medicamento_cdiabet" style="display: none;">
+                                                            <label class="floating-label">Otra vía de Administración</label>
+                                                            <input type="text" id="observaciones_medicamento_cdiabet" name="observaciones_medicamento_cdiabet" class="form-control form-control-sm " disabled >
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Periodo</label>
+                                                            <select class="form-control form-control-sm" id="periodo_cdiabet" name="periodo_cdiabet" onchange="validar_periodo_cronico('cdiabet');">
+                                                                <option value="0">Seleccione</option>
+                                                                <option value="1">SOS</option>
+                                                                <option value="2">Dosis unica</option>
+                                                                <option value="3">3 d&iacute;as</option>
+                                                                <option value="4">5 d&iacute;as</option>
+                                                                <option value="5">7 d&iacute;as</option>
+                                                                <option value="6">10 d&iacute;as</option>
+                                                                <option value="7">15 d&iacute;as</option>
+                                                                <option value="8">30 d&iacute;as</option>
+                                                                <option value="9">Permanente</option>
+                                                                <option value="10">V&iacute;a parental</option>
+                                                                <option value="11">Otro Periodo</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group fill" id="div_observaciones_periodo_cdiabet" style="display: none;">
+                                                            <label class="floating-label">Otro Periodo</label>
+                                                            <input type="text" id="observaciones_periodo_cdiabet" name="observaciones_periodo_cdiabet" class="form-control form-control-sm " disabled >
+                                                        </div>
+                                                    </div>
+                                                    {{-- cantidad de medicamento a despachar o comprar    --}}
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Cantidad Comprar/Despachar</label>
+                                                            <select class="form-control form-control-sm" id="cantidad_comprar_cdiabet" name="cantidad_comprar_cdiabet" onchange="validar_cantidad_comprar_cronico('cdiabet');">
+                                                                <option value="0">Seleccione</option>
+                                                                <option value="999">Otra Cantidad</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group fill" id="div_otra_cantidad_a_comprar_cdiabet" style="display: none;">
+                                                            <label class="floating-label">Otra Cantidad</label>
+                                                            <input type="text" id="otra_cantidad_a_comprar_cdiabet" name="otra_cantidad_a_comprar_cdiabet" class="form-control form-control-sm " disabled >
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-12 col-md-6  col-lg-6 col-xl-6 p-0">
+                                                        <button class="btn btn-success-light-c btn-block btn-sm" type="button" onclick="agregar_medicamento_cronico_patologia('cdiabet')" id="btn_registro_med_cdiabet"><i class="fa fa-plus"></i> Registrar</button>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div id="cdiabet-med">
+                                            </div>
+                                            <div>
+                                                <button type="button" class="btn btn-success-light-c btn-block btn-sm" onclick="agregar_a_receta('cdiabet')">Agregar Medicamento a Receta</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -710,7 +935,7 @@
                 </div>
 
                 <!--INSUFICIENCIA RENAL-->
-                <div class="cinsufren" style="display:none;">
+                <div id="cinsufren_div" style="display:none;">
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <h5 class="t-aten-dos text-center">Insuficiencia renal</h5>
@@ -720,22 +945,22 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-                                    <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl_adulto" role="tablist">
-                                        <li class="nav-item-secciones">
-                                            <a class="nav-secciones text-reset active" id="renal-ctrl-tab" data-toggle="tab" href="#renal-ctrl" role="tab" aria-controls="renal-ctrl" aria-selected="true">Control</a>
+                                    <ul class="nav nav-tabs-aten nav-fill" id="orl_adulto" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link-aten text-reset active" id="hiper-ctrl-tab" data-toggle="tab" href="#renal-ctrl" role="tab" aria-controls="renal-ctrl" aria-selected="true">Control</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-secciones text-reset" id="renal-hist-tab" data-toggle="tab" href="#renal-hist" role="tab" aria-controls="renal-hist" aria-selected="true">Historial de controles</a>
+                                            <a class="nav-link-aten text-reset" id="renal-hist-tab" data-toggle="tab" href="#renal-hist" role="tab" aria-controls="renal-hist" aria-selected="true">Historial de controles</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-secciones text-reset" id="renal-med-tab" data-toggle="tab" href="#renal-med" role="tab" aria-controls="renal-med" aria-selected="true">Medicamentos</a>
+                                            <a class="nav-link-aten text-reset" id="renal-med-tab" data-toggle="tab" href="#renal-med" role="tab" aria-controls="renal-med" aria-selected="true">Medicamentos</a>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="tab-content" id="orl_adulto">
+                                    <div class="tab-content" id="tab_cinsufren">
                                         <!--CONTROL-->
                                         <div class="tab-pane fade show active" id="renal-ctrl" role="tabpanel" aria-labelledby="renal-ctrl-tab">
                                              <form>
@@ -756,7 +981,7 @@
                                                     </div>
                                                     <div class="form-group col-sm-4 col-md-4">
                                                         <button type="button" onclick="registrar_control_insuficiencia_renal();"
-                                                        class="btn btn-success btn-sm float-right"><i class="feather icon-plus"></i>Guardar Control</button>
+                                                        class="btn btn-info-light-c btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -803,69 +1028,36 @@
                                             </div>
                                         </div>
                                         <!--MEDICAMENTOS-->
-                                        <div class="tab-pane fade show" id="hiper-med" role="tabpanel" aria-labelledby="hiper-med-tab">
-                                            {{--  medicamentos de patologia  --}}
-                                            <div class="medicamento_patologia" style="display:none;">
-                                                {{--  titulo  --}}
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <h5 class="text-c-blue text-center mt-1 mb-0" id="titulo_med_patologia">Medicamentos Patologia</h5>
+                                        <div class="tab-pane fade show" id="renal-med" role="tabpanel" aria-labelledby="renal-med-tab">
+                                            <div id="renal_med_formulario">
+                                                <div class="form-row ">
+                                                    <div class="form-group col-sm-12 col-md-12 col-lg-9 col-xl-9 ">
+                                                        <label class="floating-label-activo-sm">Nombre medicamento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="nombre_medicamentocron_cinsufren" id="nombre_medicamentocron_cinsufren">
+                                                        <input type="hidden" name="id_medicamentocron_cinsufren" id="id_medicamentocron_cinsufren" value=""/>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3 ">
+                                                        <label class="floating-label-activo-sm">Presentación</label>
+                                                        <select class="form-control form-control-sm" id="dosis_medicamentocron_cinsufren" name="dosis_medicamentocron_cinsufren" onchange="getCantCompCronica('dosis_medicamentocron_cinsufren', 'med_cronicomes_cinsufren');">
+                                                            <option>Seleccione</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                                                        <label class="floating-label-activo-sm">Cantidad mensual</label>
+                                                        <select class="form-control form-control-sm" id="med_cronicomes_cinsufren" name="med_cronicomes_cinsufren" >
+                                                            <option value="0">Seleccione</option>
+                                                            <option value="999">Otra Cantidad</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-6  col-lg-6 col-xl-6 p-0">
+                                                        <button class="btn btn-success-light-c btn-block btn-sm" type="button" onclick="agregar_medicamento_cronico_patologia('cinsufren')" id="btn_registro_med_cinsufren"><i class="fa fa-plus"></i> Registrar</button>
                                                     </div>
                                                 </div>
-                                                <hr>
-                                                {{--  formulario  --}}
-                                                <div class="form-row">
-                                                    <div class="col-sm-10 col-md-10 div_contenedor_medicamento_cronico_patologia">
-                                                        <div class="row ">
-                                                            <div class="form-group col-sm-4 col-md-4">
-                                                                <label class="floating-label-activo-sm">Nombre medicamento</label>
-                                                                <input type="text" class="form-control form-control-sm" name="nombre_medicamentocron_patologia" id="nombre_medicamentocron_patologia">
-                                                                <input type="hidden" name="id_medicamentocron_patologia" id="id_medicamentocron_patologia" value=""/>
-                                                            </div>
-                                                            <div class="form-group col-sm-4 col-md-4">
-                                                                <label class="floating-label-activo-sm">Presentación</label>
-                                                                <select class="form-control form-control-sm" id="dosis_medicamentocron_patologia" name="dosis_medicamentocron_patologia" onchange="getCantCompCronica('dosis_medicamentocron_patologia', 'med_cronicomes_patologia');">
-                                                                    <option>Seleccione</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group col-sm-4 col-md-4">
-                                                                <label class="floating-label-activo-sm">Cantidad mensual</label>
-                                                                <select class="form-control form-control-sm" id="med_cronicomes_patologia" name="med_cronicomes_patologia" >
-                                                                    <option value="0">Seleccione</option>
-                                                                    <option value="999">Otra Cantidad</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-2 col-md-2 p-0">
-                                                        <button class="btn btn-primary" type="button" onclick="" id="btn_registro_med_patologia"><i class="fa fa-plus"></i>Registrar</button>
-                                                    </div>
-                                                </div>
-
-                                                {{--  tabla  --}}
-                                                <hr>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <table id="tabla_med_patologia" class="display table table-striped dt-responsive nowrap pb-4 table-xs" style="width:100%">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Nombre Medicamento</th>
-                                                                    <th>Cantidad Mensual</th>
-                                                                    <th>Acción</th>
-                                                                    <th>Check</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <button class="btn btn-success" type="button" onclick="">Generar Receta medicamentos Patologia</button>
-                                                    </div>
-                                                </div>
+                                            </div>
+                                            <div id="cinsufren-med">
+                                            </div>
+                                            <div>
+                                                <button type="button" class="btn btn-success-light-c btn-block btn-sm" onclick="agregar_a_receta('cinsufren')">Agregar Medicamento a Receta</button>
                                             </div>
                                         </div>
                                     </div>
@@ -875,24 +1067,144 @@
                     </div>
                 </div>
 
+                <!-- MARCADORES TUMORALES -->
+                <div id="cmtumorales_div" style="display:none;">
+                    {{--
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos text-center">Marcadores Tumorales</h5>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+                                    <ul class="nav nav-tabs-aten nav-fill" id="orl_adulto" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link-aten text-reset active" id="hiper-ctrl-tab" data-toggle="tab" href="#renal-ctrl" role="tab" aria-controls="renal-ctrl" aria-selected="true">Control</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link-aten text-reset" id="renal-hist-tab" data-toggle="tab" href="#renal-hist" role="tab" aria-controls="renal-hist" aria-selected="true">Historial de controles</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link-aten text-reset" id="renal-med-tab" data-toggle="tab" href="#renal-med" role="tab" aria-controls="renal-med" aria-selected="true">Medicamentos</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="tab-content" id="tab_cmtumorales">
+                                        <!--CONTROL-->
+                                        <div class="tab-pane fade show active" id="cmtumorales-ctrl" role="tabpanel" aria-labelledby="cmtumorales-ctrl-tab">
+                                             <form>
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <h5 class="t-aten">Control</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-2 col-md-2">
+                                                        <label class="floating-label-activo-sm">Dato</label>
+                                                        <input type="text" class="form-control form-control-sm" name="registro_cmtumorales" id="registro_cmtumorales">
+                                                    </div>
+                                                    <div class="form-group col-sm-4 col-md-4">
+                                                        <button type="button" onclick=""
+                                                        class="btn btn-info-light-c btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--HISTORIAL DE CONTROLES-->
+                                        <div class="tab-pane fade show" id="renal-hist" role="tabpanel" aria-labelledby="renal-hist-tab">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <h5 class="t-aten">Historial de controles</h5>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                     <table id="control_cmtumorales"
+                                                        class="display table table-striped dt-responsive nowrap pb-4 table-xs"
+                                                        style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Nº Control</th>
+                                                                <th>Fecha</th>
+                                                                <!-- <th class="text-center align-middle">Acción</th>-->
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
 
+                                                            @if (isset($contro))
+                                                                @foreach ($contro as $cp)
+                                                                    <tr>
+                                                                        <td>{{ $cp->id }}</td>
+                                                                        <!--<td class="text-center align-middle">
+                                                                            <button href="#!" class="btn btn-danger btn-sm">
+                                                                                <i class="feather icon-x"></i> Eliminar</button>
+                                                                        </td>-->
+                                                                    </tr>
 
+                                                                @endforeach
+                                                            @else
+                                                                <span>No existen registros</span>
 
+                                                            @endif
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--MEDICAMENTOS-->
+                                        <div class="tab-pane fade show" id="cmtumorales-med" role="tabpanel" aria-labelledby="cmtumorales-med-tab">
+                                            <div id="cmtumorales_med_formulario">
+                                                <div class="form-row ">
+                                                    <div class="form-group col-sm-12 col-md-12 col-lg-9 col-xl-9 ">
+                                                        <label class="floating-label-activo-sm">Nombre medicamento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="nombre_medicamentocron_cmtumorales" id="nombre_medicamentocron_cmtumorales">
+                                                        <input type="hidden" name="id_medicamentocron_cmtumorales" id="id_medicamentocron_cmtumorales" value=""/>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3 ">
+                                                        <label class="floating-label-activo-sm">Presentación</label>
+                                                        <select class="form-control form-control-sm" id="dosis_medicamentocron_cmtumorales" name="dosis_medicamentocron_cmtumorales" onchange="getCantCompCronica('dosis_medicamentocron_cmtumorales', 'med_cronicomes_cmtumorales');">
+                                                            <option>Seleccione</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                                                        <label class="floating-label-activo-sm">Cantidad mensual</label>
+                                                        <select class="form-control form-control-sm" id="med_cronicomes_cmtumorales" name="med_cronicomes_cmtumorales" >
+                                                            <option value="0">Seleccione</option>
+                                                            <option value="999">Otra Cantidad</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-6  col-lg-6 col-xl-6 p-0">
+                                                        <button class="btn btn-success-light-c btn-block btn-sm" type="button" onclick="agregar_medicamento_cronico_patologia('cmtumorales')" id="btn_registro_med_cmtumorales"><i class="fa fa-plus"></i> Registrar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="cmtumorales-med">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    --}}
+                    <h3 class="azul">En construcción</h3>
+                    <img src="{{ asset('images/pages/discount.svg') }}" alt="" class="img-fluid mb-4 wid-100">
+                </div>
 
-                {{--  <div class="cmtumorales" style="display:none;">
+                <div id="creumato_div" style="display:none;">
+                    <h3 class="azul">En construcción</h3>
+                    <img src="{{ asset('images/pages/discount.svg') }}" alt="" class="img-fluid mb-4 wid-100">
+                </div>
 
-                </div>  --}}
-
-                {{--  <div class="creumato" style="display:none;">
-
-                </div>  --}}
-
-                {{--  <div class="clitemia" style="display:none;">
-
-                </div>  --}}
-
-
-
+                <div id="clitemia_div" style="display:none;">
+                    <h3 class="azul">En construcción</h3>
+                    <img src="{{ asset('images/pages/discount.svg') }}" alt="" class="img-fluid mb-4 wid-100">
+                </div>
 
             </div>
             <!--Cierre modal body
@@ -902,210 +1214,912 @@
         </div>
     </div>
 </div>
-<!-- CIERRE MODAL CRONICO -->
+
+
+<!-- MODAL AÑADIR ANTECEDENTE-->
+<div id="m_agregar_antecedente" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="form_enfermedad_cronica" aria-hidden="true">
+    <div class="modal-dialog modal-lg  modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+				<div class="row">
+					<div class="col-md-7">
+						<h5 class="modal-title text-white">Seleccione  Aquí Nuevo antecedente</h5>
+					</div>
+					<div class="col-md-5">
+						<select class="form-control form-control-sm" onchange="cambiar_antecedente();" id="nuevo_antecedente" name="nuevo_antecedente" onchange="mostrar(this.value);">
+                            <option value="apatcronica" selected>Patología crónica</option>
+                            <option value="amedicamen">Medicamentos</option>
+                            <option value="acirugia">Cirugías</option>
+                            <option value="aalergia">Alergias e intolerancias</option>
+                            <option value="agineco">Antecedentes ginecobstétricos</option>
+                            <option value="adiscapacidad">Discapacidad</option>
+                            <option value="afamiliares">Antecedentes familiares</option>
+                            <option value="afisica">Actividad física</option>
+                            <option value="agrupotransf">Grupo sanguíneo y transfusión</option>
+                            <option value="atrasplante">Trasplante de órganos y tejidos</option>
+                        </select>
+					</div>
+				</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--PATOLOGIA CRÓNICA-->
+                <div id="apatcronica" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir Patologia crónica</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
+                                        <label class="floating-label-activo-sm">Nombre</label>
+                                        <input type="text" class="form-control form-control-sm" name="nombre" id="nombre">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
+                                        <label class="floating-label-activo-sm">Comentario</label>
+                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="comentario" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="comentario" id="comentario"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-2 col-xl-2 text-right">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Nombre</th>
+                                              <th class="text-wrap">Comentario</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap">Hipertensión</td>
+                                              <td class="text-wrap text-justify">TEXTO FALSOLorem ipsum dolor sit amet, consectetur adipisicing </td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap">Diabetes Tipo II</td>
+                                              <td class="text-wrap text-justify">TEXTO FALSOLorem ipsum dolor sit amet,</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--MEDICAMENTO CRÓNICO-->
+                <div id="amedicamen" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir medicamento crónico</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
+                                        <label class="floating-label-activo-sm">Medicamento</label>
+                                        <input type="text" class="form-control form-control-sm" name="med" id="med">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
+                                        <label class="floating-label-activo-sm">Dosis</label>
+                                        <input type="text" class="form-control form-control-sm" name="dosis" id="dosis">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-2 col-xl-2 text-right">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Medicamento</th>
+                                              <th class="text-wrap">Dosis</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap">Enalapril 10 mg</td>
+                                              <td class="text-wrap text-justify">1 al día </td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap">Metformina clorhidrato 1000 mg</td>
+                                              <td class="text-wrap text-justify">1 al día</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--CIRUGIAS-->
+                <div id="acirugia" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir cirugias</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                        <label class="floating-label-activo-sm">Fecha</label>
+                                        <input type="date" class="form-control form-control-sm" name="fecha" id="fecha">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Procedimiento</label>
+                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="procedimiento" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="procedimiento" id="procedimiento"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Incidente</label>
+                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="incidente" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="incidente" id="incidente"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Fecha</th>
+                                              <th class="text-wrap">Procedimiento</th>
+                                              <th class="text-wrap">Incidente</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap">Colecistectomía</td>
+                                              <td class="text-wrap text-justify">TEXTO FALSO Lorem ipsum </td>
+                                              <td>TEXTO FALSO TEXTO falsoLorem ipsum</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--ALERGIAS - INTOLERANCIAS-->
+                <div id="aalergia" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir alergias e intolerancias</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
+                                        <label class="floating-label-activo-sm">Alergia / Intolerancia</label>
+                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="alerginto" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="alerginto" id="alerginto"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
+                                        <label class="floating-label-activo-sm">Comentarios</label>
+                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="comentario" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="comentario" id="comentario"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-2 col-xl-2">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Alergia / intolerancia</th>
+                                              <th class="text-wrap">Comentarios</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap">Penicilina</td>
+                                              <td class="text-wrap text-justify">texto falso  texto falso  texto falso  </td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap">Chocolate</td>
+                                              <td class="text-wrap text-justify">texto falso  texto falso  texto falso  </td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--ANTECEDENTES GINECOBSTÉTRICOS-->
+                <div id="agineco" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir antecedentes ginecobstétricos</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                        <label class="floating-label-activo-sm">Comentarios</label>
+                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="comentarios" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="comentarios" id="comentarios"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Comentarios</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap text-justify">Menarquía a los 12 años</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap text-justify">Inicio vida sexual 13 años</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap text-justify">El numero de pareja sexual han sido 8</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap text-justify">2 gestaciones 1 aborto, 1 parto 1 cesárea</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--DISCAPACIDAD-->
+                <div id="adiscapacidad" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir cirugias</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                        <label class="floating-label-activo-sm">Discapacidad</label>
+                                        <input type="text" class="form-control form-control-sm" name="discapacidad" id="discapacidad">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Grado</label>
+                                        <input type="text" class="form-control form-control-sm" name="grado" id="grado">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Reversibilidad</label>
+                                        <input type="text" class="form-control form-control-sm" name="reversibilidad" id="reversibilidad">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Discapacidad</th>
+                                              <th class="text-wrap">Grado</th>
+                                              <th class="text-wrap">Reversibilidad</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap">Auditiva</td>
+                                              <td class="text-wrap text-justify">TEXTO FALSO Lorem ipsum </td>
+                                              <td>TEXTO FALSO </td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--ACTIVIDAD FISICA-->
+                <div id="afisica" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir actividad física</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                        <label class="floating-label-activo-sm">Comentarios</label>
+                                        <input type="text" class="form-control form-control-sm" name="comentarios" id="comentarios">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Comentarios</th>
+                                              <th class="text-wrap">Fecha data</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap text-justify">Sedentario</td>
+                                              <td>21/12/2023 </td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap text-justify">Ejercicio 2 veces a la semana</td>
+                                              <td>21/02/2005 </td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--ANTECEDENTES FAMILIARES-->
+                <div id="afamiliares" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir antecedentes familiares</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                        <label class="floating-label-activo-sm">Comentarios</label>
+                                        <input type="text" class="form-control form-control-sm" name="comentarios" id="comentarios">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Comentarios</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap text-justify">Pareja con diabetes</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap text-justify">Hijos con hipertensión arterial y diabetes</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap text-justify">Padre con hipertensión arterial</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!--GRUPO SANGUÍNEO Y TRANSFUSIÓN-->
+                <div id="agrupotransf" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">GRUPO SANGUÍNEO Y TRANSFUSIÓN</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                        <label class="floating-label-activo-sm">Comentarios</label>
+                                        <input type="text" class="form-control form-control-sm" name="comentarios" id="comentarios">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--TRASPLANTE DE ÓRGANOS Y TEJIDOS-->
+                <div id="atrasplante" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">TRASPLANTE DE ÓRGANOS Y TEJIDOS</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                        <label class="floating-label-activo-sm">Comentarios</label>
+                                        <input type="text" class="form-control form-control-sm" name="comentarios" id="comentarios">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
 
-    $(document).ready(function () {
-        /** cronico */
-            /** autocomplete de medicamentos generales */
-            $("#nombre_medicamentocron").autocomplete({
-                source: function(request, response) {
-                    // Fetch data
-                    $.ajax({
-                        url: "{{ route('dental.getArticulo') }}",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            _token: CSRF_TOKEN,
-                            search: request.term
-                        },
-                        success: function(data) {
-                            console.log(data.length);
-                            response(data);
-                        }
-                    });
-                },
-                select: function(event, ui) {
-                    $('#nombre_medicamentocron').val(ui.item.label);
-                    $('#id_medicamento_cronico').val(ui.item.value);
-                    getDosis_cronico(ui.item.value, 'dosis_cronicomes');
-                    return false;
-                }
-            });
+    $(document).ready(function ()
+    {
+        /** autocomplete de medicamentos patologia */
+        $('#nombre_medicamento_cpeso').autocomplete({
+            source: function(request, response) {
+                // Fetch data
+                $.ajax({
+                    url: "{{ route('dental.getArticulo') }}",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function(data) {
+                        console.log(data.length);
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                $('#nombre_medicamento_cpeso').val(ui.item.label);
+                $('#id_medicamento_cpeso').val(ui.item.value);
+                $('#nombre_composicion_farmaco_cpeso').html(ui.item.droga); // save selected id to input
+                $('#id_medicamento_tipo_control_cpeso').val(ui.item.control); // save selected id to input
+                getDosis_cronico('cpeso');
+                return false;
+            }
+        });
 
-            /** autocomplete de medicamentos patologia */
-            $("#nombre_medicamentocron_patologia").autocomplete({
-                source: function(request, response) {
-                    // Fetch data
-                    $.ajax({
-                        url: "{{ route('dental.getArticulo') }}",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            _token: CSRF_TOKEN,
-                            search: request.term
-                        },
-                        success: function(data) {
-                            console.log(data.length);
-                            response(data);
-                        }
-                    });
-                },
-                select: function(event, ui) {
-                    $('#nombre_medicamentocron_patologia').val(ui.item.label);
-                    $('#id_medicamentocron_patologia').val(ui.item.value);
-                    getDosis_cronico(ui.item.value, 'dosis_medicamentocron_patologia');
-                    return false;
-                }
-            });
+        $('#nombre_medicamento_chipertension').autocomplete({
+            source: function(request, response) {
+                // Fetch data
+                $.ajax({
+                    url: "{{ route('dental.getArticulo') }}",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function(data) {
+                        console.log(data.length);
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                $('#nombre_medicamento_chipertension').val(ui.item.label);
+                $('#id_medicamento_chipertension').val(ui.item.value);
+                $('#nombre_composicion_farmaco_chipertension').html(ui.item.droga); // save selected id to input
+                $('#id_medicamento_tipo_control_chipertension').val(ui.item.control); // save selected id to input
+                getDosis_cronico('chipertension');
+                return false;
+            }
+        });
 
-            /** accion check confidencial */
-            $('#confidencial').change(function() {
-                if ($('#confidencial').is(':checked')) {
-                    $('#confidencial_descripcion').show();
-                } else {
-                    $('#confidencial_descripcion').hide();
-                }
-            });
+        $('#nombre_medicamento_cdiabet').autocomplete({
+            source: function(request, response) {
+                // Fetch data
+                $.ajax({
+                    url: "{{ route('dental.getArticulo') }}",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function(data) {
+                        console.log(data.length);
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                $('#nombre_medicamento_cdiabet').val(ui.item.label);
+                $('#id_medicamento_cdiabet').val(ui.item.value);
+                $('#nombre_composicion_farmaco_cdiabet').html(ui.item.droga); // save selected id to input
+                $('#id_medicamento_tipo_control_cdiabet').val(ui.item.control); // save selected id to input
+                getDosis_cronico('cdiabet');
+                return false;
+            }
+        });
 
-            /** accion check ges */
-            $('#modal_ges').change(function() {
-                if ($('#modal_ges').is(':checked')) {
-                    $('#form_ges').modal('show');
-                } else {
-                    $('#form_ges').modal('hide');
-                }
-            });
+        $('#nombre_medicamento_cinsufren').autocomplete({
+            source: function(request, response) {
+                // Fetch data
+                $.ajax({
+                    url: "{{ route('dental.getArticulo') }}",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function(data) {
+                        console.log(data.length);
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                $('#nombre_medicamento_cinsufren').val(ui.item.label);
+                $('#id_medicamento_cinsufren').val(ui.item.value);
+                $('#nombre_composicion_farmaco_cinsufren').html(ui.item.droga); // save selected id to input
+                $('#id_medicamento_tipo_control_cinsufren').val(ui.item.control); // save selected id to input
+                getDosis_cronico('cinsufren');
+                return false;
+            }
+        });
 
-            /** busqueda de diagnostico GES */
-            $("#nombre_ges").autocomplete({
-                source: function(request, response) {
-                    // Fetch data
-                    $.ajax({
-                        url: "{{ route('ges.ver') }}",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            _token: CSRF_TOKEN,
-                            search: request.term
-                        },
-                        success: function(data) {
-                            response(data);
-                        }
-                    });
-                },
-                select: function(event, ui) {
-                    // Set selection
-                    $('#nombre_ges').val(ui.item.label); // display the selected text
-                    $('#id_ges').val(ui.item.value); // save selected id to input
-                    return false;
-                }
-            });
+        $('#nombre_medicamento_cmtumorales').autocomplete({
+            source: function(request, response) {
+                // Fetch data
+                $.ajax({
+                    url: "{{ route('dental.getArticulo') }}",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function(data) {
+                        console.log(data.length);
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                $('#nombre_medicamento_cmtumorales').val(ui.item.label);
+                $('#id_medicamento_cmtumorales').val(ui.item.value);
+                $('#nombre_composicion_farmaco_cmtumorales').html(ui.item.droga); // save selected id to input
+                $('#id_medicamento_tipo_control_cmtumorales').val(ui.item.control); // save selected id to input
+                getDosis_cronico('cmtumorales');
+                return false;
+            }
+        });
+
+        $('#nombre_medicamento_creumato').autocomplete({
+            source: function(request, response) {
+                // Fetch data
+                $.ajax({
+                    url: "{{ route('dental.getArticulo') }}",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function(data) {
+                        console.log(data.length);
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                $('#nombre_medicamento_creumato').val(ui.item.label);
+                $('#id_medicamento_creumato').val(ui.item.value);
+                $('#nombre_composicion_farmaco_creumato').html(ui.item.droga); // save selected id to input
+                $('#id_medicamento_tipo_control_creumato').val(ui.item.control); // save selected id to input
+                getDosis_cronico('creumato');
+                return false;
+            }
+        });
+
+        $('#nombre_medicamento_clitemia').autocomplete({
+            source: function(request, response) {
+                // Fetch data
+                $.ajax({
+                    url: "{{ route('dental.getArticulo') }}",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function(data) {
+                        console.log(data.length);
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                $('#nombre_medicamento_clitemia').val(ui.item.label);
+                $('#id_medicamento_clitemia').val(ui.item.value);
+                $('#nombre_composicion_farmaco_clitemia').html(ui.item.droga); // save selected id to input
+                $('#id_medicamento_tipo_control_clitemia').val(ui.item.control); // save selected id to input
+                getDosis_cronico('clitemia');
+                return false;
+            }
+        });
+
+        /** accion check confidencial */
+        $('#confidencial').change(function() {
+            if ($('#confidencial').is(':checked')) {
+                $('#confidencial_descripcion').show();
+            } else {
+                $('#confidencial_descripcion').hide();
+            }
+        });
+
+        /** accion check ges */
+        $('#modal_ges').change(function() {
+            if ($('#modal_ges').is(':checked')) {
+                $('#form_ges').modal('show');
+            } else {
+                $('#form_ges').modal('hide');
+            }
+        });
+
+        /** busqueda de diagnostico GES */
+        $("#nombre_ges").autocomplete({
+            source: function(request, response) {
+                // Fetch data
+                $.ajax({
+                    url: "{{ route('ges.ver') }}",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function(data) {
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                // Set selection
+                $('#nombre_ges').val(ui.item.label); // display the selected text
+                $('#id_ges').val(ui.item.value); // save selected id to input
+                return false;
+            }
+        });
     });
 
     /** CRONICO */
-    function getDosis_cronico(id_medicamento, div_dosis) {
-
-        console.log(id_medicamento);
-
-        let url = "{{ route('dental.getDosis') }}";
-        $.ajax({
-
-                url: url,
-                type: "get",
-                data: {
-
-                    id_medicamento: id_medicamento,
-
-                },
-            })
-            .done(function(data) {
-                console.log(data)
-
-                if (data != null) {
-
-                    data = JSON.parse(data);
-                    console.log(data)
-                    let dosis = $('#'+div_dosis);
-
-                    dosis.find('option').remove();
-                    dosis.append('<option value="0">Seleccione</option>');
-                    $(data).each(function(i, v) { // indice, valor
-                        dosis.append('<option value="' + v.dosis + '" data-id="'+v.id+'" data-cant_comp="'+v.cant_comp+'">' + v.present +
-                            '</option>');
-                    })
-
-                } else {
-
-
-
-                }
-
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-    };
-
-    function getCantCompCronica(div_dosis, div_comp) {
-
-        var cant_comp = $('#'+div_dosis+' option:selected').attr('data-cant_comp');
-        console.log(cant_comp);
-
-        let url = "{{ route('presentacion.getCantComp') }}";
-        $.ajax({
-
-                url: url,
-                type: "get",
-                data: {
-
-                    cant_comp: cant_comp,
-
-                },
-            })
-            .done(function(data) {
-                console.log(data)
-
-                if (data != null) {
-
-                    data = JSON.parse(data);
-                    console.log(data)
-                    let select_cant_comp = $('#'+div_comp);
-
-                    select_cant_comp.find('option').remove();
-                    select_cant_comp.append('<option value="0">Seleccione</option>');
-                    $(data).each(function(i, v) { // indice, valor
-                        select_cant_comp.append('<option value="' + v.id + '">' + v.cant +'</option>');
-                    })
-                    select_cant_comp.append('<option value="999">Otra Cantidad</option>');
-
-                } else {
-
-
-
-                }
-
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-    };
-
-    function es_cronico() {
+    function es_cronico()
+    {
         if ($('#enf_cronico').prop('checked')) {
             $('#form_enfermedad_cronica').modal('show');
             $('#hipertension_div').hide();
             $('#control_peso_div').hide();
             $('#diabetes_div').hide();
 
-            $('#cronicos').val('n_C');
+            $('#cronicos').val('cpeso');
             ver_medicamento_cronico();
-            $('.medicamento_cronico_div').show();
-            $('#senal_med_cronico').removeClass('fa-angle-down');
-            $('#senal_med_cronico').addClass('fa-angle-up');
+            // $('.medicamento_cronico_div').show();
+            // $('#senal_med_cronico').removeClass('fa-angle-down');
+            // $('#senal_med_cronico').addClass('fa-angle-up');
 
             cambiar_enfermedad_cronica();
 
@@ -1113,38 +2127,41 @@
 
     }
 
-    function cambiar_enfermedad_cronica() {
+    function cambiar_enfermedad_cronica()
+    {
 
         if($('#cronicos').val() != 'n_C')
         {
-            var nombre_enfermedad = $("#cronicos option:selected").text();
-            $('#titulo_med_patologia').html( ('Medicamentos '+nombre_enfermedad).toUpperCase());
-            $('.medicamento_patologia').show();
-            $('#btn_registro_med_patologia').attr('onclick','agregar_medicamento_cronico_patologia(\''+$('#cronicos').val()+'\')');
-            ver_medicamento_cronico_patologia();
+            // var nombre_enfermedad = $("#cronicos option:selected").text();
+            // $('#titulo_med_patologia').html( ('Medicamentos '+nombre_enfermedad).toUpperCase());
+            // $('.medicamento_patologia').show();
+            // $('#btn_registro_med_patologia').attr('onclick','agregar_medicamento_cronico_patologia(\''+$('#cronicos').val()+'\')');
+            // ver_medicamento_cronico_patologia();
 
-            $('.medicamento_cronico_div').hide();
-            $('#senal_med_cronico').addClass('fa-angle-down');
-            $('#senal_med_cronico').removeClass('fa-angle-up');
+            // $('.medicamento_cronico_div').hide();
+            // $('#senal_med_cronico').addClass('fa-angle-down');
+            // $('#senal_med_cronico').removeClass('fa-angle-up');
+
+            ver_medicamento_cronico();
 
             switch ($('#cronicos').val()) {
                 case 'cpeso':
                     $('#hipertension_div').hide();
                     $('#control_peso_div').show();
                     $('#diabetes_div').hide();
-                    $('#cinsufren').hide();
-                    $('#cmtumorales').hide();
-                    $('#creumato').hide();
-                    $('#clitemia').hide();
+                    $('#cinsufren_div').hide();
+                    $('#cmtumorales_div').hide();
+                    $('#creumato_div').hide();
+                    $('#clitemia_div').hide();
                 break;
                 case 'chipertension':
                     $('#hipertension_div').show();
                     $('#control_peso_div').hide();
                     $('#diabetes_div').hide();
-                    $('#cinsufren').hide();
-                    $('#cmtumorales').hide();
-                    $('#creumato').hide();
-                    $('#clitemia').hide();
+                    $('#cinsufren_div').hide();
+                    $('#cmtumorales_div').hide();
+                    $('#creumato_div').hide();
+                    $('#clitemia_div').hide();
                     // ver_control_hipertension();
 
                 break;
@@ -1152,65 +2169,75 @@
                     $('#hipertension_div').hide();
                     $('#control_peso_div').hide();
                     $('#diabetes_div').show();
-                    $('#cinsufren').hide();
-                    $('#cmtumorales').hide();
-                    $('#creumato').hide();
-                    $('#clitemia').hide();
+                    $('#cinsufren_div').hide();
+                    $('#cmtumorales_div').hide();
+                    $('#creumato_div').hide();
+                    $('#clitemia_div').hide();
                 break;
 
                 case 'cinsufren':
                     $('#hipertension_div').hide();
                     $('#control_peso_div').hide();
                     $('#diabetes_div').hide();
-                    $('#cinsufren').show();
-                    $('#cmtumorales').hide();
-                    $('#creumato').hide();
-                    $('#clitemia').hide();
+                    $('#cinsufren_div').show();
+                    $('#cmtumorales_div').hide();
+                    $('#creumato_div').hide();
+                    $('#clitemia_div').hide();
                 break;
                 case 'cmtumorales':
                     $('#hipertension_div').hide();
                     $('#control_peso_div').hide();
                     $('#diabetes_div').hide();
-                    $('#cinsufren').hide();
-                    $('#cmtumorales').show();
-                    $('#creumato').hide();
-                    $('#clitemia').hide();
+                    $('#cinsufren_div').hide();
+                    $('#cmtumorales_div').show();
+                    $('#creumato_div').hide();
+                    $('#clitemia_div').hide();
                 break;
                 case 'creumato':
                     $('#hipertension_div').hide();
                     $('#control_peso_div').hide();
                     $('#diabetes_div').hide();
-                    $('#cinsufren').hide();
-                    $('#cmtumorales').hide();
-                    $('#creumato').show();
-                    $('#clitemia').hide();
+                    $('#cinsufren_div').hide();
+                    $('#cmtumorales_div').hide();
+                    $('#creumato_div').show();
+                    $('#clitemia_div').hide();
                 break;
                 case 'clitemia':
                     $('#hipertension_div').hide();
                     $('#control_peso_div').hide();
                     $('#diabetes_div').hide();
-                    $('#cinsufren').hide();
-                    $('#cmtumorales').hide();
-                    $('#creumato').hide();
-                    $('#clitemia').show();
+                    $('#cinsufren_div').hide();
+                    $('#cmtumorales_div').hide();
+                    $('#creumato_div').hide();
+                    $('#clitemia_div').show();
                 break;
 
                 default:
                     break;
             }
+
         }
         else
         {
-            $('.medicamento_patologia').hide();
-            $('#hipertension_div').hide();
-            $('#control_peso_div').hide();
-            $('#diabetes_div').hide();
+            $('#cronicos').val('cpeso');
+            cambiar_enfermedad_cronica();
 
-            $('#titulo_med_patologia').html( 'Medicamentos' );
+            // $('.medicamento_patologia').hide();
+
+            $('#hipertension_div').hide();
+            $('#control_peso_div').show();
+            $('#diabetes_div').hide();
+            $('#cinsufren_div').hide();
+            $('#cmtumorales_div').hide();
+            $('#creumato_div').hide();
+            $('#clitemia_div').hide();
+
+            // $('#titulo_med_patologia').html( 'Medicamentos' );
         }
     }
 
-    function registrar_control_obesidad() {
+    function registrar_control_obesidad()
+    {
 
         let peso = $('#registro_peso').val();
         let variacion = $('#registro_peso_variacion').val();
@@ -1284,7 +2311,8 @@
         }
     };
 
-    function registrar_hipertension() {
+    function registrar_hipertension()
+    {
 
         let sistolica = $('#presion_sistolica_hipertension').val();
         let diastolica = $('#presion_diastolica_hipertension').val();
@@ -1361,7 +2389,8 @@
         }
     };
 
-    function registrar_diabetes() {
+    function registrar_diabetes()
+    {
 
         let peso = $('#peso_diabetes').val();
         let pies = $('#pies_diabetes').val();
@@ -1479,13 +2508,16 @@
 
     function ver_medicamento_cronico()
     {
+        $('#'+tipo_enfermedad+'-med').html('');
 
         let url = "{{ route('medicamento_cronico.getRegsitros') }}";
-
 
         var _token = CSRF_TOKEN;
         var id_ficha_atencion = $('#id_fc').val();
         var id_paciente = $('#id_paciente_fc').val();
+        var tipo_enfermedad = 'cronico';
+        if($('#cronicos').val() != 'n_C')
+            tipo_enfermedad = $('#cronicos').val();
 
         $.ajax({
 
@@ -1494,8 +2526,8 @@
             data: {
                 _token: _token,
                 // id_ficha_atencion:id_ficha_atencion,
-                id_paciente:id_paciente,
-                tipo_enfermedad:'cronico'
+                id_paciente : id_paciente,
+                tipo_enfermedad : tipo_enfermedad,
             },
         })
         .done(function(data)
@@ -1508,9 +2540,12 @@
                 console.log(data);
                 console.log('-----------------------');
                 var html = '';
+                html += '<table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">';
                 html += '<thead>';
                 html += '    <tr>';
                 html += '        <th class="text-center align-middle">Nombre Medicamento</th>';
+                html += '        <th class="text-center align-middle">Presentacion</th>';
+                html += '        <th class="text-center align-middle">Posologia</th>';
                 html += '        <th class="text-center align-middle">Cantidad Mensual</th>';
                 html += '        <th class="text-center align-middle">Acción</th>';
                 html += '        <th class="text-center align-middle">Check</th>';
@@ -1519,21 +2554,21 @@
                 html += '<tbody>';
                 if(data.estado == 1)
                 {
-
                     $.each(data.registros, function(index, value)
                     {
                         html += '<tr>';
                         html += '    <td class="align-left align-middle">'+value.nombre_medicamento+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.presentacion+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.posologia+'</td>';
                         html += '    <td class="text-center align-middle">'+value.cantidad+'</td>';
                         html += '    <td class="text-center align-middle">';
-                        html += '        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_med_cronico(\''+value.id+'\');"><i class="feather icon-x"></i></button>';
+                        html += '        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_med_cronico_patologia(\''+value.id+'\');"><i class="feather icon-x"></i></button>';
                         html += '    </td>';
                         html += '    <td class="text-center align-middle">';
-                        html += '        <input type="checkbox" name="medicamento_cronico_general" id="medicamento_cronico_general_'+value.id+'">';
+                        html += '        <input type="checkbox" data-id="'+value.id+'" name="medicamento_cronico_'+tipo_enfermedad+'[]" id="medicamento_cronico_'+tipo_enfermedad+'_'+value.id+'">';
                         html += '    </td>';
                         html += '</tr>';
                     });
-
                 }
                 else
                 {
@@ -1544,7 +2579,8 @@
 
                 }
                 html += '</tbody>';
-                $('#tabla_medicamento_cronico').html(html);
+                html += '</table>';
+                $('#'+tipo_enfermedad+'-med').html(html);
             }
         })
         .fail(function(jqXHR, ajaxOptions, thrownError) {
@@ -1626,64 +2662,228 @@
         var id_profesional = $('#id_profesional_fc').val();
         var id_ficha_atencion = $('#id_fc').val();
         var id_paciente = $('#id_paciente_fc').val();
-        var nombre_medicamento = $('#nombre_medicamentocron_patologia').val();
-        var cantidad = $('#med_cronicomes_patologia option:selected').text();
+        var id_lugar_atencion = $('#id_lugar_atencion').val();
+
+        var nombre_medicamento = $('#nombre_medicamento_'+tipo).val();
+        var id_medicamento = $('#id_medicamento_'+tipo).val();
+        var id_medicamento_tipo_control = $('#id_medicamento_tipo_control_'+tipo).val();
+        var nombre_composicion_farmaco = $('#nombre_composicion_farmaco_'+tipo).val();
+        var dosis_medicamento = $('#dosis_medicamento_'+tipo).val();
+        var frecuencia_medicamento = $('#frecuencia_medicamento_'+tipo).val();
+        var dosis_medicamento_2 = $('#dosis_medicamento_'+tipo+'_2').val();
+        var frecuencia_medicamento_2 = $('#frecuencia_medicamento_'+tipo+'_2').val();
+        var via_administracion = $('#via_administracion_'+tipo).val();
+        var observaciones_medicamento = $('#observaciones_medicamento_'+tipo).val();
+        var periodo = $('#periodo_'+tipo).val();
+        var observaciones_periodo = $('#observaciones_periodo_'+tipo).val();
+        var cantidad_comprar = $('#cantidad_comprar_'+tipo).val();
+        var otra_cantidad_a_comprar = $('#otra_cantidad_a_comprar_'+tipo).val();
+
+        // var nombre_medicamento = $('#nombre_medicamentocron_'+tipo+'').val();
+        // var cantidad = $('#med_cronicomes_'+tipo+' option:selected').text();
         var tipo_enfermedad = tipo;
 
-        $.ajax({
+        var valido = 0;
+        var mensaje = '';
 
-            url: url,
-            type: "POST",
-            data: {
-                _token: _token,
-                id_profesional:id_profesional,
-                id_ficha_atencion:id_ficha_atencion,
-                id_paciente:id_paciente,
-                nombre_medicamento:nombre_medicamento,
-                cantidad:cantidad,
-                tipo_enfermedad:tipo_enfermedad,
-            },
-        })
-        .done(function(data)
+        if($.trim(nombre_medicamento) == '')
         {
+            valido = 1;
+            mensaje += 'Debe completar el campo Medicamento.\n';
+        }
 
-            if (data !== 'null')
+        if($('#id_medicamento_'+tipo).val() != '')
+        {
+            if($.trim(dosis_medicamento) == '' || dosis_medicamento == 0 || dosis_medicamento == 'Seleccione una opción' || dosis_medicamento == 'Seleccione' || dosis_medicamento == 'Seleccione')
             {
-                //data = JSON.parse(data);
-                console.log('-----------------------');
-                console.log(data);
-                console.log('-----------------------');
-                if(data.estado == 1)
-                {
-                    swal({
-                        title: "Medicamento Cronico.",
-                        text: "Medicamento Registrado con exito.",
-                        icon: "success",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    });
-                    $('#nombre_medicamentocron_patologia').val('');
-                    $('#id_medicamentocron_patologia').val('');
-
-                    $('#dosis_medicamentocron_patologia').html('<option value="0">Seleccione</option>');
-                    $('#med_cronicomes_patologia').html('<option value="0">Seleccione</option>');
-
-                    ver_medicamento_cronico_patologia()
-                }
-                else{
-
-                    swal({
-                        title: "Problema al Registrar Medicamento Cronico.",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                }
+                valido = 1;
+                mensaje += 'Debe completar el campo Presentación.\n';
             }
-        })
-        .fail(function(jqXHR, ajaxOptions, thrownError) {
-            console.log(jqXHR, ajaxOptions, thrownError)
-        });
+            else
+            {
+                dosis_medicamento = $('#dosis_medicamento_'+tipo+' option:selected ').text();
+            }
+
+            if($.trim(frecuencia_medicamento) == '' || frecuencia_medicamento == 0 || frecuencia_medicamento == 'Seleccione una opción' || frecuencia_medicamento == 'Seleccione' || frecuencia_medicamento == 'Seleccione')
+            {
+                valido = 1;
+                mensaje += 'Debe completar el campo Posología.\n';
+            }
+            else
+            {
+                frecuencia_medicamento = $('#frecuencia_medicamento_'+tipo+' option:selected ').text();
+            }
+        }
+        else
+        {
+            if( dosis_medicamento_2 == '')
+            {
+                valido = 1;mensaje += 'Debe completar el campo Dosis\n';
+            }
+            else
+            {
+                dosis_medicamento = dosis_medicamento_2;
+            }
+
+
+            if( frecuencia_medicamento_2 == '')
+            {
+                valido = 1;mensaje += 'Debe completar el campo Frecuencia\n';
+            }
+            else
+            {
+                frecuencia_medicamento = frecuencia_medicamento_2;
+            }
+
+        }
+
+
+        if($.trim(via_administracion) == '' || via_administracion == 0 || $.trim(via_administracion) == 'Seleccione')
+        {
+            valido = 1;
+            mensaje += 'Debe completar el campo Via de Administración.\n';
+        }
+        else if($('#via_administracion_'+tipo).val() == 11)
+        {
+            if( $.trim(observaciones_medicamento) == '')
+            {
+                valido = 1;
+                mensaje += 'Debe ingresar Otra Vía Administración\n';
+            }
+            else
+            {
+                via_administracion = observaciones_medicamento;
+            }
+        }
+        else
+        {
+            via_administracion = $('#via_administracion_'+tipo+' option:selected ').text();
+        }
+
+        if($.trim(periodo) == '' || periodo == 0 || $.trim(periodo) == 'Seleccione')
+        {
+            valido = 1;
+            mensaje += 'Debe completar el campo Periodo.\n';
+        }
+        else if($('#periodo_'+tipo).val() == 11)
+        {
+            if( $.trim(observaciones_periodo) == '')
+            {
+                valido = 1;
+                mensaje += 'Debe ingresar Otro Periodo\n';
+            }
+            else
+            {
+                periodo = observaciones_periodo;
+            }
+        }
+        else
+        {
+            periodo = $('#periodo_'+tipo+' option:selected ').text();
+        }
+
+        if($.trim(cantidad_comprar) == '' || cantidad_comprar == 0 || $.trim(cantidad_comprar) == 'Seleccione')
+        {
+            valido = 1;
+            mensaje += 'Debe completar el campo Cantidad a Comprar.\n';
+        }
+        else if($('#cantidad_comprar'+tipo).val() == '999')
+        {
+            if( $.trim(otra_cantidad_a_comprar) == '')
+            {
+                valido = 1;
+                mensaje += 'Debe ingresar Cantidad a Comprar\n';
+            }
+            else
+            {
+                cantidad_comprar = otra_cantidad_a_comprar;
+            }
+        }
+        else
+        {
+            cantidad_comprar = $('#cantidad_comprar_'+tipo+' option:selected ').text();
+        }
+
+        if(valido == 0)
+        {
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id_profesional:id_profesional,
+                    id_ficha_atencion:id_ficha_atencion,
+                    id_paciente:id_paciente,
+                    id_lugar_atencion:id_lugar_atencion,
+
+                    nombre_medicamento : nombre_medicamento,
+                    id_medicamento : id_medicamento,
+                    id_medicamento_tipo_control : id_medicamento_tipo_control,
+                    nombre_composicion_farmaco : nombre_composicion_farmaco,
+                    dosis_medicamento : dosis_medicamento,
+                    frecuencia_medicamento : frecuencia_medicamento,
+                    via_administracion : via_administracion,
+                    observaciones_medicamento : observaciones_medicamento,
+                    periodo : periodo,
+                    cantidad_comprar : cantidad_comprar,
+
+                    tipo_enfermedad:tipo_enfermedad,
+                },
+            })
+            .done(function(data)
+            {
+
+                if (data !== 'null')
+                {
+                    //data = JSON.parse(data);
+                    console.log('-----------------------');
+                    console.log(data);
+                    console.log('-----------------------');
+                    if(data.estado == 1)
+                    {
+                        swal({
+                            title: "Medicamento Cronico.",
+                            text: "Medicamento Registrado con exito.",
+                            icon: "success",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        });
+                        $('#nombre_medicamentocron_'+tipo+'').val('');
+                        $('#id_medicamentocron_'+tipo+'').val('');
+
+                        $('#dosis_medicamentocron_'+tipo+'').html('<option value="0">Seleccione</option>');
+                        $('#med_cronicomes_'+tipo+'').html('<option value="0">Seleccione</option>');
+
+                        // ver_medicamento_cronico_patologia()
+                        ver_medicamento_cronico();
+                    }
+                    else{
+
+                        swal({
+                            title: "Problema al Registrar Medicamento Cronico.",
+                            icon: "warning",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        })
+                    }
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+        else
+        {
+            swal({
+                title: "Ingreso de medicamento(s).",
+                text:mensaje,
+                icon: "error",
+                // buttons: "Aceptar",
+                //SuccessMode: true,
+            });
+        }
+
+
     }
 
     function ver_medicamento_cronico_patologia()
@@ -1800,7 +3000,7 @@
                         // buttons: "Aceptar",
                         //SuccessMode: true,
                     });
-                    ver_medicamento_cronico_patologia(tipo_enfermedad);
+                    ver_medicamento_cronico(tipo_enfermedad);
                 }
                 else{
 
@@ -1827,21 +3027,19 @@
         });
     }
 
-
     {{--  mostrar div   --}}
     function mostrar_div(div)
     {
         if ($('.'+div).is(':visible')) {
             $('.'+div).hide();
-            $('#senal_med_cronico').addClass('fa-angle-down');
-            $('#senal_med_cronico').removeClass('fa-angle-up');
+            // $('#senal_med_cronico').addClass('fa-angle-down');
+            // $('#senal_med_cronico').removeClass('fa-angle-up');
         } else {
             $('.'+div).show();
-            $('#senal_med_cronico').removeClass('fa-angle-down');
-            $('#senal_med_cronico').addClass('fa-angle-up');
+            // $('#senal_med_cronico').removeClass('fa-angle-down');
+            // $('#senal_med_cronico').addClass('fa-angle-up');
         }
     }
-
 
     {{--  CRONICO VER CONTROL DE HIPERTENSION  --}}
     function ver_control_hipertension()
@@ -2000,5 +3198,388 @@
 
     }
     /** FIN CRONICO */
+
+    /**AGREGAR ANTECEDENTE DEL PACIENTE**/
+    function ag_antecendente ()
+    {
+        $('#m_agregar_antecedente').modal('show');
+		cambiar_antecedente();
+    }
+    function cambiar_antecedente()
+    {
+
+        if($('#nuevo_antecedente').val() != 'n_C')
+        {
+            var nombre_enfermedad = $("#nuevo_antecedente option:selected").text();
+            // $('#titulo_med_patologia').html( ('Medicamentos '+nombre_enfermedad).toUpperCase());
+            // $('.medicamento_patologia').show();
+            // $('#btn_registro_med_patologia').attr('onclick','agregar_medicamento_cronico_patologia(\''+$('#nuevo_antecedente').val()+'\')');
+            // ver_medicamento_cronico_patologia();
+            ver_medicamento_cronico();
+
+            // $('.medicamento_cronico_div').hide();
+            // $('#senal_med_cronico').addClass('fa-angle-down');
+            // $('#senal_med_cronico').removeClass('fa-angle-up');
+
+            switch ($('#nuevo_antecedente').val()) {
+                case 'apatcronica':
+                    $('#apatcronica').show();
+                    $('#amedicamen').hide();
+                    $('#acirugia').hide();
+                    $('#aalergia').hide();
+                    $('#agineco').hide();
+                    $('#adiscapacidad').hide();
+                    $('#afamiliares').hide();
+                    $('#afisica').hide();
+                    $('#agrupotransf').hide();
+                    $('#atrasplante').hide();
+                break;
+                case 'amedicamen':
+                    $('#apatcronica').hide();
+                    $('#amedicamen').show();
+                    $('#acirugia').hide();
+                    $('#aalergia').hide();
+                    $('#agineco').hide();
+                    $('#afamiliares').hide();
+                    $('#adiscapacidad').hide();
+                    $('#afisica').hide();
+                    $('#agrupotransf').hide();
+                    $('#atrasplante').hide();
+
+                break;
+                case 'acirugia':
+                    $('#apatcronica').hide();
+                    $('#amedicamen').hide();
+                    $('#acirugia').show();
+                    $('#aalergia').hide();
+                    $('#agineco').hide();
+                    $('#adiscapacidad').hide();
+                    $('#afamiliares').hide();
+                    $('#afisica').hide();
+                    $('#agrupotransf').hide();
+                    $('#atrasplante').hide();
+                break;
+
+                case 'aalergia':
+                    $('#apatcronica').hide();
+                    $('#amedicamen').hide();
+                    $('#acirugia').hide();
+                    $('#aalergia').show();
+                    $('#agineco').hide();
+                    $('#adiscapacidad').hide();
+                    $('#afamiliares').hide();
+                    $('#afisica').hide();
+                    $('#agrupotransf').hide();
+                    $('#atrasplante').hide();
+                break;
+                case 'agineco':
+                    $('#apatcronica').hide();
+                    $('#amedicamen').hide();
+                    $('#acirugia').hide();
+                    $('#aalergia').hide();
+                    $('#agineco').show();
+                    $('#adiscapacidad').hide();
+                    $('#afamiliares').hide();
+                    $('#afisica').hide();
+                    $('#agrupotransf').hide();
+                    $('#atrasplante').hide();
+                break;
+                case 'afamiliares':
+                    $('#apatcronica').hide();
+                    $('#amedicamen').hide();
+                    $('#acirugia').hide();
+                    $('#aalergia').hide();
+                    $('#agineco').hide();
+                    $('#adiscapacidad').show();
+                    $('#afamiliares').hide();
+                    $('#afisica').hide();
+                    $('#agrupotransf').hide();
+                    $('#atrasplante').hide();
+                break;
+                case 'afisica':
+                    $('#apatcronica').hide();
+                    $('#amedicamen').hide();
+                    $('#acirugia').hide();
+                    $('#aalergia').hide();
+                    $('#agineco').hide();
+                    $('#adiscapacidad').hide();
+                    $('#afamiliares').hide();
+                    $('#afisica').show();
+                    $('#agrupotransf').hide();
+                    $('#atrasplante').hide();
+                break;
+                case 'agrupotransf':
+                    $('#apatcronica').hide();
+                    $('#amedicamen').hide();
+                    $('#acirugia').hide();
+                    $('#aalergia').hide();
+                    $('#agineco').hide();
+                    $('#adiscapacidad').hide();
+                    $('#afamiliares').hide();
+                    $('#afisica').hide();
+                    $('#agrupotransf').show();
+                    $('#atrasplante').hide();
+                break;
+                case 'atrasplante':
+                    $('#apatcronica').hide();
+                    $('#amedicamen').hide();
+                    $('#acirugia').hide();
+                    $('#aalergia').hide();
+                    $('#agineco').hide();
+                    $('#adiscapacidad').hide();
+                    $('#afamiliares').hide();
+                    $('#afisica').hide();
+                    $('#agrupotransf').hide();
+                    $('#atrasplante').show();
+                break;
+
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            // $('.medicamento_patologia').hide();
+            $('#hipertension_div').hide();
+            $('#control_peso_div').hide();
+            $('#diabetes_div').hide();
+
+            // $('#titulo_med_patologia').html( 'Medicamentos' );
+        }
+    }
+
+    /** MEDICAMENTOS */
+    function getDosis_cronico(tipo)
+    {
+
+        let id_medicamento = $('#id_medicamento_'+tipo).val();
+        console.log(id_medicamento);
+
+        let url = "{{ route('dental.getDosis') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                id_medicamento: id_medicamento,
+            },
+        })
+        .done(function(data)
+        {
+            console.log(data)
+
+            if (data != null)
+            {
+                data = JSON.parse(data);
+                console.log(data)
+                let dosis = $('#dosis_medicamento_'+tipo);
+
+                dosis.find('option').remove();
+                dosis.append('<option value="0">Seleccione</option>');
+                $(data).each(function(i, v) { // indice, valor
+                    dosis.append('<option value="' + v.dosis + '" data-id="'+v.id+'" data-cant_comp="'+v.cant_comp+'">' + v.present +'</option>');
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    };
+
+    function getFrecuencia_cronico(tipo)
+    {
+        let id_dosis = $('#dosis_medicamento_'+tipo).val();
+        let url = "{{ route('dental.getFrecuencia') }}";
+
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                id_dosis: id_dosis,
+            },
+        })
+        .done(function(data) {
+            console.log(data)
+
+            if (data != null)
+            {
+                data = JSON.parse(data);
+                let dosis = $('#frecuencia_medicamento_'+tipo);
+
+                dosis.find('option').remove();
+                dosis.append('<option value="0">Seleccione</option>');
+                $(data).each(function(i, v) { // indice, valor
+                    dosis.append('<option value="' + v.id + '">' + v.indic + '</option>');
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    };
+
+    function getCantComp_cronico(tipo)
+    {
+
+        var cant_comp = $('#dosis_medicamento_'+tipo+' option:selected').attr('data-cant_comp');
+        console.log(cant_comp);
+
+        let url = "{{ route('presentacion.getCantComp') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                cant_comp: cant_comp,
+            },
+        })
+        .done(function(data) {
+            console.log(data)
+
+            if (data != null)
+            {
+                data = JSON.parse(data);
+                let select_cant_comp = $('#cantidad_comprar_'+tipo);
+
+                select_cant_comp.find('option').remove();
+                select_cant_comp.append('<option value="0">Seleccione</option>');
+                $(data).each(function(i, v) { // indice, valor
+                    select_cant_comp.append('<option value="' + v.id + '">' + v.cant +'</option>');
+                });
+                select_cant_comp.append('<option value="999">Otra Cantidad</option>');
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    };
+
+    function validar_via_administracion_cronico(tipo)
+    {
+        if($('#via_administracion_'+tipo).val() == 11)
+        {
+            $('#div_observaciones_medicamento_'+tipo).show();
+            $('#observaciones_medicamento_'+tipo).removeAttr('disabled');
+        }
+        else
+        {
+            $('#div_observaciones_medicamento_'+tipo).hide();
+            $('#observaciones_medicamento_'+tipo).attr('disabled','disabled');
+            $('#observaciones_medicamento_'+tipo).val('');
+        }
+    }
+
+    function validar_periodo_cronico(tipo)
+    {
+        if($('#periodo_'+tipo).val() == 11)
+        {
+            $('#div_observaciones_periodo_'+tipo).show();
+            $('#observaciones_periodo_'+tipo).removeAttr('disabled');
+        }
+        else
+        {
+            $('#div_observaciones_periodo_'+tipo).hide();
+            $('#observaciones_periodo_'+tipo).attr('disabled','disabled');
+            $('#observaciones_periodo_'+tipo).val('');
+        }
+    }
+
+    function validar_cantidad_comprar_cronico(tipo)
+    {
+        if($('#cantidad_comprar_'+tipo).val() == 999)
+        {
+            $('#div_otra_cantidad_a_comprar_'+tipo).show();
+            $('#otra_cantidad_a_comprar_'+tipo).removeAttr('disabled');
+        }
+        else
+        {
+            $('#div_otra_cantidad_a_comprar_'+tipo).hide();
+            $('#otra_cantidad_a_comprar_'+tipo).attr('disabled','disabled');
+            $('#otra_cantidad_a_comprar_'+tipo).val('');
+        }
+    }
+
+    function agregar_a_receta(tipo)
+    {
+        var lista_medicamentos_a_receta = [];
+        $.each($("input[name='medicamento_cronico_"+tipo+"[]']:checked"), function() {
+            lista_medicamentos_a_receta.push($(this).attr('data-id'));
+        });
+
+        console.log(lista_medicamentos_a_receta);
+        if(lista_medicamentos_a_receta.length > 0)
+        {
+            var _token = CSRF_TOKEN;
+            var id_profesional = $('#id_profesional_fc').val();
+            var id_ficha_atencion = $('#id_fc').val();
+            var id_paciente = $('#id_paciente_fc').val();
+            var id_lugar_atencion = $('#id_lugar_atencion').val();
+
+            let url = "{{ route('medicamento_cronico.pasar_a_receta') }}";
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id_profesional:id_profesional,
+                    id_ficha_atencion:id_ficha_atencion,
+                    id_paciente:id_paciente,
+                    id_lugar_atencion:id_lugar_atencion,
+                    lista_medicamento:lista_medicamentos_a_receta,
+                },
+            })
+            .done(function(resp) {
+                console.log(resp)
+
+                if(resp.estado == 1)
+                {
+                    swal({
+                        title: "Registro de Medicamento cronico a Receta Medica" ,
+                        text: mensaje,
+                        icon: "success",
+                    });
+
+                    $.each($("input[name='medicamento_cronico_"+tipo+"[]']"), function() {
+                        if(this.checked)
+                            $(this).prop( "checked", false );
+                    });
+                }
+                else
+                {
+                    var mensaje = '';
+                    if(data.error)
+                    {
+                        $.each(data.error, function (indexInArray, valueOfElement)
+                        {
+                            mensaje += valueOfElement+'\n';
+                        });
+                    }
+                    else
+                    {
+                        mensaje += 'Intente nuevamente.';
+                    }
+
+                    swal({
+                        title: "Registro de Medicamento cronico a Receta Medica",
+                        text: mensaje,
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+        else
+        {
+            swal({
+                title: "Debe seleccionar al menos un medicamento para ingresar a Receta Medica.",
+                icon: "warning",
+            });
+        }
+    }
 </script>
+
+
 

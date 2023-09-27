@@ -11,11 +11,7 @@
                     </li>
                 </ul>
             </div>
-			 <!--ALERTA-->
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert"><strong>Solo el campo diagnóstico es obligatorio el resto es opcional</strong></div>
-            </div>
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="col-sm-12 col-md-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_orl') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
@@ -37,7 +33,7 @@
                         <div class="tab-pane fade show active" id="atencion_orl" role="tabpanel" aria-labelledby="atencion_orl-tab">
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <h6 class="tit-gen">Ficha de atención general</h6>
+                                    <h6 class="f-20 text-c-blue mb-2">Ficha de atención general</h6>
                                 </div>
                             </div>
                             <div class="row">
@@ -58,15 +54,15 @@
                                         <div id="motivo_c" class="collapse show" aria-labelledby="motivo" data-parent="#motivo">
                                             <div class="card-body-aten-a">
                                                 <div class="form-row">
-                                                    <div class="form-group col-md-6">
+                                                    <div class="form-group col-md-5">
                                                         <label class="floating-label-activo-sm">Motivo de consulta</label>
                                                         <input type="text" class="form-control form-control-sm" name="descripcion_consulta_orl" id="descripcion_consulta_orl">
                                                     </div>
-                                                    <div class="form-group col-md-6">
+                                                    <div class="form-group col-md-4">
                                                         <label class="floating-label-activo-sm">Antecedentes Especialidad</label>
                                                         <input type="text" class="form-control form-control-sm" name="antec_especialidado" id="antec_especialidad">
                                                     </div>
-                                                    <!--<div class="form-group col-md-3">
+                                                    <div class="form-group col-md-3">
                                                         <div class="row">
                                                             <div class="col-sm-12">
                                                                 <label class="floating-label-activo-sm">Agregar Antecedentes Nuevo</label>
@@ -79,10 +75,10 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-sm-12 m-t-10" style="display:none" id="div_campos_antecedente_nuevo">
-                                                                <!-- campos antecedentes nuevos
+                                                                <!-- campos antecedentes nuevos -->
                                                             </div>
                                                         </div>
-                                                    </div>-->
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -114,9 +110,9 @@
                                                             <li class="nav-item">
                                                                 <a class="nav-link-aten text-reset" id="cuello-tab" data-toggle="tab" href="#cuello" role="tab" aria-controls="cuello" aria-selected="true">Cuello-Gl.anexas-otros</a>
                                                             </li>
-                                                            <!--<li class="nav-item">
+                                                            <li class="nav-item">
                                                                 <a class="nav-link-aten text-reset" id="in-hosp-tab" data-toggle="tab" href="#in-hosp" role="tab" aria-control="in-hosp" aria-selected="false">Hospitalización</a>
-                                                            </li>-->
+                                                            </li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -760,11 +756,11 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <!--HOSPITALIZACION
+                                                            <!--HOSPITALIZACION-->
 															@php
                                                                 $seccion_tipo = 'orl';
                                                             @endphp
-                                                            @include('general.hospitalizacion.hospitalizar')-->
+                                                            @include('general.hospitalizacion.hospitalizar')
 
                                                         </div>
                                                     </div>
@@ -777,21 +773,7 @@
 								<!-- control post qx -->
 								 @include('general.secciones_ficha.cirugia_control.control_cirugia_general')
 								<!-- cierre control post qx -->
-								<!--HOSPITALIZACION-->
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card-a">
-                                        <div class="card-header-a" id="hospitalizar_paciente">
-                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open " type="button" data-toggle="collapse" data-target="#hospitalizar_paciente-c" aria-expanded="false" aria-controls="hospitalizar_paciente-c">
-                                                Hospitalizar Paciente
-                                            </button>
-                                        </div>
-                                        <div id="hospitalizar_paciente-c" class="collapse" aria-labelledby="hospitalizar_paciente" data-parent="#hospitalizar_paciente">
-                                            <div class="card-body-aten-a shadow-none">
-                                                @include('general.hospitalizacion.hospitalizar')
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <!--Formulario / Signos vitales y otros-->
                                 @include('general.secciones_ficha.signos_vitales')
                                 <!--Cierre: Formulario / Signos vitales y otros-->
@@ -862,8 +844,8 @@
                         <!--INFORME RINOFIBROLARINGOSCOPÍA-->
                         <div class="tab-pane fade" id="rinofibro" role="tabpanel" aria-labelledby="rinofibro-tab">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <h6 class="tit-gen">Informe Rinofibrolaringoscopía</h6>
+                                <div class="col-md-12 mb-0">
+                                    <h6 class="f-20 text-c-blue mb-2">Informe Rinofibrolaringoscopía</h6>
                                 </div>
                             </div>
                             <div class="div_form_examen_rfl">
@@ -959,13 +941,103 @@
                 }
             });
 
-			/** MENSAJE*/
-            /** CARGAR mensaje */
-            $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
-            $('#mensaje_ficha').show();
-            setTimeout(function(){
-                $('#mensaje_ficha').hide();
-            }, 5000);
+            /** cronico */
+            /** autocomplete de medicamentos generales */
+            $("#nombre_medicamentocron").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getArticulo') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            console.log(data.length);
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    $('#nombre_medicamentocron').val(ui.item.label);
+                    $('#id_medicamento_cronico').val(ui.item.value);
+                    getDosis_cronico(ui.item.value, 'dosis_cronicomes');
+                    return false;
+                }
+            });
+
+            /** autocomplete de medicamentos patologia */
+            $("#nombre_medicamentocron_patologia").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getArticulo') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            console.log(data.length);
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    $('#nombre_medicamentocron_patologia').val(ui.item.label);
+                    $('#id_medicamentocron_patologia').val(ui.item.value);
+                    getDosis_cronico(ui.item.value, 'dosis_medicamentocron_patologia');
+                    return false;
+                }
+            });
+
+            /** accion check confidencial */
+            $('#confidencial').change(function() {
+                if ($('#confidencial').is(':checked')) {
+                    $('#confidencial_descripcion').show();
+                } else {
+                    $('#confidencial_descripcion').hide();
+                }
+            });
+
+            /** accion check ges */
+            $('#modal_ges').change(function() {
+                if ($('#modal_ges').is(':checked')) {
+                    $('#form_ges').modal('show');
+                } else {
+                    $('#form_ges').modal('hide');
+                }
+            });
+
+            /** busqueda de diagnostico GES */
+            $("#nombre_ges").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('ges.ver') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    // Set selection
+                    $('#nombre_ges').val(ui.item.label); // display the selected text
+                    $('#id_ges').val(ui.item.value); // save selected id to input
+                    return false;
+                }
+            });
+
+
         })
 
         /** MANEJO DE IMAGENES */
@@ -1069,7 +1141,9 @@
                 return this.emit("error", file, this.options.dictUploadCanceled);
             },
         };
-		
+
+
+
         var lista_imagenes = [];
         function cargar_lista_imagenes()
         {
@@ -1838,7 +1912,1004 @@
                 $('#'+input_solitado_por).val();
             }
         }
-		
+
+        /** CRONICO */
+        function getDosis_cronico(id_medicamento, div_dosis) {
+
+            console.log(id_medicamento);
+
+            let url = "{{ route('dental.getDosis') }}";
+            $.ajax({
+
+                    url: url,
+                    type: "get",
+                    data: {
+
+                        id_medicamento: id_medicamento,
+
+                    },
+                })
+                .done(function(data) {
+                    console.log(data)
+
+                    if (data != null) {
+
+                        data = JSON.parse(data);
+                        console.log(data)
+                        let dosis = $('#'+div_dosis);
+
+                        dosis.find('option').remove();
+                        dosis.append('<option value="0">Seleccione</option>');
+                        $(data).each(function(i, v) { // indice, valor
+                            dosis.append('<option value="' + v.dosis + '" data-id="'+v.id+'" data-cant_comp="'+v.cant_comp+'">' + v.present +
+                                '</option>');
+                        })
+
+                    } else {
+
+
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+
+        };
+
+        function getCantCompCronica(div_dosis, div_comp) {
+
+            var cant_comp = $('#'+div_dosis+' option:selected').attr('data-cant_comp');
+            console.log(cant_comp);
+
+            let url = "{{ route('presentacion.getCantComp') }}";
+            $.ajax({
+
+                    url: url,
+                    type: "get",
+                    data: {
+
+                        cant_comp: cant_comp,
+
+                    },
+                })
+                .done(function(data) {
+                    console.log(data)
+
+                    if (data != null) {
+
+                        data = JSON.parse(data);
+                        console.log(data)
+                        let select_cant_comp = $('#'+div_comp);
+
+                        select_cant_comp.find('option').remove();
+                        select_cant_comp.append('<option value="0">Seleccione</option>');
+                        $(data).each(function(i, v) { // indice, valor
+                            select_cant_comp.append('<option value="' + v.id + '">' + v.cant +'</option>');
+                        })
+                        select_cant_comp.append('<option value="999">Otra Cantidad</option>');
+
+                    } else {
+
+
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+
+        };
+
+        function es_cronico() {
+            if ($('#enf_cronico').prop('checked')) {
+                $('#form_enfermedad_cronica').modal('show');
+                $('#hipertension_div').hide();
+                $('#control_peso_div').hide();
+                $('#diabetes_div').hide();
+
+                $('#cronicos').val('n_C');
+                ver_medicamento_cronico();
+                $('.medicamento_cronico_div').show();
+                $('#senal_med_cronico').removeClass('fa-angle-down');
+                $('#senal_med_cronico').addClass('fa-angle-up');
+
+                cambiar_enfermedad_cronica();
+
+            }
+
+        }
+
+        function cambiar_enfermedad_cronica() {
+
+            if($('#cronicos').val() != 'n_C')
+            {
+                var nombre_enfermedad = $("#cronicos option:selected").text();
+                $('#titulo_med_patologia').html( ('Medicamentos '+nombre_enfermedad).toUpperCase());
+                $('.medicamento_patologia').show();
+                $('#btn_registro_med_patologia').attr('onclick','agregar_medicamento_cronico_patologia(\''+$('#cronicos').val()+'\')');
+                ver_medicamento_cronico_patologia();
+
+                $('.medicamento_cronico_div').hide();
+                $('#senal_med_cronico').addClass('fa-angle-down');
+                $('#senal_med_cronico').removeClass('fa-angle-up');
+
+                switch ($('#cronicos').val()) {
+                    case 'cpeso':
+                        $('#hipertension_div').hide();
+                        $('#control_peso_div').show();
+                        $('#diabetes_div').hide();
+                        $('#cinsufren').hide();
+                        $('#cmtumorales').hide();
+                        $('#creumato').hide();
+                        $('#clitemia').hide();
+                    break;
+                    case 'chipertension':
+                        $('#hipertension_div').show();
+                        $('#control_peso_div').hide();
+                        $('#diabetes_div').hide();
+                        $('#cinsufren').hide();
+                        $('#cmtumorales').hide();
+                        $('#creumato').hide();
+                        $('#clitemia').hide();
+                        ver_control_hipertension();
+
+                    break;
+                    case 'cdiabet':
+                        $('#hipertension_div').hide();
+                        $('#control_peso_div').hide();
+                        $('#diabetes_div').show();
+                        $('#cinsufren').hide();
+                        $('#cmtumorales').hide();
+                        $('#creumato').hide();
+                        $('#clitemia').hide();
+                    break;
+
+                    case 'cinsufren':
+                        $('#hipertension_div').hide();
+                        $('#control_peso_div').hide();
+                        $('#diabetes_div').hide();
+                        $('#cinsufren').show();
+                        $('#cmtumorales').hide();
+                        $('#creumato').hide();
+                        $('#clitemia').hide();
+                    break;
+                    case 'cmtumorales':
+                        $('#hipertension_div').hide();
+                        $('#control_peso_div').hide();
+                        $('#diabetes_div').hide();
+                        $('#cinsufren').hide();
+                        $('#cmtumorales').show();
+                        $('#creumato').hide();
+                        $('#clitemia').hide();
+                    break;
+                    case 'creumato':
+                        $('#hipertension_div').hide();
+                        $('#control_peso_div').hide();
+                        $('#diabetes_div').hide();
+                        $('#cinsufren').hide();
+                        $('#cmtumorales').hide();
+                        $('#creumato').show();
+                        $('#clitemia').hide();
+                    break;
+                    case 'clitemia':
+                        $('#hipertension_div').hide();
+                        $('#control_peso_div').hide();
+                        $('#diabetes_div').hide();
+                        $('#cinsufren').hide();
+                        $('#cmtumorales').hide();
+                        $('#creumato').hide();
+                        $('#clitemia').show();
+                    break;
+
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                $('.medicamento_patologia').hide();
+                $('#hipertension_div').hide();
+                $('#control_peso_div').hide();
+                $('#diabetes_div').hide();
+
+                $('#titulo_med_patologia').html( 'Medicamentos' );
+            }
+        }
+
+        function registrar_control_obesidad() {
+
+            let peso = $('#registro_peso').val();
+            let variacion = $('#registro_peso_variacion').val();
+            let ideal = $('#registro_peso_ideal').val();
+            let url = "{{ route('ficha_medica.registrar_control_obesidad') }}";
+            let hora_medica = $('#hora_medica').val();
+            var validar = 0;
+            var mensaje ='';
+
+            if( peso == '' )
+            {
+                $('#registro_peso').focus();
+                mensaje += 'Debe ingresar el Peso del Control Actual.\n';
+                validar = 1;
+            }
+            if( variacion == '' )
+            {
+                $('#registro_peso_variacion').focus();
+                mensaje += 'Debe ingresar la Variación.\n';
+                validar = 1;
+            }
+            if( ideal == '' )
+            {
+                $('#registro_peso_ideal').focus();
+                mensaje += 'Debe ingresar el Peso Ideal.\n';
+                validar = 1;
+            }
+
+            if(validar == 1)
+            {
+                swal({
+                    title: "Debe ingresar todos los datos requeridos." ,
+                    text: mensaje,
+                    icon: "error",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                })
+                return false;
+            }
+            else
+            {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        peso: peso,
+                        variacion: variacion,
+                        ideal: ideal,
+                        hora_medica: hora_medica
+                    },
+                })
+                .done(function(response) {
+
+                    if (response != '') {
+                        console.log(response);
+                        //$('#form_control_obesidad').trigger("reset");
+                        $('#mensaje').text('Se ha agregago control de obesidad correctamente');
+                        $('#mensaje').show();
+                        {{--  $('#form_enfermedad_cronica').modal('hide');  --}}
+                        {{--  location.reload();  --}}
+                        $('#registro_peso').val('');
+                        $('#registro_peso_variacion').val('');
+                        $('#registro_peso_ideal').val('');
+                        ver_control_obesidad();
+                    }
+                })
+                .fail(function(e) {
+                    console.log("error");
+                    console.log(e);
+                })
+            }
+        };
+
+        function registrar_hipertension() {
+
+            let sistolica = $('#presion_sistolica_hipertension').val();
+            let diastolica = $('#presion_diastolica_hipertension').val();
+            let ideal = $('#ideal_hipertension').val();
+            let url = "{{ route('ficha_medica.registrar_hipertension') }}";
+            let hora_medica = $('#hora_medica').val();
+            let id_lugar_atencion = $('#id_lugar_atencion').val();
+
+            var validar = 0;
+            var mensaje ='';
+
+            if( sistolica == '' )
+            {
+                $('#presion_sistolica_hipertension').focus();
+                mensaje += 'Debe ingresar el Presión Sistólica.\n';
+                validar = 1;
+            }
+            if( diastolica == '' )
+            {
+                $('#presion_diastolica_hipertension').focus();
+                mensaje += 'Debe ingresar el Presión Diastólica.\n';
+                validar = 1;
+            }
+            if( ideal == '' )
+            {
+                $('#ideal_hipertension').focus();
+                mensaje += 'Debe ingresar el Presión Ideal.\n';
+                validar = 1;
+            }
+
+            if(validar == 1)
+            {
+                swal({
+                    title: "Debe ingresar todos los datos requeridos." ,
+                    text: mensaje,
+                    icon: "error",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                })
+                return false;
+            }
+            else
+            {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        sistolica: sistolica,
+                        diastolica: diastolica,
+                        ideal: ideal,
+                        hora_medica: hora_medica,
+                        id_lugar_atencion: id_lugar_atencion
+                    },
+                })
+                .done(function(response) {
+
+                    if (response != '') {
+                        console.log(response);
+                        //$('#form_control_obesidad').trigger("reset");
+                        $('#mensaje').text('Se ha agregado control de Presión Arterial correctamente');
+                        $('#mensaje').show();
+                        {{--  $('#form_enfermedad_cronica').modal('hide');  --}}
+                        $('#presion_sistolica_hipertension').val('');
+                        $('#presion_diastolica_hipertension').val('');
+                        $('#ideal_hipertension').val('');
+                        ver_control_hipertension();
+
+                    }
+                })
+                .fail(function(e) {
+                    console.log("error");
+                    console.log(e);
+                })
+            }
+        };
+
+        function registrar_diabetes() {
+
+            let peso = $('#peso_diabetes').val();
+            let pies = $('#pies_diabetes').val();
+            let hgac1 = $('#hga1c_diabetes').val();
+            let colesterol = $('#colesterol_diabetes').val();
+            let creatina = $('#creatina_diabetes').val();
+            let glicosilada_postprandial = $('#glicosilada_postprandial_diabetes').val();
+            let glicosinada_ayuno = $('#glicosilada_ayuno_diabetes').val();
+            let url = "{{ route('ficha_medica.registrar_diabetes') }}";
+            let hora_medica = $('#hora_medica').val();
+
+            $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        peso: peso,
+                        pies: pies,
+                        hgac1: hgac1,
+                        colesterol: colesterol,
+                        creatina: creatina,
+                        glicosilada_postprandial: glicosilada_postprandial,
+                        glicosinada_ayuno: glicosinada_ayuno,
+                        hora_medica: hora_medica
+                    },
+                })
+                .done(function(response) {
+
+                    if (response != '') {
+                        console.log(response);
+                        //$('#form_control_obesidad').trigger("reset");
+                        $('#mensaje').text('Se ha agregago control de diabetes correctamente');
+                        $('#mensaje').show();
+                        $('#form_enfermedad_cronica').modal('hide');
+                        location.reload();
+                    }
+                })
+                .fail(function(e) {
+                    console.log("error");
+                    console.log(e);
+                })
+        };
+
+        function agregar_medicamento_cronico()
+        {
+
+            let url = "{{ route('medicamento_cronico.registrar') }}";
+
+
+            var _token = CSRF_TOKEN;
+            var id_profesional = $('#id_profesional_fc').val();
+            var id_ficha_atencion = $('#id_fc').val();
+            var id_paciente = $('#id_paciente_fc').val();
+            var nombre_medicamento = $('#nombre_medicamentocron').val();
+            var id_medicamento = $('#id_medicamentocron').val();
+            var cantidad = $('#med_cronicomes option:selected').text()
+            var tipo_enfermedad = 'cronico';
+
+            $.ajax({
+
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id_profesional:id_profesional,
+                    id_ficha_atencion:id_ficha_atencion,
+                    id_paciente:id_paciente,
+                    nombre_medicamento:nombre_medicamento,
+                    id_medicamento:id_medicamento,
+                    cantidad:cantidad,
+                    tipo_enfermedad:tipo_enfermedad,
+                },
+            })
+            .done(function(data)
+            {
+
+                if (data !== 'null')
+                {
+                    //data = JSON.parse(data);
+                    console.log('-----------------------');
+                    console.log(data);
+                    console.log('-----------------------');
+                    if(data.estado == 1)
+                    {
+                        swal({
+                            title: "Medicamento Cronico.",
+                            text: "Medicamento Registrado con exito.",
+                            icon: "success",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        });
+                        $('#nombre_medicamentocron').val('');
+
+                        $('#dosis_cronicomes').html('<option value="0">Seleccione</option>');
+                        $('#med_cronicomes').html('<option value="0">Seleccione</option>');
+
+                        ver_medicamento_cronico();
+
+
+                    }
+                    else{
+
+                        swal({
+                            title: "Problema al Registrar Medicamento Cronico.",
+                            icon: "warning",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        })
+                    }
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        function ver_medicamento_cronico()
+        {
+
+            let url = "{{ route('medicamento_cronico.getRegsitros') }}";
+
+
+            var _token = CSRF_TOKEN;
+            var id_ficha_atencion = $('#id_fc').val();
+            var id_paciente = $('#id_paciente_fc').val();
+
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {
+                    _token: _token,
+                    // id_ficha_atencion:id_ficha_atencion,
+                    id_paciente:id_paciente,
+                    tipo_enfermedad:'cronico'
+                },
+            })
+            .done(function(data)
+            {
+
+                if (data !== 'null')
+                {
+                    //data = JSON.parse(data);
+                    console.log('-----------------------');
+                    console.log(data);
+                    console.log('-----------------------');
+                    var html = '';
+                    html += '<thead>';
+                    html += '    <tr>';
+                    html += '        <th class="text-center align-middle">Nombre Medicamento</th>';
+                    html += '        <th class="text-center align-middle">Cantidad Mensual</th>';
+                    html += '        <th class="text-center align-middle">Acción</th>';
+                    html += '        <th class="text-center align-middle">Check</th>';
+                    html += '    </tr>';
+                    html += '</thead>';
+                    html += '<tbody>';
+                    if(data.estado == 1)
+                    {
+
+                        $.each(data.registros, function(index, value)
+                        {
+                            html += '<tr>';
+                            html += '    <td class="align-left align-middle">'+value.nombre_medicamento+'</td>';
+                            html += '    <td class="text-center align-middle">'+value.cantidad+'</td>';
+                            html += '    <td class="text-center align-middle">';
+                            html += '        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_med_cronico(\''+value.id+'\');"><i class="feather icon-x"></i></button>';
+                            html += '    </td>';
+                            html += '    <td class="text-center align-middle">';
+                            html += '        <input type="checkbox" name="medicamento_cronico_general" id="medicamento_cronico_general_'+value.id+'">';
+                            html += '    </td>';
+                            html += '</tr>';
+                        });
+
+                    }
+                    else
+                    {
+
+                        html += '<tr>';
+                        html += '    <td class="text-center align-middle" colspan="3">SIN REGISTROS</td>';
+                        html += '</tr>';
+
+                    }
+                    html += '</tbody>';
+                    $('#tabla_medicamento_cronico').html(html);
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+        function eliminar_med_cronico(id)
+        {
+            let url = "{{ route('medicamento_cronico.deleteRegsitro') }}";
+
+
+            var _token = CSRF_TOKEN;
+            var id =id;
+
+            $.ajax({
+
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id:id
+                },
+            })
+            .done(function(data)
+            {
+
+                if (data !== 'null')
+                {
+                    //data = JSON.parse(data);
+                    console.log('-----------------------');
+                    console.log(data);
+                    console.log('-----------------------');
+                    if(data.estado == 1)
+                    {
+                        swal({
+                            title: "Medicamento Cronico.",
+                            text: "Medicamento Eliminado.",
+                            icon: "success",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        });
+                        ver_medicamento_cronico();
+                    }
+                    else{
+
+                        swal({
+                            title: "Problema al Eliminar Registro de Medicamento Cronico.",
+                            icon: "warning",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        })
+                    }
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Eliminar Registro de Medicamento Cronico.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        {{--  MEDICAMENTOS CRONICOS PATOLOGIA  --}}
+        function agregar_medicamento_cronico_patologia(tipo)
+        {
+
+            let url = "{{ route('medicamento_cronico.registrar') }}";
+
+
+            var _token = CSRF_TOKEN;
+            var id_profesional = $('#id_profesional_fc').val();
+            var id_ficha_atencion = $('#id_fc').val();
+            var id_paciente = $('#id_paciente_fc').val();
+            var nombre_medicamento = $('#nombre_medicamentocron_patologia').val();
+            var cantidad = $('#med_cronicomes_patologia option:selected').text();
+            var tipo_enfermedad = tipo;
+
+            $.ajax({
+
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id_profesional:id_profesional,
+                    id_ficha_atencion:id_ficha_atencion,
+                    id_paciente:id_paciente,
+                    nombre_medicamento:nombre_medicamento,
+                    cantidad:cantidad,
+                    tipo_enfermedad:tipo_enfermedad,
+                },
+            })
+            .done(function(data)
+            {
+
+                if (data !== 'null')
+                {
+                    //data = JSON.parse(data);
+                    console.log('-----------------------');
+                    console.log(data);
+                    console.log('-----------------------');
+                    if(data.estado == 1)
+                    {
+                        swal({
+                            title: "Medicamento Cronico.",
+                            text: "Medicamento Registrado con exito.",
+                            icon: "success",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        });
+                        $('#nombre_medicamentocron_patologia').val('');
+                        $('#id_medicamentocron_patologia').val('');
+
+                        $('#dosis_medicamentocron_patologia').html('<option value="0">Seleccione</option>');
+                        $('#med_cronicomes_patologia').html('<option value="0">Seleccione</option>');
+
+                        ver_medicamento_cronico_patologia()
+                    }
+                    else{
+
+                        swal({
+                            title: "Problema al Registrar Medicamento Cronico.",
+                            icon: "warning",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        })
+                    }
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        function ver_medicamento_cronico_patologia()
+        {
+
+            let url = "{{ route('medicamento_cronico.getRegsitros') }}";
+
+
+            var _token = CSRF_TOKEN;
+            var id_ficha_atencion = $('#id_fc').val();
+            var id_paciente = $('#id_paciente_fc').val();
+            var tipo_enfermedad = $('#cronicos').val();
+            $('#tabla_med_patologia').html('');
+
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {
+                    _token: _token,
+                    // id_ficha_atencion:id_ficha_atencion,
+                    id_paciente:id_paciente,
+                    tipo_enfermedad:tipo_enfermedad
+                },
+            })
+            .done(function(data)
+            {
+
+                if (data !== 'null')
+                {
+                    //data = JSON.parse(data);
+                    console.log('-----------------------');
+                    console.log(data);
+                    console.log('-----------------------');
+                    var html = '';
+                    html += '<thead>';
+                    html += '    <tr>';
+                    html += '        <th class="text-center align-middle">Nombre Medicamento</th>';
+                    html += '        <th class="text-center align-middle">Cantidad Mensual</th>';
+                    html += '        <th class="text-center align-middle">Acción</th>';
+                    html += '        <th class="text-center align-middle">Check</th>';
+                    html += '    </tr>';
+                    html += '</thead>';
+                    html += '<tbody>';
+                    if(data.estado == 1)
+                    {
+
+                        $.each(data.registros, function(index, value)
+                        {
+                            html += '<tr>';
+                            html += '    <td class="align-left align-middle">'+value.nombre_medicamento+'</td>';
+                            html += '    <td class="text-center align-middle">'+value.cantidad+'</td>';
+                            html += '    <td class="text-center align-middle">';
+                            html += '        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_med_cronico_patologia(\''+value.id+'\');"><i class="feather icon-x"></i></button>';
+                            html += '    </td>';
+                            html += '    <td class="text-center align-middle">';
+                            html += '        <input type="checkbox" name="medicamento_cronico_patologia" id="medicamento_cronico_patologia_'+value.id+'">';
+                            html += '    </td>';
+                            html += '</tr>';
+                        });
+
+                    }
+                    else
+                    {
+
+                        html += '<tr>';
+                        html += '    <td class="text-center align-middle" colspan="4">SIN REGISTROS</td>';
+                        html += '</tr>';
+
+                    }
+                    html += '</tbody>';
+                    $('#tabla_med_patologia').html(html);
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+        function eliminar_med_cronico_patologia(id)
+        {
+            let url = "{{ route('medicamento_cronico.deleteRegsitro') }}";
+
+
+            var _token = CSRF_TOKEN;
+            var id =id;
+            var tipo_enfermedad = $('#cronicos').val();
+
+            $.ajax({
+
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id:id
+                },
+            })
+            .done(function(data)
+            {
+
+                if (data !== 'null')
+                {
+                    //data = JSON.parse(data);
+                    console.log('-----------------------');
+                    console.log(data);
+                    console.log('-----------------------');
+                    if(data.estado == 1)
+                    {
+                        swal({
+                            title: "Medicamento Cronico.",
+                            text: "Medicamento Eliminado.",
+                            icon: "success",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        });
+                        ver_medicamento_cronico_patologia(tipo_enfermedad);
+                    }
+                    else{
+
+                        swal({
+                            title: "Problema al Eliminar Registro de Medicamento Cronico.",
+                            icon: "warning",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        })
+                    }
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Eliminar Registro de Medicamento Cronico.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+
+        {{--  mostrar div   --}}
+        function mostrar_div(div)
+        {
+            if ($('.'+div).is(':visible')) {
+                $('.'+div).hide();
+                $('#senal_med_cronico').addClass('fa-angle-down');
+                $('#senal_med_cronico').removeClass('fa-angle-up');
+            } else {
+                $('.'+div).show();
+                $('#senal_med_cronico').removeClass('fa-angle-down');
+                $('#senal_med_cronico').addClass('fa-angle-up');
+            }
+        }
+
+
+        {{--  CRONICO VER CONTROL DE HIPERTENSION  --}}
+        function ver_control_hipertension()
+        {
+
+            let url = "{{ route('hipertension.getHipertension') }}";
+
+
+            var _token = CSRF_TOKEN;
+            var id_paciente = $('#id_paciente_fc').val();
+            $('#control_hipertension').html('');
+
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {
+                    _token: _token,
+                    id_paciente:id_paciente
+                },
+            })
+            .done(function(data)
+            {
+
+                if (data !== 'null')
+                {
+                    //data = JSON.parse(data);
+                    console.log('----------ver_control_hipertension-------------');
+                    console.log(data);
+                    console.log('-----------------------');
+                    var html = '';
+                    html += '<thead>';
+                    html += '    <tr>';
+                    html += '         <th class="text-center align-middle">Nº Control</th>';
+                    html += '         <th class="text-center align-middle">Fecha</th>';
+                    html += '         <th class="text-center align-middle">Presión Sistólica</th>';
+                    html += '         <th class="text-center align-middle">Presión Diastólica</th>';
+                    html += '         <th class="text-center align-middle">Presión Ideal</th>';
+                    html += '    </tr>';
+                    html += '</thead>';
+                    html += '<tbody>';
+                    if(data.estado == 1)
+                    {
+
+                        $.each(data.registros, function(index, value)
+                        {
+                            var f_temp = (value.created_at).replace('T',' ').replace('Z','').replace('.000000','');
+                            var fecha = new Date(f_temp);
+                            fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear()+' '+fecha.getHours()+':'+fecha.getMinutes();
+
+                            html += '<tr>';
+                            html += '    <td class="text-center align-middle">'+value.id+'</td>';
+                            html += '    <td class="text-center align-middle">'+fecha+'</td>';
+                            html += '    <td class="text-center align-middle">'+value.sistolica+'</td>';
+                            html += '    <td class="text-center align-middle">'+value.diastolica+'</td>';
+                            html += '    <td class="text-center align-middle">'+value.ideal+'</td>';
+                            html += '</tr>';
+                        });
+
+                    }
+                    else
+                    {
+
+                        html += '<tr>';
+                        html += '    <td class="text-center align-middle" colspan="5">SIN REGISTROS</td>';
+                        html += '</tr>';
+
+                    }
+                    html += '</tbody>';
+                    $('#control_hipertension').html(html);
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+        {{--  CRONICO VER CONTROL DE OBESIDAD  --}}
+        function ver_control_obesidad()
+        {
+
+            let url = "{{ route('control_obesidad.getControlObesidad') }}";
+
+
+            var _token = CSRF_TOKEN;
+            var id_paciente = $('#id_paciente_fc').val();
+            $('#control_obesidad').html('');
+
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {
+                    _token: _token,
+                    id_paciente:id_paciente
+                },
+            })
+            .done(function(data)
+            {
+
+                if (data !== 'null')
+                {
+                    //data = JSON.parse(data);
+                    console.log('----------ver_control_hipertension-------------');
+                    console.log(data);
+                    console.log('-----------------------');
+                    var html = '';
+                    html += '<thead>';
+                    html += '    <tr>';
+                    html += '    <th class="text-center align-middle">Nº Control</th>';
+                    html += '    <th class="text-center align-middle">Fecha</th>';
+                    html += '    <th class="text-center align-middle">Peso</th>';
+                    html += '    <th class="text-center align-middle">Variación</th>';
+                    html += '    <th class="text-center align-middle">Peso Ideal</th>';
+                    html += '    <!-- <th class="text-center align-middle">Acción</th>-->';
+                    html += '</tr>';
+                    html += '</thead>';
+                    html += '<tbody>';
+                    if(data.estado == 1)
+                    {
+
+                        $.each(data.registros, function(index, value)
+                        {
+                            var f_temp = (value.created_at).replace('T',' ').replace('Z','').replace('.000000','');
+                            var fecha = new Date(f_temp);
+                            fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear();
+
+
+                            html += '<tr>';
+                            html += '    <td class="text-center align-middle">'+value.id+'</td>';
+                            html += '    <td class="text-center align-middle">'+fecha+'</td>';
+                            html += '    <td class="text-center align-middle">'+value.peso+'</td>';
+                            html += '    <td class="text-center align-middle">'+value.variacion+'</td>';
+                            html += '    <td class="text-center align-middle">'+value.ideal+'</td>';
+                            html += '    <!--<td class="text-center align-middle"><button href="#!" class="btn btn-danger btn-sm"><i class="feather icon-x"></i> Eliminar</button></td>-->';
+                            html += '</tr>';
+                        });
+
+                    }
+                    else
+                    {
+
+                        html += '<tr>';
+                        html += '    <td class="text-center align-middle" colspan="5">SIN REGISTROS</td>';
+                        html += '</tr>';
+
+                    }
+                    html += '</tbody>';
+                    $('#control_obesidad').html(html);
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+        /** FIN CRONICO */
+
         /** PERVISUALIZACION DE EXAMEN */
         function visualizar_pdf_examen(tipo_examen)
         {
@@ -1872,14 +2943,5 @@
             }
         }
 
-    </script>
-
-    <!--ALERTA DE ATENCION-->
-    <script>
-        window.setTimeout(function() {
-            $(".alert-atencion").fadeTo(500, 0).slideUp(600, function(){
-                $(this).remove();
-            });
-        }, 5000);
     </script>
 @endsection

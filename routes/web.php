@@ -1335,6 +1335,7 @@ Route::group([
     Route::get('/getRegsitros',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'getRegsitros'])->name('medicamento_cronico.getRegsitros');
     Route::get('/getRegsitro',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'getRegsitro'])->name('medicamento_cronico.getRegsitro');
     Route::post('/deleteRegsitro',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'deleteRegsitro'])->name('medicamento_cronico.deleteRegsitro');
+    Route::post('/regitrar/receta',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'pasarMedicamentoCronicoAReceta'])->name('medicamento_cronico.pasar_a_receta');
 });
 
 /** REGISTROS CONTROL HIPERTENSION - CRONICO */

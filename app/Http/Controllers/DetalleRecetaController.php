@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Articulo;
 use App\Models\DetalleReceta;
 use App\Models\FichaAtencion;
 use App\Models\LugarAtencion;
@@ -87,24 +88,39 @@ class DetalleRecetaController extends Controller
                                 $request->id_lugar_atencion,
                                 $dia
                         );
-                //REGISTRO DE MEDICAMENTO CRONICO EN TABLA DE medicamentousocronicogeneral
-                $medicamento = new MedicamentoUsoCronicoGeneral();
-                $medicamento->id_ficha_atencion = $request->id_ficha;
-                $medicamento->id_paciente = $request->id_paciente;
-                $medicamento->id_profesional = $request->id_profesional;
-                $medicamento->nombre_medicamento = $medicamentos[$i]->medicamento;
-                $medicamento->cantidad = $medicamentos[$i]->compra;
-                $medicamento->tipo_enfermedad = 'cronico';
 
-                if($medicamento->save())
+                if($medicamentos[$i]->uso_cronico == 1)
                 {
-                    $datos['med_cronico'][$i]['estado'] = 1;
-                    $datos['med_cronico'][$i]['msj'] = 'Registro Exitoso';
-                }
-                else
-                {
-                    $datos['med_cronico'][$i]['estado'] = 0;
-                    $datos['med_cronico'][$i]['error'] = $medicamento;
+                    $articulo_med = Articulo::find($medicamentos[$i]->id_producto);
+                    if($articulo_med)
+                    {
+
+                        //REGISTRO DE MEDICAMENTO CRONICO EN TABLA DE medicamentousocronicogeneral
+                        $medicamento = new MedicamentoUsoCronicoGeneral();
+                        $medicamento->id_ficha_atencion = $request->id_ficha;
+                        $medicamento->id_paciente = $request->id_paciente;
+                        $medicamento->id_profesional = $request->id_profesional;
+                        $medicamento->id_articulo = $medicamentos[$i]->id_producto;
+                        $medicamento->nombre_medicamento = $medicamentos[$i]->medicamento;
+                        $medicamento->id_tipo_control = $articulo_med->tipo_cont;
+                        $medicamento->cantidad = $medicamentos[$i]->compra;
+                        $medicamento->presentacion = $medicamentos[$i]->presentacion;
+                        $medicamento->posologia = $medicamentos[$i]->posologia;
+                        $medicamento->via_administracion = $medicamentos[$i]->via_administracion;
+                        $medicamento->periodo = $medicamentos[$i]->periodo;
+                        $medicamento->tipo_enfermedad = 'cronico';
+
+                        if($medicamento->save())
+                        {
+                            $datos['med_cronico'][$i]['estado'] = 1;
+                            $datos['med_cronico'][$i]['msj'] = 'Registro Exitoso';
+                        }
+                        else
+                        {
+                            $datos['med_cronico'][$i]['estado'] = 0;
+                            $datos['med_cronico'][$i]['error'] = $medicamento;
+                        }
+                    }
                 }
 
                 if($retorno['estado'] == 1)
@@ -142,7 +158,7 @@ class DetalleRecetaController extends Controller
      * @param String $comentario
      * @return void
      */
-    public function registroMedicamento($id_ficha, $id_ingreso_paciente, $id_recuperacion, $id_sala, $id_articulo, $producto, $presentacion, $posologia, $via_administracion, $periodo, $uso_cronico, $cantidad_compra, $comentario, $id_profesional, $id_paciente, $id_lugar_atencion, $dia)
+    static public function registroMedicamento($id_ficha, $id_ingreso_paciente, $id_recuperacion, $id_sala, $id_articulo, $producto, $presentacion, $posologia, $via_administracion, $periodo, $uso_cronico, $cantidad_compra, $comentario, $id_profesional, $id_paciente, $id_lugar_atencion, $dia)
     {
         $datos = array();
         $error = array();
@@ -182,7 +198,7 @@ class DetalleRecetaController extends Controller
         if(empty($periodo))
         {
             $validos = 1;
-            $error['))'] = 'Campo requerido ))';
+            $error['periodo'] = 'Campo requerido ))';
         }
         // if((int)$uso_cronico == '')
         // {
