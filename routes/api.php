@@ -9,6 +9,7 @@ use App\Http\Controllers\AntecedenteController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfesionalProvisorioController;
 use App\Http\Controllers\DocumentoController;
+use App\Http\Controllers\VentaManualRecetaController;
 
 
 /*
@@ -76,6 +77,13 @@ Route::get('/documento/ver_detalle_recetas', [DocumentoController::class, 'verDe
 Route::get('/documento/ver_detalle_recetas/{id_ficha}', [DocumentoController::class, 'verDetalleRecetas']);
 Route::get('/documento/venta_detalle_recetas', [DocumentoController::class, 'ventaDetalleRecetas']);
 Route::get('/documento/venta_detalle_recetas/{lista_productos}', [DocumentoController::class, 'ventaDetalleRecetas']);
+
+
+//VENTA MANUAL RECETA
+Route::post('/venta_manual_receta/registrar', [VentaManualRecetaController::class, 'registrar']);
+Route::get('/venta_manual_receta/ver_registro', [VentaManualRecetaController::class, 'verRegistro']);
+
+
 
 //  Escritorio Paciente
 //Route::get('/paciente/mis_profesionales', [App\Http\Controllers\PacienteController::class, 'getMisProfesionales']);
