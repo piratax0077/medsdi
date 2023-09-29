@@ -40,6 +40,12 @@ class ExamenEspecialidad extends Model
         return $this->hasOne(SubTipoEspecialidad::class,'id', 'id_sub_tipo_especialidad');
     }
 
+    //profesional
+    public function Profesional()
+    {
+        return $this->hasOne(Profesional::class,'id', 'id_profesional');
+    }
+
     public function ScopeFiltroEstadoHora($query, $estado)
     {
         if(!empty($estado))

@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Region;
 use App\Models\Ciudad;
+use App\Models\ExamenMedico;
+use App\Models\ResultadoExamen;
+
 class LaboratorioController extends Controller
 {
     /** ADMINISTRACION GENERAL  */
@@ -21,7 +24,7 @@ class LaboratorioController extends Controller
      public function asistentes_laboratorio(){
         return view('app.laboratorio.adm_general.asistentes_laboratorio');
     }
-   
+
     public function perfil_admin(){
         return view('app.laboratorio.adm_general.perfil_admin');
     }
@@ -62,17 +65,14 @@ class LaboratorioController extends Controller
     public function suscripcion_pago_laboratorio(){
         return view('app.laboratorio.adm_general.suscripcion_pago_laboratorio');
     }
-    /** ADMINISTRACION LOCAL  */
 
+    /** ADMINISTRACION LOCAL  */
     public function perfil_administrador_local(){
         return view('app.laboratorio.administrador_local.perfil_admin');
     }
-
     public function adm_local_laboratorio(){
         return view('app.laboratorio.administrador_local.administracion_admin');
     }
-
-
     public function asistente_laboratorio_Local(){
         return view('app.laboratorio.administrador_local.asistentes_laboratorio');
     }
@@ -88,7 +88,6 @@ class LaboratorioController extends Controller
     public function proveedores_laboratorio_local(){
         return view('app.laboratorio.administrador_local.proveedores_laboratorio_admin');
     }
-
     public function sucursales_laboratorio_local(){
         return view('app.laboratorio.administrador_local.sucursales_laboratorio');
     }
@@ -129,38 +128,87 @@ class LaboratorioController extends Controller
 	public function escritorio_asistente_laboratorio(){
         return view('app.laboratorio.lab_asistente.escritorio_asistente_laboratorio');
     }
-/** PROFESIONALES LABORATORIO  */
 
-public function perfil_profesional(){
-    return view('app.laboratorio.lab_profesional.perfil');
-}
-public function escritorio_profesional_laboratorio(){
+
+    /** ASISTENTE LABORATORIO SUBIR EXAMEN */
+    public function perfil_asistente_subir_examan(){
+        return view('app.laboratorio.lab_asistente_subir_examen.perfil');
+    }
+
+    public function agenda_laboratorio_subir_examan(){
+        return view('app.laboratorio.lab_asistente_subir_examen.agenda_laboratorio');
+    }
+
+    public function cotizar_laboratorio_subir_examan(){
+        return view('app.laboratorio.lab_asistente_subir_examen.cotizar_laboratorio');
+    }
+
+    public function orden_laboratorio_subir_examan(){
+        return view('app.laboratorio.lab_asistente_subir_examen.orden_laboratorio');
+    }
+
+    public function pacientes_laboratorio_subir_examan(){
+        return view('app.laboratorio.lab_asistente_subir_examen.pacientes_laboratorio');
+    }
+
+    public function resultados_examenes_laboratorio_subir_examan(){
+        return view('app.laboratorio.lab_asistente_subir_examen.resultados_examenes_laboratorio');
+    }
+
+    public function cargar_resultados_examenes_laboratorio_subir_examan()
+    {
+        $tipo_examen = ExamenMedico::where('cod_parent', 0)->get();
+
+        return view('app.laboratorio.lab_asistente_subir_examen.cargar_resultados_examenes_laboratorio')->with([
+            'tipo_examen' => $tipo_examen,
+        ]);
+    }
+
+    public function registrar_resultados_examenes_laboratorio_subir_examan(Request $request)
+    {
+        return ResultadoExamenController::registrar($request->id_lugar_atencion, $request->id_institucion, $request->tipo_examen, $request->id_paciente, $request->rut, $request->nombre, $request->apellido_paterno, $request->apellido_materno, $request->email, $request->observacion, $request->lista_examen);
+    }
+
+    public function resultados_lab_subir_examan(){
+        return view('app.laboratorio.lab_asistente_subir_examen.resultados_laboratorio');
+    }
+
+	public function escritorio_asistente_laboratorio_subir_examan(){
+        return view('app.laboratorio.lab_asistente_subir_examen.escritorio_asistente_laboratorio');
+    }
+
+
+    /** PROFESIONALES LABORATORIO  */
+    public function perfil_profesional(){
+        return view('app.laboratorio.lab_profesional.perfil');
+    }
+    public function escritorio_profesional_laboratorio(){
         return view('app.laboratorio.lab_profesional.escritorio_profesional_laboratorio');
     }
-public function gastos_laboratorio(){
-    return view('app.laboratorio.lab_profesional.gastos_laboratorio');
-}
-public function inventario_laboratorio(){
-    return view('app.laboratorio.lab_profesional.inventario_laboratorio');
-}
-public function pacientes_laboratoriop(){
-    return view('app.laboratorio.lab_profesional.pacientes_laboratorio');
-}
-public function procesos_laboratorio(){
-    return view('app.laboratorio.lab_profesional.procesos_laboratorio');
-}
-public function proveedores_laboratorio(){
-    return view('app.laboratorio.lab_profesional.proveedores_laboratorio');
-}
-public function recepcion_muestras(){
-    return view('app.laboratorio.lab_profesional.recepcion_muestras');
-}
-public function resultados(){
-    return view('app.laboratorio.lab_profesional.resultados');
-}
-public function solicitud_exam_laboratorio_profesional(){
-    return view('app.laboratorio.lab_profesional.solicitud_exam_laboratorio_profesional');
-}
+    public function gastos_laboratorio(){
+        return view('app.laboratorio.lab_profesional.gastos_laboratorio');
+    }
+    public function inventario_laboratorio(){
+        return view('app.laboratorio.lab_profesional.inventario_laboratorio');
+    }
+    public function pacientes_laboratoriop(){
+        return view('app.laboratorio.lab_profesional.pacientes_laboratorio');
+    }
+    public function procesos_laboratorio(){
+        return view('app.laboratorio.lab_profesional.procesos_laboratorio');
+    }
+    public function proveedores_laboratorio(){
+        return view('app.laboratorio.lab_profesional.proveedores_laboratorio');
+    }
+    public function recepcion_muestras(){
+        return view('app.laboratorio.lab_profesional.recepcion_muestras');
+    }
+    public function resultados(){
+        return view('app.laboratorio.lab_profesional.resultados');
+    }
+    public function solicitud_exam_laboratorio_profesional(){
+        return view('app.laboratorio.lab_profesional.solicitud_exam_laboratorio_profesional');
+    }
 
 	public function buscar_ciudad_region(Request $request)
     {

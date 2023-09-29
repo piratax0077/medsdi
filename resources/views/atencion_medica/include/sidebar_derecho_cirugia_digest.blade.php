@@ -39,7 +39,7 @@
                     <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ufonasa()";>+ Buscador código FONASA</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ucalcimc()";>+ Calculadora de IMC</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="imc()";>+ Calculadora de IMC</button>
                         </div>
                     </div>
                     @include("general.modal.m_ucodigofonasa")
@@ -69,7 +69,7 @@
                     @include("general.modal.m_req_ingreso")
                     @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.recom_endoscopia_general')
 
-                    @include("general.modal.ingreso")
+
                     @include("general.modal.m_cuidados_cirugia")
 
                 </div>
@@ -84,14 +84,12 @@
                     <div id="collapse_hosp" class="collapse" aria-labelledby="headinghospm" data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="sol_pabellon()";>+ Solicitud Pabellón</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingreso()";>+ Hospitalización Cirugía</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingresomedico() ";>+ Hospitalización Tratamiento Médico</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingresohosp()";>+ Hospitalización </button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="r_ingreso()";>+ Requisitos de ingreso</button>
                         </div>
                     </div>
-                    @include("general.modal.in_solic_pabellon")
-                    @include("general.modal.ingreso")
-                    @include("general.modal.ingreso_medico")
+                    @include("general.hospitalizacion.modals.in_solic_pabellon")
+                    @include("general.hospitalizacion.modals.ingreso_hosp")
                     @include("general.modal.m_req_ingreso")
                 </div>
 				<div class="card-sidebar">

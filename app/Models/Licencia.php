@@ -10,7 +10,7 @@ use App\Models\FichaAtencion;
 class Licencia extends Model
 {
     use HasFactory;
-    protected $table = 'licencias';
+    protected $table = 'licencia';
 
     public function Paciente()
     {

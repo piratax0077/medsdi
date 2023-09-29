@@ -7,7 +7,7 @@
         <div class="page-header">
             <div class="page-block">
                 <div class="row align-items-center">
-                    <div class="col-md-12">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="page-header-title">
                             <h5 class="m-b-10 font-weight-bold">Escritorio Asistente</h5>
                         </div>
@@ -29,7 +29,7 @@
                     <div class="card  subir py-auto">
                         <a href="{{ ROUTE('asistente.buscar_paciente') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-70 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                <img class="wid-60 text-center" src="{{ asset('images/iconos/pacientes.svg') }}">
                                 <h5 class="mt-1 mb-0">Buscar Pacientes</h5>
                             </div>
                         </a>
@@ -54,14 +54,22 @@
                     <div class="card subir py-auto">
                         <a href="{{ ROUTE('asistente.flujo_caja') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                <h5 class="mt-1 mb-0">Flujo de Caja</h5>
+                                <img class="wid-60 text-center" src="{{ asset('images/iconos/flujo_caja.svg') }}">
+                                <h5 class="mt-1 mb-0">Flujo de caja</h5>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="card subir py-auto">
+                        <a href="{{ ROUTE('asistente.cargar_hora_por_confirmar') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center" src="{{ asset('images/iconos/confirmar_hora.png') }}">
+                                <h5 class="mt-1 mb-0">Horas no confirmadas</h5>
                             </div>
                         </a>
                     </div>
 					<!--
                     <div class="card py-auto subir">
-                        <!--<a href="{{ ROUTE('asistente.venta_productos') }}">
+                        <a href="{{ ROUTE('asistente.venta_productos') }}">
                         <a href="{{ ROUTE('asistente.registro_paciente') }}" class="btn" type="button">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/otros_servicios_1.svg') }}">
@@ -81,7 +89,7 @@
                     <div class="card-header bg-c-info">
                         <div class="row">
                             <div class="col-sm-12 d-inline text-center">
-                                <h5 class="text-white my-2" style="font-size: 1.4rem;">Información de mis profesionales</h5>
+                                <h5 class="text-white my-2" style="font-size: 1.1rem;">Información de mis profesionales</h5>
                             </div>
                         </div>
                     </div>

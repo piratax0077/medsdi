@@ -28,11 +28,6 @@
 /** MODALS **/
 /** MODALS FORMULARIOS GENERALES **/
 
-/** Indicar medicamento **/
-function i_medicamento() {
-    $('#indicar_medicamentos').modal('show');
-}
-
 /** Indicar examen **/
 function i_examen() {
     $('#indicar_examen').modal('show');

@@ -1,8 +1,8 @@
-<div id="indicar_examen_uro" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="indicar_examen_uro" aria-hidden="true">
+<div id="indicar_examen_uro_ven" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="indicar_examen_uro_ven" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Indicar Examen / Tratamientos Especialidad Orl</h5>
+                <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Indicar Examen Enf Venéreas</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
                 </button>
             </div>
@@ -11,64 +11,52 @@
                     <div class="form-row">
                         <div class="col-sm-12 mt-2">
                             <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Tipo del Examen Lab Otorrinolaringología</label>
+                                <label class="floating-label-activo-sm">Tipo de Examen </label>
                                 <select class="form-control form-control-sm" name="" id="">
                                     <option value="AL">Seleccione</option>
-                                    <optgroup label="OÌDOS">
-                                        <option value="AL">Audiometría Niños</option>
-                                        <option value="LA">Audiometría Adultos</option>
-                                        <option value="LA">Impedanciometría</option>
-                                        <option value="LA">Examen Funcional 8º Par Completo</option>
-                                        <option value="LA">Emisioones Oto-Acústicas</option>
-                                        <option value="LA">BERA</option>
+                                    <optgroup label="SIFILIS">
+                                        <option value="246">VDRL</option>
+                                        <option value="245">TREPONEMA PALLIDUM FTA - ABS, MHA-TP </option>
                                     </optgroup>
-                                    <optgroup label="NARIZ">
-                                        <option value="AL">Rinomanometría</option>
-                                        <option value="AL">Cultivo y Antibiograma Secreción nasal y Rcto. Eosinófilos</option>
+                                    <optgroup label="VIH">
+                                        <option value="???">VIH, anticuerpos y antígenos virales, determ. de H.I.V.</option>
+                                        <option value="???">VIH, reacción de polimerasa en cadena (P.C.R.) en líquido cefaloraquídeo</option>
                                     </optgroup>
-                                    <optgroup label="FARINGO-LARÍNGE">
-                                        <option value="AL">Nasofibrolaringoscopía</option>
-                                        <option value="AL">Cultivo y Antibiograma Frotis Faríngeo</option>
-                                         <option value="AL">Cultivo y Antibiograma Frotis Faríngeo Investigar Hongos</option>
+                                    <optgroup label="Flujo">
+                                        <option value="229">Cultivo Corriente</option>
+                                        <option value="235">Cultivo y Antibiograma Neisseria Gonorrohoeae</option>
+                                        <option value="235">CHLAMYDIA TRACHOMATIS Y NEISSERIA GONORRHOEAE DETECCION</option>
+                                        <option value="271">INMUNOFLUORESCENCIA INDIRECTA</option>
+                                         <option value="359">FLUJO VAGINAL</option>
+                                         <option value="359">FLUJO SECRECION URETRAL</option>
+                                         <option value="359">Técnicas de Amplificación de Ácidos Nucleicos (TAAN)</option>
                                     </optgroup>
-                                    <optgroup label="TRATAMIENTOS">
-                                        <option value="AL">Ejercicios de Rehabilitación Vestivular</option>
-                                        <option value="AL">Otros</option>
+                                    <optgroup label="HEPATITIS-B">
+                                        <option value="281">VIRUS HEPATITIS B, ANTICUERPO DEL ANTIGENO</option>
+                                        <option value="282">VIRUS HEPATITIS B, ANTICORE TOTAL DEL (ANTI HBC TOTAL) </option>
+                                        <option value="283">VIRUS HEPATITIS B, ANTIGENO E DEL (HBEAG)</option>
+                                        <option value="284">VIRUS HEPATITIS B, ANTIGENO DE SUPERFICIE (HBSAG) </option>
+                                        <option value="285">VIRUS HEPATITIS B, ANTICORE IGM DEL (ANTI HBC IGM)  </option>
+                                    </optgroup>
+                                    <optgroup label="HEPATITIS-C">
+                                        <option value="286">VIRUS HEPATITIS C, ANTICUERPOS DE (ANTI HCV) </option>
+                                    </optgroup>
+                                    <optgroup label="PAPILOMAS">
+                                        <option value="???">Virus Papiloma Humano por PCR </option>
                                     </optgroup>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-12 mt-2">
-                             <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Tipo del Examen Lab Radiología</label>
-                                <select class="form-control form-control-sm" name="" id="">
-                                    <option value="AL">Seleccione</option>
-                                    <optgroup label="OÌDOS">
-                                        <option value="AL">TAC OIDO DERECHO CON CONTRASTE</option>
-                                        <option value="AL">TAC OIDO DERECHO SIN CONTRASTE</option>
-                                        <option value="AL">TAC OIDO IZQUIERDO CON CONTRASTE</option>
-                                        <option value="AL">TAC OIDO IZQUIERDO SIN CONTRASTE</option>
-                                        <option value="AL">RNM OIDO DERECHO </option>
-                                        <option value="AL">RNM OIDO IZQUIERDO </option>
-                                    </optgroup>
-                                    <optgroup label="NARIZ">
-                                         <option value="AL">TAC NARIZ Y CAVIDADES PARANASALES CON CONTRASTE</option>
-                                        <option value="AL">TAC NARIZ Y CAVIDADES PARANASALES SIN CONTRASTE</option>
-                                    </optgroup>
-                                    <optgroup label="CUELLO Y GLANDULAS ANEXAS">
-                                        <option value="AL">ECOTOMOGRAFÍA DE CUELLO</option>
-                                        <option value="AL">CINTIGRAMA TIROÍDEO</option>
-                                         <option value="AL">OTROS</option>
-                                    </optgroup>
-                                </select>
-                            </div>
-                        </div>
+
                         <div class="col-sm-6 mt-2">
                             <div class="form-group fill">
-                                <label id="" name="" class="floating-label-activo-sm">Prioridad</label>
-                                <select class="form-control form-control-sm">
-                                    <option>Seleccione una opción</option>
-                                    <option>..</option>
+                                <label class="floating-label">Prioridad</label>
+                                <select class="form-control form-control-sm" id="prioridad" name="prioridad">
+                                    <option value="0">Seleccione</option>
+                                    <option value="1">Baja</option>
+                                    <option value="2" selected>Media</option>
+                                    <option value="3">Alta</option>
+                                    <option value="4">Urgente</option>
                                 </select>
                             </div>
                         </div>
@@ -112,10 +100,20 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info">
-                Guardar</button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="cerrarsol_examen_esp_uro_ven();" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-info btn-sm"> Guardar</button>
             </div>
         </div>
     </div>
 </div>
+<script>
+
+    function sol_examen_esp_uro_ven()
+    {
+        $('#indicar_examen_uro_ven').modal('show');
+    }
+    function cerrarsol_examen_esp_uro_ven(){
+        $('#indicar_examen_uro_ven').modal ('hide');
+      }
+
+</script>

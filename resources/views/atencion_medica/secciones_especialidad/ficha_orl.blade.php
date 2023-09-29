@@ -11,7 +11,11 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-sm-12 col-md-12">
+			 <!--ALERTA-->
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert"><strong>Solo el campo diagnóstico es obligatorio el resto es opcional</strong></div>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_orl') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
@@ -32,64 +36,59 @@
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
                         <div class="tab-pane fade show active" id="atencion_orl" role="tabpanel" aria-labelledby="atencion_orl-tab">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-0">
-                                            <h6 class="f-18 text-c-blue mb-3">Ficha de atención general</h6>
-                                        </div>
-                                    </div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <h6 class="tit-gen">Ficha de atención general</h6>
                                 </div>
                             </div>
-                            <!--FORMULARIOS-->
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-0">
-                                <!--Formulario / Menor de edad-->
-                                @include('general.secciones_ficha.seccion_menor')
-                                <!--Cierre: Formulario / Menor de edad-->
-                            </div>
-
-                            <!--Motivo consulta-->
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card-a">
-                                    <div class="card-header-a" id="motivo">
-                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#motivo_c" aria-expanded="false" aria-controls="motivo_c">
-                                            Motivo de la consulta
-                                        </button>
-                                    </div>
-                                    <div id="motivo_c" class="collapse show" aria-labelledby="motivo" data-parent="#motivo">
-                                        <div class="card-body-aten-a">
-                                            <div class="form-row">
-                                                <div class="form-group col-md-5">
-                                                    <label class="floating-label-activo-sm">Motivo de consulta</label>
-                                                    <input type="text" class="form-control form-control-sm" name="descripcion_consulta_orl" id="descripcion_consulta_orl">
-                                                </div>
-                                                <div class="form-group col-md-4">
-                                                    <label class="floating-label-activo-sm">Antecedentes Especialidad</label>
-                                                    <input type="text" class="form-control form-control-sm" name="antec_especialidado" id="antec_especialidad">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <label class="floating-label-activo-sm">Agregar Antecedentes Nuevo</label>
-                                                            <select class="form-control form-control-sm" name="tipo_antecedente" id="tipo_antecedente" onchange="carga_campos_antecedente_nuevo();">
-                                                                <option value="">Selecciones</option>
-                                                                <option value="alergia">Alergia Medicamento</option>
-                                                                <option value="enfermedades_cronicas">Enfermedad Crónica</option>
-                                                                <option value="anestesias">Incidente Anestesia</option>
-                                                                <option value="cirugia">Incidente Cirugia</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-sm-12 m-t-10" style="display:none" id="div_campos_antecedente_nuevo">
-                                                            <!-- campos antecedentes nuevos -->
-                                                        </div>
+                            <div class="row">
+                                <!--FORMULARIOS-->
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <!--Formulario / Menor de edad-->
+                                    @include('general.secciones_ficha.seccion_menor')
+                                    <!--Cierre: Formulario / Menor de edad-->
+                                </div>
+                                <!--Motivo consulta-->
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-a">
+                                        <div class="card-header-a" id="motivo">
+                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#motivo_c" aria-expanded="false" aria-controls="motivo_c">
+                                                Motivo de la consulta
+                                            </button>
+                                        </div>
+                                        <div id="motivo_c" class="collapse show" aria-labelledby="motivo" data-parent="#motivo">
+                                            <div class="card-body-aten-a">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <label class="floating-label-activo-sm">Motivo de consulta</label>
+                                                        <input type="text" class="form-control form-control-sm" name="descripcion_consulta_orl" id="descripcion_consulta_orl">
                                                     </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label class="floating-label-activo-sm">Antecedentes Especialidad</label>
+                                                        <input type="text" class="form-control form-control-sm" name="antec_especialidado" id="antec_especialidad">
+                                                    </div>
+                                                    <!--<div class="form-group col-md-3">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <label class="floating-label-activo-sm">Agregar Antecedentes Nuevo</label>
+                                                                <select class="form-control form-control-sm" name="tipo_antecedente" id="tipo_antecedente" onchange="carga_campos_antecedente_nuevo();">
+                                                                    <option value="">Selecciones</option>
+                                                                    <option value="alergia">Alergia Medicamento</option>
+                                                                    <option value="enfermedades_cronicas">Enfermedad Crónica</option>
+                                                                    <option value="anestesias">Incidente Anestesia</option>
+                                                                    <option value="cirugia">Incidente Cirugia</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-12 m-t-10" style="display:none" id="div_campos_antecedente_nuevo">
+                                                                <!-- campos antecedentes nuevos
+                                                            </div>
+                                                        </div>
+                                                    </div>-->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
+                                <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTRO DOSL-->
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a" id="exam_esp">
@@ -115,16 +114,15 @@
                                                             <li class="nav-item">
                                                                 <a class="nav-link-aten text-reset" id="cuello-tab" data-toggle="tab" href="#cuello" role="tab" aria-controls="cuello" aria-selected="true">Cuello-Gl.anexas-otros</a>
                                                             </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="in-hosp-orl-tab" data-toggle="tab" href="#in-hosp-orl" role="tab" aria-control="in-hosp-orl" aria-selected="false">Hospitalización</a>
-                                                            </li>
+                                                            <!--<li class="nav-item">
+                                                                <a class="nav-link-aten text-reset" id="in-hosp-tab" data-toggle="tab" href="#in-hosp" role="tab" aria-control="in-hosp" aria-selected="false">Hospitalización</a>
+                                                            </li>-->
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <div class="row">
+												<div class="row">
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <div class="tab-content" id="orl_adulto">
-
                                                             <!--OIDO-->
                                                             <div class="tab-pane fade show active" id="orl_oido" role="tabpanel" aria-labelledby="orl_oido_tab">
                                                                 <div class="row">
@@ -140,9 +138,8 @@
                                                                                             <a class="nav-link-aten text-reset" id="ex_vestibular-tab" data-toggle="tab" href="#ex_vestibular" role="tab" aria-controls="ex_vestibular" aria-selected="false">Examen Vestibular</a>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="col-sm-10" id="form-orl-oido">
+                                                                                    <div class="col-sm-10">
                                                                                         <div class="tab-content" id="v-pills-tabContent">
-                                                                                            {{-- audicion_gen --}}
                                                                                             <div class="tab-pane fade show active" id="audicion_gen" role="tabpanel" aria-labelledby="audicion_gen-tab">
                                                                                                 <div class="col-sm-12 col-md-12">
                                                                                                     <div class="form-row">
@@ -196,7 +193,6 @@
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
-                                                                                            {{-- oidos_ex --}}
                                                                                             <div class="tab-pane fade show" id="oidos_ex" role="tabpanel" aria-labelledby="oidos_ex-tab">
                                                                                                 <div class="col-sm-12 col-md-12">
                                                                                                     <div class="form-row">
@@ -237,7 +233,6 @@
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
-                                                                                            {{-- biomicrosc --}}
                                                                                             <div class="tab-pane fade" id="biomicrosc" role="tabpanel" aria-labelledby="biomicrosc-tab">
                                                                                                 <div class="col-sm-12 col-md-12">
                                                                                                     <div class="form-row">
@@ -280,7 +275,6 @@
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
-                                                                                            {{-- ex_vestibular --}}
                                                                                             <div class="tab-pane fade" id="ex_vestibular" role="tabpanel" aria-labelledby="ex_vestibular-tab">
                                                                                                 <div class="col-sm-12 col-md-12">
                                                                                                     <div class="form-row">
@@ -426,16 +420,15 @@
                                                                                             <a class="nav-link-aten text-reset" id="nariz_ex_fisico-tab" data-toggle="tab" href="#nariz_ex_fisico" role="tab" aria-controls="nariz_ex_fisico" aria-selected="false">Examen Nasal</a>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="col-sm-12 col-md-10 col-xl-10" id="form-orl-nariz">
+                                                                                    <div class="col-sm-12 col-md-10 col-xl-10">
                                                                                         <div class="tab-content" id="v-pills-tabContent">
-                                                                                            {{-- exnasal_grl --}}
                                                                                             <div class="tab-pane fade show active" id="exnasal_grl" role="tabpanel" aria-labelledby="exnasal_grl-tab">
                                                                                                 <div class="col-sm-12 col-md-12">
                                                                                                     <div class="form-row">
                                                                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Aspecto General</label>
-                                                                                                                <select name="nariz_general" id="nariz_general" data-titulo="Apreciación Respiratoria" data-seccion="Aspecto General" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('nariz_general','div_detalle_nariz_gen','det_nariz_general',2)">
+                                                                                                                <select name="nariz_general" id="nariz_general" data-titulo="Apreciación Respiratoria" data-seccion="Naríz" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('nariz_general','div_detalle_nariz_gen','det_nariz_general',2)">
                                                                                                                     <option value="0">Seleccione</option>
                                                                                                                     <option value="1">Aceptable</option>
                                                                                                                     <option value="2">Deficiente</option>
@@ -443,13 +436,13 @@
                                                                                                             </div>
                                                                                                             <div class="form-group"   id="div_detalle_nariz_gen" style="display:none">
                                                                                                                 <label class="floating-label-activo-sm">Detalle Aspecto General</label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Aspecto General"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_nariz_general" id="det_nariz_general"></textarea>
+                                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_nariz_general" id="det_nariz_general"></textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Apreciación Respiratoria</label>
-                                                                                                                <select name="apreciacion_resp" id="apreciacion_resp" data-titulo="Apreciación Respiratoria" data-seccion="Aspecto General" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('apreciacion_resp','div_detalle_nariz_resp','aprec_resp_def',2)">
+                                                                                                                <select name="apreciacion_resp" id="apreciacion_resp" data-titulo="Apreciación Respiratoria" data-seccion="Naríz" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('apreciacion_resp','div_detalle_nariz_resp','aprec_resp_def',2)">
                                                                                                                     <option value="0">Seleccione</option>
                                                                                                                     <option value="1">Aceptable</option>
                                                                                                                     <option value="2">Deficiente</option>
@@ -457,26 +450,25 @@
                                                                                                             </div>
                                                                                                             <div class="form-group"  id="div_detalle_nariz_resp" style="display:none">
                                                                                                                 <label class="floating-label-activo-sm">Apreciación Respiratoria</label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Aspecto General" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="aprec_resp_def" id="aprec_resp_def"></textarea>
+                                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="aprec_resp_def" id="aprec_resp_def"></textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     <div class="form-row">
                                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                             <label class="floating-label-activo-sm">Observaciones Examen General</label>
-                                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Aspecto General" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_general_nariz" id="obs_ex_general_nariz"></textarea>
+                                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_general_nariz" id="obs_ex_general_nariz"></textarea>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
-                                                                                            {{-- nariz_ex_fisico --}}
                                                                                             <div class="tab-pane fade" id="nariz_ex_fisico" role="tabpanel" aria-labelledby="nariz_ex_fisico-tab">
                                                                                                 <div class="col-sm-12 col-md-12">
                                                                                                     <div class="form-row">
                                                                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm" style="color:#CE0909;">Examen Fosa Nasal Der.</label>
-                                                                                                                <select name="examen_fnd" id="examen_fnd" data-titulo="Examen Fosa Nasal Der." data-seccion="Examen Nasal" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_fnd','div_detalle_examen_fnd','ex_fnd_anormal',2);">
+                                                                                                                <select name="examen_fnd" id="examen_fnd" data-titulo="Examen Fosa Nasal Der." data-seccion="Naríz" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_fnd','div_detalle_examen_fnd','ex_fnd_anormal',2);">
                                                                                                                     <option value="0">Seleccione</option>
                                                                                                                     <option value="1">Normal</option>
                                                                                                                     <option value="2">Anormal</option>
@@ -484,13 +476,13 @@
                                                                                                             </div>
                                                                                                             <div class="form-group" id="div_detalle_examen_fnd" style="display:none">
                                                                                                                 <label class="floating-label-activo-sm t-red">Examen Fosa Nasal Derecha<i>(describir)</i></label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Fosa Nasal Der." data-seccion="Examen Nasal" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_fnd_anormal" id="ex_fnd_anormal"></textarea>
+                                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Fosa Nasal Der." data-seccion="Naríz" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_fnd_anormal" id="ex_fnd_anormal"></textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm"  style="color:rgb(41, 90, 189);">Examen Fosa Nasal Izq.</label>
-                                                                                                                <select name="examen_fni" id="examen_fni" data-titulo="Examen Fosa Nasal Izq." data-seccion="Examen Nasal" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_fni','div_detalle_examen_fni','ex_fni_anormal',2);">
+                                                                                                                <select name="examen_fni" id="examen_fni" data-titulo="Examen Fosa Nasal Izq." data-seccion="Naríz" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_fni','div_detalle_examen_fni','ex_fni_anormal',2);">
                                                                                                                     <option value="0">Seleccione</option>
                                                                                                                     <option value="1">Normal</option>
                                                                                                                     <option value="2">Anormal</option>
@@ -498,14 +490,14 @@
                                                                                                             </div>
                                                                                                             <div class="form-group"  id="div_detalle_examen_fni" style="display:none">
                                                                                                                 <label class="floating-label-activo-sm t-red">Examen Fosa Nasal Izquierda<i>(describir)</i></label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Fosa Nasal Izq." data-seccion="Examen Nasal" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_fni_anormal" id="ex_fni_anormal"></textarea>
+                                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Fosa Nasal Izq." data-seccion="Naríz" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_fni_anormal" id="ex_fni_anormal"></textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     <div class="form-row">
                                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                             <label class="floating-label-activo-sm">Observaciones Examen Nasal</label>
-                                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaciones Examen Nasal" data-seccion="Examen Nasal" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_nasal" id="obs_ex_nasal"></textarea>
+                                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaciones Examen Nasal" data-seccion="Naríz" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_nasal" id="obs_ex_nasal"></textarea>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
@@ -516,6 +508,7 @@
                                                                                 <div class="row">
                                                                                     <div class="col-sm-4 col-md-4">
                                                                                         <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm">Cargar ficha tipo Nariz</label>
                                                                                             <label class="floating-label-activo-sm">Cargar ficha tipo Nariz</label>
                                                                                             <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad_nariz" onchange="cargar_info_ficha_tipo_orl('select_ficha_tipo_especialidad_nariz','descripcion_ficha_tipo_especialidad_nariz', 'form-orl-nariz');">
                                                                                                 <option value="">Seleccione</option>
@@ -530,6 +523,7 @@
                                                                                     <div class="col-sm-4 col-md-4">
                                                                                         <span id="descripcion_ficha_tipo_especialidad_nariz"></span>
                                                                                     </div>
+
                                                                                     <div class="col-sm-4 col-md-4 mb-3">
                                                                                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="abrir_modal_guardar_tipo('form-orl-nariz','registro_f_t_orl_detalle','nariz');"><i class="fas fa-save"></i> Guardar nueva ficha tipo Nariz</button>
                                                                                     </div>
@@ -552,16 +546,15 @@
                                                                                             <a class="nav-link-aten text-reset" id="laringe-tab" data-toggle="tab" href="#laringe" role="tab" aria-controls="laringe" aria-selected="false">Laringe</a>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="col-sm-12 col-md-10 col-xl-10" id="form-orl-faringe">
+                                                                                    <div class="col-sm-12 col-md-10 col-xl-10">
                                                                                         <div class="tab-content" id="v-pills-tabContent">
-                                                                                            {{-- Faringe --}}
                                                                                             <div class="tab-pane fade show active" id="faringe" role="tabpanel" aria-labelledby="faringe-tab"><br>
                                                                                                 <div class="col-sm-12 col-md-12">
                                                                                                     <div class="form-row">
                                                                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Examen Boca</label>
-                                                                                                                <select name="ex_boca" id="ex_boca" class="form-control form-control-sm" data-titulo="Examen Boca"  data-seccion="Faringe"  onchange="evaluar_para_carga_detalle('ex_boca','div_detalle_ex_boca','detalle_ex_boca',2)">
+                                                                                                                <select name="ex_boca" id="ex_boca" class="form-control form-control-sm" data-titulo="Examen Boca"  data-seccion="Faringo-Laringe"  onchange="evaluar_para_carga_detalle('ex_boca','div_detalle_ex_boca','detalle_ex_boca',2)">
                                                                                                                     <option value="0">Seleccione</option>
                                                                                                                     <option value="1">Normal</option>
                                                                                                                     <option value="2">Alterado</option>
@@ -569,13 +562,13 @@
                                                                                                             </div>
                                                                                                             <div class="form-group"  id="div_detalle_ex_boca" style="display:none">
                                                                                                                 <label class="floating-label-activo-sm">Examen Boca</label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Examen Boca"  data-seccion="Faringe"   onfocus="this.rows=3" onblur="this.rows=1;" name="detalle_ex_boca" id="detalle_ex_boca"></textarea>
+                                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Examen Boca"  data-seccion="Faringo-Laringe"   onfocus="this.rows=3" onblur="this.rows=1;" name="detalle_ex_boca" id="detalle_ex_boca"></textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Examen Faríngeo</label>
-                                                                                                                <select name="examen_faringe" id="examen_faringe" data-titulo="Examen Faríngeo"  data-seccion="Faringe"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_faringe','div_detalle_examen_faringe','ex_farige_anormal',2);">
+                                                                                                                <select name="examen_faringe" id="examen_faringe" data-titulo="Examen Faríngeo"  data-seccion="Faringo-Laringe"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_faringe','div_detalle_examen_faringe','ex_farige_anormal',2);">
                                                                                                                     <option value="0">Seleccione</option>
                                                                                                                     <option value="1">Normal</option>
                                                                                                                     <option value="2">Anormal</option>
@@ -583,20 +576,26 @@
                                                                                                             </div>
                                                                                                             <div class="form-group" id="div_detalle_examen_faringe" style="display:none">
                                                                                                                 <label class="floating-label-activo-sm">Examen Faríngeo</label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  data-titulo="Examen Faríngeo"  data-seccion="Faringe"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_farige_anormal" id="ex_farige_anormal"></textarea>
+                                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  data-titulo="Examen Faríngeo"  data-seccion="Faringo-Laringe"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_farige_anormal" id="ex_farige_anormal"></textarea>
                                                                                                             </div>
                                                                                                         </div>
+
                                                                                                     </div>
+																									<div class="form-row">
+																										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																											<label class="floating-label-activo-sm">Observaciones Examen Faríngeo</label>
+																											<textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Faríngeo" data-seccion="Faringo-Laringe" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_faringeo" id="obs_ex_faringeo"></textarea>
+																										</div>
+																									</div>
                                                                                                 </div>
                                                                                             </div>
-                                                                                            {{-- Laringe --}}
                                                                                             <div class="tab-pane fade " id="laringe" role="tabpanel" aria-labelledby="laringe-tab">
                                                                                                 <div class="col-sm-12 col-md-12">
                                                                                                     <div class="form-row">
                                                                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Disfonía</label>
-                                                                                                                <select name="disfonia" id="disfonia" class="form-control form-control-sm" data-titulo="Disfonía" data-seccion="Laringe" onchange="evaluar_para_carga_detalle('disfonia','div_disfonia','det_disfonia',2)">
+                                                                                                                <select name="disfonia" id="disfonia" class="form-control form-control-sm" data-titulo="Disfonía" data-seccion="Faringo-Laringe" onchange="evaluar_para_carga_detalle('disfonia','div_disfonia','det_disfonia',2)">
                                                                                                                     <option value="0">Seleccione</option>
                                                                                                                     <option value="1">No</option>
                                                                                                                     <option value="2">Sí</option>
@@ -604,13 +603,13 @@
                                                                                                             </div>
                                                                                                             <div class="form-group"  id="div_disfonia" style="display:none">
                                                                                                                 <label class="floating-label-activo-sm">Detalle Disfonía</label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Disfonía" data-seccion="Laringe" onfocus="this.rows=3" onblur="this.rows=1;" name="det_disfonia" id="det_disfonia"></textarea>
+                                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Disfonía" data-seccion="Faringo-Laringe" onfocus="this.rows=3" onblur="this.rows=1;" name="det_disfonia" id="det_disfonia"></textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Examen Laríngeo</label>
-                                                                                                                <select name="examen_laringe" id="examen_laringe" data-titulo="Examen Laríngeo"  data-seccion="Laringe"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_laringe','div_detalle_examen_laringe','ex_larige_anormal',2);">
+                                                                                                                <select name="examen_laringe" id="examen_laringe" data-titulo="Examen Laríngeo"  data-seccion="Faringo-Laringe"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_laringe','div_detalle_examen_laringe','ex_larige_anormal',2);">
                                                                                                                     <option value="0">Seleccione</option>
                                                                                                                     <option value="1">Normal</option>
                                                                                                                     <option value="2">Anormal</option>
@@ -618,14 +617,14 @@
                                                                                                             </div>
                                                                                                             <div class="form-group" id="div_detalle_examen_laringe" style="display:none">
                                                                                                                 <label class="floating-label-activo-sm">Examen Laríngeo</label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Examen Laríngeo"  data-seccion="Laringe"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_larige_anormal" id="ex_larige_anormal"></textarea>
+                                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Examen Laríngeo"  data-seccion="Faringo-Laringe"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_larige_anormal" id="ex_larige_anormal"></textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     <div class="form-row">
                                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                             <label class="floating-label-activo-sm">Observaciones Examen Laríngeo</label>
-                                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Laríngeo" data-seccion="Laringe" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_examen_laringe" id="obs_examen_laringe"></textarea>
+                                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Laríngeo" data-seccion="Faringo-Laringe" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_laringeo" id="obs_ex_laringeo"></textarea>
                                                                                                         </div>
                                                                                                     </div>
 
@@ -638,7 +637,7 @@
                                                                                     <div class="col-sm-4 col-md-4">
                                                                                         <div class="form-group">
                                                                                             <label class="floating-label-activo-sm">Cargar ficha tipo Faringo-Laringe</label>
-                                                                                            <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad_faringe" onchange="cargar_info_ficha_tipo_orl('select_ficha_tipo_especialidad_faringe','descripcion_ficha_tipo_especialidad_faringe', 'form-orl-faringe');">
+                                                                                            <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad_of" onchange="cargar_info_ficha_tipo_oft_fo('select_ficha_tipo_especialidad_of','descripcion_ficha_tipo_especialidad_of');">
                                                                                                 <option value="">Seleccione</option>
                                                                                                 @if(!empty($fichaTipo['faringe']))
                                                                                                     @foreach ($fichaTipo['faringe'] as $ft )
@@ -668,63 +667,70 @@
                                                                         <div class="card">
                                                                             <div class="card-body">
                                                                                 <div class="row">
-                                                                                    <div class="col-sm-12 col-md-12" id="form-orl-cuello">
-                                                                                        <div class="form-row">
-                                                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Piel y Tegumentos</label>
-                                                                                                    <select name="piel_tegumnto" data-titulo="Piel y Tegumentos" data-seccion="Cuello"  id="piel_tegumnto" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);">
-                                                                                                        <option selected  value="1">Normales</option>
-                                                                                                        <option value="2">Anormales</option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                                <div class="form-group" id="div_piel_tegumnto" style="display:none;">
-                                                                                                    <label class="floating-label-activo-sm">Piel y Tegumentos</label>
-                                                                                                    <textarea class="form-control form-control-sm" data-titulo="Observacion Piel y Tegumentos" data-seccion="Cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_piel_tegumnto" id="obs_piel_tegumnto"></textarea>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Adenopatías</label>
-                                                                                                    <select name="adenopatias" data-titulo="Adenopatías" data-seccion="Cuello"  id="adenopatias" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('adenopatias','div_adenopatias','obs_adenopatias',2);">
-                                                                                                        <option selected  value="1">Normales</option>
-                                                                                                        <option value="2">Anormales</option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                                <div class="form-group" id="div_adenopatias" style="display:none;">
-                                                                                                    <label class="floating-label-activo-sm">Adenopatías</label>
-                                                                                                    <textarea class="form-control form-control-sm" data-titulo="Observacion Adenopatías"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_adenopatias" id="obs_adenopatias"></textarea>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Tumores y Masas</label>
-                                                                                                    <select name="tumores_masas" data-titulo="Tumores y Masas" data-seccion="Cuello"  id="tumores_masas" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tumores_masas','div_tumores_masas','obs_tumores_masas',2);">
-                                                                                                        <option selected  value="1">Normales</option>
-                                                                                                        <option value="2">Anormales</option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                                <div class="form-group" id="div_tumores_masas" style="display:none;">
-                                                                                                    <label class="floating-label-activo-sm">Tumores y Masas</label>
-                                                                                                    <textarea class="form-control form-control-sm" data-titulo="Observacion Tumores y Masas"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tumores_masas" id="obs_tumores_masas"></textarea>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Glándulas Anexas</label>
-                                                                                                    <select name="gland_anexas" data-titulo="Glándulas Anexas" data-seccion="Cuello"  id="gland_anexas" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('gland_anexas','div_gland_anexas','obs_gland_anexas',2);">
-                                                                                                        <option selected  value="1">Normales</option>
-                                                                                                        <option value="2">Anormales</option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                                <div class="form-group" id="div_gland_anexas" style="display:none;">
-                                                                                                    <label class="floating-label-activo-sm">Glándulas Anexas</label>
-                                                                                                    <textarea class="form-control form-control-sm" data-titulo="Observacion Glándulas Anexas"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_gland_anexas" id="obs_gland_anexas"></textarea>
+                                                                                    <div class="col-sm-12 col-md-12 col-xl-12">
+                                                                                        <div class="tab-content" id="v-pills-tabContent">
+                                                                                            <div class="tab-pane fade show active" id="faringe" role="tabpanel" aria-labelledby="faringe-tab"><br>
+                                                                                                <div class="col-sm-12 col-md-12">
+                                                                                                    <div class="form-row">
+                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+																											<div class="form-group">
+																												<label class="floating-label-activo-sm">Piel y Tegumentos</label>
+																												<select name="piel_tegumnto" data-titulo="Piel y Tegumentos" data-seccion="Cuello"  id="piel_tegumnto" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);">
+																													<option selected  value="1">Normales</option>
+																													<option value="2">Anormales</option>
+																												</select>
+																											</div>
+																											<div class="form-group" id="div_piel_tegumnto" style="display:none;">
+																												<label class="floating-label-activo-sm">Piel y Tegumentos</label>
+																												<textarea class="form-control form-control-sm" data-titulo="Observacion Piel y Tegumentos" data-seccion="Cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_piel_tegumnto" id="obs_piel_tegumnto"></textarea>
+																											</div>
+																										</div>
+																										<div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+																											<div class="form-group">
+																												<label class="floating-label-activo-sm">Adenopatías</label>
+																												<select name="adenopatias" data-titulo="Adenopatías" data-seccion="Cuello"  id="adenopatias" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('adenopatias','div_adenopatias','obs_adenopatias',2);">
+																													<option selected  value="1">Normales</option>
+																													<option value="2">Anormales</option>
+																												</select>
+																											</div>
+																											<div class="form-group" id="div_adenopatias" style="display:none;">
+																												<label class="floating-label-activo-sm">Adenopatías</label>
+																												<textarea class="form-control form-control-sm" data-titulo="Observacion Adenopatías"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_adenopatias" id="obs_adenopatias"></textarea>
+																											</div>
+																										</div>
+																										<div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+																											<div class="form-group">
+																												<label class="floating-label-activo-sm">Tumores y Masas</label>
+																												<select name="tumores_masas" data-titulo="Tumores y Masas" data-seccion="Cuello"  id="tumores_masas" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tumores_masas','div_tumores_masas','obs_tumores_masas',2);">
+																													<option selected  value="1">Normales</option>
+																													<option value="2">Anormales</option>
+																												</select>
+																											</div>
+																											<div class="form-group" id="div_tumores_masas" style="display:none;">
+																												<label class="floating-label-activo-sm">Tumores y Masas</label>
+																												<textarea class="form-control form-control-sm" data-titulo="Observacion Tumores y Masas"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tumores_masas" id="obs_tumores_masas"></textarea>
+																											</div>
+																										</div>
+																										<div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+																											<div class="form-group">
+																												<label class="floating-label-activo-sm">Glándulas Anexas</label>
+																												<select name="gland_anexas" data-titulo="Glándulas Anexas" data-seccion="Cuello"  id="gland_anexas" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('gland_anexas','div_gland_anexas','obs_gland_anexas',2);">
+																													<option selected  value="1">Normales</option>
+																													<option value="2">Anormales</option>
+																												</select>
+																											</div>
+																											<div class="form-group" id="div_gland_anexas" style="display:none;">
+																												<label class="floating-label-activo-sm">Glándulas Anexas</label>
+																												<textarea class="form-control form-control-sm" data-titulo="Observacion Glándulas Anexas"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_gland_anexas" id="obs_gland_anexas"></textarea>
+																											</div>
+																										</div>
+
+                                                                                                    </div>
+
                                                                                                 </div>
                                                                                             </div>
 
                                                                                         </div>
-
                                                                                     </div>
                                                                                 </div><br>
                                                                                 <div class="row">
@@ -754,11 +760,12 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <!--HOSPITALIZACION-->
-                                                            @php
+                                                            <!--HOSPITALIZACION
+															@php
                                                                 $seccion_tipo = 'orl';
                                                             @endphp
-                                                            @include('general.hospitalizacion.hospitalizar')
+                                                            @include('general.hospitalizacion.hospitalizar')-->
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -767,103 +774,114 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!--Formulario / Signos vitales y otros-->
-                            @include('general.secciones_ficha.signos_vitales')
-                            <!--Cierre: Formulario / Signos vitales y otros-->
-
-                            <!--CRONICOS / GES / CONFIDENCIAL -->
-                            @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
-
-                            <!--Diagnóstico-->
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card-a">
-                                    <div class="card-header-a " id="diagnostico">
-                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagnostico_c" aria-expanded="false" aria-controls="diagnostico_c">
-                                            Diagnóstico
-                                        </button>
+								<!-- control post qx -->
+								 @include('general.secciones_ficha.cirugia_control.control_cirugia_general')
+								<!-- cierre control post qx -->
+								<!--HOSPITALIZACION-->
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-a">
+                                        <div class="card-header-a" id="hospitalizar_paciente">
+                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open " type="button" data-toggle="collapse" data-target="#hospitalizar_paciente-c" aria-expanded="false" aria-controls="hospitalizar_paciente-c">
+                                                Hospitalizar Paciente
+                                            </button>
+                                        </div>
+                                        <div id="hospitalizar_paciente-c" class="collapse" aria-labelledby="hospitalizar_paciente" data-parent="#hospitalizar_paciente">
+                                            <div class="card-body-aten-a shadow-none">
+                                                @include('general.hospitalizacion.hospitalizar')
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div id="diagnostico_c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
-                                        <div class="card-body-aten-a  shadow-none">
-                                            <div class="form-row">
-                                                <div class="form-group col-md-4">
-                                                    <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
-                                                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado,eno_diagnositico_confirmado" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" >
-                                                </div>
-                                                <div class="form-group col-md-4">
-                                                    <label class="floating-label-activo-sm">Indicaciones</label>
-                                                    <input type="text" class="form-control form-control-sm" name="ind_oft" id="ind_oft">
-                                                </div>
-                                                <div class="form-group col-md-4">
-                                                    <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
-                                                    <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_cie" id="descripcion_cie" value="" onchange="cargarIgual('descripcion_cie')">
-                                                    <input type="hidden" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="" onchange="cargarIgual('id_descripcion_cie')">
+                                </div>
+                                <!--Formulario / Signos vitales y otros-->
+                                @include('general.secciones_ficha.signos_vitales')
+                                <!--Cierre: Formulario / Signos vitales y otros-->
+
+                                <!--CRONICOS / GES / CONFIDENCIAL -->
+                                @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+
+                                <!--Diagnóstico-->
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-a">
+                                        <div class="card-header-a " id="diagnostico">
+                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagnostico_c" aria-expanded="false" aria-controls="diagnostico_c">
+                                                Diagnóstico
+                                            </button>
+                                        </div>
+                                        <div id="diagnostico_c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
+                                            <div class="card-body-aten-a  shadow-none">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+                                                        <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
+                                                            <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado,eno_diagnositico_confirmado" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" >
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label class="floating-label-activo-sm">Indicaciones</label>
+                                                        <input type="text" class="form-control form-control-sm" name="ind_orl" id="ind_orl">
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
+                                                        <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_cie" id="descripcion_cie" value="" onchange="cargarIgual('descripcion_cie')">
+                                                        <input type="hidden" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="" onchange="cargarIgual('id_descripcion_cie')">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                                            @include('general.secciones_ficha.seccion_receta_examen_comunes')
-                                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+                                                @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                                <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
 
-                                            <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
-                                            @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')
-                                            <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD FIN  -->
+                                                <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
+                                                @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')
+                                                <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD FIN  -->
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <!--GUARDAR O IMPRIMIR FICHA-->
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="row mb-3">
-                                    <div class="col-md-12 text-center">
-                                        <input type="submit" class="btn btn-info-light-c mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                                        <input type="submit" class="btn btn-success-light-c mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="row">
+								<!--GUARDAR O IMPRIMIR FICHA-->
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="row mb-3">
+										<div class="col-md-12 text-center">
+											<input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+											<input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+										</div>
+									</div>
+								</div>
+							</div>
                             <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
 
                         </div>
                         <!--INFORME RINOFIBROLARINGOSCOPÍA-->
                         <div class="tab-pane fade" id="rinofibro" role="tabpanel" aria-labelledby="rinofibro-tab">
-                            <div class="row bg-white shadow-none rounded mx-1">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-12 mt-3 mb-0">
-                                            <h6 class="f-16 text-c-blue">Informe rinofibrolaringoscopía</h6>
-                                            <hr>
-                                        </div>
-                                    </div>
-                                    <div class="div_form_examen_rfl">
-                                        {!! $examen !!}
-                                    </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <h6 class="tit-gen">Informe Rinofibrolaringoscopía</h6>
                                 </div>
-                                <hr>
-                                <!-- GUARDAR EXAMEN -->
-                                <div class="col-md-12 text-center mb-3">
-                                    <input type="submit" class="btn btn-success-light-c mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
-                                    <button type="button" class="btn btn-danger-light-c mt-1" onclick="visualizar_pdf_examen('rfl');">Ver Examen PDF</button>
-                                </div>
-                                <!-- CIERRE: GUARDAR EXAMEN -->
                             </div>
+                            <div class="div_form_examen_rfl">
+                                {!! $examen !!}
+                            </div>
+                            <!-- GUARDAR EXAMEN -->
+                            <div class="col-md-12 text-center mb-3">
+                                <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
+                                <button type="button" class="btn btn-danger mt-1" onclick="visualizar_pdf_examen('rfl');">Ver Examen PDF</button>
+                            </div>
+                            <!-- CIERRE: GUARDAR EXAMEN -->
                         </div>
-                        <!--CIERRE: INFORME RINOFIBROLARINGOSCOPÍA-->
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 
 @section('page-script-ficha-atencion')
     <script>
@@ -941,103 +959,13 @@
                 }
             });
 
-            /** cronico */
-            /** autocomplete de medicamentos generales */
-            $("#nombre_medicamentocron").autocomplete({
-                source: function(request, response) {
-                    // Fetch data
-                    $.ajax({
-                        url: "{{ route('dental.getArticulo') }}",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            _token: CSRF_TOKEN,
-                            search: request.term
-                        },
-                        success: function(data) {
-                            console.log(data.length);
-                            response(data);
-                        }
-                    });
-                },
-                select: function(event, ui) {
-                    $('#nombre_medicamentocron').val(ui.item.label);
-                    $('#id_medicamento_cronico').val(ui.item.value);
-                    getDosis_cronico(ui.item.value, 'dosis_cronicomes');
-                    return false;
-                }
-            });
-
-            /** autocomplete de medicamentos patologia */
-            $("#nombre_medicamentocron_patologia").autocomplete({
-                source: function(request, response) {
-                    // Fetch data
-                    $.ajax({
-                        url: "{{ route('dental.getArticulo') }}",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            _token: CSRF_TOKEN,
-                            search: request.term
-                        },
-                        success: function(data) {
-                            console.log(data.length);
-                            response(data);
-                        }
-                    });
-                },
-                select: function(event, ui) {
-                    $('#nombre_medicamentocron_patologia').val(ui.item.label);
-                    $('#id_medicamentocron_patologia').val(ui.item.value);
-                    getDosis_cronico(ui.item.value, 'dosis_medicamentocron_patologia');
-                    return false;
-                }
-            });
-
-            /** accion check confidencial */
-            $('#confidencial').change(function() {
-                if ($('#confidencial').is(':checked')) {
-                    $('#confidencial_descripcion').show();
-                } else {
-                    $('#confidencial_descripcion').hide();
-                }
-            });
-
-            /** accion check ges */
-            $('#modal_ges').change(function() {
-                if ($('#modal_ges').is(':checked')) {
-                    $('#form_ges').modal('show');
-                } else {
-                    $('#form_ges').modal('hide');
-                }
-            });
-
-            /** busqueda de diagnostico GES */
-            $("#nombre_ges").autocomplete({
-                source: function(request, response) {
-                    // Fetch data
-                    $.ajax({
-                        url: "{{ route('ges.ver') }}",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            _token: CSRF_TOKEN,
-                            search: request.term
-                        },
-                        success: function(data) {
-                            response(data);
-                        }
-                    });
-                },
-                select: function(event, ui) {
-                    // Set selection
-                    $('#nombre_ges').val(ui.item.label); // display the selected text
-                    $('#id_ges').val(ui.item.value); // save selected id to input
-                    return false;
-                }
-            });
-
-
+			/** MENSAJE*/
+            /** CARGAR mensaje */
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
+            $('#mensaje_ficha').show();
+            setTimeout(function(){
+                $('#mensaje_ficha').hide();
+            }, 5000);
         })
 
         /** MANEJO DE IMAGENES */
@@ -1141,9 +1069,7 @@
                 return this.emit("error", file, this.options.dictUploadCanceled);
             },
         };
-
-
-
+		
         var lista_imagenes = [];
         function cargar_lista_imagenes()
         {
@@ -1912,1004 +1838,7 @@
                 $('#'+input_solitado_por).val();
             }
         }
-
-        /** CRONICO */
-        function getDosis_cronico(id_medicamento, div_dosis) {
-
-            console.log(id_medicamento);
-
-            let url = "{{ route('dental.getDosis') }}";
-            $.ajax({
-
-                    url: url,
-                    type: "get",
-                    data: {
-
-                        id_medicamento: id_medicamento,
-
-                    },
-                })
-                .done(function(data) {
-                    console.log(data)
-
-                    if (data != null) {
-
-                        data = JSON.parse(data);
-                        console.log(data)
-                        let dosis = $('#'+div_dosis);
-
-                        dosis.find('option').remove();
-                        dosis.append('<option value="0">Seleccione</option>');
-                        $(data).each(function(i, v) { // indice, valor
-                            dosis.append('<option value="' + v.dosis + '" data-id="'+v.id+'" data-cant_comp="'+v.cant_comp+'">' + v.present +
-                                '</option>');
-                        })
-
-                    } else {
-
-
-
-                    }
-
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
-
-        };
-
-        function getCantCompCronica(div_dosis, div_comp) {
-
-            var cant_comp = $('#'+div_dosis+' option:selected').attr('data-cant_comp');
-            console.log(cant_comp);
-
-            let url = "{{ route('presentacion.getCantComp') }}";
-            $.ajax({
-
-                    url: url,
-                    type: "get",
-                    data: {
-
-                        cant_comp: cant_comp,
-
-                    },
-                })
-                .done(function(data) {
-                    console.log(data)
-
-                    if (data != null) {
-
-                        data = JSON.parse(data);
-                        console.log(data)
-                        let select_cant_comp = $('#'+div_comp);
-
-                        select_cant_comp.find('option').remove();
-                        select_cant_comp.append('<option value="0">Seleccione</option>');
-                        $(data).each(function(i, v) { // indice, valor
-                            select_cant_comp.append('<option value="' + v.id + '">' + v.cant +'</option>');
-                        })
-                        select_cant_comp.append('<option value="999">Otra Cantidad</option>');
-
-                    } else {
-
-
-
-                    }
-
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
-
-        };
-
-        function es_cronico() {
-            if ($('#enf_cronico').prop('checked')) {
-                $('#form_enfermedad_cronica').modal('show');
-                $('#hipertension_div').hide();
-                $('#control_peso_div').hide();
-                $('#diabetes_div').hide();
-
-                $('#cronicos').val('n_C');
-                ver_medicamento_cronico();
-                $('.medicamento_cronico_div').show();
-                $('#senal_med_cronico').removeClass('fa-angle-down');
-                $('#senal_med_cronico').addClass('fa-angle-up');
-
-                cambiar_enfermedad_cronica();
-
-            }
-
-        }
-
-        function cambiar_enfermedad_cronica() {
-
-            if($('#cronicos').val() != 'n_C')
-            {
-                var nombre_enfermedad = $("#cronicos option:selected").text();
-                $('#titulo_med_patologia').html( ('Medicamentos '+nombre_enfermedad).toUpperCase());
-                $('.medicamento_patologia').show();
-                $('#btn_registro_med_patologia').attr('onclick','agregar_medicamento_cronico_patologia(\''+$('#cronicos').val()+'\')');
-                ver_medicamento_cronico_patologia();
-
-                $('.medicamento_cronico_div').hide();
-                $('#senal_med_cronico').addClass('fa-angle-down');
-                $('#senal_med_cronico').removeClass('fa-angle-up');
-
-                switch ($('#cronicos').val()) {
-                    case 'cpeso':
-                        $('#hipertension_div').hide();
-                        $('#control_peso_div').show();
-                        $('#diabetes_div').hide();
-                        $('#cinsufren').hide();
-                        $('#cmtumorales').hide();
-                        $('#creumato').hide();
-                        $('#clitemia').hide();
-                    break;
-                    case 'chipertension':
-                        $('#hipertension_div').show();
-                        $('#control_peso_div').hide();
-                        $('#diabetes_div').hide();
-                        $('#cinsufren').hide();
-                        $('#cmtumorales').hide();
-                        $('#creumato').hide();
-                        $('#clitemia').hide();
-                        ver_control_hipertension();
-
-                    break;
-                    case 'cdiabet':
-                        $('#hipertension_div').hide();
-                        $('#control_peso_div').hide();
-                        $('#diabetes_div').show();
-                        $('#cinsufren').hide();
-                        $('#cmtumorales').hide();
-                        $('#creumato').hide();
-                        $('#clitemia').hide();
-                    break;
-
-                    case 'cinsufren':
-                        $('#hipertension_div').hide();
-                        $('#control_peso_div').hide();
-                        $('#diabetes_div').hide();
-                        $('#cinsufren').show();
-                        $('#cmtumorales').hide();
-                        $('#creumato').hide();
-                        $('#clitemia').hide();
-                    break;
-                    case 'cmtumorales':
-                        $('#hipertension_div').hide();
-                        $('#control_peso_div').hide();
-                        $('#diabetes_div').hide();
-                        $('#cinsufren').hide();
-                        $('#cmtumorales').show();
-                        $('#creumato').hide();
-                        $('#clitemia').hide();
-                    break;
-                    case 'creumato':
-                        $('#hipertension_div').hide();
-                        $('#control_peso_div').hide();
-                        $('#diabetes_div').hide();
-                        $('#cinsufren').hide();
-                        $('#cmtumorales').hide();
-                        $('#creumato').show();
-                        $('#clitemia').hide();
-                    break;
-                    case 'clitemia':
-                        $('#hipertension_div').hide();
-                        $('#control_peso_div').hide();
-                        $('#diabetes_div').hide();
-                        $('#cinsufren').hide();
-                        $('#cmtumorales').hide();
-                        $('#creumato').hide();
-                        $('#clitemia').show();
-                    break;
-
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                $('.medicamento_patologia').hide();
-                $('#hipertension_div').hide();
-                $('#control_peso_div').hide();
-                $('#diabetes_div').hide();
-
-                $('#titulo_med_patologia').html( 'Medicamentos' );
-            }
-        }
-
-        function registrar_control_obesidad() {
-
-            let peso = $('#registro_peso').val();
-            let variacion = $('#registro_peso_variacion').val();
-            let ideal = $('#registro_peso_ideal').val();
-            let url = "{{ route('ficha_medica.registrar_control_obesidad') }}";
-            let hora_medica = $('#hora_medica').val();
-            var validar = 0;
-            var mensaje ='';
-
-            if( peso == '' )
-            {
-                $('#registro_peso').focus();
-                mensaje += 'Debe ingresar el Peso del Control Actual.\n';
-                validar = 1;
-            }
-            if( variacion == '' )
-            {
-                $('#registro_peso_variacion').focus();
-                mensaje += 'Debe ingresar la Variación.\n';
-                validar = 1;
-            }
-            if( ideal == '' )
-            {
-                $('#registro_peso_ideal').focus();
-                mensaje += 'Debe ingresar el Peso Ideal.\n';
-                validar = 1;
-            }
-
-            if(validar == 1)
-            {
-                swal({
-                    title: "Debe ingresar todos los datos requeridos." ,
-                    text: mensaje,
-                    icon: "error",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
-                })
-                return false;
-            }
-            else
-            {
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: {
-                        peso: peso,
-                        variacion: variacion,
-                        ideal: ideal,
-                        hora_medica: hora_medica
-                    },
-                })
-                .done(function(response) {
-
-                    if (response != '') {
-                        console.log(response);
-                        //$('#form_control_obesidad').trigger("reset");
-                        $('#mensaje').text('Se ha agregago control de obesidad correctamente');
-                        $('#mensaje').show();
-                        {{--  $('#form_enfermedad_cronica').modal('hide');  --}}
-                        {{--  location.reload();  --}}
-                        $('#registro_peso').val('');
-                        $('#registro_peso_variacion').val('');
-                        $('#registro_peso_ideal').val('');
-                        ver_control_obesidad();
-                    }
-                })
-                .fail(function(e) {
-                    console.log("error");
-                    console.log(e);
-                })
-            }
-        };
-
-        function registrar_hipertension() {
-
-            let sistolica = $('#presion_sistolica_hipertension').val();
-            let diastolica = $('#presion_diastolica_hipertension').val();
-            let ideal = $('#ideal_hipertension').val();
-            let url = "{{ route('ficha_medica.registrar_hipertension') }}";
-            let hora_medica = $('#hora_medica').val();
-            let id_lugar_atencion = $('#id_lugar_atencion').val();
-
-            var validar = 0;
-            var mensaje ='';
-
-            if( sistolica == '' )
-            {
-                $('#presion_sistolica_hipertension').focus();
-                mensaje += 'Debe ingresar el Presión Sistólica.\n';
-                validar = 1;
-            }
-            if( diastolica == '' )
-            {
-                $('#presion_diastolica_hipertension').focus();
-                mensaje += 'Debe ingresar el Presión Diastólica.\n';
-                validar = 1;
-            }
-            if( ideal == '' )
-            {
-                $('#ideal_hipertension').focus();
-                mensaje += 'Debe ingresar el Presión Ideal.\n';
-                validar = 1;
-            }
-
-            if(validar == 1)
-            {
-                swal({
-                    title: "Debe ingresar todos los datos requeridos." ,
-                    text: mensaje,
-                    icon: "error",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
-                })
-                return false;
-            }
-            else
-            {
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: {
-                        sistolica: sistolica,
-                        diastolica: diastolica,
-                        ideal: ideal,
-                        hora_medica: hora_medica,
-                        id_lugar_atencion: id_lugar_atencion
-                    },
-                })
-                .done(function(response) {
-
-                    if (response != '') {
-                        console.log(response);
-                        //$('#form_control_obesidad').trigger("reset");
-                        $('#mensaje').text('Se ha agregado control de Presión Arterial correctamente');
-                        $('#mensaje').show();
-                        {{--  $('#form_enfermedad_cronica').modal('hide');  --}}
-                        $('#presion_sistolica_hipertension').val('');
-                        $('#presion_diastolica_hipertension').val('');
-                        $('#ideal_hipertension').val('');
-                        ver_control_hipertension();
-
-                    }
-                })
-                .fail(function(e) {
-                    console.log("error");
-                    console.log(e);
-                })
-            }
-        };
-
-        function registrar_diabetes() {
-
-            let peso = $('#peso_diabetes').val();
-            let pies = $('#pies_diabetes').val();
-            let hgac1 = $('#hga1c_diabetes').val();
-            let colesterol = $('#colesterol_diabetes').val();
-            let creatina = $('#creatina_diabetes').val();
-            let glicosilada_postprandial = $('#glicosilada_postprandial_diabetes').val();
-            let glicosinada_ayuno = $('#glicosilada_ayuno_diabetes').val();
-            let url = "{{ route('ficha_medica.registrar_diabetes') }}";
-            let hora_medica = $('#hora_medica').val();
-
-            $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: {
-                        peso: peso,
-                        pies: pies,
-                        hgac1: hgac1,
-                        colesterol: colesterol,
-                        creatina: creatina,
-                        glicosilada_postprandial: glicosilada_postprandial,
-                        glicosinada_ayuno: glicosinada_ayuno,
-                        hora_medica: hora_medica
-                    },
-                })
-                .done(function(response) {
-
-                    if (response != '') {
-                        console.log(response);
-                        //$('#form_control_obesidad').trigger("reset");
-                        $('#mensaje').text('Se ha agregago control de diabetes correctamente');
-                        $('#mensaje').show();
-                        $('#form_enfermedad_cronica').modal('hide');
-                        location.reload();
-                    }
-                })
-                .fail(function(e) {
-                    console.log("error");
-                    console.log(e);
-                })
-        };
-
-        function agregar_medicamento_cronico()
-        {
-
-            let url = "{{ route('medicamento_cronico.registrar') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id_profesional = $('#id_profesional_fc').val();
-            var id_ficha_atencion = $('#id_fc').val();
-            var id_paciente = $('#id_paciente_fc').val();
-            var nombre_medicamento = $('#nombre_medicamentocron').val();
-            var id_medicamento = $('#id_medicamentocron').val();
-            var cantidad = $('#med_cronicomes option:selected').text()
-            var tipo_enfermedad = 'cronico';
-
-            $.ajax({
-
-                url: url,
-                type: "POST",
-                data: {
-                    _token: _token,
-                    id_profesional:id_profesional,
-                    id_ficha_atencion:id_ficha_atencion,
-                    id_paciente:id_paciente,
-                    nombre_medicamento:nombre_medicamento,
-                    id_medicamento:id_medicamento,
-                    cantidad:cantidad,
-                    tipo_enfermedad:tipo_enfermedad,
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('-----------------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    if(data.estado == 1)
-                    {
-                        swal({
-                            title: "Medicamento Cronico.",
-                            text: "Medicamento Registrado con exito.",
-                            icon: "success",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        });
-                        $('#nombre_medicamentocron').val('');
-
-                        $('#dosis_cronicomes').html('<option value="0">Seleccione</option>');
-                        $('#med_cronicomes').html('<option value="0">Seleccione</option>');
-
-                        ver_medicamento_cronico();
-
-
-                    }
-                    else{
-
-                        swal({
-                            title: "Problema al Registrar Medicamento Cronico.",
-                            icon: "warning",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        })
-                    }
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        }
-
-        function ver_medicamento_cronico()
-        {
-
-            let url = "{{ route('medicamento_cronico.getRegsitros') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id_ficha_atencion = $('#id_fc').val();
-            var id_paciente = $('#id_paciente_fc').val();
-
-            $.ajax({
-
-                url: url,
-                type: "GET",
-                data: {
-                    _token: _token,
-                    // id_ficha_atencion:id_ficha_atencion,
-                    id_paciente:id_paciente,
-                    tipo_enfermedad:'cronico'
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('-----------------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    var html = '';
-                    html += '<thead>';
-                    html += '    <tr>';
-                    html += '        <th class="text-center align-middle">Nombre Medicamento</th>';
-                    html += '        <th class="text-center align-middle">Cantidad Mensual</th>';
-                    html += '        <th class="text-center align-middle">Acción</th>';
-                    html += '        <th class="text-center align-middle">Check</th>';
-                    html += '    </tr>';
-                    html += '</thead>';
-                    html += '<tbody>';
-                    if(data.estado == 1)
-                    {
-
-                        $.each(data.registros, function(index, value)
-                        {
-                            html += '<tr>';
-                            html += '    <td class="align-left align-middle">'+value.nombre_medicamento+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.cantidad+'</td>';
-                            html += '    <td class="text-center align-middle">';
-                            html += '        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_med_cronico(\''+value.id+'\');"><i class="feather icon-x"></i></button>';
-                            html += '    </td>';
-                            html += '    <td class="text-center align-middle">';
-                            html += '        <input type="checkbox" name="medicamento_cronico_general" id="medicamento_cronico_general_'+value.id+'">';
-                            html += '    </td>';
-                            html += '</tr>';
-                        });
-
-                    }
-                    else
-                    {
-
-                        html += '<tr>';
-                        html += '    <td class="text-center align-middle" colspan="3">SIN REGISTROS</td>';
-                        html += '</tr>';
-
-                    }
-                    html += '</tbody>';
-                    $('#tabla_medicamento_cronico').html(html);
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-        }
-
-        function eliminar_med_cronico(id)
-        {
-            let url = "{{ route('medicamento_cronico.deleteRegsitro') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id =id;
-
-            $.ajax({
-
-                url: url,
-                type: "POST",
-                data: {
-                    _token: _token,
-                    id:id
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('-----------------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    if(data.estado == 1)
-                    {
-                        swal({
-                            title: "Medicamento Cronico.",
-                            text: "Medicamento Eliminado.",
-                            icon: "success",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        });
-                        ver_medicamento_cronico();
-                    }
-                    else{
-
-                        swal({
-                            title: "Problema al Eliminar Registro de Medicamento Cronico.",
-                            icon: "warning",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        })
-                    }
-                }
-                else{
-
-                    swal({
-                        title: "Problema al Eliminar Registro de Medicamento Cronico.",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        }
-
-        {{--  MEDICAMENTOS CRONICOS PATOLOGIA  --}}
-        function agregar_medicamento_cronico_patologia(tipo)
-        {
-
-            let url = "{{ route('medicamento_cronico.registrar') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id_profesional = $('#id_profesional_fc').val();
-            var id_ficha_atencion = $('#id_fc').val();
-            var id_paciente = $('#id_paciente_fc').val();
-            var nombre_medicamento = $('#nombre_medicamentocron_patologia').val();
-            var cantidad = $('#med_cronicomes_patologia option:selected').text();
-            var tipo_enfermedad = tipo;
-
-            $.ajax({
-
-                url: url,
-                type: "POST",
-                data: {
-                    _token: _token,
-                    id_profesional:id_profesional,
-                    id_ficha_atencion:id_ficha_atencion,
-                    id_paciente:id_paciente,
-                    nombre_medicamento:nombre_medicamento,
-                    cantidad:cantidad,
-                    tipo_enfermedad:tipo_enfermedad,
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('-----------------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    if(data.estado == 1)
-                    {
-                        swal({
-                            title: "Medicamento Cronico.",
-                            text: "Medicamento Registrado con exito.",
-                            icon: "success",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        });
-                        $('#nombre_medicamentocron_patologia').val('');
-                        $('#id_medicamentocron_patologia').val('');
-
-                        $('#dosis_medicamentocron_patologia').html('<option value="0">Seleccione</option>');
-                        $('#med_cronicomes_patologia').html('<option value="0">Seleccione</option>');
-
-                        ver_medicamento_cronico_patologia()
-                    }
-                    else{
-
-                        swal({
-                            title: "Problema al Registrar Medicamento Cronico.",
-                            icon: "warning",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        })
-                    }
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        }
-
-        function ver_medicamento_cronico_patologia()
-        {
-
-            let url = "{{ route('medicamento_cronico.getRegsitros') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id_ficha_atencion = $('#id_fc').val();
-            var id_paciente = $('#id_paciente_fc').val();
-            var tipo_enfermedad = $('#cronicos').val();
-            $('#tabla_med_patologia').html('');
-
-            $.ajax({
-
-                url: url,
-                type: "GET",
-                data: {
-                    _token: _token,
-                    // id_ficha_atencion:id_ficha_atencion,
-                    id_paciente:id_paciente,
-                    tipo_enfermedad:tipo_enfermedad
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('-----------------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    var html = '';
-                    html += '<thead>';
-                    html += '    <tr>';
-                    html += '        <th class="text-center align-middle">Nombre Medicamento</th>';
-                    html += '        <th class="text-center align-middle">Cantidad Mensual</th>';
-                    html += '        <th class="text-center align-middle">Acción</th>';
-                    html += '        <th class="text-center align-middle">Check</th>';
-                    html += '    </tr>';
-                    html += '</thead>';
-                    html += '<tbody>';
-                    if(data.estado == 1)
-                    {
-
-                        $.each(data.registros, function(index, value)
-                        {
-                            html += '<tr>';
-                            html += '    <td class="align-left align-middle">'+value.nombre_medicamento+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.cantidad+'</td>';
-                            html += '    <td class="text-center align-middle">';
-                            html += '        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_med_cronico_patologia(\''+value.id+'\');"><i class="feather icon-x"></i></button>';
-                            html += '    </td>';
-                            html += '    <td class="text-center align-middle">';
-                            html += '        <input type="checkbox" name="medicamento_cronico_patologia" id="medicamento_cronico_patologia_'+value.id+'">';
-                            html += '    </td>';
-                            html += '</tr>';
-                        });
-
-                    }
-                    else
-                    {
-
-                        html += '<tr>';
-                        html += '    <td class="text-center align-middle" colspan="4">SIN REGISTROS</td>';
-                        html += '</tr>';
-
-                    }
-                    html += '</tbody>';
-                    $('#tabla_med_patologia').html(html);
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-        }
-
-        function eliminar_med_cronico_patologia(id)
-        {
-            let url = "{{ route('medicamento_cronico.deleteRegsitro') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id =id;
-            var tipo_enfermedad = $('#cronicos').val();
-
-            $.ajax({
-
-                url: url,
-                type: "POST",
-                data: {
-                    _token: _token,
-                    id:id
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('-----------------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    if(data.estado == 1)
-                    {
-                        swal({
-                            title: "Medicamento Cronico.",
-                            text: "Medicamento Eliminado.",
-                            icon: "success",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        });
-                        ver_medicamento_cronico_patologia(tipo_enfermedad);
-                    }
-                    else{
-
-                        swal({
-                            title: "Problema al Eliminar Registro de Medicamento Cronico.",
-                            icon: "warning",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        })
-                    }
-                }
-                else{
-
-                    swal({
-                        title: "Problema al Eliminar Registro de Medicamento Cronico.",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        }
-
-
-        {{--  mostrar div   --}}
-        function mostrar_div(div)
-        {
-            if ($('.'+div).is(':visible')) {
-                $('.'+div).hide();
-                $('#senal_med_cronico').addClass('fa-angle-down');
-                $('#senal_med_cronico').removeClass('fa-angle-up');
-            } else {
-                $('.'+div).show();
-                $('#senal_med_cronico').removeClass('fa-angle-down');
-                $('#senal_med_cronico').addClass('fa-angle-up');
-            }
-        }
-
-
-        {{--  CRONICO VER CONTROL DE HIPERTENSION  --}}
-        function ver_control_hipertension()
-        {
-
-            let url = "{{ route('hipertension.getHipertension') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id_paciente = $('#id_paciente_fc').val();
-            $('#control_hipertension').html('');
-
-            $.ajax({
-
-                url: url,
-                type: "GET",
-                data: {
-                    _token: _token,
-                    id_paciente:id_paciente
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('----------ver_control_hipertension-------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    var html = '';
-                    html += '<thead>';
-                    html += '    <tr>';
-                    html += '         <th class="text-center align-middle">Nº Control</th>';
-                    html += '         <th class="text-center align-middle">Fecha</th>';
-                    html += '         <th class="text-center align-middle">Presión Sistólica</th>';
-                    html += '         <th class="text-center align-middle">Presión Diastólica</th>';
-                    html += '         <th class="text-center align-middle">Presión Ideal</th>';
-                    html += '    </tr>';
-                    html += '</thead>';
-                    html += '<tbody>';
-                    if(data.estado == 1)
-                    {
-
-                        $.each(data.registros, function(index, value)
-                        {
-                            var f_temp = (value.created_at).replace('T',' ').replace('Z','').replace('.000000','');
-                            var fecha = new Date(f_temp);
-                            fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear()+' '+fecha.getHours()+':'+fecha.getMinutes();
-
-                            html += '<tr>';
-                            html += '    <td class="text-center align-middle">'+value.id+'</td>';
-                            html += '    <td class="text-center align-middle">'+fecha+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.sistolica+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.diastolica+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.ideal+'</td>';
-                            html += '</tr>';
-                        });
-
-                    }
-                    else
-                    {
-
-                        html += '<tr>';
-                        html += '    <td class="text-center align-middle" colspan="5">SIN REGISTROS</td>';
-                        html += '</tr>';
-
-                    }
-                    html += '</tbody>';
-                    $('#control_hipertension').html(html);
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-        }
-
-        {{--  CRONICO VER CONTROL DE OBESIDAD  --}}
-        function ver_control_obesidad()
-        {
-
-            let url = "{{ route('control_obesidad.getControlObesidad') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id_paciente = $('#id_paciente_fc').val();
-            $('#control_obesidad').html('');
-
-            $.ajax({
-
-                url: url,
-                type: "GET",
-                data: {
-                    _token: _token,
-                    id_paciente:id_paciente
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('----------ver_control_hipertension-------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    var html = '';
-                    html += '<thead>';
-                    html += '    <tr>';
-                    html += '    <th class="text-center align-middle">Nº Control</th>';
-                    html += '    <th class="text-center align-middle">Fecha</th>';
-                    html += '    <th class="text-center align-middle">Peso</th>';
-                    html += '    <th class="text-center align-middle">Variación</th>';
-                    html += '    <th class="text-center align-middle">Peso Ideal</th>';
-                    html += '    <!-- <th class="text-center align-middle">Acción</th>-->';
-                    html += '</tr>';
-                    html += '</thead>';
-                    html += '<tbody>';
-                    if(data.estado == 1)
-                    {
-
-                        $.each(data.registros, function(index, value)
-                        {
-                            var f_temp = (value.created_at).replace('T',' ').replace('Z','').replace('.000000','');
-                            var fecha = new Date(f_temp);
-                            fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear();
-
-
-                            html += '<tr>';
-                            html += '    <td class="text-center align-middle">'+value.id+'</td>';
-                            html += '    <td class="text-center align-middle">'+fecha+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.peso+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.variacion+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.ideal+'</td>';
-                            html += '    <!--<td class="text-center align-middle"><button href="#!" class="btn btn-danger btn-sm"><i class="feather icon-x"></i> Eliminar</button></td>-->';
-                            html += '</tr>';
-                        });
-
-                    }
-                    else
-                    {
-
-                        html += '<tr>';
-                        html += '    <td class="text-center align-middle" colspan="5">SIN REGISTROS</td>';
-                        html += '</tr>';
-
-                    }
-                    html += '</tbody>';
-                    $('#control_obesidad').html(html);
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-        }
-        /** FIN CRONICO */
-
+		
         /** PERVISUALIZACION DE EXAMEN */
         function visualizar_pdf_examen(tipo_examen)
         {
@@ -2943,5 +1872,14 @@
             }
         }
 
+    </script>
+
+    <!--ALERTA DE ATENCION-->
+    <script>
+        window.setTimeout(function() {
+            $(".alert-atencion").fadeTo(500, 0).slideUp(600, function(){
+                $(this).remove();
+            });
+        }, 5000);
     </script>
 @endsection

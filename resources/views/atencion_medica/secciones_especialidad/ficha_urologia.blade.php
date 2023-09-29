@@ -1,850 +1,1163 @@
-<div class="user-profile user-card mt-0 px-1"style="background-color: #ecf0f5!important;">
-    <div class="row mx-0">
-        <div class="col-sm-12 col-md-12">
-            <ul class="nav nav-tabs-secciones mb-3 mt-3" id="uro" role="tablist">
-                <li class="nav-item-secciones">
-                    <a class="nav-secciones active text-uppercase" id="atencion_uro-tab" data-toggle="tab" href="#atencion_uro" role="tab" aria-controls="atencion_uro" aria-selected="true">Atención Especialidad</a>
-                </li>
-                <li class="nav-item-secciones">
-                    <a class="nav-secciones text-uppercase" id="cisto-tab" data-toggle="tab" href="#cisto" role="tab" aria-controls="cisto" aria-selected="false">Cistoscopía</a>
-                </li>
-                <li class="nav-item-secciones">
-                    <a class="nav-secciones text-uppercase" id="uroflujo-tab" data-toggle="tab" href="#uroflujo" role="tab" aria-controls="uroflujo" aria-selected="false">Uroflujometría</a>
-                </li>
-            </ul>
-        </div>
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <form action="{{ route('fichaAtencion.registrar_ficha_uro') }}" method="POST">
-                <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
-                <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
-                <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
-                <input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
-                <input type="hidden" name="id_fc" value="{{ $id_ficha_atencion }}" id="id_fc">
-                <input type="hidden" name="id_paciente_fc" value="{{ $paciente->id }}" id="id_paciente_fc">
-                <input type="hidden" name="rut_paciente_fc" value="{{ $paciente->rut }}" id="rut_paciente_fc">
-                <input type="hidden" name="prevision_paciente_fc" value="{{ $paciente->prevision->id }}" id="prevision_paciente_fc">
-                <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
-                <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
-                <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
-                <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
-                <input type="hidden" name="tipo_examen_especial" id="tipo_examen_especial" value="{{ $lista_examen_especial }}">
+<div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
+    <div class="col-md-12 py-0 px-1">
+        <div class="row mx-0">
+            <div class="col-sm-12 col-md-12">
+                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="uro" role="tablist">
+                    <li class="nav-item-secciones">
+                        <a class="nav-secciones active text-uppercase" id="atencion_uro-tab" data-toggle="tab" href="#atencion_uro" role="tab" aria-controls="atencion_uro" aria-selected="true">Atención Especialidad</a>
+                    </li>
+                    <li class="nav-item-secciones">
+                        <a class="nav-secciones text-uppercase" id="cisto-tab" data-toggle="tab" href="#cisto" role="tab" aria-controls="cisto" aria-selected="false">Cistoscopía</a>
+                    </li>
+                    <li class="nav-item-secciones">
+                        <a class="nav-secciones text-uppercase" id="uroflujo-tab" data-toggle="tab" href="#uroflujo" role="tab" aria-controls="uroflujo" aria-selected="false">Uroflujometría</a>
+                    </li>
+                    <li class="nav-item-secciones">
+                        <a class="nav-secciones text-uppercase" id="in-ven-urologia-tab" data-toggle="tab" href="#in-ven-urologia" role="tab" aria-controls="in-ven-urologia" aria-selected="false">Venéreas</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-12 col-md-12">
+                <form action="{{ route('fichaAtencion.registrar_ficha_uro') }}" method="POST">
+                    <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
+                    <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
+                    <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
+                    <input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
+                    <input type="hidden" name="id_fc" value="{{ $id_ficha_atencion }}" id="id_fc">
+                    <input type="hidden" name="id_paciente_fc" value="{{ $paciente->id }}" id="id_paciente_fc">
+                    <input type="hidden" name="rut_paciente_fc" value="{{ $paciente->rut }}" id="rut_paciente_fc">
+                    <input type="hidden" name="prevision_paciente_fc" value="{{ $paciente->prevision->id }}" id="prevision_paciente_fc">
+                    <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
+                    <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
+                    <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
+                    <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
+                    <input type="hidden" name="tipo_examen_especial" id="tipo_examen_especial" value="{{ $lista_examen_especial }}">
 
-                @php
-                    /** carga de id examen de espcialidad tipo  */
-                    $temp = $lista_examen_especial;
+                    @php
+                        /** carga de id examen de espcialidad tipo  */
+                        $temp = $lista_examen_especial;
 
-                    $array_temp = explode('|',$temp);
-                    //var_dump($array_temp);
-                    $array_temp2 = array();
-                    foreach($array_temp as $key=>$value)
-                    {
-                        $array_temp2[] = explode(',',$value);
-                    }
-                    $array_examen_especialidad_tipo = array();
-                    foreach($array_temp2 as $key=>$value)
-                    {
-                        $array_examen_especialidad_tipo[$value[0]] = $value[1];
-                    }
-                    // var_dump($array_examen_especialidad_tipo);
-                @endphp
+                        $array_temp = explode('|',$temp);
+                        //var_dump($array_temp);
+                        $array_temp2 = array();
+                        foreach($array_temp as $key=>$value)
+                        {
+                            $array_temp2[] = explode(',',$value);
+                        }
+                        $array_examen_especialidad_tipo = array();
+                        foreach($array_temp2 as $key=>$value)
+                        {
+                            $array_examen_especialidad_tipo[$value[0]] = $value[1];
+                        }
+                        // var_dump($array_examen_especialidad_tipo);
+                    @endphp
 
-                @csrf
-                <div class="tab-content" id="uro-contenido">
-                    <!--ATENCIÓN ESPECIALIDAD GENERAL-->
-                    <div class="tab-pane fade show active" id="atencion_uro" role="tabpanel" aria-labelledby="atencion_uro-tab">
-                        <div class="row">
-                            <div class="col-md-12 mt-1 mb-2">
-                                <h6 class="f-20 text-c-blue">Ficha de atención general</h6>
-                            </div>
-                            <!--FORMULARIOS-->
-                            <!--Formulario / Menor de edad-->
-                            @include('atencion_medica.generales.seccion_menor')
-                            <!--Cierre: Formulario / Menor de edad-->
-                            <!--Motivo consulta-->
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card">
-                                    <div class="card-header-a" id="motivo">
-                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#motivo_c" aria-expanded="false" aria-controls="motivo_c">
-                                            Motivo de la consulta
-                                        </button>
+                    @csrf
+                    <div class="tab-content" id="uro-contenido">
+                        <!--ATENCIÓN ESPECIALIDAD GENERAL-->
+                        <div class="tab-pane fade show active" id="atencion_uro" role="tabpanel" aria-labelledby="atencion_uro-tab">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="row">
+                                        <div class="col-md-12 mb-2">
+                                            <h6 class="f-20 text-c-blue">Ficha de atención general</h6>
+                                        </div>
                                     </div>
-                                    <div id="motivo_c" class="collapse show" aria-labelledby="motivo" data-parent="#motivo">
-                                        <div class="card-body-aten-a shadow-none">
-                                            <div class="form-row">
-                                                <div class="form-group col-md-6">
-                                                    <label class="floating-label-activo-sm">Motivo de Consulta</label>
-                                                    <input type="text" class="form-control form-control-sm" name="descripcion_consulta_uro" id="descripcion_consulta_uro">
+                                    <!--FORMULARIOS-->
+                                    <div class="row">
+                                        <!--Formulario / Menor de edad-->
+                                        @include('atencion_medica.generales.seccion_menor')
+                                        <!--Cierre: Formulario / Menor de edad-->
+                                        <!--Motivo consulta-->
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="motivo">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#motivo_c" aria-expanded="false" aria-controls="motivo_c">
+                                                        Motivo de la consulta
+                                                    </button>
                                                 </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Antecedentes Especialidad</label>
-                                                    <!-- visualizar antecedentes actuales -->
-                                                    <input type="text" class="form-control form-control-sm" name="antec_especialidad_uro" id="antec_especialidad_uro" readonly="readonly">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <label class="floating-label-activo-sm">Agregar antecedentes nuevo</label>
-                                                            <select class="form-control form-control-sm" name="tipo_antecedente" id="tipo_antecedente" onchange="carga_campos_antecedente_nuevo();">
-                                                                <option value="">Selecciones</option>
-                                                                <option value="alergia">Alergia Medicamento</option>
-                                                                <option value="enfermedades_cronicas">Enfermedad Crónica</option>
-                                                                <option value="anestesias">Incidente Anestesia</option>
-                                                                <option value="cirugia">Incidente Cirugia</option>
-                                                            </select>
+                                                <div id="motivo_c" class="collapse show" aria-labelledby="motivo" data-parent="#motivo">
+                                                    <div class="card-body-aten-a">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <label class="floating-label-activo-sm">Motivo de consulta</label>
+                                                                <input type="text" class="form-control form-control-sm" name="descripcion_consulta_uro" id="descripcion_consulta_uro">
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label class="floating-label-activo-sm">Antecedentes especialidad</label>
+                                                                <!-- visualizar antecedentes actuales -->
+                                                                <input type="text" class="form-control form-control-sm" name="antec_especialidad_uro" id="antec_especialidad_uro">
+                                                            </div>
+                                                            <div class="form-group col-md-12">
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                        <label class="floating-label-activo-sm">Agregar nuevo antecedente</label>
+                                                                        <select class="form-control form-control-sm" name="tipo_antecedente" id="tipo_antecedente" onchange="carga_campos_antecedente_nuevo();">
+                                                                            <option value="">Selecciones</option>
+                                                                            <option value="alergia">Alergia Medicamento</option>
+                                                                            <option value="enfermedades_cronicas">Enfermedad Crónica</option>
+                                                                            <option value="anestesias">Incidente Anestesia</option>
+                                                                            <option value="cirugia">Incidente Cirugia</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 m-t-10" style="display:none" id="div_campos_antecedente_nuevo">
+                                                                        <!-- campos antecedentes nuevos -->
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-sm-12 m-t-10" style="display:none" id="div_campos_antecedente_nuevo">
-                                                            <!-- campos antecedentes nuevos -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="exam_esp_uro">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_uro_c" aria-expanded="false" aria-controls="exam_esp_uro_c">
+                                                        Examen especialidad Urología
+                                                    </button>
+                                                </div>
+                                                <div id="exam_esp_uro_c" class="collapse" aria-labelledby="exam_esp_uro" data-parent="#exam_esp_uro">
+                                                    <div class="card-body-aten-a">
+                                                        <div class="row">
+                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                <ul class="nav nav-tabs-aten nav-fill" id="cir_dig" role="tablist">
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link-aten text-reset active" id="uro_sint_tab" data-toggle="tab" href="#uro_sint" role="tab" aria-controls="uro_sint" aria-selected="true">Examen general</a>
+                                                                    </li>
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link-aten text-reset" id="uro_genit_tab" data-toggle="tab" href="#uro_genit" role="tab" aria-controls="uro_genit" aria-selected="true">Genitales</a>
+                                                                    </li>
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link-aten text-reset" id="uro_dg_tab" data-toggle="tab" href="#uro_dg" role="tab" aria-controls="uro_dg" aria-selected="true">Lab. Especialidad</a>
+                                                                    </li>
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link-aten text-reset" id="ex_plan_tto-tab" data-toggle="tab" href="#ex_plan_tto" role="tab" aria-controls="ex_plan_tto" aria-selected="true">Plan de tratamiento</a>
+                                                                    </li>
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link-aten text-reset" id="in-hosp-urologia_tab" data-toggle="tab" href="#in-hosp-urologia" role="tab" aria-controls="in-hosp-urologia" aria-selected="true">Hospitalizar</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                <div class="tab-content" id="urologia">
+                                                                    <!--SINTOMAS GENERALES-->
+                                                                    <div class="tab-pane fade show active" id="uro_sint" role="tabpanel" aria-labelledby="uro_sint_tab">
+                                                                        <div class="row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <div class="tab-content" id="v-pills-tabContent">
+                                                                                    <div class="tab-pane fade show active" id="sint_dol" role="tabpanel" aria-labelledby="sint_dol-tab">
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <h6 class="t-aten-dos">Exámen general</h6>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">A. Costovertebral derecho</label>
+                                                                                                    <select name="costo_vert_ld" id="costo_vert_ld" data-titulo="Examen Lado derecho" data-seccion="Ángulo costovertebral" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('costo_vert_ld','div_detalle_costo_vert_ld','obs_costo_vert_ld',2)">
+                                                                                                        <option value="1">Normal</option>
+                                                                                                        <option value="2">Anormal</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_detalle_costo_vert_ld" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">A. Costovertebral derecho</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Examen Lado derecho" data-seccion="Ángulo costovertebral" rows="1" onfocus="this.rows=5" onblur="this.rows=1;" name="obs_costo_vert_ld" id="obs_costo_vert_ld"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">A. Costovertebral izquierdo</label>
+                                                                                                    <select name="costo_vert_li" id="costo_vert_li" data-titulo="Examen Lado izquierdo" data-seccion="Ángulo costovertebral" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('costo_vert_li','div_costo_vert_li','obs_costo_vert_li',2)">
+                                                                                                        <option value="1">Normal</option>
+                                                                                                        <option value="2">Anormal</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_costo_vert_li" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">A. Costovertebral izquierdo</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Examen Lado izquierdo" data-seccion="Ángulo costovertebral" rows="1" onfocus="this.rows=5" onblur="this.rows=1;" name="obs_costo_vert_li" id="obs_costo_vert_li"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Examen Abdominal</label>
+                                                                                                    <select name="examen_abd" data-titulo="Examen Abdominal" id="examen_abd" data-seccion="Abdomen" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_abd','div_obs_examen_abd','obs_examen_abd',2);">
+                                                                                                        <option  selected value="1">Normal</option>
+                                                                                                        <option value="2">Anormal</option>
+                                                                                                        <option value="3">No Realizada</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_obs_examen_abd" style="display:none;">
+                                                                                                    <label class="floating-label-activo-sm"> Observaciones Examen Abdominal</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Examen Abdominal" data-seccion="Abdomen" rows="1" onfocus="this.rows=5" onblur="this.rows=1;" name="obs_examen_abd" id="obs_examen_abd"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Examen de la Ingle</label>
+                                                                                                    <select name="ingle" id="ingle" data-titulo="Examen de la Ingle" data-seccion="Ingle" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ingle','div_detalle_ingle','obs_detalle_ingle',2)">
+                                                                                                        <option value="1">Normal</option>
+                                                                                                        <option value="2">Anormal</option>
+                                                                                                        <option value="3">No Examinada</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_detalle_ingle" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">Observaciones Ingle</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="obs. Examen de la Ingle" data-seccion="Examen_ingle" rows="1" onfocus="this.rows=5" onblur="this.rows=1;" name="obs_detalle_ingle" id="obs_detalle_ingle"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!--GENITALES-->
+                                                                    <div class="tab-pane fade show" id="uro_genit" role="tabpanel" aria-labelledby="uro_genit_tab">
+                                                                        <div class="row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <h6 class="t-aten-dos">Genitales</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                                                                    <a class="nav-link-aten text-reset active" id="uro_gen_masc-tab" data-toggle="tab" href="#uro_gen_masc" role="tab" aria-controls="uro_gen_masc" aria-selected="true">Genitales Masculinos</a>
+                                                                                    <a class="nav-link-aten text-reset" id="uro_prost-tab" data-toggle="tab" href="#uro_prost" role="tab" aria-controls="uro_prost" aria-selected="false">Examen Prostático</a>
+                                                                                    <a class="nav-link-aten text-reset" id="uro_gen_fem-tab" data-toggle="tab" href="#uro_gen_fem" role="tab" aria-controls="uro_gen_fem" aria-selected="false">Genitales Femeninos</a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
+                                                                                <div class="tab-content" id="v-pills-tabContent">
+                                                                                    <div class="tab-pane fade show active" id="uro_gen_masc" role="tabpanel" aria-labelledby="uro_gen_masc-tab">
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <h6 class="t-aten">Genitales Masculinos</h6>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Habitos Miccionales</label>
+                                                                                                    <select name="habitos_micionales" id="habitos_micionales" class="form-control form-control-sm" data-titulo="Habitos Miccionales" data-seccion="Funcionalidad" onchange="evaluar_para_carga_detalle('habitos_micionales','div_detalle_habitos_micionales','obs_habitos_micionales',2)">
+                                                                                                        <option value="1">Normales</option>
+                                                                                                        <option value="2">Anormales</option>
+                                                                                                        <option value="3">No Informado</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_detalle_habitos_micionales" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">Observaciones Uretra</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Habitos Miccionales" data-seccion="Funcionalidad" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_habitos_micionales" id="obs_habitos_micionales"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Función Pene</label>
+                                                                                                    <select name="funcion_pene" id="funcion_pene" data-titulo="Función Pene" data-seccion="Funcionalidad" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('funcion_pene','div_detalle_funcion_pene','obs_funcion_pene',2);">
+                                                                                                        <option value="1">Normal</option>
+                                                                                                        <option value="2">Anormal</option>
+                                                                                                        <option value="3">No Informado</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_detalle_funcion_pene" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">Observaciónes Func Pene</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Observaciónes Func Pene" data-seccion="Funcionalidad" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_funcion_pene" id="obs_funcion_pene"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Otros sintomas_funcionales</label>
+                                                                                                    <select name="sintomas_funcionales" id="sintomas_funcionales" data-titulo="Otros sintomas_funcionales" data-seccion="Funcionalidad" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('sintomas_funcionales','div_detalle_sintomas_funcionales','obs_sintomas_funcionales',2);">
+                                                                                                        <option value="1">No</option>
+                                                                                                        <option value="2">Si</option>
+                                                                                                        <option value="3">No Examinados</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_detalle_sintomas_funcionales" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">Observaciónes sintomas funcionales</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Otros sintomas_funcionales" data-seccion="Funcionalidad" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_sintomas_funcionales" id="obs_sintomas_funcionales"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Uretra</label>
+                                                                                                    <select name="uretra_masc" id="uretra_masc" class="form-control form-control-sm" data-titulo="Uretra" data-seccion="Genitales_Masculinos" onchange="evaluar_para_carga_detalle('uretra_masc','div_detalle_uretra_masc','obs_detalle_uretra_masc',2)">
+                                                                                                        <option value="1">Normal</option>
+                                                                                                        <option value="2">Anormal</option>
+                                                                                                        <option value="3">No Examinada</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_detalle_uretra_masc" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">Observaciones Uretra</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Uretra Masc" data-seccion="Genitales_Masculinos" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_detalle_uretra_masc" id="obs_detalle_uretra_masc"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Pene</label>
+                                                                                                    <select name="examen_pene" id="examen_pene" data-titulo="Pene" data-seccion="Genitales_Masculinos" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_pene','div_detalle_examen_pene','obs_pene_anormal',2);">
+                                                                                                        <option value="1">Normal</option>
+                                                                                                        <option value="2">Anormal</option>
+                                                                                                        <option value="3">No Examinado</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_detalle_examen_pene" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">Observaciones Pene</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Pene" data-seccion="Genitales_Masculinos" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_pene_anormal" id="obs_pene_anormal"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Testículos</label>
+                                                                                                    <select name="examen_test" id="examen_test" data-titulo="Testículos" data-seccion="Genitales_Masculinos" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_test','div_detalle_examen_test','obs_test_anormal',2);">
+                                                                                                        <option value="1">Normales</option>
+                                                                                                        <option value="2">Anormales</option>
+                                                                                                        <option value="3">No Examinados</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_detalle_examen_test" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">Observaciónes Testículos</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Testículos" data-seccion="Genitales_Masculinos" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_test_anormal" id="obs_test_anormal"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <label class="floating-label-activo-sm">Observaciones genital masculino</label>
+                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Genital Masculino" data-seccion="Genitales Masculinos" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_general_gen_masc" id="obs_ex_general_gen_masc"></textarea>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="tab-pane fade" id="uro_prost" role="tabpanel" aria-labelledby="uro_prost-tab">
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <h6 class="t-aten">Examen Prostático</h6>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Tacto Rectal</label>
+                                                                                                    <select name="tacto_rec" id="tacto_rec" data-titulo="Tacto Rectal" data-seccion="Tacto Rectal Prostata" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tacto_rec','div_detalle_tacto_rec','obs_tacto_rec',2)">
+                                                                                                        <option value="1">Normal</option>
+                                                                                                        <option value="2">Anormal</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_detalle_tacto_rec" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">Tacto Rectal</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Tacto Rectal" data-seccion="Tacto Rectal Prostata" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tacto_rec" id="obs_tacto_rec"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Antigeno Prostático</label>
+                                                                                                    <select name="antigeno_prost" id="antigeno_prost" data-titulo="Antigeno Prostático" data-seccion="Tacto Rectal Prostata" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('antigeno_prost','div_antigeno_prost','obs_antigeno_prost',2)">
+                                                                                                        <option value="1">Normal</option>
+                                                                                                        <option value="2">Anormal</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_antigeno_prost" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">Antigeno Prostático</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Antigeno Prostático" data-seccion="Tacto Rectal Prostata" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_antigeno_prost" id="obs_antigeno_prost"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!--<div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                                                                <div class="form-group">
+                                                                                                    <input type="hidden" id="biopsia_" name="biopsia_" value="0">
+                                                                                                    <div class="switch switch-success d-inline m-r-10">
+                                                                                                        <input type="checkbox" onchange="biopsia('');cambio_select_biopsia('','biopsia_uro','biopsia_uro','div_biopsia_uro','obs_biopsia_uro',2);" id="biopsia_check_" name="biopsia_check_" value="">
+                                                                                                        <label for="biopsia_check_" class="cr"></label>
+                                                                                                    </div>
+                                                                                                    <label>Biópsia</label>
+                                                                                                </div>
+                                                                                            </div>-->
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Resultado Biópsia</label>
+                                                                                                    <select name="biopsia_uro" id="biopsia_uro" data-titulo="Biópsia Uro" data-seccion="Prostata" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('biopsia_uro','div_biopsia_uro','obs_biopsia_uro',2)" disabled="disabled">
+                                                                                                        <option value="0" selected="selected">No Solicitada</option>
+                                                                                                        <option value="1">Normal</option>
+                                                                                                        <option value="2">Anormal</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_biopsia_uro" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">Biópsia</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Biópsia Uro" data-seccion="Prostata" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_biopsia_uro" id="obs_biopsia_uro"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <label class="floating-label-activo-sm">Observaciones Examen Prostático</label>
+                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaciones Examen Prostático" data-seccion="Prostata" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_prostatico" id="obs_ex_prostatico"></textarea>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="tab-pane fade" id="uro_gen_fem" role="tabpanel" aria-labelledby="uro_gen_fem-tab">
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <h6 class="t-aten">Genitales Femeninos</h6>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Vulva y Glandulas anexas</label>
+                                                                                                    <select name="vulva" id="vulva" class="form-control form-control-sm" data-titulo="Vulva y Glandulas_anexas" data-seccion="Genitales Femeninos" onchange="evaluar_para_carga_detalle('vulva','div_vulva','obs_det_vulva',2)">
+                                                                                                        <option value="1">Normal</option>
+                                                                                                        <option value="2">Anormal</option>
+                                                                                                        <option value="3">No Examinada</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_vulva" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">Obs. Vulva y Glandulas anexas</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Observaciones Vulva y Glandulas_anexas" data-seccion="Genitales Femeninos" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_det_vulva" id="obs_det_vulva"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Vagina</label>
+                                                                                                    <select name="vagina" id="vagina" class="form-control form-control-sm" data-titulo="Vagina" data-seccion="Genitales Femeninos" onchange="evaluar_para_carga_detalle('vagina','div_vagina','det_vagina',2)">
+                                                                                                        <option value="1">Normal</option>
+                                                                                                        <option value="2">Anormal</option>
+                                                                                                        <option value="3">No Examinada</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_vagina" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">Obs. Vagina</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Observaciones Vagina" data-seccion="Genitales Femeninos" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_det_vagina" id="obs_det_vagina"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Uretra</label>
+                                                                                                    <select name="uretra_fem" id="uretra_fem" class="form-control form-control-sm" data-titulo="Uretra" data-seccion="Genitales Femeninos" onchange="evaluar_para_carga_detalle('uretra_fem','div_detalle_uretra_fem','obs_det_vagina',2)">
+                                                                                                        <option value="1">Normal</option>
+                                                                                                        <option value="2">Anormal</option>
+                                                                                                        <option value="3">No Examinada</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_detalle_uretra_fem" style="display:none">
+                                                                                                    <label class="floating-label-activo-sm">Obs. Uretra</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Observaciones Uretra" data-seccion="Genitales Femeninos" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_det_uretra" id="obs_det_uretra"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <label class="floating-label-activo-sm">Observaciones examen femenino</label>
+                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaciones Examen Femenino" data-seccion="Genitales_fem" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_gen_fem" id="obs_ex_gen_fem"></textarea>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br>
+                                                                        <div class="row">
+                                                                            <div class="col-sm-4 col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Cargar ficha tipo Genitales</label>
+                                                                                    <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad_urogeneral" onchange="cargar_info_ficha_tipo_urogeneral('select_ficha_tipo_especialidad_urogeneral','descripcion_ficha_tipo_especialidad_urogeneral');">
+                                                                                        <option value="">Seleccione</option>
+                                                                                        @if(!empty($fichaTipo['urogeneral']))
+                                                                                            @foreach ($fichaTipo['urogeneral'] as $ft )
+                                                                                                <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
+                                                                                            @endforeach
+                                                                                        @endif
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-4 col-md-4">
+                                                                                <span id="descripcion_ficha_tipo_especialidad_urogeneral"></span>
+                                                                            </div>
+
+                                                                            <div class="col-sm-4 col-md-4 mb-3">
+                                                                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="abrir_modal_guardar_tipo('form-fo','registro_f_t_oft_detalle','fo');"><i class="fas fa-save"></i> Guardar nueva ficha tipo Uro-genitales</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!--LAB. ESPECIALIDAD-->
+                                                                    <div class="tab-pane fade" id="uro_dg" role="tabpanel" aria-labelledby="uro_dg_tab">
+                                                                         <div class="row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <h6 class="t-aten-dos">Lab. Especialidad</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                                                                    <a class="nav-link-aten text-reset" id="est_mic_uro-tab" data-toggle="tab" href="#est_mic_uro" role="tab" aria-controls="est_mic_uro" aria-selected="false">Exam. Especialidad</a>
+                                                                                    <a class="nav-link-aten text-reset" id="fotos_uro-tab" data-toggle="tab" href="#fotos_uro" role="tab" aria-controls="fotos_uro" aria-selected="false">Fotos</a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
+                                                                                <div class="tab-content" id="v-pills-tabContent">
+                                                                                    <div class="tab-pane fade show active" id="est_mic_uro" role="tabpanel" aria-labelledby="est_mic_uro-tab">
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <h6 class="t-aten">Exámen especialidad</h6>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-md-6">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Estudio hormonal</label>
+                                                                                                    <select name="examen_horm" data-titulo="Estudio Hormonal" id="examen_horm" data-seccion="Hormonas" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_horm','div_examen_horm','obs_examen_horm',2);">
+                                                                                                        <option  selected value="1">Normal</option>
+                                                                                                        <option value="2">Anormal</option>
+                                                                                                        <option value="3">No Realizada</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-md-6">
+                                                                                                <div class="form-group" id="div_examen_horm" style="display:none;">
+                                                                                                    <label class="floating-label-activo-sm"> Observaciones estudio hormonal</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Estudio Hormonal" data-seccion="Hormonas" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_examen_horm" id="obs_examen_horm"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_cistoscopia()";><i class="feather icon-info"></i> Solicitar Cistoscopía</button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_urodin()";><i class="feather icon-info"></i> Solicitar Est. Urodinámico</button>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                <div class="form-group">
+                                                                                                     <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_esp_uro()";><i class="feather icon-info"></i> Solicitar Est.Hormonal</button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-12">
+                                                                                            <div class="form-row">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    {{--  <div class="tab-pane fade show active" id="ex_esp_uro" role="tabpanel" aria-labelledby="ex_esp_uro-tab">
+                                                                                        <div class="col-sm-12 col-md-12">
+                                                                                            <div class="form-row">
+                                                                                                <div class="col-md-5">
+                                                                                                    <div class="form-group">
+                                                                                                        <label class="floating-label-activo-sm">Estudio Uroflujométrico</label>
+                                                                                                        <select name="examen_horm" data-titulo="Estudio Hormonal" id="examen_horm" data-seccion="Hormonas" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_horm','div_examen_horm','obs_examen_horm',2);">
+                                                                                                            <option  selected value="1">Normal</option>
+                                                                                                            <option value="2">Anormal</option>
+                                                                                                            <option value="3">No Realizada</option>
+                                                                                                        </select>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-md-5">
+                                                                                                    <div class="form-group" id="div_examen_horm" style="display:none;">
+                                                                                                        <label class="floating-label-activo-sm"> Observaciones Estudio Hormonal</label>
+                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Estudio Hormonal" data-seccion="Hormonas" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_examen_horm" id="obs_examen_horm"></textarea>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-md-5">
+                                                                                                    <div class="form-group">
+                                                                                                        <label class="floating-label-activo-sm">Estudio urodinámico</label>
+                                                                                                        <select name="examen_horm" data-titulo="Estudio Hormonal" id="examen_horm" data-seccion="Hormonas" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_horm','div_examen_horm','obs_examen_horm',2);">
+                                                                                                            <option  selected value="1">Normal</option>
+                                                                                                            <option value="2">Anormal</option>
+                                                                                                            <option value="3">No Realizada</option>
+                                                                                                        </select>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-md-5">
+                                                                                                    <div class="form-group" id="div_examen_horm" style="display:none;">
+                                                                                                        <label class="floating-label-activo-sm"> Observaciones Estudio Hormonal</label>
+                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Estudio Hormonal" data-seccion="Hormonas" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_examen_horm" id="obs_examen_horm"></textarea>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>  --}}
+                                                                                    <div class="tab-pane fade" id="fotos_uro" role="tabpanel" aria-labelledby="fotos_uro-tab">
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <h6 class="t-aten">Fotos</h6>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                                                                                                <p class="f-12 mb-0 font-weight-bold">IMAGENES PRE</p>
+                                                                                                <div class="dropzone" id="mis-imagenes-imagenes-uro-pre" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                                                                                                <p class="f-12 mb-0 font-weight-bold">IMAGENES POST</p>
+                                                                                                <div class="dropzone" id="mis-imagenes-imagenes-uro-post" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <label class="floating-label-activo-sm">Comentarios</label>
+                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Fotos" data-seccion=" Fotos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_fotos_ven" id="obs_fotos_ven"></textarea>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!--PLAN DE TRATAMIENTO-->
+                                                                    <div class="tab-pane fade show" id="ex_plan_tto" role="tabpanel" aria-labelledby="ex_plan_tto-tab">
+                                                                        <script type="text/javascript">
+                                                                               $(document).ready(function() {
+                                                                                });
+                                                                        </script>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0">
+                                                                                <h6 class="t-aten-dos">Plan de Tratamiento</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 mt-0">
+                                                                    
+                                                                                <label class="ml-0"><strong>Tratamiento médico</strong></label>
+                                                                                <div class="switch switch-success d-inline m-r-10">
+                                                                                    <input type="checkbox" id="tto_uro" name="tto_uro" value="1" onchange="javascript:showContenturo()" />
+                                                                                    <label for="tto_uro" class="cr"></label>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <div id="contentTto_uro" style="display: none;">
+                                                                                    <div class="form-row">
+                                                                                        {{-- <div class="form-group col-md-6">
+																						@include('general.secciones_ficha.receta_examen.seccion_recetario')
+                                                                                        </div>
+																						 --}}
+                                                                                        <div class="form-group col-md-12 mt-1">
+                                                                                            <label class="floating-label-activo-sm">Recomendaciones</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Recomendaciones" data-seccion="Tratamiento Uro" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="recomendaciones_tto_uro" id="recomendaciones_tto_uro"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 mt-0">
+                                                                                <label class="ml-0"><strong>Procedimiento</strong></label>
+                                                                                <div class="switch switch-success d-inline m-r-10">
+                                                                                    <input type="checkbox" id="pr_uro" name="pr_uro" value="1" onchange="javascript: showContentProc_uro()" />
+                                                                                    <label for="pr_uro" class="cr"></label>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <div id="contentProc_uro" style="display: none;">
+                                                                                    <div class="form-row">
+                                                                                        <div class="form-group col-md-4">
+                                                                                            <label class="floating-label-activo-sm">Tipo</label>
+                                                                                            <input type="text" class="form-control form-control-sm" name="tipo_proc_uro" id="tipo_proc_uro">
+                                                                                        </div>
+                                                                                        <div class="form-group col-md-8">
+                                                                                            <label class="floating-label-activo-sm">Plan</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Procedimiento" data-seccion="Tipo Procedimiento" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="plan_proc_uro" id="plan_proc_uro"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0">
+                                                                                <label class="ml-0"><strong>Cirugía</strong></label>
+                                                                                <div class="switch switch-success d-inline m-r-10">
+                                                                                    <input type="checkbox" class="custom-control-input" id="urogen" name="urogen" value="{!! old('urogen') !!}">
+                                                                                    <label class="cr" for="urogen"></label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <div id="contentTto_uro" style="display: none;">
+                                                                                    <div class="form-row">
+                                                                                        <div class="form-group col-md-12">
+                                                                                            <h6 class="text-center">Tratamiento médico</h6>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-row pt-3">
+                                                                                        {{-- <div class="form-group col-md-4">
+																							@include('general.secciones_ficha.receta_examen.seccion_recetario') 
+                                                                                        </div>
+																						--}}
+                                                                                        <div class="form-group col-md-12">
+                                                                                            <label class="floating-label-activo-sm">Recomendaciones</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Recomendaciones" data-seccion="Tratamiento Uro" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="recomendaciones_tto_uro" id="recomendaciones_tto_uro"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr>
+                                                                        <div class="form-row">
+                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <label class="floating-label-activo-sm">Obs. Plan de tratamiento</label>
+                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Plan de tratamiento" data-seccion=" Plan de tratamiento" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_plan_tratamiento" id="obs_plan_tratamiento"></textarea>
+                                                                            </div>
+                                                                            {{-- @include('general.hospitalizacion.modals.in_solic_pabellon') --}}
+                                                                        </div>
+                                                                    </div>
+                                                                    @php
+                                                                    $seccion_tipo = 'urologia';
+                                                                    @endphp
+                                                                    @include('general.hospitalizacion.hospitalizar')
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+										<!-- control post qx -->
+										 @include('general.secciones_ficha.cirugia_control.control_cirugia_general')
+										<!-- cierre control post qx -->
+                                        <!--Formulario / Signos vitales y otros-->
+                                         @include('atencion_medica.generales.signos_vitales')
+                                        <!--Cierre: Formulario / Signos vitales y otros-->
+
+                                        <!--ENFERMO CRÓNICO O GES-->
+                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+
+                                        <!--Diagnóstico-->
+                                        <div class="col-sm-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-a">
+                                                <div class="card-header-a" id="diagnostico">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagnostico_c" aria-expanded="false" aria-controls="diagnostico_c">
+                                                        Diagnóstico
+                                                    </button>
+                                                </div>
+                                                <div id="diagnostico_c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
+                                                    <div class="card-body-aten-a">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-4">
+                                                                <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
+                                                                <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado,eno_diagnositico_confirmado" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" >
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label class="floating-label-activo-sm">Indicaciones</label>
+                                                                <input type="text" class="form-control form-control-sm" name="ind_uro" id="ind_uro">
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
+                                                        <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_cie" id="descripcion_cie" value="" onchange="cargarIgual('descripcion_cie')">
+                                                        <input type="hidden" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="" onchange="cargarIgual('id_descripcion_cie')">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{--  div de botones  --}}
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+                                                @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                                <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                      
+                                                <div class="col-md-12 text-center">
+                                                    <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
+                                                    <input type="submit" class="btn btn-purple mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
+                                                </div>
+                                            
+                                    </div>
+                                </div>
+                            </div>
+                            <!--GUARDAR O IMPRIMIR FICHA-->
+                                           
+                        </div>
+                        <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
+                        
+
+                        <!-- CISTOSCOPÍA-->
+                        <div class="tab-pane fade" id="cisto" role="tabpanel" aria-labelledby="cisto-tab">
+                                <div class="row">
+                                    <div class="col-md-12  mb-2">
+                                        <h6 class="f-20 text-c-blue">Citoscopía</h6>
+                                    </div>
+                                </div>
+                                <div class="row div_form_examen_cisto">
+                                    <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_cisto" id="id_examen_especialidad_tipo_cisto" value="6">
+                                    <!-- SOLICITADO POR -->
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-a">
+                                            <div class="card-header-a" id="solicitado_por">
+                                                <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#solicitado_por_c" aria-expanded="false" aria-controls="solicitado_por_c">
+                                                    Solicitado por
+                                                </button>
+                                            </div>
+                                            <div id="solicitado_por_c" class="collapse show" aria-labelledby="solicitado_por" data-parent="#solicitado_por">
+                                                <div class="card-body-aten-a">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <input type="hidden" name="id_profesional_solicitado_por_cisto" id="id_profesional_solicitado_por_cisto" value="">
+                                                            <label class="floating-label-activo-sm">RUT</label>
+                                                            <input type="text" class="form-control form-control-sm" name="solicitado_por_rut_cisto" id="solicitado_por_rut_cisto"
+                                                            onblur="cargar_profesional(this,'solicitado_por_cisto', 'id_profesional_solicitado_por_cisto', 'div_profesional_no_inscrito_cisto', 'solicitado_por_nombre_cisto', 'solicitado_por_apellido_cisto', 'solicitado_por_telefono_cisto', 'solicitado_por_email_cisto', 'div_mensaje_cisto', 'mensaje_solicitado_por_cisto');"
+                                                            onchange="cargar_profesional(this,'solicitado_por_cisto', 'id_profesional_solicitado_por_cisto', 'div_profesional_no_inscrito_cisto', 'solicitado_por_nombre_cisto', 'solicitado_por_apellido_cisto', 'solicitado_por_telefono_cisto', 'solicitado_por_email_cisto', 'div_mensaje_cisto', 'mensaje_solicitado_por_cisto');"
+                                                            onkeyup="cargar_profesional(this,'solicitado_por_cisto', 'id_profesional_solicitado_por_cisto', 'div_profesional_no_inscrito_cisto', 'solicitado_por_nombre_cisto', 'solicitado_por_apellido_cisto', 'solicitado_por_telefono_cisto', 'solicitado_por_email_cisto', 'div_mensaje_cisto', 'mensaje_solicitado_por_cisto');">
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <label class="floating-label-activo-sm">Solicitado por</label>
+                                                            <input type="text" class="form-control form-control-sm" name="solicitado_por_cisto" id="solicitado_por_cisto">
+                                                        </div>
+
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <label class="floating-label-activo-sm">Hipótesis Diagnóstica</label>
+                                                            <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_hipotesis" name="sospecha_diagnostica_cisto" id="sospecha_diagnostica_cisto" onchange="cargarIgual('sospecha_diagnostica_cisto')">
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <label class="floating-label-activo-sm">Premedicación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="premed_cisto" id="premed_cisto">
+                                                        </div>
+                                                        <div class="form-group col-md-12" id="div_mensaje_cisto"  style="display: none;">
+                                                            <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por_cisto"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row" id="div_profesional_no_inscrito_cisto" style="display: none;">
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Nombre</label>
+                                                            <input type="text" class="form-control form-control-sm"  name="solicitado_por_nombre_cisto" id="solicitado_por_nombre_cisto" onchange="actualizar_solicitado_por('solicitado_por_cisto', 'solicitado_por_nombre_cisto', 'solicitado_por_apellido_cisto');">
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Apellido</label>
+                                                            <input type="text" class="form-control form-control-sm"  name="solicitado_por_apellido_cisto" id="solicitado_por_apellido_cisto" onchange="actualizar_solicitado_por('solicitado_por_cisto', 'solicitado_por_nombre_cisto', 'solicitado_por_apellido_cisto');">
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Telefono</label>
+                                                            <input type="text" class="form-control form-control-sm"  name="solicitado_por_telefono_cisto" id="solicitado_por_telefono_cisto" >
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Email</label>
+                                                            <input type="text" class="form-control form-control-sm"  name="solicitado_por_email_cisto" id="solicitado_por_email_cisto" >
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card-a">
-                                    <div class="card-header-a" id="exam_esp">
-                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_c" aria-expanded="false" aria-controls="exam_esp_c">
-                                            Examen especialidad Urología
-                                        </button>
-                                    </div>
-                                    <div id="exam_esp_c" class="collapse" aria-labelledby="exam_esp" data-parent="#exam_esp">
-                                        <div class="card-body-aten-a shadow-none">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Carga Ficha Tipo</label>
-                                                        <select class="form-control form-control-sm" id="select_ficha_tipo_ex_especialidad_uro" onchange="cargar_info_ficha_tipo_uro('select_ficha_tipo_ex_especialidad_uro','descripcion_ficha_tipo_ex_especialidad_uro');">
-                                                            <option value="">Seleccione</option>
-                                                            @if(!empty($fichaTipo['uro']))
-                                                                @foreach ($fichaTipo['uro'] as $ft )
-                                                                    <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
-                                                                @endforeach
-                                                            @endif
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <span id="descripcion_ficha_tipo_ex_especialidad_uro"></span>
-                                                </div>
+                                    <!-- FIN SOLICITADO POR -->
+                                    <!--INFORME CITOSCOPIA-->
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-a">
+                                            <div class="card-header-a" id="infor-citoscopia">
+                                                <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#infor-citoscopia-c" aria-expanded="false" aria-controls="infor-citoscopia-c">
+                                                Informe
+                                                </button>
                                             </div>
-                                            <div id="form-uro">
-                                                <!-- A. Costovertebral -->
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6>A. Costovertebral</h6>
-                                                            </div>
+                                            <div id="infor-citoscopia-c" class="collapse show" aria-labelledby="infor-citoscopia" data-parent="#infor-citoscopia">
+                                                <div class="card-body-aten-a">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <label class="floating-label-activo-sm">Meato y Uretra</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="uretra_cisto" id="uretra_cisto"></textarea>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Examen Lado derecho</label>
-                                                            <select name="costo_vert_ld" id="costo_vert_ld" data-titulo="Examen Lado derecho" data-seccion="Ángulo costovertebral" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('costo_vert_ld','div_detalle_costo_vert_ld','obs_costo_vert_ld',2)">
-                                                                <option value="1">Normal</option>
-                                                                <option value="2">Anormal</option>
-                                                            </select>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <label class="floating-label-activo-sm">Vejiga</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="vejiga_cisto" id="vejiga_cisto"></textarea>
                                                         </div>
-                                                        <div class="form-group" id="div_detalle_costo_vert_ld" style="display:none">
-                                                            <label class="floating-label-activo-sm">Examen Lado derecho</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Examen Lado derecho" data-seccion="Ángulo costovertebral" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_costo_vert_ld" id="obs_costo_vert_ld"></textarea>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <label class="floating-label-activo-sm">Biópsias</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="biopsias_cisto" id="biopsias_cisto"></textarea>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Examen Lado izquierdo</label>
-                                                            <select name="costo_vert_li" id="costo_vert_li" data-titulo="Examen Lado izquierdo" data-seccion="Ángulo costovertebral" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('costo_vert_li','div_costo_vert_li','obs_costo_vert_li',2)">
-                                                                <option value="1">Normal</option>
-                                                                <option value="2">Anormal</option>
-                                                            </select>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <label class="floating-label-activo-sm">Tratamientos</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="tratamientos_cisto" id="tratamiento_cistos"></textarea>
                                                         </div>
-                                                        <div class="form-group" id="div_costo_vert_li" style="display:none">
-                                                            <label class="floating-label-activo-sm">Examen Lado izquierdo</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Examen Lado izquierdo" data-seccion="Ángulo costovertebral" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_costo_vert_li" id="obs_costo_vert_li"></textarea>
+                                                        <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                                            <label class="floating-label-activo-sm">Comentarios</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="comentrarios_cisto" id="comentrarios_cisto"></textarea>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                                <!-- Abdomen -->
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6>Abdomen</h6>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <br>
-                                                    <div class="col-md-5">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Examen Abdominal</label>
-                                                            <select name="examen_abd" data-titulo="Examen Abdominal" id="examen_abd" data-seccion="Abdomen" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_abd','div_obs_examen_abd','obs_examen_abd',2);">
-                                                                <option  selected value="1">Normal</option>
-                                                                <option value="2">Anormal</option>
-                                                                <option value="3">No Realizada</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        <div class="form-group" id="div_obs_examen_abd" style="display:none;">
-                                                            <label class="floating-label-activo-sm"> Observaciones Examen Abdominal</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Examen Abdominal" data-seccion="Abdomen" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_examen_abd" id="obs_examen_abd"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                                <!--Tacto Rectal Prostata-->
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6>Tacto Rectal Prostata</h6>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Tacto Rectal</label>
-                                                            <select name="tacto_rec" id="tacto_rec" data-titulo="Tacto Rectal" data-seccion="Tacto Rectal Prostata" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tacto_rec','div_detalle_tacto_rec','obs_tacto_rec',2)">
-                                                                <option value="1">Normal</option>
-                                                                <option value="2">Anormal</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group" id="div_detalle_tacto_rec" style="display:none">
-                                                            <label class="floating-label-activo-sm">Tacto Rectal</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Tacto Rectal" data-seccion="Tacto Rectal Prostata" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tacto_rec" id="obs_tacto_rec"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Antigeno Prostático</label>
-                                                            <select name="antigeno_prost" id="antigeno_prost" data-titulo="Antigeno Prostático" data-seccion="Tacto Rectal Prostata" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('antigeno_prost','div_antigeno_prost','obs_antigeno_prost',2)">
-                                                                <option value="1">Normal</option>
-                                                                <option value="2">Anormal</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group" id="div_antigeno_prost" style="display:none">
-                                                            <label class="floating-label-activo-sm">Antigeno Prostático</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Antigeno Prostático" data-seccion="Tacto Rectal Prostata" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_antigeno_prost" id="obs_antigeno_prost"></textarea>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <input type="hidden" id="biopsia_" name="biopsia_" value="0">
-                                                            <div class="switch switch-success d-inline m-r-10">
-                                                                <input type="checkbox" onchange="biopsia('');cambio_select_biopsia('','biopsia_uro','biopsia_uro','div_biopsia_uro','obs_biopsia_uro',2);" id="biopsia_check_" name="biopsia_check_" value="">
-                                                                <label for="biopsia_check_" class="cr"></label>
-                                                            </div>
+                                                        <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                             <label>Biópsia</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Biópsia</label>
-                                                            <select name="biopsia_uro" id="biopsia_uro" data-titulo="Biópsia Uro" data-seccion="Tacto Rectal Prostata" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('biopsia_uro','div_biopsia_uro','obs_biopsia_uro',2)" disabled="disabled">
-                                                                <option value="0" selected="selected">No Solicitada</option>
-                                                                <option value="1">Normal</option>
-                                                                <option value="2">Anormal</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group" id="div_biopsia_uro" style="display:none">
-                                                            <label class="floating-label-activo-sm">Biópsia</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Biópsia Uro" data-seccion="Tacto Rectal Prostata" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_biopsia_uro" id="obs_biopsia_uro"></textarea>
-                                                        </div>
-                                                    </div>
-
-
-                                                </div>
-                                                <hr>
-												<!--Ingle-->
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6>Ingle</h6>
+                                                            <input type="hidden" id="biopsia_cisto" name="biopsia_cisto" value="0">
+                                                            <div class="switch switch-success d-inline m-r-10">
+                                                                <input type="checkbox" onchange="biopsia('cisto');" id="biopsia_check_cisto" name="biopsia_check_cisto" value="">
+                                                                <label for="biopsia_check_cisto" class="cr"></label>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-5">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Examen de la Ingle</label>
-                                                            <select name="ingle" id="ingle" data-titulo="Examen de la Ingle" data-seccion="Ingle" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ingle','div_detalle_ingle','obs_detalle_ingle',2)">
-                                                                <option value="1">Normal</option>
-                                                                <option value="2">Anormal</option>
-                                                                <option value="3">No Examinada</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        <div class="form-group" id="div_detalle_ingle" style="display:none">
-                                                            <label class="floating-label-activo-sm">Observaciones Ingle</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="obs. Examen de la Ingle" data-seccion="Examen_ingle" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_detalle_ingle" id="obs_detalle_ingle"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                                <!-- Funcionalidad -->
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6> Funcionalidad</h6>
+                                                    <!--IMAGENES-->
+                                                    <div class="form-row">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+                                                            <p class="f-12 mb-0 font-weight-bold">IMAGENES</p>
+                                                            <div class="dropzone" id="mis-imagenes-cisto" action="{{ route('profesional.imagen.carga') }}">
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Habitos Miccionales</label>
-                                                            <select name="habitos_micionales" id="habitos_micionales" class="form-control form-control-sm" data-titulo="Habitos Miccionales" data-seccion="Funcionalidad" onchange="evaluar_para_carga_detalle('habitos_micionales','div_detalle_habitos_micionales','obs_habitos_micionales',2)">
-                                                                <option value="1">Normales</option>
-                                                                <option value="2">Anormales</option>
-                                                                <option value="3">No Informado</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group" id="div_detalle_habitos_micionales" style="display:none">
-                                                            <label class="floating-label-activo-sm">Observaciones Uretra</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Habitos Miccionales" data-seccion="Funcionalidad" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_habitos_micionales" id="obs_habitos_micionales"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Función Pene</label>
-                                                            <select name="funcion_pene" id="funcion_pene" data-titulo="Función Pene" data-seccion="Funcionalidad" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('funcion_pene','div_detalle_funcion_pene','obs_funcion_pene',2);">
-                                                                <option value="1">Normal</option>
-                                                                <option value="2">Anormal</option>
-                                                                <option value="3">No Informado</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group" id="div_detalle_funcion_pene" style="display:none">
-                                                            <label class="floating-label-activo-sm">Observaciónes Func Pene</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Observaciónes Func Pene" data-seccion="Funcionalidad" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_funcion_pene" id="obs_funcion_pene"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Otros sintomas_funcionales</label>
-                                                            <select name="sintomas_funcionales" id="sintomas_funcionales" data-titulo="Otros sintomas_funcionales" data-seccion="Funcionalidad" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('sintomas_funcionales','div_detalle_sintomas_funcionales','obs_sintomas_funcionales',2);">
-                                                                <option value="1">No</option>
-                                                                <option value="2">Si</option>
-                                                                <option value="3">No Examinados</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group" id="div_detalle_sintomas_funcionales" style="display:none">
-                                                            <label class="floating-label-activo-sm">Observaciónes sintomas funcionales</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Otros sintomas_funcionales" data-seccion="Funcionalidad" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_sintomas_funcionales" id="obs_sintomas_funcionales"></textarea>
-                                                        </div>
-                                                    </div>
                                                 </div>
-                                                <hr>
-                                                <!-- Genitales Masculinos -->
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6> Genitales Masculinos</h6>
-                                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--DIAGNÓSTICO-->
+                                    <div class="col-sm-12 col-md-12">
+                                        <div class="card-a">
+                                            <div class="card-header-a" id="diagn-citoscopia">
+                                                <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagn-citoscopia-c" aria-expanded="false" aria-controls="diagn-citoscopia-c">
+                                                Diagnóstico
+                                                </button>
+                                            </div>
+                                            <div id="diagn-citoscopia-c" class="collapse show" aria-labelledby="diagn-citoscopia" data-parent="#diagn-citoscopia">
+                                                <div class="card-body-aten-a">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                                            <label class="floating-label-activo-sm">Diagnóstico endoscópico</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" data-input_seccion="Diagnóstico endoscópico" data-input_igual="descripcion_hipotesis" name="hip_diag_cisto" id="hip_diag_cisto"  onchange="cargarCompletar('hip_diag_cisto')"></textarea>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Uretra</label>
-                                                            <select name="uretra_masc" id="uretra_masc" class="form-control form-control-sm" data-titulo="Uretra" data-seccion="Genitales_Masculinos" onchange="evaluar_para_carga_detalle('uretra_masc','div_detalle_uretra_masc','obs_detalle_uretra_masc',2)">
-                                                                <option value="1">Normal</option>
-                                                                <option value="2">Anormal</option>
-                                                                <option value="3">No Examinada</option>
-                                                            </select>
+                                                        <div class="form-group col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                                            <label class="floating-label-activo-sm">Observaciones</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_cisto" id="obs_cisto"></textarea>
                                                         </div>
-                                                        <div class="form-group" id="div_detalle_uretra_masc" style="display:none">
-                                                            <label class="floating-label-activo-sm">Observaciones Uretra</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Uretra Masc" data-seccion="Genitales_Masculinos" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_detalle_uretra_masc" id="obs_detalle_uretra_masc"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Pene</label>
-                                                            <select name="examen_pene" id="examen_pene" data-titulo="Pene" data-seccion="Genitales_Masculinos" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_pene','div_detalle_examen_pene','obs_pene_anormal',2);">
-                                                                <option value="1">Normal</option>
-                                                                <option value="2">Anormal</option>
-                                                                <option value="3">No Examinado</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group" id="div_detalle_examen_pene" style="display:none">
-                                                            <label class="floating-label-activo-sm">Observaciónes Pene</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Pene" data-seccion="Genitales_Masculinos" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_pene_anormal" id="obs_pene_anormal"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Testículos</label>
-                                                            <select name="examen_test" id="examen_test" data-titulo="Testículos" data-seccion="Genitales_Masculinos" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_test','div_detalle_examen_test','obs_test_anormal',2);">
-                                                                <option value="1">Normales</option>
-                                                                <option value="2">Anormales</option>
-                                                                <option value="3">No Examinados</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group" id="div_detalle_examen_test" style="display:none">
-                                                            <label class="floating-label-activo-sm">Observaciónes Testículos</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Testículos" data-seccion="Genitales_Masculinos" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_test_anormal" id="obs_test_anormal"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                                <!-- Genitales Femeninos -->
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6> Genitales Femeninos</h6>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Vulva y Glandulas_anexas</label>
-                                                            <select name="vulva" id="vulva" class="form-control form-control-sm" data-titulo="Vulva y Glandulas_anexas" data-seccion="Genitales Femeninos" onchange="evaluar_para_carga_detalle('vulva','div_vulva','det_vulva',2)">
-                                                                <option value="1">Normal</option>
-                                                                <option value="2">Anormal</option>
-                                                                <option value="3">No Examinada</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group" id="div_vulva" style="display:none">
-                                                            <label class="floating-label-activo-sm">Observaciones Vulva y Glandulas_anexas</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Observaciones Vulva y Glandulas_anexas" data-seccion="Genitales Femeninos" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_det_vulva" id="obs_det_vulva"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Vagina</label>
-                                                            <select name="vagina" id="vagina" class="form-control form-control-sm" data-titulo="Vagina" data-seccion="Genitales Femeninos" onchange="evaluar_para_carga_detalle('vagina','div_vagina','det_vagina',2)">
-                                                                <option value="1">Normal</option>
-                                                                <option value="2">Anormal</option>
-                                                                <option value="3">No Examinada</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group" id="div_vagina" style="display:none">
-                                                            <label class="floating-label-activo-sm">Observaciones Vagina</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Observaciones Vagina" data-seccion="Genitales Femeninos" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_det_vagina" id="obs_det_vagina"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Uretra</label>
-                                                            <select name="uretra_fem" id="uretra_fem" class="form-control form-control-sm" data-titulo="Uretra" data-seccion="Genitales Femeninos" onchange="evaluar_para_carga_detalle('uretra_fem','div_detalle_uretra_fem','obs_det_vagina',2)">
-                                                                <option value="1">Normal</option>
-                                                                <option value="2">Anormal</option>
-                                                                <option value="3">No Examinada</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group col-md-12" id="div_detalle_uretra_fem" style="display:none">
-                                                            <label class="floating-label-activo-sm">Observaciones Uretra</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Observaciones Uretra" data-seccion="Genitales Femeninos" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_det_vagina" id="obs_det_vagina"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                                <hr>
-                                                <!-- Hormonas -->
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <div class="form-row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h6>Hormonas</h6>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <br>
-                                                    <div class="col-md-5">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Estudio Hormonal</label>
-                                                            <select name="examen_horm" data-titulo="Estudio Hormonal" id="examen_horm" data-seccion="Hormonas" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('examen_horm','div_examen_horm','obs_examen_horm',2);">
-                                                                <option  selected value="1">Normal</option>
-                                                                <option value="2">Anormal</option>
-                                                                <option value="3">No Realizada</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        <div class="form-group" id="div_examen_horm" style="display:none;">
-                                                            <label class="floating-label-activo-sm"> Observaciones Estudio Hormonal</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Estudio Hormonal" data-seccion="Hormonas" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_examen_horm" id="obs_examen_horm"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-9" style="margin-bottom: 0;">
-                                                        <label class="floating-label-activo-sm">Resumen Examen Especialidad</label>
-                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Resumen Examen Especialidad" data-seccion="Resumen Examen Especialidad_uro" data-tipo="general" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="bs_ex_uro" id="obs_ex_uro"></textarea>
-                                                    </div>
-                                                    <div class="form-group col-md-3 align-middle" style="margin:auto">
-                                                        <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo('form-uro','registro_f_t_uro_detalle','uro');"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--Formulario / Signos vitales y otros-->
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card-a">
-                                    <div class="card-header-a" id="signosvit-otros">
-                                        <button class="accor-open btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#signosvit-otros-c" aria-expanded="false" aria-controls="signosvit-otros-c">
-                                            Signos vitales y otros
-                                        </button>
+                                <!--GUARDAR EXAMEN-->
+                                <div class="row">
+                                    <div class="col-md-12 text-center mb-3">
+                                        <input type="submit" class="btn btn-info mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar e ir a su Agenda">
+                                        <bottom type="bottom" class="btn btn-purple mt-1" onclick="visualizar_pdf_examen('cisto');">Ver Examen PDF</bottom>
                                     </div>
-                                    <div id="signosvit-otros-c" class="collapse" aria-labelledby="signosvit-otros" data-parent="#signosvit-otros">
-                                        <div class="card-body-aten-a shadow-none">
-                                            <div class="form-row">
-                                                <div class="form-group col-md-1">
-                                                    @if (isset($fichaAtencion) && $fichaAtencion->temperatura !=
-                                                    null)
-                                                    <label class="floating-label-activo-sm">Tº</label>
-                                                    <input type="text" class="form-control form-control-sm" name="temperatura" id="temperatura" value="{{ $fichaAtencion->temperatura }}">
-                                                    @else
-                                                    <label class="floating-label-activo-sm">Tº</label>
-                                                    <input type="text" class="form-control form-control-sm" name="temperatura" id="temperatura" value="{!! old('temperatura') !!}">
-                                                    @endif
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    @if (isset($fichaAtencion) && $fichaAtencion->pulso != null)
-                                                    <label class="floating-label-activo-sm">Pulso</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pulso" id="pulso" value="{{ $fichaAtencion->pulso }}">
-                                                    @else
-                                                    <label class="floating-label-activo-sm">Pulso</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pulso" id="pulso" value="{!! old('pulso') !!}">
-                                                    @endif
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    @if (isset($fichaAtencion) && $fichaAtencion->frecuencia_reposo
-                                                    != null)
-                                                    <label class="floating-label-activo-sm">Frec.
-                                                        Reposo</label>
-                                                    <input type="text" class="form-control form-control-sm" name="frecuencia_reposo" id="frecuencia_reposo" value="{{ $fichaAtencion->frecuencia_reposo }}">
-                                                    @else
-                                                    <label class="floating-label-activo-sm">Frec.
-                                                        Reposo</label>
-                                                    <input type="text" class="form-control form-control-sm" name="frecuencia_reposo" id="frecuencia_reposo" value="{!! old('frecuencia_reposo') !!}">
-                                                    @endif
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    @if (isset($fichaAtencion) && $fichaAtencion->peso != null)
-                                                    <label class="floating-label-activo-sm">Peso</label>
-                                                    <input type="text" class="form-control form-control-sm" name="peso" id="peso" value="{{ $fichaAtencion->peso }}">
-                                                    @else
-                                                    <label class="floating-label-activo-sm">Peso</label>
-                                                    <input type="text" class="form-control form-control-sm" name="peso" id="peso" value="{!! old('peso') !!}">
-                                                    @endif
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    @if (isset($fichaAtencion) && $fichaAtencion->talla != null)
-                                                    <label class="floating-label-activo-sm">Talla</label>
-                                                    <input type="text" class="form-control form-control-sm" name="talla" id="talla" value="{{ $fichaAtencion->talla }}">
-                                                    @else
-                                                    <label class="floating-label-activo-sm">Talla</label>
-                                                    <input type="text" class="form-control form-control-sm" name="talla" id="talla" value="{!! old('talla') !!}">
-                                                    @endif
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    @if (isset($fichaAtencion) && $fichaAtencion->imc != null)
-                                                    <label class="floating-label-activo-sm">IMC</label>
-                                                    <input type="text" class="form-control form-control-sm" name="imc" id="imc" value="{{ $fichaAtencion->imc }}">
-                                                    @else
-                                                    <label class="floating-label-activo-sm">IMC</label>
-                                                    <input type="text" class="form-control form-control-sm" name="imc" id="imc" value="{!! old('imc') !!}">
-                                                    @endif
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    @if (isset($fichaAtencion) && $fichaAtencion->estado_nutricional
-                                                    != null)
-                                                    <label class="floating-label-activo-sm">Estado
-                                                        Nutricional</label>
-                                                    <input type="text" class="form-control form-control-sm" name="estado_nutricional" id="estado_nutricional" value="{{ $fichaAtencion->estado_nutricional }}">
-                                                    @else
-                                                    <label class="floating-label-activo-sm">Estado
-                                                        Nutricional</label>
-                                                    <input type="text" class="form-control form-control-sm" name="estado_nutricional" id="estado_nutricional" value="{!! old('estado_nutricional') !!}">
-                                                    @endif
-                                                </div>
+                                </div>
+                            </div>
+                          <!--CIERRE: CISTOSCOPÍA-->
+
+
+
+                        <!-- CISTOSCOPÍA-->
+						<div class="tab-pane fade" id="cisto" role="tabpanel" aria-labelledby="cisto-tab">
+								<div class="row">
+									<div class="col-md-12  mb-2">
+										<h6 class="f-20 text-c-blue">Citoscopía</h6>
+									</div>
+								</div>
+								<div class="row div_form_examen_cisto">
+                                    <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_cisto" id="id_examen_especialidad_tipo_cisto" value="{{ $array_examen_especialidad_tipo['cisto'] }}">
+									{!! $examen['cisto'] !!}
+								</div>
+                                <!--GUARDAR EXAMEN-->
+                                <div class="row">
+                                    <div class="col-md-12 text-center mb-3">
+                                        <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar e ir a su Agenda">
+                                        <bottom type="bottom" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('cisto');">Ver Examen PDF</bottom>
+                                    </div>
+                                </div>
+							</div>
+						  <!--CIERRE: CISTOSCOPÍA-->
+
+
+                          <!--UROFLUJO-->
+                        <div class="tab-pane fade" id="uroflujo" role="tabpanel" aria-labelledby="uroflujo-tab">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                    <h6 class="f-20 text-c-blue">Uroflujometría</h6>
+                                </div>
+                            </div>
+                            <div class="row div_form_examen_uro_flujo">
+                                <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_uro_flujo" id="id_examen_especialidad_tipo_uro_flujo" value="7">
+                                <!-- SOLICITADO POR -->
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-a">
+                                            <div class="card-header-a" id="solicitado_por">
+                                                <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#solicitado_por_c" aria-expanded="false" aria-controls="solicitado_por_c">
+                                                    Solicitado por
+                                                </button>
                                             </div>
-                                            <div class="form-row">
-                                                <div class="form-group mb-1">
-                                                    <label><strong>Presión Arterial</strong></label>
-                                                    <div class="switch switch-success d-inline m-r-10">
-                                                        <input type="checkbox" id="p_arterial" value="{!! old('p_arterial') !!}">
-                                                        <label for="p_arterial" class="cr"></label>
+                                            <div id="solicitado_por_c" class="collapse show" aria-labelledby="solicitado_por" data-parent="#solicitado_por">
+                                                <div class="card-body-aten-a">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <input type="hidden" name="id_profesional_solicitado_por_uro_flujo" id="id_profesional_solicitado_por_uro_flujo" value="">
+                                                            <label class="floating-label-activo-sm">RUT</label>
+                                                            <input type="text" class="form-control form-control-sm" name="solicitado_por_rut_uro_flujo" id="solicitado_por_rut_uro_flujo"
+                                                                onblur="cargar_profesional(this,'solicitado_por_uro_flujo', 'id_profesional_solicitado_por_uro_flujo', 'div_profesional_no_inscrito_uro_flujo', 'solicitado_por_nombre_uro_flujo', 'solicitado_por_apellido_uro_flujo', 'solicitado_por_telefono_uro_flujo', 'solicitado_por_email_uro_flujo', 'div_mensaje_uro_flujo', 'mensaje_solicitado_por_uro_flujo');"
+                                                                onchange="cargar_profesional(this,'solicitado_por_uro_flujo', 'id_profesional_solicitado_por_uro_flujo', 'div_profesional_no_inscrito_uro_flujo', 'solicitado_por_nombre_uro_flujo', 'solicitado_por_apellido_uro_flujo', 'solicitado_por_telefono_uro_flujo', 'solicitado_por_email_uro_flujo', 'div_mensaje_uro_flujo', 'mensaje_solicitado_por_uro_flujo');"
+                                                                onkeyup="cargar_profesional(this,'solicitado_por_uro_flujo', 'id_profesional_solicitado_por_uro_flujo', 'div_profesional_no_inscrito_uro_flujo', 'solicitado_por_nombre_uro_flujo', 'solicitado_por_apellido_uro_flujo', 'solicitado_por_telefono_uro_flujo', 'solicitado_por_email_uro_flujo', 'div_mensaje_uro_flujo', 'mensaje_solicitado_por_uro_flujo');">
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <label class="floating-label-activo-sm">Solicitado por</label>
+                                                            <input type="text" class="form-control form-control-sm" name="solicitado_por_uro_flujo" id="solicitado_por_uro_flujo">
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <label class="floating-label-activo-sm">Hipótesis Diagnóstica</label>
+                                                            <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_hipotesis" name="sospecha_diagnostica_uro_flujo" id="sospecha_diagnostica_uro_flujo" onchange="cargarIgual('sospecha_diagnostica_uro_flujo')">
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <label class="floating-label-activo-sm">Premedicación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="premed_uro_flujo" id="premed_uro_flujo">
+                                                        </div>
+                                                        <div class="form-group col-md-12" id="div_mensaje_cisto"  style="display: none;">
+                                                            <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por_uro_flujo"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" id="div_profesional_no_inscrito_uro_flujo" style="display: none;">
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Nombre</label>
+                                                            <input type="text" class="form-control form-control-sm"  name="solicitado_por_nombre_uro_flujo" id="solicitado_por_nombre_uro_flujo" onchange="actualizar_solicitado_por('solicitado_por_uro_flujo', 'solicitado_por_nombre_uro_flujo', 'solicitado_por_apellido_uro_flujo');">
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Apellido</label>
+                                                            <input type="text" class="form-control form-control-sm"  name="solicitado_por_apellido_uro_flujo" id="solicitado_por_apellido_uro_flujo" onchange="actualizar_solicitado_puro_flujo', 'solicitado_por_nombre_uro_flujo', 'solicitado_por_apellido_uro_flujo');">
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Telefono</label>
+                                                            <input type="text" class="form-control form-control-sm"  name="solicitado_por_telefono_uro_flujo" id="solicitado_por_telefono_uro_flujo" >
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Email</label>
+                                                            <input type="text" class="form-control form-control-sm"  name="solicitado_por_email_uro_flujo" id="solicitado_por_email_uro_flujo" >
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-row" id="form_1" style="display:none">
-                                                <div class="form-group col-md-3">
-                                                    @if (isset($fichaAtencion) && $fichaAtencion->presion_bi !=
-                                                    null)
-                                                    <label class="floating-label-activo-sm">BI</label>
-                                                    <input type="text" class="form-control form-control-sm" name="presion_bi" id="presion_bi" value="{{ $fichaAtencion->presion_bi }}">
-                                                    @else
-                                                    <label class="floating-label-activo-sm">BI</label>
-                                                    <input type="text" class="form-control form-control-sm" name="presion_bi" id="presion_bi" value="{!! old('presion_bi') !!}">
-                                                    @endif
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    @if (isset($fichaAtencion) && $fichaAtencion->presion_bd !=
-                                                    null)
-                                                    <label class="floating-label-activo-sm">BD</label>
-                                                    <input type="text" class="form-control form-control-sm" name="presion_bd" id="presion_bd" value="{{ $fichaAtencion->presion_bd }}">
-                                                    @else
-                                                    <label class="floating-label-activo-sm">BD</label>
-                                                    <input type="text" class="form-control form-control-sm" name="presion_bd" id="presion_bd" value="{!! old('presion_bd') !!}">
-                                                    @endif
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    @if (isset($fichaAtencion) && $fichaAtencion->presion_de_pie !=
-                                                    null)
-                                                    <label class="floating-label-activo-sm">De pié</label>
-                                                    <input type="text" class="form-control form-control-sm" name="presion_de_pie" id="presion_de_pie" value="{{ $fichaAtencion->presion_de_pie }}">
-                                                    @else
-                                                    <label class="floating-label-activo-sm">De pié</label>
-                                                    <input type="text" class="form-control form-control-sm" name="presion_de_pie" id="presion_de_pie" value="{!! old('presion_de_pie') !!}">
-                                                    @endif
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    @if (isset($fichaAtencion) && $fichaAtencion->presion_sentado !=
-                                                    null)
-                                                    <label class="floating-label-activo-sm">Sentado</label>
-                                                    <input type="text" class="form-control form-control-sm" name="presion_sentado" id="presion_sentado" value="{{ $fichaAtencion->presion_sentado }}">
-                                                    @else
-                                                    <label class="floating-label-activo-sm">Sentado</label>
-                                                    <input type="text" class="form-control form-control-sm" name="presion_sentado" id="presion_sentado" value="{!! old('presion_sentado') !!}">
-                                                    @endif
-                                                </div>
+                                        </div>
+                                    </div>
+                                    <!--INFORME URO_FLUJOMETRIA-->
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-a">
+                                            <div class="card-header-a" id="info-uro_flujo">
+                                                <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#info-uro_flujo-c" aria-expanded="false" aria-controls="info-uro_flujo-c">
+                                                Informe
+                                                </button>
                                             </div>
-                                            <div class="form-row">
-                                                <div class="form-group mb-1">
-                                                    <label><strong>Comunicación y traslado</strong></label>
-                                                    <div class="switch switch-success d-inline m-r-10">
-                                                        <input type="checkbox" id="com_trasl" value="{!! old('com_trasl') !!}">
-                                                        <label for="com_trasl" class="cr"></label>
+                                            <div id="info-uro_flujo-c" class="collapse show" aria-labelledby="info-uro_flujo" data-parent="#info-uro_flujo">
+                                                <div class="card-body-aten-a">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <label class="floating-label-activo-sm">Volumen de vaciado</label>
+                                                            <input type="text" class="form-control form-control-sm" name="vol_vac_uro_flujo" id="vol_vac_uro_flujo">
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <label class="floating-label-activo-sm">Qmax -Flujo</label>
+                                                            <input type="text" class="form-control form-control-sm" name="q_flujo_uro_flujo" id="q_flujo_uro_flujo">
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <label class="floating-label-activo-sm">Morfología de la Curva</label>
+                                                            <input type="text" class="form-control form-control-sm" name="m_curva_uro_flujo" id="m_curva_uro_flujo">
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                            <label class="floating-label-activo-sm">Residuo Post-Miccional</label>
+                                                            <input type="text" class="form-control form-control-sm" name="residuo_uro_flujo" id="residuo_uro_flujo">
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <label class="floating-label-activo-sm">Comentarios</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="comentrarios_uro_flujo" id="comentrarios_uro_flujo"></textarea>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-row" id="form_2" style="display:none">
-                                                <div class="form-group col-md-4">
-                                                    @if (isset($fichaAtencion) &&
-                                                    $fichaAtencion->ct_estado_conciencia != null)
-                                                    <label class="floating-label-activo-sm">Estado de
-                                                        conciencia</label>
-                                                    <input type="text" class="form-control form-control-sm" name="ct_estado_conciencia" id="ct_estado_conciencia" value="{{ $fichaAtencion->ct_estado_conciencia }}">
-                                                    @else
-                                                    <label class="floating-label-activo-sm">Estado de
-                                                        conciencia</label>
-                                                    <input type="text" class="form-control form-control-sm" name="ct_estado_conciencia" id="ct_estado_conciencia" value="{!! old('ct_estado_conciencia') !!}">
-                                                    @endif
-                                                </div>
-                                                <div class="form-group col-md-4">
-                                                    @if (isset($fichaAtencion) && $fichaAtencion->ct_lenguaje !=
-                                                    null)
-                                                    <label class="floating-label-activo-sm">Lenguaje</label>
-                                                    <input type="text" class="form-control form-control-sm" name="ct_lenguaje" id="ct_lenguaje" value="{{ $fichaAtencion->ct_lenguaje }}">
-                                                    @else
-                                                    <label class="floating-label-activo-sm">Lenguaje</label>
-                                                    <input type="text" class="form-control form-control-sm" name="ct_lenguaje" id="ct_lenguaje" value="{!! old('ct_lenguaje') !!}">
-                                                    @endif
-                                                </div>
-                                                <div class="form-group col-md-4">
-                                                    @if (isset($fichaAtencion) && $fichaAtencion->ct_traslado !=
-                                                    null)
-                                                    <label class="floating-label-activo-sm">Traslado</label>
-                                                    <input type="text" class="form-control form-control-sm" name="ct_traslado" id="ct_traslado" value="{{ $fichaAtencion->ct_traslado }}">
-                                                    @else
-                                                    <label class="floating-label-activo-sm">Traslado</label>
-                                                    <input type="text" class="form-control form-control-sm" name="ct_traslado" id="ct_traslado" value="{!! old('ct_traslado') !!}">
-                                                    @endif
+                                                    <!--IMAGENES-->
+                                                    <div class="form-row">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+                                                            <p class="f-12 mb-0 font-weight-bold">IMAGENES</p>
+                                                            <div class="dropzone" id="mis-imagenes-uro_flujo" action="{{ route('profesional.imagen.carga') }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            <!--GUARDAR EXAMEN-->
+                            <div class="row">
+                                <div class="col-md-12 text-center mb-3">
+                                    <input type="submit" class="btn btn-info mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar e ir a su Agenda">
+                                    <bottom type="bottom" class="btn btn-purple mt-1" onclick="visualizar_pdf_examen('uro_flujo');">Ver examen PDF</bottom>
+                                </div>
                             </div>
-                            <!--Cierre: Formulario / Signos vitales y otros-->
-                            <!--ENFERMO CRÓNICO O GES-->
-                            @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
-                            <!--Diagnóstico-->
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card-a">
-                                    <div class="card-header-a" id="diagnostico">
-                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagnostico_c" aria-expanded="false" aria-controls="diagnostico_c">
-                                            Diagnóstico
-                                        </button>
-                                    </div>
-                                    <div id="diagnostico_c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
-                                        <div class="card-body-aten-a shadow-none">
-                                            <div class="form-row">
-                                                <div class="form-group col-md-4">
-                                                    <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
-                                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" data-input_igual="lic_descripcion_hipotesis,sospecha_diagnostica_cisto" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" ></textarea>
+                        </div>
+                        <!--CIERRE:UROFLUJO-->
 
-                                                </div>
-                                                <div class="form-group col-md-4">
-                                                    <label class="floating-label-activo-sm">Indicaciones</label>
-                                                    <input type="text" class="form-control form-control-sm" name="ind_uro" id="ind_uro">
-                                                </div>
-                                                <div class="form-group col-md-4">
-                                                    <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
-                                                    <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie" name="descripcion_cie" id="descripcion_cie" value="" onchange="cargarIgual('descripcion_cie')">
-                                                    <input type="hidden" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="" onchange="cargarIgual('id_descripcion_cie')">
-                                                </div>
-                                            </div>
+						<!--UROFLUJO-->
+						<div class="tab-pane fade" id="uroflujo" role="tabpanel" aria-labelledby="uroflujo-tab">
+							<div class="row">
+								<div class="col-md-12 mb-2">
+                                    <h6 class="f-20 text-c-blue">Uroflujometría</h6>
+                                </div>
+                            </div>
+                            <div class="row div_form_examen_uro_flujo">
+                                <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_uro_flujo" id="id_examen_especialidad_tipo_uro_flujo" value="{{ $array_examen_especialidad_tipo['uro_flujo'] }}">
+                                {!! $examen['uro_flujo'] !!}
+                            </div>
+                            <!--GUARDAR EXAMEN-->
+                            <div class="row">
+                                <div class="col-md-12 text-center mb-3">
+                                    <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
+                                    <bottom type="bottom" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('uro_flujo');">Ver Examen PDF</bottom>
+                                </div>
+                            </div>
+						</div>
+
+                        
+	
+                        <div class="tab-pane fade" id="in-ven-urologia" role="tabpanel" aria-labelledby="in-ven-urologia-tab">
+                            <div class="row bg-white shadow-none rounded mx-1">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12 mt-3 mb-0">
+                                            @include('general.venereas.venereas')
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{--  div de botones  --}}
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card-a">
-                                    <div class="card-body">
-                                <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                                @include('atencion_medica.generales.seccion_receta_examen_comunes')
-                                <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-
-                                <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
-                                {{--  @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')  --}}
-                                <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD FIN  -->
-                                    </div>
-                                </div>
-
-                                <!--GUARDAR O IMPRIMIR FICHA-->
-                                <div class="row mb-3">
-                                    <div class="col-md-12 text-center">
-                                        <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                                        <input type="submit" class="btn btn-purple mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
-
-                    <!-- CISTOSCOPÍA-->
-					<div class="tab-pane fade" id="cisto" role="tabpanel" aria-labelledby="cisto-tab">
-						<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-							<div class="row">
-								<div class="col-md-12 mt-3 mb-0">
-									<h6 class="f-20 text-c-blue">Citoscopía</h6>
-								</div>
-							</div>
-							<div class="row div_form_examen_cisto">
-                                <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_cisto" id="id_examen_especialidad_tipo_cisto" value="{{ $array_examen_especialidad_tipo['cisto'] }}">
-								{!! $examen['cisto'] !!}
-							</div>
-                            <!--GUARDAR EXAMEN-->
-                            <div class="row">
-                                <div class="col-md-12 text-center mb-3">
-                                    <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
-                                    <bottom type="bottom" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('cisto');">Ver Examen PDF</bottom>
-                                </div>
-                            </div>
-						</div>
-					</div>
-					<!--CIERRE: CISTOSCOPÍA-->
-
-					<!--UROFLUJO-->
-					<div class="tab-pane fade" id="uroflujo" role="tabpanel" aria-labelledby="uroflujo-tab">
-						<div class="row bg-white shadow-none rounded mx-1">
-							<div class="col-md-12">
-								<div class="row">
-									<div class="col-md-12 mt-3 mb-0">
-                                        <h6 class="f-16 text-c-blue">Uroflujometría</h6>
-                                        <hr>
-                                    </div>
-                                </div>
-                                <div class="row div_form_examen_uro_flujo">
-                                    <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_uro_flujo" id="id_examen_especialidad_tipo_uro_flujo" value="{{ $array_examen_especialidad_tipo['uro_flujo'] }}">
-                                    {!! $examen['uro_flujo'] !!}
-                                </div>
-                                <!--GUARDAR EXAMEN-->
-                                <div class="row">
-                                    <div class="col-md-12 text-center mb-3">
-                                        <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
-                                        <bottom type="bottom" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('uro_flujo');">Ver examen PDF</bottom>
-                                    </div>
-                                </div>
-							</div>
-						</div>
-					</div>
-					<!--CIERRE:UROFLUJO-->
-
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-
 </div>
+@include("general.modal.modal_no_disponible")
 <!--MODALES modal_enfermedades_cronicas-->
 @include('atencion_medica.formularios.modal_atencion_general.modal_enfermedades_cronicas')
 
 <!-- MODAL DE BIOPSIA -->
 @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
+@include('atencion_medica.formularios.modal_atencion_especialidad.urologia.modal_sol_cisto')
+@include('atencion_medica.formularios.modal_atencion_especialidad.urologia.indicar_estudio_urod')
+@include('atencion_medica.formularios.modal_atencion_especialidad.urologia.indicar_estudio_horm')
 
+<script type="text/javascript">
+    function showContenturo() {
+        element = document.getElementById("contentTto_uro");
+        check = document.getElementById("tto_uro");
+        if (check.checked) {
+            element.style.display='block';
+        }
+        else {
+            element.style.display='none';
+        }
+    }
+
+
+    function showContentProc_uro() {
+        element = document.getElementById("contentProc_uro");
+        check = document.getElementById("pr_uro");
+        if (check.checked) {
+            element.style.display='block';
+        }
+        else {
+            element.style.display='none';
+        }
+    }
+</script>
 @section('page-script-ficha-atencion')
     <script>
-
         $(document).ready(function() {
 
-            {{--  mensaje de exito al registrar ficha clinica  --}}
-             @if(session('mensaje'))
-                swal({
-                    title: "Registro de Ficha Clínica.",
-                    text:"{{ session('mensaje') }}",
-                    icon: "info",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
-                });
-            @endif
-            {{--  mensaje de exito al registrar ficha clinica  --}}
-            @if(session('success'))
-                swal({
-                    title: "Registro de Ficha Clínica.",
-                    text:"{{ session('success') }}",
-                    icon: "success",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
-                });
-            @endif
-
-			{{--  mensaje de erro al registrar ficha clinica  --}}
-			@if(session('error'))
-				swal({
-					title: "Registro de Ficha Clínica.",
-					text:"{{ session('error') }}",
-					icon: "error",
-					// buttons: "Aceptar",
-					//SuccessMode: true,
-				});
-			@endif
-
-			{{--  mensaje de warning al registrar ficha clinica  --}}
-			@if(session('warning'))
-				swal({
-					title: "Registro de Ficha Clínica.",
-					text:"{{ session('warning') }}",
-					icon: "warning",
-					// buttons: "Aceptar",
-					//SuccessMode: true,
-				});
-			@endif
-
             /* formatear rut */
-            $("#solicitado_por_rut_cisto").rut({
-                formatOn: 'keyup',
-                minimumLength: 2,
-                validateOn: 'change',
-                useThousandsSeparator : false
-            });
-            $("#solicitado_por_rut_uroflujo").rut({
+            $("#solicitado_por_rut_rfl").rut({
                 formatOn: 'keyup',
                 minimumLength: 2,
                 validateOn: 'change',
@@ -1011,341 +1324,46 @@
                 }
             });
 
-
-        })
-
-
-        /** MANEJO DE IMAGENES */
-        var myDropzone_cisto ;
-        Dropzone.options.misImagenesCisto = {
-            init:function()
-            {
-                myDropzone_cisto = this;
-            },
-            url: "{{ route('profesional.imagen.carga') }}",
-            method: 'post',
-            createImageThumbnails: true,
-            addRemoveLinks: true,
-            headers:{
-                'X-CSRF-TOKEN' : CSRF_TOKEN,
-                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
-            },
-
-            acceptedFiles: "image/*",
-            maxFilesize: 4,
-            maxFiles: 6,
-            /** El texto utilizado antes de que se eliminen los archivos. */
-            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
-
-            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
-            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
-
-            /**
-             * El texto que se agregará antes del formulario alternativo.
-             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
-             * ser ignorado.
-             */
-            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
-
-            /**
-             * Si el tamaño del archivo es demasiado grande.
-             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
-             */
-             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
-
-            /** Si el archivo no coincide con el tipo de archivo. */
-            dictInvalidFileType: "No puedes subir archivos de este tipo.",
-
-            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
-            dictCancelUpload: "Cancelar carga",
-
-            /** El texto que se muestra si una carga se canceló manualmente */
-            dictUploadCanceled: "Subida cancelada.",
-
-            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
-            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
-
-            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
-            dictRemoveFile: "Eliminar archivo",
-
-            /**
-             * Se muestra si `maxFiles` es st y se excede.
-             */
-            dictMaxFilesExceeded: "No puede cargar más archivos.",
-
-            // accept(file, done) {
-            //     console.log('-------------accept-----------------------');
-            //     cargar_lista_imagenes();
-            //     return done();
-            // },
-            success: function(file, response){
-                // console.log('-------------success-----------------------');
-                cargar_lista_imagenes(myDropzone_cisto,'cisto');
-
-                if (file.previewElement) {
-                    return file.previewElement.classList.add("dz-success");
+            $('#tratamiento_check').change(function(){
+                if($('#tratamiento_check').is(':checked')){
+                    $('#tratamiento').val(1);
                 }
-            },
-            error(file, message) {
-                // console.log('-------------error-----------------------');
-                if (file.previewElement) {
-                    file.previewElement.classList.add("dz-error");
-                    if (typeof message !== "string" && message.error)
-                    {
-                        message = message.error;
-                    }
-                    else
-                    {
-                        message = message.message;
-                    }
-                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
-                        node.textContent = message;
-                    }
-                }
-            },
-            removedfile(file) {
-                // console.log('-------------removedfile-----------------------');
-                if (file.previewElement != null && file.previewElement.parentNode != null) {
-                    file.previewElement.parentNode.removeChild(file.previewElement);
-                }
-                cargar_lista_imagenes(myDropzone_cisto,'cisto');
-                return this._updateMaxFilesReachedClass();
-            },
-            canceled: function canceled(file) {
-                cargar_lista_imagenes(myDropzone_cisto,'cisto');
-                return this.emit("error", file, this.options.dictUploadCanceled);
-            },
-        };
-
-        var myDropzone_uro_flujo ;
-        Dropzone.options.misImagenesUroFlujo = {
-            init:function()
-            {
-                myDropzone_uro_flujo = this;
-            },
-            url: "{{ route('profesional.imagen.carga') }}",
-            method: 'post',
-            createImageThumbnails: true,
-            addRemoveLinks: true,
-            headers:{
-                'X-CSRF-TOKEN' : CSRF_TOKEN,
-                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
-            },
-
-            acceptedFiles: "image/*",
-            maxFilesize: 4,
-            maxFiles: 2,
-            /** El texto utilizado antes de que se eliminen los archivos. */
-            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
-
-            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
-            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
-
-            /**
-             * El texto que se agregará antes del formulario alternativo.
-             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
-             * ser ignorado.
-             */
-            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
-
-            /**
-             * Si el tamaño del archivo es demasiado grande.
-             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
-             */
-             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
-
-            /** Si el archivo no coincide con el tipo de archivo. */
-            dictInvalidFileType: "No puedes subir archivos de este tipo.",
-
-            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
-            dictCancelUpload: "Cancelar carga",
-
-            /** El texto que se muestra si una carga se canceló manualmente */
-            dictUploadCanceled: "Subida cancelada.",
-
-            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
-            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
-
-            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
-            dictRemoveFile: "Eliminar archivo",
-
-            /**
-             * Se muestra si `maxFiles` es st y se excede.
-             */
-            dictMaxFilesExceeded: "No puede cargar más archivos.",
-
-            // accept(file, done) {
-            //     console.log('-------------accept-----------------------');
-            //     cargar_lista_imagenes();
-            //     return done();
-            // },
-            success: function(file, response){
-                // console.log('-------------success-----------------------');
-                cargar_lista_imagenes(myDropzone_uro_flujo, 'uro_flujo');
-
-                if (file.previewElement) {
-                    return file.previewElement.classList.add("dz-success");
-                }
-            },
-            error(file, message) {
-                // console.log('-------------error-----------------------');
-                if (file.previewElement) {
-                    file.previewElement.classList.add("dz-error");
-                    if (typeof message !== "string" && message.error)
-                    {
-                        message = message.error;
-                    }
-                    else
-                    {
-                        message = message.message;
-                    }
-                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
-                        node.textContent = message;
-                    }
-                }
-            },
-            removedfile(file) {
-                console.log('-------------removedfile-----------------------');
-                if (file.previewElement != null && file.previewElement.parentNode != null) {
-                    file.previewElement.parentNode.removeChild(file.previewElement);
-                }
-                cargar_lista_imagenes(myDropzone_uro_flujo, 'uro_flujo');
-                return this._updateMaxFilesReachedClass();
-            },
-            canceled: function canceled(file) {
-                cargar_lista_imagenes(myDropzone_uro_flujo, 'uro_flujo');
-                return this.emit("error", file, this.options.dictUploadCanceled);
-            },
-        };
-
-
-        var lista_imagenes = {};
-        function cargar_lista_imagenes(obj_dropzone, alias_examen)
-        {
-            // console.log('--------------cargar_lista_imagenes----------------------');
-            lista_imagenes[alias_examen] = [];
-            let temp  = obj_dropzone.getAcceptedFiles();
-            $.each(temp, function( index, value )
-            {
-                if(value.status == "success")
+                else
                 {
-                    if(value.xhr !== undefined)
-                    {
-                        var img_temp = JSON.parse(value.xhr.response);
-                        lista_imagenes[alias_examen][index] = [
-                            url=img_temp.img.url,
-                            nombre_origian= img_temp.img.original_file_name,
-                            nombre_img = img_temp.img.nombre_img,
-                            file_extension = img_temp.img.file_extension,
-                        ];
-                        $('#input_lista_imagenes').val('');
-                        $('#input_lista_imagenes').val(JSON.stringify(lista_imagenes));
-                    }
+                    $('#tratamiento').val(0);
+                }
+            });
+            $('#lentes_check').change(function(){
+                if($('#lentes_check').is(':checked')){
+                    $('#lentes').val(1);
+                }
+                else
+                {
+                    $('#lentes').val(0);
+                }
+            });
+            $('#procedimiento_check').change(function(){
+                if($('#procedimiento_check').is(':checked')){
+                    $('#procedimiento').val(1);
+                    $('#modal_procedimiento').modal('show');
+                }
+                else
+                {
+                    $('#procedimiento').val(0);
+                }
+            });
+            $('#cirugia_check').change(function(){
+                if($('#cirugia_check').is(':checked')){
+                    $('#cirugia').val(1);
+                }
+                else
+                {
+                    $('#cirugia').val(0);
                 }
             });
 
+        })
 
-        }
-        /** CIERRE MANEJO DE IMAGENES */
-
-
-        function cargar_profesional(rut, input_nombre_completo, input_id, div_solicitar, input_nombre, input_apellido, input_tel, input_email, div_mensaje, text_mensaje)
-        {
-            rut = $(rut).val();
-
-            // console.log('------------------------------------');
-            // console.log(rut.length);
-            // console.log(rut);
-            // console.log('------------------------------------');
-
-            if(rut.length>5)
-            {
-                url = "{{ route('profesional.buscar') }}";
-                $.ajax({
-
-                    url: url,
-                    type: "GET",
-                    data: {
-                        rut : rut,
-                    },
-                })
-                .done(function(data)
-                {
-                    // console.log('-----------------------');
-                    // console.log(data);
-                    // console.log('-----------------------');
-                    if(data.estado == 1)
-                    {
-
-                        if(data.registros.length>0)
-                        {
-                            var nombre = data.registros[0].nombre+' '+data.registros[0].apellido_uno;
-                            var id = data.registros[0].id;
-                            // $('#'+input_nombre).attr('readonly', true);
-                            $('#'+input_nombre_completo).val(nombre);
-                            $('#'+input_id).val(id);
-                            $('#'+div_solicitar).hide();
-                            mensaje = '';
-                            $('#'.div_mensaje).hide();
-                            $('#'+text_mensaje).html(mensaje);
-                            $('#'+input_nombre).val('');
-                            $('#'+input_apellido).val('');
-                            $('#'+input_tel).val('');
-                            $('#'+input_email).val('');
-                        }
-                        else
-                        {
-                            mensaje = 'Profesional no encontrato, debe ingresar datos.';
-                            $('#'+input_nombre_completo).val('');
-                            $('#'+input_id).val('');
-                            $('#'+div_solicitar).show();
-                            $('#'.div_mensaje).show();
-                            $('#'+text_mensaje).html(mensaje);
-                            $('#'.input_nombre).val('');
-                            $('#'.input_apellido).val('');
-                            $('#'.input_tel).val('');
-                            $('#'.input_email).val('');
-                            // $('#'+input_nombre).attr('readonly', true);
-                        }
-                    }
-                    else
-                    {
-                        mensaje = 'Se presento un problema en la busqueda intente nuevamente';
-                        $('#'.div_mensaje).show();
-                        $('#'+text_mensaje).html(mensaje);
-                        // $('#'+input_nombre).attr('readonly', false);
-                    }
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
-            }
-            else if(rut.length==0)
-            {
-                $('#'+input_nombre).val('');
-                // $('#'+input_nombre).attr('readonly', true);
-                $('#'+input_id).val('');
-                $('#'+div_solicitar).hide();
-                $('#div_mensaje').hide();
-                $('#mensaje_solicitado_por').html('');
-            }
-        }
-
-        function actualizar_solicitado_por(input_solitado_por, input_nombre, input_apellido)
-        {
-            var nombre = $('#'+input_nombre).val();
-            var apellido = $('#'+input_apellido).val();
-            if(nombre != '' || apellido != '')
-            {
-                // $('#'+input_solitado_por).attr('readonly', true);
-                $('#'+input_solitado_por).val($('#'+input_nombre).val()+' '+$('#'+input_apellido).val());
-            }
-            else
-            {
-                // $('#'+input_solitado_por).attr('readonly', false);
-                $('#'+input_solitado_por).val();
-            }
-        }
         /** REGISTO ANTECEDENTES */
         function carga_campos_antecedente_nuevo()
         {
@@ -1524,24 +1542,19 @@
 
         function cargarIgual(input)
         {
+
             let actual = $('#'+input);
             let equivalentes = $('#'+input).attr('data-input_igual').split(',');
             $.each(equivalentes, function( index, value ) {
                 var equivalente = $('#'+value);
                 equivalente.val(actual.val());
             });
-        }
 
-        function cargarCompletar(input)
-        {
-            let actual = $('#'+input);
-            let equivalentes = $('#'+input).attr('data-input_igual').split(',');
-            let seccion = $('#'+input).attr('data-input_seccion');
-            $.each(equivalentes, function( index, value ) {
-                var equivalente = $('#'+value);
-                var valor_prev = equivalente.val();
-                equivalente.val(valor_prev + ' - ' + seccion + ': ' + actual.val());
-            });
+            // let actual = $('#'+input);
+            // let equivalente = $('#'+$('#'+input).attr('data-input_igual'));
+
+            // equivalente.val(actual.val());
+
         }
 
         function evaluar_para_carga_detalle(select, div, input, valor)
@@ -1556,15 +1569,27 @@
 
         function abrir_modal_guardar_tipo(div_id_data, div_id_detalle,tipo)
         {
-            $("#btn_modal_registrar_ficha_tipo_uro").unbind();
+            $("#btn_modal_registrar_ficha_tipo_oft").unbind();
 
-            if(tipo == 'uro')
+            if(tipo == 'oft_g')
             {
-                $('#btn_modal_registrar_ficha_tipo_uro').click(function(){
-                    guardar_tipo_ficha_uro();
+                $('#btn_modal_registrar_ficha_tipo_oft').click(function(){
+                    guardar_tipo_ficha_oft_g();
                 });
             }
-            $('#modal_registrar_ficha_tipo_uro').modal('show');
+            else if(tipo == 'bio')
+            {
+                $('#btn_modal_registrar_ficha_tipo_oft').click(function(){
+                    guardar_tipo_ficha_bio();
+                });
+            }
+            else if(tipo == 'fo')
+            {
+                $('#btn_modal_registrar_ficha_tipo_oft').click(function(){
+                    guardar_tipo_ficha_fo();
+                });
+            }
+            $('#modal_registrar_ficha_tipo_oft').modal('show');
 
             cargarSeccion(div_id_detalle,div_id_data);
         }
@@ -1587,7 +1612,7 @@
                     html +='    <input type="hidden" name="modal_agregar_tipo_'+$(elemento).attr('id')+'" id="modal_agregar_tipo_'+$(elemento).attr('id')+'" value="'+$(elemento).val()+'">';
                     html +='</div>';
                 }
-                else if($(elemento).prop('nodeName') == 'TEXTAREA')
+                else if($(elemento).prop('nodeName') == 'TEXTAREA' || $(elemento).prop('nodeName') == 'INPUT')
                 {
                     html +='<div class="col-md-4">'+$(elemento).data('titulo')+'</div>';
                     html +='<div class="col-md-6">';
@@ -1612,12 +1637,12 @@
             $('#'+label).html( $('#'+textarea).val() );
         }
 
-        function guardar_tipo_ficha_uro()
+        function guardar_tipo_ficha_oft_g()
         {
-            var registro_f_t_uro_nombre = $('#registro_f_t_uro_nombre').val();
-            var registro_f_t_uro_descripcion = $('#registro_f_t_uro_descripcion').val();
+            var registro_f_t_oft_nombre = $('#registro_f_t_oft_nombre').val();
+            var registro_f_t_oft_descripcion = $('#registro_f_t_oft_descripcion').val();
             var _token = CSRF_TOKEN;
-            if(registro_f_t_uro_nombre == ''){
+            if(registro_f_t_oft_nombre == ''){
                 swal({
                         title: "Problema al Registrar Tipo Ficha.\n Campo requedido Nombre",
                         icon: "warning",
@@ -1626,7 +1651,7 @@
                     });
                     return false;
             }
-            if(registro_f_t_uro_descripcion == ''){
+            if(registro_f_t_oft_descripcion == ''){
                 swal({
                         title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
                         icon: "warning",
@@ -1638,10 +1663,10 @@
 
 
             var data = [];
-            data.registro_f_t_uro_nombre = registro_f_t_uro_nombre;
-            data.registro_f_t_uro_descripcion = registro_f_t_uro_descripcion;
+            data.registro_f_t_oft_nombre = registro_f_t_oft_nombre;
+            data.registro_f_t_oft_descripcion = registro_f_t_oft_descripcion;
 
-            $('#registro_f_t_uro_detalle').find('input,textarea').each(function(key, elemento){
+            $('#registro_f_t_oft_detalle').find('input,textarea').each(function(key, elemento){
                 {{--  console.log($(elemento).attr('id'));  --}}
                 {{--  console.log($(elemento).val());  --}}
                 {{--  console.log($(elemento).prop('nodeName'));  --}}
@@ -1652,7 +1677,7 @@
             });
 
             {{--  console.log(data);  --}}
-            url = "{{ route('profesional.ficha_tipo_uro') }}";
+            url = "{{ route('profesional.ficha_tipo_oft') }}";
             $.ajax({
 
                 url: url,
@@ -1660,42 +1685,34 @@
                 data: {
                     _token: _token,
                     id_profesional : $('#id_profesional_fc').val(),
-                    nombre : data.registro_f_t_uro_nombre,
-                    descripcion : data.registro_f_t_uro_descripcion,
-                    costo_vert_ld : data.modal_agregar_tipo_costo_vert_ld,
-                    obs_costo_vert_ld : data.observaciones_obs_costo_vert_ld,
-                    costo_vert_li : data.modal_agregar_tipo_costo_vert_li,
-                    obs_costo_vert_li : data.observaciones_obs_costo_vert_li,
-                    examen_abd : data.modal_agregar_tipo_examen_abd,
-                    obs_examen_abd : data.observaciones_obs_examen_abd,
-                    tacto_rec : data.modal_agregar_tipo_tacto_rec,
-                    obs_tacto_rec : data.observaciones_obs_tacto_rec,
-                    antigeno_prost : data.modal_agregar_tipo_antigeno_prost,
-                    obs_antigeno_prost : data.observaciones_obs_antigeno_prost,
-                    biopsia_uro : data.modal_agregar_tipo_biopsia_uro,
-                    obs_biopsia_uro : data.observaciones_obs_biopsia_uro,
-                    ingle : data.modal_agregar_tipo_ingle,
-                    obs_detalle_ingle : data.observaciones_obs_detalle_ingle,
-                    habitos_micionales : data.modal_agregar_tipo_habitos_micionales,
-                    obs_habitos_micionales : data.observaciones_obs_habitos_micionales,
-                    funcion_pene : data.modal_agregar_tipo_funcion_pene,
-                    obs_funcion_pene : data.observaciones_obs_funcion_pene,
-                    sintomas_funcionales : data.modal_agregar_tipo_sintomas_funcionales,
-                    obs_sintomas_funcionales : data.observaciones_obs_sintomas_funcionales,
-                    uretra_masc : data.modal_agregar_tipo_uretra_masc,
-                    obs_detalle_uretra_masc : data.observaciones_obs_detalle_uretra_masc,
-                    examen_pene : data.modal_agregar_tipo_examen_pene,
-                    obs_pene_anormal : data.observaciones_obs_pene_anormal,
-                    examen_test : data.modal_agregar_tipo_examen_test,
-                    obs_test_anormal : data.observaciones_obs_test_anormal,
-                    vulva : data.modal_agregar_tipo_vulva,
-                    obs_det_vulva : data.observaciones_obs_det_vulva,
-                    vagina : data.modal_agregar_tipo_vagina,
-                    obs_det_vagina : data.observaciones_obs_det_vagina,
-                    examen_horm : data.modal_agregar_tipo_examen_horm,
-                    obs_examen_horm : data.observaciones_obs_examen_horm,
-                    obs_ex_uro : data.observaciones_obs_ex_uro,
-
+                    ind_esp_cirugia : '',
+                    nombre : data.registro_f_t_oft_nombre,
+                    descripcion : data.registro_f_t_oft_descripcion,
+                    agudeza_visual_subj_od : data.modal_agregar_tipo_agudeza_visual_subj_od,
+                    obs_agudeza_visual_subj_od : data.observaciones_obs_agudeza_visual_subj_od,
+                    agudeza_visual_subj_oi : data.modal_agregar_tipo_agudeza_visual_subj_oi,
+                    obs_agudeza_visual_subj_oi : data.observaciones_obs_agudeza_visual_subj_oi,
+                    agudeza_visual_obj_od : data.modal_agregar_tipo_agudeza_visual_obj_od,
+                    obs_agudeza_visual_obj_od : data.observaciones_obs_agudeza_visual_obj_od,
+                    agudeza_visual_obj_oi : data.modal_agregar_tipo_agudeza_visual_obj_oi,
+                    obs_agudeza_visual_obj_oi : data.observaciones_obs_agudeza_visual_obj_oi,
+                    mov_oculares : data.modal_agregar_tipo_mov_oculares,
+                    obs_mov_oculares : data.observaciones_obs_mov_oculares,
+                    autorefracto_od : data.modal_agregar_tipo_autorefracto_od,
+                    obs_autorefracto_od : data.observaciones_obs_autorefracto_od,
+                    autorefracto_oi : data.modal_agregar_tipo_autorefracto_oi,
+                    obs_autorefracto_oi : data.observaciones_obs_autorefracto_oi,
+                    presion_ocular_od : data.modal_agregar_tipo_presion_ocular_od,
+                    obs_presion_ocular_od : data.observaciones_obs_presion_ocular_od,
+                    valor_presion_ocular_od : data.observaciones_valor_presion_ocular_od,
+                    presion_ocular_oi : data.modal_agregar_tipo_presion_ocular_oi,
+                    obs_presion_ocular_oi : data.observaciones_obs_presion_ocular_oi,
+                    valor_presion_ocular_oi : data.observaciones_valor_presion_ocular_od,
+                    campo_visual_od : data.modal_agregar_tipo_campo_visual_od,
+                    obs_campo_visual_od : data.observaciones_obs_campo_visual_od,
+                    campo_visual_oi : data.modal_agregar_tipo_campo_visual_oi,
+                    obs_campo_visual_oi : data.observaciones_obs_campo_visual_oi,
+                    campo_otros_ex_general : data.observaciones_campo_otros_ex_general
 
                 },
             })
@@ -1706,7 +1723,7 @@
                 {{--  console.log('-----------------------');  --}}
                 if(data.estado == 1)
                 {
-                    $('#modal_registrar_ficha_tipo_uro').modal('hide');
+                    $('#modal_registrar_ficha_tipo_oft').modal('hide');
                     swal({
                         title: "Tipo Ficha Registrado",
                         icon: "success",
@@ -1731,16 +1748,242 @@
 
         }
 
-        function cargar_info_ficha_tipo_uro(select, div_descripcion)
+        function guardar_tipo_ficha_bio()
+        {
+            var registro_f_t_oft_nombre = $('#registro_f_t_oft_nombre').val();
+            var registro_f_t_oft_descripcion = $('#registro_f_t_oft_descripcion').val();
+            var _token = CSRF_TOKEN;
+            if(registro_f_t_oft_nombre == ''){
+                swal({
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Nombre",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+            }
+            if(registro_f_t_oft_descripcion == ''){
+                swal({
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+            }
+
+
+            var data = [];
+            data.registro_f_t_oft_nombre = registro_f_t_oft_nombre;
+            data.registro_f_t_oft_descripcion = registro_f_t_oft_descripcion;
+
+            $('#registro_f_t_oft_detalle').find('input,textarea').each(function(key, elemento){
+                {{--  console.log($(elemento).attr('id'));  --}}
+                {{--  console.log($(elemento).val());  --}}
+                {{--  console.log($(elemento).prop('nodeName'));  --}}
+                {{--  console.log('*******');  --}}
+
+                data[$(elemento).attr('id')] = $(elemento).val();
+
+            });
+
+            {{--  console.log(data);  --}}
+            url = "{{ route('profesional.ficha_tipo_oft_bio') }}";
+            $.ajax({
+
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id_profesional : $('#id_profesional_fc').val(),
+                    ind_esp_cirugia : '',
+                    nombre : data.registro_f_t_oft_nombre,
+                    descripcion : data.registro_f_t_oft_descripcion,
+                    parpbiood : data.modal_agregar_tipo_parpbiood,
+                    obs_parpbiood : data.observaciones_obs_parpbiood,
+                    conjuntiva_bio_od : data.modal_agregar_tipo_conjuntiva_bio_od,
+                    obs_conjuntiva_bio_od : data.observaciones_obs_conjuntiva_bio_od,
+                    biocornea_od : data.modal_agregar_tipo_biocornea_od,
+                    obs_biocornea_od : data.observaciones_obs_biocornea_od,
+                    camara_ant_od : data.modal_agregar_tipo_camara_ant_od,
+                    obs_camara_ant_od : data.observaciones_obs_camara_ant_od,
+                    tyndall_od : data.modal_agregar_tipo_tyndall_od,
+                    obs_tyndall_od : data.observaciones_obs_tyndall_od,
+                    cristalino_bio_od : data.modal_agregar_tipo_cristalino_bio_od,
+                    obs_cristalino_bio_od : data.observaciones_obs_cristalino_bio_od,
+                    campo_otros_bio_od : data.observaciones_campo_otros_bio_od,
+                    parpbiooi : data.modal_agregar_tipo_parpbiooi,
+                    obs_parpbiooi : data.observaciones_obs_parpbiooi,
+                    conjuntiva_bio_oi : data.modal_agregar_tipo_conjuntiva_bio_oi,
+                    obs_conjuntiva_bio_oi : data.observaciones_obs_conjuntiva_bio_oi,
+                    biocornea_oi : data.modal_agregar_tipo_biocornea_oi,
+                    obs_biocornea_oi : data.observaciones_obs_biocornea_oi,
+                    camara_ant_oi : data.modal_agregar_tipo_camara_ant_oi,
+                    obs_camara_ant_oi : data.observaciones_obs_camara_ant_oi,
+                    tyndall_oi : data.modal_agregar_tipo_tyndall_oi,
+                    obs_tyndall_oi : data.observaciones_obs_tyndall_oi,
+                    cristalino_bio_oi : data.modal_agregar_tipo_cristalino_bio_oi,
+                    obs_cristalino_bio_oi : data.observaciones_obs_cristalino_bio_oi,
+                    campo_otros_bio_oi : data.observaciones_campo_otros_bio_oi
+                },
+            })
+            .done(function(data)
+            {
+                {{--  console.log('-----------------------');  --}}
+                {{--  console.log(data);  --}}
+                {{--  console.log('-----------------------');  --}}
+                if(data.estado == 1)
+                {
+                    $('#modal_registrar_ficha_tipo_oft').modal('hide');
+                    swal({
+                        title: "Tipo Ficha Registrado",
+                        icon: "success",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Registrar Tipo Ficha.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+        function guardar_tipo_ficha_fo()
+        {
+            var registro_f_t_oft_nombre = $('#registro_f_t_oft_nombre').val();
+            var registro_f_t_oft_descripcion = $('#registro_f_t_oft_descripcion').val();
+            var _token = CSRF_TOKEN;
+            if(registro_f_t_oft_nombre == ''){
+                swal({
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Nombre",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+            }
+            if(registro_f_t_oft_descripcion == ''){
+                swal({
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+            }
+
+
+            var data = [];
+            data.registro_f_t_oft_nombre = registro_f_t_oft_nombre;
+            data.registro_f_t_oft_descripcion = registro_f_t_oft_descripcion;
+
+            $('#registro_f_t_oft_detalle').find('input,textarea').each(function(key, elemento){
+                {{--  console.log($(elemento).attr('id'));  --}}
+                {{--  console.log($(elemento).val());  --}}
+                {{--  console.log($(elemento).prop('nodeName'));  --}}
+                {{--  console.log('*******');  --}}
+
+                data[$(elemento).attr('id')] = $(elemento).val();
+
+            });
+
+            {{--  console.log(data);  --}}
+            url = "{{ route('profesional.ficha_tipo_oft_fondo_ojo') }}";
+            $.ajax({
+
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id_profesional : $('#id_profesional_fc').val(),
+                    ind_esp_cirugia : '',
+                    nombre : data.registro_f_t_oft_nombre,
+                    descripcion : data.registro_f_t_oft_descripcion,
+                    papilas_fo_od : data.modal_agregar_tipo_papilas_fo_od,
+                    obs_papilas_fo_od : data.observaciones_obs_papilas_fo_od,
+                    excavacion_fo_od : data.modal_agregar_tipo_excavacion_fo_od,
+                    obs_excavacion_fo_od : data.observaciones_obs_excavacion_fo_od,
+                    bordes_od : data.modal_agregar_tipo_bordes_od,
+                    obs_bordes_od : data.observaciones_obs_bordes_od,
+                    maculas_fo_od : data.modal_agregar_tipo_maculas_fo_od,
+                    obs_maculas_fo_od : data.observaciones_obs_maculas_fo_od,
+                    vasos_fo_od : data.modal_agregar_tipo_vasos_fo_od,
+                    obs_vasos_fo_od : data.observaciones_obs_vasos_fo_od,
+                    periferia_fo_od : data.modal_agregar_tipo_periferia_fo_od,
+                    obs_periferia_fo_od : data.observaciones_obs_periferia_fo_od,
+                    campo_fo_otros_od : data.observaciones_campo_fo_otros_od,
+                    papilas_fo_oi : data.modal_agregar_tipo_papilas_fo_oi,
+                    obs_papilas_fo_oi : data.observaciones_obs_papilas_fo_oi,
+                    excavacion_fo_oi : data.modal_agregar_tipo_excavacion_fo_oi,
+                    obs_excavacion_fo_oi : data.observaciones_obs_excavacion_fo_oi,
+                    bordes_oi : data.modal_agregar_tipo_bordes_oi,
+                    obs_bordes_oi : data.observaciones_obs_bordes_oi,
+                    maculas_fo_oi : data.modal_agregar_tipo_maculas_fo_oi,
+                    obs_maculas_fo_oi : data.observaciones_obs_maculas_fo_oi,
+                    vasos_fo_oi : data.modal_agregar_tipo_vasos_fo_oi,
+                    obs_vasos_fo_oi : data.observaciones_obs_vasos_fo_oi,
+                    periferia_fo_oi : data.modal_agregar_tipo_periferia_fo_oi,
+                    obs_periferia_fo_oi : data.observaciones_obs_periferia_fo_oi,
+                    campo_fo_otros_oi : data.observaciones_campo_fo_otros_oi,
+                },
+            })
+            .done(function(data)
+            {
+                {{--  console.log('-----------------------');  --}}
+                {{--  console.log(data);  --}}
+                {{--  console.log('-----------------------');  --}}
+                if(data.estado == 1)
+                {
+                    $('#modal_registrar_ficha_tipo_oft').modal('hide');
+                    swal({
+                        title: "Tipo Ficha Registrado",
+                        icon: "success",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Registrar Tipo Ficha.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+        function cargar_info_ficha_tipo_oft(select, div_descripcion)
         {
             let id_ft = $('#'+select).val();
             if(id_ft == '')
             {
                 $('#'+div_descripcion).html('');
-                $('#form-uro').find('select,textarea').each(function(key, elemento){
+                $('#form-cdg').find('select,textarea').each(function(key, elemento){
                     if($(elemento).prop('nodeName') == 'SELECT')
                     {
                         $(elemento).val(0);
+                    }
+                    else if($(elemento).prop('nodeName') == 'INPUT')
+                    {
+                        $(elemento).val('');
                     }
                     else
                     {
@@ -1748,97 +1991,233 @@
                     }
                 });
 
-
-                if($('#biopsia_uro').val() == 0)
-                {
-                    // Uncheck
-                    $("#biopsia_check_").prop("checked", false);
-                    $('#biopsia_uro').attr('disabled','disabled').val(0);
-                }
-                else
-                {
-                    // Check
-                    $("#biopsia_check_").prop("checked", true);
-                    $('#biopsia_uro').attr('disabled',false).val(1);
-                }
-
-
-                evaluar_para_carga_detalle('costo_vert_ld','div_detalle_costo_vert_ld','obs_costo_vert_ld',2);
-                evaluar_para_carga_detalle('costo_vert_li','div_costo_vert_li','obs_costo_vert_li',2);
-                evaluar_para_carga_detalle('examen_abd','div_obs_examen_abd','obs_examen_abd',2);
-                evaluar_para_carga_detalle('tacto_rec','div_detalle_tacto_rec','obs_tacto_rec',2);
-                evaluar_para_carga_detalle('antigeno_prost','div_antigeno_prost','obs_antigeno_prost',2);
-                evaluar_para_carga_detalle('biopsia_uro','div_biopsia_uro','obs_biopsia_uro',2);
-                evaluar_para_carga_detalle('ingle','div_detalle_ingle','obs_detalle_ingle',2);
-                evaluar_para_carga_detalle('habitos_micionales','div_detalle_habitos_micionales','obs_habitos_micionales',2);
-                evaluar_para_carga_detalle('funcion_pene','div_detalle_funcion_pene','obs_funcion_pene',2);
-                evaluar_para_carga_detalle('sintomas_funcionales','div_detalle_sintomas_funcionales','obs_sintomas_funcionales',2);
-                evaluar_para_carga_detalle('uretra_masc','div_detalle_uretra_masc','obs_detalle_uretra_masc',2);
-                evaluar_para_carga_detalle('examen_pene','div_detalle_examen_pene','obs_pene_anormal',2);
-                evaluar_para_carga_detalle('examen_test','div_detalle_examen_test','obs_test_anormal',2);
-                evaluar_para_carga_detalle('vulva','div_vulva','det_vulva',2);
-                evaluar_para_carga_detalle('vagina','div_vagina','det_vagina',2);
-                evaluar_para_carga_detalle('uretra_fem','div_detalle_uretra_fem','obs_det_vagina',2);
-                evaluar_para_carga_detalle('examen_horm','div_examen_horm','obs_examen_horm',2);
+                evaluar_para_carga_detalle('agudeza_visual_subj_od','div_agudeza_visual_subj_od','obs_agudeza_visual_subj_od',2);
+                evaluar_para_carga_detalle('agudeza_visual_subj_oi','div_agudeza_visual_subj_oi','obs_agudeza_visual_subj_oi',2);
+                evaluar_para_carga_detalle('agudeza_visual_obj_od','div_agudeza_visual_obj_od','obs_agudeza_visual_obj_od',2);
+                evaluar_para_carga_detalle('agudeza_visual_obj_oi','div_agudeza_visual_obj_oi','obs_agudeza_visual_obj_oi',2);
+                evaluar_para_carga_detalle('mov_oculares','div_mov_oculares','obs_mov_oculares',2);
+                evaluar_para_carga_detalle('autorefracto_od','div_autorefracto_od','obs_autorefracto_od',2);
+                evaluar_para_carga_detalle('autorefracto_oi','div_autorefracto_oi','obs_autorefracto_oi',2);
+                evaluar_para_carga_detalle('presion_ocular_od','div_presion_ocular_od','obs_presion_ocular_od',2);
+                evaluar_para_carga_detalle('presion_ocular_oi','div_presion_ocular_oi','obs_presion_ocular_oi',2);
+                evaluar_para_carga_detalle('campo_visual_od','div_campo_visual_od','obs_campo_visual_od',2);
+                evaluar_para_carga_detalle('campo_visual_oi','div_campo_visual_oi','obs_campo_visual_oi',2);
 
                 return false;
             }
             $('#'+div_descripcion).html($('#'+select+' option:selected').attr('data-descripcion'));
 
-            url = "{{ route('profesional.buscar_ficha_tipo_uro') }}";
+            url = "{{ route('profesional.buscar_ficha_tipo_oft') }}";
             $.ajax({
 
                 url: url,
                 type: "GET",
                 data: {
-                    id_profesional : $('#id_profesional').val(),
+                    id_profesional : $('#id_profesional_fc').val(),
                     id_ficha_tipo :  id_ft,
                 },
             })
             .done(function(data)
             {
-                // console.log('-----------------------');
-                // console.log(data);
-                // console.log('-----------------------');
+                {{--  console.log('-----------------------');  --}}
+                {{--  console.log(data);  --}}
+                {{--  console.log('-----------------------');  --}}
                 if(data.estado == 1)
                 {
                     $.each(data.registros, function(index, value)
                     {
+                        {{--  console.log(index);  --}}
+                        {{--  console.log(value);  --}}
+                        {{--  console.log($('#'+index));  --}}
+
                         $('#'+index).val(value);
-                        if(index == 'biopsia_uro')
-                        {
-                            if($('#biopsia_uro').val() == 0)
-                            {
-                                // Uncheck
-                                $("#biopsia_check_").prop("checked", false);
-                                $('#biopsia_uro').attr('disabled','disabled').val(0);
-                            }
-                            else
-                            {
-                                // Check
-                                $("#biopsia_check_").prop("checked", true);
-                                $('#biopsia_uro').attr('disabled',false).val(1);
-                            }
-                        }
+                    });
+                    evaluar_para_carga_detalle('agudeza_visual_subj_od','div_agudeza_visual_subj_od','obs_agudeza_visual_subj_od',2);
+                    evaluar_para_carga_detalle('agudeza_visual_subj_oi','div_agudeza_visual_subj_oi','obs_agudeza_visual_subj_oi',2);
+                    evaluar_para_carga_detalle('agudeza_visual_obj_od','div_agudeza_visual_obj_od','obs_agudeza_visual_obj_od',2);
+                    evaluar_para_carga_detalle('agudeza_visual_obj_oi','div_agudeza_visual_obj_oi','obs_agudeza_visual_obj_oi',2);
+                    evaluar_para_carga_detalle('mov_oculares','div_mov_oculares','obs_mov_oculares',2);
+                    evaluar_para_carga_detalle('autorefracto_od','div_autorefracto_od','obs_autorefracto_od',2);
+                    evaluar_para_carga_detalle('autorefracto_oi','div_autorefracto_oi','obs_autorefracto_oi',2);
+                    evaluar_para_carga_detalle('presion_ocular_od','div_presion_ocular_od','obs_presion_ocular_od',2);
+                    evaluar_para_carga_detalle('presion_ocular_oi','div_presion_ocular_oi','obs_presion_ocular_oi',2);
+                    evaluar_para_carga_detalle('campo_visual_od','div_campo_visual_od','obs_campo_visual_od',2);
+                    evaluar_para_carga_detalle('campo_visual_oi','div_campo_visual_oi','obs_campo_visual_oi',2);
+
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Cargar Tipo Ficha.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        function cargar_info_ficha_tipo_oft_bio(select, div_descripcion)
+        {
+            let id_ft = $('#'+select).val();
+            if(id_ft == '')
+            {
+                $('#'+div_descripcion).html('');
+                $('#form-bio').find('select,textarea').each(function(key, elemento){
+                    if($(elemento).prop('nodeName') == 'SELECT')
+                    {
+                        $(elemento).val(0);
+                    }
+                    else if($(elemento).prop('nodeName') == 'INPUT')
+                    {
+                        $(elemento).val('');
+                    }
+                    else
+                    {
+                        $(elemento).val('');
+                    }
+                });
+
+                evaluar_para_carga_detalle('parpbiood','div_parpbiood','obs_parpbiood',2);
+                evaluar_para_carga_detalle('conjuntiva_bio_od','div_conjuntiva_bio_od','obs_conjuntiva_bio_od',2);
+                evaluar_para_carga_detalle('biocornea_od','div_biocornea_od','obs_biocornea_od',3);
+                evaluar_para_carga_detalle('camara_ant_od','div_camara_ant_od','obs_camara_ant_od',2);
+                evaluar_para_carga_detalle('tyndall_od','div_tyndall_od','obs_tyndall_od',2);
+                evaluar_para_carga_detalle('cristalino_bio_od','div_cristalino_bio_od','obs_cristalino_bio_od',2);
+                evaluar_para_carga_detalle('parpbiooi','div_parpbiooi','obs_parpbiooi',2);
+                evaluar_para_carga_detalle('conjuntiva_bio_oi','div_conjuntiva_bio_oi','obs_conjuntiva_bio_oi',2);
+                evaluar_para_carga_detalle('biocornea_oi','div_biocornea_oi','obs_biocornea_oi',3);
+                evaluar_para_carga_detalle('camara_ant_oi','div_camara_ant_oi','obs_camara_ant_oi',2);
+                evaluar_para_carga_detalle('tyndall_oi','div_tyndall_oi','obs_tyndall_oi',2);
+                evaluar_para_carga_detalle('cristalino_bio_oi','div_cristalino_bio_oi','obs_cristalino_bio_oi',2);
+
+                return false;
+            }
+            $('#'+div_descripcion).html($('#'+select+' option:selected').attr('data-descripcion'));
+
+            url = "{{ route('profesional.buscar_ficha_tipo_oft_bio') }}";
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {
+                    id_profesional : $('#id_profesional_fc').val(),
+                    id_ficha_tipo :  id_ft,
+                },
+            })
+            .done(function(data)
+            {
+                {{--  console.log('-----------------------');  --}}
+                {{--  console.log(data);  --}}
+                {{--  console.log('-----------------------');  --}}
+                if(data.estado == 1)
+                {
+                    $.each(data.registros, function(index, value)
+                    {
+                        {{--  console.log(index);  --}}
+                        {{--  console.log(value);  --}}
+                        {{--  console.log($('#'+index));  --}}
+
+                        $('#'+index).val(value);
+                    });
+                    evaluar_para_carga_detalle('parpbiood','div_parpbiood','obs_parpbiood',2);
+                    evaluar_para_carga_detalle('conjuntiva_bio_od','div_conjuntiva_bio_od','obs_conjuntiva_bio_od',2);
+                    evaluar_para_carga_detalle('biocornea_od','div_biocornea_od','obs_biocornea_od',3);
+                    evaluar_para_carga_detalle('camara_ant_od','div_camara_ant_od','obs_camara_ant_od',2);
+                    evaluar_para_carga_detalle('tyndall_od','div_tyndall_od','obs_tyndall_od',2);
+                    evaluar_para_carga_detalle('cristalino_bio_od','div_cristalino_bio_od','obs_cristalino_bio_od',2);
+                    evaluar_para_carga_detalle('parpbiooi','div_parpbiooi','obs_parpbiooi',2);
+                    evaluar_para_carga_detalle('conjuntiva_bio_oi','div_conjuntiva_bio_oi','obs_conjuntiva_bio_oi',2);
+                    evaluar_para_carga_detalle('biocornea_oi','div_biocornea_oi','obs_biocornea_oi',3);
+                    evaluar_para_carga_detalle('camara_ant_oi','div_camara_ant_oi','obs_camara_ant_oi',2);
+                    evaluar_para_carga_detalle('tyndall_oi','div_tyndall_oi','obs_tyndall_oi',2);
+                    evaluar_para_carga_detalle('cristalino_bio_oi','div_cristalino_bio_oi','obs_cristalino_bio_oi',2);
+
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Cargar Tipo Ficha.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        function cargar_info_ficha_tipo_oft_fo(select, div_descripcion)
+        {
+            let id_ft = $('#'+select).val();
+            if(id_ft == '')
+            {
+                $('#'+div_descripcion).html('');
+                $('#form-fo').find('select,textarea').each(function(key, elemento){
+                    if($(elemento).prop('nodeName') == 'SELECT')
+                    {
+                        $(elemento).val(0);
+                    }
+                    else if($(elemento).prop('nodeName') == 'INPUT')
+                    {
+                        $(elemento).val('');
+                    }
+                    else
+                    {
+                        $(elemento).val('');
+                    }
+                });
+
+                evaluar_para_carga_detalle('papilas_fo_oi','div_papilas_fo_oi','obs_papilas_fo_oi',2);
+                evaluar_para_carga_detalle('excavacion_fo_oi','div_excavacion_fo_oi','obs_excavacion_fo_oi',12);
+                evaluar_para_carga_detalle('bordes_oi','div_bordes_oi','obs_bordes_oi',2);
+                evaluar_para_carga_detalle('maculas_fo_oi','div_maculas_fo_oi','obs_maculas_fo_oi',2);
+                evaluar_para_carga_detalle('vasos_fo_oi','div_vasos_fo_oi','obs_vasos_fo_oi',2);
+                evaluar_para_carga_detalle('periferia_fo_oi','div_periferia_fo_oi','obs_periferia_fo_oi',2);
+
+                return false;
+            }
+            $('#'+div_descripcion).html($('#'+select+' option:selected').attr('data-descripcion'));
+
+            url = "{{ route('profesional.buscar_ficha_tipo_oft_fondo_ojo') }}";
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {
+                    id_profesional : $('#id_profesional_fc').val(),
+                    id_ficha_tipo :  id_ft,
+                },
+            })
+            .done(function(data)
+            {
+                {{--  console.log('-----------------------');  --}}
+                {{--  console.log(data);  --}}
+                {{--  console.log('-----------------------');  --}}
+                if(data.estado == 1)
+                {
+                    $.each(data.registros, function(index, value)
+                    {
+                        {{--  console.log(index);  --}}
+                        {{--  console.log(value);  --}}
+                        {{--  console.log($('#'+index));  --}}
+
+                        $('#'+index).val(value);
                     });
 
-                    evaluar_para_carga_detalle('costo_vert_ld','div_detalle_costo_vert_ld','obs_costo_vert_ld',2);
-                    evaluar_para_carga_detalle('costo_vert_li','div_costo_vert_li','obs_costo_vert_li',2);
-                    evaluar_para_carga_detalle('examen_abd','div_obs_examen_abd','obs_examen_abd',2);
-                    evaluar_para_carga_detalle('tacto_rec','div_detalle_tacto_rec','obs_tacto_rec',2);
-                    evaluar_para_carga_detalle('antigeno_prost','div_antigeno_prost','obs_antigeno_prost',2);
-                    evaluar_para_carga_detalle('biopsia_uro','div_biopsia_uro','obs_biopsia_uro',2);
-                    evaluar_para_carga_detalle('ingle','div_detalle_ingle','obs_detalle_ingle',2);
-                    evaluar_para_carga_detalle('habitos_micionales','div_detalle_habitos_micionales','obs_habitos_micionales',2);
-                    evaluar_para_carga_detalle('funcion_pene','div_detalle_funcion_pene','obs_funcion_pene',2);
-                    evaluar_para_carga_detalle('sintomas_funcionales','div_detalle_sintomas_funcionales','obs_sintomas_funcionales',2);
-                    evaluar_para_carga_detalle('uretra_masc','div_detalle_uretra_masc','obs_detalle_uretra_masc',2);
-                    evaluar_para_carga_detalle('examen_pene','div_detalle_examen_pene','obs_pene_anormal',2);
-                    evaluar_para_carga_detalle('examen_test','div_detalle_examen_test','obs_test_anormal',2);
-                    evaluar_para_carga_detalle('vulva','div_vulva','det_vulva',2);
-                    evaluar_para_carga_detalle('vagina','div_vagina','det_vagina',2);
-                    evaluar_para_carga_detalle('uretra_fem','div_detalle_uretra_fem','obs_det_vagina',2);
-                    evaluar_para_carga_detalle('examen_horm','div_examen_horm','obs_examen_horm',2);
+                    evaluar_para_carga_detalle('papilas_fo_oi','div_papilas_fo_oi','obs_papilas_fo_oi',2);
+                    evaluar_para_carga_detalle('excavacion_fo_oi','div_excavacion_fo_oi','obs_excavacion_fo_oi',12);
+                    evaluar_para_carga_detalle('bordes_oi','div_bordes_oi','obs_bordes_oi',2);
+                    evaluar_para_carga_detalle('maculas_fo_oi','div_maculas_fo_oi','obs_maculas_fo_oi',2);
+                    evaluar_para_carga_detalle('vasos_fo_oi','div_vasos_fo_oi','obs_vasos_fo_oi',2);
+                    evaluar_para_carga_detalle('periferia_fo_oi','div_periferia_fo_oi','obs_periferia_fo_oi',2);
 
                 }
                 else{
@@ -1982,7 +2361,21 @@
             }
         }
 
-
+        function actualizar_solicitado_por(input_solitado_por, input_nombre, input_apellido)
+        {
+            var nombre = $('#'+input_nombre).val();
+            var apellido = $('#'+input_apellido).val();
+            if(nombre != '' || apellido != '')
+            {
+                // $('#'+input_solitado_por).attr('readonly', true);
+                $('#'+input_solitado_por).val($('#'+input_nombre).val()+' '+$('#'+input_apellido).val());
+            }
+            else
+            {
+                // $('#'+input_solitado_por).attr('readonly', false);
+                $('#'+input_solitado_por).val();
+            }
+        }
 
         /** CRONICO */
         function getDosis_cronico(id_medicamento, div_dosis) {
@@ -2981,85 +3374,8 @@
         }
         /** FIN CRONICO */
 
-        function biopsia(alias_examen)
-        {
-            if($('#biopsia_check_'+alias_examen).prop('checked'))
-			{
-				$('#m_biopsia_cir').modal('show');
-                $('#biopsia_'+alias_examen).val(1);
-			}
-            else
-            {
-                $('#biopsia_'+alias_examen).val(0);
-                $('#m_biopsia_cir').modal('hide');
-            }
-        }
-
-        function cambio_select_biopsia(alias_examen, select, div, input, valor)
-        {
-            if($('#biopsia_check_'+alias_examen).prop('checked'))
-			{
-				$('#'+select).attr('disabled',false).val(1);
-			}
-            else
-            {
-                $('#'+select).attr('disabled','disabled').val(0);
-            }
-            // evaluar_para_carga_detalle(select,div,input,valor);
-            evaluar_para_carga_detalle('biopsia_uro','div_biopsia_uro','obs_biopsia_uro',2);
-        }
-
-        /** PERVISUALIZACION DE EXAMEN */
-        function visualizar_pdf_examen(tipo_examen)
-        {
-            if(tipo_examen!='')
-            {
-                var array_datos = {};
-                $('.div_form_examen_'+tipo_examen).find('input,textarea,select').each(function (key, element){
-                    var key_temp = element.id.replace('_'+tipo_examen,'');
-
-                    if(key_temp == 'biopsia')
-                    {
-                        if(element.value == 1)
-                        {
-                            array_datos[key_temp] = 'SI';
-                        }
-                        else
-                        {
-                            array_datos[key_temp] = 'NO';
-                        }
-                    }
-                    else
-                    {
-                        array_datos[key_temp] = element.value;
-                    }
-                });
-
-                var imagenes = $('#input_lista_imagenes').val();
-                if(imagenes != '')
-                {
-                    imagenes = JSON.parse(imagenes);
-                    imagenes = JSON.stringify(JSON.stringify(imagenes[tipo_examen]));
-                    console.log(imagenes );
-                }
-
-                var data ='id_ficha='+$('#id_fc').val()+'&contenido='+JSON.stringify(array_datos)+'&imagenes='+imagenes;
-                Fancybox.show(
-                    [
-                        {
-                        src: '{{ route("pdf.visualizar.examen") }}?'+data,
-                        type: "iframe",
-                        preload: false,
-                        },
-                    ]
-                );
-            }
-            else
-            {
-                console.log('tipo examen no especificado');
-            }
-        }
     </script>
 @endsection
+
 
 

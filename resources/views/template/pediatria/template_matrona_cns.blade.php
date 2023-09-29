@@ -22,7 +22,6 @@
 
         <!-- fileupload-custom css -->
         <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
-        <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
 
         <!--Accordion-->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
@@ -127,7 +126,6 @@
 
         <!-- file-upload Js -->
         <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
-        <!-- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script> -->
 
         <!-- mensajes -->
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
@@ -161,6 +159,7 @@
 
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
         </script>
 
         @yield('js_inferior')

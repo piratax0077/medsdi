@@ -507,6 +507,8 @@
                                                         // $('#confirmar_anulacion_hora').hide();
                                                         // $('#confirmacion_hora').hide();
                                                         $('#modal_recepcion_bonos_api').modal('show');
+
+                                                        /** PESTAÑA DE RECIBIR PAGO */
                                                         $('#bono_paciente_rut').val(data.paciente.rut);
                                                         $('#bono_paciente_nombre').val(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
                                                         $('#bono_profesional_nombre').val(data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos);
@@ -514,6 +516,25 @@
                                                         $('#bono_hora_medica').val(info.event.id);
                                                         $('#bono_id_profesional').val(data.profesional.id);
                                                         $('#bono_id_paciente').val(data.paciente.id);
+
+                                                        /** PESTAÑA DE VENTA DE BONO */
+                                                        $('#venta_rut').val(data.paciente.rut);
+                                                        $('#venta_serie').val('');
+                                                        $('#venta_nombre').val(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
+                                                        $('#venta_paciente_nombre').val(data.paciente.nombres);
+                                                        $('#venta_paciente_apellido_uno').val(data.paciente.apellido_uno);
+                                                        $('#venta_paciente_apellido_dos').val(data.paciente.apellido_dos);
+                                                        $('#venta_paciente_email').val(data.paciente.email);
+                                                        $('#venta_previsioon').val('0');
+                                                        $('#venta_folio').val('');
+                                                        $('#venta_valor_consulta').val('');
+                                                        $('#venta_valor_pagar').val('');
+                                                        $('#venta_valor_seguro').val('');
+                                                        $('#venta_valor_copago').val('');
+
+                                                        $('.venta_autorizada').hide();
+
+                                                        $('#div_btn_pedir_autorizacion').show();
 
                                                     }
                                                     //rojo

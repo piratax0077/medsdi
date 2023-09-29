@@ -11,12 +11,8 @@
                             <h5 class="m-b-10 font-weight-bold">Mis Exámenes</h5>
                         </div>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.home') }}"
-                                    data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i
-                                        class="feather icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta') }}"
-                                    data-toggle="tooltip" data-placement="top"
-                                    title="Volver a inicio de receta online">Receta Online</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta') }}" data-toggle="tooltip" data-placement="top" title="Volver a inicio de receta online">Receta Online</a></li>
                             <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta.examen') }}">Mis Exámenes</a></li>
                         </ul>
                     </div>
@@ -25,141 +21,104 @@
         </div>
         <!--Cierre: Header-->
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-header">
                         <div class="row">
                             <div class="col-md-12">
-                                <h4 class="text-c-blue f-20 d-inline ml-4">Mis Exámenes</h4>
-                                <!--<button type="button" class="btn btn-success btn-sm d-inline float-right mr-4"
-                                    data-toggle="modal" data-target="#agregar_examen_profesional_ro">
-                                    <i class="feather icon-plus"></i> Agregar examen
-                                </button>-->
+                                <h4 class="text-c-blue f-20 d-inline ml-4">Mis exámenes</h4>
                             </div>
                         </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-6 col-md-12">
-                                <table id="tabla_examenes_paciente_ro"
-                                    class="display table table-striped table-hover dt-responsive nowrap table-sm"
-                                    style="width:100%">
-                                    <thead>
+                    </div>
+                    <div class="card-body">
+                        <table id="tabla_examenes_paciente_ro" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Nº de Orden</th>
+                                    <th>Profesional</th>
+                                    <th>Tipo de Examen</th>
+                                    <th>Nombre del examen</th>
+                                    <th>Comentarios</th>
+                                    <th>Estado</th>
+                                    <th>Examen</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if ($examenes_especialidad_realizados)
+                                    @foreach ($examenes_especialidad_realizados as $exam)
+                                        @if ($exam->HoraMedica->id_estado == 6)
+                                            <tr>
+                                                <td>{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
+                                                <td>{{ $exam->id }}</td>
+                                                <td>{{ $exam->profesional->nombre.' '.$exam->profesional->apellido_uno.' '.$exam->profesional->apellido_dos }}</td>
+                                                <td>{{ $exam->nombre }}</td>
+                                                <td>
+                                                    @if ($exam->SubTipoEspecialidad)
+                                                        {{ $exam->SubTipoEspecialidad->nombre }}
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
+                                                <td>-</td>
+                                                <td>
+                                                    @if ($exam->revisado == 1)
+                                                        Revisado
+                                                    @else
+                                                        No revisado
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad('{{ $exam->id }}',1);"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                @endif
+
+                                {{-- RESULTADODE DE EXAMENES LABORATORIO --}}
+                                @if ($resultado_examen)
+                                    @foreach ( $resultado_examen as $result_ex)
                                         <tr>
-                                            <th class="text-center align-middle">Fecha</th>
-                                            <th class="text-center align-middle">Nº de Orden</th>
-                                            <th class="text-center align-middle">Profesional</th>
-                                            <th class="text-center align-middle">Nombre del examen</th>
-                                            <th class="text-center align-middle">Comentarios</th>
-                                            <th class="text-center align-middle">Estado</th>
-                                            <th class="text-center align-middle">Examen</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Pendiente
-                                        <tr>
-                                            <td class="text-wrap text-center align-middle">11/09/2020</td>
-                                            <td class="text-wrap text-center align-middle">12344434</td>
-                                            <td class="align-middle text-center">
-                                                <strong>Jaime Kriman Astorga</strong><br>
-                                                Otorrinolaringólogo</td>
-                                            <td class="align-middle text-center">Hemograma Completo</td>
-                                            <td class="align-middle text-center">Comentarios
-                                            <td class="align-middle text-center">Enviado</td>
-                                            <td class="text-center align-middle">
-                                                <button type="button" class="btn btn-secondary btn-sm"
-                                                    data-toggle="modal" data-target="#m_cons_ex"><i
-                                                        class="feather icon-file-plus"></i> Ver Examen</button>
+                                            <td>{{ date('d-m-Y',strtotime($result_ex->fecha_registro)) }}</td>
+                                            <td>{{ $result_ex->id }}</td>
+                                            <td>LABORATORIO</td>
+                                            <td>
+                                                @if ($result_ex->obj_tipo_examen)
+                                                    {{ $result_ex->obj_tipo_examen->nombre_examen }}
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td>-</td>
+                                            <td>{{ $result_ex->observacion }}</td>
+                                            <td>
+                                                @if ($result_ex->revisado == 1)
+                                                    Revisado
+                                                @else
+                                                    No revisado
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($result_ex->ResultadoExamenArchivo->count()>0)
+                                                    <button type="button" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',1);"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                @else
+                                                    <button type="button" disabled="disabled" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                @endif
                                             </td>
                                         </tr>
-                                        -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <!--Cierre: Container Completo-->
-<!-- Modal examen profesional-->
-<div id="agregar_examen_profesional_ro" class="modal fade" tabindex="-1" role="dialog"
-    aria-labelledby="agregar_receta_profesional_ro" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center">Agregar examen</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-                <form id="recetas_profesional">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <h6 class="text-c-blue ml-2 mb-3">Ingrese los datos del examen</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label class="floating-label">Rut</label>
-                                <input type="person" class="form-control" name="rut_paciente" id="rut_paciente">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label class="floating-label">Nombres</label>
-                                <input type="text" class="form-control" name="nombres_paciente" id="nombres_paciente">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label class="floating-label">Apellidos</label>
-                                <input type="text" class="form-control" name="apellidos_paciente"
-                                    id="apellidos_paciente">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label class="floating-label">Nombre del Examen</label>
-                                <select id="nombre_examen" name="nombre_examen" class="form-control">
-                                    <option selected value="0">Seleccione una opción </option>
-                                    <option>..</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label class="floating-label-activo">Fecha</label>
-                                <input type="date" class="form-control" name="fecha_paciente" id="fecha_paciente">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <h6 class="ml-2 mt-2">Adjuntar examen</h6>
-                                <input type="file" class="aform-control-file pb-3" id="adjuntar_examen_receta_online">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label class="floating-label">Comentarios</label>
-                                <textarea class="form-control" rows="1" name="comentarios_examen"
-                                    id="comentarios_examen"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info">Guardar Cambios</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 @endsection
 @section('page-script')
@@ -169,5 +128,89 @@
             responsive: true,
         });
     });
+
+    {{-- ABRIR ARCHIVOS --}}
+    function verExamenEspecialidad(id_examen, cambio_estado)
+    {
+        if(id_examen != '')
+        {
+            var data ='id_examen_especialidad='+id_examen+'';
+            Fancybox.show(
+                [{
+                    src: '{{ route("pdf.examen_especialidad") }}?'+data,
+                    type: "iframe",
+                    preload: false,
+                }]
+            );
+        }
+        else
+        {
+            swal({
+                title: "Ver Examen Especialidad",
+                text:"No Se encuentra examen",
+                icon: "error"
+            });
+        }
+    }
+
+    function verResultadoExamen(id_examen, cambio_estado)
+    {
+        if(id_examen != '')
+        {
+            let url = "{{ route('resultado.examen.lab.archivo.ver') }}";
+            var archivos = [];
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {
+                    id : id_examen
+                },
+            })
+            .done(function(data) {
+
+                console.log(data);
+                if (data.estado == 1)
+                {
+                    $.each(data.registros, function (key, value)
+                    {
+                        var temp_type = 'image';
+                        console.log(value.url.indexOf('.pdf'));
+                        if(value.url.indexOf('.pdf') != -1)
+                        {
+                            temp_type = 'iframe';
+                        }
+                        else
+                        {
+                            temp_type = 'image';
+                        }
+                        archivos.push({
+                            src: value.url,
+                            type: temp_type,
+                            preload: false,
+                        });
+                    });
+
+                    if(archivos.length > 0)
+                        Fancybox.show(archivos);
+                }
+                else
+                {
+                    console.log('examen no revisado');
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+        else
+        {
+            swal({
+                title: "Ver Resultado de Examen Laboratorio",
+                text:"No Se encuentra resultado de examen Laboratorio",
+                icon: "error"
+            });
+        }
+    }
 </script>
 @endsection

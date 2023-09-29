@@ -29,7 +29,7 @@
 
                 <!-- SECCION CONSENTIMIENTOS -->
                 @include('general.sidebar.seccion_consentimientos')
-                
+
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_utilidades">
                         <h2 class="mb-0">
@@ -41,13 +41,31 @@
                     <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_side_bar">
                     <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ufonasa()";>+ Buscador código FONASA</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ucalcimc()";>+ Calculadora de IMC</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="imc()";>+ Calculadora de IMC</button>
                         </div>
                     </div>
-                    @include("atencion_medica.sidebars.modals_generales.m_ucodigofonasa")
-                    @include("atencion_medica.sidebars.modals_generales.m_uimc")
+                    @include("general.modal.m_ucodigofonasa")
+                    @include("general.modal.m_uimc")
                 </div>
-
+                <div class="card-sidebar">
+                    <div class="card-header-sidebar" id="heading_hosp">
+                        <h2 class="mb-0">
+                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_hosp" aria-expanded="false" aria-controls="collapse_hosp"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                        FORMULARIOS DE HOSPITALIZACIÓN
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapse_hosp" class="collapse" aria-labelledby="headinghospm" data-parent="#accordion_side_bar">
+                        <div class="card-body-sidebar">
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="sol_pabellon()";>+ Solicitud Pabellón</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingresohosp()";>+ Hospitalización </button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="r_ingreso()";>+ Requisitos de ingreso</button>
+                        </div>
+                    </div>
+                    @include("general.hospitalizacion.modals.in_solic_pabellon")
+                    @include("general.hospitalizacion.modals.ingreso_hosp")
+                    @include("general.modal.m_req_ingreso")
+                </div>
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_recom">
                         <h2 class="mb-0">
@@ -60,16 +78,8 @@
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cuid_piel()";>+ Indicaciones Cuidados de la piel</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="tipos() ";>+ Tipos de la piel</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingreso()";>+ Orden de Hospitalización</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="r_ingreso()";>+ Requisitos de ingreso</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="icirugia()";>+ Indicaciones post cirugía Urológica</button>
                         </div>
                     </div>
-                    @include("atencion_medica.sidebars.modals_generales.ingreso")
-                    @include("atencion_medica.sidebars.modals_generales.m_cuidados_cirugia")
-                    @include("atencion_medica.sidebars.modals_generales.m_req_ingreso")
-
-
 
                     @include("atencion_medica.sidebars.modals_especialidad.dermatologia.m_dermo_cuidados")
 
@@ -101,5 +111,3 @@
     <!--FORMULARIOS GENERALES-->
 
 
-    <!--SIDEBAR 3 (GINECO-OBSTÉTRICOS)-->
-        <!--MODALS EXÁMENES ESPECÍFICOS-->

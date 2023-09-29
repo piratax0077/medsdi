@@ -15,3 +15,9 @@
         </div>
     </div>
 </div>
+<script>
+    function gravedad_garces()
+    {
+        $('#garces').modal('show');
+    }
+</script>

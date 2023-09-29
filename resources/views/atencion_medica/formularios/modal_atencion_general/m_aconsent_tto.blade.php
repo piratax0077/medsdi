@@ -16,26 +16,26 @@
         @csrf
 		<div class="modal-content">
 			<div class="modal-header bg-info">
-				<h5 class="modal-title text-white text-center">Consentimiento Informado </h5>
+				<h5 class="modal-title text-white text-center">Consentimiento informado </h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 				</button>
             </div>
 			<div class="modal-body">
-				<div class="form-row"hidden >
-					<div class="form-group fill col-sm-3">
+				<div class="form-row"hidden>
+					<div class="form-group col-sm-3">
 			            <label class="floating-label">Rut</label>
 			            <input type="text" class="form-control form-control-sm" name="nom_pcte" id="rut">
 			        </div>
-					<div class="form-group fill col-sm-5">
+					<div class="form-group col-sm-5">
 			            <label class="floating-label">Nombre del paciente</label>
 			            <input type="text" class="form-control form-control-sm" name="nom_pcte" id="nom_pcte">
 			        </div>
-					<div class="form-group fill col-sm-2">
+					<div class="form-group col-sm-2">
 			            <label class="floating-label">Edad</label>
 			            <input type="text" class="form-control form-control-sm" name="edad_pcte" id="edad_pcte">
 			        </div>
-                    <div class="form-group fill col-sm-2">
+                    <div class="form-group col-sm-2">
 			            <label class="floating-label">N°</label>
 			            <input type="text" class="form-control form-control-sm" name="edad_pcte" id="edad_pcte">
 			        </div>
@@ -48,21 +48,21 @@
                     @include('atencion_medica.generales.seccion_menor')
 				</div>
 				<div class="form-row" hidden>
-					<div class="form-group fill col-sm-6">
+					<div class="form-group col-sm-6">
 						<label class="floating-label">Nombre del profesional</label>
 						<input type="text" class="form-control form-control-sm" id="prof"name="prof" value="{{ $profesional->apellido_uno }}">
 					</div>
 				</div>
                 <div class="form-row">
-					<div class="form-group fill col-sm-4">
+					<div class="form-group col-sm-4">
 						<label class="floating-label">Diagnóstico</label>
 						<input type="text" class="form-control form-control-sm" id="diagnostico_pre"name="diagnostico_pre" value="">
 					</div>
-                    <div class="form-group fill col-sm-4">
+                    <div class="form-group col-sm-4">
 						<label class="floating-label">Cirugía o Procedimiento</label>
 						<input type="text" class="form-control form-control-sm" id="cirugia"name="cirugia" value="">
 					</div>
-                    <div class="form-group fill col-sm-4">
+                    <div class="form-group col-sm-4">
 						<label class="floating-label">Nombre del Consentimiento</label>
 						<input  type="text" class="form-control form-control-sm" id="consentimiento"name="consentimiento" value="autocomplete">
 					</div>
@@ -119,10 +119,10 @@
                             </div>
                         </div>
 			        </div>
-				</div
+				</div>
                 <div class="form-row">
                     <div class="form-group col-sm-12">
-                        <label class="floating-label-activo-sm">Situaciones Especiales del paciente</label>
+                        <label class="floating-label-activo-sm">Situaciones especiales del paciente</label>
                         <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="situaciones Especiales del paciente" id="situaciones Especiales del paciente"></textarea>
                     </div>
                 </div>

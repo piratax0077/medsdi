@@ -22,7 +22,6 @@ Route::get('/Acceso_Profesional_NI/{token}', [App\Http\Controllers\EscritorioPro
 Route::get('/Check_sdi_external',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdi'])->name('anonymous.check_sdi'); // PARAMS OBLIGATORIOS urla=Inicio&urln=Mi_Ficha_Medica
 Route::get('/Check_sdi_token_external',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdiToken'])->name('anonymous.check_sdi_token');
 Route::post('/estado_acceso_profesional_no_inscrito', [App\Http\Controllers\EscritorioProfesional::class, 'agregar_profesional_provisorio'])->name('anonymous.agregar_profesional_provisorio');
-
 Route::get('/autocomplete', [ficha_atencionController::class, 'autocomplete'])->name('autocomplete.medicamentos');
 
 //PDF
@@ -42,6 +41,9 @@ Route::get('/', function () {
 Route::get('Ingreso', [App\Http\Controllers\HomeController::class, 'ingreso'])->name('home.ingreso');
 Route::post('Registro', [App\Http\Controllers\HomeController::class, 'registro'])->name('home.registro');
 Route::get('Buscar_user_email', [App\Http\Controllers\HomeController::class, 'buscar_user_email'])->name('home.buscar_user_email');
+Route::post('recuperar_contrasena', [App\Http\Controllers\HomeController::class, 'recuperarcontrasena'])->name('home.recuperar_contrasena');
+
+
 
 /** confirmaciones  */
 Route::get('invitacion/profesional/aprobacion_rechazo', [App\Http\Controllers\EscritorioGeneral::class, 'invitacionProfesionalConfirmacionRechazo'])->name('invitacion.profesional.confirmacion_rechazo');
@@ -366,10 +368,36 @@ Route::group([
     /** mis controles personales */
     Route::get('mis_controles', [App\Http\Controllers\EscritorioPaciente::class, 'mis_controles'])->name('paciente.mis_controles');
 
-    /** liberar bienvenida  */
+/** controles de glicemia */
+    Route::post('control/glicemia/registro',[App\Http\Controllers\EscritorioPaciente::class, 'registroControlGlicemia'])->name('paciente.registro_c_glicemia');
+    Route::get('control/glicemia/ver',[App\Http\Controllers\EscritorioPaciente::class, 'verRegistrosControlGlicemia'])->name('paciente.ver_registros_c_glicemia');
+    Route::post('control/glicemia/eliminar',[App\Http\Controllers\EscritorioPaciente::class, 'eliminarRegistroControlGlicemia'])->name('paciente.eliminar_registro_c_glicemia');
+
+    /** controles de peso */
+    Route::post('control/peso/registro',[App\Http\Controllers\EscritorioPaciente::class, 'registroControlPeso'])->name('paciente.registro_c_peso');
+    Route::get('control/peso/ver',[App\Http\Controllers\EscritorioPaciente::class, 'verRegistrosControlPeso'])->name('paciente.ver_registros_c_peso');
+    Route::post('control/peso/eliminar',[App\Http\Controllers\EscritorioPaciente::class, 'eliminarRegistroControlPeso'])->name('paciente.eliminar_registro_c_peso');
+    /** controles de oxigeno */
+    Route::post('control/oxigeno/registro',[App\Http\Controllers\EscritorioPaciente::class, 'registroControlOxigeno'])->name('paciente.registro_c_oxigeno');
+    Route::get('control/oxigeno/ver',[App\Http\Controllers\EscritorioPaciente::class, 'verRegistrosControlOxigeno'])->name('paciente.ver_registros_c_oxigeno');
+    Route::post('control/oxigeno/eliminar',[App\Http\Controllers\EscritorioPaciente::class, 'eliminarRegistroControlOxigeno'])->name('paciente.eliminar_registro_c_oxigeno');
+     /** controles de orina */
+     Route::post('control/orina/registro',[App\Http\Controllers\EscritorioPaciente::class, 'registroControlOrina'])->name('paciente.registro_c_orina');
+     Route::get('control/orina/ver',[App\Http\Controllers\EscritorioPaciente::class, 'verRegistrosControlOrina'])->name('paciente.ver_registros_c_orina');
+     Route::post('control/orina/eliminar',[App\Http\Controllers\EscritorioPaciente::class, 'eliminarRegistroControlOrina'])->name('paciente.eliminar_registro_c_orina');
+    /** controles de presion */
+    Route::post('control/presion/registro',[App\Http\Controllers\EscritorioPaciente::class, 'registroControlPresion'])->name('paciente.registro_c_presion');
+    Route::get('control/presion/ver',[App\Http\Controllers\EscritorioPaciente::class, 'verRegistrosControlPresion'])->name('paciente.ver_registros_c_presion');
+    Route::post('control/presion/eliminar',[App\Http\Controllers\EscritorioPaciente::class, 'eliminarRegistroControlPresion'])->name('paciente.eliminar_registro_c_presion');
+
+	/** liberar bienvenida  */
     Route::get('contrasena/bienvenida/liberar', [App\Http\Controllers\EscritorioPaciente::class, 'CambiocontrasenaLiberacionBienvenida'])->name('paciente.perfil.contrasena.liberar.bienvenida');
     Route::get('bienvenida/liberar', [App\Http\Controllers\EscritorioPaciente::class, 'liberarBienvenida'])->name('paciente.perfil.liberar.bienvenida');
 });
+
+/** INICIO DE LICENCIA */
+Route::get('/aprobar/licencia/aceptar', [App\Http\Controllers\LicenciaAprobacionController::class, 'licenciaEvaluacion'])->name('paciente.licencia.evalueacion.aceptar');
+Route::get('/aprobar/licencia/rechazar', [App\Http\Controllers\LicenciaAprobacionController::class, 'licenciaEvaluacion'])->name('paciente.licencia.evalueacion.rechazar');
 
 Route::group(
     [
@@ -441,6 +469,8 @@ Route::group([
     Route::get('Diagnosticos_cie10', [App\Http\Controllers\EscritorioProfesional::class, 'diagnosticos_cie10'])->name('profesional.diagnosticos_cie10');
 	Route::get('buscar_Diagnosticos_cie10', [App\Http\Controllers\EscritorioProfesional::class, 'buscarDiagnostico_cie10'])->name('profesional.buscar_diagnosticos_cie10');
 	Route::post('registrar_Diagnosticos_cie10', [App\Http\Controllers\EscritorioProfesional::class, 'registrarDiagnosticoCie10Profesional'])->name('profesional.registrar_diagnosticos_cie10');
+
+
     Route::get('Flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'ver_flujo_caja'])->name('profesional.flujo_caja');
     Route::get('Mis_estadisticas', [App\Http\Controllers\EscritorioProfesional::class, 'mis_estadisticas'])->name('profesional.mis_estadisticas');
 	Route::get('Administracion', [App\Http\Controllers\EscritorioProfesional::class, 'ver_adm_dental'])->name('profesional.ver_adm_dental');
@@ -451,6 +481,7 @@ Route::group([
     Route::get('Administracion/Personal', [App\Http\Controllers\EscritorioProfesional::class, 'ver_adm_dental_personal'])->name('profesional.adm_dental.personal');
     Route::get('Administracion/Proveedores', [App\Http\Controllers\EscritorioProfesional::class, 'ver_adm_dental_proveedores'])->name('profesional.adm_dental.proveedores');
     Route::get('Administracion/Aranceles', [App\Http\Controllers\EscritorioProfesional::class, 'ver_adm_dental_misaranceles'])->name('profesional.adm_dental.misaranceles');
+
     Route::get('FIcha_medica_unica/{id}', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('profesional.ficha_medica_unica');
     Route::get('Ficha_medica_unica_atencion/{id}', [App\Http\Controllers\EscritorioProfesional::class, 'miFichaMedicaAtencion'])->name('profesional.ficha_medica_unica_atencion');
     Route::get('Mi_perfil', [App\Http\Controllers\EscritorioProfesional::class, 'mi_perfil'])->name('profesional.mi_perfil');
@@ -582,8 +613,22 @@ Route::group([
     Route::get('/ficha/vacuna/ver_registros', [App\Http\Controllers\FichaPediatriaVacunaController::class, 'verRegistros'])->name('ficha.ver.registros.vacuna');
     Route::get('/ficha/vacuna/carnet', [App\Http\Controllers\FichaPediatriaVacunaController::class, 'generarPdfCarnet'])->name('ficha.pdf.vacuna');
 
+    /** INICIO DE LICENCIA */
+    Route::get('/aprobar/licencia/aceptar', [App\Http\Controllers\LicenciaAprobacionController::class, 'licenciaEvaluacion'])->name('profesional.licencia.evalueacion.aceptar');
+    Route::get('/aprobar/licencia/rechazar', [App\Http\Controllers\LicenciaAprobacionController::class, 'licenciaEvaluacion'])->name('profesional.licencia.evalueacion.rechazar');
 
 });
+
+Route::group([
+    'middleware' => ['role:Profesional|Paciente|Admin'],
+    'prefix' => 'resultado/examen',
+], function () {
+    /** VER ARCHIVO DE RESULTADOS LAB */
+    Route::get('/archivo/ver', [App\Http\Controllers\ResultadoExamenController::class, 'verArchivos'])->name('resultado.examen.lab.archivo.ver');
+    Route::get('/revisado', [App\Http\Controllers\ResultadoExamenController::class, 'resultadoRevisado'])->name('resultado.examen.lab.revisado');
+    Route::get('/ver', [App\Http\Controllers\ResultadoExamenController::class, 'resultadoVer'])->name('resultado.examen.ver');
+});
+
 
 /* ASISTENTE CONSULTA*/
 Route::group([
@@ -763,9 +808,6 @@ Route::group([
 });
 
 
-
-
-
 /* ASISTENTE JEFE Centro Medico*/
 Route::group([
     'middleware' => ['role:AsistenteJefaCaja|Admin'],
@@ -848,6 +890,14 @@ Route::group([
     Route::post('lista/espera/registrar/existente', [App\Http\Controllers\ListaEsperaController::class, 'registrarExistente'])->name('lista.espera.registrar.existente');
     Route::post('lista/espera/registrar/nuevo', [App\Http\Controllers\ListaEsperaController::class, 'registrarNuevo'])->name('lista.espera.registrar.nuevo');
     Route::post('lista/espera/eliminar', [App\Http\Controllers\ListaEsperaController::class, 'eliminar'])->name('lista.espera.eliminar');
+
+    /** solicitud de permiso al paciente para venta de bono  */
+    Route::post('solicitud/autorizacion/bono/venta', [App\Http\Controllers\VentaBonoController::class, 'solicitarAutorizacionPaciente'])->name('asistente.solicitud.auto.paciente.venta.bono');
+    Route::post('solicitud/autorizacion/validar', [App\Http\Controllers\VentaBonoController::class, 'validarAutorizacion'])->name('asistente.solicitud.auto.validar');
+    Route::post('conectar/prevision', [App\Http\Controllers\VentaBonoController::class, 'conectarIsapreFonasa'])->name('asistente.conectar.prevision');
+    Route::post('venta/bono/pago', [App\Http\Controllers\VentaBonoController::class, 'procesarPagoVenta'])->name('asistente.venta.bono.pago');
+    Route::get('venta/bono/pdf', [App\Http\Controllers\VentaBonoController::class, 'generarPdf_r'])->name('asistente.venta.bono.pdf');
+
 });
 
 /* ASISTENTE Online*/
@@ -903,8 +953,9 @@ Route::group([
     Route::get('/Enfermera_tens', [App\Http\Controllers\EnfermeriaController::class, 'enfermera_tens'])->name('app.enfermeria.enfermera_tens');
 
 });
-  /** LABORATORIO  */
- Route::group([
+
+/** LABORATORIO  */
+Route::group([
     'middleware' => ['role:Laboratorio|Admin'],
     'prefix' => 'Laboratorio',
 ], function () {
@@ -929,7 +980,7 @@ Route::group([
 	Route::get('/Laboratorio/pacientes_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'pacientes_laboratorio'])->name('app.laboratorio.lab_asistente.pacientes_laboratorio');
 	Route::get('/Laboratorio/resultados_examenes_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'resultados_examenes_laboratorio'])->name('app.laboratorio.lab_asistente.resultados_examenes_laboratorio');
 
-    Route::get('/Laboratorio/lab_asistente', [App\Http\Controllers\LaboratorioController::class, 'escritorio_asistente_laboratorio'])->name('app.laboratorio.lab_asistente.escritorio_asistente_laboratorio');
+    Route::get('/Laboratorio/lab_asistente', [App\Http\Controllers\LaboratorioController::class, 'escritorio_asistente_laboratorio'])->name('app.laboratorio.lab_asistente');
     Route::get('/Laboratorio/escritorio_profesional_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'escritorio_profesional_laboratorio'])->name('app.laboratorio.lab_profesional.escritorio_profesional_laboratorio');
 	Route::get('/Laboratorio/pacientes_laboratoriop', [App\Http\Controllers\LaboratorioController::class, 'pacientes_laboratorio'])->name('app.laboratorio.lab_profesional.pacientes_laboratorio');
 
@@ -942,24 +993,53 @@ Route::group([
 	Route::get('/Laboratorio/solicitud_exam_laboratorio_profesional', [App\Http\Controllers\LaboratorioController::class, 'solicitud_exam_laboratorio_profesional'])->name('app.laboratorio.lab_profesional.solicitud_exam_laboratorio_profesional');
 });
 
+
+/** CARGA DE RESULTADOS LABORATORIO */
+Route::group([
+    'middleware' => ['role:AsistenteCargaExamenExterno|Admin'],
+    'prefix' => 'Asistente/laboratorio/examen',
+], function () {
+    Route::get('/home', [App\Http\Controllers\LaboratorioController::class, 'escritorio_asistente_laboratorio_subir_examan'])->name('lab.exa.asistente.home');
+    Route::get('/agenda', [App\Http\Controllers\LaboratorioController::class, 'agenda_laboratorio_subir_examan'])->name('lab.exa.asistente.agenda_laboratorio');
+    Route::get('/cotizar', [App\Http\Controllers\LaboratorioController::class, 'cotizar_laboratorio_subir_examan'])->name('lab.exa.asistente.cotizar_laboratorio');
+    Route::get('/orden/ver', [App\Http\Controllers\LaboratorioController::class, 'orden_laboratorio_subir_examan'])->name('lab.exa.asistente.orden_laboratorio');
+    Route::get('/pacientes', [App\Http\Controllers\LaboratorioController::class, 'pacientes_laboratorio_subir_examan'])->name('lab.exa.asistente.pacientes_laboratorio');
+    Route::get('/resultados/ver', [App\Http\Controllers\LaboratorioController::class, 'resultados_examenes_laboratorio_subir_examan'])->name('lab.exa.asistente.resultados_examenes_laboratorio');
+
+    Route::get('/resultados/cargar', [App\Http\Controllers\LaboratorioController::class, 'cargar_resultados_examenes_laboratorio_subir_examan'])->name('lab.exa.asistente.cargar_resultados_examenes_laboratorio');
+    Route::get('/resultados/registrar', [App\Http\Controllers\LaboratorioController::class, 'registrar_resultados_examenes_laboratorio_subir_examan'])->name('lab.exa.asistente.registrar_resultados_examenes_laboratorio');
+    Route::get('/resultados/ver/resultado/rut', [App\Http\Controllers\ResultadoExamenController::class, 'verRegistrosRut'])->name('lab.exa.asistente.ver_resultados_examenes_rut_laboratorio');
+
+    /** Proceso de examen */
+	Route::post('/examen/carga', [App\Http\Controllers\CargaExamenController::class, 'cargaArchivoTemp'])->name('examen.imagen.carga');
+
+    Route::get('Paciente/buscar', [App\Http\Controllers\EscritorioPaciente::class, 'buscarPacientePorRut'])->name('lab.exa.asistente.buscar_paciente_rut');
+});
+
+
+Route::get('testarchivo',[App\Http\Controllers\ResultadoExamenController::class, 'testArchivo']);
+Route::get('notificar',[App\Http\Controllers\ResultadoExamenController::class, 'notificar_r']);
+
+
 Route::group([
     'middleware' => ['auth:sanctum', 'verified'],
 ], function () {
     /*Ficha Medica*/
-    Route::post('Ficha_medica_no_inscrito', [ficha_atencionController::class, 'atencion_profesional_no_inscrito'])->name('atencion_medica.ficha_atencion_profesional_no_inscrito');
+    Route::post('Ficha_medica_no_inscrito', [App\Http\Controllers\ficha_atencionController::class, 'atencion_profesional_no_inscrito'])->name('atencion_medica.ficha_atencion_profesional_no_inscrito');
 
-    Route::post('Ficha_Atencion/crear', [ficha_atencionController::class, 'store'])->name('fichaAtencion.registrar_ficha');
-	Route::post('Ficha_Atencion/crear/orl', [ficha_atencionController::class, 'store_orl'])->name('fichaAtencion.registrar_ficha_orl');
-    Route::post('Ficha_Atencion/crear/cg', [ficha_atencionController::class, 'store_cg'])->name('fichaAtencion.registrar_ficha_cg');
-    Route::post('Ficha_Atencion/crear/cdg', [ficha_atencionController::class, 'store_cdg'])->name('fichaAtencion.registrar_ficha_cdg');
-    Route::post('Ficha_Atencion/crear/uro', [ficha_atencionController::class, 'store_uro'])->name('fichaAtencion.registrar_ficha_uro');
-    Route::post('Ficha_Atencion/crear/oft', [ficha_atencionController::class, 'store_oft'])->name('fichaAtencion.registrar_ficha_oft');
-	Route::post('Ficha_Atencion/crear/dermo', [ficha_atencionController::class, 'store_dermo'])->name('fichaAtencion.registrar_ficha_dermo');
-	Route::post('Ficha_Atencion/crear/pediatria/general', [ficha_atencionController::class, 'store_pediatria_general'])->name('fichaAtencion.registrar_ficha_ped_gen');
-    //Route::post('Ficha_atencion/Registro_ficha', [ficha_atencionController::class, 'store'])->name('crear.ficha_atencion');
-    //Route::post('Ficha_atencion/Registro_ficha', [ficha_atencionController::class, 'store'])->name('crear.ficha_atencion');
+    Route::post('Ficha_Atencion/crear', [App\Http\Controllers\ficha_atencionController::class, 'store'])->name('fichaAtencion.registrar_ficha');
+	Route::post('Ficha_Atencion/crear/orl', [App\Http\Controllers\ficha_atencionController::class, 'store_orl'])->name('fichaAtencion.registrar_ficha_orl');
+    Route::post('Ficha_Atencion/crear/cg', [App\Http\Controllers\ficha_atencionController::class, 'store_cg'])->name('fichaAtencion.registrar_ficha_cg');
+    Route::post('Ficha_Atencion/crear/cdg', [App\Http\Controllers\ficha_atencionController::class, 'store_cdg'])->name('fichaAtencion.registrar_ficha_cdg');
+    Route::post('Ficha_Atencion/crear/uro', [App\Http\Controllers\ficha_atencionController::class, 'store_uro'])->name('fichaAtencion.registrar_ficha_uro');
+    Route::post('Ficha_Atencion/crear/oft', [App\Http\Controllers\ficha_atencionController::class, 'store_oft'])->name('fichaAtencion.registrar_ficha_oft');
+	Route::post('Ficha_Atencion/crear/dermo', [App\Http\Controllers\ficha_atencionController::class, 'store_dermo'])->name('fichaAtencion.registrar_ficha_dermo');
+	Route::post('Ficha_Atencion/crear/trumatologia/ortopedia', [App\Http\Controllers\ficha_atencionController::class, 'store_tru_ort'])->name('fichaAtencion.registrar_ficha_trau_ort');
+	Route::post('Ficha_Atencion/crear/pediatria/general', [App\Http\Controllers\FichaPediatriaController::class, 'storePediatriaGeneral'])->name('fichaAtencion.registrar_ficha_ped_gen');
+	Route::post('Ficha_Atencion/crear/pediatria/cirugia/general', [App\Http\Controllers\FichaPediatriaController::class, 'storePediatriaCirugiaGeneral'])->name('fichaAtencion.registrar_ficha_ped_cir_trum_quem');
+    //Route::post('Ficha_atencion/Registro_ficha', [App\Http\Controllers\ficha_atencionController::class, 'store'])->name('crear.ficha_atencion');
 
-    Route::post('/getArticulo', [ficha_atencionController::class, 'getArticulo'])->name('ficha_medica.getArticulo');
+    Route::post('/getArticulo', [App\Http\Controllers\ficha_atencionController::class, 'getArticulo'])->name('ficha_medica.getArticulo');
 
 
     Route::get('/Ficha_medica', [App\Http\Controllers\ficha_atencionController::class, 'index']);
@@ -1255,6 +1335,7 @@ Route::group([
     Route::get('/getRegsitros',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'getRegsitros'])->name('medicamento_cronico.getRegsitros');
     Route::get('/getRegsitro',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'getRegsitro'])->name('medicamento_cronico.getRegsitro');
     Route::post('/deleteRegsitro',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'deleteRegsitro'])->name('medicamento_cronico.deleteRegsitro');
+    Route::post('/regitrar/receta',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'pasarMedicamentoCronicoAReceta'])->name('medicamento_cronico.pasar_a_receta');
 });
 
 /** REGISTROS CONTROL HIPERTENSION - CRONICO */
@@ -1393,6 +1474,7 @@ Route::group([
 
     /** Proceso de imagenes */
 	Route::post('/imagen/carga', [App\Http\Controllers\CargaImagenController::class, 'cargaImagenTemp'])->name('asistente.imagen.carga');
+
 });
 
 

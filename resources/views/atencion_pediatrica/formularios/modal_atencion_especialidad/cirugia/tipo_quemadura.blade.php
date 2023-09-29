@@ -15,3 +15,10 @@
         </div>
     </div>
 </div>
+
+<script>
+    function tipo_quemadura()
+    {
+        $('#tabla_tipoquem_modal').modal('show');
+    }
+</script>

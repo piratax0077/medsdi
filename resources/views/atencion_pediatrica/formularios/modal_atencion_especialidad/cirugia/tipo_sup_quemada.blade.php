@@ -15,3 +15,10 @@
         </div>
     </div>
 </div>
+
+<script>
+    function sup_quemada()
+    {
+        $('#tabla_superquem_modal').modal('show');
+    }
+</script>

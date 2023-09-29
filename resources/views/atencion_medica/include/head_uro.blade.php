@@ -15,6 +15,4 @@
 <meta name="description" content="" />
 <meta name="keywords" content="">
 <meta name="author" content="Redmedichile"/>
-<link rel="icon" href="../assets/images/sdi-icon.png" type="image/x-icon">
-<link rel="stylesheet" href="../assets/css/style.css?t=<?=time()?>">
-<link rel="stylesheet" href="../assets/css/style_index.css?t=<?=time()?>">
+

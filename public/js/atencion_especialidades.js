@@ -38,10 +38,7 @@ function ind_endoscopia() {
 function r_ingreso() {
     $('#modal_ireqingreso').modal('show');
 }
-/** Indicar medicamento **/
-function i_medicamento() {
-    $('#indicar_medicamentos').modal('show');
-}
+
 /** Indicar Audífono **/
 function i_audif() {
     cargar_receta_audifono();

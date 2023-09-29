@@ -7,7 +7,8 @@
         </header>
         <div class="bs-canvas-content">
             <div class="accordion" id="accordion_side_bar">
-                <div class="card-sidebar">
+                 <div class="card-sidebar">
+                     {{--  <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_solicitud_examenes">
                         <h2 class="mb-0">
                             <button class="btn btn-light btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse_solicitud_examenes" aria-expanded="true" aria-controls="collapse_solicitud_examenes"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
@@ -23,10 +24,11 @@
                     </div>
                     @include("atencion_medica.formularios.modal_atencion_general.modal_examen_rx")
                     @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
+                </div>  --}}
                 </div>
-                <!-- SECCION CONSENTIMIENTOS -->
+                <!--SECCION CONSENTIMIENTOS -->
                 @include('general.sidebar.seccion_consentimientos')
-               
+
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_utilidades">
                         <h2 class="mb-0">
@@ -38,11 +40,11 @@
                     <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ufonasa()";>+ Buscador código FONASA</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ucalcimc()";>+ Calculadora de IMC</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="imc()";>+ Calculadora de IMC</button>
                         </div>
                     </div>
-                      @include("general.modal.m_ucodigofonasa")
-                    @include("general.modal.m_uimc")
+                         @include("general.modal.m_ucodigofonasa")
+                        @include("general.modal.m_uimc")
                 </div>
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_recom">
@@ -54,13 +56,28 @@
                     </div>
                     <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingreso()";>+ Orden de Hospitalización</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="r_ingreso()";>+ Requisitos de ingreso</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="icirugia()";>+ Indicaciones post cirugía En General</button>
                         </div>
                     </div>
-                    @include("general.modal.ingreso")
                     @include("general.modal.m_cuidados_cirugia")
+                </div>
+                <div class="card-sidebar">
+                    <div class="card-header-sidebar" id="heading_hosp">
+                        <h2 class="mb-0">
+                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_hosp" aria-expanded="false" aria-controls="collapse_hosp"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                        FORMULARIOS DE HOSPITALIZACIÓN
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapse_hosp" class="collapse" aria-labelledby="headinghospm" data-parent="#accordion_side_bar">
+                        <div class="card-body-sidebar">
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="sol_pabellon()";>+ Solicitud Pabellón</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingresohosp()";>+ Hospitalización </button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="r_ingreso()";>+ Requisitos de ingreso</button>
+                        </div>
+                    </div>
+                    @include("general.hospitalizacion.modals.in_solic_pabellon")
+                    @include("general.hospitalizacion.modals.ingreso_hosp")
                     @include("general.modal.m_req_ingreso")
                 </div>
 				<div class="card-sidebar">

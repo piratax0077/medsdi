@@ -18,6 +18,10 @@ class ArticuloFaltanteController extends Controller
 	        $error['nombre'] = 'nombre requerido';
 	        $valido = 1;
         }
+        if(empty($request->droga)){
+	        $error['droga'] = 'droga requerido';
+	        $valido = 1;
+        }
         if(empty($request->id_profesional)){
 	        $error['id_profesional'] = 'id_profesional requerido';
 	        $valido = 1;
@@ -36,6 +40,7 @@ class ArticuloFaltanteController extends Controller
             $articuloFaltante = new ArticuloFaltante();
 
             $articuloFaltante->nombre = $request->nombre;
+            $articuloFaltante->droga = $request->droga;
             $articuloFaltante->id_profesional = $request->id_profesional;
             $articuloFaltante->fecha_solicitud = date('Y-m-d');
             //$articuloFaltante->fecha_cierre = 'NULL';

@@ -7,37 +7,46 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-row">
-				    <div class="form-group col-sm-12 col-md-3">
-				        <label class="floating-label-activo">Fecha</label>
-				        <input type="date" class="form-control form-control-sm" name="c_glicemia_fecha" id="c_glicemia_fecha"></input>
+				    <div class="form-group col-sm-12 col-md-4">
+				        <p class="font-italic mt-0 mb-0 text-black">
+                            @php
+                            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                            $fecha = \Carbon\Carbon::parse(now());
+                            $mes = $meses[($fecha->format('n')) - 1];
+                            $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y') .'a las '. $fecha->format('H');
+                            @endphp
+                            {{ $fecha }}
+                        </p>
 				    </div>
-				    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+				    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
 				        <label class="floating-label-activo">Alimentación</label>
-				        <select class="form-control form-control-sm" name="c_glicemia_sistolica">
-					        <option>Desayuno</option>
-					        <option>Almuerzo</option>
-					        <option>Cena</option>
-					        <option>Nocturno</option>
+				        <select class="form-control form-control-sm" name="c_glicemia_alimento" id="c_glicemia_alimento">
+					        <option value="0">Seleccione</option>
+					        <option value="1">Desayuno</option>
+					        <option value="2">Almuerzo</option>
+					        <option value="3">Cena</option>
+					        <option value="4">Nocturno</option>
 				        </select>
 				    </div>
-				    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+				    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
 				        <label class="floating-label-activo">Post-prandial</label>
-				        <input type="text" class="form-control form-control-sm" name="c_glicemia_sistolica" id="c_glicemia_sistolica"></input>
+				        <input type="text" class="form-control form-control-sm" name="c_glicemia_sistolica" id="c_glicemia_postprandial"></input>
+				    </div>
+				    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+				        <label class="floating-label-activo">Pre-prandial</label>
+				        <input type="text" class="form-control form-control-sm" name="c_glicemia_diastólica" id="c_glicemia_preprandial"></input>
+				    </div>
+				    <div class='form-group col-sm-12 col-md-2 col-lg-2 col-xl-2'>
+				        <label class="floating-label-activo">Glicemia nocturna</label>
+				        <input type="text" class="form-control form-control-sm" name="c_glicemia_noche" id="c_glicemia_noche"></input>
+				    </div>
+
+				    <div class="form-group col-sm-12 col-md-7 col-lg-7 col-xl-7">
+				        <label class="floating-label-activo">Comentarios</label>
+				        <textarea class="form-control caja-texto form-control-sm " rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="c_glicemia_observacion" id="c_glicemia_observacion"></textarea>
 				    </div>
 				    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-				        <label class="floating-label-activo">Pre-prandial</label>
-				        <input type="text" class="form-control form-control-sm" name="c_glicemia_diastólica" id="c_glicemia_diastólica"></input>
-				    </div>
-				    <!--<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-				        <label class="floating-label-activo">Glicemia nocturna</label>
-				        <input type="text" class="form-control form-control-sm" name="c_glicemia_noct" id="c_glicemia_noct"></input>
-				    </div>-- SOLO APARECE CUANDO SE MARCA "NOCTURNO" Y DESAPARECEN POSY Y PRE, QUEDA ESTE SOLO-->
-				    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-				        <label class="floating-label-activo">Comentarios</label>
-				        <textarea class="form-control caja-texto form-control-sm " rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="c_glicemia-coment" id="c_glicemia-coment"></textarea>
-				    </div>
-				    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-				        <button class="btn btn-sm btn-block btn-primary">Agregar</button>
+				        <button type="button" class="btn btn-sm btn-block btn-primary" onclick="registro_c_glicemia();">Agregar</button>
 				    </div>
 				</div>
 				<div class="row">
@@ -52,17 +61,13 @@
 						            <th>Momento</th>
 						            <th>Post-prandial</th>
 						            <th>Pre-prandial</th>
+						            <th>Nocturno</th>
 						            <th>Comentarios</th>
+						            <th>Eliminar</th>
 						        </tr>
 						    </thead>
 						    <tbody>
-						        <tr>
-						            <td>00/00/0000</td>
-						            <td>Desayuno</td>
-						            <td>85</td>
-						            <td>150</td>
-						            <td>Comentarios</td>
-						        </tr>
+						        {{--    --}}
 						    </tbody>
 						</table>
 					</div>
@@ -70,6 +75,181 @@
 			</div>
 		</div>
 	</div>
-</div>	
+</div>
+<script>
+    function ctrl_glicemia()
+    {
+        ver_registros_c_glicemia('reg-c-glic');
+        $('#c_glicemia').modal('show');
+    }
 
-	
+    function registro_c_glicemia()
+    {
+
+        let alimento = $('#c_glicemia_alimento').val();
+        let postprandial = $('#c_glicemia_postprandial').val();
+        let preprandial = $('#c_glicemia_preprandial').val();
+        let noche = $('#c_glicemia_noche').val();
+        let observacion = $('#c_glicemia_observacion').val();
+        let _token = CSRF_TOKEN;
+
+        let url = "{{ route('paciente.registro_c_glicemia') }}";
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                _token: _token,
+                alimento : alimento,
+                postprandial : postprandial,
+                preprandial : preprandial,
+                noche : noche,
+                observacion : observacion,
+            },
+        })
+        .done(function(data) {
+            console.log(data)
+
+            if (data != null)
+            {
+                if(data.estado == 1)
+                {
+                    swal({
+                        title: "Ingreso de Control de Glicemia.",
+                        text: 'Control registrado con Exito.',
+                        icon: "success",
+                    });
+                }
+                else
+                {
+                    swal({
+                        title: "Ingreso de Control de Glicemia.",
+                        text: 'Falla en el registro, Intente nuevamente.',
+                        icon: "warning",
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Ingreso de Control de Glicemia.",
+                    text: 'Sin Retorno de Registro, Intente nuevamente.',
+                    icon: "error",
+                });
+            }
+            ver_registros_c_glicemia('reg-c-glic');
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function ver_registros_c_glicemia(tabla)
+    {
+        $('#'+tabla+' tbody').html('');
+
+        let url = "{{ route('paciente.ver_registros_c_glicemia') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {},
+        })
+        .done(function(data) {
+            console.log(data)
+
+            if (data != null)
+            {
+                if(data.estado == 1)
+                {
+                    let alimento = ['', 'Desayuno', 'Almuerzo', 'Cena', 'Nocturno']
+                    $.each(data.registros, function (key, value)
+                    {
+                        var html = '';
+                        html += '<tr>';
+                        html += '    <td>'+value.fecha+'</td>';
+                        html += '    <td>'+alimento[value.alimento]+'</td>';
+                        html += '    <td>'+value.postprandial+'</td>';
+                        html += '    <td>'+value.preprandial+'</td>';
+                        if(value.noche != null) html += '    <td>'+value.noche+'</td>';
+                        else html += '    <td> </td>';
+                        if(value.observacion != null) html += '    <td>'+value.observacion+'</td>';
+                        else html += '    <td> </td>';
+                        html += '    <td> <button type="button" class="btn btn-xs btn-block btn-danger" onclick="eliminar_c_glicemia(\''+value.id+'\');">Eliminar</button> </td>';
+                        html += '</tr>';
+                        $('#'+tabla+' tbody').append(html);
+                    });
+                }
+                else
+                {
+                    var html = '';
+                    html += '<tr>';
+                    html += '    <td colspan="5">Sin Registros</td>';
+                    html += '</tr>';
+                    $('#'+tabla+' tbody').html(html);
+                }
+            }
+            else
+            {
+                var html = '';
+                html += '<tr>';
+                html += '    <td colspan="5">Sin Registros</td>';
+                html += '</tr>';
+                $('#'+tabla+' tbody').html(html);
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function eliminar_c_glicemia(id)
+    {
+        let url = "{{ route('paciente.eliminar_registro_c_glicemia') }}";
+        let _token = CSRF_TOKEN;
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                _token : _token,
+                id : id,
+            },
+        })
+        .done(function(data) {
+            console.log(data)
+
+            if (data != null)
+            {
+                if(data.estado == 1)
+                {
+                    swal({
+                        title: "Eliminar de Control de Glicemia.",
+                        text: 'Control eliminado con Exito.',
+                        icon: "success",
+                    });
+                    ver_registros_c_glicemia('reg-c-glic');
+                }
+                else
+                {
+                    swal({
+                        title: "Eliminar de Control de Glicemia.",
+                        text: 'Control No eliminado.',
+                        icon: "danger",
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Eliminar de Control de Glicemia.",
+                    text: 'Control No eliminado.',
+                    icon: "danger",
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+
+</script>

@@ -1,7 +1,7 @@
 {{--  SECCION MENOR DE EDAD INICIO  --}}
 @if (\Carbon\Carbon::parse($paciente->fecha_nac)->age < 18)
-    <div class="col-sm-12 col-md-12">
-        <div class="card">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="card-a">
             <div class="card-header" id="menor_edad">
                 <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#menor_edad_c" aria-expanded="false" aria-controls="menor_edad_c">
                     Info. Acompañante del menor de edad
@@ -9,7 +9,7 @@
             </div>
 
             <div id="menor_edad_c" class="collapse show" aria-labelledby="menor_edad" data-parent="#menor_edad">
-                <div class="card-body-aten shadow-none">
+                <div class="card-body-aten-a shadow-none">
                     <div class="form-row">
                         <input type="hidden" name="id_tipo_autorizacion_acompanante" id="id_tipo_autorizacion_acompanante" value="1">
                         <div class="form-group col-md-3">

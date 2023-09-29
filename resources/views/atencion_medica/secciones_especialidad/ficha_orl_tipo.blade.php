@@ -10,7 +10,18 @@
             </div>
             <div class="modal-body">
                 <div class="container">
-                    <input type="hidden" name="f_t_orl_tipo" id="f_t_orl_tipo" value="">
+                    {{--  <div class="form-row">
+
+                        <div class="form-group col-md-6">
+                            <label class="floating-label-activo-sm">Tipo</label>
+                            <select class="form-control form-control-sm" id="registro_f_t_orl_tipo_seccion" onchange="cargarSeccion'registro_f_t_orl_detalle');">
+                                <option value="">Seleccione</option>
+                                <option value="1">Oído</option>
+                                <option value="2">Nariz</option>
+                                <option value="3">Faringolaringe</option>
+                            </select>
+                        </div>
+                    </div>  --}}
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label class="floating-label-activo-sm">Nombre Ficha</label>
@@ -36,7 +47,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-danger">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="btn_modal_registrar_ficha_tipo_orl" onclick="guardar_tipo_ficha_otorrino()">Registrar</button>
+                        <button type="button" class="btn btn-primary" onclick="guardar_tipo_ficha_otorrino();">Registrar</button>
                     </div>
                 </div>
             </div>

@@ -9,7 +9,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis Recetas</h5>
+                                <h5 class="m-b-10 font-weight-bold">Mis recetas</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip"
@@ -18,7 +18,7 @@
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.index_receta_online') }}"
                                         data-toggle="tooltip" data-placement="top"
                                         title="Volver a inicio de receta online">Receta Online</a></li>
-                                <li class="breadcrumb-item"><a href="#">Mis Recetas</a></li>
+                                <li class="breadcrumb-item"><a href="mis_recetas_profesional.blade.php">Mis recetas</a></li>
                             </ul>
                         </div>
                     </div>
@@ -26,62 +26,53 @@
             </div>
             <!--Cierre: Header-->
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="card">
+                        <div class="card-header bg-light">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <h4 class="text-c-blue f-22">Mis recetas</h4>
+                            </div>
+                        </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h4 class="text-c-blue f-22 d-inline ml-4 my-1 py-1">Mis Recetas</h4>
-                                    <!--<button type="button" class="btn btn-success btn-sm d-inline float-right mr-4 my-1"
-                                        data-toggle="modal" data-target="#agregar_receta_profesional_ro">
-                                        <i class="feather icon-plus"></i> Agregar receta
-                                    </button>-->
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-6 col-md-12">
-                                    <table id="tabla_recetas_profesional_ro"
-                                        class="display table table-striped table-hover dt-responsive nowrap table-sm"
-                                        style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center align-middle">Fecha</th>
-                                                <th class="text-center align-middle">Paciente</th>
-                                                <th class="text-center align-middle">Diagnóstico</th>
-                                                <!--th class="text-center align-middle">Acción</th>-->
-                                                <!-- <th class="text-center align-middle">Estado</th>-->
-                                                <th class="text-center align-middle">Receta</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($ficha as $fic)
-                                                @if(!empty($fic->recetas) && $fic->recetas !=null && count($fic->recetas)>0)
-                                                <tr>
-                                                    <td class="text-wrap text-center align-middle">
-                                                        {{ $fic->created_at }}
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        {{ $fic->Paciente()->first()->nombres }}<br>
-                                                        {{ $fic->Paciente->first()->rut }}
-                                                    </td>
-                                                    <td class="align-middle text-center">{{ $fic->motivo }}</td>
-                                                    <!--<td class="align-middle text-center">
-                                                        <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Receta a Paciente"><i class="feather icon-navigation"></i></button>
-                                                    </td>-->
-                                                    <!--<td class="align-middle text-center">
-                                                    </td>-->
-                                                    <td class="align-middle text-center">
-                                                        {{-- <a href="{{ route('profesional.ver_recetas_pdf', $fic->id) }}"><img src="{{ asset('images/documento.svg') }}" alt="Documento" height="20px"> Ver Receta</a> --}}
-                                                        <div onclick="ver_pdf_receta('{{ $fic->id }}')"><img src="{{ asset('images/documento.svg') }}" alt="Documento" height="20px"> Ver</div>
-                                                    </td>
-                                                </tr>
-                                                @endif
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            <table id="tabla_recetas_profesional_ro"
+                                class="display table table-striped dt-responsive nowrap table-xs"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Paciente</th>
+                                        <th>Diagnóstico</th>
+                                        <!--th class="text-center align-middle">Acción</th>-->
+                                        <!-- <th class="text-center align-middle">Estado</th>-->
+                                        <th>Receta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($ficha as $fic)
+                                        @if(!empty($fic->recetas) && $fic->recetas !=null && count($fic->recetas)>0)
+                                        <tr>
+                                            <td>
+                                                {{ $fic->created_at }}
+                                            </td>
+                                            <td>
+                                                {{ $fic->Paciente()->first()->nombres }}<br>
+                                                {{ $fic->Paciente->first()->rut }}
+                                            </td>
+                                            <td>{{ $fic->motivo }}</td>
+                                            <!--<td class="align-middle text-center">
+                                                <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Receta a Paciente"><i class="feather icon-navigation"></i></button>
+                                            </td>-->
+                                            <!--<td class="align-middle text-center">
+                                            </td>-->
+                                            <td>
+                                                {{-- <a href="{{ route('profesional.ver_recetas_pdf', $fic->id) }}"><img src="{{ asset('images/documento.png') }}" alt="Documento" height="35px"> Ver receta</a> --}}
+                                                <div onclick="ver_pdf_receta('{{ $fic->id }}')"><img src="{{ asset('images/documento.png') }}" alt="Documento" height="35px"></div>
+                                            </td>
+                                        </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

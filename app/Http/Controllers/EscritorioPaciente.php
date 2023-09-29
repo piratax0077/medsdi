@@ -38,8 +38,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 use App\Helpers\Funciones;
+use App\Models\ExamenEspecialidad;
+use App\Models\ExamenMedico;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+
+use App\Models\PacienteControlGlicemia;
+use App\Models\PacienteControlPeso;
+use App\Models\PacienteControlPresion;
+use App\Models\PacienteControlOxigeno;
+use App\Models\PacienteControlOrina;
+use App\Models\ResultadoExamen;
 
 class EscritorioPaciente extends Controller
 {
@@ -916,7 +925,44 @@ class EscritorioPaciente extends Controller
 
     public function receta_misexamenes()
     {
-        return view('app.paciente.receta.mis_examenes');
+        $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
+
+        /** EXAMENES DE ESPECIALIDAD REALIZADOS */
+        $examenes_especialidad_realizados = ExamenEspecialidad::select('id', 'id_tipo', 'id_template', 'id_examen_tipo', 'id_sub_tipo_especialidad', 'id_ficha_atencion', 'id_ficha_especialidad', 'id_paciente', 'id_profesional', 'id_asistente', 'nombre', 'revisado', 'estado')
+                                                            ->with(['HoraMedica' => function($query){
+                                                                $query->select('id', 'id_ficha_atencion', 'fecha_realizacion_consulta', 'id_estado');
+                                                            }])
+                                                            ->with(['ExamenEspecialidadTemplate' => function($query){
+                                                                $query->select('id', 'nombre', 'alias');
+                                                            }])
+                                                            ->with(['ExamenEspecialidadTipo' => function($query){
+                                                                $query->select('id', 'nombre', 'descripcion');
+                                                            }])
+                                                            ->with(['SubTipoEspecialidad' => function($query){
+                                                                $query->select('id', 'nombre');
+                                                            }])
+                                                            ->with(['Profesional' => function($query){
+                                                                $query->select('id', 'nombre', 'apellido_uno', 'apellido_dos');
+                                                            }])
+                                                            ->where('id_paciente', $paciente->id)
+                                                            ->get();
+
+        /** resultado de examenes */
+        // $resultado_examen = ResultadoExamen::where('id_paciente', $paciente->id)->get();
+        $resultado_examen = ResultadoExamen::with('ResultadoExamenArchivo')->where('id_paciente', $paciente->id)->get();
+        if($resultado_examen)
+        {
+            foreach ($resultado_examen as $key => $value)
+            {
+                $result_tipo_ex = ExamenMedico::where('id', $value->tipo_examen)->get()->first();
+                $resultado_examen[$key]['obj_tipo_examen'] = $result_tipo_ex;
+            }
+        }
+
+        return view('app.paciente.receta.mis_examenes')->with([
+            'examenes_especialidad_realizados' => $examenes_especialidad_realizados,
+            'resultado_examen' => $resultado_examen,
+        ]);
     }
 
     public function receta_miscertificados()
@@ -1352,5 +1398,716 @@ class EscritorioPaciente extends Controller
         return $datos;
     }
 
-}
+    public function buscarPacientePorRut(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
 
+        $rut = $request->rut;
+
+        if($valido)
+        {
+            $paciente = Paciente::where('rut','like', ''.$rut.'%')->get()->first();
+            if($paciente)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registro'] = $paciente;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function registroControlGlicemia(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->alimento))
+        {
+            $error['alimento'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->postprandial))
+        {
+            $error['postprandial'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->preprandial))
+        {
+            $error['preprandial'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $paciente = Paciente::where('id_usuario', Auth::user()->id)->get()->first();
+            $registro = new PacienteControlGlicemia();
+            $registro->id_paciente = $paciente->id;
+            $registro->alimento = $request->alimento;
+            $registro->postprandial = $request->postprandial;
+            $registro->preprandial = $request->preprandial;
+            $registro->noche = $request->noche;
+            $registro->observacion = $request->observacion;
+            $registro->fecha = date('Y-m-d H:i');
+
+            if($registro->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'falla en registro';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function verRegistrosControlGlicemia(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $paciente = Paciente::where('id_usuario', Auth::user()->id)->get()->first();
+
+            $filtro = array();
+            $filtro[] = array('id_paciente', $paciente->id);
+            if($request->estado == '')
+                $filtro[] = array('estado', 1);
+            else
+                $filtro[] = array('estado', $request->estado);
+
+            $registros = PacienteControlGlicemia::where($filtro)->get();
+
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function eliminarRegistroControlGlicemia(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id))
+        {
+            $error['id'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = PacienteControlGlicemia::find($request->id);
+
+            if($registro)
+            {
+                $registro->estado = 0;
+                if($registro->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'registro eliminado';
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'falla en eliminar';
+                }
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro no encontrado';
+        }
+
+        return $datos;
+
+    }
+
+
+
+    public function registroControlPeso(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->inicial))
+        {
+            $error['inicial'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->actual))
+        {
+            $error['actual'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->estatura))
+        {
+            $error['estatura'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->imc))
+        {
+            $error['imc'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->variacion))
+        {
+            $error['variacion'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->ideal))
+        {
+            $error['ideal'] = 'campo requerido';
+            $valido = 0;
+        }
+        if($valido)
+        {
+            $paciente = Paciente::where('id_usuario', Auth::user()->id)->get()->first();
+            $registro = new PacienteControlPeso();
+            $registro->id_paciente = $paciente->id;
+            $registro->inicial = $request->inicial;
+            $registro->actual = $request->actual;
+            $registro->estatura = $request->estatura;
+            $registro->imc = $request->imc;
+            $registro->variacion = $request->variacion;
+            $registro->ideal = $request->ideal;
+            $registro->fecha = date('Y-m-d H:i');
+
+            if($registro->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'falla en registro';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function verRegistrosControlPeso(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $paciente = Paciente::where('id_usuario', Auth::user()->id)->get()->first();
+
+            $filtro = array();
+            $filtro[] = array('id_paciente', $paciente->id);
+            if($request->estado == '')
+                $filtro[] = array('estado', 1);
+            else
+                $filtro[] = array('estado', $request->estado);
+
+            $registros = PacienteControlPeso::where($filtro)->get();
+
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function eliminarRegistroControlPeso(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id))
+        {
+            $error['id'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = PacienteControlPeso::find($request->id);
+
+            if($registro)
+            {
+                $registro->estado = 0;
+                if($registro->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'registro eliminado';
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'falla en eliminar';
+                }
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro no encontrado';
+        }
+
+        return $datos;
+
+    }
+
+    public function registroControlPresion(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+        if(empty($request->sistolica))
+        {
+            $error['sistolica'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->diastólica))
+        {
+            $error['diastólica'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->pulso))
+        {
+            $error['pulso'] = 'campo requerido';
+            $valido = 0;
+        }
+        if($valido)
+        {
+
+            $paciente = Paciente::where('id_usuario', Auth::user()->id)->get()->first();
+            $registro = new PacienteControlPresion();
+            $registro->id_paciente = $paciente->id;
+            $registro->sistolica = $request->sistolica;
+            $registro->diastólica = $request->diastólica;
+            $registro->pulso = $request->pulso;
+            $registro->coment = $request->coment;
+            $registro->fecha = date('Y-m-d H:i');
+            if($registro->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'falla en registro';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function verRegistrosControlPresion(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $paciente = Paciente::where('id_usuario', Auth::user()->id)->get()->first();
+
+            $filtro = array();
+            $filtro[] = array('id_paciente', $paciente->id);
+            if($request->estado == '')
+                $filtro[] = array('estado', 1);
+            else
+                $filtro[] = array('estado', $request->estado);
+
+            $registros = PacienteControlPresion::where($filtro)->get();
+
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function eliminarRegistroControlPresion(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id))
+        {
+            $error['id'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = PacienteControlPresion::find($request->id);
+
+            if($registro)
+            {
+                $registro->estado = 0;
+                if($registro->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'registro eliminado';
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'falla en eliminar';
+                }
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro no encontrado';
+        }
+
+        return $datos;
+
+    }
+    public function registroControlOxigeno(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->lectura))
+        {
+            $error['lectura'] = 'campo requerido';
+            $valido = 0;
+        }
+
+
+        if($valido)
+        {
+            $paciente = Paciente::where('id_usuario', Auth::user()->id)->get()->first();
+            $registro = new PacienteControlOxigeno();
+            $registro->id_paciente = $paciente->id;
+            $registro->lectura = $request->lectura;
+            $registro->coment = $request->coment;
+            $registro->fecha = date('Y-m-d H:i');
+
+            if($registro->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'falla en registro';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function verRegistrosControlOxigeno(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $paciente = Paciente::where('id_usuario', Auth::user()->id)->get()->first();
+
+            $filtro = array();
+            $filtro[] = array('id_paciente', $paciente->id);
+            if($request->estado == '')
+                $filtro[] = array('estado', 1);
+            else
+                $filtro[] = array('estado', $request->estado);
+
+            $registros = PacienteControlOxigeno::where($filtro)->get();
+
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function eliminarRegistroControlOxigeno(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id))
+        {
+            $error['id'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = PacienteControlOxigeno::find($request->id);
+
+            if($registro)
+            {
+                $registro->estado = 0;
+                if($registro->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'registro eliminado';
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'falla en eliminar';
+                }
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro no encontrado';
+        }
+
+        return $datos;
+
+    }
+
+
+
+
+
+
+    public function registroControlOrina(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->lectura))
+        {
+            $error['lectura'] = 'campo requerido';
+            $valido = 0;
+        }
+
+
+        if($valido)
+        {
+            $paciente = Paciente::where('id_usuario', Auth::user()->id)->get()->first();
+            $registro = new PacienteControlOrina();
+            $registro->id_paciente = $paciente->id;
+            $registro->lectura = $request->lectura;
+            $registro->coment = $request->coment;
+            $registro->fecha = date('Y-m-d H:i');
+
+            if($registro->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'falla en registro';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function verRegistrosControlOrina(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $paciente = Paciente::where('id_usuario', Auth::user()->id)->get()->first();
+
+            $filtro = array();
+            $filtro[] = array('id_paciente', $paciente->id);
+            if($request->estado == '')
+                $filtro[] = array('estado', 1);
+            else
+                $filtro[] = array('estado', $request->estado);
+
+            $registros = PacienteControlOrina::where($filtro)->get();
+
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function eliminarRegistroControlOrina(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id))
+        {
+            $error['id'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = PacienteControlOrina::find($request->id);
+
+            if($registro)
+            {
+                $registro->estado = 0;
+                if($registro->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'registro eliminado';
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'falla en eliminar';
+                }
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registro no encontrado';
+        }
+
+        return $datos;
+
+    }
+
+}

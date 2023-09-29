@@ -188,7 +188,9 @@
                                                 <p>Desea adjuntar algún documento</p>
                                                 <input type="hidden" name="input_lista_archivo" id="input_lista_archivo" value="">
                                                 <!-- [ Main Content ] start -->
-                                                <div class="dropzone" id="mis-archivos" action="">
+                                                {{-- <div class="dropzone" id="mis-archivos-ges" action="{{ route('profesional.archivo.carga') }}"> --}}
+                                                <div class="dropzone" id="mis-archivos-ges">
+                                                {{-- <div class="dropzone" id="mis-archivos-ges" action=""> --}}
                                                 </div>
                                                 <!-- [ file-upload ] end -->
                                             </div>
@@ -228,350 +230,353 @@
 
 <script>
     /** MANEJO DE ARCHIVO */
-    // var myDropzone_ges ;
-    // Dropzone.options.misArchivos = {
-    //     init:function()
-    //     {
-    //         myDropzone_ges = this;
-    //     },
-    //     url: "{{ route('profesional.archivo.carga') }}",
-    //     method: 'post',
-    //     createImageThumbnails: true,
-    //     addRemoveLinks: true,
-    //     headers:{
-    //         'X-CSRF-TOKEN' : CSRF_TOKEN,
-    //     },
 
-    //     acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv",
-    //     maxFilesize: 4,
-    //     maxFiles: 4,
-    //     /** El texto utilizado antes de que se eliminen los archivos. */
-    //     dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
+    // $(document).ready(function () {
+    //     // var myDropzone_ges ;
+    //     // Dropzone.options.misArchivosGes = {
+    //     //     init:function()
+    //     //     {
+    //     //         myDropzone_ges = this;
+    //     //     },
+    //     //     url: "{{ route('profesional.archivo.carga') }}",
+    //     //     method: 'post',
+    //     //     createImageThumbnails: true,
+    //     //     addRemoveLinks: true,
+    //     //     headers:{
+    //     //         'X-CSRF-TOKEN' : CSRF_TOKEN,
+    //     //     },
 
-    //     /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
-    //     dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+    //     //     acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*",
+    //     //     maxFilesize: 4,
+    //     //     maxFiles: 4,
+    //     //     /** El texto utilizado antes de que se eliminen los archivos. */
+    //     //     dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
 
-    //     /**
-    //      * El texto que se agregará antes del formulario alternativo.
-    //      * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
-    //      * ser ignorado.
-    //      */
-    //     dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+    //     //     /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+    //     //     dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
 
-    //     /**
-    //      * Si el tamaño del archivo es demasiado grande.
-    //      * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
-    //      */
-    //     dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+    //     //     /**
+    //     //      * El texto que se agregará antes del formulario alternativo.
+    //     //      * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+    //     //      * ser ignorado.
+    //     //      */
+    //     //     dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
 
-    //     /** Si el archivo no coincide con el tipo de archivo. */
-    //     dictInvalidFileType: "No puedes subir archivos de este tipo.",
+    //     //     /**
+    //     //      * Si el tamaño del archivo es demasiado grande.
+    //     //      * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+    //     //      */
+    //     //     dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
 
-    //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
-    //     dictCancelUpload: "Cancelar carga",
+    //     //     /** Si el archivo no coincide con el tipo de archivo. */
+    //     //     dictInvalidFileType: "No puedes subir archivos de este tipo.",
 
-    //     /** El texto que se muestra si una carga se canceló manualmente */
-    //     dictUploadCanceled: "Subida cancelada.",
+    //     //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+    //     //     dictCancelUpload: "Cancelar carga",
 
-    //     /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
-    //     dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+    //     //     /** El texto que se muestra si una carga se canceló manualmente */
+    //     //     dictUploadCanceled: "Subida cancelada.",
 
-    //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
-    //     dictRemoveFile: "Eliminar archivo",
+    //     //     /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+    //     //     dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
 
-    //     /**
-    //      * Se muestra si `maxFiles` es st y se excede.
-    //      */
-    //     dictMaxFilesExceeded: "No puede cargar más archivos.",
+    //     //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+    //     //     dictRemoveFile: "Eliminar archivo",
 
-    //     // accept(file, done) {
-    //     //     console.log('-------------accept-----------------------');
-    //     //     cargar_lista_archivo();
-    //     //     return done();
-    //     // },
-    //     success: function(file, response){
-    //         // console.log('-------------success-----------------------');
-    //         cargar_lista_archivo(myDropzone_ges,'ges');
+    //     //     /**
+    //     //      * Se muestra si `maxFiles` es st y se excede.
+    //     //      */
+    //     //     dictMaxFilesExceeded: "No puede cargar más archivos.",
 
-    //         if (file.previewElement) {
-    //             return file.previewElement.classList.add("dz-success");
-    //         }
-    //     },
-    //     error(file, message) {
-    //         // console.log('-------------error-----------------------');
-    //         if (file.previewElement) {
-    //             file.previewElement.classList.add("dz-error");
-    //             if (typeof message !== "string" && message.error)
-    //             {
-    //                 message = message.error;
-    //             }
-    //             else
-    //             {
-    //                 message = message.message;
-    //             }
-    //             for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
-    //                 node.textContent = message;
-    //             }
-    //         }
-    //     },
-    //     removedfile(file) {
-    //         // console.log('-------------removedfile-----------------------');
-    //         cargar_lista_archivo(myDropzone_ges,'ges');
-    //         if (file.previewElement != null && file.previewElement.parentNode != null) {
-    //             file.previewElement.parentNode.removeChild(file.previewElement);
-    //         }
-    //         return this._updateMaxFilesReachedClass();
-    //     },
-    //     canceled: function canceled(file) {
-    //         cargar_lista_archivo(myDropzone_ges,'ges');
-    //         return this.emit("error", file, this.options.dictUploadCanceled);
-    //     },
-    // };
+    //     //     // accept(file, done) {
+    //     //     //     console.log('-------------accept-----------------------');
+    //     //     //     cargar_lista_archivo();
+    //     //     //     return done();
+    //     //     // },
+    //     //     success: function(file, response){
+    //     //         // console.log('-------------success-----------------------');
+    //     //         cargar_lista_archivo(myDropzone_ges,'ges');
 
-    // var lista_archivo = {};
-    // function cargar_lista_archivo(obj_dropzone, alias_examen)
-    // {
-    //     // console.log('--------------cargar_lista_archivo----------------------');
-    //     lista_archivo[alias_examen] = [];
-    //     let temp  = obj_dropzone.getAcceptedFiles();
-    //     $.each(temp, function( index, value )
-    //     {
-    //         if(value.status == "success")
-    //         {
-    //             if(value.xhr !== undefined)
-    //             {
-    //                 var archivo_temp = JSON.parse(value.xhr.response);
-    //                 lista_archivo[alias_examen][index] = [
-    //                     url=archivo_temp.archivo.url,
-    //                     nombre_origian= archivo_temp.archivo.original_file_name,
-    //                     nombre_archivo = archivo_temp.archivo.nombre_archivo,
-    //                     file_extension = archivo_temp.archivo.file_extension,
-    //                 ];
-    //                 $('#input_lista_archivo').val('');
-    //                 $('#input_lista_archivo').val(JSON.stringify(lista_archivo));
-    //             }
-    //         }
-    //     });
+    //     //         if (file.previewElement) {
+    //     //             return file.previewElement.classList.add("dz-success");
+    //     //         }
+    //     //     },
+    //     //     error(file, message) {
+    //     //         // console.log('-------------error-----------------------');
+    //     //         if (file.previewElement) {
+    //     //             file.previewElement.classList.add("dz-error");
+    //     //             if (typeof message !== "string" && message.error)
+    //     //             {
+    //     //                 message = message.error;
+    //     //             }
+    //     //             else
+    //     //             {
+    //     //                 message = message.message;
+    //     //             }
+    //     //             for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+    //     //                 node.textContent = message;
+    //     //             }
+    //     //         }
+    //     //     },
+    //     //     removedfile(file) {
+    //     //         // console.log('-------------removedfile-----------------------');
+    //     //         cargar_lista_archivo(myDropzone_ges,'ges');
+    //     //         if (file.previewElement != null && file.previewElement.parentNode != null) {
+    //     //             file.previewElement.parentNode.removeChild(file.previewElement);
+    //     //         }
+    //     //         return this._updateMaxFilesReachedClass();
+    //     //     },
+    //     //     canceled: function canceled(file) {
+    //     //         cargar_lista_archivo(myDropzone_ges,'ges');
+    //     //         return this.emit("error", file, this.options.dictUploadCanceled);
+    //     //     },
+    //     // };
+    // });
 
-
-    // }
-    // /** CIERRE MANEJO DE IMAGENES */
-
-    // function registrar_ges_ficha()
-    // {
-    //     var validar = 0;
-    //     var mensaje ='';
-
-    //     let nombre_ges = $('#nombre_ges').val();
-    //     let id_ges = $('#id_ges').val();
-
-    //     let nombre_institucion_ficha_ges = $('#nombre_institucion_ficha_ges').val();
-    //     let direccion_institucion_ficha_ges = $('#direccion_institucion_ficha_ges').val();
-    //     let id_profesional = $('#id_profesional').val();
-    //     let nombre_responsable_ficha_ges = $('#nombre_responsable_ficha_ges').val();
-    //     let rut_responsable_ficha_ges = $('#rut_responsable_ficha_ges').val();
-
-    //     let id_paciente = $('#id_paciente_fc').val();
-
-    //     let confirmacion_diagnostica_ficha_ges = $('#confirmacion_diagnostica_ficha_ges').val();
-    //     let paciente_tratamiento_ficha_ges = $('#paciente_tratamiento_ficha_ges').val();
-
-    //     // lista_archivo
-    //     let lista_archivo = $('#input_lista_archivo').val();
-
-    //     let id_ficha_atencion = $('#id_fc').val();
-    //     let id_lugar_atencion = $('#id_lugar_atencion').val();
-    //     let hora_medica = $('#hora_medica').val();
-    //     // let codigo_validacion_informe_ges = $('#codigo_validacion_informe_ges').val();
+    var lista_archivo = {};
+    function cargar_lista_archivo(obj_dropzone, alias_examen)
+    {
+        // console.log('--------------cargar_lista_archivo----------------------');
+        lista_archivo[alias_examen] = [];
+        let temp  = obj_dropzone.getAcceptedFiles();
+        $.each(temp, function( index, value )
+        {
+            if(value.status == "success")
+            {
+                if(value.xhr !== undefined)
+                {
+                    var archivo_temp = JSON.parse(value.xhr.response);
+                    lista_archivo[alias_examen][index] = [
+                        url=archivo_temp.archivo.url,
+                        nombre_origian= archivo_temp.archivo.original_file_name,
+                        nombre_archivo = archivo_temp.archivo.nombre_archivo,
+                        file_extension = archivo_temp.archivo.file_extension,
+                    ];
+                    $('#input_lista_archivo').val('');
+                    $('#input_lista_archivo').val(JSON.stringify(lista_archivo));
+                }
+            }
+        });
 
 
-    //     // if(nombre_institucion_ficha_ges == '')
-    //     // {
-    //     //     $('#nombre_institucion_ficha_ges').focus();
-    //     //     validar = 1;
+    }
+    /** CIERRE MANEJO DE IMAGENES */
 
-    //     // }
-    //     // if(direccion_institucion_ficha_ges == '')
-    //     // {
-    //     //     $('#direccion_institucion_ficha_ges').focus();
-    //     //     validar = 1;
+    function registrar_ges_ficha()
+    {
+        var validar = 0;
+        var mensaje ='';
 
-    //     // }
+        let nombre_ges = $('#nombre_ges').val();
+        let id_ges = $('#id_ges').val();
 
-    //     // if(nombre_responsable_ficha_ges == '')
-    //     // {
-    //     //     $('#nombre_responsable_ficha_ges').focus();
-    //     //     validar = 1;
+        let nombre_institucion_ficha_ges = $('#nombre_institucion_ficha_ges').val();
+        let direccion_institucion_ficha_ges = $('#direccion_institucion_ficha_ges').val();
+        let id_profesional = $('#id_profesional').val();
+        let nombre_responsable_ficha_ges = $('#nombre_responsable_ficha_ges').val();
+        let rut_responsable_ficha_ges = $('#rut_responsable_ficha_ges').val();
 
-    //     // }
-    //     // if(rut_responsable_ficha_ges == '')
-    //     // {
-    //     //     $('#rut_responsable_ficha_ges').focus();
-    //     //     validar = 1;
+        let id_paciente = $('#id_paciente_fc').val();
 
-    //     // }
+        let confirmacion_diagnostica_ficha_ges = $('#confirmacion_diagnostica_ficha_ges').val();
+        let paciente_tratamiento_ficha_ges = $('#paciente_tratamiento_ficha_ges').val();
 
-    //     if(confirmacion_diagnostica_ficha_ges == '')
-    //     {
-    //         $('#confirmacion_diagnostica_ficha_ges').focus();
-    //         mensaje += ' Debe ingresar Confirmación diagnóstica GES.\n' ;
-    //         validar = 1;
+        // lista_archivo
+        let lista_archivo = $('#input_lista_archivo').val();
 
-    //     }
-    //     if(paciente_tratamiento_ficha_ges == '')
-    //     {
-    //         $('#paciente_tratamiento_ficha_ges').focus();
-    //         mensaje += ' Debe Confimar si el paciente se encuentra en tratamiento.\n' ;
-    //         validar = 1;
+        let id_ficha_atencion = $('#id_fc').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+        let hora_medica = $('#hora_medica').val();
+        // let codigo_validacion_informe_ges = $('#codigo_validacion_informe_ges').val();
 
-    //     }
-    //     if(nombre_ges == '')
-    //     {
-    //         $('#nombre_ges').focus();
-    //         mensaje += ' Debe ingresar el Diagnóstico GES.\n' ;
-    //         validar = 1;
-    //     }
-    //     // if(id_paciente == '')
-    //     // {
-    //     //     $('#id_paciente').focus();
-    //     //     validar = 1;
-    //     // }
-    //     // if(id_profesional == '')
-    //     // {
-    //     //     $('#id_profesional').focus();
-    //     //     validar = 1;
-    //     // }
-    //     // if(id_ficha_atencion == '')
-    //     // {
-    //     //     $('#id_ficha_atencion').focus();
-    //     //     validar = 1;
-    //     // }
-    //     // if(id_lugar_atencion == '')
-    //     // {
-    //     //     $('#id_lugar_atencion').focus();
-    //     //     validar = 1;
-    //     // }
-    //     // if(hora_medica == '')
-    //     // {
-    //     //     $('#hora_medica').focus();
-    //     //     validar = 1;
-    //     // }
 
-    //     if(validar == 1)
-    //     {
-    //         swal({
-    //             title: "Debe ingresar todos los datos requeridos." ,
-    //             text: mensaje,
-    //             icon: "error",
-    //         })
-    //         return false;
-    //     }
-    //     else
-    //     {
+        // if(nombre_institucion_ficha_ges == '')
+        // {
+        //     $('#nombre_institucion_ficha_ges').focus();
+        //     validar = 1;
 
-    //         $.ajax({
-    //             url: "{{ route('ficha_atencion.registrar_diagnostico_ges') }}",
-    //             type: 'GET',
-    //             dataType: 'json',
-    //             data: {
-    //                 nombre_institucion_ficha_ges : nombre_institucion_ficha_ges,
-    //                 direccion_institucion_ficha_ges : direccion_institucion_ficha_ges,
-    //                 nombre_responsable_ficha_ges : nombre_responsable_ficha_ges,
-    //                 rut_responsable_ficha_ges : rut_responsable_ficha_ges,
-    //                 confirmacion_diagnostica_ficha_ges : confirmacion_diagnostica_ficha_ges,
-    //                 paciente_tratamiento_ficha_ges : paciente_tratamiento_ficha_ges,
-    //                 id_ges : id_ges,
-    //                 nombre_ges : nombre_ges,
-    //                 id_paciente : id_paciente,
-    //                 id_profesional : id_profesional,
-    //                 id_ficha_atencion : id_ficha_atencion,
-    //                 id_lugar_atencion : id_lugar_atencion,
-    //                 hora_medica : hora_medica,
-    //                 // codigo_verificacion : codigo_validacion_informe_ges,
-    //                 codigo_verificacion : '',
-    //                 lista_archivo : lista_archivo,
-    //             },
-    //         })
-    //         .done(function(resp) {
-    //             console.log(resp);
+        // }
+        // if(direccion_institucion_ficha_ges == '')
+        // {
+        //     $('#direccion_institucion_ficha_ges').focus();
+        //     validar = 1;
 
-    //             if (resp != '')
-    //             {
-    //                 if(resp.estado == 1)
-    //                 {
-    //                     console.log(resp);
-    //                     //$('#form_control_obesidad').trigger("reset");
-    //                     $('#nombre_ges').val('');
-    //                     $('#id_ges').val('');
+        // }
 
-    //                     $('#nombre_responsable_ficha_ges').val('');
-    //                     $('#rut_responsable_ficha_ges').val('');
-    //                     $('#confirmacion_diagnostica_ficha_ges').val('');
-    //                     $('#paciente_tratamiento_ficha_ges').val('');
-    //                     $('#input_lista_archivo').val('');
-    //                     $('#codigo_validacion_informe_ges').val('');
+        // if(nombre_responsable_ficha_ges == '')
+        // {
+        //     $('#nombre_responsable_ficha_ges').focus();
+        //     validar = 1;
 
-    //                     $('#mensaje').text('Se ha creado Diagnostico GES de forma correcta');
-    //                     $('#mensaje').show();
-    //                     $('#form_ges').modal('hide');
+        // }
+        // if(rut_responsable_ficha_ges == '')
+        // {
+        //     $('#rut_responsable_ficha_ges').focus();
+        //     validar = 1;
 
-    //                     swal({
-    //                         title: "Constancia GES (Artículo 24 Ley 19.966).",
-    //                         text: 'Registro Exitoso.\n El paciente ha sido Notificado\n La constancia puede ser recuperada desde su escritorio (Documentos).',
-    //                         icon: "success",
-    //                     });
-    //                 }
-    //                 else
-    //                 {
-    //                     swal({
-    //                         title: "Constancia GES (Artículo 24 Ley 19.966).",
-    //                         text: 'Registro Fallido.',
-    //                         icon: "error",
-    //                     });
-    //                 }
-    //             }
-    //             else
-    //             {
-    //                 swal({
-    //                     title: "Constancia GES (Artículo 24 Ley 19.966).",
-    //                     text: 'Registro Fallido.',
-    //                     icon: "error",
-    //                 });
-    //             }
-    //         })
-    //         .fail(function(e) {
-    //             console.log("error");
-    //             console.log(e);
-    //         })
-    //     }
-    // };
+        // }
 
-    // function ver_pdf_constancia_ges(id_ficha_atencion)
-    // {
+        if(confirmacion_diagnostica_ficha_ges == '')
+        {
+            $('#confirmacion_diagnostica_ficha_ges').focus();
+            mensaje += ' Debe ingresar Confirmación diagnóstica GES.\n' ;
+            validar = 1;
 
-    //     var variables = '';
-    //     variables += '?id_ficha_atencion='+$('#id_fc').val();
-    //     variables += '&nombre_institucion_ficha_ges='+$('#nombre_institucion_ficha_ges').val();
-    //     variables += '&direccion_institucion_ficha_ges='+$('#direccion_institucion_ficha_ges').val();
-    //     variables += '&nombre_responsable_ficha_ges='+$('#nombre_responsable_ficha_ges').val();
-    //     variables += '&rut_responsable_ficha_ges='+$('#rut_responsable_ficha_ges').val();
-    //     variables += '&confirmacion_diagnostica_ficha_ges='+$('#confirmacion_diagnostica_ficha_ges').val();
-    //     variables += '&paciente_tratamiento_ficha_ges='+$('#paciente_tratamiento_ficha_ges').val();
-    //     variables += '&fecha_ficha_ges='+$('#fecha_ficha_ges').val();
-    //     variables += '&hora_ficha_ges='+$('#hora_ficha_ges').val();
-    //     variables += '&id_ges_diagnostico='+$('#id_ges_diagnostico').val();
-    //     variables += '&nombre_ges='+$('#nombre_ges').val();
-    //     variables += '&funcionalidad='+$('#funcionalidad').val();
+        }
+        if(paciente_tratamiento_ficha_ges == '')
+        {
+            $('#paciente_tratamiento_ficha_ges').focus();
+            mensaje += ' Debe Confimar si el paciente se encuentra en tratamiento.\n' ;
+            validar = 1;
 
-    //     Fancybox.show(
-    //         [
-    //             {
-    //             src: '{{ route("ficha_atencion.vista.previa.pdf.ges") }}'+variables,
-    //             type: "iframe",
-    //             preload: false,
-    //             },
-    //         ]
-    //     );
-    // }
+        }
+        if(nombre_ges == '')
+        {
+            $('#nombre_ges').focus();
+            mensaje += ' Debe ingresar el Diagnóstico GES.\n' ;
+            validar = 1;
+        }
+        // if(id_paciente == '')
+        // {
+        //     $('#id_paciente').focus();
+        //     validar = 1;
+        // }
+        // if(id_profesional == '')
+        // {
+        //     $('#id_profesional').focus();
+        //     validar = 1;
+        // }
+        // if(id_ficha_atencion == '')
+        // {
+        //     $('#id_ficha_atencion').focus();
+        //     validar = 1;
+        // }
+        // if(id_lugar_atencion == '')
+        // {
+        //     $('#id_lugar_atencion').focus();
+        //     validar = 1;
+        // }
+        // if(hora_medica == '')
+        // {
+        //     $('#hora_medica').focus();
+        //     validar = 1;
+        // }
+
+        if(validar == 1)
+        {
+            swal({
+                title: "Debe ingresar todos los datos requeridos." ,
+                text: mensaje,
+                icon: "error",
+            })
+            return false;
+        }
+        else
+        {
+
+            $.ajax({
+                url: "{{ route('ficha_atencion.registrar_diagnostico_ges') }}",
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    nombre_institucion_ficha_ges : nombre_institucion_ficha_ges,
+                    direccion_institucion_ficha_ges : direccion_institucion_ficha_ges,
+                    nombre_responsable_ficha_ges : nombre_responsable_ficha_ges,
+                    rut_responsable_ficha_ges : rut_responsable_ficha_ges,
+                    confirmacion_diagnostica_ficha_ges : confirmacion_diagnostica_ficha_ges,
+                    paciente_tratamiento_ficha_ges : paciente_tratamiento_ficha_ges,
+                    id_ges : id_ges,
+                    nombre_ges : nombre_ges,
+                    id_paciente : id_paciente,
+                    id_profesional : id_profesional,
+                    id_ficha_atencion : id_ficha_atencion,
+                    id_lugar_atencion : id_lugar_atencion,
+                    hora_medica : hora_medica,
+                    // codigo_verificacion : codigo_validacion_informe_ges,
+                    codigo_verificacion : '',
+                    lista_archivo : lista_archivo,
+                },
+            })
+            .done(function(resp) {
+                console.log(resp);
+
+                if (resp != '')
+                {
+                    if(resp.estado == 1)
+                    {
+                        console.log(resp);
+                        //$('#form_control_obesidad').trigger("reset");
+                        $('#nombre_ges').val('');
+                        $('#id_ges').val('');
+
+                        $('#nombre_responsable_ficha_ges').val('');
+                        $('#rut_responsable_ficha_ges').val('');
+                        $('#confirmacion_diagnostica_ficha_ges').val('');
+                        $('#paciente_tratamiento_ficha_ges').val('');
+                        $('#input_lista_archivo').val('');
+                        $('#codigo_validacion_informe_ges').val('');
+
+                        $('#mensaje').text('Se ha creado Diagnostico GES de forma correcta');
+                        $('#mensaje').show();
+                        $('#form_ges').modal('hide');
+
+                        swal({
+                            title: "Constancia GES (Artículo 24 Ley 19.966).",
+                            text: 'Registro Exitoso.\n El paciente ha sido Notificado\n La constancia puede ser recuperada desde su escritorio (Documentos).',
+                            icon: "success",
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Constancia GES (Artículo 24 Ley 19.966).",
+                            text: 'Registro Fallido.',
+                            icon: "error",
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Constancia GES (Artículo 24 Ley 19.966).",
+                        text: 'Registro Fallido.',
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(e) {
+                console.log("error");
+                console.log(e);
+            })
+        }
+    };
+
+    function ver_pdf_constancia_ges(id_ficha_atencion)
+    {
+
+        var variables = '';
+        variables += '?id_ficha_atencion='+$('#id_fc').val();
+        variables += '&nombre_institucion_ficha_ges='+$('#nombre_institucion_ficha_ges').val();
+        variables += '&direccion_institucion_ficha_ges='+$('#direccion_institucion_ficha_ges').val();
+        variables += '&nombre_responsable_ficha_ges='+$('#nombre_responsable_ficha_ges').val();
+        variables += '&rut_responsable_ficha_ges='+$('#rut_responsable_ficha_ges').val();
+        variables += '&confirmacion_diagnostica_ficha_ges='+$('#confirmacion_diagnostica_ficha_ges').val();
+        variables += '&paciente_tratamiento_ficha_ges='+$('#paciente_tratamiento_ficha_ges').val();
+        variables += '&fecha_ficha_ges='+$('#fecha_ficha_ges').val();
+        variables += '&hora_ficha_ges='+$('#hora_ficha_ges').val();
+        variables += '&id_ges_diagnostico='+$('#id_ges_diagnostico').val();
+        variables += '&nombre_ges='+$('#nombre_ges').val();
+        variables += '&funcionalidad='+$('#funcionalidad').val();
+
+        Fancybox.show(
+            [
+                {
+                src: '{{ route("ficha_atencion.vista.previa.pdf.ges") }}'+variables,
+                type: "iframe",
+                preload: false,
+                },
+            ]
+        );
+    }
 
 </script>

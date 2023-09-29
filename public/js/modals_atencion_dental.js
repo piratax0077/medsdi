@@ -11,7 +11,7 @@
 			console.log("abrir modal accion_modal_interconsulta");
 			$('#m_interconsulta.php').modal();
 		});
-		
+
 		/* Formulario de informe médico */
 $('#formularios_atencion').on('click', ".accion_modal_informe", function () {
 	console.log("abrir modal accion_modal_informe");
@@ -122,7 +122,7 @@ $('#formularios_atencion').on('click', ".accion_modal_informe", function () {
         	function maxilar_superior (){
 	            $('#tratamiento_maxilar_superior').modal('show');
 	        }
-       
+
         	/* Maxilar superior*/
         	function maxilar_inferior (){
 	            $('#tratamiento_maxilar_inferior').modal('show');
@@ -151,9 +151,6 @@ $('#formularios_atencion').on('click', ".accion_modal_informe", function () {
 	            $('#indicar_examen').modal('show');
 	        }
 
-	        function i_medicamento(){
-	            $('#indicar_medicamentos').modal('show');
-	        }
 
 	    /* derivacion a tratamiento */
 
@@ -249,4 +246,3 @@ $('#formularios_atencion').on('click', ".accion_modal_informe", function () {
 	}
 
 
-	

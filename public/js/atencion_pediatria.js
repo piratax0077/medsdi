@@ -28,12 +28,6 @@
 /** MODALS **/
 /** MODALS FORMULARIOS GENERALES **/
 
-
-/** Indicar medicamento **/
-function i_medicamento() {
-    $('#indicar_medicamentos').modal('show');
-}
-
 function rx_ped() {
     $('#modal_ex_radiologicoped').modal('show');
 }

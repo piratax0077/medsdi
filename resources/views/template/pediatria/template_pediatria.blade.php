@@ -22,6 +22,7 @@
         <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
+
         <!-- fileupload-custom css -->
         <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
 
@@ -162,6 +163,7 @@
 
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
             $(document).ready(function () {
                 {{--  mensaje de exito al registrar ficha clinica  --}}
                  @if(session('mensaje'))

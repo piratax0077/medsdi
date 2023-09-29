@@ -21,6 +21,7 @@
                                             <span id="datos_consulta_rut"></span>
                                         </td>
 
+
                                         </th>
                                     </tr>
                                     <tr>
@@ -171,7 +172,7 @@
                         <a class="nav-link-modal active" id="pills-tab-recibir-bono" data-toggle="pill" href="#pills-recibir-bono" role="tab" aria-controls="pills-home" aria-selected="true">Recibir Pago</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link-modal" id="pills-venta-tab" data-toggle="pill" href="#pills-venta" role="tab" aria-controls="pills-venta" aria-selected="false">Venta</a>
+                        <a class="nav-link-modal" id="pills-venta-tab" data-toggle="pill" href="#pills-venta" role="tab" aria-controls="pills-venta" aria-selected="false">Venta de Bonos</a>
                     </li>
                 </ul>
                 {{--  PESTAÑAS  --}}
@@ -183,60 +184,68 @@
                             <input type="hidden" name="bono_id_profesional" id="bono_id_profesional">
                             <input type="hidden" name="bono_id_paciente" id="bono_id_paciente">
                             <input type="hidden" name="bono_id_tipo_bono" id="bono_id_tipo_bono" value="1">
-                            <div class="col-sm-12 mt-2">
-                                <div class="form-group">
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Rut del Paciente</label>
-                                    <input type="person" class="form-control" name="bono_paciente_rut" id="bono_paciente_rut">
+                                    <input type="person" class="form-control form-control-sm" name="bono_paciente_rut" id="bono_paciente_rut">
                                 </div>
-                                <div class="form-group">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Nombre del Paciente</label>
-                                    <input type="text" class="form-control" name="bono_paciente_nombre" id="bono_paciente_nombre">
+                                    <input type="text" class="form-control form-control-sm" name="bono_paciente_nombre" id="bono_paciente_nombre">
                                 </div>
-                                <hr>
-                                <div class="form-group">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
                                     <label class="floating-label-activo-sm"> Nombre Profesional</label>
-                                    <input type="text" class="form-control" name="bono_profesional_nombre" id="bono_profesional_nombre">
+                                    <input type="text" class="form-control form-control-sm" name="bono_profesional_nombre" id="bono_profesional_nombre">
                                 </div>
-                                <div class="form-group">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
                                     <label class="floating-label-activo-sm"> Rut Profesional</label>
-                                    <input type="text" class="form-control" name="bono_profesional_rut" id="bono_profesional_rut">
+                                    <input type="text" class="form-control form-control-sm" name="bono_profesional_rut" id="bono_profesional_rut">
                                 </div>
-                                <hr>
-                                <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <label class="floating-label-activo-sm">Clase Pago</label>
-                                        <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control">
-                                            <option value="1">Bono Fisico</option>
-                                            <option value="2">Sencillito</option>
-                                            <option value="3">Caja Vecina</option>
-                                            <option value="4">Bono Web</option>
-                                            <option value="5">Bono Web Pre-Pago</option>
-											<option value="6">Particular</option>
-											<option value="7">Copago</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="floating-label-activo-sm">Nº de bono o programa</label>
-                                        <input type="text" class="form-control" name="bono_numero" id="bono_numero" >
-                                    </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Clase Pago</label>
+                                    <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm">
+                                        <option value="1">Bono Fisico</option>
+                                        <option value="2">Sencillito</option>
+                                        <option value="3">Caja Vecina</option>
+                                        <option value="4">Bono Web</option>
+                                        <option value="5">Bono Web Pre-Pago</option>
+                                        <option value="6">Particular</option>
+                                    </select>
                                 </div>
-                                {{--  <div class="form-group">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Nº de bono o programa</label>
-                                    <input type="text" class="form-control" name="bono_numero" id="bono_numero" >
-                                </div>  --}}
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Valor total</label>
-                                    <input name="bono_valor_consulta" id="bono_valor_consulta" type="number" class="form-control">
+                                    <input type="text" class="form-control form-control-sm" name="bono_numero" id="bono_numero" >
                                 </div>
-                                <div class="form-group">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Convenio</label>
-                                    <select id="bono_prevision" name="bono_prevision" class="form-control">
+                                    <select id="bono_prevision" name="bono_prevision" class="form-control form-control-sm">
                                         <option value="0">Selecione una opción</option>
                                         @foreach ($prevision as $prev)
                                             <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
                                         @endforeach
                                     </select>
                                 </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Valor total</label>
+                                    <input name="bono_valor_consulta" id="bono_valor_consulta" type="number" class="form-control form-control-sm">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
                                 <div class="form-group mb-3">
                                     <div class="switch switch-success d-inline m-r-10">
                                         <input type="checkbox" id="recepcion_programa">
@@ -246,11 +255,11 @@
                                 </div>
                                 <div class="form-group" id="sesiones_programa" style="display:none">
                                     <label class="floating-label">Nº de Sesiones</label>
-                                    <input name="bono_sn_sesiones" id="bono_sn_sesiones" type="number" class="form-control">
+                                    <input name="bono_sn_sesiones" id="bono_sn_sesiones" type="number" class="form-control form-control-sm">
                                 </div>
-                                <hr>
+                            </div>
+                            <div class="col-sm-12">
                                 <div class="form-group text-center my-2 pb-2">
-                                    <button type="button" class="btn btn-danger close_modal_recepcion_bonos_api" data-dismiss="modal">Cerrar</button>
                                     <div onclick="recepcion_pago();" class="btn btn-success">Recepcionar</div>
                                 </div>
                             </div>
@@ -259,73 +268,87 @@
                     {{--  PESTAÑA DE VENTA DE BONO  --}}
                     <div class="tab-pane fade" id="pills-venta" role="tabpanel" aria-labelledby="pills-venta-tab">
                         <div class="form-row">
-                            <div class="col-sm-12 mt-2">
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label">Rut</label>
+                                    <input type="person" class="form-control form-control-sm" name="rut" id="rut">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label">Nº de serie carne</label>
+                                    <input type="text" class="form-control form-control-sm" name="serie" id="serie">
+                                    </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label">Nombre</label>
+                                    <input type="text" class="form-control form-control-sm" name="nombre" id="nombre">
+                                </div>
+                            </div>
 
-                                <div class="form-group">
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
                                     <label class="floating-label">Previsión</label>
-                                    <select id="prevision" name="previsioon" class="form-control">
+                                    <select id="prevision" name="previsioon" class="form-control form-control-sm">
                                         <option value="0">Selecione una opción</option>
                                         @foreach ($prevision as $prev)
                                             <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-
-                                <div class="form-group">
-                                    <label class="floating-label">Rut</label>
-                                    <input type="person" class="form-control" name="rut" id="rut">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <button type="submit" onclick="conectar_api()"; class="btn btn-info btn-sm has-ripple">Pedir Autorización</button>
                                 </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Nº de serie carne</label>
-                                    <input type="text" class="form-control" name="serie" id="serie">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label">Folio</label>
+                                    <input type="number" class="form-control form-control-sm" name="folio" id="folio">
                                 </div>
-                                <div class="form-group">
-                                    {{-- Nombre de persona en Cita --}}
-                                    <label class="floating-label">Nombre Beneficiario</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label">Valor Bono</label>
+                                    <input type="number" class="form-control form-control-sm" name="valor_consulta" id="valor_consulta">
                                 </div>
-
-                                <div class="form-group mt-3">
-                                    {{-- respuesta de api --}}
-                                    <label class="floating-label">Número de Bono</label>
-                                    <input type="number" class="form-control" name="folio" id="folio">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label">Valor Bonificación</label>
+                                    <input type="number" class="form-control form-control-sm" name="valor_pagar" id="valor_pagar">
                                 </div>
-
-                                <div class="form-group">
-                                    <label class="floating-label">Valor Total</label>
-                                    <input type="number" class="form-control" name="valor_consulta" id="valor_consulta">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Valor Bonificacion</label>
-                                    <input type="number" class="form-control" name="valor_pagar" id="valor_pagar">
-                                </div>
-                                <div class="form-group">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
                                     <label class="floating-label">Aporte Seguro</label>
-                                    <input type="number" class="form-control" name="valor_seguro" id="valor_seguro">
+                                    <input type="number" class="form-control form-control-sm" name="valor_seguro" id="valor_seguro">
                                 </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Valor a Pagar</label>
-                                    <input type="number" class="form-control" name="valor_copago" id="valor_copagp">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label">Valor a pagar</label>
+                                    <input type="number" class="form-control form-control-sm" name="valor_copago" id="valor_copagp">
                                 </div>
-
-                                {{-- <div class="form-group">
-                                    <label class="floating-label">Valor de la Consulta</label>
-                                    <input name="valor_consulta" id="valor_consulta" type="number" class="form-control">
-                                </div> --}}
-
-                                <hr>
-                                <div class="form-group text-center my-2 pb-2">
-                                    <button type="button" class="btn btn-danger close_modal_recepcion_bonos_api" data-dismiss="modal">Cerrar</button>
-                                    <button type="submit" class="btn btn-info">Pagar Atención Médica</button>
+                            </div>
+                            <hr>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <button type="submit" class="btn btn-info btn-sm has-ripple left-0">Pagar Atención Médica</button>
+                                    {{--  <button type="button" class="btn btn-danger btn-sm has-ripple " data-dismiss="modal">Cerrar</button>  --}}
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill text-left">
+                                    {{--  <button type="submit" class="btn btn-info btn-sm has-ripple">Pagar Atención Médica</button>  --}}
+                                    <button type="button" class="btn btn-danger btn-sm has-ripple " data-dismiss="modal">Cerrar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
-
-
-
             </div>
         </div>
     </div>
@@ -609,4 +632,6 @@
         </div>
     </div>
 </div>
+@include('app.asistente.modales.m_esperando_api')
 <!-- FIN MODAL AGREGAR HORA MEDICA -->
+

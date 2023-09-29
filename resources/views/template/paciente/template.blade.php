@@ -50,6 +50,10 @@
      <link rel="stylesheet" type="text/css" href="{{ asset('css/tabs-secciones.css') }}">
     <link rel="stylesheet" href="{{ asset('css/formulario_sm.css') }}">
 
+    <!-- fancy box -->
+    <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
+    <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
+
 
     @yield('page-styles')
 

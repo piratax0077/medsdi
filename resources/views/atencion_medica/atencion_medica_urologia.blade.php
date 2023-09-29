@@ -45,8 +45,7 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false">Licencia</a>
                                     </li>
-                                     <li class="nav-item">
-                                        {{-- <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a> --}}
+                                    <li class="nav-item">
                                         @if (request('token'))
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
                                         @else
@@ -85,6 +84,7 @@
                             @include('general.secciones_ficha.licencia')
                         </div>
                         <!--Ficha Médica Única-->
+
                         <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
                             @include('atencion_medica.secciones_ficha.fmu')
                         </div>
@@ -109,18 +109,11 @@
         @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
         @include("atencion_medica.include.sidebar_derecho_uro"){{-- modales y data de sidebar especialidad --}}
 
-
         <!--Modals de especialidad -->
+		@include("general.modal.modal_no_disponible")
         @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
 
         <!--Modals formularios generales-->
-
-       {{--   @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
-
-
     </div>
-
     <!--Cierre: Container Completo-->
 @endsection
