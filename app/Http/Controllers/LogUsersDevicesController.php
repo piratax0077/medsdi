@@ -320,18 +320,13 @@ class LogUsersDevicesController extends Controller
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Notificación GES</span> El Profesional {$profesional} le ha notificado Patologia GES con fecha {$fecha}</p><br>";
                     break;
 
-<<<<<<< Updated upstream
                     case 11: //  autorizacion compin paciente
-=======
-                    case 14: //  Permiso para venta de MEDICAMENTOS
->>>>>>> Stashed changes
                         $data = json_decode($value['msg'],false);
                         $id = $data->id;
                         $nombre = $data->nombre;
                         $fecha = $data->fecha;
                         $profesional = $data->profesional;
                         /** peticion */
-<<<<<<< Updated upstream
                         $value['msg_estado'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> solicita su permiso para Iniciar una Licencia";
 
                         /** resultado */
@@ -403,8 +398,13 @@ class LogUsersDevicesController extends Controller
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Autorizacion para compra de bono</span> con fecha {$fecha}</p><br>";
                     break;
 
-
-=======
+					case 14: //  Permiso para venta de MEDICAMENTOS
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id;
+                        $nombre = $data->nombre;
+                        $fecha = $data->fecha;
+                        $profesional = $data->profesional;
+                        /** peticion */
                         $value['msg_estado'] = "Se necesita  <span class='color-azul txt_bold'>permiso</span> para la venta de medicamentos asociados a una receta";
 
                         /** resultado */
@@ -423,7 +423,6 @@ class LogUsersDevicesController extends Controller
                         else
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Venta Farmacia Cancelada</span> Permiso para venta con fecha {$fecha}</p><br>";
                     break;
->>>>>>> Stashed changes
                 }
 
 
