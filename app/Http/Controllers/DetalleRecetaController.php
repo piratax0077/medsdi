@@ -245,7 +245,8 @@ class DetalleRecetaController extends Controller
             $detalle_receta->via_administracion = $via_administracion;
             $detalle_receta->periodo = $periodo;
             $detalle_receta->uso_cronico = $uso_cronico;
-            $detalle_receta->cantidad_compra = $cantidad_compra;
+            $detalle_receta->cantidad_compra = $cantidad_compra;            
+            $detalle_receta->cantidad = $this->obtenerCantidad($cantidad_compra);
             $detalle_receta->cantidad_vendida = 0;
             $detalle_receta->comentario = $comentario;
 
@@ -392,5 +393,22 @@ class DetalleRecetaController extends Controller
 
         return $datos;
 
+    }
+
+    public function obtenerCantidad($texto)
+    {
+        $cantidad_text = $texto;
+
+        $n1 = strpos($cantidad_text, '(');
+        $n2 = strpos($cantidad_text, ')');
+
+        //echo $n1; //2
+        //echo $n2; //4
+
+        $largo = ($n2-($n1+1));
+        //echo $largo;
+
+        return (int)substr($cantidad_text, $n1+1,$largo);
+        
     }
 }

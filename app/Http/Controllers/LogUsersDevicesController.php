@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LogLogUsersDevices;
 use App\Models\LogUsersDevices;
+use App\Helpers\Funciones;
 use Illuminate\Http\Request;
 
 class LogUsersDevicesController extends Controller
@@ -397,7 +398,31 @@ class LogUsersDevicesController extends Controller
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Autorizacion para compra de bono</span> con fecha {$fecha}</p><br>";
                     break;
 
+					case 14: //  Permiso para venta de MEDICAMENTOS
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id;
+                        $nombre = $data->nombre;
+                        $fecha = $data->fecha;
+                        $profesional = $data->profesional;
+                        /** peticion */
+                        $value['msg_estado'] = "Se necesita  <span class='color-azul txt_bold'>permiso</span> para la venta de medicamentos asociados a una receta";
 
+                        /** resultado */
+                        if($value['estado'] == 1)
+                            $value['msg_body'] = "<span class='color-azul txt_bold'>Permiso</span> para venta con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        elseif($value['estado'] == 2)
+                            $value['msg_body'] = "<span class='color-azul txt_bold'>Permiso</span> para venta con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        else
+                            $value['msg_body'] = "<span class='color-azul txt_bold'>Permiso</span> para venta con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+
+                        /** lista log */
+                        if($value['estado'] == 1)
+                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Venta Farmacia Autorizada</span> Permiso para venta con fecha {$fecha}</p><br>";
+                        elseif($value['estado'] == 2)
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Venta Farmacia Rechazada</span> Permiso para venta con fecha {$fecha}</p><br>";
+                        else
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Venta Farmacia Cancelada</span> Permiso para venta con fecha {$fecha}</p><br>";
+                    break;
                 }
 
 
@@ -525,6 +550,7 @@ class LogUsersDevicesController extends Controller
             $error['estado'] = 'campo requerido';
             $campos_requeridos = 1;
         }
+        /*
         if($request->fecha_ingreso=='')
         {
             $error['fecha_ingreso'] = 'campo requerido';
@@ -535,12 +561,14 @@ class LogUsersDevicesController extends Controller
             $error['fecha_termino'] = 'campo requerido';
             $campos_requeridos = 1;
         }
-
+        */
 
         /* FIN - VALIDACION CAMPOS */
 
         if($campos_requeridos==0)
         {
+
+            /*
             $registro->id_user_create = $request->id_user_create;
             $registro->id_user_recept = $request->id_user_recept;
 
@@ -553,16 +581,32 @@ class LogUsersDevicesController extends Controller
             $fecha =date('Y-m-d');
             $hora = date('H:i:s');
             $fecha_actual  = date('Y-m-d H:i:s', strtotime($fecha.' '.$hora));
-            $fecha_vencimiento  = date ( 'Y-m-d H:i:s' ,strtotime ( '-'.env('TIEMPO_ESPERA_CONFIRMACION').' hours' , strtotime ($fecha_actual) ) );
-            $fecha_expira = date ( 'Y-m-d H:i:s' ,strtotime ( '-'.((int)env('TIEMPO_ESPERA_CONFIRMACION')+6).' hours' , strtotime ($fecha_actual) ) );
+            $fecha_vencimiento  = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.env('TIEMPO_ESPERA_CONFIRMACION').' hours' , strtotime ($fecha_actual) ) );
+            $fecha_expira = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.((int)env('TIEMPO_ESPERA_CONFIRMACION')).' hours' , strtotime ($fecha_actual) ) );
 
             $registro->fecha_ingreso = $fecha_actual;
             $registro->fecha_termino = $fecha_vencimiento;
             $registro->fecha_exp = $fecha_expira;
             $registro->token = md5(uniqid());
+			*/
 
-            if($registro->save())
+            $id_user_create = $request->id_user_create;
+            $id_user_recept = $request->id_user_recept;
+
+            $evento = 'Generar Permiso';
+            $nombre = '';
+            $apellido_p = '';
+            $apellido_m = '';
+            $lugar = 'Sistema';
+            $profesional = '';
+            $tipo = 'Check SDI';
+            $id_tipo = $request->tipo;
+            
+            $permiso = Funciones::generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo,$id_tipo);
+
+            if($permiso['app']['estado'] == 1)
             {
+                $datos['id'] =  $permiso['app']['last_id'];
                 $datos['estado'] = 1;
                 $datos['msg'] = 'Registros Creado';
                 $datos['request_data'] = $request->all();
