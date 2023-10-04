@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AcompananteDependiente;
 use App\Models\Paciente;
 use App\Models\PacientesDependientes;
 use Illuminate\Http\Request;
@@ -138,8 +139,18 @@ class PacientesDependientesController extends Controller
                                                 ->with('Tipodependencia')
                                                 ->tipoDependencia($request->tipo_dependencia)
                                                 ->get();
+
             if($registros)
             {
+                foreach ($registros as $key => $value)
+                {
+                    $filtro_2 = array();
+                    $filtro_2[] = array('id_dependiente', $value->id_paciente);
+                    $registro_depen = AcompananteDependiente::where($filtro_2)->where('id_tipo', 1)->with('acompanante');
+                    $registro_temp = AcompananteDependiente::where('id_responsable', $paciente->id)->where('id_tipo', 2)->whereNull('id_dependiente')->with('acompanante')->union($registro_depen)->get();
+                    $registros[$key]['acompanante'] = $registro_temp;
+                }
+
                 $datos['estado'] = 1;
                 $datos['msj'] = 'registros';
                 $datos['registros'] = $registros;

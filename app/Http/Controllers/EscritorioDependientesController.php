@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Acompanante;
+use App\Models\AcompananteDependiente;
+use App\Models\Asistente;
 use App\Models\Direccion;
 use App\Models\Paciente;
 use App\Models\PacientesDependientes;
 use App\Models\Prevision;
+use App\Models\Profesional;
 use App\Models\Region;
 use App\Models\TipoDependencia;
 use App\Models\User;
@@ -44,6 +48,16 @@ class EscritorioDependientesController extends Controller
                                                     ->with('Tipodependencia')
                                                     ->where('id_responsable',$paciente->id)
                                                     ->get();
+
+                foreach ($registros as $key_2 => $value_2)
+                {
+                    $filtro_temp = array();
+                    $filtro_temp[] = array('id_dependiente', $value_2->id_paciente);
+                    $registro_depen = AcompananteDependiente::where($filtro_temp)->where('id_tipo', 1)->with('acompanante');
+                    $registro_temp = AcompananteDependiente::where('id_responsable', $value_2->id_responsable)->whereNull('id_dependiente')->where('id_tipo', 2)->with('acompanante')->union($registro_depen)->get();
+                    $registros[$key_2]['acompanante'] = $registro_temp;
+                }
+
                 $prevision = Prevision::all();
                 $region = Region::all();
                 $titulo = '';
@@ -57,6 +71,7 @@ class EscritorioDependientesController extends Controller
                     'tipo_dependencias' => $request->tipo_dependencia,
                     'prevision' => $prevision,
                     'region' => $region,
+                    'paciente' => $paciente,
 
                 ]);
 
@@ -522,4 +537,96 @@ class EscritorioDependientesController extends Controller
 
         return $datos;
     }
+
+
+    public function buscar_persona_rut(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->rut))
+        {
+            $error['RUT'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = '';
+
+            $acompanante = Acompanante::where('rut', $request->rut)->first();
+
+            $paciente = Paciente::where('rut', $request->rut)->first();
+            if(empty($paciente))
+            {
+                $asistente = Asistente::where('rut', $request->rut)->first();
+                if(empty($asistente))
+                {
+                    $profesional = Profesional::where('rut', $request->rut)->first();
+                    if(empty($profesional))
+                    {
+                        $registro = '';
+                    }
+                    else
+                    {
+                        $registro = array(
+                            'id' => $profesional->id,
+                            'rut' => $profesional->rut,
+                            'nombre' => $profesional->nombre,
+                            'apellido_paterno' => $profesional->apellido_uno,
+                            'apellido_materno' => $profesional->apellido_dos,
+                            'email' => $profesional->email,
+                            'tipo' => 'profesional',
+                        );// $profesional;
+                    }
+                }
+                else
+                {
+                    $registro = array(
+                        'id' => $asistente->id,
+                        'rut' => $asistente->rut,
+                        'nombre' => $asistente->nombre,
+                        'apellido_paterno' => $asistente->apellido_uno,
+                        'apellido_materno' => $asistente->apellido_dos,
+                        'email' => $asistente->email,
+                        'tipo' => 'asistente',
+                    );// $asistente;
+                }
+            }
+            else
+            {
+                $registro = array(
+                    'id' => $paciente->id,
+                    'rut' => $paciente->rut,
+                    'nombre' => $paciente->nombres,
+                    'apellido_paterno' => $paciente->apellido_uno,
+                    'apellido_materno' => $paciente->apellido_dos,
+                    'email' => $paciente->email,
+                    'tipo' => 'paciente',
+                );// $paciente;
+            }
+
+            if(is_array($registro))
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registro';
+                $datos['registro'] = $registro;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registro';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
 }

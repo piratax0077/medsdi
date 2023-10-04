@@ -80,6 +80,7 @@ use App\Models\NotificacionConfirmacion;
 use App\Models\PacientesDependientes;
 use App\Models\RecetaAudifono;
 use App\Models\ResultadoExamen;
+use App\Models\TipoAntecedente;
 use App\Models\TipoInforme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -558,6 +559,24 @@ class ficha_atencionController extends Controller
 
             /** examenes radiologicos */
             $examenes_radiologicos = '';
+			
+			/** CNS */
+            $cns_tipo = CnsTipo::with(['CnsTipoTemplate' => function($query){
+                                            $query->select('id', 'nombre', 'alias');
+                                        }])
+                                        ->where('estado', 1)
+                                        ->get();
+            $cns_tipo_array = CnsTipo::where('estado', 1)->pluck('id')->toArray();
+
+            $cns_tipo_template = CnsTipoTemplate::with(['CnsTipo' => function($query){
+                                                            $query->select('id', 'id_cns_template', 'nombre');
+                                                        }])
+                                                        ->whereIn('id', $cns_tipo_array)
+                                                        ->get();
+
+            $filtro_cns = array();
+            $filtro_cns[] = array('id_paciente', $paciente->id);
+            $cns_registros = FichaPediatriaCns::with(['CnsTipoTemplate' => function($query){ $query->select('id', 'nombre', 'alias');}])->where($filtro_cns)->get();
         }
 
 
@@ -996,7 +1015,7 @@ class ficha_atencionController extends Controller
                 $resultado_examen[$key]['obj_tipo_examen'] = $result_tipo_ex;
             }
         }
-		
+
         // INTERCONSULTA
         $filtro_inter = array();
         $filtro_inter[] = array('id_paciente', $paciente->id);
@@ -1017,6 +1036,8 @@ class ficha_atencionController extends Controller
         // ESPECIALIDAD -> PROFESION
         $especialidad = Especialidad::all();
 
+		$tipo_antecedente = TipoAntecedente::all();
+		
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1058,6 +1079,7 @@ class ficha_atencionController extends Controller
                 'cns_tipo_template' => $cns_tipo_template,
                 'cns_registros' => $cns_registros,
                 'resultado_examen' => $resultado_examen,
+                'tipo_antecedente' => $tipo_antecedente,
 
                 // 'ficha_ges' => $ges,
                 // 'direccion' => $direccion,

@@ -2,7 +2,7 @@
     <div class="card-a" style=" border: 1px solid #6c9bd5;">
         <div class="card-header-a" id="cgc" >
             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open" type="button" data-toggle="collapse" data-target="#cgc-c" aria-expanded="false" aria-controls="cgc-c">
-              Nuevo Antecedente / Crónicos / GES / Confidencial
+              Crónicos / GES / Nuevo Antecedente / Confidencial
             </button>
         </div>
         <div id="cgc-c" class="collapse show" aria-labelledby="cgc" data-parent="#cgc">
@@ -10,9 +10,9 @@
                 <form>
                     <div class="row">
                         <!--NUEVO ANTECEDENTE-->
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="col-md-3 mx-auto">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input" onchange="ag_antecendente();" id="check_antecedentes" name="check_antecedentes" value="{!! old('check_antecedentes') !!}">
@@ -57,9 +57,9 @@
                             </div>
                         </div>
                         {{-- CRONICO --}}
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="col-md-3 mx-auto">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input" onchange="es_cronico();" id="enf_cronico" name="enf_cronico" data-toggle="modal" data-target="#form_enfermo_cronico" value="{!! old('enf_cronico') !!}">
@@ -104,9 +104,9 @@
                             </div>
                         </div>
                         {{-- GES --}}
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="col-md-3">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input" id="modal_ges" name="modal_ges" value="{!! old('modal_ges') !!}">
@@ -135,14 +135,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="col-md-3">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="confidencial" name="confidencial" value="{!! old('confidencial') !!}" >
-                                            <label class="custom-control-label" for="confidencial">Confidencial</label>
-                                        </div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="confidencial" name="confidencial" value="{!! old('confidencial') !!}" >
+                                        <label class="custom-control-label" for="confidencial">Confidencial</label>
                                     </div>
                                 </div>
                             </div>

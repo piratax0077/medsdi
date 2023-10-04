@@ -68,6 +68,7 @@ use PDF;
 use App\Helpers\Funciones;
 use App\Models\FichaPediatriaGeneralTipo;
 use App\Models\Invitacion;
+use App\Models\PacientesDependientes;
 use Illuminate\Support\Facades\Hash;
 
 class EscritorioProfesional extends Controller
@@ -974,11 +975,22 @@ class EscritorioProfesional extends Controller
         $paciente = Paciente::where('id', $hora_medica->id_paciente)->first();
         $profesional = Profesional::where('id', $hora_medica->id_profesional)->first();
 
+        $edad = (\Carbon\Carbon::parse($paciente->fecha_nac)->age);
+
+        $responsable = '';
+        if($edad < 18)
+        {
+            $result_responsable = PacientesDependientes::where('id_paciente', $paciente->id)->first();
+            $responsable = Paciente::where('id', $result_responsable->id_responsable)->first();
+        }
+
         // return json_encode($paciente);
         return array(
             'paciente' => $paciente,
             'profesional' =>$profesional,
-            'estado_hora' =>$hora_medica->id_estado
+            'estado_hora' =>$hora_medica->id_estado,
+            'edad' => $edad,
+            'responsable' => $responsable,
         );
     }
 

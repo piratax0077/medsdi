@@ -2,7 +2,7 @@
     <div class="card-a" style=" border: 1px solid #6c9bd5;">
         <div class="card-header-a" id="cgc" >
             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open" type="button" data-toggle="collapse" data-target="#cgc-c" aria-expanded="false" aria-controls="cgc-c">
-              Nuevo Antecedente / Crónicos / GES / Confidencial
+              Crónicos / GES / Nuevo Antecedente / Confidencial
             </button>
         </div>
         <div id="cgc-c" class="collapse show" aria-labelledby="cgc" data-parent="#cgc">
@@ -10,9 +10,9 @@
                 <form>
                     <div class="row">
                         <!--NUEVO ANTECEDENTE-->
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="col-md-3 mx-auto">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input" onchange="ag_antecendente();" id="check_antecedentes" name="check_antecedentes" value="{!! old('check_antecedentes') !!}">
@@ -57,9 +57,9 @@
                             </div>
                         </div>
                         {{-- CRONICO --}}
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="col-md-3 mx-auto">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input" onchange="es_cronico();" id="enf_cronico" name="enf_cronico" data-toggle="modal" data-target="#form_enfermo_cronico" value="{!! old('enf_cronico') !!}">
@@ -104,9 +104,9 @@
                             </div>
                         </div>
                         {{-- GES --}}
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="col-md-3">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input" id="modal_ges" name="modal_ges" value="{!! old('modal_ges') !!}">
@@ -135,14 +135,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="col-md-3">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="confidencial" name="confidencial" value="{!! old('confidencial') !!}" >
-                                            <label class="custom-control-label" for="confidencial">Confidencial</label>
-                                        </div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="confidencial" name="confidencial" value="{!! old('confidencial') !!}" >
+                                        <label class="custom-control-label" for="confidencial">Confidencial</label>
                                     </div>
                                 </div>
                             </div>
@@ -1229,12 +1227,21 @@
 					</div>
 					<div class="col-md-5">
 						<select class="form-control form-control-sm" onchange="cambiar_antecedente();" id="nuevo_antecedente" name="nuevo_antecedente" onchange="mostrar(this.value);">
-                            <option value="n_C">Seleccione</option>
                             @if($tipo_antecedente)
                                 @foreach ( $tipo_antecedente as $tipo)
                                     <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
                                 @endforeach
                             @endif
+                            <option value="apatcronica" selected>Patología crónica</option>
+                            <option value="amedicamen">Medicamentos</option>
+                            <option value="acirugia">Cirugías</option>
+                            <option value="aalergia">Alergias e intolerancias</option>
+                            <option value="agineco">Antecedentes ginecobstétricos</option>
+                            <option value="adiscapacidad">Discapacidad</option>
+                            <option value="afamiliares">Antecedentes familiares</option>
+                            <option value="afisica">Actividad física</option>
+                            <option value="agrupotransf">Grupo sanguíneo y transfusión</option>
+                            <option value="atrasplante">Trasplante de órganos y tejidos</option>
                         </select>
 					</div>
 				</div>
@@ -1242,76 +1249,625 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h5 class="t-aten-dos" id="titulo_antecedente">Añadir XXX</h5>
-                    </div>
-                    <div class="col-md-12" id="modal-body-input">
-                    </div>
-                    <div class="col-md-12">
-                        <input type="hidden" value="" id="id-antecedente-m">
-                        <input type="hidden" value="" id="tipo-antecedente-m">
-                        <input type="hidden" value="{{ $paciente->rut }}" id="user-rut">
-                        <input type="hidden" value="{{ $profesional->Especialidad()->first()->nombre }}" id="user-profesion">
-                        <input type="hidden" value="{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}" id="user-profesional">
-                        <input type="hidden" value="{{Auth::user()->id}}" id="user-id">
-                        <button type="button" class="btn btn-sm btn-primary-light-c" id="agregar-antecedente" onclick="agregarAntecedente()"><i class="feather icon-save"></i> Agregar antecedentes</button>
-                        <button type="button" class="btn btn-sm btn-primary-light-c" id="modificar-antecedente" onclick="modificarAntecedente()"><i class="feather icon-edit"></i> Modificar antecedentes</button>
-                        <button type="button" class="btn btn-sm btn-danger-light-c" id="modificar-antecedente-cancelar" onclick="cancelarModificar()"><i class="feather icon-x"></i> Cancelar Modificar</button>
-                        {{-- <button type="button" class="btn btn-sm btn-danger-light-c" data-dismiss="modal" aria-label="Close"><i class="feather icon-x"></i> Cerrar</button> --}}
-                        {{-- <button type="button" class="btn btn-sm btn-danger-light-c" onclick="verModalAgregar('hide')"><i class="feather icon-x"></i> Cerrar</button> --}}
-                    </div>
-                    <div class="col-md-12 mt-3">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-xs" id="tabla_antecedentes">
-                                <thead>
-                                    <tr>
-                                        <th>Procedimiento</th>
-                                        <th>Incidentes</th>
-                                        <th>Profesional</th>
-                                        <th>Fecha</th>
-                                        <th>Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+            <div class="modal-body" id="modal-body-input">
+                <!--PATOLOGIA CRÓNICA-->
+                <div id="apatcronica" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir Patologia crónica</h5>
                         </div>
                     </div>
-
-                    <div class="col-md-12">
-                        <button type="button" class="btn btn-sm btn-danger-light-c" data-dismiss="modal" aria-label="Close"><i class="feather icon-x"></i> Cerrar Modal</button>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
+                                        <label class="floating-label-activo-sm">Nombre</label>
+                                        <input type="text" class="form-control form-control-sm" name="nombre" id="nombre">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
+                                        <label class="floating-label-activo-sm">Comentario</label>
+                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="comentario" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="comentario" id="comentario"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-2 col-xl-2 text-right">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Nombre</th>
+                                              <th class="text-wrap">Comentario</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap">Hipertensión</td>
+                                              <td class="text-wrap text-justify">TEXTO FALSOLorem ipsum dolor sit amet, consectetur adipisicing </td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap">Diabetes Tipo II</td>
+                                              <td class="text-wrap text-justify">TEXTO FALSOLorem ipsum dolor sit amet,</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
 
-            </div>
-        </div>
-    </div>
-</div>
+                <!--MEDICAMENTO CRÓNICO-->
+                <div id="amedicamen" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir medicamento crónico</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
+                                        <label class="floating-label-activo-sm">Medicamento</label>
+                                        <input type="text" class="form-control form-control-sm" name="med" id="med">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
+                                        <label class="floating-label-activo-sm">Dosis</label>
+                                        <input type="text" class="form-control form-control-sm" name="dosis" id="dosis">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-2 col-xl-2 text-right">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Medicamento</th>
+                                              <th class="text-wrap">Dosis</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap">Enalapril 10 mg</td>
+                                              <td class="text-wrap text-justify">1 al día </td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap">Metformina clorhidrato 1000 mg</td>
+                                              <td class="text-wrap text-justify">1 al día</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="modal" id="modal-confirmar" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Desactivar Antecedente</h5>
-                <button type="button" class="close" onclick="verModalDesactivar('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-                <p class="mb-0">Desea desactivar el antecedente ingresado.</p>
-            </div>
-            <div class="modal-footer">
-                <input type="hidden" value="" id="id-antecedente-m-desactivar">
-                <input type="hidden" value="" id="tipo-antecedente-m-desactivar">
-                <button type="button" class="btn  btn-danger mr-0" onclick="eliminarAntecedente()">Desactivar</button>
-                <button type="button" class="btn  btn-primary" onclick="verModalDesactivar('hide')">Cerrar</button>
+                <!--CIRUGIAS-->
+                <div id="acirugia" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir cirugias</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                        <label class="floating-label-activo-sm">Fecha</label>
+                                        <input type="date" class="form-control form-control-sm" name="fecha" id="fecha">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Procedimiento</label>
+                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="procedimiento" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="procedimiento" id="procedimiento"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Incidente</label>
+                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="incidente" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="incidente" id="incidente"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Fecha</th>
+                                              <th class="text-wrap">Procedimiento</th>
+                                              <th class="text-wrap">Incidente</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap">Colecistectomía</td>
+                                              <td class="text-wrap text-justify">TEXTO FALSO Lorem ipsum </td>
+                                              <td>TEXTO FALSO TEXTO falsoLorem ipsum</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--ALERGIAS - INTOLERANCIAS-->
+                <div id="aalergia" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir alergias e intolerancias</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
+                                        <label class="floating-label-activo-sm">Alergia / Intolerancia</label>
+                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="alerginto" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="alerginto" id="alerginto"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
+                                        <label class="floating-label-activo-sm">Comentarios</label>
+                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="comentario" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="comentario" id="comentario"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-2 col-xl-2">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Alergia / intolerancia</th>
+                                              <th class="text-wrap">Comentarios</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap">Penicilina</td>
+                                              <td class="text-wrap text-justify">texto falso  texto falso  texto falso  </td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap">Chocolate</td>
+                                              <td class="text-wrap text-justify">texto falso  texto falso  texto falso  </td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--ANTECEDENTES GINECOBSTÉTRICOS-->
+                <div id="agineco" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir antecedentes ginecobstétricos</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                        <label class="floating-label-activo-sm">Comentarios</label>
+                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="comentarios" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="comentarios" id="comentarios"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Comentarios</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap text-justify">Menarquía a los 12 años</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap text-justify">Inicio vida sexual 13 años</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap text-justify">El numero de pareja sexual han sido 8</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap text-justify">2 gestaciones 1 aborto, 1 parto 1 cesárea</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--DISCAPACIDAD-->
+                <div id="adiscapacidad" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir cirugias</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                        <label class="floating-label-activo-sm">Discapacidad</label>
+                                        <input type="text" class="form-control form-control-sm" name="discapacidad" id="discapacidad">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Grado</label>
+                                        <input type="text" class="form-control form-control-sm" name="grado" id="grado">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Reversibilidad</label>
+                                        <input type="text" class="form-control form-control-sm" name="reversibilidad" id="reversibilidad">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Discapacidad</th>
+                                              <th class="text-wrap">Grado</th>
+                                              <th class="text-wrap">Reversibilidad</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap">Auditiva</td>
+                                              <td class="text-wrap text-justify">TEXTO FALSO Lorem ipsum </td>
+                                              <td>TEXTO FALSO </td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--ACTIVIDAD FISICA-->
+                <div id="afisica" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir actividad física</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                        <label class="floating-label-activo-sm">Comentarios</label>
+                                        <input type="text" class="form-control form-control-sm" name="comentarios" id="comentarios">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Comentarios</th>
+                                              <th class="text-wrap">Fecha data</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap text-justify">Sedentario</td>
+                                              <td>21/12/2023 </td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap text-justify">Ejercicio 2 veces a la semana</td>
+                                              <td>21/02/2005 </td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--ANTECEDENTES FAMILIARES-->
+                <div id="afamiliares" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">Añadir antecedentes familiares</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                        <label class="floating-label-activo-sm">Comentarios</label>
+                                        <input type="text" class="form-control form-control-sm" name="comentarios" id="comentarios">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-xs table-bordered">
+                                         <thead>
+                                            <tr>
+                                              <th class="text-wrap">Comentarios</th>
+                                              <th class="text-wrap">Acción</th>
+                                            </tr>
+                                          </thead>
+                                        <tbody>
+                                            <tr>
+                                              <td class="text-wrap text-justify">Pareja con diabetes</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap text-justify">Hijos con hipertensión arterial y diabetes</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="text-wrap text-justify">Padre con hipertensión arterial</td>
+                                              <td>
+                                                <button type="button" class="btn btn-xxs btn-danger-light-c"><i class="feather icon-x"></i> Eliminar</button>
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!--GRUPO SANGUÍNEO Y TRANSFUSIÓN-->
+                <div id="agrupotransf" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">GRUPO SANGUÍNEO Y TRANSFUSIÓN</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                        <label class="floating-label-activo-sm">Comentarios</label>
+                                        <input type="text" class="form-control form-control-sm" name="comentarios" id="comentarios">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--TRASPLANTE DE ÓRGANOS Y TEJIDOS-->
+                <div id="atrasplante" style="display:none;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h5 class="t-aten-dos">TRASPLANTE DE ÓRGANOS Y TEJIDOS</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                        <label class="floating-label-activo-sm">Comentarios</label>
+                                        <input type="text" class="form-control form-control-sm" name="comentarios" id="comentarios">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <button type="button" class="btn btn-sm btn-block btn-success-light-c"><i class="feather icon-plus"></i> Añadir</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="alert alert-success" role="alert">
+                                      Antecedentes guardados con éxito
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                        <button type="button" class="btn btn-info text-right"><i class="feather icon-save"></i> Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -2809,25 +3365,11 @@
     }
 
     /** ANTECEDENTES */
-    const msg = (title,text,icon) => {
-        swal({
-                title: title,
-                text: text,
-                icon: icon,
-                // buttons: "Aceptar",
-                //SuccessMode: true,
-            })
-    };
-
     /**AGREGAR ANTECEDENTE DEL PACIENTE**/
     function ag_antecendente ()
     {
-        if($('#check_antecedentes').prop('checked'))
-        {
-            $('#nuevo_antecedente').val(1);
-            $('#m_agregar_antecedente').modal('show');
-            cambiar_antecedente();
-        }
+        $('#m_agregar_antecedente').modal('show');
+		cambiar_antecedente();
     }
 
     function cambiar_antecedente()
@@ -2836,20 +3378,16 @@
         if($('#nuevo_antecedente').val() != 'n_C')
         {
             var nombre_enfermedad = $("#nuevo_antecedente option:selected").text();
-            var tipo = $("#nuevo_antecedente").val();
 
-            $('#agregar-antecedente').show();
-            $('#modificar-antecedente').hide();
-            $('#modificar-antecedente-cancelar').hide();
 
-            $('#modal-body-input').html('');
+            $('#modal-body-input').html(html);
             var html = '';
 
             switch(tipo)
             {
-                case '1':
+                case 1:
                     html+=`
-                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table>
                             <tr>
                                 <td>Procedimiento</td>
                                 <td><input class="form-control" type="text" id="procedimiento"></td>
@@ -2861,9 +3399,9 @@
                         </table>
                     `;
                 break;
-                case '2':
+                case 2:
                     html+=`
-                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table>
                             <tr>
                                 <td>Nombre</td>
                                 <td><input class="form-control" type="text" id="nombre"></td>
@@ -2875,9 +3413,9 @@
                         </table>
                     `;
                 break;
-                case '3':
+                case 3:
                     html+=`
-                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table>
                             <tr>
                                 <td>Fecha Cirugía</td>
                                 <td><input class="form-control" type="date" id="fecha"></td>
@@ -2893,9 +3431,9 @@
                         </table>
                     `;
                 break;
-                case '4':
+                case 4:
                     html+=`
-                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table>
                             <tr>
                                 <td>Procedimiento</td>
                                 <td><input class="form-control" type="text" id="procedimiento"></td>
@@ -2907,9 +3445,9 @@
                         </table>
                     `;
                 break;
-                case '5':
+                case 5:
                     html+=`
-                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table>
                             <tr>
                                 <td>Nombre antecedente</td>
                                 <td><input class="form-control form-control-sm" type="text" id="procedimiento"></td>
@@ -2925,9 +3463,9 @@
                         </table>
                     `;
                 break;
-                case '6':
+                case 6:
                     html+=`
-                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table>
                             <tr>
                                 <td>Nombre alergia</td>
                                 <td><input class="form-control form-control-sm" type="text" id="nombre"></td>
@@ -2939,9 +3477,9 @@
                         </table>
                     `;
                 break;
-                case '7':
+                case 7:
                     html+=`
-                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table>
                             <tr>
                                 <td>Nombre Medicamento</td>
                                 <td>
@@ -2958,9 +3496,9 @@
                         </table>
                     `;
                 break;
-                case '8':
+                case 8:
                     html+=`
-                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table>
                             <tr>
                                 <td>Tipo de Discapacidad</td>
                                 <td>
@@ -2995,12 +3533,7 @@
                 break;
             }
 
-            cargarRegistrosAntecedentes(tipo);
-            $('#titulo_antecedente').html('Añadir '+nombre_enfermedad);
             $('#modal-body-input').html(html);
-            $('#tipo-antecedente-m').val(tipo);
-            $('#id-antecedente-m').val('');
-
             if( tipo == 7)
             {
                 activarMedicamentos('nombre_medicamento_cronico');
@@ -3010,12 +3543,14 @@
         }
         else
         {
-            $('#modal-body-input').html('');
-            $('#nuevo_antecedente').val(1);
-            cambiar_antecedente();
+            // $('.medicamento_patologia').hide();
+            $('#hipertension_div').hide();
+            $('#control_peso_div').hide();
+            $('#diabetes_div').hide();
+
+            // $('#titulo_med_patologia').html( 'Medicamentos' );
         }
     }
-
     {{--  MEDICAMENTOS AUTOCOMPLETE --}}
 	const activarMedicamentos = (input) => {
 		$("#"+input).autocomplete({
@@ -3040,446 +3575,4 @@
 			}
 		});
 	}
-
-    const agregarAntecedente = () => {
-
-        $('#title-antecedente').html('Agregar Antecedente');
-
-        var data = {};
-        var url = '{{Request::root()}}/api/antecedente/registrar';
-        var tipo = $('#tipo-antecedente-m').val();
-
-        /* CAMPOS */
-        data.nombre = $('#nombre').val();
-        data.comentario = $('#comentario').val();
-        data.procedimiento = $('#procedimiento').val();
-        data.nombre_medicamento_cronico = $('#nombre_medicamento_cronico').val();
-        data.fecha = $('#fecha').val();
-        data.dosis = $('#dosis').val();
-        data.institucion = $('#institucion').val();
-        data.discapacidad_tipo = $('#discapacidad_tipo').val();
-        data.discapacidad_grado = $('#discapacidad_grado').val();
-        data.discapacidad_permanente = $('#discapacidad_permanente').val();
-
-        data.id_paciente = $('#id_paciente_fc').val();
-        data.id_tipo_antecedente = $('#tipo-antecedente-m').val();
-        data.id_users = $('#user-id').val();
-        data.rut_responsable =$('#user-rut').val();
-        data.profesion = $('#user-profesion').val();
-        data.profesional = $('#user-profesional').val();
-        data.estado = 1;
-
-
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: data,
-            success: (resp)=>{
-                if(resp.estado==1)
-                {
-                    $('#nombre').val('');
-                    $('#comentario').val('');
-                    $('#procedimiento').val('');
-                    $('#nombre_medicamento_cronico').val('');
-                    $('#fecha').val('');
-                    $('#dosis').val('');
-                    $('#institucion').val('');
-                    $('#discapacidad_tipo').val('');
-                    $('#discapacidad_grado').val('');
-                    $('#discapacidad_permanente').val('');
-
-                    cargarRegistrosAntecedentes(tipo);
-                    msg('Antecedente','Registro Ingresado.','success');
-
-
-                }else{
-                    msg('Antecedente','Campo Obligatorio: '+JSON.stringify(resp.error),'danger');
-                }
-            },
-            error: (resp)=>{
-                console.warn(resp);
-            }
-        });
-    }
-
-    const cargarRegistrosAntecedentes = (tipo) => {
-
-        var data = {};
-        var url = '{{Request::root()}}/api/antecedente/ver_registros';
-
-        data.id_tipo_antecedente = tipo;
-        data.estado = 1;
-
-        $.ajax({
-            url: url,
-            type: "GET",
-            data: data,
-            success: (resp)=>{
-                if(resp.estado==1)
-                {
-                    var head_ = '';
-                    var html_ = '';
-                    var permiso_ = '';
-                    var id_users = parseInt($('#user-id').val());
-
-                    resp.registros.forEach(e => {
-
-                        permiso_ = '';
-                        if(e.id_users == id_users)
-                            permiso_ = `
-                                <buttom class="btn btn-icon btn-info feather icon-edit-2" onclick="verEditarAntecedente(${tipo},${e.id})"></buttom>
-                                <buttom class="btn btn-icon btn-danger feather icon-x-square" onclick="verModalDesactivar('show',${tipo},${e.id})"></buttom>
-                            `;
-
-                        console.log(e.antecedente_data.procedimiento);
-                        switch(tipo)
-                        {
-                            case '1':
-                                head_ =`
-                                    <tr>
-                                        <th>Procedimiento</th>
-                                        <th>Incidentes</th>
-                                        <th>Profesional</th>
-                                        <th>Fecha</th>
-                                        <th>Acción</th>
-                                    </tr>
-                                `;
-                                html_ +=`
-                                    <tr>
-                                        <td>${e.antecedente_data.procedimiento}</td>
-                                        <td>${e.antecedente_data.comentario}</td>
-                                        <td>${e.antecedente_data.profesional}<br/>${e.antecedente_data.rut_responsable}</td>
-                                        <td>${e.antecedente_data.fecha_regitro}</td>
-                                        <td>${permiso_}</td>
-                                    </tr>
-                                `;
-                            break;
-                            case '2':
-                                head_ =`
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Comentario</th>
-                                        <th>Profesional</th>
-                                        <th>Fecha</th>
-                                        <th></th>
-                                    </tr>
-                                `;
-                                html_ +=`
-                                    <tr>
-                                        <td>${e.antecedente_data.nombre}</td>
-                                        <td>${e.antecedente_data.comentario}</td>
-                                        <td>${e.antecedente_data.profesional} <br/>${e.antecedente_data.rut_responsable}</td>
-                                        <td>${e.antecedente_data.fecha_regitro}</td>
-                                        <td>${permiso_}</td>
-                                    </tr>
-                                `;
-                            break;
-                            case '3':
-                                head_ =`
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>Procedimiento</th>
-                                        <th>Incidente</th>
-                                        <th>Profesional</th>
-                                        <th>Fecha data</th>
-                                        <th></th>
-                                    </tr>
-                                `;
-                                html_ +=`
-                                    <tr>
-                                        <td>${e.antecedente_data.fecha}</td>
-                                        <td>${e.antecedente_data.procedimiento}</td>
-                                        <td>${e.antecedente_data.comentario}</td>
-                                        <td>${e.antecedente_data.profesional} <br/>${e.antecedente_data.rut_responsable}</td>
-                                        <td>${e.antecedente_data.fecha_regitro}</td>
-                                        <td>${permiso_}</td>
-                                    </tr>
-                                `;
-                            break;
-                            case '4':
-                                head_ =`
-                                    <tr>
-                                        <th>Procedimiento</th>
-                                        <th>Comentario</th>
-                                        <th>Rut Responsable</th>
-                                        <th>Profesional</th>
-                                        <th>Fecha data</th>
-                                        <th></th>
-                                    </tr>
-                                `;
-                                html_ +=`
-                                    <tr>
-                                        <td>${e.antecedente_data.procedimiento}</td>
-                                        <td>${e.antecedente_data.comentario}</td>
-                                        <td>${e.antecedente_data.rut_responsable}</td>
-                                        <td>${e.antecedente_data.profesional}</td>
-                                        <td>${e.antecedente_data.fecha_regitro}</td>
-                                        <td>${permiso_}</td>
-                                    </tr>
-                                `;
-                            break;
-                            case '5':
-                                head_ =`
-                                    <tr>
-                                        <th>Patología</th>
-                                        <th>Clínica o servicio</th>
-                                        <th>Fecha Aproximada</th>
-                                        <th></th>
-                                    </tr>
-                                `;
-                                html_ +=`
-                                    <tr>
-                                        <td>${e.antecedente_data.procedimiento}</td>
-                                        <td>${e.antecedente_data.institucion}</td>
-                                        <td>${e.antecedente_data.fecha}</td>
-                                        <td>${permiso_}</td>
-                                    </tr>
-                                `;
-                            break;
-                            case '6':
-                                head_ =`
-                                    <tr>
-                                        <th>Nombre Alergia</th>
-                                        <th>Comentario</th>
-                                        <th>Fecha</th>
-                                        <th></th>
-                                    </tr>
-                                `;
-                                html_ +=`
-                                    <tr>
-                                        <td>${e.antecedente_data.nombre}</td>
-                                        <td>${e.antecedente_data.comentario}</td>
-                                        <td>${e.antecedente_data.fecha_regitro}</td>
-                                        <td>${permiso_}</td>
-                                    </tr>
-                                `;
-                            break;
-                            case '7':
-                                head_ =`
-                                    <tr>
-                                        <th>Nombre Medicamento Crónico</th>
-                                        <th>Dosis</th>
-                                        <th>Fecha</th>
-                                        <th></th>
-                                    </tr>
-                                `;
-                                html_ +=`
-                                    <tr>
-                                        <td>${e.antecedente_data.nombre_medicamento_cronico}</td>
-                                        <td>${e.antecedente_data.dosis}</td>
-                                        <td>${e.antecedente_data.fecha_regitro}</td>
-                                        <td>${permiso_}</td>
-                                    </tr>
-                                `;
-                            break;
-                            case '8':
-                                head_ =`
-                                    <tr>
-                                        <th>Discapacidad</th>
-                                        <th>Grado</th>
-                                        <th>Reversibilidad</th>
-                                        <th>Fecha</th>
-                                        <th>Acción</th>
-                                    </tr>
-                                `;
-                                html_ +=`
-                                    <tr>
-                                        <td>${e.antecedente_data.discapacidad_tipo}</td>
-                                        <td>${e.antecedente_data.discapacidad_grado}</td>
-                                        <td>${e.antecedente_data.discapacidad_permanente}</td>
-                                        <td>${e.antecedente_data.fecha_regitro}</td>
-                                        <td>${permiso_}</td>
-                                    </tr>
-                                `;
-                            break;
-                        }
-
-                    });
-
-                    $('#tabla_antecedentes thead').html(head_);
-                    $('#tabla_antecedentes tbody').html(html_);
-                }
-            },
-            error: (resp)=>{
-                console.warn(resp);
-            }
-        });
-    }
-
-    const verEditarAntecedente = (tipo,id)=>{
-
-        var nombre_enfermedad = $("#nuevo_antecedente option:selected").text();
-        $('#titulo_antecedente').html('Modificar '+nombre_enfermedad);
-        $('#agregar-antecedente').hide();
-        $('#modificar-antecedente').show();
-        $('#modificar-antecedente-cancelar').show();
-
-        $('#tipo-antecedente-m').val(tipo);
-
-        $('#id-antecedente-m').val(id);
-        cargarDatosAntecedente(id);
-
-    }
-
-    const cargarDatosAntecedente = (id) => {
-
-        var data = {};
-        var url = '{{Request::root()}}/api/antecedente/ver_registro';
-
-        data.id = id;
-
-        $.ajax({
-                url: url,
-                type: "GET",
-                data: data,
-            success: (resp)=>{
-                if(resp.estado==1)
-                {
-                    $('#procedimiento').val(resp.registros.antecedente_data.procedimiento);
-                    $('#comentario').val(resp.registros.antecedente_data.comentario);
-                    $('#nombre').val(resp.registros.antecedente_data.nombre);
-                    $('#fecha').val(resp.registros.antecedente_data.fecha);
-                    $('#nombre_medicamento_cronico').val(resp.registros.antecedente_data.nombre_medicamento_cronico);
-                    $('#dosis').val(resp.registros.antecedente_data.dosis);
-                    $('#institucion').val(resp.registros.antecedente_data.institucion);
-                    $('#discapacidad_tipo').val(resp.registros.antecedente_data.discapacidad_tipo);
-                    $('#discapacidad_grado').val(resp.registros.antecedente_data.discapacidad_grado);
-                    $('#discapacidad_permanente').val(resp.registros.antecedente_data.discapacidad_permanente);
-                }
-            },
-            error: (resp)=>{
-                console.warn(resp);
-            }
-        });
-
-    }
-
-    const modificarAntecedente = () =>
-    {
-
-        var data = {};
-        var url = '{{Request::root()}}/api/antecedente/modificar';
-        var tipo = $('#tipo-antecedente-m').val();
-
-        /* CAMPOS */
-        data.id = $('#id-antecedente-m').val();
-        data.nombre = $('#nombre').val();
-        data.comentario = $('#comentario').val();
-        data.procedimiento = $('#procedimiento').val();
-        data.nombre_medicamento_cronico = $('#nombre_medicamento_cronico').val();
-        data.fecha = $('#fecha').val();
-        data.dosis = $('#dosis').val();
-        data.institucion = $('#institucion').val();
-        data.discapacidad_tipo = $('#discapacidad_tipo').val();
-        data.discapacidad_grado = $('#discapacidad_grado').val();
-        data.discapacidad_permanente = $('#discapacidad_permanente').val();
-
-
-        data.id_paciente = $('#id_paciente_fc').val();
-        data.id_tipo_antecedente = $('#tipo-antecedente-m').val();
-        data.id_users = $('#user-id').val();
-        data.rut_responsable =$('#user-rut').val();
-        data.profesion = $('#user-profesion').val();
-        data.profesional = $('#user-profesional').val();
-        data.estado = 1;
-
-
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: data,
-            success: (resp)=>{
-                if(resp.estado==1)
-                {
-                    var nombre_enfermedad = $("#nuevo_antecedente option:selected").text();
-                    $('#titulo_antecedente').html('Registrar '+nombre_enfermedad);
-                    $('#agregar-antecedente').show();
-                    $('#modificar-antecedente').hide();
-                    $('#modificar-antecedente-cancelar').hide();
-
-                    $('#id-antecedente-m').val('');
-                    $('#nombre').val('');
-                    $('#comentario').val('');
-                    $('#procedimiento').val('');
-                    $('#nombre_medicamento_cronico').val('');
-                    $('#fecha').val('');
-                    $('#dosis').val('');
-                    $('#institucion').val('');
-                    $('#discapacidad_tipo').val('');
-                    $('#discapacidad_grado').val('');
-                    $('#discapacidad_permanente').val('');
-
-                    cargarRegistrosAntecedentes(tipo);
-                    msg('Antecedente','Registro Modificado.','success');
-
-                }
-                else
-                {
-                    msg('Antecedente','Campo Obligatorio: '+JSON.stringify(resp.error),'danger');
-                }
-            },
-            error: (resp)=>{
-                console.warn(resp);
-            }
-        });
-    }
-
-    const cancelarModificar = () =>
-    {
-        var nombre_enfermedad = $("#nuevo_antecedente option:selected").text();
-        $('#titulo_antecedente').html('Registrar '+nombre_enfermedad);
-        $('#agregar-antecedente').show();
-        $('#modificar-antecedente').hide();
-        $('#modificar-antecedente-cancelar').hide();
-
-        $('#id-antecedente-m').val('');
-        $('#nombre').val('');
-        $('#comentario').val('');
-        $('#procedimiento').val('');
-        $('#nombre_medicamento_cronico').val('');
-        $('#fecha').val('');
-        $('#dosis').val('');
-        $('#institucion').val('');
-        $('#discapacidad_tipo').val('');
-        $('#discapacidad_grado').val('');
-        $('#discapacidad_permanente').val('');
-    }
-
-    const verModalDesactivar = (fun,tipo,id) => {
-        $('#id-antecedente-m-desactivar').val(id);
-        $('#tipo-antecedente-m-desactivar').val(tipo);
-        $('#modal-confirmar').modal(fun);
-    }
-
-    const eliminarAntecedente = () => {
-
-        var data = {};
-        var url = '{{Request::root()}}/api/antecedente/estado';
-        var tipo =   $('#tipo-antecedente-m-desactivar').val();
-
-        /* CAMPOS */
-        data.id = $('#id-antecedente-m-desactivar').val();
-        data.estado = 0;
-
-
-        $.ajax({
-                url: url,
-                type: "POST",
-                data: data,
-            success: (resp)=>{
-                if(resp.estado==1)
-                {
-                    cargarRegistrosAntecedentes(tipo);
-                    msg('Antecedente','Registro Desactivado.','success');
-                    $('#modal-confirmar').modal('hide');
-
-                }else{
-                    msg('Antecedente','Campo Obligatorio: '+JSON.stringify(resp.error),'danger');
-                }
-            },
-            error: (resp)=>{
-                console.warn(resp);
-            }
-        });
-    }
 </script>

@@ -344,6 +344,8 @@ Route::group([
     Route::post('dependientes/registro', [App\Http\Controllers\EscritorioDependientesController::class, 'registrarDepPacienteExistente'])->name('paciente.dependientes.registro');
     Route::post('dependientes/nuevo/registro', [App\Http\Controllers\EscritorioDependientesController::class, 'registroDepPacienteNuevo'])->name('paciente.dependientes.nuevo.registro');
 
+    Route::get('buscar_persona_rut', [App\Http\Controllers\EscritorioDependientesController::class, 'buscar_persona_rut'])->name('paciente.buscar_persona_rut');
+
     Route::get('buscar_rut', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_rut_paciente'])->name('paciente.buscar_rut_paciente');
 
     /** index */
@@ -368,7 +370,7 @@ Route::group([
     /** mis controles personales */
     Route::get('mis_controles', [App\Http\Controllers\EscritorioPaciente::class, 'mis_controles'])->name('paciente.mis_controles');
 
-/** controles de glicemia */
+    /** controles de glicemia */
     Route::post('control/glicemia/registro',[App\Http\Controllers\EscritorioPaciente::class, 'registroControlGlicemia'])->name('paciente.registro_c_glicemia');
     Route::get('control/glicemia/ver',[App\Http\Controllers\EscritorioPaciente::class, 'verRegistrosControlGlicemia'])->name('paciente.ver_registros_c_glicemia');
     Route::post('control/glicemia/eliminar',[App\Http\Controllers\EscritorioPaciente::class, 'eliminarRegistroControlGlicemia'])->name('paciente.eliminar_registro_c_glicemia');
@@ -393,6 +395,11 @@ Route::group([
 	/** liberar bienvenida  */
     Route::get('contrasena/bienvenida/liberar', [App\Http\Controllers\EscritorioPaciente::class, 'CambiocontrasenaLiberacionBienvenida'])->name('paciente.perfil.contrasena.liberar.bienvenida');
     Route::get('bienvenida/liberar', [App\Http\Controllers\EscritorioPaciente::class, 'liberarBienvenida'])->name('paciente.perfil.liberar.bienvenida');
+
+    /** ACOMPAÑANATE DE DEPENDIENTE */
+    Route::post('acompanante/asignacion', [App\Http\Controllers\AcompananteController::class, 'registrarAcompananteAsignacionPaciente'])->name('paciente.acompanante.asignacion');
+    Route::get('acompanante/ver/asignacion', [App\Http\Controllers\AcompananteController::class, 'verRegistros'])->name('paciente.acompanante.ver');
+	
 });
 
 /** INICIO DE LICENCIA */
@@ -890,7 +897,7 @@ Route::group([
     Route::post('lista/espera/registrar/existente', [App\Http\Controllers\ListaEsperaController::class, 'registrarExistente'])->name('lista.espera.registrar.existente');
     Route::post('lista/espera/registrar/nuevo', [App\Http\Controllers\ListaEsperaController::class, 'registrarNuevo'])->name('lista.espera.registrar.nuevo');
     Route::post('lista/espera/eliminar', [App\Http\Controllers\ListaEsperaController::class, 'eliminar'])->name('lista.espera.eliminar');
-
+	
     /** solicitud de permiso al paciente para venta de bono  */
     Route::post('solicitud/autorizacion/bono/venta', [App\Http\Controllers\VentaBonoController::class, 'solicitarAutorizacionPaciente'])->name('asistente.solicitud.auto.paciente.venta.bono');
     Route::post('solicitud/autorizacion/validar', [App\Http\Controllers\VentaBonoController::class, 'validarAutorizacion'])->name('asistente.solicitud.auto.validar');
@@ -1335,7 +1342,7 @@ Route::group([
     Route::get('/getRegsitros',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'getRegsitros'])->name('medicamento_cronico.getRegsitros');
     Route::get('/getRegsitro',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'getRegsitro'])->name('medicamento_cronico.getRegsitro');
     Route::post('/deleteRegsitro',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'deleteRegsitro'])->name('medicamento_cronico.deleteRegsitro');
-    Route::post('/regitrar/receta',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'pasarMedicamentoCronicoAReceta'])->name('medicamento_cronico.pasar_a_receta');
+	Route::post('/regitrar/receta',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'pasarMedicamentoCronicoAReceta'])->name('medicamento_cronico.pasar_a_receta');
 });
 
 /** REGISTROS CONTROL HIPERTENSION - CRONICO */

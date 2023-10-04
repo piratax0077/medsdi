@@ -48,12 +48,26 @@
                                             @if ($registros->count() >0 )
                                                 @foreach ($registros as $registro)
                                                     <div class="card col-md-3">
+                                                        <div class="card-header">
+                                                            <h5>Dependiente</h5>
+                                                            <div class="card-header-right">
+                                                                <div class="btn-group card-option">
+                                                                    <button type="button" class="btn dropdown-toggle has-ripple" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                        <i class="feather icon-more-horizontal"></i>
+                                                                    <span class="ripple ripple-animate" style="height: 20px; width: 20px; animation-duration: 0.689655s; animation-timing-function: linear; background: rgb(136, 136, 136); opacity: 0.4; top: -0.625px; left: -1px;"></span></button>
+                                                                    <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right" style="">
+                                                                        <li class="" onclick="abrir_agregar_acompanante('{{ $registro->paciente->id }}', '{{ $paciente->id }}');"><span><i class="feather icon-plus"></i> Agregar Acompañante</span></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         @if ($dependencia == 1)
                                                             <a href="{{ ROUTE('paciente.dependiente.home',['id_dependiente_activo'=>$registro->paciente->id]    ) }}">
                                                         @else
                                                             <a href="{{ ROUTE('paciente.home') }}">
                                                         @endif
                                                             <div class="card-body text-center" style="cursor:pointer">
+
                                                                 @if($registro->paciente->sexo == 'M')
                                                                     <img class="wid-60 text-center mt-1" src="{{ asset('images/iconos/paciente-m.svg') }}">
                                                                 @else
@@ -64,6 +78,29 @@
                                                                 {{-- <h6 class="mt-2">Tipo Dependencia: <br />{{ $registro->Tipodependencia->nombre }}</h6> --}}
                                                             </div>
                                                         </a>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <h5 class="text-center">Acompañantes</h5>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <table style="width: 100%; border: 0px;" id="lista_acompananate_{{ $registro->id_paciente }}">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Nombre</th>
+                                                                            <th>RUT</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach ($registro->acompanante as $acompanante)
+                                                                            <tr>
+                                                                                <td style="font-size: 10px; font-weight: bold;">{{ $acompanante->acompanante->nombre.' '.$acompanante->acompanante->apellido_uno.' '.$acompanante->acompanante->apellido_dos }}</td>
+                                                                                <td style="font-size: 10px; font-weight: bold;">{{ $acompanante->acompanante->rut }}</td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 @endforeach
                                             @else
@@ -85,6 +122,7 @@
     </div>
 
     @include('app.paciente.modales.dependientes.agregar')
+    @include('app.paciente.modales.dependientes.agregar_acompanante')
 
 @endsection
 
@@ -790,14 +828,54 @@
                                 url_temp = "{{ route('paciente.home') }}";
 
                             html += '<div class="card col-md-3">';
-                            html += '    <a href="'+url_temp+'">';
-                            html += '        <div class="card-body text-center" style="cursor:pointer">';
-                            html += '            <img class="wid-60 text-center mt-1" src="'+img+'">';
-                            html += '            <h5 class="mt-2">'+value.paciente.nombres+' '+value.paciente.apellido_uno+ ' '+value.paciente.apellido_dos+'</h5>';
+                            html += '   <div class="card-header">';
+                            html += '       <h5>Dependiente</h5>';
+                            html += '       <div class="card-header-right">';
+                            html += '           <div class="btn-group card-option">';
+                            html += '               <button type="button" class="btn dropdown-toggle has-ripple" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+                            html += '                   <i class="feather icon-more-horizontal"></i>';
+                            html += '               <span class="ripple ripple-animate" style="height: 20px; width: 20px; animation-duration: 0.689655s; animation-timing-function: linear; background: rgb(136, 136, 136); opacity: 0.4; top: -0.625px; left: -1px;"></span></button>';
+                            html += '               <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right" style="">';
+                            html += '                   <li class="" onclick="abrir_agregar_acompanante(\''+value.id_paciente+'\', \''+value.id_responsable+'\');"><span><i class="feather icon-plus"></i> Agregar Acompañante</span></li>';
+                            html += '               </ul>';
+                            html += '           </div>';
+                            html += '       </div>';
+                            html += '   </div>';
+                            html += '   <a href="'+url_temp+'">';
+                            html += '           <div class="card-body text-center" style="cursor:pointer">';
+                            html += '               <img class="wid-60 text-center mt-1" src="'+img+'">';
+                            html += '               <h5 class="mt-2">'+value.paciente.nombres+' '+value.paciente.apellido_uno+ ' '+value.paciente.apellido_dos+'</h5>';
                             // html += '            <h6 class="mt-2">Relación: '+value.relacion+'</h6>';
                             // html += '            <h6 class="mt-2">Tipo Dependencia: <br/>'+value.Tipodependencia.nombre+'</h6>';
+                            html += '           </div>';
+                            html += '   </a>';
+
+                            html += '   <div class="row">';
+                            html += '        <div class="col-md-12">';
+                            html += '            <h5 class="text-center">Acompañantes</h5>';
                             html += '        </div>';
-                            html += '    </a>';
+                            html += '        <div class="col-md-12">';
+                            html += '            <table style="width: 100%; border: 0px;" id="lista_acompananate_'+value.id_paciente+'">';
+                            html += '                <thead>';
+                            html += '                    <tr>';
+                            html += '                        <th>Nombre</th>';
+                            html += '                        <th>RUT</th>';
+                            html += '                    </tr>';
+                            html += '                </thead>';
+                            html += '                <tbody>';
+
+                            $.each(value.acompanante, function (indexInArray, valueOfElement)
+                            {
+                                html += '<tr>';
+                                html += '    <td style="font-size: 10px; font-weight: bold;">'+valueOfElement.acompanante.nombre+' '+valueOfElement.acompanante.apellido_uno+' '+valueOfElement.acompanante.apellido_dos+'</td>';
+                                html += '    <td style="font-size: 10px; font-weight: bold;">'+valueOfElement.acompanante.rut+'</td>';
+                                html += '</tr>';
+                            });
+
+                            html += '               </tbody>';
+                            html += '           </table>';
+                            html += '       </div>';
+                            html += '   </div>';
                             html += '</div>';
                         });
                     }
@@ -814,5 +892,6 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         }
+
     </script>
 @endsection
