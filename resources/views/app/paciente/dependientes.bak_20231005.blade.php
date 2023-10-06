@@ -23,80 +23,111 @@
             <!--Cierre: Header-->
 
             <!-- TABLA DE DEPENDIENTES-->
-            <div class="row ">
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="card">
-                        <div class="card-body bg-info py-3 rounded">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h5 class="text-white f-20 d-inline">Mis Dependientes {{ $titulo }}</h5>
+            <div class="row m-b-30">
+                <div class="col-md-12">
+                    <div class="card h-100 pb-0">
+                        <div class="card-header text-center bg-c-info">
+                            <h5 class="text-white d-inline text-center" style="font-size: 1.2rem;">Mis Dependientes {{ $titulo }}</h5>
+                        </div>
+                        <div class="card-body pt-4 pb-0">
 
+                            <div class="row m-b-30">
+                                <div class="col-md-12">
                                     @if ( $tipo_dependencias != '4' )
-                                        <button type="button" class="btn btn-purple-light-c btn-sm d-inline" id="btn-agregar-dep" name="btn-agregar-dep"><i class="feather icon-plus"></i> Agregar</button>
+                                        <button type="button" class="btn btn-success" id="btn-agregar-dep" name="btn-agregar-dep">Agregar</button>
                                     @endif
                                     <input type="hidden" name="dependencia" id="dependencia" value="{{ $dependencia }}">
                                     <input type="hidden" name="tipo_dependencias" id="tipo_dependencias" value="{{ $tipo_dependencias }}">
                                 </div>
                             </div>
+                            <div class="row m-b-30">
+                                <div class="col-md-12">
+                                    <div class="row" id="card-lista-dependientes">
+
+                                        @if ($registros)
+                                            @if ($registros->count() >0 )
+                                                @foreach ($registros as $registro)
+                                                    <div class="card col-md-3">
+                                                        <div class="card-header">
+                                                            <h5>Dependiente</h5>
+                                                            <div class="card-header-right">
+                                                                <div class="btn-group card-option">
+                                                                    <button type="button" class="btn dropdown-toggle has-ripple" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                        <i class="feather icon-more-horizontal"></i>
+                                                                    <span class="ripple ripple-animate" style="height: 20px; width: 20px; animation-duration: 0.689655s; animation-timing-function: linear; background: rgb(136, 136, 136); opacity: 0.4; top: -0.625px; left: -1px;"></span></button>
+                                                                    <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right" style="">
+                                                                        <li class="" onclick="abrir_agregar_acompanante('{{ $registro->paciente->id }}', '{{ $paciente->id }}');"><span><i class="feather icon-plus"></i> Agregar Acompañante</span></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @if ($dependencia == 1)
+                                                            <a href="{{ ROUTE('paciente.dependiente.home',['id_dependiente_activo'=>$registro->paciente->id]    ) }}">
+                                                        @else
+                                                            <a href="{{ ROUTE('paciente.home') }}">
+                                                        @endif
+                                                            <div class="card-body text-center" style="cursor:pointer">
+
+                                                                @if($registro->paciente->sexo == 'M')
+                                                                    <img class="wid-60 text-center mt-1" src="{{ asset('images/iconos/paciente-m.svg') }}">
+                                                                @else
+                                                                    <img class="wid-60 text-center mt-1" src="{{ asset('images/iconos/paciente-f.svg') }}">
+                                                                @endif
+                                                                <h5 class="mt-2">{{ $registro->paciente->nombres.' '.$registro->paciente->apellido_uno. ' '.$registro->paciente->apellido_dos }}</h5>
+                                                                {{-- <h6 class="mt-2">Relación: {{ $registro->relacion }}</h6> --}}
+                                                                {{-- <h6 class="mt-2">Tipo Dependencia: <br />{{ $registro->Tipodependencia->nombre }}</h6> --}}
+                                                            </div>
+                                                        </a>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <h5 class="text-center">Acompañantes</h5>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <table style="width: 100%; border: 0px;" id="lista_acompananate_{{ $registro->id_paciente }}">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Nombre</th>
+                                                                            <th>RUT</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach ($registro->acompanante as $acompanante)
+                                                                            <tr>
+                                                                                <td style="font-size: 10px; font-weight: bold;">{{ $acompanante->acompanante->nombre.' '.$acompanante->acompanante->apellido_uno.' '.$acompanante->acompanante->apellido_dos }}</td>
+                                                                                <td style="font-size: 10px; font-weight: bold;">{{ $acompanante->acompanante->rut }}</td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                <h4 class="">Sin Dependientes Registrados</h4>
+                                            @endif
+
+                                        @endif
+
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- TABLA DE DEPENDIENTES-->
-             <div class="row row-cols-1 row-cols-md-2" id="card-lista-dependientes">
-                @if ($registros)
-                    @if ($registros->count() >0 )
-                        @foreach ($registros as $registro)
-                            <div class="col mb-4">
-                                <div class="card">
-                                    @if ($dependencia == 1)
-                                        <a href="{{ ROUTE('paciente.dependiente.home',['id_dependiente_activo'=>$registro->paciente->id]    ) }}"></a>
-                                    @else
-                                        <a href="{{ ROUTE('paciente.home') }}">
-                                    @endif
-                                        <div class="card-body text-center" style="cursor:pointer">
-                                            @if($registro->paciente->sexo == 'M')
-                                                <img class="wid-60 text-center mt-1 rounded-circle" src="{{ asset('images/iconos/paciente-m.svg') }}">
-                                            @else
-                                                <img class="wid-60 text-center mt-1 rounded-circle" src="{{ asset('images/iconos/paciente-f.svg') }}">
-                                            @endif
-                                            <h5 class="mt-2 mb-0">{{ $registro->paciente->nombres.' '.$registro->paciente->apellido_uno. ' '.$registro->paciente->apellido_dos }}</h5>
-                                            {{-- <h6 class="mt-2">Relación: {{ $registro->relacion }}</h6> --}}
-                                            {{-- <h6 class="mt-2">Tipo Dependencia: <br />{{ $registro->Tipodependencia->nombre }}</h6> --}}
-                                        </div>
-                                    </a>
-                                    <div class="pb-3 px-2 pt-0 mt-0 text-center">
-                                        <div type="button" class="btn btn-sm btn-purple" onclick="ver_acomp_dep('{{ $paciente->id }}', '{{ $registro->paciente->id }}')"><i class="feather icon-user"></i> Ver acompañantes</div>
-                                        <div type="button" class="btn btn-sm btn-success-light-c" onclick="abrir_agregar_acompanante('{{ $registro->paciente->id }}', '{{ $paciente->id }}');"><i class="feather icon-plus"></i> Añadir acompañante</div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    @else
-                        <h5>Sin Dependientes Registrados</h5>
-                    @endif
-                @endif
-            </div>
+            <!-- CIERRE TABLA DE DEPENDIENTES-->
         </div>
     </div>
 
-
     @include('app.paciente.modales.dependientes.agregar')
     @include('app.paciente.modales.dependientes.agregar_acompanante')
-    @include('app.paciente.modales.dependientes.ver_acomp')
-
-
 
 @endsection
 
 @section('page-script')
-    <script type="text/javascript">
-        function anadir_acomp_dep()
-        {
-            $('#m_anadir_acomp_dep').modal('show');
-        }
-
+    <script>
         $(document).ready(function () {
             $('#btn-agregar-dep').click(function (e) {
                 e.preventDefault();
@@ -786,6 +817,7 @@
                             else
                                 img = img_f;
 
+
                             var url_temp = '';
                             if($('#dependencia').val() == 1)
                             {
@@ -795,21 +827,56 @@
                             else
                                 url_temp = "{{ route('paciente.home') }}";
 
-                            html += '<div class="col mb-4">';
-                            html += '    <div class="card">';
-                            html += '        <a href="'+url_temp+'"></a>';
-                            html += '            <div class="card-body text-center" style="cursor:pointer">';
-                            html += '                <img class="wid-60 text-center mt-1 rounded-circle" src="'+img+'">';
-                            html += '                <h5 class="mt-2 mb-0">'+value.paciente.nombres+' '+value.paciente.apellido_uno+ ' '+value.paciente.apellido_dos+'</h5>';
-                            html += '            </div>';
-                            html += '        </a>';
-                            html += '        <div class="pb-3 px-2 pt-0 mt-0 text-center">';
-                            html += '            <div type="button" class="btn btn-sm btn-purple" onclick="ver_acomp_dep(\''+value.id_responsable+'\', \''+value.id_paciente+'\')"><i class="feather icon-user"></i> Ver acompañantes</div>';
-                            html += '            <div type="button" class="btn btn-sm btn-success-light-c" onclick="abrir_agregar_acompanante(\''+value.id_paciente+'\', \''+value.id_responsable+'\');"><i class="feather icon-plus"></i> Añadir acompañante</div>';
-                            html += '        </div>';
-                            html += '    </div>';
-                            html += '</div>';
+                            html += '<div class="card col-md-3">';
+                            html += '   <div class="card-header">';
+                            html += '       <h5>Dependiente</h5>';
+                            html += '       <div class="card-header-right">';
+                            html += '           <div class="btn-group card-option">';
+                            html += '               <button type="button" class="btn dropdown-toggle has-ripple" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+                            html += '                   <i class="feather icon-more-horizontal"></i>';
+                            html += '               <span class="ripple ripple-animate" style="height: 20px; width: 20px; animation-duration: 0.689655s; animation-timing-function: linear; background: rgb(136, 136, 136); opacity: 0.4; top: -0.625px; left: -1px;"></span></button>';
+                            html += '               <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right" style="">';
+                            html += '                   <li class="" onclick="abrir_agregar_acompanante(\''+value.id_paciente+'\', \''+value.id_responsable+'\');"><span><i class="feather icon-plus"></i> Agregar Acompañante</span></li>';
+                            html += '               </ul>';
+                            html += '           </div>';
+                            html += '       </div>';
+                            html += '   </div>';
+                            html += '   <a href="'+url_temp+'">';
+                            html += '           <div class="card-body text-center" style="cursor:pointer">';
+                            html += '               <img class="wid-60 text-center mt-1" src="'+img+'">';
+                            html += '               <h5 class="mt-2">'+value.paciente.nombres+' '+value.paciente.apellido_uno+ ' '+value.paciente.apellido_dos+'</h5>';
+                            // html += '            <h6 class="mt-2">Relación: '+value.relacion+'</h6>';
+                            // html += '            <h6 class="mt-2">Tipo Dependencia: <br/>'+value.Tipodependencia.nombre+'</h6>';
+                            html += '           </div>';
+                            html += '   </a>';
 
+                            html += '   <div class="row">';
+                            html += '        <div class="col-md-12">';
+                            html += '            <h5 class="text-center">Acompañantes</h5>';
+                            html += '        </div>';
+                            html += '        <div class="col-md-12">';
+                            html += '            <table style="width: 100%; border: 0px;" id="lista_acompananate_'+value.id_paciente+'">';
+                            html += '                <thead>';
+                            html += '                    <tr>';
+                            html += '                        <th>Nombre</th>';
+                            html += '                        <th>RUT</th>';
+                            html += '                    </tr>';
+                            html += '                </thead>';
+                            html += '                <tbody>';
+
+                            $.each(value.acompanante, function (indexInArray, valueOfElement)
+                            {
+                                html += '<tr>';
+                                html += '    <td style="font-size: 10px; font-weight: bold;">'+valueOfElement.acompanante.nombre+' '+valueOfElement.acompanante.apellido_uno+' '+valueOfElement.acompanante.apellido_dos+'</td>';
+                                html += '    <td style="font-size: 10px; font-weight: bold;">'+valueOfElement.acompanante.rut+'</td>';
+                                html += '</tr>';
+                            });
+
+                            html += '               </tbody>';
+                            html += '           </table>';
+                            html += '       </div>';
+                            html += '   </div>';
+                            html += '</div>';
                         });
                     }
                 }
