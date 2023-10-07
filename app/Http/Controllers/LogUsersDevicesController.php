@@ -59,20 +59,41 @@ class LogUsersDevicesController extends Controller
                         $value['msg_estado'] = "<span class='color-azul txt_bold'>{$data->nombre}</span> - Rendición de Caja <span class='color-azul txt_bold'>N°{$id}</span>";
 
                         /** resultado */
-                        if($value['estado'] == 1)
-                            $value['msg_body'] = "<span class='color-azul txt_bold'>{$data->nombre}</span> - Rendición de Caja <span class='color-azul txt_bold'>N°{$id}</span>";
-                        elseif($value['estado'] == 2)
-                            $value['msg_body'] = "<span class='color-azul txt_bold'>{$data->nombre}</span> - Rendición de Caja <span class='color-azul txt_bold'>N°{$id}</span>";
-                        else
-                            $value['msg_body'] = "<span class='color-azul txt_bold'>{$data->nombre}</span> - Rendición de Caja <span class='color-azul txt_bold'>N°{$id}</span>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "<span class='color-azul txt_bold'>{$data->nombre}</span> - Rendición de Caja <span class='color-azul txt_bold'>N°{$id}</span>";
+                            break;   
+                            case 2:
+                                $value['msg_body'] = "<span class='color-azul txt_bold'>{$data->nombre}</span> - Rendición de Caja <span class='color-azul txt_bold'>N°{$id}</span>";
+                            break;   
+                            case 3:
+                                $value['msg_body'] = "<span class='color-azul txt_bold'>{$data->nombre}</span> - Rendición de Caja <span class='color-azul txt_bold'>N°{$id}</span>";
+                            break;   
+                            case 4:
+                                $value['msg_body'] = "<span class='color-azul txt_bold'>{$data->nombre}</span> - Rendición de Caja <span class='color-azul txt_bold'>N°{$id}</span>";
+                            break;   
+                        }
+                     
 
                         /** lista log */
-                        if($value['estado'] == 1)
-                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}</p><br>";
-                        elseif($value['estado'] == 2)
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Rechazada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}</p><br>";
-                        else
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cancelada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}</p><br>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}</p><br>";
+                            break;   
+                            case 2:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Rechazada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}</p><br>";
+                            break;   
+                            case 3:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cancelada</span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}</p><br>";
+                            break;   
+                            case 4:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada <span class='color-rojo txt_bold'>Expirada</span></span> Rendición de Caja N°{$id} de la Asistente <span class='color-azul txt_bold'>{$nombre}</span> de fecha {$fecha}</p><br>";
+                            break;   
+                        }
+                        
+                            
                     break;
 
                     case 2: // ficha única
@@ -84,20 +105,40 @@ class LogUsersDevicesController extends Controller
                         $value['msg_estado'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
 
                         /** resultado */
-                        if($value['estado'] == 1)
-                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-                        elseif($value['estado'] == 2)
-                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-                        else
-                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 2:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 3:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 4:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                        }
 
                         /** lista log */
-                        if($value['estado'] == 1)
-                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
-                        elseif($value['estado'] == 2)
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Rechazada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
-                        else
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cancelada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
+                            break;   
+                            case 2:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Rechazada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
+                            break;   
+                            case 3:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cancelada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
+                            break;   
+                            case 4:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada <span class='color-rojo txt_bold'>Expirada</span></span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
+                            break;   
+                        }
+                    
+                            
                     break;
 
                     case 3: // reserva de hora
@@ -114,20 +155,40 @@ class LogUsersDevicesController extends Controller
                         $value['msg_estado'] = "Usted tiene una Reserva <span class='color-azul txt_bold'>{$evento}</span> por Confirmar, con el Dr. {$profesional}, en <span class='color-azul txt_bold'>{$lugar_atencion}</span> en fecha <span class='color-azul txt_bold'>{$fecha} {$hora}</span>";
 
                         /** resultado */
-                        if($value['estado'] == 1)
-                            $value['msg_body'] = "Usted ha Confirmado la Reserva <span class='color-azul txt_bold'>{$evento}</span>, con el Dr. {$profesional}, en <span class='color-azul txt_bold'>{$lugar_atencion}</span> en fecha <span class='color-azul txt_bold'>{$fecha} {$hora}</span>";
-                        elseif($value['estado'] == 2)
-                            $value['msg_body'] = "Usted ha Rechazado la Reserva <span class='color-azul txt_bold'>{$evento}</span>, con el Dr. {$profesional}, en <span class='color-azul txt_bold'>{$lugar_atencion}</span> en fecha <span class='color-azul txt_bold'>{$fecha} {$hora}</span>";
-                        else
-                            $value['msg_body'] = "Se ha cancelado la Reserva <span class='color-azul txt_bold'>{$evento}</span>, con el Dr. {$profesional}, en <span class='color-azul txt_bold'>{$lugar_atencion}</span> en fecha <span class='color-azul txt_bold'>{$fecha} {$hora}</span>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "Usted ha Confirmado la Reserva <span class='color-azul txt_bold'>{$evento}</span>, con el Dr. {$profesional}, en <span class='color-azul txt_bold'>{$lugar_atencion}</span> en fecha <span class='color-azul txt_bold'>{$fecha} {$hora}</span>";
+                            break;   
+                            case 2:
+                                $value['msg_body'] = "Usted ha Rechazado la Reserva <span class='color-azul txt_bold'>{$evento}</span>, con el Dr. {$profesional}, en <span class='color-azul txt_bold'>{$lugar_atencion}</span> en fecha <span class='color-azul txt_bold'>{$fecha} {$hora}</span>";
+                            break;   
+                            case 3:
+                                $value['msg_body'] = "Se ha cancelado la Reserva <span class='color-azul txt_bold'>{$evento}</span>, con el Dr. {$profesional}, en <span class='color-azul txt_bold'>{$lugar_atencion}</span> en fecha <span class='color-azul txt_bold'>{$fecha} {$hora}</span>";
+                            break;   
+                            case 4:
+                                $value['msg_body'] = "Usted ha Confirmado la Reserva <span class='color-azul txt_bold'>{$evento}</span>, con el Dr. {$profesional}, en <span class='color-azul txt_bold'>{$lugar_atencion}</span> en fecha <span class='color-azul txt_bold'>{$fecha} {$hora}</span>";
+                            break;   
+                        }
+      
 
                         /** lista log */
-                        if($value['estado'] == 1)
-                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Reserva Confirmada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
-                        elseif($value['estado'] == 2)
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Reserva Rechazada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
-                        else
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Reserva Cancelada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Reserva Confirmada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
+                            break;   
+                            case 2:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Reserva Rechazada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
+                            break;   
+                            case 3:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Reserva Cancelada</span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
+                            break;   
+                            case 4:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Reserva Confirmada <span class='color-rojo txt_bold'>Expirada</span></span> Reserva de {$evento} para el día <span class='color-azul txt_bold'>{$fecha} {$hora}</span></p><br>";
+                            break;   
+                        }                      
+                            
                     break;
 
                     case 4: // consentimiento informado
@@ -142,20 +203,41 @@ class LogUsersDevicesController extends Controller
                         $value['msg_estado'] = "Tiene pendiente confirmar un Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}. Puede leerlo en su escritorio de Paciente o email.";
 
                         /** resultado */
-                        if($value['estado'] == 1)
-                            $value['msg_body'] = "Usted ha Autorizado el Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
-                        elseif($value['estado'] == 2)
-                            $value['msg_body'] = "Usted ha Rechazado el Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
-                        else
-                            $value['msg_body'] = "Se ha cancelado la solicitud de Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}. Por sobrepasar el tiempo de aprobación.";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "Usted ha Autorizado el Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
+                            break;   
+                            case 2:
+                                $value['msg_body'] = "Usted ha Rechazado el Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
+                            break;   
+                            case 3:
+                                $value['msg_body'] = "Se ha cancelado la solicitud de Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}. Por sobrepasar el tiempo de aprobación.";
+                            break;   
+                            case 4:
+                                $value['msg_body'] = "Usted ha Autorizado el Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
+                            break;   
+                        }            
+                            
 
                         /** lista log */
-                        if($value['estado'] == 1)
-                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Consentimiento Autorizado</span> Consentimiento de {$consentimiento}</p><br>";
-                        elseif($value['estado'] == 2)
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Consentimiento Rechazada</span> Consentimiento de {$consentimiento}</p><br>";
-                        else
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Consentimiento Cancelada</span> Consentimiento de {$consentimiento}</p><br>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Consentimiento Autorizado</span> Consentimiento de {$consentimiento}</p><br>";
+                            break;   
+                            case 2:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Consentimiento Rechazada</span> Consentimiento de {$consentimiento}</p><br>";
+                            break;   
+                            case 3:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Consentimiento Cancelada</span> Consentimiento de {$consentimiento}</p><br>";
+                            break;   
+                            case 4:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Consentimiento Autorizado <span class='color-rojo txt_bold'>Expirada</span></span> Consentimiento de {$consentimiento}</p><br>";
+                            break;   
+                        }      
+                     
+                            
                     break;
 
                     case 5: // revocacion de consentimiento informado
@@ -170,20 +252,39 @@ class LogUsersDevicesController extends Controller
                         $value['msg_estado'] = "Tiene pendiente confirmar una Revocacionde Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
 
                         /** resultado */
-                        if($value['estado'] == 1)
-                            $value['msg_body'] = "Usted ha Confirmado la Revocación de Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
-                        elseif($value['estado'] == 2)
-                            $value['msg_body'] = "Usted ha Rechazado la Revocacion de Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
-                        else
-                            $value['msg_body'] = "Se ha cancelado la Revocación de Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}. Por sobrepasar el tiempo de aprobación.";
-
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "Usted ha Confirmado la Revocación de Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
+                            break;   
+                            case 2:
+                                $value['msg_body'] = "Usted ha Rechazado la Revocacion de Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
+                            break;   
+                            case 3:
+                                $value['msg_body'] = "Se ha cancelado la Revocación de Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}. Por sobrepasar el tiempo de aprobación.";
+                            break;   
+                            case 4:
+                                $value['msg_body'] = "Usted ha Confirmado la Revocación de Consentimiento <span class='color-azul txt_bold'>{$consentimiento}</span>, para el Dr. {$profesional}.";
+                            break;   
+                        }      
+                      
                         /** lista log */
-                        if($value['estado'] == 1)
-                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Revocación de Consentimiento Confirmada</span> {$consentimiento}.<br>";
-                        elseif($value['estado'] == 2)
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Revocación de Consentimiento Rechazada</span> {$consentimiento}.<br>";
-                        else
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Revocación de Consentimiento Cancelada</span> {$consentimiento}.<br>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Revocación de Consentimiento Confirmada</span> {$consentimiento}.<br>";
+                            break;   
+                            case 2:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Revocación de Consentimiento Rechazada</span> {$consentimiento}.<br>";
+                            break;   
+                            case 3:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Revocación de Consentimiento Cancelada</span> {$consentimiento}.<br>";
+                            break;   
+                            case 4:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Revocación de Consentimiento Confirmada <span class='color-rojo txt_bold'>Expirada</span></span> {$consentimiento}.</p><br>";
+                            break;   
+                        }   
+
                     break;
 
                     case 6: //  solicitud alta voluntaria
@@ -198,20 +299,39 @@ class LogUsersDevicesController extends Controller
                         $value['msg_estado'] = "Tiene pendiente confirmar una <span class='color-azul txt_bold'>Solicitud de Alta Voluntaria</span>.";
 
                         /** resultado */
-                        if($value['estado'] == 1)
-                            $value['msg_body'] = "Usted ha Autorizado su <span class='color-azul txt_bold'>Solicitud de Alta Voluntaria</span></span>.";
-                        elseif($value['estado'] == 2)
-                            $value['msg_body'] = "Usted ha Rechazado su <span class='color-azul txt_bold'>Solicitud de Alta Voluntaria</span>.";
-                        else
-                            $value['msg_body'] = "Se ha cancelado su <span class='color-azul txt_bold'>Solicitud de Alta Voluntaria</span>. Por sobrepasar el tiempo de aprobación.";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "Usted ha Autorizado su <span class='color-azul txt_bold'>Solicitud de Alta Voluntaria</span></span>.";
+                            break;   
+                            case 2:
+                                $value['msg_body'] = "Usted ha Rechazado su <span class='color-azul txt_bold'>Solicitud de Alta Voluntaria</span>.";
+                            break;   
+                            case 3:
+                                $value['msg_body'] = "Se ha cancelado su <span class='color-azul txt_bold'>Solicitud de Alta Voluntaria</span>. Por sobrepasar el tiempo de aprobación.";
+                            break;   
+                            case 4:
+                                $value['msg_body'] = "Usted ha Autorizado su <span class='color-azul txt_bold'>Solicitud de Alta Voluntaria</span></span>.";
+                            break;   
+                        }      
 
                         /** lista log */
-                        if($value['estado'] == 1)
-                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud de Alta Voluntaria Autorizada</span></p><br>";
-                        elseif($value['estado'] == 2)
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud de Alta Voluntaria Rechazada</span></p><br>";
-                        else
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud de Alta Voluntaria Cancelada</span></p><br>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud de Alta Voluntaria Autorizada</span></p><br>";
+                            break;   
+                            case 2:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud de Alta Voluntaria Rechazada</span></p><br>";
+                            break;   
+                            case 3:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud de Alta Voluntaria Cancelada</span></p><br>";
+                            break;   
+                            case 4:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud de Alta Voluntaria Autorizada <span class='color-rojo txt_bold'>Expirada</span></span></p><br>";
+                            break;   
+                        }   
+                       
                     break;
 
                     case 7: //  rechazo de tratamiento
@@ -226,20 +346,39 @@ class LogUsersDevicesController extends Controller
                         $value['msg_estado'] = "Tiene pendiente confirmar un <span class='color-azul txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia</span>.";
 
                         /** resultado */
-                        if($value['estado'] == 1)
-                            $value['msg_body'] = "Usted ha Autorizado un <span class='color-azul txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia</span></span>.";
-                        elseif($value['estado'] == 2)
-                            $value['msg_body'] = "Usted ha Rechazado un <span class='color-azul txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia</span>.";
-                        else
-                            $value['msg_body'] = "Se ha cancelado un <span class='color-azul txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia</span>. Por sobrepasar el tiempo de aprobación.";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "Usted ha Autorizado un <span class='color-azul txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia</span></span>.";
+                            break;   
+                            case 2:
+                                $value['msg_body'] = "Usted ha Rechazado un <span class='color-azul txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia</span>.";
+                            break;   
+                            case 3:
+                                $value['msg_body'] = "Se ha cancelado un <span class='color-azul txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia</span>. Por sobrepasar el tiempo de aprobación.";
+                            break;   
+                            case 4:
+                                $value['msg_body'] = "Usted ha Autorizado un <span class='color-azul txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia</span></span>.";
+                            break;   
+                        }      
 
                         /** lista log */
-                        if($value['estado'] == 1)
-                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia Autorizada</span></p><br>";
-                        elseif($value['estado'] == 2)
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia Rechazada</span></p><br>";
-                        else
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia Cancelada</span></p><br>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia Autorizada</span></p><br>";
+                            break;   
+                            case 2:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia Rechazada</span></p><br>";
+                            break;   
+                            case 3:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia Cancelada</span></p><br>";
+                            break;   
+                            case 4:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Rechazo voluntario de tratamiento médico, procedimientos y/o cirugia Autorizada <span class='color-rojo txt_bold'>Expirada</span></span></p><br>";
+                            break;   
+                        }  
+                     
                     break;
 
 
@@ -253,20 +392,40 @@ class LogUsersDevicesController extends Controller
                         $value['msg_estado'] = "Tiene pendiente confirmar una <span class='color-azul txt_bold'>Invitación a un Profesional Provisorio</span>.";
 
                         /** resultado */
-                        if($value['estado'] == 1)
-                            $value['msg_body'] = "Usted ha Autorizado una <span class='color-azul txt_bold'>Invitación a un Profesional Provisorio</span></span>.";
-                        elseif($value['estado'] == 2)
-                            $value['msg_body'] = "Usted ha Rechazado una <span class='color-azul txt_bold'>Invitación a un Profesional Provisorio</span>.";
-                        else
-                            $value['msg_body'] = "Se ha cancelado una <span class='color-azul txt_bold'>Invitación a un Profesional Provisorio</span>. Por sobrepasar el tiempo de aprobación.";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "Usted ha Autorizado una <span class='color-azul txt_bold'>Invitación a un Profesional Provisorio</span></span>.";
+                            break;   
+                            case 2:
+                                $value['msg_body'] = "Usted ha Rechazado una <span class='color-azul txt_bold'>Invitación a un Profesional Provisorio</span>.";
+                            break;   
+                            case 3:
+                                $value['msg_body'] = "Se ha cancelado una <span class='color-azul txt_bold'>Invitación a un Profesional Provisorio</span>. Por sobrepasar el tiempo de aprobación.";
+                            break;   
+                            case 4:
+                                $value['msg_body'] = "Usted ha Autorizado una <span class='color-azul txt_bold'>Invitación a un Profesional Provisorio</span></span>.";
+                            break;   
+                        }   
+                       
 
                         /** lista log */
-                        if($value['estado'] == 1)
-                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Invitación a un Profesional Provisorio Autorizada</span></p><br>";
-                        elseif($value['estado'] == 2)
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Invitación a un Profesional Provisorio Rechazada</span></p><br>";
-                        else
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Invitación a un Profesional Provisorio Cancelada</span></p><br>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Invitación a un Profesional Provisorio Autorizada</span></p><br>";
+                            break;   
+                            case 2:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Invitación a un Profesional Provisorio Rechazada</span></p><br>";
+                            break;   
+                            case 3:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Invitación a un Profesional Provisorio Cancelada</span></p><br>";
+                            break;   
+                            case 4:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Invitación a un Profesional Provisorio Autorizada <span class='color-rojo txt_bold'>Expirada</span></span></p><br>";
+                            break;   
+                        }  
+                       
                     break;
 
 					case 9: //  modificar antecedentes medicos de paciente
@@ -278,20 +437,38 @@ class LogUsersDevicesController extends Controller
                         $value['msg_estado'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando su autorizacion para modificar sus antecedentes médicos";
 
                         /** resultado */
-                        if($value['estado'] == 1)
-                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> ha sido Autorizado con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-                        elseif($value['estado'] == 2)
-                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> ha sido Rechazado con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-                        else
-                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> ha cancelado su autorización con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-
-                        /** lista log */
-                        if($value['estado'] == 1)
-                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada</span> El Profesional {$nombre} ha sido autorizado con fecha {$fecha}</p><br>";
-                        elseif($value['estado'] == 2)
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Rechazada</span> El Profesional {$nombre} ha sido notificado con fecha {$fecha}</p><br>";
-                        else
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cancelada</span> El Profesional {$nombre} ha recibido la cancelacion de autorización con fecha {$fecha}</p><br>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> ha sido Autorizado con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 2:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> ha sido Rechazado con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 3:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> ha cancelado su autorización con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 4:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> ha sido Autorizado con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                        }   
+                       /** lista log */
+                       switch($value['estado'])
+                       {
+                           case 1:
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada</span> El Profesional {$nombre} ha sido autorizado con fecha {$fecha}</p><br>";
+                           break;   
+                           case 2:
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Rechazada</span> El Profesional {$nombre} ha sido notificado con fecha {$fecha}</p><br>";
+                           break;   
+                           case 3:
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cancelada</span> El Profesional {$nombre} ha recibido la cancelacion de autorización con fecha {$fecha}</p><br>";
+                           break;   
+                           case 4:
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada <span class='color-rojo txt_bold'>Expirada</span> El Profesional {$nombre} ha sido autorizado con fecha {$fecha}</span></p><br>";
+                           break;   
+                       }  
+                    
                     break;
 
                     case 10: //  notificar ges
@@ -304,20 +481,38 @@ class LogUsersDevicesController extends Controller
                         $value['msg_estado'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> Notifica Patologia GES";
 
                         /** resultado */
-                        if($value['estado'] == 1)
-                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> le ha notificado Patologia GES con fecha<span class='color-azul txt_bold'>{$fecha}</span>";
-                        elseif($value['estado'] == 2)
-                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> le ha notificado Patologia GES con fecha<span class='color-azul txt_bold'>{$fecha}</span>";
-                        else
-                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> le ha notificado Patologia GES con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> le ha notificado Patologia GES con fecha<span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 2:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> le ha notificado Patologia GES con fecha<span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 3:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> le ha notificado Patologia GES con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 4:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> le ha notificado Patologia GES con fecha<span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                        }   
                         /** lista log */
-                        if($value['estado'] == 1)
+                        switch($value['estado'])
+                        {
+                           case 1:
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Notificación GES</span> El Profesional {$profesional} le ha notificado Patologia GES con fecha {$fecha}</p><br>";
+                           break;   
+                           case 2:
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Notificación GES</span> El Profesional {$profesional} le ha notificado Patologia GES con fecha {$fecha}</p><br>";
+                           break;   
+                           case 3:
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Notificación GES</span> El Profesional {$profesional} le ha notificado Patologia GES con fecha {$fecha}</p><br>";
+                           break;   
+                           case 4:
                             $msg_html_estructura = "<p><span class='color-verde txt_bold'>Notificación GES</span> El Profesional {$profesional} le ha notificado Patologia GES con fecha {$fecha}</p><br>";
-                        elseif($value['estado'] == 2)
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Notificación GES</span> El Profesional {$profesional} le ha notificado Patologia GES con fecha {$fecha}</p><br>";
-                        else
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Notificación GES</span> El Profesional {$profesional} le ha notificado Patologia GES con fecha {$fecha}</p><br>";
+                           break;   
+                        } 
+
                     break;
 
                     case 11: //  autorizacion compin paciente
@@ -330,20 +525,38 @@ class LogUsersDevicesController extends Controller
                         $value['msg_estado'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> solicita su permiso para Iniciar una Licencia";
 
                         /** resultado */
-                        if($value['estado'] == 1)
-                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> solicita su permiso para Iniciar una Licencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-                        elseif($value['estado'] == 2)
-                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> solicita su permiso para Iniciar una Licencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-                        else
-                            $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> solicita su permiso para Iniciar una Licencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> solicita su permiso para Iniciar una Licencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 2:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> solicita su permiso para Iniciar una Licencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 3:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> solicita su permiso para Iniciar una Licencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 4:
+                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$profesional}</span> solicita su permiso para Iniciar una Licencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                        }  
                         /** lista log */
-                        if($value['estado'] == 1)
-                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Notificación COMPIN</span> El Profesional {$profesional} solicita su permiso para Iniciar una Licencia con fecha {$fecha}</p><br>";
-                        elseif($value['estado'] == 2)
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Notificación COMPIN</span> El Profesional {$profesional} solicita su permiso para Iniciar una Licencia con fecha {$fecha}</p><br>";
-                        else
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Notificación COMPIN</span> El Profesional {$profesional} solicita su permiso para Iniciar una Licencia con fecha {$fecha}</p><br>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Notificación COMPIN</span> El Profesional {$profesional} solicita su permiso para Iniciar una Licencia con fecha {$fecha}</p><br>";
+                            break;   
+                            case 2:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Notificación COMPIN</span> El Profesional {$profesional} solicita su permiso para Iniciar una Licencia con fecha {$fecha}</p><br>";
+                            break;   
+                            case 3:
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Notificación COMPIN</span> El Profesional {$profesional} solicita su permiso para Iniciar una Licencia con fecha {$fecha}</p><br>";
+                            break;   
+                            case 4:
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Notificación COMPIN</span> El Profesional {$profesional} solicita su permiso para Iniciar una Licencia con fecha {$fecha}</p><br>";
+                            break;   
+                        }  
+                    
                     break;
 
                     case 12: //  autorizacion licencia profesional
@@ -356,20 +569,39 @@ class LogUsersDevicesController extends Controller
                         $value['msg_estado'] = "Profesional esta por Iniciar Licencia";
 
                         /** resultado */
-                        if($value['estado'] == 1)
-                            $value['msg_body'] = "Profesional por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-                        elseif($value['estado'] == 2)
-                            $value['msg_body'] = "Profesional por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-                        else
-                            $value['msg_body'] = "Profesional por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "Profesional por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 2:
+                                $value['msg_body'] = "Profesional por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 3:
+                                $value['msg_body'] = "Profesional por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 4:
+                                $value['msg_body'] = "Profesional por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                        }                         
 
                         /** lista log */
-                        if($value['estado'] == 1)
-                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Creacion de Licencia</span> con fecha {$fecha}</p><br>";
-                        elseif($value['estado'] == 2)
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Creacion de Licencia</span> con fecha {$fecha}</p><br>";
-                        else
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Creacion de Licencia</span> con fecha {$fecha}</p><br>";
+                        switch($value['estado'])
+                        {
+                           case 1:
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Creacion de Licencia</span> con fecha {$fecha}</p><br>";
+                           break;   
+                           case 2:
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Creacion de Licencia</span> con fecha {$fecha}</p><br>";
+                           break;   
+                           case 3:
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Creacion de Licencia</span> con fecha {$fecha}</p><br>";
+                           break;   
+                           case 4:
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Creacion de Licencia <span class='color-rojo txt_bold'>Expirada</span> con fecha {$fecha}</span></p><br>";
+                           break;   
+                        }  
+                       
                     break;
 
                     case 13: //  autorizacion de paciente para compra de bono
@@ -382,20 +614,40 @@ class LogUsersDevicesController extends Controller
                         $value['msg_estado'] = "Autorizacion para compra de bono";
 
                         /** resultado */
-                        if($value['estado'] == 1)
-                            $value['msg_body'] = "Autorizacion para compra de bono con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-                        elseif($value['estado'] == 2)
-                            $value['msg_body'] = "Autorizacion para compra de bono con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-                        else
-                            $value['msg_body'] = "Autorizacion para compra de bono con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "Autorizacion para compra de bono con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 2:
+                                $value['msg_body'] = "Autorizacion para compra de bono con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 3:
+                                $value['msg_body'] = "Autorizacion para compra de bono con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 4:
+                                $value['msg_body'] = "Autorizacion para compra de bono con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                        }    
+                       
 
                         /** lista log */
-                        if($value['estado'] == 1)
-                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Autorizacion para compra de bono</span> con fecha {$fecha}</p><br>";
-                        elseif($value['estado'] == 2)
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Autorizacion para compra de bono</span> con fecha {$fecha}</p><br>";
-                        else
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Autorizacion para compra de bono</span> con fecha {$fecha}</p><br>";
+                        switch($value['estado'])
+                        {
+                           case 1:
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Autorizacion para compra de bono</span> con fecha {$fecha}</p><br>";
+                           break;   
+                           case 2:
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Autorizacion para compra de bono</span> con fecha {$fecha}</p><br>";
+                           break;   
+                           case 3:
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Autorizacion para compra de bono</span> con fecha {$fecha}</p><br>";
+                           break;   
+                           case 4:
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Autorizacion para compra de bono <span class='color-rojo txt_bold'>Expirada</span> con fecha {$fecha}</span></p><br>";
+                           break;   
+                        }  
+                      
                     break;
 
 					case 14: //  Permiso para venta de MEDICAMENTOS
@@ -408,20 +660,39 @@ class LogUsersDevicesController extends Controller
                         $value['msg_estado'] = "Se necesita  <span class='color-azul txt_bold'>permiso</span> para la venta de medicamentos asociados a una receta";
 
                         /** resultado */
-                        if($value['estado'] == 1)
-                            $value['msg_body'] = "<span class='color-azul txt_bold'>Permiso</span> para venta con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-                        elseif($value['estado'] == 2)
-                            $value['msg_body'] = "<span class='color-azul txt_bold'>Permiso</span> para venta con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-                        else
-                            $value['msg_body'] = "<span class='color-azul txt_bold'>Permiso</span> para venta con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
-
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "<span class='color-azul txt_bold'>Permiso</span> para venta con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 2:
+                                $value['msg_body'] = "<span class='color-azul txt_bold'>Permiso</span> para venta con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 3:
+                                $value['msg_body'] = "<span class='color-azul txt_bold'>Permiso</span> para venta con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                            case 4:
+                                $value['msg_body'] = "<span class='color-azul txt_bold'>Permiso</span> para venta con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                            break;   
+                        }    
+                       
                         /** lista log */
-                        if($value['estado'] == 1)
-                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Venta Farmacia Autorizada</span> Permiso para venta con fecha {$fecha}</p><br>";
-                        elseif($value['estado'] == 2)
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Venta Farmacia Rechazada</span> Permiso para venta con fecha {$fecha}</p><br>";
-                        else
-                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Venta Farmacia Cancelada</span> Permiso para venta con fecha {$fecha}</p><br>";
+                        switch($value['estado'])
+                        {
+                           case 1:
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Venta Farmacia Autorizada</span> Permiso para venta con fecha {$fecha}</p><br>";
+                           break;   
+                           case 2:
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Venta Farmacia Rechazada</span> Permiso para venta con fecha {$fecha}</p><br>";
+                           break;   
+                           case 3:
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Venta Farmacia Cancelada</span> Permiso para venta con fecha {$fecha}</p><br>";
+                           break;   
+                           case 4:
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Venta Farmacia Autorizada <span class='color-rojo txt_bold'>Expirada</span> Permiso para venta con fecha {$fecha}</span></p><br>";
+                           break;   
+                        }  
+                       
                     break;
                 }
 
@@ -789,6 +1060,7 @@ class LogUsersDevicesController extends Controller
     public function checkStateSol(){ // CRON CADA 1 MIN
 
         $registros = LogUsersDevices::whereIn('estado',[0,1])->get();
+        //$registros = LogUsersDevices::whereIn('estado',[0])->get();
 
         if($registros)
         {
@@ -805,8 +1077,14 @@ class LogUsersDevicesController extends Controller
                     $segundos = strtotime($fecha_exp) - strtotime($fecha_actual);
                     if($segundos<0)
                     {
-                        $value->estado = 3;
-                        $value->save();
+                        if($value->estado == 1){
+                            $value->estado = 4;
+                            $value->save();
+                        }else{
+                            $value->estado = 3;
+                            $value->save();
+                        }
+                        
                     }
                 }
             }
