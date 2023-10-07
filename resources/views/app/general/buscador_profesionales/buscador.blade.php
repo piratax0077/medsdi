@@ -70,11 +70,11 @@
                                                     <label class="floating-label-activo-sm">Profesión</label>
                                                     <select class="form-control form-control-sm" name="buscar_especialidad_profesion" id="buscar_especialidad_profesion" onchange="buscar_tipo_especialidad(this);">
                                                         <option value="">Seleccione</option>
-                                                        
+
                                                         @if(isset($profesiones))
                                                             @foreach($profesiones as $pro_key => $pro)
                                                             @php
-                                                                $selected_id1 = '';                                                            
+                                                                $selected_id1 = '';
                                                                 if((int)$filtros['id_profesion']==$pro->id && (int)$filtros['id_profesion']>0)
                                                                 $selected_id1 = 'selected';
                                                             @endphp
@@ -120,7 +120,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                           
+
                                             <div class="col-sm-12 col-md-4">
                                                 <div class="form-group">
                                                     <label class="floating-label-activo-sm">Región</label>
@@ -152,7 +152,6 @@
                                                 </div>  --}}
 
                                                 <div class="form-group">
-
                                                     <div class="switch switch-success d-inline m-r-10">
                                                         <input type="checkbox" id="buscar_especialidad_hora24" value="1">
                                                         <label for="buscar_especialidad_hora24" class="cr"></label>
@@ -296,29 +295,6 @@
                 </div>
             </div>
             <div class="row" id="div_resultado_busqueda">
-
-                {{--  <!--Card Tomar Hora Perfil Médico -->
-                <div class="col-sm-12 col-md-4">
-                    <div class="card user-card user-card-1 mt-4">
-                        <div class="card-body pt-0">
-                            <div class="user-about-block text-center">
-                                <div class="row align-items-end">
-                                    <div class="col"><img class="img-radius img-fluid wid-70" src="{{ asset('images/img_perfil/usuario_profesional.svg') }}" alt="Nombre del Médico"></div>
-                                </div>
-                            </div>
-                            <div class="text-center">
-                                <a href="#!" data-toggle="modal" data-target="#modal-report">
-                                    <span class="badge badge-primary mt-2">Medicina General</span>
-                                    <h6 class="mb-1 mt-2">Nombre y Apellidos</h6>
-                                </a>
-                                <p class="mb-3 text-muted"><i class="feather icon-calendar"></i>Próxima hora 27/08/2021</p>
-                                <button type="button" class="btn btn-outline-info btn-sm" onclick="f_profesional();"><i class="feather icon-file-plus"></i> Ver ficha</button>
-                                <button type="button" class="btn btn-info btn-sm" onclick="hora_medica();"><i class="feather icon-calendar"></i> Reservar hora</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>  --}}
-
             </div>
         </div>
     </div>
@@ -327,14 +303,14 @@
     <!--Modals buscador -->
     @include("app.general.buscador_profesionales.modals.ficha_profesional")
     @include("app.general.buscador_profesionales.modals.reservar_hora")
-   
+
 @endsection
 
 
 @section('page-script')
     <script>
-     @if($filtros['id_profesion']!=0&&$filtros['id_especialidad']!=0)
-     buscar_profesional_especialidad();
+     @if( $filtros['id_profesion'] !=0 && $filtros['id_especialidad'] !=0 )
+        buscar_profesional_especialidad();
      @endif
     </script>
 @endsection

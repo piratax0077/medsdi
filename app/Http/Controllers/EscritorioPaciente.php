@@ -38,8 +38,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 use App\Helpers\Funciones;
+use App\Models\AcompananteDependiente;
 use App\Models\ExamenEspecialidad;
 use App\Models\ExamenMedico;
+use App\Models\LogUsersDevices;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -48,7 +50,9 @@ use App\Models\PacienteControlPeso;
 use App\Models\PacienteControlPresion;
 use App\Models\PacienteControlOxigeno;
 use App\Models\PacienteControlOrina;
+use App\Models\PacientesDependientes;
 use App\Models\ResultadoExamen;
+use DateTime;
 
 class EscritorioPaciente extends Controller
 {
@@ -1091,6 +1095,7 @@ class EscritorioPaciente extends Controller
 
         $datos = array();
         if(empty($request->id_dependiente_activo))
+        {
             $paciente = Paciente::where('id_usuario', Auth::user()->id)
                         ->with(['Prevision' => function($query){
                             $query->select('id', 'nombre');
@@ -1099,7 +1104,9 @@ class EscritorioPaciente extends Controller
                             $query->with('Ciudad')->first();
                         }])
                         ->first();
+        }
         else
+        {
             $paciente = Paciente::where('id', $request->id_dependiente_activo)
                         ->with(['Prevision' => function($query){
                             $query->select('id', 'nombre');
@@ -1108,6 +1115,24 @@ class EscritorioPaciente extends Controller
                             $query->with('Ciudad')->first();
                         }])
                         ->first();
+
+            /** BUSCAR INFORMACION DE DEPENDIENTES */
+            $info_depen = PacientesDependientes::where('id_paciente', $paciente->id)->first();
+
+            /** BUSCAR RESPONSABLES */
+            $filtro_temp = array();
+            $filtro_temp[] = array('id_dependiente', $info_depen->id_paciente);
+            $registro_depen = AcompananteDependiente::where($filtro_temp)->where('id_tipo', 1)->with('acompanante');
+            $registro_temp = AcompananteDependiente::where('id_responsable', $info_depen->id_responsable)->whereNull('id_dependiente')->where('id_tipo', 2)->with('acompanante')->union($registro_depen)->get();
+            $paciente['acompanante'] = $registro_temp;
+
+            /** BUSCAR REPRESENTENATE */
+            $registro_representante = Paciente::where('id_usuario', Auth::user()->id)->first();
+            $paciente['representante'] = $registro_representante;
+
+            $paciente['edad'] = $this->obtener_edad_segun_fecha($paciente->fecha_nac);
+        }
+
 
         if($paciente)
         {
@@ -1195,6 +1220,15 @@ class EscritorioPaciente extends Controller
             $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
             $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
 
+            $hora_medica->acomp_representante = $request->representante;
+            $hora_medica->acomp_acompanante = $request->acompanante;
+            if(!empty($request->lista_Acompanante))
+            $hora_medica->acomp_lista = json_encode($request->lista_Acompanante);
+
+            $hora_medica->autorizacion_atencion = $request->autorizacion_atencion;
+            // $hora_medica->id_log_users_devices = '';
+
+
             if(!empty($request->tipo_hora_medica))
             {
                 $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
@@ -1212,6 +1246,45 @@ class EscritorioPaciente extends Controller
                     'profesional' => $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos ,
                     'lugar_atencion' => $lugar_atencion->nombre,
                 );
+
+                /**  */
+                /** menor edad? */
+                $edad = \Carbon\Carbon::parse($paciente->fecha_nac)->diff(\Carbon\Carbon::now())->format('%y');
+                if( $edad < 18 )
+                {
+
+                    if( $request->autorizacion_atencion == 1 )
+                    {
+                        $usuario = Auth::user()->id;
+                        $id_user_create = $usuario;
+                        $id_user_recept = $usuario;
+                        $evento = 'Autorizacion Atencion a Menor de Edad';
+                        $nombre = $paciente->nombre;
+                        $apellido_p = $paciente->apellido_uno;
+                        $apellido_m = $paciente->apellido_dos;
+                        $lugar = $lugar_atencion->nombre;
+                        $profesional_log = $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos;
+                        $tipo = 'Autorizacion Atencion a Menor de Edad';
+                        $tipo_id = '15';
+
+                        // $log_users_devices = new LogUsersDevices();
+                        $funcion = new Funciones();
+                        $log_users_devices = (object) $funcion->generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional_log,$tipo,$tipo_id);
+
+                        $datos['log_users_devices'] = $log_users_devices;
+
+                        if($log_users_devices->app['estado'] == 1)
+                        {
+                            $hora_medica->autorizacion_atencion = $request->autorizacion_atencion;
+                            $hora_medica->id_log_users_devices = $log_users_devices->app['last_id'];
+                            if($hora_medica->save())
+                            {
+                                $datos['hora_medica_update']['estado'] = 1;
+                                $datos['hora_medica_update']['msj'] = 'autorizacion';
+                            }
+                        }
+                    }
+                }
             }
         }
 

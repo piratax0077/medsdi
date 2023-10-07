@@ -34,6 +34,9 @@
 
     <link rel="stylesheet" href="{{ asset('js/fullcalendar-5.10.1/lib/main.css') }}" />
 
+    <!-- select2 -->
+    <link rel="stylesheet" type="text/css" href='{{ asset('css/plugins/select2.min.css') }}'/>
+
 
    {{-- autocomplete
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
@@ -151,6 +154,9 @@
 
     <!-- autocomplete -->
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <!--select2 -->
+    <script src="{{ asset('js/plugins/select2.full.min.js')}}"></script>
 
     <!-- TEMPLATE BUSCADOR DE PROFESIONAL -->
     <script>
@@ -829,7 +835,15 @@
 
             let url = "{{ route('paciente.get.informacion') }}";
             var datos = {};
-            var id_dependiente_activo = '{{ $paciente->id }}';
+
+            var id_dependiente_activo = '';
+            @if (!empty($id_dependiente_activo))
+                id_dependiente_activo = '{{ $paciente->id }}';
+                $('#seccion_acompanante').show();
+            @else
+                id_dependiente_activo = '';
+                $('#seccion_acompanante').hide();
+            @endif
 
             if(id_dependiente_activo != '')
                 datos.id_dependiente_activo = id_dependiente_activo;
@@ -871,8 +885,35 @@
                     $('#reserva_hora_email').html(data.registro.email);
                     $('#reserva_hora_telefono').html(data.registro.telefono_uno);
 
+                    if( data.registro.edad < 18 )
+                    {
+                        $('#seccion_autorizacion').show();
+                    }
+                    else
+                    {
+                        $('#seccion_autorizacion').hide();
+                    }
 
+                    if(typeof data.registro.representante != "undefined")
+                    {
+                        $('#div_info_representante').show();
+                        $('#div_info_representante').html('<strong>Representante:</strong> '+data.registro.representante.nombres+' '+data.registro.representante.apellido_uno);
 
+                        $('.div_info_acompanante').hide();
+                        $('#reserva_hora_id_acompanante').html('');
+                        $.each(data.registro.acompanante, function (indexInArray, valueOfElement)
+                        {
+                            console.log(valueOfElement);
+                            var html = '';
+                            html = '<option value="'+valueOfElement.id_acompanante+'">'+valueOfElement.acompanante.nombre+' '+valueOfElement.acompanante.apellido_uno+' - '+valueOfElement.acompanante.rut+'</option>';
+                            $('#reserva_hora_id_acompanante').append(html);
+                        });
+                        $('#reserva_hora_id_acompanante').select2();
+                    }
+                    else
+                    {
+                        $('#acompanante_representante').prop("checked", false);
+                    }
                 }
                 else
                 {
@@ -904,6 +945,29 @@
             let origen = $('#reserva_hora_origen').val();
 
 
+            let representante = 0;
+            let lista_Acompanante = $('#reserva_hora_id_acompanante').val();
+
+            if( $('#acompanante_representante').prop("checked") )
+                representante = 1;
+            else
+                representante = 0;
+
+            let acompanante = 0;
+            if( $('#acompanante_acompanante').prop("checked") )
+                acompanante = 1;
+            else
+            {
+                acompanante = 0;
+                lista_Acompanante = '';
+            }
+
+            let autorizacion_atencion = 0;
+            if( $('#autorizacion_atencion').prop("checked") )
+                autorizacion_atencion = 1;
+            else
+                autorizacion_atencion = 0;
+
             $.ajax({
                     url: url,
                     type: "post",
@@ -915,6 +979,10 @@
                         id_profesional: id_profesional,
                         id_asistente: id_asistente,
                         origen: origen,
+                        representante: representante,
+                        acompanante: acompanante,
+                        lista_Acompanante: lista_Acompanante,
+                        autorizacion_atencion: autorizacion_atencion,
                     }
                 })
                 .done(function(data) {
@@ -979,6 +1047,31 @@
             $('#modal_info_pro_lugar_atencion').DataTable({
                 responsive: true,
             })
+
+            $('#acompanante_representante').change(function(elm)
+            {
+                if(this.checked)
+                {
+                    $('#div_info_representante').show();
+                }
+                else
+                {
+                    $('#div_info_representante').hide();
+                }
+            });
+
+            $('#acompanante_acompanante').change(function(elm)
+            {
+                if(this.checked)
+                {
+                    $('#div_info_acompanante').show();
+                }
+                else
+                {
+                    $('#div_info_acompanante').hide();
+                    $('#reserva_hora_id_acompanante').val('').select2();
+                }
+            });
         });
 
     </script>
