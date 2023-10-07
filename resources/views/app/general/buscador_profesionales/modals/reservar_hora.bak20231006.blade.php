@@ -24,11 +24,17 @@
 
                     <div class="col-md-6">
                         <label class="mt-4">El Profesional atiende los dias <span id="modal_reserva_dias_atencion" class="hljs-strong"></span></label>
+                        {{--  <div class="form-row">
+                            <div class="form-group col-md-12 mb-2 mt-0">
+                            </div>
+                        </div>  --}}
                     </div>
 
                     <div class="col-md-12">
                         <div class="form-row">
                             <div class="form-group col-md-12 mb-2 mt-0">
+                                {{--  <input type="date" id="calendario" name="calendario">  --}}
+                                {{--  <div id="calendario_reserva_buscador" name="calendario_reserva_buscador" class="calendar fc fc-unthemed fc-ltr"></div>  --}}
                                 <label class="floating-label-active-sm mb-0">Seleccione una fecha</label>
                                 <input class="form-control form-control-sm" type="date" name="modal_reserva_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_reserva_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  />
                             </div>
@@ -41,6 +47,9 @@
                             </div>
                             <div class="col-md-12 mx-auto" >
                                 <div class="row" id="modal_reserva_hora_lista_horas">
+                                    {{--  <div class="col-md-2 btn btn-outline-primary btn-sm btn-block">
+                                        8:00
+                                    </div>  --}}
                                 </div>
                             </div>
                         </div>
@@ -49,6 +58,8 @@
                 <hr>
                 <div class="row">
                     <div class="col-md-12 text-center">
+                        {{--  <button type="button" class="btn btn-info"><i class="feather icon-check-circle"></i>
+                            Reservar hora</button>  --}}
                         <label class="label">Seleccione  Lugar de Atención, Día en el calendario y haga click en la Hora Disponible.</label>
                     </div>
                 </div>
@@ -88,6 +99,7 @@
                         </button>
                     </div>
                 </div>
+
 
 
                 <form id="form_reseva_de_horas">
@@ -155,73 +167,16 @@
                             </tbody>
                         </table>
 
-                        <div class="col-sm-12 col-md-12" id="seccion_acompanante">
-                            <label class="label">Acompañado por </label>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="switch switch-success d-inline m-r-10">
-                                            <input type="checkbox" id="acompanante_representante" value="1" checked>
-                                            <label for="acompanante_representante" class="cr"></label>
-                                        </div>
-                                        <label><strong>Representante</strong></label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6"><div id="div_info_representante"></div></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="switch switch-success d-inline m-r-10">
-                                            <input type="checkbox" id="acompanante_acompanante" value="1">
-                                            <label for="acompanante_acompanante" class="cr"></label>
-                                        </div>
-                                        <label><strong>Acompañante</strong></label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div id="div_info_acompanante" style="display: none">
-                                        <div class="form-group">
-                                            <label class="floating-label-activo-sm">Acompañante</label>
-                                            {{-- <input type="text" class="form-control form-control-sm" name="reserva_hora_id_acompanante" id="reserva_hora_id_acompanante"> --}}
-                                            <select class="form-control form-control-sm" multiple name="reserva_hora_id_acompanante" id="reserva_hora_id_acompanante">
-                                                {{-- <option value="">Seleccione</option> --}}
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12 col-md-12 mt-1">
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label class="floating-label">Descripción Reserva</label>
                                 <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion" id="reserva_hora_descripcion">
                             </div>
                         </div>
-
-                        <div class="col-sm-12 col-md-12" id="seccion_autorizacion">
-                            <label class="label">Autorización Atención</label>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <div class="switch switch-success d-inline m-r-10">
-                                            <input type="checkbox" id="autorizacion_atencion" value="1" checked>
-                                            <label for="autorizacion_atencion" class="cr"></label>
-                                        </div>
-                                        <label><strong>Autorizar Atención</strong></label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <p style="font-size: 12px;font-weight: bold;color: #04048f;">A Confirmar usted esta Confirmando Su Consentimiento al Profesional para realizar la Atención Medica.<p>
-                                    <p style="font-size: 12px;font-weight: bold;color: #04048f;">En caso de No dar su Concentimiento puede ser solicitado posteriormente por el Profesional.</p>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger close_agenda_agregar_paciente" onclick="$('#agenda_agregar_paciente').modal('hide');" data-dismiss="modal">Cancelar</button>
                             <button type="button" onclick="agendar_hora();" class="btn btn-info">Agendar Hora</button>
+
                         </div>
                     </div>
 

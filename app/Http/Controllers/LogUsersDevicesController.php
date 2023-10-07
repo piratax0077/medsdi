@@ -423,6 +423,33 @@ class LogUsersDevicesController extends Controller
                         else
                             $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Venta Farmacia Cancelada</span> Permiso para venta con fecha {$fecha}</p><br>";
                     break;
+
+                    case 15: //  AUTORIZACION DE ATENCION MEDICA
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id;
+                        $nombre = $data->nombre;
+                        $fecha = $data->fecha;
+                        $profesional = $data->profesional;
+                        /** peticion */
+                        $value['msg_estado'] = "Se necesita <span class='color-azul txt_bold'>Autorización</span> para la Atención Medica de Menor de Edad";
+
+                        /** resultado */
+                        if($value['estado'] == 1)
+                            $value['msg_body'] = "<span class='color-azul txt_bold'>Autorización</span> para Atención Medica a Menor de Edad con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        elseif($value['estado'] == 2)
+                            $value['msg_body'] = "<span class='color-azul txt_bold'>Autorización</span> para Atención Medica a Menor de Edad con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        else
+                            $value['msg_body'] = "<span class='color-azul txt_bold'>Autorización</span> para Atención Medica a Menor de Edad con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+
+                        /** lista log */
+                        if($value['estado'] == 1)
+                            $msg_html_estructura = "<p><span class='color-verde txt_bold'>Autorizada</span> para Atención Medica a Menor de Edad con fecha {$fecha}</p><br>";
+                        elseif($value['estado'] == 2)
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Rechazada</span> para Atención Medica a Menor de Edad con fecha {$fecha}</p><br>";
+                        else
+                            $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Cancelada</span> para Atención Medica a Menor de Edad con fecha {$fecha}</p><br>";
+                    break;
+
                 }
 
 
@@ -601,7 +628,7 @@ class LogUsersDevicesController extends Controller
             $profesional = '';
             $tipo = 'Check SDI';
             $id_tipo = $request->tipo;
-            
+
             $permiso = Funciones::generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo,$id_tipo);
 
             if($permiso['app']['estado'] == 1)

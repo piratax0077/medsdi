@@ -51,9 +51,10 @@
                             <div class="col mb-4">
                                 <div class="card">
                                     @if ($dependencia == 1)
-                                        <a href="{{ ROUTE('paciente.dependiente.home',['id_dependiente_activo'=>$registro->paciente->id]    ) }}"></a>
+                                        <a href="{{ ROUTE('paciente.dependiente.home',['id_dependiente_activo'=>$registro->paciente->id]) }}">
                                     @else
-                                        <a href="{{ ROUTE('paciente.home') }}">
+                                        {{-- <a href="{{ ROUTE('paciente.home') }}"> --}}
+                                        <a href="{{ ROUTE('paciente.dependiente.home',['id_dependiente_activo'=>$registro->paciente->id]) }}">
                                     @endif
                                         <div class="card-body text-center" style="cursor:pointer">
                                             @if($registro->paciente->sexo == 'M')
