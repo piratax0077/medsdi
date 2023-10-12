@@ -220,6 +220,10 @@
                 $('#rut_paciente_reserva').val('');
             });
 
+            function cerrar_modal_infoProf() {
+                $('#info_prof').modal('hide');
+            }
+
             {{-- ****** VALIDACIONDEFORMULARIOS ****** --}}
             {{--  VALIDACION RUT BUSQUEDA - AGENDA  --}}
             $('#validacion_rut_form').validate({
@@ -238,257 +242,7 @@
                 },
             });
 
-            $('#acompanante_representante').change(function(elm)
-            {
-                if(this.checked)
-                {
-                    $('#div_info_representante').show();
-                }
-                else
-                {
-                    $('#div_info_representante').hide();
-                }
-            });
-
-            $('#acompanante_acompanante').change(function(elm)
-            {
-                if(this.checked)
-                {
-                    $('#div_info_acompanante').show();
-                }
-                else
-                {
-                    $('#div_info_acompanante').hide();
-                    $('#reserva_hora_id_acompanante').val('').select2();
-                }
-            });
-
-            $('#autorizacion_atencion').change(function()
-            {
-                if(this.checked)
-                {
-                    $('#agenda_validar_auto_menor_edad').modal({backdrop: 'static', keyboard: false});
-                    $('#agenda_validar_auto_menor_edad').modal('show');
-                    solicitarAutorizacionMenorEdad();
-                }
-                else
-                {
-                    // $('#agenda_validar_auto_menor_edad').modal('hide');
-                }
-            });
-
         });
-
-        function cerrar_modal_infoProf() {
-            $('#info_prof').modal('hide');
-        }
-
-        function cerrarModalAutorizacionMenorEdad()
-        {
-            swal({
-                title: "Autorización Para Atención de Menor de Edad.",
-                text: 'Al "Aceptar" cierra la ventana sin esperar Autorización del Responsable.\n Debe Realizar la Solicitud Nuevamente.',
-                icon: "warning",
-                buttons: ["Aceptar", 'Cancelar'],
-            }).then((result) => {
-                if (result == true)
-                {
-                    console.log('regresar');
-                } else {
-
-                    $('#agenda_validar_auto_menor_edad').modal('hide');
-                    cancelarautorizacionMenorEdad();
-
-                }
-            })
-        };
-
-        function solicitarAutorizacionMenorEdad()
-        {
-            estado_cancelado = 0;
-            var id_lugar_atencion = $('#id_lugar_atencion').val();
-            var id_profesional = $('#agenda_profesional_asistente').val();
-            var id_paciente = $('#reserva_hora_id_paciente').val();
-            var edad = $('#reserva_hora_edad').val();
-            var id_responsable = $('#reserva_hora_id_responsable').val();
-            var nombre_representante = $('#div_info_representante').html();
-
-            let url = "{{ route('asistente.solicitar_aprobacion.atencion_menor') }}";
-            $.ajax({
-                url: url,
-                type: "GET",
-                data: {
-                    id_lugar_atencion : id_lugar_atencion,
-                    id_profesional : id_profesional,
-                    id_paciente : id_paciente,
-                    edad : edad,
-                    id_responsable : id_responsable,
-                    nombre_representante : nombre_representante,
-                },
-                success:function(data){
-                    if (data !== 'null')
-                    {
-                        console.log(data);
-                        if(data.estado == 1)
-                        {
-                            $('#imagen_carga').hide();
-                            $('#imagen_resultado').html('<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">');
-                            $('#text_resultado').html('<h3>En espera de Aprobación</h3>');
-
-                            var token_temp = '';
-                            $.each(data.registros, function (key, value) {
-
-                                if(value.estado == 1)
-                                {
-                                    if(token_temp == '')
-                                    {
-                                        if(data.registros.length>1)
-                                            token_temp = value.log_users_devices.token+'-';
-                                        else
-                                            token_temp = value.log_users_devices.token;
-                                    }
-                                    else
-                                        token_temp = value.log_users_devices.token;
-
-                                    validar_autorizacion_menor_edad(value.log_users_devices.token);
-                                }
-                            });
-
-                            $('#agenda_validar_auto_menor_token').val(token_temp);
-                        }
-                        else
-                        {
-                            $('#imagen_carga').hide();
-                            $('#imagen_resultado').html('<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">');
-                            $('#text_resultado').html('<h3>Problema al solicitar Aprobación.</h3>');
-                        }
-                    }
-                    else
-                    {
-                        console.log('error');
-                        console.log(data);
-                    }
-                }
-            });
-        }
-
-        function validar_autorizacion_menor_edad(token)
-        {
-            if(estado_cancelado == 0)
-            {
-                let url = "{{ route('asistente.aprobacion.validar.atencion_menor') }}";
-                $.ajax({
-                    url: url,
-                    type: "GET",
-                    data: {
-                        token : token,
-                    },
-                    success:function(data){
-                        console.log(data);
-                        if(data.estado == 1)
-                        {
-                            if(data.registro.estado == 1)
-                            {
-                                $('#imagen_carga').hide();
-                                $('#imagen_resultado').html('<img src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Cargando">');
-                                $('#text_resultado').html('<h3>Aprobado</h3>');
-
-                                $('#autorizacion_atencion_token').val(token);
-
-                                setTimeout(function(){
-                                    $('#agenda_validar_auto_menor_edad').modal('hide');
-                                }, 3000);
-                            }
-                            else if(data.registro.estado == 2)
-                            {
-                                $('#imagen_carga').hide();
-                                $('#imagen_resultado').html('<img src="{{ asset('images/iconos/error.svg') }}" alt="Cargando">');
-                                $('#text_resultado').html('<h3>Rechazado</h3>');
-                                $('#autorizacion_atencion').prop('checked', false);
-                            }
-                            else
-                            {
-                                setTimeout(function(){
-                                    validar_autorizacion_menor_edad(token);
-                                }, 2000);
-
-                            }
-                        }
-                        else if(data.estado == 2)
-                        {
-                            $('#imagen_carga').hide();
-                            $('#imagen_resultado').html('<img src="{{ asset('images/iconos/error.svg') }}" alt="Cargando">');
-                            $('#text_resultado').html('<h3>Rechazado</h3><br/><p>Debe Intentar nuevamente.</p>');
-                            setTimeout(function(){
-                                $('#agenda_validar_auto_menor_edad').modal('hide');
-                            }, 2000);
-                        }
-                        else
-                        {
-                            setTimeout(function(){
-                                validar_autorizacion_menor_edad(token);
-                            }, 2000);
-                        }
-                    }
-                });
-            }
-        }
-
-        var estado_cancelado = 0;
-        function cancelarautorizacionMenorEdad()
-        {
-            var token  = $('#agenda_validar_auto_menor_token').val();
-            let url = "{{ route('asistente.aprobacion.cancelar.atencion_menor') }}";
-
-
-            var temp_token = token.split('-');
-
-            $.each(temp_token, function (key, value)
-            {
-                $.ajax({
-                    url: url,
-                    type: "GET",
-                    data: {
-                        token : value,
-                    },
-                    success:function(data){
-                        console.log(data);
-                        if(data.estado == 1)
-                        {
-                            $('#imagen_carga').show();
-                            $('#imagen_resultado').html('');
-                            $('#text_resultado').html('');
-                            $('#autorizacion_atencion_token').val('');
-
-
-                            swal({
-                                title: "Solicitud de aprobacion.",
-                                text:"Cancelada",
-                                icon: "success",
-                            });
-
-                            setTimeout(function(){
-                                $('#agenda_validar_auto_menor_edad').modal('hide');
-                                $('#autorizacion_atencion').prop('checked', false);
-                            }, 1000);
-
-                            estado_cancelado = 1;
-                        }
-
-                        else
-                        {
-                            swal({
-                                title: "Solicitud de aprobacion.",
-                                text:"Falla en proceso de Cancelación",
-                                icon: "error",
-                            });
-                        }
-                    }
-                });
-            });
-
-        }
-
         {{--  ***** INICIO FUNCIONES ******  --}}
         /** METODOS DE AGENDA */
         {{-- BUSCAR INFO PROFESIONAL --}}
@@ -1487,47 +1241,6 @@
 
                             $('#rut_paciente_reserva').val('');
                             $('.div_rut_buscar').hide();
-
-                            $('#reserva_hora_edad').val(data.edad);
-
-                            $('#id_lugar_atencion').val($('#agenda_lugar_atencion_asistente').val());
-
-                            if(data.edad < 18)
-                            {
-                                $('#acompanante_representante').prop("checked", true);
-                                $('#acompanante_acompanante').prop("checked", false);
-                                $('#autorizacion_atencion').prop("checked", false);
-
-                                $('#div_info_representante').html(data.nombre_responsable);
-
-                                $('#reserva_hora_id_acompanante').html('');
-                                $.each(data.acompanante, function (indexInArray, valueOfElement)
-                                {
-                                    console.log(valueOfElement);
-                                    var html = '';
-                                    html = '<option value="'+valueOfElement.id_acompanante+'">'+valueOfElement.acompanante.nombre+' '+valueOfElement.acompanante.apellido_uno+' - '+valueOfElement.acompanante.rut+'</option>';
-                                    $('#reserva_hora_id_acompanante').append(html);
-                                });
-                                $('#reserva_hora_id_acompanante').select2();
-
-                                $('#reserva_hora_id_responsable').val(data.id_responsable);
-
-                                $('#seccion_acompanante').show();
-                                $('#seccion_autorizacion').show();
-                            }
-                            else
-                            {
-                                $('#acompanante_representante').prop("checked",false);
-                                $('#acompanante_acompanante').prop("checked",false);
-                                $('#autorizacion_atencion').prop("checked",false);
-                                $('#reserva_hora_id_acompanante').val('');
-
-
-                                $('#reserva_hora_id_responsable').val('');
-
-                                $('#seccion_acompanante').hide();
-                                $('#seccion_autorizacion').hide();
-                            }
                         }
                         else
                         {
@@ -1551,8 +1264,6 @@
                             $('#reserva_hora_numero_dir').val(data.direccion.numero_dir);
 
                             $('#reserva_hora_telefono_uno').val(data.telefono_uno);
-
-                            $('#reserva_hora_id_responsable').val('');
 
                             {{--
                             $('#reserva_hora_profesion').val();
@@ -1839,29 +1550,6 @@
             let id_profesional = $('#agenda_profesional_asistente').val();
             let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
 
-            let representante = 0;
-            let lista_Acompanante = $('#reserva_hora_id_acompanante').val();
-
-            if( $('#acompanante_representante').prop("checked") )
-                representante = 1;
-            else
-                representante = 0;
-
-            let acompanante = 0;
-            if( $('#acompanante_acompanante').prop("checked") )
-                acompanante = 1;
-            else
-            {
-                acompanante = 0;
-                lista_Acompanante = '';
-            }
-
-            let autorizacion_atencion = 0;
-            if( $('#autorizacion_atencion').prop("checked") )
-                autorizacion_atencion = 1;
-            else
-                autorizacion_atencion = 0;
-
 
             $.ajax({
 
@@ -1873,10 +1561,6 @@
                         reserva_hora_id: reserva_hora_id,
                         id_lugar_atencion: id_lugar_atencion,
                         id_profesional: id_profesional,
-                        representante: representante,
-                        acompanante: acompanante,
-                        lista_Acompanante: lista_Acompanante,
-                        autorizacion_atencion: autorizacion_atencion,
                     }
                 })
                 .done(function(data) {

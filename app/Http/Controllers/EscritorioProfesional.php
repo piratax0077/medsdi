@@ -66,6 +66,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use PDF;
 use App\Helpers\Funciones;
+use App\Models\AcompananteDependiente;
 use App\Models\FichaPediatriaGeneralTipo;
 use App\Models\Invitacion;
 use App\Models\PacientesDependientes;
@@ -1811,9 +1812,53 @@ class EscritorioProfesional extends Controller
 
         // validar si es paciente
         if($tipo_paciente > 1)
+        {
             $paciente['tipo_paciente'] = 'NO';
+            $paciente['edad'] = 99;
+            $paciente['nombre_responsable'] = '';
+            $paciente['id_responsable'] = '';
+        }
         else
+        {
             $paciente['tipo_paciente'] = 'SI';
+            $edad = \Carbon\Carbon::parse($paciente->fecha_nac)->diff(\Carbon\Carbon::now())->format('%y');
+            $paciente['edad'] = $edad;
+
+            $nombres_representante = '';
+            $id_representante = '';
+            $registro_temp = '';
+
+            /** datos de representeante y acompañantes */
+            if( $edad < 18)
+            {
+                $lista_representante = PacientesDependientes::where('id_paciente', $paciente->id)->get();
+                if($lista_representante)
+                {
+                    $array_resp = array();
+                    foreach ($lista_representante as $key => $value)
+                    {
+                        $paciente_temp = Paciente::find($value->id_responsable);
+                        $array_resp[] = $paciente_temp->id;
+                        if(!empty($nombres_representante))
+                        {
+                            $nombres_representante .= ' - ';
+                            $id_representante .= '-';
+                        }
+                        $nombres_representante .= $paciente_temp->nombres.' '.$paciente_temp->apellido_uno.' '.$paciente_temp->apellido_dos;
+                        $id_representante .= $paciente_temp->id;
+                    }
+
+                    /** BUSCAR RESPONSABLES */
+                    $filtro_temp = array();
+                    $filtro_temp[] = array('id_dependiente', $paciente->id);
+                    $registro_depen = AcompananteDependiente::where($filtro_temp)->where('id_tipo', 1)->with('acompanante');
+                    $registro_temp = AcompananteDependiente::whereIn('id_responsable', $array_resp)->whereNull('id_dependiente')->where('id_tipo', 2)->with('acompanante')->union($registro_depen)->get();
+                }
+            }
+            $paciente['nombre_responsable'] = $nombres_representante;
+            $paciente['id_responsable'] = $id_representante;
+            $paciente['acompanante'] = $registro_temp;
+        }
 
         return json_encode($paciente);
     }

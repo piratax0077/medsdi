@@ -899,7 +899,7 @@
                         $('#div_info_representante').show();
                         $('#div_info_representante').html('<strong>Representante:</strong> '+data.registro.representante.nombres+' '+data.registro.representante.apellido_uno);
 
-                        $('.div_info_acompanante').hide();
+                        $('#div_info_acompanante').hide();
                         $('#reserva_hora_id_acompanante').html('');
                         $.each(data.registro.acompanante, function (indexInArray, valueOfElement)
                         {

@@ -399,7 +399,7 @@ Route::group([
     /** ACOMPAÑANATE DE DEPENDIENTE */
     Route::post('acompanante/asignacion', [App\Http\Controllers\AcompananteController::class, 'registrarAcompananteAsignacionPaciente'])->name('paciente.acompanante.asignacion');
     Route::get('acompanante/ver/asignacion', [App\Http\Controllers\AcompananteController::class, 'verRegistros'])->name('paciente.acompanante.ver');
-	
+
 });
 
 /** INICIO DE LICENCIA */
@@ -897,7 +897,7 @@ Route::group([
     Route::post('lista/espera/registrar/existente', [App\Http\Controllers\ListaEsperaController::class, 'registrarExistente'])->name('lista.espera.registrar.existente');
     Route::post('lista/espera/registrar/nuevo', [App\Http\Controllers\ListaEsperaController::class, 'registrarNuevo'])->name('lista.espera.registrar.nuevo');
     Route::post('lista/espera/eliminar', [App\Http\Controllers\ListaEsperaController::class, 'eliminar'])->name('lista.espera.eliminar');
-	
+
     /** solicitud de permiso al paciente para venta de bono  */
     Route::post('solicitud/autorizacion/bono/venta', [App\Http\Controllers\VentaBonoController::class, 'solicitarAutorizacionPaciente'])->name('asistente.solicitud.auto.paciente.venta.bono');
     Route::post('solicitud/autorizacion/validar', [App\Http\Controllers\VentaBonoController::class, 'validarAutorizacion'])->name('asistente.solicitud.auto.validar');
@@ -948,6 +948,11 @@ Route::group([
 
     /** motor de busqueda asistente online*/
     Route::get('perfil/configuracion/busqueda/editar', [App\Http\Controllers\EscritorioAsistente::class, 'editar_configuracion_busqueda'])->name('asistente.editar_configuracion_busqueda');
+
+    /** SOLICITUD A TENCION MENOR DE EDAD  */
+    Route::get('autorizacion/solicitud/representante', [App\Http\Controllers\EscritorioAsistente::class, 'envioSolicitudAtencionMenor'])->name('asistente.solicitar_aprobacion.atencion_menor');
+    Route::get('autorizacion/solicitud/validar/representante', [App\Http\Controllers\EscritorioAsistente::class, 'validarSolicitudAtencionMenor'])->name('asistente.aprobacion.validar.atencion_menor');
+    Route::get('autorizacion/solicitud/cancelar/representante', [App\Http\Controllers\EscritorioAsistente::class, 'cancelarSolicitudAtencionMenor'])->name('asistente.aprobacion.cancelar.atencion_menor');
 });
 
  /** ENFERMERIA  */

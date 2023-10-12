@@ -1237,7 +1237,8 @@ class EscritorioPaciente extends Controller
 
             // $hora_medica->origen = $request->origen;
 
-            if ($hora_medica->save()) {
+            if ($hora_medica->save())
+            {
                 $datos['estado'] = 1;
                 $datos['msj'] = 'Hora Reservada';
                 $datos['registro'] = array(

@@ -725,13 +725,13 @@ class LogUsersDevicesController extends Controller
                         switch($value['estado'])
                         {
                            case 1:
-                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Autorizada</span> para Atención Medica a Menor de Edad con fecha {$fecha}</p><br>";
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Autorizada</span> Atención Medica a Menor de Edad con fecha {$fecha}</p><br>";
                            break;
                            case 2:
-                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Rechazada</span> para Atención Medica a Menor de Edad con fecha {$fecha}</p><br>";
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Rechazada</span> Atención Medica a Menor de Edad con fecha {$fecha}</p><br>";
                            break;
                            case 3:
-                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Cancelada</span> para Atención Medica a Menor de Edad con fecha {$fecha}</p><br>";
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Cancelada</span> Atención Medica a Menor de Edad con fecha {$fecha}</p><br>";
                            break;
                            case 4:
                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Atención Medica a Menor de Edad Autorizada <span class='color-rojo txt_bold'>Expirada</span> para venta con fecha {$fecha}</span></p><br>";

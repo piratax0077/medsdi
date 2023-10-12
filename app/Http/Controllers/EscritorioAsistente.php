@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Funciones;
 use App\Models\Asistente;
 use App\Models\AsistenteContactoEmergencia;
 use App\Models\AsistenteTipo;
@@ -18,6 +19,7 @@ use App\Models\Instituciones;
 use App\Models\LiquidacionRecibo;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
+use App\Models\PacientesDependientes;
 use App\Models\Prevision;
 use App\Models\Profesional;
 use App\Models\ProfesionalConvenio;
@@ -781,12 +783,60 @@ class EscritorioAsistente extends Controller
         $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
         $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
 
+        $hora_medica->acomp_representante = $request->representante;
+        $hora_medica->acomp_acompanante = $request->acompanante;
+        if(!empty($request->lista_Acompanante))
+        $hora_medica->acomp_lista = json_encode($request->lista_Acompanante);
+
+        $hora_medica->autorizacion_atencion = $request->autorizacion_atencion;
+        // $hora_medica->id_log_users_devices = '';
+
         if (!$hora_medica->save()) {
             return 'error';
         }
 
-
         $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
+
+        /** menor edad? */
+        // $edad = \Carbon\Carbon::parse($paciente->fecha_nac)->diff(\Carbon\Carbon::now())->format('%y');
+        // if( $edad < 18 )
+        // {
+
+        //     if( $request->autorizacion_atencion == 1 )
+        //     {
+        //         $responsable_temp = PacientesDependientes::where('id_paciente', $paciente->id)->first();
+        //         $responsable = Paciente::find($responsable_temp->id_responsable);
+
+        //         $id_user_create = $responsable->id_usuario;
+        //         $id_user_recept = Auth::user()->id;
+        //         $evento = 'Autorizacion Atencion a Menor de Edad';
+        //         $nombre = $paciente->nombre;
+        //         $apellido_p = $paciente->apellido_uno;
+        //         $apellido_m = $paciente->apellido_dos;
+        //         $lugar = $lugar_atencion->nombre;
+        //         $profesional_log = $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos;
+        //         $tipo = 'Autorizacion Atencion a Menor de Edad';
+        //         $tipo_id = '15';
+
+        //         // $log_users_devices = new LogUsersDevices();
+        //         $funcion = new Funciones();
+        //         $log_users_devices = (object) $funcion->generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional_log,$tipo,$tipo_id);
+
+        //         $datos['log_users_devices'] = $log_users_devices;
+
+        //         if($log_users_devices->app['estado'] == 1)
+        //         {
+        //             $hora_medica->autorizacion_atencion = $request->autorizacion_atencion;
+        //             $hora_medica->id_log_users_devices = $log_users_devices->app['last_id'];
+        //             if($hora_medica->save())
+        //             {
+        //                 $datos['hora_medica_update']['estado'] = 1;
+        //                 $datos['hora_medica_update']['msj'] = 'autorizacion';
+        //             }
+        //         }
+        //     }
+        // }
+
         $institucion = Instituciones::where('id_lugar_atencion',$lugar_atencion->id)->first();
         $nombre_institucion = '';
         if($institucion)
@@ -1293,4 +1343,195 @@ class EscritorioAsistente extends Controller
 
         return $datos;
     }
+
+    public function envioSolicitudAtencionMenor(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_lugar_atencion))
+        {
+            $error['id_lugar_atencion'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['id_profesional'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_paciente))
+        {
+            $error['id_paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_responsable))
+        {
+            $error['id_responsable'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
+            $profesional = Profesional::find($request->id_profesional);
+            $paciente = Paciente::find($request->id_paciente);
+
+            if(strpos($request->id_responsable, '-') === false)
+            {
+                $respn_temp = array($request->id_responsable);
+            }
+            else
+            {
+                $respn_temp = explode('-', $request->id_responsable);
+            }
+
+            $responsable = Paciente::whereIn('id', $respn_temp)->get();
+
+            if($responsable)
+            {
+                if($paciente)
+                {
+                    $cantidad = 0;
+                    $exito = 0;
+                    $fallo = 0;
+                    foreach ($responsable as $key => $value)
+                    {
+                        $cantidad++;
+
+                        $id_user_create = Auth::user()->id;
+                        $id_user_recept = $value->id_usuario;
+                        $evento = 'Autorizacion Atencion a Menor de Edad';
+                        $nombre = $paciente->nombre;
+                        $apellido_p = $paciente->apellido_uno;
+                        $apellido_m = $paciente->apellido_dos;
+                        $lugar = $lugar_atencion->nombre;
+                        $profesional_log = $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos;
+                        $tipo = 'Autorizacion Atencion a Menor de Edad';
+                        $tipo_id = '15';
+
+                        // $log_users_devices = new LogUsersDevices();
+                        $funcion = new Funciones();
+                        $log_users_devices = (object) $funcion->generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional_log,$tipo,$tipo_id);
+
+                        $datos['registros'][$key]['log_users_devices'] = $log_users_devices->app;
+
+                        if($log_users_devices->app['estado'] == 1)
+                        {
+                            $datos['registros'][$key]['estado'] = 1;
+                            $datos['registros'][$key]['msj'] = 'Solicitud enviada';
+
+                            $exito++;
+                        }
+                        else
+                        {
+                            $datos['registros'][$key]['estado'] = 0;
+                            $datos['registros'][$key]['msj'] = 'Falla en solicitud';
+
+                            $fallo++;
+                        }
+                    }
+
+                    if($cantidad == $exito)
+                    {
+                        $datos['estado'] = 1;
+                        $datos['cantidad'] = $cantidad;
+                        $datos['exito'] = $exito;
+                        $datos['fallo'] = $fallo;
+                        $datos['msj'] = 'exito';
+                    }
+                    else if($cantidad == $fallo)
+                    {
+                        $datos['estado'] = 0;
+                        $datos['cantidad'] = $cantidad;
+                        $datos['exito'] = $exito;
+                        $datos['fallo'] = $fallo;
+                        $datos['msj'] = 'falla';
+                    }
+                    else
+                    {
+                        $datos['estado'] = 1;
+                        $datos['cantidad'] = $cantidad;
+                        $datos['exito'] = $exito;
+                        $datos['fallo'] = $fallo;
+                        $datos['msj'] = 'falla intermedia';
+                    }
+
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Paciente no encontrado';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Responsable no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function validarSolicitudAtencionMenor(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->token))
+        {
+            $error['token'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $funcion = new Funciones();
+            $datos = $funcion->checkStatePermApp($request->token);
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function cancelarSolicitudAtencionMenor(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->token))
+        {
+            $error['token'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $funcion = new Funciones();
+            $datos = $funcion->disablePermApp($request->token);
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
 }

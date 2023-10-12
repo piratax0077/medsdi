@@ -405,8 +405,10 @@
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                     <input type="hidden" id="fecha_consulta" name="fecha_consulta" value="">
                     <input type="hidden" id="reserva_hora_id_paciente" name="reserva_hora_id_paciente" value="">
-                    <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="$('#agenda_lugar_atencion_asistente').val();">
-                    <input type="hidden" name="fecha" id="fecha">
+                    <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="">
+                    <input type="hidden" name="fecha" id="fecha" value="">
+                    <input type="hidden" name="reserva_hora_edad" id="reserva_hora_edad" value="">
+                    <input type="hidden" name="reserva_hora_id_responsable" id="reserva_hora_id_responsable" value="">
 
                     {{--  VISUALIZACION DE DATOS DEL PACIENTE  --}}
                     <div id="reserva_datos_paciente" class="row mx-3">
@@ -463,12 +465,70 @@
                             </tbody>
                         </table>
 
+                        <div class="col-sm-12 col-md-12" id="seccion_acompanante">
+                            <label class="label">Acompañado por </label>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="switch switch-success d-inline m-r-10">
+                                            <input type="checkbox" id="acompanante_representante" value="1" checked>
+                                            <label for="acompanante_representante" class="cr"></label>
+                                        </div>
+                                        <label><strong>Representante</strong></label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6"><div id="div_info_representante"></div></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="switch switch-success d-inline m-r-10">
+                                            <input type="checkbox" id="acompanante_acompanante" value="1">
+                                            <label for="acompanante_acompanante" class="cr"></label>
+                                        </div>
+                                        <label><strong>Acompañante</strong></label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div id="div_info_acompanante" style="display: none">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Acompañante</label>
+                                            {{-- <input type="text" class="form-control form-control-sm" name="reserva_hora_id_acompanante" id="reserva_hora_id_acompanante"> --}}
+                                            <select class="form-control form-control-sm" multiple name="reserva_hora_id_acompanante" id="reserva_hora_id_acompanante">
+                                                {{-- <option value="">Seleccione</option> --}}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label class="floating-label">Descripción Reserva</label>
                                 <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion" id="reserva_hora_descripcion">
                             </div>
                         </div>
+
+                        <div class="col-sm-12 col-md-12" id="seccion_autorizacion">
+                            <label class="label">Autorización Atención</label>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="switch switch-success d-inline m-r-10">
+                                            <input type="checkbox" id="autorizacion_atencion" value="1" checked>
+                                            <label for="autorizacion_atencion" class="cr"></label>
+                                        </div>
+                                        <label><strong>Autorizar Atención</strong></label>
+                                        <input type="hidden" name="autorizacion_atencion_token" id="autorizacion_atencion_token" value="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <p style="font-size: 12px;font-weight: bold;color: #04048f;">Al Autorizar Atencion usted conciente que el Profesional atienda al Paciente.<p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger close_agenda_agregar_paciente" data-dismiss="modal">Cancelar</button>
                             <button type="button" onclick="agendar_hora();" class="btn btn-info">Agendar Hora</button>
@@ -642,6 +702,41 @@
         </div>
     </div>
 </div>
+
+<div id="agenda_validar_auto_menor_edad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="agenda_validar_auto_menor_edad" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info pt-3 pb-2">
+                <h5 class="modal-title text-white text-center">Tomar hora</h5>
+                <button id="cerrar_tomar_hora" type="button" class="close text-white" data-dismiss="modal" aria-label="Close" onclick="cancelarautorizacionMenorEdad();"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="agenda_validar_auto_menor_edad" id="agenda_validar_auto_menor_edad" value="">
+                <input type="hidden" name="agenda_validar_auto_menor_token" id="agenda_validar_auto_menor_token" value="">
+                <div class="row">
+                    <div class="col-md-12">
+                        Validando Aprobación de Responsable para Atencion Medica de Menor de Edad
+                    </div>
+                    <div class="col-md-12">
+                        <input type="hidden" name="">
+                        <div class="row">
+                            <div class="col-md-6" id="imagen_resultado"></div>
+                            <div class="col-md-6" id="text_resultado"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" id="imagen_carga">
+                        <img src="{{ asset('images/spinner.svg') }}" alt="Cargando">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="cancelarautorizacionMenorEdad();">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 @include('general.asistentes.m_esperando_api')
 @include('general.asistentes.m_pago')
