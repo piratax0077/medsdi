@@ -22,7 +22,7 @@
         <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
         <!-- fileupload-custom css -->
         <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
-       <!-- autocomplete-->
+		<!-- autocomplete-->
         <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}?t={{ time() }}">
         <!--Accordion-->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
@@ -58,6 +58,7 @@
                 overflow: auto;
             }
         </style>
+        @yield('css-btn-autorizacion')
     </head>
     <body>
         @include('template.pediatria.header')
@@ -159,7 +160,7 @@
 
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
+			
             /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
             function  envio_indicaciones_pdf(id_modal){
                 let url = "{{ route('indicacion.medica.registro.envio') }}";
@@ -253,6 +254,8 @@
         @yield('page-script-med-exa') {{--  seccion receta y exmaenes --}}
         @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
         @yield('js-sidebar') {{-- seccion js side bar --}}
+        @yield('js-lic') {{-- seccion js side bar --}}
+        @yield('page-script-btn-autorizacion')
 
     </body>
 </html>

@@ -1,5 +1,6 @@
-@extends('template.template_cdb')
+@extends('template.otros_profesionales.template_matrona')
 @section('Content')
+
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -9,7 +10,7 @@
                     <div class="row align-items-center pb-2">
                         <div class="col-md-6">
                             <div class="page-header-title">
-                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN FICHA CIRUGIA COLOPROCTOLOGICA </strong></h5>
+                                <h5 class="text-white d-inline f-16 mt-1"><strong>FICHA ATENCIÓN MATRONA</strong></h5>
                                 <p class="font-italic mt-0 mb-0 text-white">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -41,29 +42,21 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
-                                    <li class="nav-item">										
-										@if(!empty(session('lic_token')) && session('lic_estado') == 1)
-										<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
-										@else
-											<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>
-										@endif 
+                                    <li class="nav-item">
+                                        @if(!empty(session('lic_token')) && session('lic_estado') == 1)
+                                            <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
+                                        @else
+                                            <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>
+                                        @endif
                                     </li>
                                     <li class="nav-item">
-                                        {{-- <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a> --}}
-                                        @if (request('token'))
-                                            <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
-                                        @else
-                                            @php
-                                                $url_temp = 'Profesional/Paciente/Ficha_consulta?_token='.request('_token').'&id_hora_realizar='.request('id_hora_realizar').'&lugar_atencion_id='.request('lugar_atencion_id').'';
-                                            @endphp
-                                            <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $paciente->id_usuario,'urla'=> $url_temp,'urln' => $url_temp, 'id_tipo' => 9]) }}">FMU</a>
-                                        @endif
+                                        <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="band_exam_tab" data-toggle="tab" href="#band_exam" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
+                                        <a class="nav-link text-reset" id="examenes-tab" data-toggle="tab" href="#examenes" role="tab" aria-controls="examenes" aria-selected="false">Exámenes</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="hospitalizacion" aria-selected="false">Hospitalización</a>
@@ -81,7 +74,7 @@
                     <div class="tab-content" id="at-oftalmo">
                         <!--Atender paciente-->
                         <div class="tab-pane fade show active" id="atender" role="tabpanel" aria-labelledby="atender-tab">
-                            @include('atencion_medica.secciones_especialidad.ficha_cirugia_digest_baja')
+                            @include('atencion_otros_prof.secciones_especialidad.ficha_matrona')
                         </div>
                         <!--Licencia-->
                         <div class="tab-pane fade show" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
@@ -89,30 +82,57 @@
                         </div>
                         <!--Ficha Médica Única-->
                         <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
-                            @include('atencion_medica.secciones_ficha.fmu')
+                            @include('general.secciones_ficha.fmu')
                         </div>
                         <!--Atenciones previas-->
                         <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
+                            {{--  @include('atencion_pediatrica.secciones_ficha.atenciones_previas')  --}}
                             @include('general.secciones_ficha.atenciones_previas_form')
                         </div>
-                         <!--Exámenes-->
-                        <div class="tab-pane fade show" id="band_exam" role="tabpanel" aria-labelledby="band_exam_tab">
+                        <!--Exámenes-->
+                        <div class="tab-pane fade show" id="examenes" role="tabpanel" aria-labelledby="examenes-tab">
                             @include('general.secciones_ficha.bandeja_examenes')
                         </div>
                         <!--Hospitalización-->
                         <div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">
-                            @include('general.hospitalizacion.hospitalizacion')
+                            {{--  @include('general.hospitalizacion.hospitalizacion')  --}}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- SIDE BAR CDB -->
-        @include("atencion_medica.include.sidebar_derecho_cdb")
+        <!--Botón flotane del sidebar derecho otorrino-->
+        {{--  <div class="row">
+            <div class="col-sm-12">
+                <div class="boton-formularios">
+                    <input type="checkbox" id="btn-mas">
+                    <div class="redes">
+                        <a id="boton_1" class="fas fa-user fa-2x" data-toggle="canvas" data-target="#antecedentes_paciente_p" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left"></a>
+                        <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left"></a>
+                        <a id="boton_3" class="fas fa-deaf fa-2x" data-toggle="canvas" data-target="#formularios_pediatria" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Pediatia" data-placement="left"></a>
+                    </div>
+                    <div class="btn-mas">
+                        <label for="btn-mas" class="fa fa-plus"></label>
+                    </div>
+                </div>
+            </div>
+        </div>  --}}
+        <!--Cierre: Botón flotante-->
+
+        <!-- SIDE BAR MATRONA -->
+        @include("atencion_otros_prof.include.sidebar_derecho_matrona")
+
+        <!--Modals de especialidad -->
+        {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
+
+        <!--Modals formularios generales-->
+        {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
+        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
+        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
+
+
     </div>
     <!--Cierre: Container Completo-->
-	@include("general.modal.modal_no_disponible")
-	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
 @endsection
 @include('app.profesional.modales.boton_flotante_agenda_autorizacion')

@@ -67,6 +67,7 @@
         }
 
     </style>
+    @yield('css-btn-autorizacion')
 </head>
 <body>
     @include('template.header')
@@ -172,51 +173,6 @@
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-        $(document).ready(function () {
-            {{--  mensaje de exito al registrar ficha clinica  --}}
-             @if(session('mensaje'))
-                swal({
-                    title: "Registro de Ficha Clínica.",
-                    text:"{{ session('mensaje') }}",
-                    icon: "info",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
-                });
-            @endif
-            {{--  mensaje de exito al registrar ficha clinica  --}}
-            @if(session('success'))
-                swal({
-                    title: "Registro de Ficha Clínica.",
-                    text:"{{ session('success') }}",
-                    icon: "success",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
-                });
-            @endif
-
-			{{--  mensaje de erro al registrar ficha clinica  --}}
-			@if(session('error'))
-				swal({
-					title: "Registro de Ficha Clínica.",
-					text:"{{ session('error') }}",
-					icon: "error",
-					// buttons: "Aceptar",
-					//SuccessMode: true,
-				});
-			@endif
-
-			{{--  mensaje de warning al registrar ficha clinica  --}}
-			@if(session('warning'))
-				swal({
-					title: "Registro de Ficha Clínica.",
-					text:"{{ session('warning') }}",
-					icon: "warning",
-					// buttons: "Aceptar",
-					//SuccessMode: true,
-				});
-			@endif
-
-        });
 
         function abrir_modal_clasificacion_colon(){
             $('#m_clasificacion').modal('show');
@@ -317,6 +273,8 @@
     @yield('page-script-med-exa') {{--  seccion receta y exmaenes --}}
     @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
     @yield('js-sidebar') {{-- seccion js side bar --}}
+    @yield('js-lic') {{-- seccion js side bar --}}
+	@yield('page-script-btn-autorizacion')
 </body>
 
 </html>

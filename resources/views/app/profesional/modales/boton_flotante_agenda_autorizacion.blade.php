@@ -175,6 +175,11 @@
                             $("#descripcion_hipotesis").trigger("keyup");
                         }
 
+                        if($("#hip_diag_spec"))
+                        {
+                            $("#hip_diag_spec").trigger("keyup");
+                        }
+
                     }
                     else if(data.estado == 1)
                     {
@@ -200,6 +205,11 @@
                             $("#descripcion_hipotesis").trigger("keyup");
                         }
 
+                        if($("#hip_diag_spec"))
+                        {
+                            $("#hip_diag_spec").trigger("keyup");
+                        }
+
                     }
                     else if(data.estado == 2)
                     {
@@ -219,6 +229,11 @@
                         if($("#descripcion_hipotesis"))
                         {
                             $("#descripcion_hipotesis").trigger("keyup");
+                        }
+
+                        if($("#hip_diag_spec"))
+                        {
+                            $("#hip_diag_spec").trigger("keyup");
                         }
 
                     }
@@ -242,6 +257,11 @@
                             $("#descripcion_hipotesis").trigger("keyup");
                         }
 
+                        if($("#hip_diag_spec"))
+                        {
+                            $("#hip_diag_spec").trigger("keyup");
+                        }
+
                     }
                     else if(data.estado == 4)
                     {
@@ -263,6 +283,11 @@
                             $("#descripcion_hipotesis").trigger("keyup");
                         }
 
+                        if($("#hip_diag_spec"))
+                        {
+                            $("#hip_diag_spec").trigger("keyup");
+                        }
+
                     }
                     else
                     {
@@ -277,6 +302,11 @@
                         if($("#descripcion_hipotesis"))
                         {
                             $("#descripcion_hipotesis").trigger("keyup");
+                        }
+
+                        if($("#hip_diag_spec"))
+                        {
+                            $("#hip_diag_spec").trigger("keyup");
                         }
 
                     }
@@ -322,6 +352,11 @@
                                 $("#descripcion_hipotesis").trigger("keyup");
                             }
 
+                            if($("#hip_diag_spec"))
+                            {
+                                $("#hip_diag_spec").trigger("keyup");
+                            }
+
                         }
                         else
                         {
@@ -342,6 +377,11 @@
                             if($("#descripcion_hipotesis"))
                             {
                                 $("#descripcion_hipotesis").trigger("keyup");
+                            }
+
+                            if($("#hip_diag_spec"))
+                            {
+                                $("#hip_diag_spec").trigger("keyup");
                             }
 
                         }

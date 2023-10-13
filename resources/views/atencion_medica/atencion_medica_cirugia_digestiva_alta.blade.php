@@ -41,8 +41,12 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false">Licencia</a>
+                                    <li class="nav-item">										
+										@if(!empty(session('lic_token')) && session('lic_estado') == 1)
+										<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
+										@else
+											<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>
+										@endif 
                                     </li>
                                    <li class="nav-item">
                                         {{-- <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a> --}}
@@ -111,3 +115,4 @@
 	@include("general.modal.modal_no_disponible")
 	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
 @endsection
+@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
