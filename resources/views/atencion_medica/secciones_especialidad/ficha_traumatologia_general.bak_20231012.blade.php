@@ -16,12 +16,6 @@
 
                 </ul>
             </div>
-			 <!--ALERTA-->
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert"><strong>Solo el campo diagnóstico es obligatorio el resto es opcional</strong>
-                </div>
-            </div>
-
             <div class="col-sm-12 col-md-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_trau_ort') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
@@ -42,10 +36,11 @@
                         <!--ATENCIÓN TRAUMATOLOGIA-->
                         <div class="tab-pane fade show active " id="atencion_traumato" role="tabpanel" aria-labelledby="atencion_traumato-tab">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="col-md-12">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="tit-gen">Ficha de atención Traumatológica </h6>
+                                        <div class="col-md-12 mt-3 mb-0">
+                                            <h6 class="f-16 text-c-blue">Ficha de atención Traumatológica </h6>
+                                            <hr>
                                         </div>
                                     </div>
                                     <!--FORMULARIOS-->
@@ -502,10 +497,11 @@
                         <!--ATENCIÓN ORTOPEDICA-->
                         <div class="tab-pane fade show" id="ortopedia_gen" role="tabpanel" aria-labelledby="ortopedia_gen-tab">
                             <div class="row bg-white shadow-none rounded mx-1">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="col-md-12">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="tit-gen">Ficha de atención Ortopédia </h6>
+                                        <div class="col-md-12 mt-3 mb-0">
+                                            <h6 class="f-16 text-c-blue">Ficha de atención Ortopédia </h6>
+                                            <hr>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -970,13 +966,7 @@
                     $('.btn_examenes_pdf').attr('disabled','disabled');
                 }
             });
-		/** MENSAJE*/
-		/** CARGAR mensaje */
-		$('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
-		$('#mensaje_ficha').show();
-		setTimeout(function(){
-			$('#mensaje_ficha').hide();
-		}, 5000);
+
             /** diagnostico ortopedia */
             $('#descripcion_hipotesis_ort').keyup(function(){
                 if($.trim(this.value) != ''){
@@ -1885,15 +1875,6 @@
 
 
     </script>
-
-    <!--ALERTA DE ATENCION-->
-    <script>
-    window.setTimeout(function() {
-        $(".alert-atencion").fadeTo(500, 0).slideUp(600, function(){
-            $(this).remove(); 
-        });
-    }, 5000);
-
 @endsection
 
 

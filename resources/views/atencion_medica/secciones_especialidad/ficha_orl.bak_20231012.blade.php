@@ -13,7 +13,7 @@
             </div>
 			 <!--ALERTA-->
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert"><strong>Solo el campo diagnóstico es obligatorio el resto es opcional</strong></div>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_orl') }}" method="POST">
@@ -970,13 +970,14 @@
                     return false;
                 }
             });
+
 			/** MENSAJE*/
-			    /** CARGAR mensaje */
-				$('#mensaje_ficha').html('<strong>Solo el campo Hipótesis diagnóstica es obligatorio el resto es opcional</strong>');
-				$('#mensaje_ficha').show();
-				setTimeout(function(){
-					$('#mensaje_ficha').hide();
-				}, 5000);
+            /** CARGAR mensaje */
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
+            $('#mensaje_ficha').show();
+            setTimeout(function(){
+                $('#mensaje_ficha').hide();
+            }, 5000);
         })
 
         /** MANEJO DE IMAGENES */
@@ -1883,5 +1884,14 @@
             }
         }
 
+    </script>
+
+    <!--ALERTA DE ATENCION-->
+    <script>
+        window.setTimeout(function() {
+            $(".alert-atencion").fadeTo(500, 0).slideUp(600, function(){
+                $(this).remove();
+            });
+        }, 5000);
     </script>
 @endsection

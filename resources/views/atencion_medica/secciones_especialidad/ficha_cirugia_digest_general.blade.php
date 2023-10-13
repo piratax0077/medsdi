@@ -14,6 +14,11 @@
                     </li>
 				</ul>
             </div>
+             <!--ALERTA-->
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="alert alert-warning-b alert-dismissible fade show" role="alert"><strong>Solo el campo dignóstico es Obligatorio el resto es opcional</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+            </div>
             <div class="col-sm-12 col-md-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_cdg') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
@@ -54,10 +59,10 @@
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
                         <div class="tab-pane fade show active" id="atencion_cirugia_gen" role="tabpanel" aria-labelledby="atencion_cirugia_gen-tab">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="row">
-                                        <div class="col-md-12 mt-2 mb-2">
-                                            <h6 class="f-20 text-c-blue">Ficha de atención general</h6>
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <h6 class="tit-gen">Ficha de atención general</h6>
                                         </div>
                                     </div>
                                     <!--FORMULARIOS-->
@@ -532,11 +537,10 @@
                         <!--INFORME ENDOSCOPÍA DIGESTIVA ALTA-->
                         <div class="tab-pane fade" id="endosc_gastrica" role="tabpanel" aria-labelledby="endosc_gastrica-tab">
                             <div class="row bg-white shadow-none rounded mx-1">
-                                <div class="col-md-12">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="row">
-                                        <div class="col-md-12 mt-3 mb-0">
-                                            <h6 class="f-16 text-c-blue">Informe Endoscopía Digestiva</h6>
-                                            <hr>
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <h6 class="tit-gen">Informe Endoscopía Digestiva</h6>
                                         </div>
                                     </div>
                                     <div class="row div_form_examen_eda">
@@ -558,10 +562,10 @@
                         <!--INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
                         <div class="tab-pane fade" id="colonoscopia" role="tabpanel" aria-labelledby="colonoscopia-tab">
                            <div class="row bg-white shadow-none rounded mx-1">
-                               <div class="col-md-12">
+                               <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                    <div class="row">
-                                       <div class="col-md-12 mt-3 mb-0">
-                                           <h6 class="f-16 text-c-blue">Informe Colonoscopía</h6>
+                                       <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                           <h6 class="tit-gen">Informe Colonoscopía</h6>
                                            <hr>
                                        </div>
                                    </div>
@@ -841,11 +845,23 @@
             /** fin formulario pestaña 1 */
 
             $('#hip_diag_spec').keyup(function(){
-                if($.trim(this.value) != ''){
-                    $('.btn_agregar_medicamento').removeAttr("disabled");
-                    $('.btn_medicamento_pdf').removeAttr("disabled");
-                    $('.btn_agregar_examen').removeAttr("disabled");
-                    $('.btn_examenes_pdf').removeAttr("disabled");
+                if($.trim(this.value) != '')
+                {
+                   if( lic_token != '' && lic_estado == 1)
+                    {
+                        $('.btn_agregar_medicamento').removeAttr("disabled");
+                        $('.btn_medicamento_pdf').removeAttr("disabled");
+                        $('.btn_agregar_examen').removeAttr("disabled");
+                        $('.btn_examenes_pdf').removeAttr("disabled");
+                    }
+                    else
+                    {
+                        $('.btn_agregar_medicamento').attr('disabled','disabled');
+                        $('.btn_medicamento_pdf').attr('disabled','disabled');
+                        $('.btn_agregar_examen').attr('disabled','disabled');
+                        $('.btn_examenes_pdf').attr('disabled','disabled');
+                    }
+
                 }
                 else
                 {
@@ -879,7 +895,13 @@
                     return false;
                 }
             });
-
+				/** MENSAJE*/
+			    /** CARGAR mensaje */
+				$('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
+				$('#mensaje_ficha').show();
+				setTimeout(function(){
+					$('#mensaje_ficha').hide();
+				}, 5000);
             $("#lic_descripcion_cie").autocomplete({
                 source: function(request, response) {
                     // Fetch data
@@ -906,7 +928,13 @@
 
         })
 
-
+				/** MENSAJE*/
+			    /** CARGAR mensaje */
+				$('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
+				$('#mensaje_ficha').show();
+				setTimeout(function(){
+					$('#mensaje_ficha').hide();
+				}, 5000);
         function cargarIgual(input){
 
             let actual = $('#'+input);

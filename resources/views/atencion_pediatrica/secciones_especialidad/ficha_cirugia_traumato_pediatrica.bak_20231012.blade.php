@@ -16,12 +16,6 @@
                     </li>
                 </ul>
             </div>
-			<!--ALERTA-->
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert"><strong>Solo el campo diagnóstico es obligatorio el resto es opcional</strong>
-                </div>
-            </div>
-
             <form action="{{ route('fichaAtencion.registrar_ficha_ped_cir_trum_quem') }}" method="POST" class="col-sm-12 col-md-12">
                 <div class="col-sm-12 col-md-12">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
@@ -2386,10 +2380,10 @@
                                             <div class="card-body-aten-a shadow-none">
 
                                                 <div class="form-row">
-                                                     <div class="form-group col-md-4">
-														<label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
-														<input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado,eno_diagnositico_confirmado" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" >
-													</div>
+                                                    <div class="form-group col-md-4">
+                                                        <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
+                                                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" >
+                                                    </div>
                                                     <div class="form-group col-md-4">
                                                         <label class="floating-label-activo-sm">Indicaciones</label>
                                                         <input type="text" class="form-control form-control-sm" name="ind_esp_cirugia" id="ind_esp_cirugia">
@@ -2405,31 +2399,25 @@
                                         </div>
                                     </div>
                                 </div>
-								{{--  div de botones  --}}
-
-								<div class="col-sm-12 col-md-12">
-									<div class="card">
-										<div class="card-body">
-											<!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-											@include('general.secciones_ficha.seccion_receta_examen_comunes')
-											<!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-										</div>
-
-										<!--GUARDAR O IMPRIMIR FICHA-->
-
-										<div class="col-md-12 text-center" style=" margin-top:25px;">
-											<input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
-											<input type="submit" class="btn btn-success  mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
-										</div>
-									</div>
-								</div>
 
                             </div>
                         </div>
 
                     </div>
                 </div>
+                {{--  div de botones  --}}
 
+                <div class="col-sm-12 col-md-12">
+                    <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+                    @include('atencion_medica.generales.seccion_receta_examen_comunes')
+                    <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+                </div>
+                <!--GUARDAR O IMPRIMIR FICHA-->
+
+                <div class="col-md-12 text-center" style=" margin-top:25px;">
+                    <input type="submit" class="btn btn-primary-light-c btn-sm mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
+                    <input type="submit" class="btn btn-info-light-c btn-sm mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
+                </div>
             </form>
 
         </div>
@@ -2665,13 +2653,6 @@
             $('.'+ocultar).hide();
             $('#'+label).html( $('#'+textarea).val() );
         }
-
-		/** CARGAR mensaje */
-		$('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
-		$('#mensaje_ficha').show();
-		setTimeout(function(){
-			$('#mensaje_ficha').hide();
-		}, 5000);
 
         function guardar_tipo_ficha_cdg()
         {
@@ -3169,15 +3150,6 @@
             $('#id_cns_tipo').val(id);
         }
 
-    </script>
-
-    <!--ALERTA DE ATENCION-->
-    <script>
-    window.setTimeout(function() {
-        $(".alert-atencion").fadeTo(500, 0).slideUp(600, function(){
-            $(this).remove();
-        });
-    }, 5000);
     </script>
 @endsection
 

@@ -2,20 +2,14 @@
     <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
-                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
+                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="cir_dig" role="tablist">
                     <li class="nav-item-secciones">
                         <a class="nav-secciones active text-uppercase" id="atencion_cirugia_gen-tab" data-toggle="tab" href="#atencion_cirugia_gen" role="tab" aria-controls="atencion_orl" aria-selected="true">Atención Especialidad</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="endosc_gastrica-tab" data-toggle="tab" href="#endosc_gastrica" role="tab" aria-controls="endosc_gastrica" aria-selected="false">Endoscopía Digestiva Alta</a>
+                        <a class="nav-secciones text-uppercase" id="colonoscopia-tab" data-toggle="tab" href="#colonoscopia" role="tab" aria-controls="colonoscopia" aria-selected="false">Endoscopía Digestiva Baja</a>
                     </li>
 				</ul>
-            </div>
-			<div class="row">
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 pt-3 d-inline float-left">
-                    {{-- mensaje --}}
-                    <div class="alert alert-success" role="alert" id="mensaje_ficha"></div>
-                </div>
             </div>
             <div class="col-sm-12 col-md-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_cdg') }}" method="POST">
@@ -33,27 +27,8 @@
                     <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
                     <input type="hidden" name="tipo_examen_especial" id="tipo_examen_especial" value="{{ $lista_examen_especial }}">
 
-                    @php
-                        /** carga de id examen de espcialidad tipo  */
-                        $temp = $lista_examen_especial;
-
-                        $array_temp = explode('|',$temp);
-                        //var_dump($array_temp);
-                        $array_temp2 = array();
-                        foreach($array_temp as $key=>$value)
-                        {
-                            $array_temp2[] = explode(',',$value);
-                        }
-                        $array_examen_especialidad_tipo = array();
-                        foreach($array_temp2 as $key=>$value)
-                        {
-                            $array_examen_especialidad_tipo[$value[0]] = $value[1];
-                        }
-                        // var_dump($array_examen_especialidad_tipo);
-                    @endphp
-
                     @csrf
-                    <div class="tab-content" id="CDA-contenido">
+                    <div class="tab-content" id="orl-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
                         <div class="tab-pane fade show active" id="atencion_cirugia_gen" role="tabpanel" aria-labelledby="atencion_cirugia_gen-tab">
                             <div class="row">
@@ -98,12 +73,12 @@
                                         <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card-a">
-                                                <div class="card-header-a" id="exam_esp_cda">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_cda_c" aria-expanded="false" aria-controls="exam_esp_cda_c">
+                                                <div class="card-header-a" id="exam_esp_cdb">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_cdb_c" aria-expanded="false" aria-controls="exam_esp_cdb_c">
                                                         Examen especialidad
                                                     </button>
                                                 </div>
-                                                <div id="exam_esp_cda_c" class="collapse" aria-labelledby="exam_esp_cda" data-parent="#exam_esp_cda">
+                                                <div id="exam_esp_cdb_c" class="collapse" aria-labelledby="exam_esp_cdb" data-parent="#exam_esp_cdb">
                                                     <div class="card-body-aten-a">
                                                         <div class="row">
                                                             <div class="col-md-6">
@@ -120,29 +95,68 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <span id="descripcion_ficha_tipo_ex_especialidad_cdg"></span>
+                                                                <span id="descripcion_ficha_tipo_ex_especialidad_cdb"></span>
                                                             </div>
                                                         </div>
-                                                        <div id="form-cdg">
+                                                        <div id="form-cdb">
                                                             <div class="form-row mb-2">
                                                                 <div class="col-md-12">
-                                                                    <h5 style="text-align:center;">Cirugía Digestiva</h5>
+                                                                    <h5 style="text-align:center;">Cirugía Digestiva Baja</h5>
                                                                 </div>
                                                             </div>
                                                             <hr>
                                                             <div class="row">
                                                                 <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Dolor</label>
-                                                                            <select name="dolor_cdg" id="dolor_cdg" placeholder="Dolor" data-titulo="Dolor"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2)">
-                                                                                <option value="1" selected>No</option>
-                                                                                <option value="2">Si</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-12" id="div_detalle_dolor" style="display:none">
-                                                                            <label class="floating-label-activo-sm">Dolor</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Dolor" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_dolor_cdg" id="obs_dolor_cdg"></textarea>
-                                                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Transito</label>
+                                                                        <select name="transito_intest" id="transito_intest" data-titulo="Transito"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('transito_intest','div_detalle_transito_intest','obs_transito_intest',2)">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_transito_intest" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Obs Transito</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Transito" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_transito_intest" id="obs_transito_intest"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Dolor Defecación</label>
+                                                                        <select name="dolor_def" id="dolor_def" data-titulo="Dolor Defecación" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('dolor_def','div_detalle_dolor_def','obs_dolor_def',2)">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_dolor_def" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Dolor Defecación</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="obs. Dolor Defecación" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_dolor_def" id="obs_dolor_def"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Presencia de Sangre y Otros</label>
+                                                                        <select name="sangre_otros" id="sangre_otros" data-titulo="Presencia de Sangre y Otros" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('sangre_otros','div_detalle_sangre_otros','obs_sangre_otros',2)">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_sangre_otros" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Presencia de Sangre y Otros</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="obs. Presencia de Sangre y Otros" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_sangre_otrosg" id="obs_sangre_otros"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Dolor</label>
+                                                                        <select name="dolor_cdg" id="dolor_cdg"  data-titulo="Dolor"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2)">
+                                                                            <option value="1" selected>No</option>
+                                                                            <option value="2">Si</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group col-md-12" id="div_detalle_dolor" style="display:none">
+                                                                        <label class="floating-label-activo-sm">Dolor</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Obs. Dolor" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_dolor_cdg" id="obs_dolor_cdg"></textarea>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
@@ -225,7 +239,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-3 align-middle" style="margin:auto">
-                                                                    <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo('form-cdg','registro_f_t_cg_detalle','cdg');"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
+                                                                    <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo('form-cdb','registro_f_t_cg_detalle','cdg');"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -303,7 +317,8 @@
                                         </div>
                                         <!-- cierre control post qx -->
 
-                                        <!--Formulario / Signos vitales y otros-->
+
+                                         <!--Formulario / Signos vitales y otros-->
                                          @include('atencion_medica.generales.signos_vitales')
                                         <!--Cierre: Formulario / Signos vitales y otros-->
 
@@ -323,7 +338,7 @@
                                                         <div class="form-row">
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;"data-input_igual="lic_descripcion_hipotesis,sospecha_diagnostica_eda,sospecha_diagnostica_edb" name="hip_diag_spec" id="hip_diag_spec" onChange="cargarIgual('hip_diag_spec')"></textarea>
+															  <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;"data-input_igual="lic_descripcion_hipotesis,sospecha_diagnostica_eda,sospecha_diagnostica_edb" name="hip_diag_spec" id="hip_diag_spec" onChange="cargarIgual('hip_diag_spec')"></textarea>
                                                             </div>
                                                             <div class="form-group col-md-4">
                                                                 <label class="floating-label-activo-sm">Indicaciones</label>
@@ -340,43 +355,32 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                         <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
-
-                        <!--INFORME ENDOSCOPÍA DIGESTIVA ALTA-->
-                        <div class="tab-pane fade" id="endosc_gastrica" role="tabpanel" aria-labelledby="endosc_gastrica-tab">
-                            <div class="row bg-white shadow-none rounded mx-1">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-12 mt-3 mb-0">
-                                            <h6 class="f-16 text-c-blue">Informe Endoscopía Digestiva</h6>
-                                            <hr>
-                                        </div>
-                                    </div>
-                                    <div class="row div_form_examen_eda">
-                                        <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_eda" id="id_examen_especialidad_tipo_eda" value="{{ $array_examen_especialidad_tipo['eda'] }}">
-                                        {!! $examen['eda'] !!}
-                                    </div>
-                                    <!--GUARDAR EXAMEN-->
+                        <!--INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
+                       <div class="tab-pane fade" id="colonoscopia" role="tabpanel" aria-labelledby="colonoscopia-tab">
+                           <div class="row bg-white shadow-none rounded mx-1">
+                               <div class="col-md-12">
                                    <div class="row">
-                                        <div class="col-md-12 text-center mb-3">
-                                            <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
-                                            <bottom type="bottom" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('eda');">Ver Examen PDF</bottom>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--CIERRE: INFORME ENDOSCOPIA ALTA-->
-
+                                       <div class="col-md-12 mt-3 mb-0">
+                                           <h6 class="f-16 text-c-blue">Informe Colonoscopía</h6>
+                                           <hr>
+                                       </div>
+                                   </div>
+                                   <div class="row">
+                                        {!! $examen['edb'] !!}
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <!--CIERRE:INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
                     </div>
                 </form>
             </div>
-             {{--  div de botones  --}}
-             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              {{--  div de botones  --}}
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -391,11 +395,12 @@
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="row mb-3">
                     <div class="col-md-12 text-center">
-                        <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                        <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+                        <input type="submit" class="btn btn-info-light-c mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+                        <input type="submit" class="btn btn-success-light-c mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
                     </div>
                 </div>
             </div>
+            <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
         </div>
     </div>
 </div>
@@ -421,23 +426,11 @@
             /** fin formulario pestaña 1 */
 
             $('#hip_diag_spec').keyup(function(){
-                if($.trim(this.value) != '')
-                {
-                   if( lic_token != '' && lic_estado == 1)
-                    {
-                        $('.btn_agregar_medicamento').removeAttr("disabled");
-                        $('.btn_medicamento_pdf').removeAttr("disabled");
-                        $('.btn_agregar_examen').removeAttr("disabled");
-                        $('.btn_examenes_pdf').removeAttr("disabled");
-                    }
-                    else
-                    {
-                        $('.btn_agregar_medicamento').attr('disabled','disabled');
-                        $('.btn_medicamento_pdf').attr('disabled','disabled');
-                        $('.btn_agregar_examen').attr('disabled','disabled');
-                        $('.btn_examenes_pdf').attr('disabled','disabled');
-                    }
-
+                if($.trim(this.value) != ''){
+                    $('.btn_agregar_medicamento').removeAttr("disabled");
+                    $('.btn_medicamento_pdf').removeAttr("disabled");
+                    $('.btn_agregar_examen').removeAttr("disabled");
+                    $('.btn_examenes_pdf').removeAttr("disabled");
                 }
                 else
                 {
@@ -497,13 +490,7 @@
             });
 
         })
-		/** MENSAJE*/
-			    /** CARGAR mensaje */
-				$('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
-				$('#mensaje_ficha').show();
-				setTimeout(function(){
-					$('#mensaje_ficha').hide();
-				}, 5000);
+
 
         function cargarIgual(input){
 
@@ -654,6 +641,14 @@
                     obs_dolor_cdg : data.observaciones_obs_dolor_cdg,
                     dolor_cdg : data.modal_agregar_tipo_dolor_cdg,
                     obs_dolor_cdg : data.observaciones_obs_dolor_cdg,
+
+                    transito_intest : data.modal_agregar_tipo_transito_intest,
+                    obs_transito_intest : data.observaciones_obs_transito_intest,
+                    dolor_def : data.modal_agregar_tipo_dolor_def,
+                    obs_dolor_def : data.observaciones_obs_dolor_def,
+                    sangre_otros : data.modal_agregar_tipo_sangre_otros,
+                    obs_sangre_otros : data.observaciones_obs_sangre_otros,
+
                     otros_sintomas_cdg : data.modal_agregar_tipo_otros_sintomas_cdg,
                     obs_otros_sintomas_cdg : data.observaciones_obs_otros_sintomas_cdg,
                     ceg_cdg : data.modal_agregar_tipo_ceg_cdg,
@@ -857,6 +852,9 @@
                 });
 
                 evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2);
+                evaluar_para_carga_detalle('transito_intest','div_detalle_transito_intest','obs_transito_intest',2);
+                evaluar_para_carga_detalle('dolor_def','div_detalle_dolor_def','obs_dolor_def',2);
+                evaluar_para_carga_detalle('sangre_otros','div_detalle_sangre_otros','obs_sangre_otros',2);
                 evaluar_para_carga_detalle('otros_sintomas_cdg','div_detalle_cd_otros_sintomas','obs_otros_sintomas_cdg',2);
                 evaluar_para_carga_detalle('ceg_cdg','div_detalle_ceg_cdg','obs_ceg_cdg',2);
                 evaluar_para_carga_detalle('masa_cdg','div_detalle_masa_cdg','obs_masa_cdg',2);
@@ -893,6 +891,9 @@
                         $('#'+index).val(value);
                     });
                     evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2);
+                    evaluar_para_carga_detalle('transito_intest','div_detalle_transito_intest','obs_transito_intest',2)
+                    evaluar_para_carga_detalle('dolor_def','div_detalle_dolor_def','obs_dolor_def',2);
+                    evaluar_para_carga_detalle('sangre_otros','div_detalle_sangre_otros','obs_sangre_otros',2);
                     evaluar_para_carga_detalle('otros_sintomas_cdg','div_detalle_cd_otros_sintomas','obs_otros_sintomas_cdg',2);
                     evaluar_para_carga_detalle('ceg_cdg','div_detalle_ceg_cdg','obs_ceg_cdg',2);
                     evaluar_para_carga_detalle('masa_cdg','div_detalle_masa_cdg','obs_masa_cdg',2);
@@ -1457,69 +1458,6 @@
             {
                 // $('#'+input_solitado_por).attr('readonly', false);
                 $('#'+input_solitado_por).val();
-            }
-        }
-
-        /** PERVISUALIZACION DE EXAMEN */
-        function visualizar_pdf_examen(tipo_examen)
-        {
-            if(tipo_examen!='')
-            {
-                var array_datos = {};
-                $('.div_form_examen_'+tipo_examen).find('input,textarea,select').each(function (key, element){
-                    var key_temp = element.id.replace('_'+tipo_examen,'');
-
-                    if(key_temp == 'biopsia' || key_temp == 'muestra_hp')
-                    {
-                        if(element.value == 1)
-                        {
-                            array_datos[key_temp] = 'SI';
-                        }
-                        else
-                        {
-                            array_datos[key_temp] = 'NO';
-                        }
-                    }
-                    else if(key_temp == 'muestra_hp_resultado')
-                    {
-                        if(element.value == 1)
-                        {
-                            array_datos[key_temp] = 'Positivo';
-                        }
-                        else
-                        {
-                            array_datos[key_temp] = 'Negativa';
-                        }
-                    }
-                    else
-                    {
-                        array_datos[key_temp] = element.value;
-                    }
-                });
-
-                var imagenes = $('#input_lista_imagenes').val();
-                if(imagenes != '')
-                {
-                    imagenes = JSON.parse(imagenes);
-                    imagenes = JSON.stringify(JSON.stringify(imagenes[tipo_examen]));
-                    console.log(imagenes );
-                }
-
-
-                var data ='id_ficha='+$('#id_fc').val()+'&contenido='+JSON.stringify(array_datos)+'&imagenes='+imagenes;
-                Fancybox.show(
-                    [
-                        {
-                        src: '{{ route("pdf.visualizar.examen") }}?'+data,
-                        type: "iframe",
-                        preload: false,
-                        },
-                    ]
-                );
-            }
-            else
-            {
-                console.log('tipo examen no especificado');
             }
         }
 

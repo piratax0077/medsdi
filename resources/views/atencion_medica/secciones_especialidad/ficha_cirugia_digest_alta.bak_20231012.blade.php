@@ -11,12 +11,6 @@
                     </li>
 				</ul>
             </div>
-			<div class="row">
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 pt-3 d-inline float-left">
-                    {{-- mensaje --}}
-                    <div class="alert alert-success" role="alert" id="mensaje_ficha"></div>
-                </div>
-            </div>
             <div class="col-sm-12 col-md-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_cdg') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
@@ -421,23 +415,11 @@
             /** fin formulario pestaña 1 */
 
             $('#hip_diag_spec').keyup(function(){
-                if($.trim(this.value) != '')
-                {
-                   if( lic_token != '' && lic_estado == 1)
-                    {
-                        $('.btn_agregar_medicamento').removeAttr("disabled");
-                        $('.btn_medicamento_pdf').removeAttr("disabled");
-                        $('.btn_agregar_examen').removeAttr("disabled");
-                        $('.btn_examenes_pdf').removeAttr("disabled");
-                    }
-                    else
-                    {
-                        $('.btn_agregar_medicamento').attr('disabled','disabled');
-                        $('.btn_medicamento_pdf').attr('disabled','disabled');
-                        $('.btn_agregar_examen').attr('disabled','disabled');
-                        $('.btn_examenes_pdf').attr('disabled','disabled');
-                    }
-
+                if($.trim(this.value) != ''){
+                    $('.btn_agregar_medicamento').removeAttr("disabled");
+                    $('.btn_medicamento_pdf').removeAttr("disabled");
+                    $('.btn_agregar_examen').removeAttr("disabled");
+                    $('.btn_examenes_pdf').removeAttr("disabled");
                 }
                 else
                 {
@@ -497,13 +479,7 @@
             });
 
         })
-		/** MENSAJE*/
-			    /** CARGAR mensaje */
-				$('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
-				$('#mensaje_ficha').show();
-				setTimeout(function(){
-					$('#mensaje_ficha').hide();
-				}, 5000);
+
 
         function cargarIgual(input){
 

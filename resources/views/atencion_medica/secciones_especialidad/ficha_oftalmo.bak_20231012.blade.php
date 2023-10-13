@@ -8,10 +8,6 @@
                     </li>
                 </ul>
             </div>
-			 <!--ALERTA-->
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
-            </div>
             <div class="col-sm-12 col-md-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_oft') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
@@ -115,8 +111,9 @@
                                                                                         <a class="nav-link-aten text-reset" id="ex_mov_oculares-tab" data-toggle="tab" href="#ex_mov_oculares" role="tab" aria-controls="ex_mov_oculares" aria-selected="false">Ex neurológico</a>
                                                                                         <a class="nav-link-aten text-reset" id="presion_ocular-tab" data-toggle="tab" href="#presion_ocular" role="tab" aria-controls="presion_ocular" aria-selected="false">Presión Ocular</a>
                                                                                         <a class="nav-link-aten text-reset" id="v_colores-tab" data-toggle="tab" href="#v_colores" role="tab" aria-controls="v_colores" aria-selected="false">Test Visión de Colores</a>
-                                                                                        <a class="nav-link-aten text-reset" id="test-estrab-tab" data-toggle="tab" href="#test-estrab" role="tab" aria-controls="test-estrab" aria-selected="false">Est. Estrabismo-Test</a>
-                                                                                        <a class="nav-link-aten text-reset" id="vergenc-tab" data-toggle="tab" href="#vergenc" role="tab" aria-controls="vergenc" aria-selected="false">Estudio Mov. oculares</a>
+                                                                                        <a class="nav-link-aten text-reset" id="campo_visual-tab" data-toggle="tab" href="#campo_visual" role="tab" aria-controls="campo_visual" aria-selected="false">Cover-Test</a>
+                                                                                        <a class="nav-link-aten text-reset" id="campo_visual-tab" data-toggle="tab" href="#campo_visual" role="tab" aria-controls="campo_visual" aria-selected="false">Estereopsis</a>
+                                                                                        <a class="nav-link-aten text-reset" id="campo_visual-tab" data-toggle="tab" href="#campo_visual" role="tab" aria-controls="campo_visual" aria-selected="false">Convergencia</a>
                                                                                         <a class="nav-link-aten text-reset" id="campo_visual-tab" data-toggle="tab" href="#campo_visual" role="tab" aria-controls="campo_visual" aria-selected="false">Campo Visual</a>
                                                                                     </div>
                                                                                 </div>
@@ -312,16 +309,16 @@
                                                                                                         </div>
                                                                                                     </div>
 
-                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                         <div class="form-group">
-                                                                                                            <label class="floating-label-activo-sm ">ADD</label>
+                                                                                                            <label class="floating-label-activo-sm t-red">ADD</label>
                                                                                                             <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
                                                                                                         </div>
 
                                                                                                     </div>
-                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                         <div class="form-group">
-                                                                                                            <label class="floating-label-activo-sm ">DIP</label>
+                                                                                                            <label class="floating-label-activo-sm t-blue">DIP</label>
                                                                                                             <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
                                                                                                         </div>
 
@@ -338,7 +335,7 @@
                                                                                                     </div>
                                                                                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                         <div class="form-group">
-                                                                                                            <label class="floating-label-activo-sm t-blue">Prisma OI</label>
+                                                                                                            <label class="floating-label-activo-sm t-blue">RPrisma OI</label>
                                                                                                             <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OD" data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_autorefracto_od" id="obs_autorefracto_od"></textarea>
                                                                                                         </div>
                                                                                                         <div class="form-group" id="div_autorefracto_oi" style="display:none;">
@@ -346,7 +343,13 @@
                                                                                                             <textarea class="form-control form-control-sm" data-titulo="Obs. Autorrefractometría OI"data-seccion="Parámetros Generales"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_autorefracto_oi" id="obs_autorefracto_oi"></textarea>
                                                                                                         </div>
                                                                                                     </div>
-                                                                                                </div>
+                                                                                                </div>{{--
+                                                                                                <div class="form-row">
+                                                                                                    <div class="form-group col-md-12">
+                                                                                                        <label class="floating-label-activo-sm">Observaciones Examen Auditívo</label>
+                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Auditívo" data-seccion="Oídos Audición" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oidos" id="obs_ex_oidos"></textarea>
+                                                                                                    </div>
+                                                                                                </div> --}}
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="tab-pane fade " id="ex_mov_oculares" role="tabpanel" aria-labelledby="ex_mov_oculares-tab">
@@ -504,160 +507,6 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="tab-pane fade" id="test-estrab" role="tabpanel" aria-labelledby="test-estrab-tab">
-                                                                                            <div class="col-sm-12 col-md-12">
-                                                                                                <div class="form-row">
-                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                        <div class="form-group">
-                                                                                                            <label class="floating-label-activo-sm">Cover-test Intermitente</label>
-                                                                                                            <select name="cover_int" data-titulo="Cover-test Intermitente" data-seccion="Parámetros Generales" id="cover_int" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cover_int','div_cover_int','obs_cover_int',2);">
-                                                                                                                <option selected  value="1">Normal</option>
-                                                                                                                <option value="2">Anormal</option>
-                                                                                                                <option value="3">No Examinado</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_cover_int" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Observaciones</label>
-                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Cover-test Intermitente" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cover_int" id="obs_cover_int"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                        <div class="form-group">
-                                                                                                            <label class="floating-label-activo-sm">Cover-test Alternante</label>
-                                                                                                            <select name="cover_alt" data-titulo="Cover-test Alternante" data-seccion="Parámetros Generales" id="cover_alt" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cover_alt','div_cover_alt','obs_cover_alt',2);">
-                                                                                                                <option selected  value="1">Normal</option>
-                                                                                                                <option value="2">Anormal</option>
-                                                                                                                <option value="3">No Examinado</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_cover_alt" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Observaciones</label>
-                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Cover-test Alternante" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cover_alt" id="obs_cover_alt"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                        <div class="form-group">
-                                                                                                            <label class="floating-label-activo-sm">Cover-test Prisma</label>
-                                                                                                            <select name="cover_alt" data-titulo="Cover-test Prisma" data-seccion="Parámetros Generales" id="cover_alt" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cover_alt','div_cover_alt','obs_cover_alt',2);">
-                                                                                                                <option selected  value="1">Normal</option>
-                                                                                                                <option value="2">Anormal</option>
-                                                                                                                <option value="3">No Examinado</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_cover_alt" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Observaciones</label>
-                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Cover-test Prisma" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cover_alt" id="obs_cover_alt"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                        <div class="form-group">
-                                                                                                            <label class="floating-label-activo-sm">Test de Hirschberg</label>
-                                                                                                            <select name="test_hirsch" data-titulo="Test de Hirschberg" data-seccion="Parámetros Generales" id="test_hirsch" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('test_hirsch','div_test_hirsch','obs_test_hirsch',2);">
-                                                                                                                <option selected  value="1">Normal</option>
-                                                                                                                <option value="2">Anormal</option>
-                                                                                                                <option value="3">No Examinado</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_test_hirsch" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Observaciones</label>
-                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Test de Hirschberg" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_test_hirsch" id="obs_test_hirsch"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                        <div class="form-group">
-                                                                                                            <label class="floating-label-activo-sm">Test de Krimsky</label>
-                                                                                                            <select name="campo_visual_oi" data-titulo="Test de Krimsky" data-seccion="Parámetros Generales" id="campo_visual_oi"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('campo_visual_oi','div_campo_visual_oi','obs_campo_visual_oi',2);">
-                                                                                                                <option selected  value="1">Normal</option>
-                                                                                                                <option value="2">Anormal</option>
-                                                                                                                <option value="3">No Examinado</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_campo_visual_oi" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Observaciones</label>
-                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Test de Krimsky" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_campo_visual_oi" id="obs_campo_visual_oi"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                        <label class="floating-label-activo-sm">Otros Estudios</label>
-                                                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs. Otros Estudios" data-seccion="Parámetros Generales" id="campo_otros_ex_general" name="campo_otros_ex_general"  rows="1" onfocus="this.rows=4"  onblur="this.rows=1;"></textarea>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Observaciones Generales</label>
-                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Generales" data-seccion="Parámetros Generales" id="campo_otros_ex_general" name="campo_otros_ex_general"  rows="1" onfocus="this.rows=4"  onblur="this.rows=1;"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="tab-pane fade" id="vergenc" role="tabpanel" aria-labelledby="vergenc-tab">
-                                                                                            <div class="col-sm-12 col-md-12">
-                                                                                                <div class="form-row">
-                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                        <div class="form-group">
-                                                                                                            <label class="floating-label-activo-sm">Ducciones</label>
-                                                                                                            <select name="ducciones" data-titulo="Campo Visual OD" data-seccion="Parámetros Generales" id="ducciones" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ducciones','div_ducc','obs_ducc',2);">
-                                                                                                                <option selected  value="1">Normal</option>
-                                                                                                                <option value="2">Anormal</option>
-                                                                                                                <option value="3">No Examinado</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_ducc" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Observaciones</label>
-                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Campo Visual OD" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ducc" id="obs_ducc"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                        <div class="form-group">
-                                                                                                            <label class="floating-label-activo-sm">Versiones</label>
-                                                                                                            <select name="versiones" data-titulo="Campo Visual OI" data-seccion="Parámetros Generales" id="versiones"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('versiones','div_versiones','obs_versiones',2);">
-                                                                                                                <option selected  value="1">Normal</option>
-                                                                                                                <option value="2">Anormal</option>
-                                                                                                                <option value="3">No Examinado</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_versiones" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Observaciones</label>
-                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Campo Visual OI" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_versiones" id="obs_versiones"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                        <div class="form-group">
-                                                                                                            <label class="floating-label-activo-sm">Vergencia</label>
-                                                                                                            <select name="vergencia" data-titulo="Campo Visual OI" data-seccion="Parámetros Generales" id="vergencia"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('vergencia','div_vergencia','obs_vergencia',2);">
-                                                                                                                <option selected  value="1">Normal</option>
-                                                                                                                <option value="2">Anormal</option>
-                                                                                                                <option value="3">No Examinado</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_vergencia" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Observaciones</label>
-                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Campo Visual OI" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_vergencia" id="obs_vergencia"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                        <div class="form-group">
-                                                                                                            <label class="floating-label-activo-sm">Estereopsis</label>
-                                                                                                            <select name="estereop" data-titulo="Campo Visual OI" data-seccion="Parámetros Generales" id="estereop"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('estereop','div_estereop','obs_estereop',2);">
-                                                                                                                <option selected  value="1">Normal</option>
-                                                                                                                <option value="2">Anormal</option>
-                                                                                                                <option value="3">No Examinado</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_estereop" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Observaciones</label>
-                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Campo Visual OI" data-seccion="Parámetros Generales" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_estereop" id="obs_estereop"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Observaciones Generales</label>
-                                                                                                            <textarea class="form-control form-control-sm" data-titulo="Obs. Otros Antecedentes Importantes" data-seccion="Parámetros Generales" id="vergencia" name="vergencia"  rows="1" onfocus="this.rows=4"  onblur="this.rows=1;"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
                                                                                         <div class="tab-pane fade" id="campo_visual" role="tabpanel" aria-labelledby="campo_visual-tab">
                                                                                             <div class="col-sm-12 col-md-12">
                                                                                                 <div class="form-row">
@@ -724,6 +573,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+
                                                                         <!--EXAMEN  BIOMICROSCOPIA-->
                                                                         <div class="tab-pane fade show" id="examen_biomicroscop" role="tabpanel" aria-labelledby="examen_biomicroscop-tab">
                                                                             <div class="row">
@@ -1352,14 +1202,12 @@
                                         </div>
                                         <!-- control post qx -->
                                         @include('general.secciones_ficha.cirugia_control.control_cirugia_general')
-                                        <!-- cierre control post qx -->
-										 <!--Formulario / Signos vitales y otros-->
-										@include('general.secciones_ficha.signos_vitales')
-										<!--Cierre: Formulario / Signos vitales y otros-->
+                                       <!-- cierre control post qx -->
+										<!--FORMULARIO / SIGNOS VITALES Y OTROS-->
+                                        @include('atencion_medica.generales.signos_vitales')
 
-										<!--CRONICOS / GES / CONFIDENCIAL -->
-										@include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
-
+                                        <!--CRONICOS / GES / CONFIDENCIAL -->
+                                        @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
 
                                         <!--Diagnóstico-->
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -1444,23 +1292,11 @@
             });
 
             $('#descripcion_hipotesis').keyup(function(){
-                if($.trim(this.value) != '')
-                {
-                   if( lic_token != '' && lic_estado == 1)
-                    {
-                        $('.btn_agregar_medicamento').removeAttr("disabled");
-                        $('.btn_medicamento_pdf').removeAttr("disabled");
-                        $('.btn_agregar_examen').removeAttr("disabled");
-                        $('.btn_examenes_pdf').removeAttr("disabled");
-                    }
-                    else
-                    {
-                        $('.btn_agregar_medicamento').attr('disabled','disabled');
-                        $('.btn_medicamento_pdf').attr('disabled','disabled');
-                        $('.btn_agregar_examen').attr('disabled','disabled');
-                        $('.btn_examenes_pdf').attr('disabled','disabled');
-                    }
-
+                if($.trim(this.value) != ''){
+                    $('.btn_agregar_medicamento').removeAttr("disabled");
+                    $('.btn_medicamento_pdf').removeAttr("disabled");
+                    $('.btn_agregar_examen').removeAttr("disabled");
+                    $('.btn_examenes_pdf').removeAttr("disabled");
                 }
                 else
                 {
@@ -1654,13 +1490,7 @@
             });
 
         })
-		/** MENSAJE*/
-			    /** CARGAR mensaje */
-			$('#mensaje_ficha').html('<strong>Solo el campo Hipótesis diagnóstica es obligatorio el resto es opcional</strong>');
-			$('#mensaje_ficha').show();
-			setTimeout(function(){
-				$('#mensaje_ficha').hide();
-			}, 5000);
+
         /** REGISTO ANTECEDENTES */
         function carga_campos_antecedente_nuevo()
         {

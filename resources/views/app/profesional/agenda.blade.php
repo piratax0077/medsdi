@@ -42,13 +42,12 @@
         }
 
         .btn-group > .btn,
-  .btn-group-vertical > .btn {
-    position: relative;
-    flex: 1 1 auto;
-  padding:5px 5px;
-  font-size:0.8rem;
-    
-}
+        .btn-group-vertical > .btn {
+            position: relative;
+            flex: 1 1 auto;
+            padding:5px 5px;
+            font-size:0.8rem;
+        }
     </style>
     <link href='{{ asset('css/estilos_boton_agen_examenes.css') }}' rel='stylesheet' />
 @endsection

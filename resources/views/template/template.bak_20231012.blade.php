@@ -70,8 +70,8 @@
             z-index: 2006;
             overflow: auto;
         }
+
     </style>
-    @yield('css-btn-autorizacion')
 </head>
 
 <body>
@@ -266,30 +266,18 @@
             });
 
             $('#descripcion_hipotesis').keyup(function(){
-                if($.trim(this.value) != '')
-                {
-                   if( lic_token != '' && lic_estado == 1)
-                    {
-                        $('.btn_agregar_medicamento').removeAttr("disabled");
-                        $('.btn_medicamento_pdf').removeAttr("disabled");
-                        $('.btn_agregar_examen').removeAttr("disabled");
-                        $('.btn_examenes_pdf').removeAttr("disabled");
-                    }
-                    else
-                    {
-                        $('.btn_agregar_medicamento').attr('disabled','disabled');
-                        $('.btn_medicamento_pdf').attr('disabled','disabled');
-                        $('.btn_agregar_examen').attr('disabled','disabled');
-                        $('.btn_examenes_pdf').attr('disabled','disabled');
-                    }
-
+                if($.trim(this.value) != ''){
+                    $('#btn_agregar_medicamento').removeAttr("disabled");
+                    $('#btn_medicamento_pdf').removeAttr("disabled");
+                    $('#btn_agregar_examen').removeAttr("disabled");
+                    $('#btn_examenes_pdf').removeAttr("disabled");
                 }
                 else
                 {
-                    $('.btn_agregar_medicamento').attr('disabled','disabled');
-                    $('.btn_medicamento_pdf').attr('disabled','disabled');
-                    $('.btn_agregar_examen').attr('disabled','disabled');
-                    $('.btn_examenes_pdf').attr('disabled','disabled');
+                    $('#btn_agregar_medicamento').attr('disabled','disabled');
+                    $('#btn_medicamento_pdf').attr('disabled','disabled');
+                    $('#btn_agregar_examen').attr('disabled','disabled');
+                    $('#btn_examenes_pdf').attr('disabled','disabled');
                 }
             });
 
@@ -2581,101 +2569,14 @@
             console.log(jqXHR, ajaxOptions, thrownError)
         });
     }
-    </script>
-    <script>
-        /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
-        function  envio_indicaciones_pdf(id_modal){
-            let url = "{{ route('indicacion.medica.registro.envio') }}";
-            var id_tipo_documento = 1;
-            var id_paciente = $('#id_paciente_fc').val();
-            var id_profesional = $('#id_profesional_fc').val();
-            var id_ficha_atencion = $('#id_fc').val();
-            var id_lugar_atencion = $('#id_lugar_atencion').val();
-            var observacion = '';
-            // var observacion = $('#observacion').val();
-            var documento = '';
-            var url_documento = '';
-            var cuerpo = '';
-            var otro = '';
-            var token = CSRF_TOKEN;
 
-            if(id_tipo_documento == 1)
-            {
-                documento = $('#'+id_modal+' embed').attr('data-documento');
-                url_documento = $('#'+id_modal+' embed').attr('data-url');
-            }
-            else
-            {
-                // cuerpo = $('#cuerpo').val();
-            }
-            var datos = {};
-            datos._token = token;
-            datos.id_tipo_documento = id_tipo_documento;
-            datos.id_paciente = id_paciente;
-            datos.id_profesional = id_profesional;
-            datos.id_ficha_atencion = id_ficha_atencion;
-            datos.id_lugar_atencion = id_lugar_atencion;
-            datos.observacion = observacion;
-            datos.documento = documento;
-            datos.url = url_documento;
-            datos.cuerpo = cuerpo;
-            datos.otro = otro;
 
-            $.ajax({
-                url: url,
-                type: 'post',
-                dataType: "json",
-                data: datos,
-                success: function(data) {
-                    // console.log(data);
-                    if(data.estado == 1)
-                    {
-                        var mensaje = '';
-                        mensaje = 'Documento asignado al Paciente para visualizar en su escritorio.\n';
-                        if(data.update_correo.estado == 1)
-                            mensaje = 'Documento enviado por correo al Paciente.\n';
-                        else
-                            mensaje = 'Problema al enviar Documento por correo al Paciente.\n';
-
-                        swal({
-                            title: "Indicación Enviada al Paciente",
-                            text: mensaje,
-                            icon: "success",
-                        });
-                    }
-                    else
-                    {
-                        var texto_error = '';
-
-                        if(data.estado ==  0)
-                        {
-                            if('error' in data)
-                            {
-                                $.each(data.error, function (indexInArray, valueOfElement) {
-                                    texto_error += indexInArray+': '+valueOfElement+'\n';
-                                });
-                            }
-                        }
-                        swal({
-                            title: "Indicación Enviada al Paciente",
-                            text: data.msj+'\n'+texto_error,
-                            icon: "warning",
-                        });
-                    }
-                }
-            });
-        }
-        /** FIN METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
     </script>
 
     @yield('js_inferior')
     @yield('page-script')
-    @yield('page-script-ficha-atencion'){{-- ficha_orl.blade --}}
-    @yield('js-ficha-general-espc') {{-- seccion js fiche general especialidad --}}
     @yield('page-script-med-exa')
     @yield('js-sidebar') {{-- seccion js side bar --}}
-    @yield('js-lic') {{-- seccion js side bar --}}
-	@yield('page-script-btn-autorizacion')
 </body>
 
 </html>

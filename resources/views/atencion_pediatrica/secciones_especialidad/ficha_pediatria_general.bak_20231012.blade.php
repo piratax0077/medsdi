@@ -17,12 +17,7 @@
                     </li>  --}}
                 </ul>
             </div>
-			<!--ALERTA-->
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert"><strong>Solo el campo diagnóstico es obligatorio el resto es opcional</strong>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="col-sm-12 col-md-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_ped_gen') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <!-- <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}"> -->
@@ -329,6 +324,194 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <!---------------------->
+                                                    <!--<div class="form-row">
+                                                        <div class="col-md-12">
+                                                            <h6 class="f-16 text-c-blue"> Crecimiento y Desarrollo</h6>
+                                                        </div>
+                                                    </div>-->
+                                                    <!--<br>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-5">
+                                                            <label class="floating-label-activo-sm">Descripción Crecimiento y Desarrollo</label>
+                                                            <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_gral_crec_desarr" id="obs_gral_crec_desarr"></textarea>
+                                                        </div>
+                                                        <div class="form-group col-md-7">
+                                                            {{-- descomentar cuando se tengan antecedentes de embarazon en gine obstetricia --}}
+                                                            {{-- <button type="button" class="btn btn-outline-primary btn-sm mb-4" onclick="ant_parto ();"></i>Antec. Embarazo y Parto</button> --}}
+                                                            <button type="button" class="btn btn-outline-primary btn-sm mb-4" onclick="tunner();"></i>G. de Tunner Femenino</button>
+                                                            <button type="button" class="btn btn-outline-primary btn-sm mb-4" onclick="tunner_m();"></i>G. de Tunner Masculino</button>
+                                                        </div>
+                                                    </div>-->
+
+                                                    <!--<div class="form-row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Carga Ficha Tipo</label>
+                                                                <select class="form-control form-control-sm" id="select_ficha_tipo_especialidad" onchange="cargar_info_ficha_tipo_ped_gen('select_ficha_tipo_especialidad','descripcion_ficha_tipo_especialidad');">
+                                                                    <option value="">Seleccione</option>
+                                                                    @if(!empty($fichaTipo['ped_gen']))
+                                                                        @foreach ($fichaTipo['ped_gen'] as $ft )
+                                                                            <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <span id="descripcion_ficha_tipo_especialidad"></span>
+                                                        </div>
+                                                    </div>-->
+                                                    <!--<div class="form-row">
+                                                        <div class="col-md-12">
+                                                            <h6 class="f-16 text-c-blue">Estado Nutricional</h6>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div id="form-ped_gen">
+                                                        <div class="form-row">
+                                                            <div class="col-sm-12 col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm">Estado nutricional</label>
+                                                                    <select name="e_nutricional" data-titulo="Examen_nutricional" data-seccion="Estado Nutricional" id="e_nutricional" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_nutricional','div_examen_nutricional','obs_e_nutricional',2);">
+                                                                        <option selected  value="1">Normal</option>
+                                                                        <option value="2">Anormal</option>
+                                                                        <option value="3">Ex. No Realizado</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_examen_nutricional" style="display:none;">
+                                                                    <label class="floating-label-activo-sm">Estado Nutricional(describir)</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="obs. Examen_nutricional" data-seccion="Estado Nutricional" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_nutricional" id="obs_e_nutricional"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <div class="form-group ">
+                                                                    <label class="floating-label-activo-sm">Vacunas</label>
+                                                                    <select name="e_vacunas" id="e_vacunas" data-titulo="Vacunas" data-seccion="Estado Nutricional" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_vacunas','div_e_vacunas','obs_e_vacunas',2);">
+                                                                        <option selected value="1">Al día</option>
+                                                                        <option value="2">Atrasadas</option>
+                                                                        <option value="3">No Informadas</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_e_vacunas" style="display:none;">
+                                                                    <label class="floating-label-activo-sm">Vacunas(describir)</label>
+                                                                    <textarea class="form-control form-control-sm"  data-titulo="obs. Vacunas" data-seccion="Estado Nutricional" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_vacunas" id="obs_e_vacunas"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="col-sm-12 col-md-12">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm">Obs. Estado nutricional y vacunas</label>
+                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Estado nutricional y vacunas" data-seccion="Estado Nutricional" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_nutricional_vacunas" id="obs_ex_nutricional_vacunas"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <hr>-->
+                                                        <!--<div class="form-row">
+                                                            <div class="col-md-12">
+                                                                <h6 class="f-16 text-c-blue">Examen Segmentario</h6>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="form-row">
+                                                            <div class="col-sm-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm">Piel</label>
+                                                                    <select name="e_piel" id="e_piel" data-titulo="Piel" data-seccion="Examen Segmentario" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_piel','div_e_piel','obs_e_piel',2)">
+                                                                        <option selected value="1">Normal</option>
+                                                                        <option value="2">Anormal Describir</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_e_piel" style="display:none">
+                                                                    <label class="floating-label-activo-sm">Describir Examen de piel</label>
+                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Piel" data-seccion="Examen Segmentario" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_piel" id="obs_e_piel"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm">Cabeza y Cuello</label>
+                                                                    <select name="e_cabcuello" id="e_cabcuello" data-titulo="Cabeza y Cuello" data-seccion="Examen Segmentario" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_cabcuello','div_e_cabcuello','obs_e_cabcuello',3)">
+                                                                        <option selected value="1">Normal</option>
+                                                                        <option value="2">No Examinado</option>
+                                                                        <option value="3">Otro Describir</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_e_cabcuello" style="display:none">
+                                                                    <label class="floating-label-activo-sm">Describir Examen de Cuello</label>
+                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs.Cabeza y Cuello" data-seccion="Examen Segmentario"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_cabcuello" id="obs_e_cabcuello"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm">Torax</label>
+                                                                    <select name="e_torax" id="e_torax" data-titulo="Torax" data-seccion="Examen Segmentario" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_torax','div_e_torax','obs_e_torax',2);">
+                                                                        <option selected value="1">Normal</option>
+                                                                        <option value="2">Alterado Describir</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_e_torax" style="display:none">
+                                                                    <label class="floating-label-activo-sm">Describir Examen de Torax</label>
+                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs.Torax" data-seccion="Examen Segmentario" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_torax" id="obs_e_torax"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm">Abdomen</label>
+                                                                    <select name="e_abdomen" id="e_abdomen" data-titulo="Abdomen" data-seccion="Examen Segmentario"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_abdomen','div_e_abdomen','obs_e_abdomen',2);">
+                                                                        <option selected value="1">Normal</option>
+                                                                        <option value="2">Anormal(describir)</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_e_abdomen" style="display:none">
+                                                                    <label class="floating-label-activo-sm">Examen de Abdomen</label>
+                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Abdomen" data-seccion="Examen Segmentario" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_abdomen" id="obs_e_abdomen"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12 col-md-4">
+                                                            <div class="form-group">
+                                                                    <label class="floating-label-activo-sm">Musculo-Esquelético</label>
+                                                                    <select name="e_muscesq" id="e_muscesq" data-titulo="Musculo-Esquelético" data-seccion="Examen Segmentario" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('e_muscesq','div_e_muscesq','obs_e_muscesq',2);">
+                                                                        <option selected value="1">Normal</option>
+                                                                        <option value="2">Anormal</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_e_muscesq" style="display:none">
+                                                                    <label class="floating-label-activo-sm">Examen Musculo-Esquelético</label>
+                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Musculo-Esquelético" data-seccion="Examen Segmentario" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_muscesq" id="obs_e_muscesq"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm">Organos de los Sentidos</label>
+                                                                    <select name="e_o_sent" id="e_o_sent" data-titulo="O-Sentidos" class="form-control form-control-sm"data-seccion="Examen Segmentario"  onchange="evaluar_para_carga_detalle('e_o_sent','div_e_o_sent','obs_e_o_sent',2);">
+                                                                        <option selected value="1">Normal</option>
+                                                                        <option value="2">Anormal</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_e_o_sent" style="display:none">
+                                                                    <label class="floating-label-activo-sm">Examen Organos de los Sentidos</label>
+                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. O-Sentidos" data-seccion="Examen Segmentario" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_o_sent" id="obs_e_o_sent"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-12">
+                                                                <label class="floating-label-activo-sm">Observaciones Ex Segmentario</label>
+                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Ex Segmentario" data-seccion="Examen Segmentario"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_segmentario" id="obs_ex_segmentario"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-9" style="margin-bottom: 0;">
+                                                                <label class="floating-label-activo-sm">Observaciones Examen Especialidad</label>
+                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Examen Especialidad" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_ex_pedgen" id="obs_ex_pedgen"></textarea>
+                                                            </div>
+                                                            <div class="form-group col-md-3 align-middle" style="margin:auto">
+                                                                <button type="button" class="btn btn-outline-primary has-ripple" onclick="abrir_modal_guardar_tipo('form-ped_gen','registro_f_t_detalle','ped_gen');"><i class="me-2" data-feather="thumbs-up"></i>Guardar Nueva Ficha Tipo<span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -32.5625px; left: 8.375px;"></span></button>
+                                                            </div>
+                                                        </div>-->
+
                                                 </div>
                                             </div>
                                         </div>
@@ -342,26 +525,31 @@
                                 <!--DIAGNÓSTICO-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
-                                        <div class="card-header-a " id="diagnostico">
+                                        <div class="card-header-a" id="diagnostico">
                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagnostico_c" aria-expanded="false" aria-controls="diagnostico_c">
                                                 Diagnóstico
                                             </button>
                                         </div>
                                         <div id="diagnostico_c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
-                                            <div class="card-body-aten-a  shadow-none">
+                                            <div class="card-body-aten-a shadow-none">
                                                 <div class="form-row">
                                                     <div class="form-group col-md-4">
                                                         <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
-                                                            <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado,eno_diagnositico_confirmado" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" >
+                                                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,diagnostico_cons" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" >
                                                     </div>
                                                     <div class="form-group col-md-4">
                                                         <label class="floating-label-activo-sm">Indicaciones</label>
-                                                        <input type="text" class="form-control form-control-sm" name="ind_orl" id="ind_orl">
+                                                        <input type="text" class="form-control form-control-sm" name="indicacion" id="indicacion">
                                                     </div>
                                                     <div class="form-group col-md-4">
                                                         <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
-                                                        <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_cie" id="descripcion_cie" value="" onchange="cargarIgual('descripcion_cie')">
-                                                        <input type="hidden" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="" onchange="cargarIgual('id_descripcion_cie')">
+                                                        @if (isset($fichaAtencion->diagnostico_ce10))
+                                                            <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie,lic_descripcion_cie" name="descripcion_cie_esp" id="descripcion_cie_esp" value="{{ $fichaAtencion->diagnostico_ce10 }}" onchange="cargarIgual('descripcion_cie_esp')">
+                                                            <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie,lic_descripcion_cie" name="id_descripcion_cie_esp" id="id_descripcion_cie_esp" value="{{ $fichaAtencion->diagnostico_ce10 }}" onchange="cargarIgual('id_descripcion_cie_esp')">
+                                                        @else
+                                                            <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie,lic_descripcion_cie" name="descripcion_cie_esp" id="descripcion_cie_esp" value="" onchange="cargarIgual('descripcion_cie_esp')">
+                                                            <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie,lic_descripcion_cie" name="id_descripcion_cie_esp" id="id_descripcion_cie_esp" value="" onchange="cargarIgual('id_descripcion_cie_esp')">
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -383,7 +571,7 @@
                         <div class="card">
                             <div class="card-body">
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                            @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                            @include('atencion_medica.generales.seccion_receta_examen_comunes')
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
                             </div>
                         </div>
@@ -391,8 +579,8 @@
                         <!--GUARDAR O IMPRIMIR FICHA-->
                         <div class="row mb-3">
                             <div class="col-md-12 text-center">
-                               <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
-								<input type="submit" class="btn btn-purple mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
+                                <input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+                                <input type="submit" class="btn btn-success  mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
                             </div>
                         </div>
 
@@ -417,12 +605,7 @@
         $('#btn_extamiz').click(function () {
             $('#extamiz').toggle();
         });
-		/** CARGAR mensaje */
-		$('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
-		$('#mensaje_ficha').show();
-		setTimeout(function(){
-			$('#mensaje_ficha').hide();
-		}, 5000);
+
         $(document).ready(function() {
 
             // $('#btn_recien_nacido').click(function () {
@@ -440,23 +623,11 @@
             // });
 
             $('#descripcion_hipotesis').keyup(function(){
-                if($.trim(this.value) != '')
-                {
-                   if( lic_token != '' && lic_estado == 1)
-                    {
-                        $('.btn_agregar_medicamento').removeAttr("disabled");
-                        $('.btn_medicamento_pdf').removeAttr("disabled");
-                        $('.btn_agregar_examen').removeAttr("disabled");
-                        $('.btn_examenes_pdf').removeAttr("disabled");
-                    }
-                    else
-                    {
-                        $('.btn_agregar_medicamento').attr('disabled','disabled');
-                        $('.btn_medicamento_pdf').attr('disabled','disabled');
-                        $('.btn_agregar_examen').attr('disabled','disabled');
-                        $('.btn_examenes_pdf').attr('disabled','disabled');
-                    }
-
+                if($.trim(this.value) != ''){
+                    $('.btn_agregar_medicamento').removeAttr("disabled");
+                    $('.btn_medicamento_pdf').removeAttr("disabled");
+                    $('.btn_agregar_examen').removeAttr("disabled");
+                    $('.btn_examenes_pdf').removeAttr("disabled");
                 }
                 else
                 {
@@ -831,11 +1002,5 @@
         }
     </script>
 
-    <!--ALERTA DE ATENCION-->
-    <script>
-        window.setTimeout(function() {
-            $(".alert-atencion").fadeTo(500, 0).slideUp(600, function(){
-                $(this).remove();
-            });
-        }, 5000);
-     </script>
+
+

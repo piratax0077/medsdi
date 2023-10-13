@@ -17,12 +17,7 @@
                     </li>
                 </ul>
             </div>
-            <!--ALERTA-->
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert"><strong>Solo el campo diagnóstico es obligatorio el resto es opcional</strong>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="col-sm-12 col-md-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_uro') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
@@ -64,8 +59,8 @@
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="tit-gen">Ficha de atención general</h6>
+                                        <div class="col-md-12 mb-2">
+                                            <h6 class="f-20 text-c-blue">Ficha de atención general</h6>
                                         </div>
                                     </div>
                                     <!--FORMULARIOS-->
@@ -628,7 +623,7 @@
                                                                         </div>
                                                                         <div class="form-row">
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 mt-0">
-
+                                                                    
                                                                                 <label class="ml-0"><strong>Tratamiento médico</strong></label>
                                                                                 <div class="switch switch-success d-inline m-r-10">
                                                                                     <input type="checkbox" id="tto_uro" name="tto_uro" value="1" onchange="javascript:showContenturo()" />
@@ -688,7 +683,7 @@
                                                                                     </div>
                                                                                     <div class="form-row pt-3">
                                                                                         {{-- <div class="form-group col-md-4">
-																							@include('general.secciones_ficha.receta_examen.seccion_recetario')
+																							@include('general.secciones_ficha.receta_examen.seccion_recetario') 
                                                                                         </div>
 																						--}}
                                                                                         <div class="form-group col-md-12">
@@ -769,26 +764,26 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                      
                                                 <div class="col-md-12 text-center">
                                                     <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
                                                     <input type="submit" class="btn btn-purple mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
                                                 </div>
-
+                                            
                                     </div>
                                 </div>
                             </div>
                             <!--GUARDAR O IMPRIMIR FICHA-->
-
+                                           
                         </div>
                         <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
-
+                        
 
                         <!-- CISTOSCOPÍA-->
                         <div class="tab-pane fade" id="cisto" role="tabpanel" aria-labelledby="cisto-tab">
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="tit-gen">Citoscopía</h6>
+                                    <div class="col-md-12  mb-2">
+                                        <h6 class="f-20 text-c-blue">Citoscopía</h6>
                                     </div>
                                 </div>
                                 <div class="row div_form_examen_cisto">
@@ -944,8 +939,8 @@
                         <!-- CISTOSCOPÍA-->
 						<div class="tab-pane fade" id="cisto" role="tabpanel" aria-labelledby="cisto-tab">
 								<div class="row">
-									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-										<h6 class="tit-gen">Citoscopía</h6>
+									<div class="col-md-12  mb-2">
+										<h6 class="f-20 text-c-blue">Citoscopía</h6>
 									</div>
 								</div>
 								<div class="row div_form_examen_cisto">
@@ -1087,8 +1082,8 @@
 						<!--UROFLUJO-->
 						<div class="tab-pane fade" id="uroflujo" role="tabpanel" aria-labelledby="uroflujo-tab">
 							<div class="row">
-								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <h6 class="tit-gen">Uroflujometría</h6>
+								<div class="col-md-12 mb-2">
+                                    <h6 class="f-20 text-c-blue">Uroflujometría</h6>
                                 </div>
                             </div>
                             <div class="row div_form_examen_uro_flujo">
@@ -1104,6 +1099,8 @@
                             </div>
 						</div>
 
+                        
+	
                         <div class="tab-pane fade" id="in-ven-urologia" role="tabpanel" aria-labelledby="in-ven-urologia-tab">
                             <div class="row bg-white shadow-none rounded mx-1">
                                 <div class="col-md-12">
@@ -1154,13 +1151,6 @@
             element.style.display='none';
         }
     }
-	/** MENSAJE*/
-		/** CARGAR mensaje */
-		$('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
-		$('#mensaje_ficha').show();
-		setTimeout(function(){
-			$('#mensaje_ficha').hide();
-		}, 5000);
 </script>
 @section('page-script-ficha-atencion')
     <script>
@@ -1175,23 +1165,11 @@
             });
 
             $('#descripcion_hipotesis').keyup(function(){
-                if($.trim(this.value) != '')
-                {
-                   if( lic_token != '' && lic_estado == 1)
-                    {
-                        $('.btn_agregar_medicamento').removeAttr("disabled");
-                        $('.btn_medicamento_pdf').removeAttr("disabled");
-                        $('.btn_agregar_examen').removeAttr("disabled");
-                        $('.btn_examenes_pdf').removeAttr("disabled");
-                    }
-                    else
-                    {
-                        $('.btn_agregar_medicamento').attr('disabled','disabled');
-                        $('.btn_medicamento_pdf').attr('disabled','disabled');
-                        $('.btn_agregar_examen').attr('disabled','disabled');
-                        $('.btn_examenes_pdf').attr('disabled','disabled');
-                    }
-
+                if($.trim(this.value) != ''){
+                    $('.btn_agregar_medicamento').removeAttr("disabled");
+                    $('.btn_medicamento_pdf').removeAttr("disabled");
+                    $('.btn_agregar_examen').removeAttr("disabled");
+                    $('.btn_examenes_pdf').removeAttr("disabled");
                 }
                 else
                 {
@@ -3397,16 +3375,6 @@
         /** FIN CRONICO */
 
     </script>
-    <!--ALERTA DE ATENCION-->
-    <script>
-    window.setTimeout(function() {
-        $(".alert-atencion").fadeTo(500, 0).slideUp(600, function(){
-            $(this).remove();
-        });
-    }, 5000);
-
-
-</script>
 @endsection
 
 

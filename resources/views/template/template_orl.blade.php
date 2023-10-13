@@ -50,6 +50,8 @@
 
     <link rel="stylesheet" href="{{ asset('css/estilos_atencion_medica.css') }}?t=<?= time() ?>">
 
+	<!-- Select2 css -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
     <!-- fancy box -->
     <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
     <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
@@ -69,6 +71,7 @@
         }
 
     </style>
+    @yield('css-btn-autorizacion')
 </head>
 <body>
     @include('template.header')
@@ -116,7 +119,11 @@
 
     <!--Sidebars-->
     <script src="{{ asset('js/bs_canvas.js') }}"></script>
-
+	<!--SELECT 2-->
+    <script src="{{ asset('js/plugins/select2.full.min.js') }}"></script>
+    <!-- form-select-custom Js -->
+    <script src="{{ asset('js/pages/form-select-custom.js') }}"></script>
+    <!-- select2 css -->
 
     <!--Formularios Modals-->
     <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
@@ -232,6 +239,7 @@
     @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
     @yield('js-sidebar') {{-- seccion js side bar --}}
     @yield('js-lic') {{-- seccion js side bar --}}
+    @yield('page-script-btn-autorizacion')
 </body>
 
 </html>

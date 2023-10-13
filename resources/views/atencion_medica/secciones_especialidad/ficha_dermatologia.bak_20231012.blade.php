@@ -8,12 +8,6 @@
                     </li>
                 </ul>
             </div>
-             <!--ALERTA-->
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert"><strong>Solo el campo diagnóstico es obligatorio el resto es opcional</strong>
-                </div>
-            </div>
-
             <div class="col-sm-12 col-md-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_dermo') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
@@ -34,8 +28,8 @@
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="tit-gen">Ficha de atención general</h6>
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-0">
+                                            <h6 class="f-16 text-c-blue">Ficha de atención general</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -605,11 +599,11 @@
              <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-
+      
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
                             @include('general.secciones_ficha.seccion_receta_examen_comunes')
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-
+                 
                     </div>
                 </div>
             </div>
@@ -641,23 +635,11 @@
             });
 
             $('#descripcion_hipotesis').keyup(function(){
-                if($.trim(this.value) != '')
-                {
-                   if( lic_token != '' && lic_estado == 1)
-                    {
-                        $('.btn_agregar_medicamento').removeAttr("disabled");
-                        $('.btn_medicamento_pdf').removeAttr("disabled");
-                        $('.btn_agregar_examen').removeAttr("disabled");
-                        $('.btn_examenes_pdf').removeAttr("disabled");
-                    }
-                    else
-                    {
-                        $('.btn_agregar_medicamento').attr('disabled','disabled');
-                        $('.btn_medicamento_pdf').attr('disabled','disabled');
-                        $('.btn_agregar_examen').attr('disabled','disabled');
-                        $('.btn_examenes_pdf').attr('disabled','disabled');
-                    }
-
+                if($.trim(this.value) != ''){
+                    $('.btn_agregar_medicamento').removeAttr("disabled");
+                    $('.btn_medicamento_pdf').removeAttr("disabled");
+                    $('.btn_agregar_examen').removeAttr("disabled");
+                    $('.btn_examenes_pdf').removeAttr("disabled");
                 }
                 else
                 {
@@ -715,13 +697,7 @@
                     return false;
                 }
             });
-			/** MENSAJE*/
-			    /** CARGAR mensaje */
-				$('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
-				$('#mensaje_ficha').show();
-				setTimeout(function(){
-					$('#mensaje_ficha').hide();
-				}, 5000);
+
             /** cronico */
             /** autocomplete de medicamentos generales */
             $("#nombre_medicamentocron").autocomplete({
@@ -3616,14 +3592,6 @@
         /** FIN CRONICO */
 
     </script>
-
-    <!--ALERTA DE ATENCION-->
-    <script>
-    window.setTimeout(function() {
-        $(".alert-atencion").fadeTo(500, 0).slideUp(600, function(){
-            $(this).remove();
-        });
-    }, 5000);
 @endsection
 
 

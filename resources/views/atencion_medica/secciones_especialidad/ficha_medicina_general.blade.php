@@ -2,8 +2,13 @@
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">
+             <!--ALERTA-->
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert"><strong>Solo el campo diagnóstico es obligatorio el resto es opcional</strong>
+                </div>
+            </div>
             <div class="col-sm-12 col-md-12">
-                <form action="{{ route('fichaAtencion.registrar_ficha_cg') }}" method="POST">
+                <form action="{{ route('fichaAtencion.registrar_ficha') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
                     <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
@@ -22,191 +27,170 @@
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
                         <div class="tab-pane fade show active" id="atencion_cirugia_gen" role="tabpanel" aria-labelledby="atencion_cirugia_gen-tab">
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-12 mt-3 mb-0">
-                                            <h6 class="f-20 text-c-blue mb-2">Ficha de Atención Medicina General</h6>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <!--Formulario / Menor de edad-->
-                                        @include('atencion_medica.generales.seccion_menor')
-                                        <!--Cierre: Formulario / Menor de edad-->
-
-                                        <!--Formulario / Motivo de la Consulta-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card-a">
-                                                <div class="card-header-a" id="mot-consulta">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#mot-consulta-c" aria-expanded="false" aria-controls="mot-consulta-c">
-                                                        Motivo de la consulta
-                                                    </button>
-                                                </div>
-                                                <div id="mot-consulta-c" class="collapse show" aria-labelledby="mot-consulta" data-parent="#mot-consulta">
-                                                    <div class="card-body-aten-a">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-8">
-
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->motivo != null)
-                                                                    <label class="floating-label-activo-sm">Descripción</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" data-input_igual="descripcion_consulta_orl" name="descripcion_consulta" id="descripcion_consulta" onchange="cargarIgual('descripcion_consulta')">{{ $fichaAtencion->motivo }}</textarea>
-                                                                @else
-                                                                    <label class="floating-label-activo-sm">Descripción</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" data-input_igual="descripcion_consulta_orl" name="descripcion_consulta" id="descripcion_consulta" onchange="cargarIgual('descripcion_consulta')">{!! old('descripcion_consulta') !!}</textarea>
-                                                                @endif
-
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-
-                                                                <div class="form-group fill">
-                                                                    <label class="floating-label-activo-sm">Seleccione
-                                                                        Consulta Control</label>
-                                                                    <select class="form-control form-control-sm" id="id_consulta_control" name="id_consulta_control">
-                                                                        <option>Seleccione</option>
-                                                                    </select>
-                                                                </div>
-
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--Cierre: Formulario /Motivo de la Consulta-->
-
-                                         <!--Formulario / Antecedentes-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card-a">
-                                                <div class="card-header-a" id="antecedentes">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#antecedentes-c" aria-expanded="false" aria-controls="antecedentes-c">
-                                                        Antecedentes
-                                                    </button>
-                                                </div>
-                                                <div id="antecedentes-c" class="collapse show" aria-labelledby="antecedentes" data-parent="#antecedentes">
-                                                    <div class="card-body-aten-a">
-                                                        <div class="form-row">
-                                                            @if (isset($fichaAtencion) && $fichaAtencion->antecedentes != null)
-                                                            <div class="form-group col-md-12">
-                                                                <label class="floating-label-activo-sm">Antecedentes</label>
-                                                                <input type="text" class="form-control form-control-sm" name="descripcion_antecedentes" id="descripcion_antecedentes" value="{{ $fichaAtencion->antecedentes }}">
-                                                            </div>
-                                                            @else
-                                                            <div class="form-group col-md-12">
-                                                                <label class="floating-label-activo-sm">Antecedentes</label>
-                                                                <textarea class="form-control form-control-sm" name="descripcion_antecedentes" id="descripcion_antecedentes">{!! old('descripcion_antecedentes') !!}</textarea>
-                                                            </div>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--Cierre: Formulario / Antecedentes-->
-
-                                        <!--Formulario / Examen Físico-->
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="card">
-                                                <div class="card-a">
-                                                    <div class="card-header-a" id="examen-fisico">
-                                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#examen-fisico-c" aria-expanded="false" aria-controls="examen-fisico-c">
-                                                            Examen físico
-                                                        </button>
-                                                    </div>
-                                                    <div id="examen-fisico-c" class="collapse show" aria-labelledby="examen-fisico" data-parent="#examen-fisico">
-                                                        <div class="card-body-aten-a">
-                                                            <div class="form-row">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->examen_fisico !=
-                                                                null)
-                                                                <div class="form-group col-md-12">
-                                                                    <label class="floating-label-activo-sm">Descripción</label>
-                                                                    <input class="form-control caja-texto form-control-sm" name="descripcion_examen_fisico" id="descripcion_examen_fisico" value="{{ $fichaAtencion->examen_fisico }}">
-                                                                </div>
-                                                                @else
-                                                                <div class="form-group col-md-12">
-                                                                    <label class="floating-label-activo-sm">Descripción</label>
-                                                                    <textarea class="form-control form-control-sm" name="descripcion_examen_fisico" id="descripcion_examen_fisico">{!! old('descripcion_examen_fisico') !!}</textarea>
-                                                                </div>
-                                                                @endif
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--Cierre: Formulario / Examen Físico-->
-
-                                        <!--Formulario / Signos vitales y otros-->
-                                        @include('atencion_medica.generales.signos_vitales')
-                                        <!--Cierre: Formulario / Signos vitales y otros-->
-                                       @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
-
-                                        <!--Formulario / Diagnóstico-->
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="card-a">
-                                                <div class="card-header-a" id="diagnostico">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagnostico-c" aria-expanded="false" aria-controls="diagnostico-c">
-                                                        Diagnóstico
-                                                    </button>
-                                                </div>
-                                                <div id="diagnostico-c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
-                                                    <div class="card-body-aten-a">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-6">
-                                                                @if (isset($fichaAtencion) &&
-                                                                $fichaAtencion->hipotesis_diagnostico != null)
-                                                                <label class="floating-label-activo-sm">Hipótesis
-                                                                    Diagnóstica</label>
-                                                                <input type="text" class="form-control form-control-sm"  data-input_igual="hip-diag_spec,lic_descripcion_hipotesis" name="descripcion_hipotesis" id="descripcion_hipotesis" value="{{ $fichaAtencion->hipotesis_diagnostico }}" onchange="cargarIgual('descripcion_hipotesis')">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Hipótesis
-                                                                    Diagnóstica</label>
-                                                                <input type="text" class="form-control form-control-sm" data-input_igual="hip-diag_spec,lic_descripcion_hipotesis"  name="descripcion_hipotesis" id="descripcion_hipotesis" value="{!! old('descripcion_hipotesis') !!}" onchange="cargarIgual('descripcion_hipotesis')">
-                                                                @endif
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                @if (isset($fichaAtencion) && $fichaAtencion->diagnostico_ce10 != null)
-                                                                <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
-                                                                <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie_esp,lic_descripcion_cie" name="descripcion_cie" id="descripcion_cie" value="{{ $fichaAtencion->diagnostico_ce10 }}" onchange="cargarIgual('descripcion_cie')">
-                                                                <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie_esp,lic_descripcion_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="{{ $fichaAtencion->diagnostico_ce10 }}" onchange="cargarIgual('id_descripcion_cie')">
-                                                                @else
-                                                                <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
-                                                                <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie_esp,lic_descripcion_cie" name="descripcion_cie" id="descripcion_cie" value="{!! old('descripcion_cie') !!}" onchange="cargarIgual('descripcion_cie')">
-                                                                <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie_esp,lic_descripcion_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="{!! old('id_descripcion_cie') !!}" onchange="cargarIgual('id_descripcion_cie')">
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--Cierre: Formulario / Diagnóstico-->
-
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                                                    @include('general.secciones_ficha.seccion_receta_examen_comunes')
-                                                    <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                         <div class="col-md-12 text-center">
-                                                <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
-                                                <input type="submit" class="btn btn-purple mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
-                                            </div>
-
-
-                                    </div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <h6 class="tit-gen">Ficha de atención medicina general</h6>
                                 </div>
                             </div>
+                            <div class="row">
+                                <!--Formulario / Menor de edad-->
+                                @include('general.secciones_ficha.seccion_menor')
+                                <!--Cierre: Formulario / Menor de edad-->
 
+                                <!--MOTIVO DE LA CONSULTA-->
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-a">
+                                        <div class="card-header-a" id="mot-consulta">
+                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#mot-consulta-c" aria-expanded="false" aria-controls="mot-consulta-c">
+                                                Motivo de la consulta
+                                            </button>
+                                        </div>
+                                        <div id="mot-consulta-c" class="collapse show" aria-labelledby="mot-consulta" data-parent="#mot-consulta">
+                                            <div class="card-body-aten-a">
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                        @if (isset($fichaAtencion) && $fichaAtencion->motivo != null)
+                                                            <label class="floating-label-activo-sm">Descripción</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" data-input_igual="descripcion_consulta_orl" name="descripcion_consulta" id="descripcion_consulta" onchange="cargarIgual('descripcion_consulta')">{{ $fichaAtencion->motivo }}</textarea>
+                                                        @else
+                                                            <label class="floating-label-activo-sm">Descripción</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" data-input_igual="descripcion_consulta_orl" name="descripcion_consulta" id="descripcion_consulta" onchange="cargarIgual('descripcion_consulta')">{!! old('descripcion_consulta') !!}</textarea>
+                                                        @endif
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                        <label class="floating-label-activo-sm">Anamnesis</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" data-input_igual="descripcion_consulta_orl" name="anamnesis_consulta" id="anamnesis_consulta"></textarea>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                            <label class="floating-label-activo-sm">Seleccione
+                                                                Consulta Control</label>
+                                                            <select class="form-control form-control-sm" id="id_consulta_control" name="id_consulta_control">
+                                                                <option>Seleccione</option>
+                                                            </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Cierre: Formulario /Motivo de la Consulta-->
+
+                                 <!--Formulario / Antecedentes
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-a">
+                                        <div class="card-header-a" id="antecedentes">
+                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#antecedentes-c" aria-expanded="false" aria-controls="antecedentes-c">
+                                                Antecedentes
+                                            </button>
+                                        </div>
+                                        <div id="antecedentes-c" class="collapse show" aria-labelledby="antecedentes" data-parent="#antecedentes">
+                                            <div class="card-body-aten-a">
+                                                <div class="form-row">
+                                                    @if (isset($fichaAtencion) && $fichaAtencion->antecedentes != null)
+                                                    <div class="form-group col-md-12">
+                                                        <label class="floating-label-activo-sm">Antecedentes</label>
+                                                        <input type="text" class="form-control form-control-sm" name="descripcion_antecedentes" id="descripcion_antecedentes" value="{{ $fichaAtencion->antecedentes }}">
+                                                    </div>
+                                                    @else
+                                                    <div class="form-group col-md-12">
+                                                        <label class="floating-label-activo-sm">Antecedentes</label>
+                                                        <textarea class="form-control form-control-sm" name="descripcion_antecedentes" id="descripcion_antecedentes">{!! old('descripcion_antecedentes') !!}</textarea>
+                                                    </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                Cierre: Formulario / Antecedentes-->
+
+                                <!--EXAMEN FÍSICO-->
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-a">
+                                        <div class="card-header-a" id="examen-fisico">
+                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#examen-fisico-c" aria-expanded="false" aria-controls="examen-fisico-c">
+                                                Examen físico
+                                            </button>
+                                        </div>
+                                        <div id="examen-fisico-c" class="collapse show" aria-labelledby="examen-fisico" data-parent="#examen-fisico">
+                                            <div class="card-body-aten-a">
+                                                <div class="form-row">
+                                                    @if (isset($fichaAtencion) && $fichaAtencion->examen_fisico !=
+                                                    null)
+                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <label class="floating-label-activo-sm">Descripción</label>
+                                                        <input class="form-control caja-texto form-control-sm" name="descripcion_examen_fisico" id="descripcion_examen_fisico" value="{{ $fichaAtencion->examen_fisico }}">
+                                                    </div>
+                                                    @else
+                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <label class="floating-label-activo-sm">Descripción</label>
+                                                        <textarea class="form-control form-control-sm" name="descripcion_examen_fisico" id="descripcion_examen_fisico">{!! old('descripcion_examen_fisico') !!}</textarea>
+                                                    </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--SIGNOS VITALES Y OTROS-->
+                                @include('general.secciones_ficha.signos_vitales')
+                                <!--Cierre: Formulario / Signos vitales y otros-->
+                                @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+
+                                <!--DIAGNÓSTICO E INDICACIONES-->
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-a">
+                                        <div class="card-header-a" id="diagnostico">
+                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagnostico-c" aria-expanded="false" aria-controls="diagnostico-c">
+                                                Diagnóstico
+                                            </button>
+                                        </div>
+                                        <div id="diagnostico-c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
+                                            <div class="card-body-aten-a">
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="floating-label-activo-sm">Diagnóstico</label>
+                                                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,diagnostico_cons" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" >
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
+                                                        @if (isset($fichaAtencion->diagnostico_ce10))
+                                                            <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie,lic_descripcion_cie" name="descripcion_cie_esp" id="descripcion_cie_esp" value="{{ $fichaAtencion->diagnostico_ce10 }}" onchange="cargarIgual('descripcion_cie_esp')">
+                                                            <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie,lic_descripcion_cie" name="id_descripcion_cie_esp" id="id_descripcion_cie_esp" value="{{ $fichaAtencion->diagnostico_ce10 }}" onchange="cargarIgual('id_descripcion_cie_esp')">
+                                                        @else
+                                                            <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie,lic_descripcion_cie" name="descripcion_cie_esp" id="descripcion_cie_esp" value="" onchange="cargarIgual('descripcion_cie_esp')">
+                                                            <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie,lic_descripcion_cie" name="id_descripcion_cie_esp" id="id_descripcion_cie_esp" value="" onchange="cargarIgual('id_descripcion_cie_esp')">
+                                                        @endif
+                                                    </div>
+                                                    <div class="form-group col-sm-12 ol-md-12 col-lg-12 col-xl-12">
+                                                        <label class="floating-label-activo-sm">Indicaciones</label>
+                                                        <input type="text" class="form-control form-control-sm" name="indicacion" id="indicacion">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                               <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="card">
+										<div class="card-body">
+											<!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+											@include('general.secciones_ficha.seccion_receta_examen_comunes')
+											<!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+										</div>
+									</div>
+								</div>
+                                <!--AÑADIR MEDICAMENTOS - EXAMENES-->
+                                <div class="col-md-12 text-center">
+                                    <input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
+                                    <input type="submit" class="btn btn-success  mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
+                                </div>
+							</div>
                         </div>
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
 </div>
@@ -221,11 +205,23 @@
     <script>
         $(document).ready(function() {
             $('#descripcion_hipotesis').keyup(function(){
-                if($.trim(this.value) != ''){
-                    $('.btn_agregar_medicamento').removeAttr("disabled");
-                    $('.btn_medicamento_pdf').removeAttr("disabled");
-                    $('.btn_agregar_examen').removeAttr("disabled");
-                    $('.btn_examenes_pdf').removeAttr("disabled");
+                if($.trim(this.value) != '')
+                {
+                   if( lic_token != '' && lic_estado == 1)
+                    {
+                        $('.btn_agregar_medicamento').removeAttr("disabled");
+                        $('.btn_medicamento_pdf').removeAttr("disabled");
+                        $('.btn_agregar_examen').removeAttr("disabled");
+                        $('.btn_examenes_pdf').removeAttr("disabled");
+                    }
+                    else
+                    {
+                        $('.btn_agregar_medicamento').attr('disabled','disabled');
+                        $('.btn_medicamento_pdf').attr('disabled','disabled');
+                        $('.btn_agregar_examen').attr('disabled','disabled');
+                        $('.btn_examenes_pdf').attr('disabled','disabled');
+                    }
+
                 }
                 else
                 {
@@ -259,7 +255,13 @@
                     return false;
                 }
             });
-
+				/** MENSAJE*/
+			    /** CARGAR mensaje */
+				$('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
+				$('#mensaje_ficha').show();
+				setTimeout(function(){
+					$('#mensaje_ficha').hide();
+				}, 5000);
             /** autocomplete de medicamentos generales */
             $("#nombre_medicamentocron").autocomplete({
                 source: function(request, response) {
@@ -1831,4 +1833,12 @@
 
 
     </script>
+
+    <!--ALERTA DE ATENCION-->
+    <script>
+    window.setTimeout(function() {
+        $(".alert-atencion").fadeTo(500, 0).slideUp(600, function(){
+            $(this).remove();
+        });
+    }, 5000);
 @endsection

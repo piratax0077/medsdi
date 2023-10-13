@@ -623,6 +623,11 @@ Route::group([
     /** INICIO DE LICENCIA */
     Route::get('/aprobar/licencia/aceptar', [App\Http\Controllers\LicenciaAprobacionController::class, 'licenciaEvaluacion'])->name('profesional.licencia.evalueacion.aceptar');
     Route::get('/aprobar/licencia/rechazar', [App\Http\Controllers\LicenciaAprobacionController::class, 'licenciaEvaluacion'])->name('profesional.licencia.evalueacion.rechazar');
+    Route::get('/licencia/autorizacion/soliciar', [App\Http\Controllers\LicenciaAprobacionController::class, 'solicitarAutorizacion'])->name('profesional.licencia.solicitar');
+    Route::get('/licencia/autorizacion/validar', [App\Http\Controllers\LicenciaAprobacionController::class, 'validarAutorizacion'])->name('profesional.licencia.validar');
+    Route::get('/licencia/autorizacion/cancelar', [App\Http\Controllers\LicenciaAprobacionController::class, 'cancelarAutorizacion'])->name('profesional.licencia.cancelar');
+
+
 
 });
 
