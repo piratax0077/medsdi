@@ -167,7 +167,7 @@
 
                                     <div class="col-sm-6 mt-2">
                                         <div class="form-group">
-                                            <label class="floating-label-activo-sm">Ingrese Nombre Medicamento</label>
+                                            <label class="floating-label">Ingrese Nombre Medicamento</label>
                                             <input type="text" id="manual_nombre_medicamento_ficha_dental" name="manual_nombre_medicamento_ficha_dental" class="form-control form-control-sm">
                                             <input type="hidden" id="manual_id_medicamento_ficha_dental" name="manual_id_medicamento_ficha_dental" value="0">
                                             <input type="hidden" id="med_faltante" value="">
@@ -176,30 +176,14 @@
 
                                     <div class="col-sm-6 mt-2">
                                         <div class="form-group">
-                                            <label class="floating-label-activo-sm">Farmaco</label>
+                                            <label class="floating-label">Farmaco</label>
                                             <input type="text" id="manual_nombre_composicion_farmaco" name="manual_nombre_composicion_farmaco" class="form-control form-control-sm">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6 mt-2">
-                                        <div class="form-group">
-                                            <label class="floating-label-activo-sm">Tipo Control</label>
-                                            <select name="manual_tipo_control" id="manual_tipo_control" class="form-control form-control-sm">
-                                                <option value="">Seleccione</option>
-                                                @if($receta_control)
-                                                    @foreach ($receta_control as $control)
-                                                        @if($control->cod_control !== 8)
-                                                            <option value="{{ $control->cod_control }}">{{ $control->descripcion }}</option>
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6 mt-2">
                                         <div class="form-group fill">
-                                            <label class="floating-label-activo-sm">Ingrese Presentación</label>
+                                            <label class="floating-label">Ingrese Presentación</label>
                                             <input type="text" id="manual_dosis_medicamento_ficha_dental" name="manual_dosis_medicamento_ficha_dental" class="form-control form-control-sm">
 
                                         </div>
@@ -207,14 +191,14 @@
 
                                     <div class="col-sm-6 mt-2">
                                         <div class="form-group fill">
-                                            <label class="floating-label-activo-sm">Ingrese Posología</label>
+                                            <label class="floating-label">Ingrese Posología</label>
                                             <input type="text" id="manual_frecuencia_medicamento_ficha_dental" name="manual_frecuencia_medicamento_ficha_dental" class="form-control form-control-sm">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6 mt-2">
                                         <div class="form-group fill">
-                                            <label class="floating-label-activo-sm">Vía de Administración</label>
+                                            <label class="floating-label">Vía de Administración</label>
                                             <select class="form-control form-control-sm" id="manual_via_administracion_ficha_dental" name="manual_via_administracion_ficha_dental" onchange="validar_via_administracion_manual_sdi();">
                                                 <option value="0">Seleccione</option>
                                                 <option value="1">V&iacute;a Oral</option>
@@ -231,14 +215,14 @@
                                             </select>
                                         </div>
                                         <div class="form-group fill" id="div_manual_observaciones_via_administracion_ficha_dental" style="display: none;">
-                                            <label class="floating-label-activo-sm">Otra vía de Administración</label>
+                                            <label class="floating-label">Otra vía de Administración</label>
                                             <input type="text" id="manual_observaciones_via_administracion_ficha_dental" name="manual_observaciones_via_administracion_ficha_dental" class="form-control form-control-sm " disabled >
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-3 mt-2">
+                                    <div class="col-sm-6 mt-2">
                                         <div class="form-group fill">
-                                            <label class="floating-label-activo-sm">Periodo</label>
+                                            <label class="floating-label">Periodo</label>
                                             <select class="form-control form-control-sm" id="manual_periodo_ficha_dental" name="manual_periodo_ficha_dental" onchange="validar_periodo_manual_sdi();">
                                                 <option value="0">Seleccione</option>
                                                 <option value="1">SOS</option>
@@ -255,38 +239,16 @@
                                             </select>
                                         </div>
                                         <div class="form-group fill" id="div_manual_observaciones_periodo_ficha_dental" style="display: none;">
-                                            <label class="floating-label-activo-sm">Otro Periodo</label>
+                                            <label class="floating-label">Otro Periodo</label>
                                             <input type="text" id="manual_observaciones_periodo_ficha_dental" name="manual_observaciones_periodo_ficha_dental" class="form-control form-control-sm " disabled >
                                         </div>
                                     </div>
 
-                                    <input type="hidden" id="manual_cantidad_comprar" name="manual_cantidad_comprar" value="">
-
-                                    <div class="col-sm-3  mt-2">
-                                        <label class="floating-label-activo-sm">Cantidad a Comprar</label>
-                                        <select name="manual_cantidad_numero" id="manual_cantidad_numero" class="form-control form-control-sm" onchange="cargarCantidadComprar('manual_cantidad_numero', 'manual_cantidad_tipo_unidad', 'manual_cantidad_comprar')">
-                                            <option value="1">(1) Uno</option>
-                                            <option value="2">(2) Dos</option>
-                                            <option value="3">(3) Tres</option>
-                                            <option value="4">(4) Cuatro</option>
-                                            <option value="5">(5) Cinco</option>
-                                            <option value="6">(6) Seis</option>
-                                            <option value="7">(7) Siete</option>
-                                            <option value="8">(8) Ocho</option>
-                                            <option value="9">(9) Nueve</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-3  mt-2">
-                                        <label class="floating-label-activo-sm">Presentación</label>
-                                        <select name="manual_cantidad_tipo_unidad" id="manual_cantidad_tipo_unidad" class="form-control form-control-sm" onchange="cargarCantidadComprar('manual_cantidad_numero', 'manual_cantidad_tipo_unidad', 'manual_cantidad_comprar')">
-                                            <option value="Ampolla(s)">Ampolla(s)</option>
-                                            <option value="Caja(s)">Caja(s)</option>
-                                            <option value="Franco(s)">Franco(s)</option>
-                                            <option value="Unidad(es)">Unidad(es)</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-3  mt-2">
-                                        <label id="manual_cantidad_comprar_label"></label>
+                                    <div class="col-sm-6 mt-2">
+                                        <div class="form-group fill">
+                                            <label class="floating-label">Cantidad a Comprar</label>
+                                            <input type="text" id="manual_cantidad_comprar" name="manual_cantidad_comprar" class="form-control form-control-sm">
+                                        </div>
                                     </div>
 
                                     <div class="col-sm-12">
@@ -313,90 +275,32 @@
 
 							<!--TAB 3-->
 							<div class="tab-pane fade show" id="rec_magistral" role="tabpanel" aria-labelledby="rec_magistral_tab">
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        <button type="button" onclick="agregar_componente();" class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> Agregar Componente a Receta Magistral</button>
-                                    </div>
-                                </div>
+                                <div class="form-row">
 
-                                <div class="row">
-                                    <div class="col-sm-6 mt-2">
+                                    <div class="col-sm-12 mt-2">
                                         <div class="form-group">
-                                            <label class="floating-label-activo-sm">Tipo Control</label>
-                                            <select name="magistral_tipo_control" id="magistral_tipo_control" class="form-control form-control-sm">
-                                                <option value="">Seleccione</option>
-                                                @if($receta_control)
-                                                    @foreach ($receta_control as $control)
-                                                        @if($control->cod_control == 8)
-                                                            <option value="{{ $control->cod_control }}" selected>{{ $control->descripcion }}</option>
-                                                        @else
-                                                            @if(intval($control->cod_control) != 6 && intval($control->cod_control) != 7)
-                                                                <option value="{{ $control->cod_control }}">{{ $control->descripcion }}</option>
-                                                            @endif
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </select>
+                                            <label class="floating-label">Ingrese Los Compuestos y cantidad</label>
+                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="magistral_nombre_medicamento_ficha_dental" id="magistral_nombre_medicamento_ficha_dental"></textarea>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-6 mt-2">
-                                        <label class="label">Si Receta Magistra Posee Elementos con Control Debe seleccionar el Tipo de Control Adecuado</label>
-                                    </div>
-                                </div>
-
-                                <div class="div_componentes">
-                                    <div class="form-row componente">
-                                        <div class="col-sm-8 mt-6">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Ingrese los Compuestos</label>
-                                                <input class="form-control form-control-sm" type="text" name="magistral_nombre_medicamento_ficha_dental" id="magistral_nombre_medicamento_ficha_dental" value="" placeholder="">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4 mt-6">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Ingrese la cantidad</label>
-                                                <input class="form-control form-control-sm" type="text" name="magistral_cantidad_medicamento_ficha_dental" id="magistral_cantidad_medicamento_ficha_dental" value="" placeholder="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-row ">
-                                    <div class="col-sm-4 mt-2">
-                                        <label class="floating-label-activo-sm">Presentación</label>
-                                        <select name="magistral_cantidad_tipo_unidad" id="magistral_cantidad_tipo_unidad" class="form-control form-control-sm" onchange="cargarCantidadComprar('magistral_cantidad_numero', 'magistral_cantidad_tipo_unidad', 'magistral_cantidad_comprar')">
-                                            <option value="Cápsulas de gelatina duras">Cápsulas de gelatina duras</option>
-                                            <option value="Colirios">Colirios</option>
-                                            <option value="Comprimidos">Comprimidos</option>
-                                            <option value="Cremas">Cremas</option>
-                                            <option value="Enemas">Enemas</option>
-                                            <option value="Granulados">Granulados</option>
-                                            <option value="Jeringas precargadas">Jeringas precargadas</option>
-                                            <option value="Papelillos">Papelillos</option>
-                                            <option value="Polvos">Polvos</option>
-                                            <option value="Pomadas">Pomadas</option>
-                                            <option value="Soluciones">Soluciones</option>
-                                            <option value="Supositorios">Supositorios</option>
-                                            <option value="Suspensiones">Suspensiones</option>
-                                            <option value="Viales">Viales</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-4 mt-2">
                                         <div class="form-group fill">
-                                            <label class="floating-label-activo-sm">CSP</label>
-                                            <input type="text" id="magistral_dosis_medicamento_ficha_dental" name="magistral_dosis_medicamento_ficha_dental" class="form-control form-control-sm" placeholder="">
+                                            <label class="floating-label">Presentacion</label>
+                                            <input type="text" id="magistral_dosis_medicamento_ficha_dental" name="magistral_dosis_medicamento_ficha_dental" class="form-control form-control-sm">
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4 mt-2">
+                                    <div class="col-sm-6 mt-2">
                                         <div class="form-group fill">
-                                            <label class="floating-label-activo-sm">Ingrese Posología</label>
+                                            <label class="floating-label">Ingrese Posología</label>
                                             <input type="text" id="magistral_frecuencia_medicamento_ficha_dental" name="magistral_frecuencia_medicamento_ficha_dental" class="form-control form-control-sm">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6 mt-2">
                                         <div class="form-group fill">
-                                            <label class="floating-label-activo-sm">Vía de Administración</label>
+                                            <label class="floating-label">Vía de Administración</label>
                                             <select class="form-control form-control-sm" id="magistral_via_administracion_ficha_dental" name="magistral_via_administracion_ficha_dental" onchange="validar_via_administracion_manual_sdi();">
                                                 <option value="0">Seleccione</option>
                                                 <option value="1">V&iacute;a Oral</option>
@@ -413,14 +317,14 @@
                                             </select>
                                         </div>
                                         <div class="form-group fill" id="div_magistral_observaciones_via_administracion_ficha_dental" style="display: none;">
-                                            <label class="floating-label-activo-sm">Otra vía de Administración</label>
+                                            <label class="floating-label">Otra vía de Administración</label>
                                             <input type="text" id="magistral_observaciones_via_administracion_ficha_dental" name="magistral_observaciones_via_administracion_ficha_dental" class="form-control form-control-sm " disabled >
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6 mt-2">
                                         <div class="form-group fill">
-                                            <label class="floating-label-activo-sm">Periodo</label>
+                                            <label class="floating-label">Periodo</label>
                                             <select class="form-control form-control-sm" id="magistral_periodo_ficha_dental" name="magistral_periodo_ficha_dental" onchange="validar_periodo_manual_sdi();">
                                                 <option value="0">Seleccione</option>
                                                 <option value="1">SOS</option>
@@ -437,60 +341,17 @@
                                             </select>
                                         </div>
                                         <div class="form-group fill" id="div_magistral_observaciones_periodo_ficha_dental" style="display: none;">
-                                            <label class="floating-label-activo-sm">Otro Periodo</label>
+                                            <label class="floating-label">Otro Periodo</label>
                                             <input type="text" id="magistral_observaciones_periodo_ficha_dental" name="magistral_observaciones_periodo_ficha_dental" class="form-control form-control-sm " disabled >
                                         </div>
                                     </div>
 
-                                    {{-- <div class="col-sm-12 mt-2">
+                                    <div class="col-sm-6 mt-2">
                                         <div class="form-group fill">
-                                            <input type="hidden" id="magistral_cantidad_comprar" name="magistral_cantidad_comprar" value="">
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <label class="floating-label-activo-sm">Cantidad a Despachar</label>
-                                                    <select name="magistral_cantidad_numero" id="magistral_cantidad_numero" class="form-control form-control-sm" onchange="cargarCantidadComprar('magistral_cantidad_numero', 'magistral_cantidad_tipo_unidad', 'magistral_cantidad_comprar')">
-                                                        <option value="1">(1) Una Unidad</option>
-                                                        <option value="2">(2) Dos Unidad</option>
-                                                        <option value="3">(3) Tres Unidad</option>
-                                                        <option value="4">(4) Cuatro Unidad</option>
-                                                        <option value="5">(5) Cinco Unidad</option>
-                                                        <option value="6">(6) Seis Unidad</option>
-                                                        <option value="7">(7) Siete Unidad</option>
-                                                        <option value="8">(8) Ocho Unidad</option>
-                                                        <option value="9">(9) Nueve Unidad</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <label class="floating-label-activo-sm">Presentación</label>
-                                                    <select name="magistral_cantidad_tipo_unidad" id="magistral_cantidad_tipo_unidad" class="form-control form-control-sm" onchange="cargarCantidadComprar('magistral_cantidad_numero', 'magistral_cantidad_tipo_unidad', 'magistral_cantidad_comprar')">
-                                                        <option value="Cápsulas de gelatina duras">Cápsulas de gelatina duras</option>
-                                                        <option value="Colirios">Colirios</option>
-                                                        <option value="Comprimidos">Comprimidos</option>
-                                                        <option value="Cremas">Cremas</option>
-                                                        <option value="Enemas">Enemas</option>
-                                                        <option value="Granulados">Granulados</option>
-                                                        <option value="Jeringas precargadas">Jeringas precargadas</option>
-                                                        <option value="Papelillos">Papelillos</option>
-                                                        <option value="Polvos">Polvos</option>
-                                                        <option value="Pomadas">Pomadas</option>
-                                                        <option value="Soluciones">Soluciones</option>
-                                                        <option value="Supositorios">Supositorios</option>
-                                                        <option value="Suspensiones">Suspensiones</option>
-                                                        <option value="Viales">Viales</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <label id="magistral_cantidad_comprar_label"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> --}}
-                                    {{-- <div class="col-sm-6 mt-2">
-                                        <div class="form-group fill">
-                                            <label class="floating-label-activo-sm">Cantidad a Despachar</label>
+                                            <label class="floating-label">Cantidad a Despachar</label>
                                             <input type="text" id="magistral_cantidad_comprar" name="magistral_cantidad_comprar" class="form-control form-control-sm">
                                         </div>
-                                    </div> --}}
+                                    </div>
 
                                     <div class="col-sm-12">
                                         <div class="row">
@@ -505,14 +366,14 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
-                                                <button type="button" onclick="indicar_medicamento_magistral_sdi()" class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> Agregar Medicamento Magistral</button>
+                                                <button type="button" onclick="indicar_medicamento_magistral_sdi()"
+                                                    class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> Agregar Medicamento Magistral</button>
                                             </div>
                                         </div>
                                     </div>
 
                                 </div>
                             </div>
-
                             <!--DIV DE TABLA -->
                             <div class="row">
                                 <div class="col-sm-12">
@@ -523,21 +384,14 @@
                                             <table id="tabla_medicamento_cirugia_sdi" class="table table-bordered table-xs">
                                                 <thead>
                                                     <tr>
-                                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_tipo_control</td>
-                                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_producto</td>
-                                                        <td class="text-center align-middle text-wrap">Medicamentos</td>
-                                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">farmaco</td>
-                                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_presentacion</td>
-                                                        <td class="text-center align-middle text-wrap">Presentación</td>
-                                                        <td class="text-center align-middle text-wrap" hidden="hidden">id_receta_dosis</td>
-                                                        <td class="text-center align-middle text-wrap hidden">Posología</td>
-                                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_via_administracion</td>
-                                                        <td class="text-center align-middle text-wrap">Vía Adm.</td>
-                                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_periodo</td>
-                                                        <td class="text-center align-middle text-wrap">Periodo</td>
-                                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">uso_cronico</td>
-                                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">cantidad_compra</td>
-                                                        <td class="text-center align-middle text-wrap">Comprar</td>
+                                                        <th class="text-center align-middle hidden" hidden="hidden">id_producto</th>
+                                                        <th class="text-center align-middle hidden" hidden="hidden">uso_cronico</th>
+                                                        <th class="text-center align-middle">Medicamento</th>
+                                                        <th class="text-center align-middle">Presentación</th>
+                                                        <th class="text-center align-middle">Posología</th>
+                                                        <th class="text-center align-middle">Vía Adm.</th>
+                                                        <th class="text-center align-middle">Periodo</th>
+                                                        <th class="text-center align-middle">Comprar</th>
                                                         <th class="text-center align-middle">Eliminar</th>
                                                     </tr>
                                                 </thead>
@@ -559,6 +413,23 @@
                             <!-- DIV MEDICAMENTO FALTANTE-->
                             <div class="row">
                                 <div class="col-md-12">
+                                    {{-- <div class="col-sm-12 mt-3 mb-2"> --}}
+                                        {{-- <div class="custom-control custom-switch"> --}}
+                                            {{-- <input type="checkbox" class="custom-control-input" id="no_existe_switch"> --}}
+                                            {{-- <label class="custom-control-label text-primary" for="no_existe_switch"><strong><u>Sugerencia de medicamento.</u></strong></label> --}}
+                                        {{-- </div> --}}
+                                    {{-- </div> --}}
+                                    {{-- <div class="row" id="no_existe" style="display:none"> --}}
+                                        {{-- <div class="col-sm-12 col-md-12"> --}}
+                                            {{-- <p>Ayudanos a mejorar nuestro módulo de recetas ingresando el nombre del medicamento o dispositivo faltante</p> --}}
+                                        {{-- </div> --}}
+                                        {{-- <div class="col-sm-8 col-md-8"> --}}
+                                            {{-- <input class="form-control form-control-sm" id="med_faltante" type="text" placeholder="Nombre del medicamento o dispositivo"> --}}
+                                        {{-- </div> --}}
+                                        {{-- <div class="col-sm-4 col-md-4"> --}}
+                                            {{-- <button type="button" class="btn btn-info" onclick="enviar_medicamento_faltante_sdi();">Enviar Solicitud</button> --}}
+                                        {{-- </div> --}}
+                                    {{-- </div> --}}
                                     <div class="col-sm-12 mt-3 mb-2">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input" id="ranking_recetas_switch">
@@ -607,8 +478,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -705,8 +576,6 @@
     function i_medicamento()
     {
         ver_medicamento_ficha_medica_sdi();
-        cargarCantidadComprar('manual_cantidad_numero', 'manual_cantidad_tipo_unidad', 'manual_cantidad_comprar');
-        cargarCantidadComprar('magistral_cantidad_numero', 'magistral_cantidad_tipo_unidad', 'magistral_cantidad_comprar');
         $('#indicar_recetario').modal({backdrop: 'static', keyboard: false});
     }
 
@@ -772,6 +641,7 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
     };
+
 
     function getFrecuencia_sdi()
     {
@@ -848,7 +718,7 @@
                     select_cant_comp.find('option').remove();
                     select_cant_comp.append('<option value="0">Seleccione</option>');
                     $(data).each(function(i, v) { // indice, valor
-                        select_cant_comp.append('<option value="' + v.cantidad + '">' + v.cant +'</option>');
+                        select_cant_comp.append('<option value="' + v.id + '">' + v.cant +'</option>');
                     })
                     select_cant_comp.append('<option value="999">Otra Cantidad</option>');
                 } else {
@@ -913,32 +783,17 @@
     {
 
         let nombre_medicamento_ficha_dental = $('#nombre_medicamento_ficha_dental').val();
-        let farmaco = $('#nombre_composicion_farmaco').html();
         let id_medicamento = $('#id_medicamento_ficha_dental').val();
         let id_tipo_control = $('#id_medicamento_tipo_control').val();
-
-        let id_dosis_medicamento_ficha_dental = $('#dosis_medicamento_ficha_dental').val();
         let dosis_medicamento_ficha_dental = $('#dosis_medicamento_ficha_dental option:selected').text();
-
-        let id_frecuencia_medicamento_ficha_dental = $('#frecuencia_medicamento_ficha_dental').val();
         let frecuencia_medicamento_ficha_dental = $('#frecuencia_medicamento_ficha_dental option:selected').text();
-
         let dosis_medicamento_ficha_dental_2 = $('#dosis_medicamento_ficha_dental_2').val();
         let frecuencia_medicamento_ficha_dental_2 = $('#frecuencia_medicamento_ficha_dental_2').val();
-
-        let id_via_administracion_ficha_dental = $('#via_administracion_ficha_dental').val();
         let via_administracion_ficha_dental = $('#via_administracion_ficha_dental option:selected').text();
-
         let observaciones_medicamento_ficha_dental = $('#observaciones_medicamento_ficha_dental').val();
-
-        let id_periodo_ficha_dental = $('#periodo_ficha_dental').val();
         let periodo_ficha_dental = $('#periodo_ficha_dental option:selected').text();
-
         let observaciones_periodo_ficha_dental = $('#observaciones_periodo_ficha_dental').val();
-
-        let id_cantidad_comprar = $('#cantidad_comprar').val();
         let cantidad_comprar = $('#cantidad_comprar option:selected').text();
-
         let otra_cantidad_a_comprar = $('#otra_cantidad_a_comprar').val();
 
 
@@ -1063,33 +918,17 @@
                 $('.medicamentos_sin_registros').remove()
 
                 var i = $('#tabla_medicamento_cirugia_sdi tr').length; //contador para asignar id al boton que borrara la fila
-
                 var fila = '<tr class="tabla_medicamento_cirugia_sdi" id="row' + i + '">' +
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_tipo_control + '</td>' +
-
                                 '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_medicamento + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + nombre_medicamento_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + farmaco + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_dosis_medicamento_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + dosis_medicamento_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_frecuencia_medicamento_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + frecuencia_medicamento_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_via_administracion_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + via_administracion_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_periodo_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + periodo_ficha_dental + '</td>' +
-
                                 '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + medicamento_uso_cronico + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_cantidad_comprar + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + nombre_medicamento_ficha_dental + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + dosis_medicamento_ficha_dental + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + frecuencia_medicamento_ficha_dental + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + via_administracion_ficha_dental + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + periodo_ficha_dental + '</td>' +
                                 '<td class="text-center align-middle text-wrap">' + cantidad_comprar + '</td>' +
-
                                 '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento_sdi(\'row' + i + '\');">Quitar</div></td>'+
-                            '</tr>';
+                            '</tr>'; //esto seria lo que contendria la fila
 
                 i++;
 
@@ -1264,7 +1103,8 @@
     function ver_medicamento_ficha_medica_sdi()
     {
 
-        let url = "{{ route('profesional.receta.ver') }}";
+        let url = "{{ route('detalle_receta.ver_medicamentos') }}";
+
 
         var _token = CSRF_TOKEN;
         var id_ficha = $('#id_fc').val();
@@ -1289,97 +1129,53 @@
                 console.log(data);
                 console.log('-----------------------');
                 var html = '';
+
                 html += '<thead>';
                 html += '    <tr>';
-                html += '        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_tipo_control</td>';
-                html += '        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_producto</td>';
-                html += '        <td class="text-center align-middle text-wrap">Medicamentos</td>';
-                html += '        <td class="text-center align-middle text-wrap hidden" hidden="hidden">Farmaco</td>';
-                html += '        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_presentacion</td>';
-                html += '        <td class="text-center align-middle text-wrap">Presentación</td>';
-                html += '        <td class="text-center align-middle text-wrap" hidden="hidden">id_receta_dosis</td>';
-                html += '        <td class="text-center align-middle text-wrap hidden">Posología</td>';
-                html += '        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_via_administracion</td>';
-                html += '        <td class="text-center align-middle text-wrap">Vía Adm.</td>';
-                html += '        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_periodo</td>';
-                html += '        <td class="text-center align-middle text-wrap">Periodo</td>';
-                html += '        <td class="text-center align-middle text-wrap hidden" hidden="hidden">uso_cronico</td>';
-                html += '        <td class="text-center align-middle text-wrap hidden" hidden="hidden">cantidad_compra</td>';
-                html += '        <td class="text-center align-middle text-wrap">Comprar</td>';
+                html += '        <th class="text-center align-middle hidden" hidden="hidden">id_producto</th>';
+                html += '        <th class="text-center align-middle hidden" hidden="hidden">uso_cronico</th>';
+                html += '        <th class="text-center align-middle">Medicamento</th>';
+                html += '        <th class="text-center align-middle">Presentación</th>';
+                html += '        <th class="text-center align-middle">Posología</th>';
+                html += '        <th class="text-center align-middle">Vía Adm.</th>';
+                html += '        <th class="text-center align-middle">Periodo</th>';
+                html += '        <th class="text-center align-middle">Comprar</th>';
                 html += '        <th class="text-center align-middle">Eliminar</th>';
                 html += '    </tr>';
                 html += '</thead>';
                 html += '<tbody>';
-
                 if(data.estado == 1)
                 {
-                    var i = 1;
+
                     $.each(data.registros, function(index, value)
                     {
-                        console.log(value);
-                        if(value.detalle.length > 0)
-                        {
-                            $.each(value.detalle, function(index_2, value_2)
-                            {
+                        {{--  var f_temp = (value.created_at).replace('T',' ').replace('Z','').replace('.000000','');
+                        var fecha = new Date(f_temp);
+                        fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear()+' '+fecha.getHours()+':'+fecha.getMinutes();  --}}
 
-                                html += '<tr class="tabla_medicamento_cirugia_sdi" id="row' + i + '">';
-                                html +=     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + value_2.id_tipo_control + '</td>';
-
-                                if(value_2.id_tipo_control == 8)
-                                {
-                                    html +=     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + value_2.producto + '</td>';
-
-                                    var data= value_2.producto;
-                                    arr = $.parseJSON(data);
-                                    var text_producto = '';
-                                    $.each(arr,function(key,value)
-                                    {
-                                        text_producto += ''+value.nombre+': '+value.cantidad+'<br/>';
-                                    });
-
-                                    html +=     '<td class="text-center align-middle text-wrap">' + text_producto + '</td>';
-                                }
-                                else
-                                {
-                                    html +=     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + value_2.id_producto + '</td>';
-                                    html +=     '<td class="text-center align-middle text-wrap">' + value_2.producto + '</td>';
-                                }
-
-                                html +=     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + value_2.farmaco + '</td>';
-
-                                html +=     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + value_2.id_presentacion + '</td>';
-                                html +=     '<td class="text-center align-middle text-wrap">' + value_2.presentacion + '</td>';
-
-                                html +=     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + value_2.id_receta_dosis + '</td>';
-                                html +=     '<td class="text-center align-middle text-wrap">' + value_2.posologia + '</td>';
-
-                                html +=     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + value_2.id_via_administracion + '</td>';
-                                html +=     '<td class="text-center align-middle text-wrap">' + value_2.via_administracion + '</td>';
-
-                                html +=     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + value_2.id_periodo + '</td>';
-                                html +=     '<td class="text-center align-middle text-wrap">' + value_2.periodo + '</td>';
-
-                                html +=     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + value_2.uso_cronico + '</td>';
-
-                                html +=     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + value_2.cantidad + '</td>';
-                                html +=     '<td class="text-center align-middle text-wrap">' + value_2.cantidad_compra + '</td>';
-
-                                html +=     '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento_sdi(\'row' + i + '\');">Quitar</div></td>';
-                                html += '</tr>';
-                                i++;
-                            });
-                        }
+                        html += '<tr class="tabla_medicamento_cirugia_sdi" id="row' + index + '">';
+                        html += '    <td class="text-center align-middle text-wrap hidden" hidden="hidden">'+value.id_articulo+'</td>';
+                        html += '    <td class="text-center align-middle text-wrap hidden" hidden="hidden">'+value.uso_cronico+'</td>';
+                        html += '    <td class="text-center align-middle text-wrap">'+value.producto+'</td>';
+                        html += '    <td class="text-center align-middle text-wrap">'+value.presentacion+'</td>';
+                        html += '    <td class="text-center align-middle text-wrap">'+value.posologia+'</td>';
+                        html += '    <td class="text-center align-middle text-wrap">'+value.via_administracion+'</td>';
+                        html += '    <td class="text-center align-middle text-wrap">'+value.periodo+'</td>';
+                        html += '    <td class="text-center align-middle text-wrap">'+value.cantidad_compra+'</td>';
+                        html += '    <td class="text-center align-middle text-wrap"><div name="remove" id="' + index +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento_sdi(\'row' + index + '\');">Quitar</div></td>';
+                        html += '</tr>';
                     });
+
                 }
                 else
                 {
+
                     html += '<tr class="medicamentos_sin_registros">';
-                    html += '    <td class="text-center align-middle " colspan="15">'+data.msj+'</td>';
+                    html += '    <td class="text-center align-middle " colspan="9">'+data.msj+'</td>';
                     html += '</tr>';
+
                 }
-
                 html += '</tbody>';
-
                 $('#tabla_medicamento_cirugia_sdi').html(html);
             }
         })
@@ -1414,30 +1210,14 @@
             if (i > 0) {
                 rol = {};
                 var data = $(this).find("td");
-
-                rol['id_tipo_control'] = $.trim($(data[0]).text().split("\n").join(""));//id_tipo_control
-
-                rol['id_producto'] = $.trim($(data[1]).text().split("\n").join(""));//id_medicamento
-                rol['producto'] = $.trim($(data[2]).text().split("\n").join(""));//nombre_medicamento_ficha_dental
-                rol['componente'] = $.trim($(data[3]).text().split("\n").join(""));//nombre_medicamento_ficha_dental
-
-                rol['id_dosis'] = $.trim($(data[4]).text().split("\n").join(""));//id_dosis_medicamento_ficha_dental
-                rol['dosis'] = $.trim($(data[5]).text().split("\n").join(""));//dosis_medicamento_ficha_dental
-
-                rol['id_posologia'] = $.trim($(data[6]).text().split("\n").join(""));//id_frecuencia_medicamento_ficha_dental
-                rol['posologia'] = $.trim($(data[7]).text().split("\n").join(""));//frecuencia_medicamento_ficha_dental
-
-                rol['id_via_administracion'] = $.trim($(data[8]).text().split("\n").join(""));//id_via_administracion_ficha_dental
-                rol['via_administracion'] = $.trim($(data[9]).text().split("\n").join(""));//via_administracion_ficha_dental
-
-                rol['id_periodo'] = $.trim($(data[10]).text().split("\n").join(""));//id_periodo_ficha_dental
-                rol['periodo'] = $.trim($(data[11]).text().split("\n").join(""));//periodo_ficha_dental
-
-                rol['uso_cronico'] = $.trim($(data[12]).text().split("\n").join(""));//medicamento_uso_cronico
-
-                rol['cantidad'] = $.trim($(data[13]).text().split("\n").join(""));//id_cantidad_comprar
-                rol['cantidad_comprar'] = $.trim($(data[14]).text().split("\n").join(""));//cantidad_comprar
-
+                rol["id_producto"] = $.trim($(data[0]).text().split("\n").join(""));
+                rol["uso_cronico"] = $.trim($(data[1]).text().split("\n").join(""));
+                rol["medicamento"] = $.trim($(data[2]).text().split("\n").join(""));
+                rol["presentacion"] = $.trim($(data[3]).text().split("\n").join(""));
+                rol["posologia"] = $.trim($(data[4]).text().split("\n").join(""));
+                rol["via_administracion"] = $.trim($(data[5]).text().split("\n").join(""));
+                rol["periodo"] = $.trim($(data[6]).text().split("\n").join(""));
+                rol["compra"] = $.trim($(data[7]).text().split("\n").join(""));
                 rows1.push(rol);
             }
         });
@@ -1453,67 +1233,69 @@
         var _token = CSRF_TOKEN;
 
 
-        // let url = "{{ route('detalle_receta.registro_medicamentos') }}";
-        let url = "{{ route('profesional.receta.registro') }}";
+        let url = "{{ route('detalle_receta.registro_medicamentos') }}";
         $.ajax({
-            url: url,
-            type: "post",
-            data: {
-                _token: _token,
-                medicamentos: JSON.stringify(rows1),
-                id_ficha: id_ficha_atencion,
-                id_ingreso_paciente: '0',
-                id_recuperacion: '0',
-                id_sala: '0',
-                id_profesional: id_profesional,
-                id_paciente: id_paciente,
-                id_lugar_atencion: id_lugar_atencion,
-            },
-        })
-        .done(function(data) {
-            console.log(data)
 
-            if (data != null) {
-
-                {{--  data = JSON.parse(data);  --}}
+                url: url,
+                type: "post",
+                data: {
+                    _token: _token,
+                    medicamentos: JSON.stringify(rows1),
+                    id_ficha: id_ficha_atencion,
+                    id_ingreso_paciente: '0',
+                    id_recuperacion: '0',
+                    id_sala: '0',
+                    id_profesional: id_profesional,
+                    id_paciente: id_paciente,
+                    id_lugar_atencion: id_lugar_atencion,
+                },
+            })
+            .done(function(data) {
                 console.log(data)
 
-                if(data.falla == '0'){
-                    swal({
-                        title: "Ingreso de medicamento(s).",
-                        text: 'Medicamentos registrados con Exito.',
-                        icon: "success",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    });
+                if (data != null) {
+
+                    {{--  data = JSON.parse(data);  --}}
+                    console.log(data)
+
+                    if(data.falla == '0'){
+                        swal({
+                            title: "Ingreso de medicamento(s).",
+                            text: 'Medicamentos registrados con Exito.',
+                            icon: "success",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Ingreso de medicamento(s).",
+                            text: 'Falla en el registro, Intente nuevamente.',
+                            icon: "warning",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        });
+                    }
                 }
                 else
                 {
                     swal({
                         title: "Ingreso de medicamento(s).",
-                        text: 'Falla en el registro, Intente nuevamente.',
-                        icon: "warning",
+                        text: 'Sin Retorno de Registro, Intente nuevamente.',
+                        icon: "error",
                         // buttons: "Aceptar",
                         //SuccessMode: true,
                     });
                 }
-            }
-            else
-            {
-                swal({
-                    title: "Ingreso de medicamento(s).",
-                    text: 'Sin Retorno de Registro, Intente nuevamente.',
-                    icon: "error",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
-                });
-            }
 
-        })
-        .fail(function(jqXHR, ajaxOptions, thrownError) {
-            console.log(jqXHR, ajaxOptions, thrownError)
-        });
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
     }
+
 
     {{-- MEDICAMENTO MANUAL --}}
     function validar_via_administracion_manual_sdi()
@@ -1552,22 +1334,13 @@
         let nombre_medicamento_ficha_dental = $('#manual_nombre_medicamento_ficha_dental').val();
         let id_medicamento = $('#manual_id_medicamento_ficha_dental').val();
         let farmaco = $('#manual_nombre_composicion_farmaco').val();
-        let tipo_control = $('#manual_tipo_control').val();
-
         let dosis_medicamento_ficha_dental = $('#manual_dosis_medicamento_ficha_dental').val();
         let frecuencia_medicamento_ficha_dental = $('#manual_frecuencia_medicamento_ficha_dental').val();
-
         let cantidad_comprar = $('#manual_cantidad_comprar').val();
-        let cantidad_numero_comprar = $('#manual_cantidad_numero').val();
-
-        let id_via_administracion_ficha_dental = $('#manual_via_administracion_ficha_dental').val();
         let via_administracion_ficha_dental = $('#manual_via_administracion_ficha_dental option:selected').text();
-
         let observaciones_medicamento_ficha_dental = $('#manual_observaciones_via_administracion_ficha_dental').val();
 
-        let id_periodo_ficha_dental = $('#manual_periodo_ficha_dental').val();
         let periodo_ficha_dental = $('#manual_periodo_ficha_dental option:selected').text();
-
         let observaciones_periodo_ficha_dental = $('#manual_observaciones_periodo_ficha_dental').val();
 
 
@@ -1595,12 +1368,6 @@
             {
                 valido = 1;
                 mensaje += 'Debe completar el campo Medicamento.\n';
-            }
-
-            if($.trim(tipo_control) == '0')
-            {
-                valido = 1;
-                mensaje += 'Debe completar el campo Tipo Control.\n';
             }
 
             if($.trim(farmaco) == '')
@@ -1663,60 +1430,23 @@
                 valido = 1;
                 mensaje += 'Debe completar el campo Cantidad a Comprar.\n';
             }
-            else
-            {
-                const regex = /\(\d+\) \w+ \w+/g;
-                if (!regex.test(cantidad_comprar))
-                {
-                    console.log('no cuadra');
-                    valido = 1;
-                    mensaje += 'El campo de Cantidad a Comprar no tiene el formato adecuado\n Ejemplo: (1) Una Caja.\n';
-                }
-                else
-                {
-                    console.log('correcto');
-                }
-            }
 
             if(valido == 0)
             {
                 $('.medicamentos_sin_registros').remove()
 
                 var i = $('#tabla_medicamento_cirugia_sdi tr').length; //contador para asignar id al boton que borrara la fila
-
-
-                // var text = cantidad_comprar;
-                // var inicio = text.indexOf('(')+1;
-                // var fin = text.indexOf(')');
-                // var cantidad_num = text.substring(inicio, fin);
-
-
                 var fila = '<tr class="tabla_medicamento_cirugia_sdi" id="row' + i + '">' +
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + tipo_control + '</td>' +
-
                                 '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_medicamento + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + nombre_medicamento_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + farmaco + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">0</td>' +
-                                '<td class="text-center align-middle text-wrap">' + dosis_medicamento_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">0</td>' +
-                                '<td class="text-center align-middle text-wrap">' + frecuencia_medicamento_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_via_administracion_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + via_administracion_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_periodo_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + periodo_ficha_dental + '</td>' +
-
                                 '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + medicamento_uso_cronico + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + cantidad_numero_comprar + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + nombre_medicamento_ficha_dental + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + dosis_medicamento_ficha_dental + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + frecuencia_medicamento_ficha_dental + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + via_administracion_ficha_dental + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + periodo_ficha_dental + '</td>' +
                                 '<td class="text-center align-middle text-wrap">' + cantidad_comprar + '</td>' +
-
                                 '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento_sdi(\'row' + i + '\');">Quitar</div></td>'+
-                            '</tr>';
+                            '</tr>'; //esto seria lo que contendria la fila
 
                 i++;
 
@@ -1748,8 +1478,10 @@
             {
                 swal({
                     title: "Ingreso de medicamento(s).",
-                    text: mensaje,
+                    text:mensaje,
                     icon: "error",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
                 });
             }
         }
@@ -1770,19 +1502,11 @@
 
         let id_medicamento = 0;
         let farmaco = '';
-        // let nombre_medicamento_ficha_dental = $('#magistral_nombre_medicamento_ficha_dental').val();
-
-        let tipo_control = $('#magistral_tipo_control').val();
-
+        let nombre_medicamento_ficha_dental = $('#magistral_nombre_medicamento_ficha_dental').val();
         let dosis_medicamento_ficha_dental = $('#magistral_dosis_medicamento_ficha_dental').val();
         let frecuencia_medicamento_ficha_dental = $('#magistral_frecuencia_medicamento_ficha_dental').val();
-
-        let id_via_administracion_ficha_dental = $('#magistral_via_administracion_ficha_dental').val();
         let via_administracion_ficha_dental = $('#magistral_via_administracion_ficha_dental option:selected').text();
-
         let observaciones_medicamento_ficha_dental = $('#magistral_observaciones_via_administracion_ficha_dental').val();
-
-        let id_periodo_ficha_dental = $('#magistral_periodo_ficha_dental').val();
         let periodo_ficha_dental = $('#magistral_periodo_ficha_dental option:selected').text();
         let observaciones_periodo_ficha_dental = $('#magistral_observaciones_periodo_ficha_dental').val();
         let cantidad_comprar = $('#magistral_cantidad_comprar').val();
@@ -1797,25 +1521,7 @@
             }
         });
 
-        var array_med = [];
-        var text_med = '';
-        $('.componente').each(function(key, elemento)
-        {
-            var nombre = $(elemento).find( '#magistral_nombre_medicamento_ficha_dental' ).val();
-            var cantidad = $(elemento).find( '#magistral_cantidad_medicamento_ficha_dental' ).val();
-
-            if(nombre == '' || cantidad == '')
-            {
-                valido = 1;
-                mensaje += 'Debe completar de forma correcto los Compuestos o Cantidades.\n';
-            }
-
-            array_med.push( {'nombre':nombre, 'cantidad':cantidad } );
-            text_med += ''+nombre+':'+cantidad+'<br>';
-        });
-
-
-        if($.inArray(text_med,lista_med) == -1)
+        if($.inArray(nombre_medicamento_ficha_dental,lista_med) == -1)
         {
 
             var medicamento_uso_cronico = 0;
@@ -1824,12 +1530,6 @@
 
             var valido = 0;
             var mensaje = '';
-
-            if($.trim(tipo_control) == '')
-            {
-                valido = 1;
-                mensaje += 'Debe seleccionar el Tipo de Control.\n';
-            }
 
             if($.trim(nombre_medicamento_ficha_dental) == '')
             {
@@ -1890,89 +1590,29 @@
                 valido = 1;
                 mensaje += 'Debe completar el campo Cantidad a Comprar.\n';
             }
-            else
-            {
-                const regex = /\(\d+\) \w+ \w+/g;
-                if (!regex.test(cantidad_comprar))
-                {
-                    console.log('no cuadra');
-                    valido = 1;
-                    mensaje += 'El campo de Cantidad a Comprar no tiene el formato adecuado\n Ejemplo: (1) Una Caja.\n';
-                }
-                else
-                {
-                    console.log('correcto');
-                }
-            }
-
-            console.log(valido);
-            console.log(mensaje);
 
             if(valido == 0)
             {
                 $('.medicamentos_sin_registros').remove()
 
                 var i = $('#tabla_medicamento_cirugia_sdi tr').length; //contador para asignar id al boton que borrara la fila
-
-                var text = cantidad_comprar;
-                var inicio = text.indexOf('(')+1;
-                var fin = text.indexOf(')');
-                var cantidad_num = text.substring(inicio, fin);
-
                 var fila = '<tr class="tabla_medicamento_cirugia_sdi" id="row' + i + '">' +
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + tipo_control + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + JSON.stringify(array_med) + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + text_med + '</td>' +
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden"></td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">0</td>' +
-                                '<td class="text-center align-middle text-wrap">' + dosis_medicamento_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">0</td>' +
-                                '<td class="text-center align-middle text-wrap">' + frecuencia_medicamento_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_via_administracion_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + via_administracion_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_periodo_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + periodo_ficha_dental + '</td>' +
-
+                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_medicamento + '</td>' +
                                 '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + medicamento_uso_cronico + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + cantidad_num + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + nombre_medicamento_ficha_dental + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + dosis_medicamento_ficha_dental + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + frecuencia_medicamento_ficha_dental + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + via_administracion_ficha_dental + '</td>' +
+                                '<td class="text-center align-middle text-wrap">' + periodo_ficha_dental + '</td>' +
                                 '<td class="text-center align-middle text-wrap">' + cantidad_comprar + '</td>' +
-
                                 '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento_sdi(\'row' + i + '\');">Quitar</div></td>'+
-                            '</tr>';
+                            '</tr>'; //esto seria lo que contendria la fila
 
                 i++;
 
-                console.log(fila);
-
                 $('#tabla_medicamento_cirugia_sdi tr:first').after(fila);
 
-                var html_comp = '';
-                html_comp += '<div class="form-row componente">';
-                html_comp += '    <div class="col-sm-8 mt-6">';
-                html_comp += '        <div class="form-group">';
-                html_comp += '            <label class="floating-label-activo-sm">Ingrese los Compuestos</label>';
-                html_comp += '            <input class="form-control form-control-sm" type="text" name="magistral_nombre_medicamento_ficha_dental" id="magistral_nombre_medicamento_ficha_dental" value="">';
-                html_comp += '        </div>';
-                html_comp += '    </div>';
-                html_comp += '    <div class="col-sm-4 mt-6">';
-                html_comp += '        <div class="form-group">';
-                html_comp += '            <label class="floating-label-activo-sm">Ingrese la cantidad</label>';
-                html_comp += '            <input class="form-control form-control-sm" type="text" name="magistral_cantidad_medicamento_ficha_dental" id="magistral_cantidad_medicamento_ficha_dental" value="">';
-                html_comp += '        </div>';
-                html_comp += '    </div>';
-                html_comp += '</div>';
-
-                $('.div_componentes').html('');
-                $('.div_componentes').html(html_comp);
-
-                $('#magistral_tipo_control').val('8');
-                $('#magistral_dosis_medicamento_ficha_dental').val('');
+                $('#magistral_nombre_medicamento_ficha_dental').val('');
                 $('#magistral_frecuencia_medicamento_ficha_dental').val('');
                 $('#magistral_via_administracion_ficha_dental').val('');
                 $('#magistral_observaciones_via_administracion_ficha_dental').val('');
@@ -2005,37 +1645,5 @@
             });
         }
     }
-
-    function agregar_componente()
-    {
-        var cant = $('.componente').length+1;
-        var html = '';
-        html += '<div class="form-row componente">';
-        html += '    <div class="col-sm-8 mt-6">';
-        html += '        <div class="form-group">';
-        html += '            <label class="floating-label-activo-sm">Ingrese los Compuestos</label>';
-        html += '            <input class="form-control form-control-sm" type="text" name="magistral_nombre_medicamento_ficha_dental" id="magistral_nombre_medicamento_ficha_dental" value="">';
-        html += '        </div>';
-        html += '    </div>';
-        html += '    <div class="col-sm-4 mt-6">';
-        html += '        <div class="form-group">';
-        html += '            <label class="floating-label-activo-sm">Ingrese la cantidad</label>';
-        html += '            <input class="form-control form-control-sm" type="text" name="magistral_cantidad_medicamento_ficha_dental" id="magistral_cantidad_medicamento_ficha_dental" value="">';
-        html += '        </div>';
-        html += '    </div>';
-        html += '</div>';
-
-        $('.div_componentes').append(html);
-    }
-
-    function cargarCantidadComprar(cantidad, unidad, input)
-    {
-        var valor = $('#'+cantidad).val();
-        var valor_text = $('#'+cantidad+' option:selected').text();
-        var unid = $('#'+unidad).val();
-        $('#'+input).val(valor_text+' '+unid);
-        $('#'+input+'_label').html(valor_text+' '+unid);
-    }
-
 </script>
 

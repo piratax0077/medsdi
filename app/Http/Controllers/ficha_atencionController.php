@@ -79,6 +79,7 @@ use App\Models\LogUsersDevices;
 use App\Models\NotificacionConfirmacion;
 use App\Models\PacientesDependientes;
 use App\Models\RecetaAudifono;
+use App\Models\RecetaControl;
 use App\Models\ResultadoExamen;
 use App\Models\TipoAntecedente;
 use App\Models\TipoInforme;
@@ -294,6 +295,8 @@ class ficha_atencionController extends Controller
             $direccion = null;
             $ciudad = null;
         }
+
+        $receta_control = RecetaControl::orderBy('Descripcion')->get();
 
         $fichaTipo = array();
 
@@ -559,7 +562,7 @@ class ficha_atencionController extends Controller
 
             /** examenes radiologicos */
             $examenes_radiologicos = '';
-			
+
 			/** CNS */
             $cns_tipo = CnsTipo::with(['CnsTipoTemplate' => function($query){
                                             $query->select('id', 'nombre', 'alias');
@@ -738,6 +741,24 @@ class ficha_atencionController extends Controller
             // ATENCIÓN PSICOLOGIA
             $ruta_blade = 'atencion_otros_prof.atencion_psicologia';
             // $fichaTipo = FichaOtorrinoTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+            $fichaTipo = '';
+            $examen = '';
+            $lista_examen_especial = '';
+
+            /** examenes de la especialidad */
+            $examenes_especialidad = '';
+
+            /** examenes radiologicos */
+            $examenes_radiologicos = '';
+        }
+		else if($profesional->id_tipo_especialidad == 12 )
+        {
+            // ATENCIÓN SIQUIATRIA
+            // 80 Psiquiatría General
+            // 81 Adicciones
+
+            $ruta_blade = 'atencion_medica.atencion_medica_siquiatria';
+
             $fichaTipo = '';
             $examen = '';
             $lista_examen_especial = '';
@@ -1037,7 +1058,7 @@ class ficha_atencionController extends Controller
         $especialidad = Especialidad::all();
 
 		$tipo_antecedente = TipoAntecedente::all();
-		
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1080,6 +1101,7 @@ class ficha_atencionController extends Controller
                 'cns_registros' => $cns_registros,
                 'resultado_examen' => $resultado_examen,
                 'tipo_antecedente' => $tipo_antecedente,
+                'receta_control' => $receta_control,
 
                 // 'ficha_ges' => $ges,
                 // 'direccion' => $direccion,
@@ -5121,7 +5143,7 @@ class ficha_atencionController extends Controller
             return back()->with('error', $mensaje)->withInput();
         }
     }
-	
+
     public function crear_licencia(Request $request)
     {
         $datos = array();
