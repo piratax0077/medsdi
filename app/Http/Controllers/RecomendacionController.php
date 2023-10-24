@@ -501,20 +501,20 @@ class RecomendacionController extends Controller
         $valido = 1;
         $filtros = array();
 
-        if(!empty($request->id_ficha_atencion))
-            $filtros[] = array('atencion', encrypt($request->id_ficha_atencion));
+        if(!empty($request->id_ficha))
+            $filtros[] = array('atencion', $request->id_ficha);
         if(!empty($request->id_ingreso_paciente))
-            $filtros[] = array('salida', encrypt($request->id_ingreso_paciente));
+            $filtros[] = array('salida', $request->id_ingreso_paciente);
         if(!empty($request->id_recuperacion))
-            $filtros[] = array('herir', encrypt($request->id_recuperacion));
+            $filtros[] = array('herir', $request->id_recuperacion);
         if(!empty($request->id_sala))
-            $filtros[] = array('cuadro', encrypt($request->id_sala));
+            $filtros[] = array('cuadro', $request->id_sala);
         if(!empty($request->id_paciente))
-            $filtros[] = array('activo', encrypt($request->id_paciente));
+            $filtros[] = array('activo', $request->id_paciente);
         if(!empty($request->id_profesional))
-            $filtros[] = array('aficionado', encrypt($request->id_profesional));
+            $filtros[] = array('aficionado', $request->id_profesional);
         if(!empty($request->id_tipo_control))
-            $filtros[] = array('control', encrypt($request->id_tipo_control));
+            $filtros[] = array('control', $request->id_tipo_control);
         if(!empty($request->token_doc))
             $filtros[] = array('cod_doc', $request->token_doc);
 

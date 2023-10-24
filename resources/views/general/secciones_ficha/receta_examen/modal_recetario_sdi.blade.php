@@ -349,13 +349,13 @@
                                         <div class="col-sm-8 mt-6">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Ingrese los Compuestos</label>
-                                                <input class="form-control form-control-sm" type="text" name="magistral_nombre_medicamento_ficha_dental" id="magistral_nombre_medicamento_ficha_dental" value="" placeholder="">
+                                                <input class="form-control form-control-sm" type="text" name="magistral_nombre_medicamento_ficha_dental" id="magistral_nombre_medicamento_ficha_dental" value="">
                                             </div>
                                         </div>
                                         <div class="col-sm-4 mt-6">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Ingrese la cantidad</label>
-                                                <input class="form-control form-control-sm" type="text" name="magistral_cantidad_medicamento_ficha_dental" id="magistral_cantidad_medicamento_ficha_dental" value="" placeholder="">
+                                                <input class="form-control form-control-sm" type="text" name="magistral_cantidad_medicamento_ficha_dental" id="magistral_cantidad_medicamento_ficha_dental" value="">
                                             </div>
                                         </div>
                                     </div>
@@ -363,7 +363,7 @@
                                 <div class="form-row ">
                                     <div class="col-sm-4 mt-2">
                                         <label class="floating-label-activo-sm">Presentación</label>
-                                        <select name="magistral_cantidad_tipo_unidad" id="magistral_cantidad_tipo_unidad" class="form-control form-control-sm" onchange="cargarCantidadComprar('magistral_cantidad_numero', 'magistral_cantidad_tipo_unidad', 'magistral_cantidad_comprar')">
+                                        <select name="magistral_dosis_medicamento_ficha_dental" id="magistral_dosis_medicamento_ficha_dental" class="form-control form-control-sm">
                                             <option value="Cápsulas de gelatina duras">Cápsulas de gelatina duras</option>
                                             <option value="Colirios">Colirios</option>
                                             <option value="Comprimidos">Comprimidos</option>
@@ -383,7 +383,7 @@
                                     <div class="col-sm-4 mt-2">
                                         <div class="form-group fill">
                                             <label class="floating-label-activo-sm">CSP</label>
-                                            <input type="text" id="magistral_dosis_medicamento_ficha_dental" name="magistral_dosis_medicamento_ficha_dental" class="form-control form-control-sm" placeholder="">
+                                            <input type="text" id="magistral_cantidad_comprar" name="magistral_cantidad_comprar" class="form-control form-control-sm" value="">
                                         </div>
                                     </div>
 
@@ -683,7 +683,6 @@
             {
                 $('#mensaje_uso_cronico').hide();
             }
-
         });
 
         {{--  mostrar ocultar mensaje de medicamento de uso cronico en receta de ficha  --}}
@@ -705,8 +704,6 @@
     function i_medicamento()
     {
         ver_medicamento_ficha_medica_sdi();
-        cargarCantidadComprar('manual_cantidad_numero', 'manual_cantidad_tipo_unidad', 'manual_cantidad_comprar');
-        cargarCantidadComprar('magistral_cantidad_numero', 'magistral_cantidad_tipo_unidad', 'magistral_cantidad_comprar');
         $('#indicar_recetario').modal({backdrop: 'static', keyboard: false});
     }
 
@@ -1770,7 +1767,6 @@
 
         let id_medicamento = 0;
         let farmaco = '';
-        // let nombre_medicamento_ficha_dental = $('#magistral_nombre_medicamento_ficha_dental').val();
 
         let tipo_control = $('#magistral_tipo_control').val();
 
@@ -1785,6 +1781,7 @@
         let id_periodo_ficha_dental = $('#magistral_periodo_ficha_dental').val();
         let periodo_ficha_dental = $('#magistral_periodo_ficha_dental option:selected').text();
         let observaciones_periodo_ficha_dental = $('#magistral_observaciones_periodo_ficha_dental').val();
+
         let cantidad_comprar = $('#magistral_cantidad_comprar').val();
         // $('#magistral_medicamento_uso_cronico').val();
 
@@ -1829,12 +1826,6 @@
             {
                 valido = 1;
                 mensaje += 'Debe seleccionar el Tipo de Control.\n';
-            }
-
-            if($.trim(nombre_medicamento_ficha_dental) == '')
-            {
-                valido = 1;
-                mensaje += 'Debe completar el campo Medicamento.\n';
             }
 
             if($.trim(dosis_medicamento_ficha_dental) == '')
@@ -1892,21 +1883,18 @@
             }
             else
             {
-                const regex = /\(\d+\) \w+ \w+/g;
-                if (!regex.test(cantidad_comprar))
-                {
-                    console.log('no cuadra');
-                    valido = 1;
-                    mensaje += 'El campo de Cantidad a Comprar no tiene el formato adecuado\n Ejemplo: (1) Una Caja.\n';
-                }
-                else
-                {
-                    console.log('correcto');
-                }
+                // const regex = /\(\d+\) \w+ \w+/g;
+                // if (!regex.test(cantidad_comprar))
+                // {
+                //     console.log('no cuadra');
+                //     valido = 1;
+                //     mensaje += 'El campo de Cantidad a Comprar no tiene el formato adecuado\n Ejemplo: (1) Una Caja.\n';
+                // }
+                // else
+                // {
+                //     console.log('correcto');
+                // }
             }
-
-            console.log(valido);
-            console.log(mensaje);
 
             if(valido == 0)
             {
@@ -1914,10 +1902,10 @@
 
                 var i = $('#tabla_medicamento_cirugia_sdi tr').length; //contador para asignar id al boton que borrara la fila
 
-                var text = cantidad_comprar;
-                var inicio = text.indexOf('(')+1;
-                var fin = text.indexOf(')');
-                var cantidad_num = text.substring(inicio, fin);
+                // var text = cantidad_comprar;
+                // var inicio = text.indexOf('(')+1;
+                // var fin = text.indexOf(')');
+                // var cantidad_num = text.substring(inicio, fin);
 
                 var fila = '<tr class="tabla_medicamento_cirugia_sdi" id="row' + i + '">' +
                                 '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + tipo_control + '</td>' +
@@ -1940,7 +1928,7 @@
 
                                 '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + medicamento_uso_cronico + '</td>' +
 
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + cantidad_num + '</td>' +
+                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">1</td>' +
                                 '<td class="text-center align-middle text-wrap">' + cantidad_comprar + '</td>' +
 
                                 '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento_sdi(\'row' + i + '\');">Quitar</div></td>'+
