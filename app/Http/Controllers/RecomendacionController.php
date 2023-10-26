@@ -746,6 +746,7 @@ class RecomendacionController extends Controller
                 }
 
                 /** ESPECIALIDAD OTORRINOLARINGOLOGÍA (AUDIFONOS) */
+                $recetaAudifonos = array();
                 $detalleOrlAudifono = RecetaAudifono::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
                 if($detalleOrlAudifono)
                 {
