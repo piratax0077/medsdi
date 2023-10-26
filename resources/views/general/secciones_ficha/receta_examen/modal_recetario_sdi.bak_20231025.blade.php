@@ -331,7 +331,7 @@
                                                             <option value="{{ $control->cod_control }}" selected>{{ $control->descripcion }}</option>
                                                         @else
                                                             @if(intval($control->cod_control) != 6 && intval($control->cod_control) != 7)
-                                                                {{-- <option value="{{ $control->cod_control }}">{{ $control->descripcion }}</option> --}}
+                                                                <option value="{{ $control->cod_control }}">{{ $control->descripcion }}</option>
                                                             @endif
                                                         @endif
                                                     @endforeach
@@ -520,7 +520,7 @@
                                         <!--**** Al agregar un medicamento, se debe cargar la tabla *****-->
                                         <!--Tabla-->
                                         <div class="table-responsive">
-                                            <table id="tabla_medicamento_cirugia_sdi" class="table table-bordered table-xs">
+                                            <table id="tabla_medicamento_cirugia_sdi" class="table table-bordered table-sm">
                                                 <thead>
                                                     <tr>
                                                         <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_tipo_control</td>
@@ -592,7 +592,7 @@
                                         <div class="col-sm-6">
                                             <div class="form-group fill">
                                                 <label class="floating-label">Tipo de control</label>
-                                                <select class="form-control form-control-sm" id="" name="">
+                                                <select class="form-control form-control-sm">
                                                     <option value="S" data-select2-id="0">Seleccione una opción</option>
                                                     <option value="1"> Control Psicotrópicos</option>
                                                     <option value="2"> Control Estupefacientes</option>
@@ -1361,7 +1361,7 @@
                                 html +=     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + value_2.cantidad + '</td>';
                                 html +=     '<td class="text-center align-middle text-wrap">' + value_2.cantidad_compra + '</td>';
 
-                                html +=     '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento_sdi(\'row' + i + '\');">Quitar</div></td>';
+                                html +=     '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger-light-c btn-xs btn_remove" onclick="eliminar_medicamento_sdi(\'row' + i + '\');">Quitar</div></td>';
                                 html += '</tr>';
                                 i++;
                             });

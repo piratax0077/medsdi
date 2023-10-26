@@ -23,7 +23,6 @@ class PdfController extends Controller
      */
     static function generarPDF($titulo, $detalle, $nombre, $template, $funcionalida = 'V')
     {
-
         ini_set('display_errors', '1');
         // return response($detalle)->header('Content-Type', 'application/json');
         $date = date('Y-m-d');

@@ -59,17 +59,17 @@
             <div class="modal-body">
                 <div class="row">
                     @if(!empty(session('lic_token')) && session('lic_estado') == 1)
-                        <div class="col-md-6 text-center">
+                        <div class="col-md-12 text-center">
                             <button class="btn btn-xs btn-success" id="modal_autorizacion_btn_solicitar" onclick="solicitar_autorizacion_licencia();" disabled>Abrir mis Talonarios de Receta y Licencia</button>
                         </div>
-                        <div class="col-md-6 text-center">
+                        <div class="col-md-12 text-center mt-3">
                             <button class="btn btn-xs btn-danger" id="modal_autorizacion_btn_cancelar" onclick="cancelar_autorizacion_licencia();" >Cerrar mis Talonarios de Receta y Licencia</button>
                         </div>
                     @else
-                        <div class="col-md-6 text-center">
+                        <div class="col-md-12 text-center ">
                             <button class="btn btn-xs btn-success" id="modal_autorizacion_btn_solicitar" onclick="solicitar_autorizacion_licencia();">Abrir mis Talonarios de Receta y Licencia</button>
                         </div>
-                        <div class="col-md-6 text-center">
+                        <div class="col-md-12 text-center mt-3">
                             <button class="btn btn-xs btn-danger" id="modal_autorizacion_btn_cancelar" onclick="cancelar_autorizacion_licencia();" disabled>Cerrar mis Talonarios de Receta y Licencia</button>
                         </div>
                     @endif
