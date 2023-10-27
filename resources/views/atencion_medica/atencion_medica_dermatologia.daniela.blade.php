@@ -4,6 +4,7 @@
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
+
             <!--Header-->
             <div class="page-header">
                 <div class="page-block">
@@ -32,6 +33,7 @@
                 </div>
             </div>
             <!--Cierre: Header-->
+
             <!-- TAB ATENCIÓN -->
             <div class="user-profile user-card pt-0">
                 <div class="card-body py-0">
@@ -42,9 +44,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
-                                     <li class="nav-item">
+                                    <li class="nav-item">
 										@if(!empty(session('lic_token')) && session('lic_estado') == 1)
-										<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
+										    <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
 										@else
 											<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>
 										@endif
@@ -76,6 +78,7 @@
                 </div>
             </div>
             <!-- tab general-->
+
             <!--Contenido de tab-->
             <div class="row">
                 <div class="col-md-12">

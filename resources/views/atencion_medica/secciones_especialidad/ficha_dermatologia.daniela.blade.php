@@ -1,7 +1,7 @@
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="col-sm-12 col-md-12">
                 <ul class="nav nav-tabs-secciones mb-3 mt-3" id="dermato" role="tablist">
                     <li class="nav-item-secciones">
                         <a class="nav-secciones active text-uppercase" id="atencion_derma-tab" data-toggle="tab" href="#atencion_derma" role="tab" aria-controls="atencion_derma" aria-selected="true">Atención Especialidad</a>
@@ -17,33 +17,37 @@
                 <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
             </div>
 
-            <form action="{{ route('fichaAtencion.registrar_ficha_dermo') }}" method="POST">
-                <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
-                <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
-                <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
-                <input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
-                <input type="hidden" name="id_fc" value="{{ $id_ficha_atencion }}" id="id_fc">
-                <input type="hidden" name="id_paciente_fc" value="{{ $paciente->id }}" id="id_paciente_fc">
-                <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
-                <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
-                <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
-                <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <form action="{{ route('fichaAtencion.registrar_ficha_dermo') }}" method="POST">
+                    <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
+                    <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
+                    <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
+                    <input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
+                    <input type="hidden" name="id_fc" value="{{ $id_ficha_atencion }}" id="id_fc">
+                    <input type="hidden" name="id_paciente_fc" value="{{ $paciente->id }}" id="id_paciente_fc">
+                    <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
+                    <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
+                    <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
+                    <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
 
-                @csrf
-
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    @csrf
                     <div class="tab-content" id="derma-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
                         <div class="tab-pane fade show active" id="atencion_derma" role="tabpanel" aria-labelledby="atencion_derma-tab">
                             <div class="row">
+                                <!--FORMULARIOS-->
+
                                 <!--Formulario / Menor de edad-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0">
                                     @include('general.secciones_ficha.seccion_menor')
                                 </div>
-                                <!--Motivo consulta-->
+                                <!--Cierre: Formulario / Menor de edad-->
+
+                                <!--MOTIVO CONSULTA-->
                                 @include('general.secciones_ficha.motivo')
                                 <!--Motivo consulta-->
-                                {{-- Imagenes Toma de Biópsia --}}
+
+                                {{-- INICIO Imagenes Toma de Biopsia --}}
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
                                         <div class="card-header-a" id="imagenes">
@@ -52,41 +56,35 @@
                                             </button>
                                         </div>
                                         <div id="imagenes_c" class="collapse show" aria-labelledby="motivo" data-parent="#imagenes">
-                                            <div class="card-body-aten-a pb-1">
-                                                <div class="form-row">
-                                                    <!--IMAGENES-->
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <div class="form-row">
-                                                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 mt-2">
-                                                                <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</p>
-                                                                <div id="img_cons_dermato_pre-c" class="collapse show" aria-labelledby="img_cons_dermato_pre" data-parent="#img_cons_dermato_pre">
-                                                                    <div class="dropzone" id="mis-imagenes-cons-dermato-pre" action="{{ route('profesional.imagen.carga') }}"></div>
-                                                                </div>
+                                            <div class="card-body-aten-a">
+                                                <div class="form-row pb-2">
+                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 mt-2">
+                                                        <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</p>
+                                                        <div id="img_cons_dermato_pre-c" class="collapse show" aria-labelledby="img_cons_dermato_pre" data-parent="#img_cons_dermato_pre">
+                                                            <div class="dropzone" id="mis-imagenes-cons-dermato-pre" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 mt-2">
+                                                        <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</p>
+                                                        <div id="img_cons_dermato_post-c" class="collapse show" aria-labelledby="img_cons_dermato_post" data-parent="#img_cons_dermato_post">
+                                                            <div class="dropzone" id="mis-imagenes-cons-dermato-post" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                        <div class="form-group mt-3">
+                                                            <input type="hidden" name="biopsia_dermat" id="biopsia_dermat" value="">
+                                                            <div class="custom-control custom-switch">
+                                                                <input type="checkbox" class="custom-control-input" onchange="biopsia('dermat');" id="biopsia_check_dermat" name="biopsia_check_dermat" value="">>
+                                                                <label class="custom-control-label" for="biopsia_check_dermat">Biopsia</label>
                                                             </div>
-
-                                                            <div class="col-sm-4 mt-2">
-                                                                <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</p>
-                                                                <div id="img_cons_dermato_post-c" class="collapse show" aria-labelledby="img_cons_dermato_post" data-parent="#img_cons_dermato_post">
-                                                                    <div class="dropzone" id="mis-imagenes-cons-dermato-post" action="{{ route('profesional.imagen.carga') }}"></div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                <div class="form-group mt-3">
-                                                                    <input type="hidden" name="biopsia_dermat" id="biopsia_dermat" value="">
-                                                                    <div class="custom-control custom-switch mb-3">
-                                                                        <input type="checkbox" class="custom-control-input" onchange="biopsia('dermat');" id="biopsia_check_dermat" name="biopsia_check_dermat" value="">
-                                                                        <label for="biopsia_check_dermat" class="custom-control-label">Biopsia</label>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" for="mot_zona_bp"> Zona y Motivo</label>
-                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="mot_zona_bp" id="mot_zona_bp"></textarea>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label  class="floating-label-activo-sm" for="obs_result_biopsia"> Observaciones y Resultado</label>
-                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_result_biopsia" id="obs_result_biopsia"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Zona y Motivo</label>
+                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="motivo_cons" id="motivo_cons"></textarea>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Observaciones y Resultado</label>
+                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_result_biopsia" id="obs_result_biopsia"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -94,6 +92,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{-- CIERRE Imagenes Toma de Biopsia --}}
+
                                 <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
@@ -103,7 +103,7 @@
                                             </button>
                                         </div>
                                         <div id="exam_esp_c" class="collapse" aria-labelledby="exam_esp" data-parent="#exam_esp">
-                                            <div class="card-body-aten-a pb-2">
+                                            <div class="card-body-aten-a">
                                                 <div id="form-dermato">
                                                     <div class="row">
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -118,10 +118,10 @@
                                                                     <a class="nav-link-aten text-reset" id="derma_exfol_tab" data-toggle="tab" href="#derma_exfol" role="tab" aria-controls="derma_exfol" aria-selected="true">Exfoliación Quimica</a>
                                                                 </li>
                                                                 <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="derma_derma_tab" data-toggle="tab" href="#derma_derma" role="tab" aria-controls="derma_derma" aria-selected="false">Dermabración Dermoplaning</a>
+                                                                    <a class="nav-link-aten text-reset" id="derma_derma_tab" data-toggle="tab" href="#derma_derma" role="tab" aria-controls="derma_derma" aria-selected="false">Dermabración / Dermoplaning</a>
                                                                 </li>
                                                                 <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="derma_laser_tab" data-toggle="tab" href="#derma_laser" role="tab" aria-control="derma_laser" aria-selected="false">Cirugia Láser</a>
+                                                                    <a class="nav-link-aten text-reset" id="derma_laser_tab" data-toggle="tab" href="#derma_laser" role="tab" aria-control="derma_laser" aria-selected="false">Cirugía Láser</a>
                                                                 </li>
                                                                 <li class="nav-item">
                                                                     <a class="nav-link-aten text-reset" id="derma_otro_tab" data-toggle="tab" href="#derma_otro" role="tab" aria-control="derma_otro" aria-selected="false">Otro tratamiento</a>
@@ -129,20 +129,20 @@
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="row pb-2">
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                             <div class="tab-content" id="dermato_adulto">
-                                                                <!--ELIMINACIÓN DE CICATRICES-->
+                                                                <!--EXAMEN  GEN-->
                                                                 <div class="tab-pane fade show active" id="derma_cicatriz" role="tabpanel" aria-labelledby="derma_cicatriz_tab">
-                                                                    <div  id="formulario_tto_dermico">
+                                                                    <form id="formulario_tto_dermico">
                                                                         <div class="form-row">
                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <h6 class="t-aten"> ELIMINACIÓN DE CICATRICES </h6>
+                                                                                <h6 class="t-aten">Eliminación de cicatrices </h6>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-row">
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm" for="elim_cicat">Tipo de Procedimiento</label>
+                                                                                <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
                                                                                 <select class="form-control form-control-sm" name="elim_cicat" id="elim_cicat">
                                                                                     <option value = "0">Seleccione una opción</option>
                                                                                     <option value = "1">Dermoabrasión</option>
@@ -158,40 +158,40 @@
                                                                                 </select>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm" for="desc_elim_cicat">Descripción </label>
+                                                                                <label class="floating-label-activo-sm">Descripción </label>
                                                                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="desc_elim_cicat" id="desc_elim_cicat"></textarea>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm"for="obs_elim_cica"> Observaciones</label>
+                                                                                <label class="floating-label-activo-sm">Observaciones</label>
                                                                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_elim_cica" id="obs_elim_cica"></textarea>
                                                                             </div>
                                                                             <!--IMAGENES-->
-                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
                                                                                 <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</p>
                                                                                 <div id="imagenes_elim_cicat_pre-c" class="collapse show" aria-labelledby="imagenes_elim_cicat_pre" data-parent="#imagenes_elim_cicat_pre">
                                                                                     <div class="dropzone" id="mis-imagenes-elim_cicar_pre" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
                                                                                 <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</p>
                                                                                 <div id="imagenes_elim_cicat_post-c" class="collapse show" aria-labelledby="imagenes_elim_cicat_post" data-parent="#imagenes_elim_cicat_post">
                                                                                     <div class="dropzone" id="mis-imagenes-elim-cicat-post" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
+                                                                    </form>
                                                                 </div>
-                                                                <!--TTO PIEL DAÑADA-->
+                                                                <!--TTO. PIEL DAÑADA-->
                                                                 <div class="tab-pane fade show" id="derma_piel_dan" role="tabpanel" aria-labelledby="derma_piel_dan_tab">
-                                                                    <div id="formulario_piel_danada">
+                                                                    <form id="formulario_piel_danada">
                                                                         <div class="form-row">
                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <h6 class="t-aten">TRATAMIENTO DE PIEL DAÑADA</h6>
+                                                                                <h6 class="t-aten">Tratamiento de piel dañada</h6>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-row">
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm" for="proc_piel_danada"> Tipo de Procedimiento </label>
+                                                                                <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
                                                                                 <select class="form-control form-control-sm" name="proc_piel_danada" id="proc_piel_danada">
                                                                                     <option value = "0">Seleccione una opción</option>
                                                                                     <option value = "1">Toxina botulínica tipo A</option>
@@ -204,40 +204,40 @@
                                                                                 </select>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm" for="proc_piel_danada_desc">Descripción </label>
+                                                                                <label class="floating-label-activo-sm">Descripción </label>
                                                                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="proc_piel_danada_desc" id="proc_piel_danada_desc"></textarea>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm" for="proc_piel_danada_obs">Observaciones</label>
+                                                                                <label class="floating-label-activo-sm">Observaciones</label>
                                                                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="proc_piel_danada_obs" id="proc_piel_danada_obs"></textarea>
                                                                             </div>
                                                                             <!--IMAGENES-->
-                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
                                                                                 <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</p>
                                                                                 <div id="proc_piel_danada_img_pre-c" class="collapse show" aria-labelledby="proc_piel_danada_img_pre" data-parent="#proc_piel_danada_obs_img_pre">
                                                                                     <div class="dropzone" id="mis-imagenes-proc-piel-danada-img-pre" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
                                                                                 <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</p>
                                                                                 <div id="proc_piel_danada_img_post-c" class="collapse show" aria-labelledby="proc_piel_danada_img_post" data-parent="#proc_piel_danada_img_post">
                                                                                     <div class="dropzone" id="mis-imagenes-proc-piel-danada-img-post" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
+                                                                    </form>
                                                                 </div>
-                                                                <!--EXFOLIACIÓN QUIMÍCA-->
+                                                                <!--EXFOLIACIÓN QUÍMICA-->
                                                                 <div class="tab-pane fade show" id="derma_exfol" role="tabpanel" aria-labelledby="derma_exfol_tab">
-                                                                    <div id="formulario_rinofibro">
+                                                                    <form id="formulario_rinofibro">
                                                                         <div class="form-row">
                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <h6 class="t-aten">EXFOLIACIÓN QUÍMICA</h6>
+                                                                               <h6 class="t-aten">Exfoliación química</h6>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-row">
-                                                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                                                                                <label class="floating-label-activo-sm" for="exfoliacion_proc">Motivo Procedimiento </label>
+                                                                            <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                                                <label class="floating-label-activo-sm">Motivo Procedimiento </label>
                                                                                 <select class="form-control form-control-sm" name="exfoliacion_proc" id="exfoliacion_proc">
                                                                                     <option value = "0">Seleccione una opción</option>
                                                                                     <option value = "1">Corregir el color (pigmento) desigual de la piel</option>
@@ -248,8 +248,8 @@
                                                                                     <option value = "6">Otro</option>
                                                                                 </select>
                                                                             </div>
-                                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                                                                                <label class="floating-label-activo-sm" for="exfoliacion_comp">Compuesto</label>
+                                                                           <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                                                <label class="floating-label-activo-sm">Compuesto</label>
                                                                                 <select class="form-control form-control-sm" name="exfoliacion_comp" id="exfoliacion_comp">
                                                                                     <option value = "0">Seleccione una opción</option>
                                                                                     <option value = "1">Alfahidroxiácidos</option>
@@ -257,33 +257,33 @@
                                                                                     <option value = "3">fenol</option>
                                                                                 </select>
                                                                             </div>
-                                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                                                                                <label class="floating-label-activo-sm" for="exfoliacion_desc">Descripción </label>
+                                                                            <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                                                <label class="floating-label-activo-sm">Descripción </label>
                                                                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="exfoliacion_desc" id="exfoliacion_desc"></textarea>
                                                                             </div>
-                                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                                                                                <label class="floating-label-activo-sm" for="exfoliacion_obs">Observaciones</label>
+                                                                            <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                                                <label class="floating-label-activo-sm">Observaciones</label>
                                                                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="exfoliacion_obs" id="exfoliacion_obs"></textarea>
                                                                             </div>
                                                                             <!--IMAGENES-->
-                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
                                                                                 <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</p>
                                                                                 <div id="imagenes_exfoliacion_pre-c" class="collapse show" aria-labelledby="imagenes_exfoliacion_pre" data-parent="#imagenes_exfoliacion_pre">
                                                                                     <div class="dropzone" id="mis-imagenes-imagenes-exfoliacion-pre" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
                                                                                 <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</p>
                                                                                 <div id="imagenes_exfoliacion_post-c" class="collapse show" aria-labelledby="imagenes_exfoliacion_post" data-parent="#imagenes_exfoliacion_post">
                                                                                     <div class="dropzone" id="mis-imagenes-imagenes-exfoliacion-post" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
+                                                                    </form>
                                                                 </div>
                                                                 <!--DERMABRASIÓN / DERMOPLANING-->
                                                                 <div class="tab-pane fade show" id="derma_derma" role="tabpanel" aria-labelledby="derma_derma_tab">
-                                                                    <div id="formulario_rinofibro">
+                                                                    <form id="formulario_rinofibro">
                                                                         <div class="form-row">
                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                 <h6 class="t-aten">DERMABRASIÓN / DERMOPLANING</h6>
@@ -291,97 +291,97 @@
                                                                         </div>
                                                                         <div class="form-row">
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm" for="dermabras_proc">Tipo de Procedimiento </label>
+                                                                                <label class="floating-label-activo-sm">Tipo de Procedimiento </label>
                                                                                 <select class="form-control form-control-sm" name="dermabras_proc" id="dermabras_proc">
-                                                                                    <option value = "0">Seleccione una opción</option>
+                                                                                    <option>Seleccione una opción</option>
                                                                                     <option value = "1">DERMABRASIÓN</option>
                                                                                     <option value = "2">DERMOPLANING</option>
                                                                                 </select>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm" for="dermabras_desc">Descripción </label>
+                                                                                <label id="" name="" class="floating-label-activo-sm">Descripción </label>
                                                                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="dermabras_desc" id="dermabras_desc"></textarea>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm" for="dermabras_obs">Observaciones</label>
+                                                                                <label id="" name="" class="floating-label-activo-sm">Observaciones</label>
                                                                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="dermabras_obs" id="dermabras_obs"></textarea>
                                                                             </div>
                                                                             <!--IMAGENES-->
-                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
                                                                                 <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</p>
                                                                                 <div id="imagenes_dermabras_pre-c" class="collapse show" aria-labelledby="imagenes_dermabras_pre" data-parent="#imagenes_dermabras_pre">
                                                                                     <div class="dropzone" id="mis-imagenes-imagenes-dermabras-pre" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
                                                                                 <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</p>
                                                                                 <div id="imagenes_dermabras_post-c" class="collapse show" aria-labelledby="imagenes_dermabras_post" data-parent="#imagenes_dermabras_post">
                                                                                     <div class="dropzone" id="mis-imagenes-imagenes-dermabras-post" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
+                                                                    </form>
                                                                 </div>
-                                                                <!--CIRUGIA LÁSER-->
+                                                                <!--C.LÁSER-->
                                                                 <div class="tab-pane fade show" id="derma_laser" role="tabpanel" aria-labelledby="derma_laser_tab">
-                                                                    <div id="formulario_rinofibro">
+                                                                    <form id="formulario_rinofibro">
                                                                         <div class="form-row">
                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <h6 class="t-aten">CIRUGÍA LÁSER</h6>
+                                                                                <h6 class="t-aten">Cirugía láser</h6>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-row">
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                    <label class="floating-label-activo-sm" for="laser_motivo">Motivo Procedimiento</label>
+                                                                                <label class="floating-label-activo-sm">Motivo procedimiento</label>
                                                                                 <input type="text" class="form-control form-control-sm" name="laser_motivo" id="laser_motivo">
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm" for="laser_desc">Descripción </label>
+                                                                                <label class="floating-label-activo-sm">Descripción </label>
                                                                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="laser_desc" id="laser_desc"></textarea>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm" for="laser_obs">Observaciones</label>
+                                                                                <label class="floating-label-activo-sm">Observaciones</label>
                                                                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="laser_obs" id="laser_obs"></textarea>
                                                                             </div>
                                                                             <!--IMAGENES-->
-                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
                                                                                 <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</p>
                                                                                 <div id="imagenes_laser_pre-c" class="collapse show" aria-labelledby="imagenes_laser_pre" data-parent="#imagenes_laser_pre">
                                                                                     <div class="dropzone" id="mis-imagenes-imagenes-laser-pre" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                               <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</p>
+                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
+                                                                                <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</p>
                                                                                 <div id="imagenes_laser_post-c" class="collapse show" aria-labelledby="imagenes_laser_post" data-parent="#imagenes_laser_post">
                                                                                     <div class="dropzone" id="mis-imagenes-imagenes-laser-post" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
+                                                                    </form>
                                                                 </div>
-                                                                <!--OTRO PROCEDIMIENTO-->
+                                                                <!--OTRO PROC-->
                                                                 <div class="tab-pane fade show" id="derma_otro" role="tabpanel" aria-labelledby="derma_otro_tab">
-                                                                    <div id="formulario_rinofibro">
+                                                                    <form id="formulario_rinofibro">
                                                                         <div class="form-row">
                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <h6 class="t-aten">OTRO PROCEDIMIENTO</h6>
+                                                                                <h6 class="t-aten">Otro procedimiento</h6>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-row">
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm" for="nombre_otro_proced">Procedimiento</label>
+                                                                                <label class="floating-label-activo-sm">Procedimiento</label>
                                                                                 <input type="text" class="form-control form-control-sm" name="nombre_otro_proced" id="nombre_otro_proced"/>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm" for="desc_otro_proced">Descripción </label>
+                                                                                <label class="floating-label-activo-sm">Descripción </label>
                                                                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="desc_otro_proced" id="desc_otro_proced"></textarea>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label  class="floating-label-activo-sm" for="obs_otro_proced">Observaciones</label>
+                                                                                <label class="floating-label-activo-sm">Observaciones</label>
                                                                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_otro_proced" id="obs_otro_proced"></textarea>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
+                                                                    </form>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -391,38 +391,40 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- control post qx -->
-                                @include('general.secciones_ficha.cirugia_control.control_cirugia_general')
+								<!-- CONTROL POST QX -->
+								@include('general.secciones_ficha.control_cirugia_gen')
                                 <!--ENFERMO CRÓNICO O GES-->
-                                @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
-                                <!--Diagnóstico-->
-                                @include('general.secciones_ficha.diagnostico')
+                                 @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                                <!--DIAGNÓSTICO-->
+                                 @include('general.secciones_ficha.diagnostico')
+
                             </div>
                         </div>
-                        <!-- VENEREAS -->
+                        <!-- venerea -->
                         @include('general.venereas.venereas')
                     </div>
-                </div>
-                {{--  div de botones  --}}
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                            @include('general.secciones_ficha.seccion_receta_examen_comunes')
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-                        </div>
+                </form>
+            </div>
+
+             {{--  div de botones  --}}
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+                        @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                        <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
                     </div>
                 </div>
+            </div>
                 <!--GUARDAR O IMPRIMIR FICHA-->
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="row mb-3">
-                        <div class="col-md-12 text-center">
-                            <input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                            <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
-                        </div>
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="row mb-3">
+                    <div class="col-md-12 text-center">
+                        <input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+                        <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
@@ -430,17 +432,9 @@
 <!--MODALES modal_enfermedades_cronicas-->
 @include('atencion_medica.formularios.modal_atencion_general.modal_enfermedades_cronicas')
 @include("general.modal.modal_no_disponible")
-
 @section('page-script-ficha-atencion')
     <script>
         $(document).ready(function() {
-
-            /** MENSAJE*/
-            $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
-            $('#mensaje_ficha').show();
-            setTimeout(function(){
-                $('#mensaje_ficha').hide();
-            }, 5000);
 
             /* formatear rut */
             $("#solicitado_por_rut_rfl").rut({
@@ -525,7 +519,13 @@
                     return false;
                 }
             });
-
+			/** MENSAJE*/
+			    /** CARGAR mensaje */
+				$('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
+				$('#mensaje_ficha').show();
+				setTimeout(function(){
+					$('#mensaje_ficha').hide();
+				}, 5000);
             /** cronico */
             /** autocomplete de medicamentos generales */
             $("#nombre_medicamentocron").autocomplete({
@@ -621,6 +621,7 @@
                     return false;
                 }
             });
+
 
         })
 
@@ -1837,6 +1838,109 @@
                 return this.emit("error", file, this.options.dictUploadCanceled);
             },
         };
+
+        // var myDropzone ;
+        // Dropzone.options.misImagenes = {
+        //     init:function()
+        //     {
+        //         myDropzone = this;
+        //     },
+        //     url: "{{ route('profesional.imagen.carga') }}",
+        //     method: 'post',
+        //     createImageThumbnails: true,
+        //     addRemoveLinks: true,
+        //     headers:{
+        //         'X-CSRF-TOKEN' : CSRF_TOKEN,
+        //         // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+        //     },
+
+        //     acceptedFiles: "image/*",
+        //     maxFilesize: 4,
+        //     maxFiles: 12,
+        //     /** El texto utilizado antes de que se eliminen los archivos. */
+        //     dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+        //     /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+        //     dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+        //     /**
+        //      * El texto que se agregará antes del formulario alternativo.
+        //      * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+        //      * ser ignorado.
+        //      */
+        //     dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+        //     /**
+        //      * Si el tamaño del archivo es demasiado grande.
+        //      * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+        //      */
+        //      dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+        //     /** Si el archivo no coincide con el tipo de archivo. */
+        //     dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+        //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+        //     dictCancelUpload: "Cancelar carga",
+
+        //     /** El texto que se muestra si una carga se canceló manualmente */
+        //     dictUploadCanceled: "Subida cancelada.",
+
+        //     /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+        //     dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+        //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+        //     dictRemoveFile: "Eliminar archivo",
+
+        //     /**
+        //      * Se muestra si `maxFiles` es st y se excede.
+        //      */
+        //     dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+        //     // accept(file, done) {
+        //     //     console.log('-------------accept-----------------------');
+        //     //     cargar_lista_imagenes();
+        //     //     return done();
+        //     // },
+        //     success: function(file, response){
+        //         // console.log('-------------success-----------------------');
+        //         cargar_lista_imagenes();
+
+        //         if (file.previewElement) {
+        //             return file.previewElement.classList.add("dz-success");
+        //         }
+        //     },
+        //     error(file, message) {
+        //         // console.log('-------------error-----------------------');
+        //         if (file.previewElement) {
+        //             file.previewElement.classList.add("dz-error");
+        //             if (typeof message !== "string" && message.error)
+        //             {
+        //                 message = message.error;
+        //             }
+        //             else
+        //             {
+        //                 message = message.message;
+        //             }
+        //             for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+        //                 node.textContent = message;
+        //             }
+        //         }
+        //     },
+        //     removedfile(file) {
+        //         // console.log('-------------removedfile-----------------------');
+        //         cargar_lista_imagenes();
+        //         if (file.previewElement != null && file.previewElement.parentNode != null) {
+        //             file.previewElement.parentNode.removeChild(file.previewElement);
+        //         }
+        //         return this._updateMaxFilesReachedClass();
+        //     },
+        //     canceled: function canceled(file) {
+        //         cargar_lista_imagenes();
+        //         return this.emit("error", file, this.options.dictUploadCanceled);
+        //     },
+        // };
+
+
 
         var lista_imagenes = [];
         var lista_imagenes = {};

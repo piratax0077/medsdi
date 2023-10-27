@@ -4486,8 +4486,9 @@ class ficha_atencionController extends Controller
             $id_profesional = $request->id_profesional_fc;
             $id_paciente = $request->id_paciente_fc;
 
-            $ficha->motivo = $request->descripcion_consulta_dermato;
-            $ficha->antecedentes = $request->antec_especialidad_dermato;
+            $ficha->motivo = $request->motivo;
+            $ficha->antecedentes = $request->antecedentes;
+            $ficha->examen_fisico = $request->examen_fisico;
 
             $ges = 0;
             if ($request->modal_ges == 'on') {
@@ -4670,6 +4671,7 @@ class ficha_atencionController extends Controller
                 $ficha_dermo->img_cons_dermato_pre = $value_img_cons_dermato_pre;
                 $ficha_dermo->img_cons_dermato_post = $value_img_cons_dermato_post;
                 $ficha_dermo->biopsia_dermat = $request->biopsia_dermat;
+                $ficha_dermo->mot_zona_bp = $request->mot_zona_bp;
                 $ficha_dermo->obs_result_biopsia = $request->obs_result_biopsia;
                 $ficha_dermo->elim_cicat = $request->elim_cicat;
                 $ficha_dermo->desc_elim_cicat = $request->desc_elim_cicat;

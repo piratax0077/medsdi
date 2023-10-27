@@ -1,5 +1,4 @@
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-
     <!--INDICACIONES-->
     <div class="row">
         <div class="col-sm-12 col-md-12 text-center">
@@ -7,6 +6,7 @@
         </div>
     </div>
     <div class="row">
+
         @if(!empty(session('lic_token')) && session('lic_estado') == 1)
             @if (isset($fichaAtencion) && $fichaAtencion->hipotesis_diagnostico != null)
                 <div class="col-sm-12 col-md-6 text-center">
@@ -53,13 +53,11 @@
             </div>
         @endif
 
-
     </div>
 </div>
 
 
-@section('Modals-med-exa')
-    {{-- @include('app.cirugia.modals.modals_cesarea.modal_indicar_medicamentos') --}}
+@section('modals-med-exa')
     @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
     @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
 @endsection

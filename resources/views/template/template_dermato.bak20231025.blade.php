@@ -31,8 +31,7 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
     <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
 
-    <!--boton azul-->
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
+
 
     <!--Accordion-->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
@@ -50,9 +49,6 @@
     <link rel="stylesheet" href="{{ asset('css/bs_canvas.css') }}?t={{ time() }}">
 
     <link rel="stylesheet" href="{{ asset('css/estilos_atencion_medica.css') }}?t=<?= time() ?>">
-
-    <!-- Select2 css -->
-    <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
 
     <!-- fancy box -->
     <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
@@ -81,7 +77,7 @@
 
     <!-- Modal de la vista -->
     @yield('Modals')
-    @yield('modals-med-exa')
+    @yield('Modals-med-exa')
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
 
@@ -121,8 +117,6 @@
     <!--Sidebars-->
     <script src="{{ asset('js/bs_canvas.js') }}"></script>
 
-    <!--SELECT 2-->
-    <script src="{{ asset('js/plugins/select2.full.min.js') }}"></script>
 
     <!--Formularios Modals-->
     <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
