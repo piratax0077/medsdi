@@ -34,6 +34,7 @@ use App\Models\FichaCirugiaDigestivaTipo;
 use App\Models\FichaCirugiaGeneral;
 use App\Models\FichaCirugiaGeneralTipo;
 use App\Models\FichaOtorrino;
+use App\Models\FichaOrl;		
 use App\Models\FichaOtorrinoTipo;
 use App\Models\GesRegistros;
 use App\Models\Hipertension;
@@ -2814,62 +2815,96 @@ class ficha_atencionController extends Controller
                 $tipo_mensaje = 'success';
                 $mensaje = 'Ficha Clínica guardada de forma correcta\n';
 
+                if($request->estudio == 1)
+                {
+                    /** registro ficha especialidad */
+                    $ficha_otorrino = new FichaOtorrino();
+                    $ficha_otorrino->id_fichas_atenciones = $ficha->id;
+                    $ficha_otorrino->id_paciente = $id_paciente;
+                    $ficha_otorrino->id_usa_audifono = $request->usa_audifono;
+                    $ficha_otorrino->audifono = $request->audifono;
+                    $ficha_otorrino->apreciacion_auditiva = $request->apreciacion_auditiva;
+                    $ficha_otorrino->aprec_auditiva_def = $request->aprec_auditiva_def;
+                    $ficha_otorrino->examen_oi = $request->examen_oi;
+                    $ficha_otorrino->ex_oi_anormal = $request->ex_oi_anormal;
+                    $ficha_otorrino->examen_od = $request->examen_od;
+                    $ficha_otorrino->ex_od_anormal = $request->examen_od;
+                    $ficha_otorrino->obs_ex_oidos = $request->ex_od_anormal;
+                    $ficha_otorrino->examen_bio_oi = $request->examen_bio_oi;
+                    $ficha_otorrino->obs_examen_bio_oi = $request->obs_examen_bio_oi;
+                    $ficha_otorrino->examen_bio_od = $request->examen_bio_od;
+                    $ficha_otorrino->obs_examen_bio_od = $request->obs_examen_bio_od;
+                    $ficha_otorrino->obs_ex_biom = $request->obs_ex_biom;
 
-                /** registro ficha especialidad */
-                $ficha_orl = new FichaOtorrino();
+                    $ficha_otorrino->id_tipo_episodios = $request->episodios;
+                    $ficha_otorrino->obs_episodios = $request->detalle_episodios;
+                    $ficha_otorrino->id_tipo_equilibrio = $request->equilibrio;
+                    $ficha_otorrino->obs_equilibrio = $request->detalle_equilibrio;
+                    $ficha_otorrino->id_tipo_ng = $request->ng;
+                    $ficha_otorrino->obs_ng = $request->detalle_ng;
+                    $ficha_otorrino->id_tipo_sint_acomp = $request->sint_acomp;
+                    $ficha_otorrino->obs_sint_acomp = $request->detalle_sint_acompanantes;
+                    $ficha_otorrino->id_tipo_vertigo = $request->tipo_vertigo;
+                    $ficha_otorrino->obs_tipo_vertigo = $request->detalle_tipo_vertigo;
+                    $ficha_otorrino->obs_vestibular = $request->obs_vestibular;
+                    $ficha_otorrino->nariz_general = $request->nariz_general;
+                    $ficha_otorrino->det_nariz_general = $request->det_nariz_general;
+                    $ficha_otorrino->apreciacion_resp = $request->apreciacion_resp;
+                    $ficha_otorrino->aprec_resp_def = $request->aprec_resp_def;
+                    $ficha_otorrino->examen_fni = $request->examen_fni;
+                    $ficha_otorrino->ex_fni_anormal = $request->ex_fni_anormal;
+                    $ficha_otorrino->examen_fnd = $request->examen_fnd;
+                    $ficha_otorrino->ex_fnd_anormal = $request->ex_fnd_anormal;
+                    $ficha_otorrino->obs_ex_nasal = $request->obs_ex_nasal;
+                    $ficha_otorrino->disfonia = $request->disfonia;
+                    $ficha_otorrino->det_disfonia = $request->det_disfonia;
+                    $ficha_otorrino->ex_boca = $request->ex_boca;
+                    $ficha_otorrino->detalle_ex_boca = $request->detalle_ex_boca;
+                    $ficha_otorrino->examen_faringe =$request->examen_faringe;
+                    $ficha_otorrino->ex_farige_anormal = $request->ex_farige_anormal;
+                    $ficha_otorrino->examen_laringe =$request->examen_laringe;
+                    $ficha_otorrino->ex_larige_anormal = $request->ex_larige_anormal;
+                    $ficha_otorrino->obs_examen_laringe = $request->obs_examen_laringe;
+                    $ficha_otorrino->obs_ex_orl = $request->bs_ex_orl;
+                    $ficha_otorrino->hip_diag_orl = $request->diag_spec;
+                    $ficha_otorrino->ind_orl = $request->ind_orl;
+                    $ficha_otorrino->estado = 1;
+
+                    if($ficha_otorrino->save())
+                    {
+                        $datos['ficha_otorrino']['estado'] = 1;
+                        $datos['ficha_otorrino']['msj'] = 'registro exitoso';
+                        $mensaje .= '\n'.'Ficha Otorrino guardada de forma correcta';
+
+                    }
+                    else
+                    {
+                        $datos['ficha_otorrino']['estado'] = 0;
+                        $datos['ficha_otorrino']['msj'] = 'registro NO exitoso';
+                        $mensaje .= '\n'.'Ficha Otorrino No guardada ';
+                    }
+                }
+
+                 /** registro ficha especialidad */
+                $ficha_orl = new FichaOrl();
                 $ficha_orl->id_fichas_atenciones = $ficha->id;
                 $ficha_orl->id_paciente = $id_paciente;
-                $ficha_orl->id_usa_audifono = $request->usa_audifono;
-                $ficha_orl->audifono = $request->audifono;
-                $ficha_orl->apreciacion_auditiva = $request->apreciacion_auditiva;
-                $ficha_orl->aprec_auditiva_def = $request->aprec_auditiva_def;
-                $ficha_orl->examen_oi = $request->examen_oi;
-                $ficha_orl->ex_oi_anormal = $request->ex_oi_anormal;
-                $ficha_orl->examen_od = $request->examen_od;
-                $ficha_orl->ex_od_anormal = $request->examen_od;
-                $ficha_orl->obs_ex_oidos = $request->ex_od_anormal;
-                $ficha_orl->examen_bio_oi = $request->examen_bio_oi;
-                $ficha_orl->obs_examen_bio_oi = $request->obs_examen_bio_oi;
-                $ficha_orl->examen_bio_od = $request->examen_bio_od;
-                $ficha_orl->obs_examen_bio_od = $request->obs_examen_bio_od;
-                $ficha_orl->obs_ex_biom = $request->obs_ex_biom;
-
-                $ficha_orl->id_tipo_episodios = $request->episodios;
-                $ficha_orl->obs_episodios = $request->detalle_episodios;
-                $ficha_orl->id_tipo_equilibrio = $request->equilibrio;
-                $ficha_orl->obs_equilibrio = $request->detalle_equilibrio;
-                $ficha_orl->id_tipo_ng = $request->ng;
-                $ficha_orl->obs_ng = $request->detalle_ng;
-                $ficha_orl->id_tipo_sint_acomp = $request->sint_acomp;
-                $ficha_orl->obs_sint_acomp = $request->detalle_sint_acompanantes;
-                $ficha_orl->id_tipo_vertigo = $request->tipo_vertigo;
-                $ficha_orl->obs_tipo_vertigo = $request->detalle_tipo_vertigo;
-                $ficha_orl->obs_vestibular = $request->obs_vestibular;
-
-                $ficha_orl->nariz_general = $request->nariz_general;
-                $ficha_orl->det_nariz_general = $request->det_nariz_general;
-                $ficha_orl->apreciacion_resp = $request->apreciacion_resp;
-                $ficha_orl->aprec_resp_def = $request->aprec_resp_def;
-                $ficha_orl->examen_fni = $request->examen_fni;
-                $ficha_orl->ex_fni_anormal = $request->ex_fni_anormal;
-                $ficha_orl->examen_fnd = $request->examen_fnd;
-                $ficha_orl->ex_fnd_anormal = $request->ex_fnd_anormal;
-                $ficha_orl->obs_ex_nasal = $request->obs_ex_nasal;
-                $ficha_orl->disfonia = $request->disfonia;
-                $ficha_orl->det_disfonia = $request->det_disfonia;
-                $ficha_orl->ex_boca = $request->ex_boca;
-                $ficha_orl->detalle_ex_boca = $request->detalle_ex_boca;
-
-                $ficha_orl->examen_faringe =$request->examen_faringe;
-                $ficha_orl->ex_farige_anormal = $request->ex_farige_anormal;
-                $ficha_orl->examen_laringe =$request->examen_laringe;
-                $ficha_orl->ex_larige_anormal = $request->ex_larige_anormal;
-
-                $ficha_orl->obs_examen_laringe = $request->obs_examen_laringe;
-
-                $ficha_orl->obs_ex_orl = $request->bs_ex_orl;
-                $ficha_orl->hip_diag_orl = $request->diag_spec;
-                $ficha_orl->ind_orl = $request->ind_orl;
+                $ficha_orl->audicion = $request->audicion;
+                $ficha_orl->ex_oido = $request->ex_oido;
+                $ficha_orl->biomicroscopia = $request->biomicroscopia;
+                $ficha_orl->vestibular = $request->vestibular;
+                $ficha_orl->o_resultado_ex = $request->o_resultado_ex;
+                $ficha_orl->nariz_ext = $request->nariz_ext;
+                $ficha_orl->f_nasales = $request->f_nasales;
+                $ficha_orl->n_resultado_ex = $request->n_resultado_ex;
+                $ficha_orl->boca = $request->boca;
+                $ficha_orl->faringe = $request->faringe;
+                $ficha_orl->laringe = $request->laringe;
+                $ficha_orl->fl_resultado_ex = $request->fl_resultado_ex;
+                $ficha_orl->cuello_grl = $request->cuello_grl;
+                $ficha_orl->masas = $request->masas;
+                $ficha_orl->glandulas = $request->glandulas;
+                $ficha_orl->c_resultado_ex = $request->c_resultado_ex;
                 $ficha_orl->estado = 1;
 
                 if($ficha_orl->save())
