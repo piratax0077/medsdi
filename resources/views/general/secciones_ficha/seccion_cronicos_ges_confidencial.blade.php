@@ -168,11 +168,12 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content bg-light">
             <div class="modal-header bg-info">
+
                 <div class="row">
-                    <div class="col-md-4">
-                        <h5 class="modal-title text-white">Controles de enfermedades crónicas</h5>
+                    <div class="col-md-6">
+                        <h5 class="modal-title text-white">Control de Enfermedades Crónicas</h5>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <select class="form-control form-control-sm" onchange="cambiar_enfermedad_cronica();" id="cronicos" name="cronicos" >
                             <option value="n_C">Seleccione control</option>
                             <option value="cpeso">Obesidad</option>
@@ -1207,8 +1208,6 @@
         </div>
     </div>
 </div>
-
-
 <!-- MODAL AÑADIR ANTECEDENTE-->
 <div id="m_agregar_antecedente" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="form_enfermedad_cronica" aria-hidden="true">
     <div class="modal-dialog modal-lg  modal-dialog-centered" role="document">
@@ -2036,14 +2035,19 @@
         var id_medicamento = $('#id_medicamento_'+tipo).val();
         var id_medicamento_tipo_control = $('#id_medicamento_tipo_control_'+tipo).val();
         var nombre_composicion_farmaco = $('#nombre_composicion_farmaco_'+tipo).val();
+        var id_dosis_medicamento = $('#dosis_medicamento_'+tipo).val();
         var dosis_medicamento = $('#dosis_medicamento_'+tipo).val();
+        var id_frecuencia_medicamento = $('#frecuencia_medicamento_'+tipo).val();
         var frecuencia_medicamento = $('#frecuencia_medicamento_'+tipo).val();
         var dosis_medicamento_2 = $('#dosis_medicamento_'+tipo+'_2').val();
         var frecuencia_medicamento_2 = $('#frecuencia_medicamento_'+tipo+'_2').val();
+        var id_via_administracion = $('#via_administracion_'+tipo).val();
         var via_administracion = $('#via_administracion_'+tipo).val();
         var observaciones_medicamento = $('#observaciones_medicamento_'+tipo).val();
+        var id_periodo = $('#periodo_'+tipo).val();
         var periodo = $('#periodo_'+tipo).val();
         var observaciones_periodo = $('#observaciones_periodo_'+tipo).val();
+        var id_cantidad_comprar = $('#cantidad_comprar_'+tipo).val();
         var cantidad_comprar = $('#cantidad_comprar_'+tipo).val();
         var otra_cantidad_a_comprar = $('#otra_cantidad_a_comprar_'+tipo).val();
 
@@ -2188,11 +2192,16 @@
                     id_medicamento : id_medicamento,
                     id_medicamento_tipo_control : id_medicamento_tipo_control,
                     nombre_composicion_farmaco : nombre_composicion_farmaco,
+                    id_dosis_medicamento : id_dosis_medicamento,
                     dosis_medicamento : dosis_medicamento,
+                    id_frecuencia_medicamento : id_frecuencia_medicamento,
                     frecuencia_medicamento : frecuencia_medicamento,
+                    id_via_administracion : id_via_administracion,
                     via_administracion : via_administracion,
                     observaciones_medicamento : observaciones_medicamento,
+                    id_periodo : id_periodo,
                     periodo : periodo,
+                    id_cantidad_comprar : id_cantidad_comprar,
                     cantidad_comprar : cantidad_comprar,
 
                     tipo_enfermedad:tipo_enfermedad,
@@ -2661,7 +2670,7 @@
                 select_cant_comp.find('option').remove();
                 select_cant_comp.append('<option value="0">Seleccione</option>');
                 $(data).each(function(i, v) { // indice, valor
-                    select_cant_comp.append('<option value="' + v.id + '">' + v.cant +'</option>');
+                    select_cant_comp.append('<option value="' + v.cantidad + '">' + v.cant +'</option>');
                 });
                 select_cant_comp.append('<option value="999">Otra Cantidad</option>');
             }

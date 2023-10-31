@@ -20,7 +20,7 @@ class RecomendacionController extends Controller
         return $this->registrarRecomendacion($request->atencion, $request->salida, $request->herir, $request->cuadro, $request->activo, $request->aficionado, $request->control, $request->cod_doc, $request->cod_auto, $request->info);
     }
 
-    public function registrarRecomendacion($atencion, $salida, $herir, $cuadro, $activo, $aficionado, $control, $cod_doc, $cod_auto, $info)
+    static public function registrarRecomendacion($atencion, $salida, $herir, $cuadro, $activo, $aficionado, $control, $cod_doc, $cod_auto, $info)
     {
         $datos = array();
         $error = array();
@@ -134,7 +134,7 @@ class RecomendacionController extends Controller
         return $this->registrarDetalle($request->id_recomendacion, $request->control, $request->id_articulo, $request->articulo, $request->componente, $request->id_apariencia, $request->apariencia, $request->id_cuota, $request->cuota, $request->id_regimen, $request->regimen, $request->id_lapso, $request->lapso, $request->uso_frecuente, $request->volumen_compra, $request->volumen, $request->volumen_entregado, $request->comentario, $request->cod_doc);
     }
 
-    public function registrarDetalle($id_recomendacion, $control, $id_articulo, $articulo, $componente, $id_apariencia, $apariencia, $id_cuota, $cuota, $id_regimen, $regimen, $id_lapso, $lapso, $uso_frecuente, $volumen_compra, $volumen, $volumen_entregado, $comentario, $cod_doc)
+    static public function registrarDetalle($id_recomendacion, $control, $id_articulo, $articulo, $componente, $id_apariencia, $apariencia, $id_cuota, $cuota, $id_regimen, $regimen, $id_lapso, $lapso, $uso_frecuente, $volumen_compra, $volumen, $volumen_entregado, $comentario, $cod_doc)
     {
         $datos = array();
         $error = array();
@@ -773,7 +773,7 @@ class RecomendacionController extends Controller
                 if($cantidad_recetas > 0)
                     return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas', 'recetaAudifonos'), 'Receta Medica '.$paciente->rut, 'pdf_receta_medica_2');
                 else
-                    return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas'), 'Receta Medica ', 'pdf_receta_medica_2');
+                    return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas', 'recetaAudifonos'), 'Receta Medica ', 'pdf_receta_medica_2');
                 exit();
 
             }
