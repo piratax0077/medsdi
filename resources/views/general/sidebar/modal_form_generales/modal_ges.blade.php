@@ -1,5 +1,5 @@
 <div id="form_ges" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="form_ges" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white">Constancia GES (Artículo 24 Ley 19.966)</h5>
@@ -7,8 +7,8 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-12 mt-3">
-                        <div class="form-group fill">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group">
                             <label class="floating-label-activo-sm">Seleccione Patología Ges</label>
                             <input type="text" class="form-control form-control-sm" name="nombre_ges" id="nombre_ges">
                             <input type="hidden" class="form-control form-control-sm" name="id_ges" id="id_ges">
@@ -16,213 +16,147 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="bt-wizard" id="wizard_constancia_ges_2">
-                            <ul class="nav nav-pills">
-                                <li class="tab-wizard-formularios">
-                                    <a href="#datos_prestador_ges_2" class="nav-link-wizard rounded-0" data-toggle="tab">
-                                        Datos del prestador
-                                    </a>
-                                </li>
-                                <li class="tab-wizard-formularios">
-                                    <a href="#datos_paciente_ges_2" class="nav-link-wizard rounded-0" data-toggle="tab">
-                                        Datos del paciente
-                                    </a>
-                                </li>
-                                <li class="tab-wizard-formularios">
-                                    <a href="#informacion_medica_ges_2" class="nav-link-wizard rounded-0" data-toggle="tab">
-                                        Información médica
-                                    </a>
-                                </li>
-                                <li class="tab-wizard-formularios">
-                                    <a href="#constancia_ges_2" class="nav-link-wizard rounded-0" data-toggle="tab">
-                                        Constancia
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane pt-4 active show" id="datos_prestador_ges_2">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+                        <ul class="nav nav-tabs-aten nav-fill" id="form-ges" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link-aten text-reset active" id="inf-prestador-tab" data-toggle="tab" href="#inf-prestador" role="tab" aria-controls="inf-prestador" aria-selected="true">Info. del prestador</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-aten text-reset" id="inf-pcte-tab" data-toggle="tab" href="#inf-pcte" role="tab" aria-controls="inf-pcte" aria-selected="true">Info. del Paciente</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-aten text-reset" id="inf-med-tab" data-toggle="tab" href="#inf-med" role="tab" aria-controls="info-med" aria-selected="true">Info. Médica</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-aten text-reset" id="const-tab" data-toggle="tab" href="#const" role="tab" aria-controls="const" aria-selected="true">Constancia</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="tab-content" id="form-ges">
+                                <!--INFO PRESTADOR-->
+                                <div class="tab-pane fade show active" id="inf-prestador" role="tabpanel" aria-labelledby="inf-prestador-tab">
                                     <div class="form-row">
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <h6 class="text-c-blue">Datos del Prestador</h6>
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <h6 class="t-aten-dos">Información del Prestador</h6>
                                         </div>
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label><strong>Nombre Institución: </strong></label>
-                                            <span>{{ $lugar_atencion->nombre }}</span>
-                                            <input type="hidden" name="nombre_institucion_ficha_ges" id="nombre_institucion_ficha_ges" value="{{ $lugar_atencion->nombre }}">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <ul>
+                                                <li><strong>Nombre Institución:  </strong><span>{{ $lugar_atencion->nombre }}</span>
+                                                    <input type="hidden" name="nombre_institucion_ficha_ges" id="nombre_institucion_ficha_ges" value="{{ $lugar_atencion->nombre }}"></li>
+                                                <li><strong>Profesional:  </strong><span>{{ $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos }}</span></li>
+                                                <li><strong>Teléfono:  </strong><span>{{ $profesional->telefono_uno }}</span></li>
+                                                <li><strong>Dirección:  </strong>{{--  <span>{{ $profesional->Direccion()->first()->direccion .' ' .$profesional->Direccion()->first()->numero_dir .', Región de ' .$profesional->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre .' ' .$profesional->Direccion()->first()->Ciudad()->first()->nombre }}</span>  --}}
+                                                    <span>{{ $lugar_atencion->Direccion()->first()->direccion .' ' .$lugar_atencion->Direccion()->first()->numero_dir .', Región de ' .$lugar_atencion->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre .' ' .$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre }}</span>
+                                                    <input type="hidden" name="direccion_institucion_ficha_ges" id="direccion_institucion_ficha_ges" value="{{ $lugar_atencion->Direccion()->first()->direccion .' ' .$lugar_atencion->Direccion()->first()->numero_dir .', Región de ' .$lugar_atencion->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre .' ' .$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre }}">
+                                                </li>
+                                            </ul>
                                         </div>
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label><strong>Profesional: </strong></label>
-                                            <span>{{ $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos }}</span>
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label><strong>Teléfono: </strong></label>
-                                            <span>{{ $profesional->telefono_uno }}</span>
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label><strong>Dirección: </strong></label>
-                                            {{--  <span>{{ $profesional->Direccion()->first()->direccion .' ' .$profesional->Direccion()->first()->numero_dir .', Región de ' .$profesional->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre .' ' .$profesional->Direccion()->first()->Ciudad()->first()->nombre }}</span>  --}}
-                                            <span>{{ $lugar_atencion->Direccion()->first()->direccion .' ' .$lugar_atencion->Direccion()->first()->numero_dir .', Región de ' .$lugar_atencion->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre .' ' .$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre }}</span>
-                                            <input type="hidden" name="direccion_institucion_ficha_ges" id="direccion_institucion_ficha_ges" value="{{ $lugar_atencion->Direccion()->first()->direccion .' ' .$lugar_atencion->Direccion()->first()->numero_dir .', Región de ' .$lugar_atencion->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre .' ' .$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre }}">
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label class="floating-label-activo-sm">Nombre del responsable</label>
-                                            <input type="text" class="form-control form-control-sm" name="nombre_responsable_ficha_ges" id="nombre_responsable_ficha_ges" value="">
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label class="floating-label-activo-sm">Rut del responsable</label>
-                                            <input type="person" class="form-control form-control-sm" name="rut_responsable_ficha_ges" id="rut_responsable_ficha_ges" value="">
-                                        </div>
-                                    </div>
-                                    <div class="row justify-content-between mx-0 btn-page">
-                                        <div class="col-sm-6 pl-0">
-                                            <a href="#!" class="btn btn-success btn-sm button-previous disabled">Anterior</a>
-                                        </div>
-                                        <div class="col-sm-6 text-md-right pr-0">
-                                            <a href="#!" class="btn btn-success btn-sm button-next">Siguente</a>
-                                        </div>
+
                                     </div>
                                 </div>
-
-                                <div class="tab-pane pt-4" id="datos_paciente_ges_2">
+                                <!--INFO PACIENTE-->
+                                <div class="tab-pane fade show" id="inf-pcte" role="tabpanel" aria-labelledby="inf-pcte-tab">
                                     <div class="form-row">
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <h6 class="text-c-blue">Datos del Paciente</h6>
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <h6 class="t-aten-dos">Información del Paciente</h6>
                                         </div>
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label><strong>Nombre: </strong></label>
-                                            <span>{{ $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos  }}</span>
-                                            <input type="hidden" name="nombre_paciente_ficha_ges" id="nombre_paciente_ficha_ges" value="{{ $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos }}" >
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label><strong>Rut: </strong></label>
-                                            <span>{{ $paciente->rut }}</span>
-                                            <input type="hidden" name="rut_paciente_ficha_ges" id="rut_paciente_ficha_ges" value="{{ $paciente->rut }}" >
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label><strong>Previsión: </strong></label>
-                                            <span>
-                                                @foreach ($prevision as $previ)
-                                                    @if ($previ->id == $paciente->Prevision()->first()->id)
-                                                        {{ $previ->nombre }}
-                                                        <input type="hidden" name="prevision_ficha_ges" id="prevision_ficha_ges" value="{{ $paciente->Prevision()->first()->id }}">
-                                                    @endif
-                                                @endforeach
-                                            </span>
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label><strong>Dirección: </strong></label>
-                                            <span>{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}</span>
-                                            <input type="hidden" name="direccion_paciente" id="direccion_paciente" value="{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}" >
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label><strong>Correo electrónico: </strong></label>
-                                            <span>{{ $paciente->email }}</span>
-                                            <input type="hidden" name="email_paciente" value="{{ $paciente->email }}" id="email_paciente" >
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label><strong>Teléfono: </strong></label>
-                                            <span>{{ $paciente->telefono_uno }}</span>
-                                            <input type="hidden" name="telefono_paciente" value="{{ $paciente->telefono_uno }}" id="telefono_paciente" >
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <ul>
+                                                <li><strong>Nombre:  </strong><span>{{ $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos  }}</span>
+                                                    <input type="hidden" name="nombre_paciente_ficha_ges" id="nombre_paciente_ficha_ges" value="{{ $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos }}" >
+                                                </li>
+                                                <li>
+                                                    <strong>Rut:  </strong><span>{{ $paciente->rut }}</span>
+                                                    <input type="hidden" name="rut_paciente_ficha_ges" id="rut_paciente_ficha_ges" value="{{ $paciente->rut }}" >
+                                                </li>
+                                                <li>
+                                                    <strong>Previsión:  </strong>
+                                                    <span>
+                                                        @foreach ($prevision as $previ)
+                                                            @if ($previ->id == $paciente->Prevision()->first()->id)
+                                                                {{ $previ->nombre }}
+                                                                <input type="hidden" name="prevision_ficha_ges" id="prevision_ficha_ges" value="{{ $paciente->Prevision()->first()->id }}">
+                                                            @endif
+                                                        @endforeach
+                                                    </span>
+                                                </li>
+                                                <li><strong>Dirección:  </strong><span>{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}</span>
+                                                    <input type="hidden" name="direccion_paciente" id="direccion_paciente" value="{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}" ></li>
+                                                <li><strong>Correo electrónico:  </strong><span>{{ $paciente->email }}</span>
+                                                    <input type="hidden" name="email_paciente" value="{{ $paciente->email }}" id="email_paciente" >
+                                                </li>
+                                                <li><strong>Teléfono:  </strong><span>{{ $paciente->telefono_uno }}</span>
+                                                    <input type="hidden" name="telefono_paciente" value="{{ $paciente->telefono_uno }}" id="telefono_paciente" >
+                                                </li>
+                                            <ul>
                                         </div>
                                     </div>
-                                    <div class="row justify-content-between mx-0 btn-page">
-                                        <div class="col-sm-6 pl-0">
-                                            <a href="#!" class="btn btn-success btn-sm button-previous">Anterior</a>
-                                        </div>
-                                        <div class="col-sm-6 text-md-right pr-0">
-                                            <a href="#!" class="btn btn-success btn-sm button-next">Siguente</a>
-                                        </div>
+                               </div>
+                               <!--INFO MEDICA-->
+                               <div class="tab-pane fade show" id="inf-med" role="tabpanel" aria-labelledby="inf-med-tab">
+                                <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                        <h6 class="t-aten-dos">Información Médica</h6>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <label class="floating-label-activo-sm">Confirmación diagnóstica GES</label>
+                                        <input type="text" class="form-control form-control-sm" name="confirmacion_diagnostica_ficha_ges" id="confirmacion_diagnostica_ficha_ges">
+                                    </div>
+
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <label class="floating-label-activo-sm">¿Paciente con tratamiento?</label>
+                                        <input type="text" class="form-control form-control-sm" name="paciente_tratamiento_ficha_ges" id="paciente_tratamiento_ficha_ges">
                                     </div>
                                 </div>
-
-                                <div class="tab-pane pt-4" id="informacion_medica_ges_2">
-                                    <div class="form-row">
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <h6 class="text-c-blue">Información Médica</h6>
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label class="floating-label-activo-sm">Confirmación diagnóstica GES</label>
-                                            <input type="text" class="form-control form-control-sm" name="confirmacion_diagnostica_ficha_ges" id="confirmacion_diagnostica_ficha_ges">
-                                        </div>
-
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label class="floating-label-activo-sm">¿Paciente con tratamiento?</label>
-                                            <input type="text" class="form-control form-control-sm" name="paciente_tratamiento_ficha_ges" id="paciente_tratamiento_ficha_ges">
-                                        </div>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <h6 class="t-aten-dos">Fecha Notificación</h6>
                                     </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <h6 class="text-c-blue">Fecha Notificación</h6>
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-12">
-
-                                            <span>
-                                                <h5 class="text-c-blue">
-                                                    {{ Carbon\Carbon::now()->timezone('America/Santiago')->format('d-m-Y H:i') }}
-                                                </h5>
-                                            </span>
-
-                                        </div>
-
-                                    </div>
-                                    <div class="row justify-content-between mx-0 btn-page">
-                                        <div class="col-sm-6 pl-0">
-                                            <a href="#!" class="btn btn-success btn-sm button-previous">Anterior</a>
-                                        </div>
-                                        <div class="col-sm-6 text-md-right pr-0">
-                                            <a href="#!" class="btn btn-success btn-sm button-next">Siguente</a>
-                                        </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <span>
+                                            <h5>
+                                                {{ Carbon\Carbon::now()->timezone('America/Santiago')->format('d-m-Y H:i') }}
+                                            </h5>
+                                        </span>
                                     </div>
                                 </div>
-
-                                <div class="tab-pane pt-4" id="constancia_ges_2">
+                                </div>
+                                <!--CONSTANCIA-->
+                               <div class="tab-pane fade show" id="const" role="tabpanel" aria-labelledby="const-tab">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12">
-                                            <h6 class="text-c-blue mb-2 text-center">Constancia</h6>
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <h6 class="text-c-blue text-center t-aten-dos">Constancia</h6>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="alert alert-success text-justify pt-3 pb-1" role="alert">
-                                                <p>Desea adjuntar algún documento</p>
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="alert alert-warning mb-1" role="alert">
+                                                Si desea adjuntar un documento arrastre el archivo en el recuadro.
+                                              </div>
+                                            <div class=" text-justify pt-3 pb-1" role="alert">
                                                 <input type="hidden" name="input_lista_archivo" id="input_lista_archivo" value="">
                                                 <!-- [ Main Content ] start -->
-                                                {{-- <div class="dropzone" id="mis-archivos-ges" action="{{ route('profesional.archivo.carga') }}"> --}}
-                                                <div class="dropzone" id="mis-archivos-ges">
-                                                {{-- <div class="dropzone" id="mis-archivos-ges" action=""> --}}
+                                                <div class="dropzone" id="mis-archivos" action="">
                                                 </div>
                                                 <!-- [ file-upload ] end -->
                                             </div>
                                         </div>
                                     </div>
-
-
-                                     <div class="row">
+                                    <div class="row">
                                         <div class="col-sm-6 col-md-6 text-center">
-                                            <button type="button" class="btn btn-sm btn-danger-light mt-2 mb-4" onclick="ver_pdf_constancia_ges();">PDF</button>
+                                            <button type="button" class="btn btn-danger-light-c mt-2 mb-2" onclick="ver_pdf_constancia_ges();"><i class="feather icon-file"></i> Ver PDF</button>
                                         </div>
-                                         <div class="col-sm-6 col-md-6 text-center">
-                                             <button type="button" class="btn btn-sm btn-primary-light mt-2 mb-4" onclick="registrar_ges_ficha();">Guardar / Enviar Notificación</button>
-                                         </div>
-                                     </div>
-
-                                    <div class="row justify-content-between mx-0 btn-page">
-                                        <div class="col-sm-6 pl-0">
-                                            <a href="#!" class="btn btn-success btn-sm button-previous">Anterior</a>
-                                        </div>
-                                        <div class="col-sm-6 text-md-right pr-0">
-                                            <a href="#!" class="btn btn-success btn-sm button-next ">Siguente</a>
+                                        <div class="col-sm-6 col-md-6 text-center">
+                                            <button type="button" class="btn btn-info-light-c mt-2 mb-2" onclick="registrar_ges_ficha();"><i class="feather icon-save"></i> Guardar / Enviar Notificación</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+
             </div>
         </div>
     </div>
@@ -230,108 +164,105 @@
 
 <script>
     /** MANEJO DE ARCHIVO */
+    // var myDropzone_ges ;
+    // Dropzone.options.misArchivos = {
+    //     init:function()
+    //     {
+    //         myDropzone_ges = this;
+    //     },
+    //     url: "{{ route('profesional.archivo.carga') }}",
+    //     method: 'post',
+    //     createImageThumbnails: true,
+    //     addRemoveLinks: true,
+    //     headers:{
+    //         'X-CSRF-TOKEN' : CSRF_TOKEN,
+    //     },
 
-    // $(document).ready(function () {
-    //     // var myDropzone_ges ;
-    //     // Dropzone.options.misArchivosGes = {
-    //     //     init:function()
-    //     //     {
-    //     //         myDropzone_ges = this;
-    //     //     },
-    //     //     url: "{{ route('profesional.archivo.carga') }}",
-    //     //     method: 'post',
-    //     //     createImageThumbnails: true,
-    //     //     addRemoveLinks: true,
-    //     //     headers:{
-    //     //         'X-CSRF-TOKEN' : CSRF_TOKEN,
-    //     //     },
+    //     acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv",
+    //     maxFilesize: 4,
+    //     maxFiles: 4,
+    //     /** El texto utilizado antes de que se eliminen los archivos. */
+    //     dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
 
-    //     //     acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*",
-    //     //     maxFilesize: 4,
-    //     //     maxFiles: 4,
-    //     //     /** El texto utilizado antes de que se eliminen los archivos. */
-    //     //     dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
+    //     /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+    //     dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
 
-    //     //     /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
-    //     //     dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+    //     /**
+    //      * El texto que se agregará antes del formulario alternativo.
+    //      * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+    //      * ser ignorado.
+    //      */
+    //     dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
 
-    //     //     /**
-    //     //      * El texto que se agregará antes del formulario alternativo.
-    //     //      * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
-    //     //      * ser ignorado.
-    //     //      */
-    //     //     dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+    //     /**
+    //      * Si el tamaño del archivo es demasiado grande.
+    //      * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+    //      */
+    //     dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
 
-    //     //     /**
-    //     //      * Si el tamaño del archivo es demasiado grande.
-    //     //      * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
-    //     //      */
-    //     //     dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+    //     /** Si el archivo no coincide con el tipo de archivo. */
+    //     dictInvalidFileType: "No puedes subir archivos de este tipo.",
 
-    //     //     /** Si el archivo no coincide con el tipo de archivo. */
-    //     //     dictInvalidFileType: "No puedes subir archivos de este tipo.",
+    //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+    //     dictCancelUpload: "Cancelar carga",
 
-    //     //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
-    //     //     dictCancelUpload: "Cancelar carga",
+    //     /** El texto que se muestra si una carga se canceló manualmente */
+    //     dictUploadCanceled: "Subida cancelada.",
 
-    //     //     /** El texto que se muestra si una carga se canceló manualmente */
-    //     //     dictUploadCanceled: "Subida cancelada.",
+    //     /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+    //     dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
 
-    //     //     /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
-    //     //     dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+    //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+    //     dictRemoveFile: "Eliminar archivo",
 
-    //     //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
-    //     //     dictRemoveFile: "Eliminar archivo",
+    //     /**
+    //      * Se muestra si `maxFiles` es st y se excede.
+    //      */
+    //     dictMaxFilesExceeded: "No puede cargar más archivos.",
 
-    //     //     /**
-    //     //      * Se muestra si `maxFiles` es st y se excede.
-    //     //      */
-    //     //     dictMaxFilesExceeded: "No puede cargar más archivos.",
+    //     // accept(file, done) {
+    //     //     console.log('-------------accept-----------------------');
+    //     //     cargar_lista_archivo();
+    //     //     return done();
+    //     // },
+    //     success: function(file, response){
+    //         // console.log('-------------success-----------------------');
+    //         cargar_lista_archivo(myDropzone_ges,'ges');
 
-    //     //     // accept(file, done) {
-    //     //     //     console.log('-------------accept-----------------------');
-    //     //     //     cargar_lista_archivo();
-    //     //     //     return done();
-    //     //     // },
-    //     //     success: function(file, response){
-    //     //         // console.log('-------------success-----------------------');
-    //     //         cargar_lista_archivo(myDropzone_ges,'ges');
-
-    //     //         if (file.previewElement) {
-    //     //             return file.previewElement.classList.add("dz-success");
-    //     //         }
-    //     //     },
-    //     //     error(file, message) {
-    //     //         // console.log('-------------error-----------------------');
-    //     //         if (file.previewElement) {
-    //     //             file.previewElement.classList.add("dz-error");
-    //     //             if (typeof message !== "string" && message.error)
-    //     //             {
-    //     //                 message = message.error;
-    //     //             }
-    //     //             else
-    //     //             {
-    //     //                 message = message.message;
-    //     //             }
-    //     //             for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
-    //     //                 node.textContent = message;
-    //     //             }
-    //     //         }
-    //     //     },
-    //     //     removedfile(file) {
-    //     //         // console.log('-------------removedfile-----------------------');
-    //     //         cargar_lista_archivo(myDropzone_ges,'ges');
-    //     //         if (file.previewElement != null && file.previewElement.parentNode != null) {
-    //     //             file.previewElement.parentNode.removeChild(file.previewElement);
-    //     //         }
-    //     //         return this._updateMaxFilesReachedClass();
-    //     //     },
-    //     //     canceled: function canceled(file) {
-    //     //         cargar_lista_archivo(myDropzone_ges,'ges');
-    //     //         return this.emit("error", file, this.options.dictUploadCanceled);
-    //     //     },
-    //     // };
-    // });
+    //         if (file.previewElement) {
+    //             return file.previewElement.classList.add("dz-success");
+    //         }
+    //     },
+    //     error(file, message) {
+    //         // console.log('-------------error-----------------------');
+    //         if (file.previewElement) {
+    //             file.previewElement.classList.add("dz-error");
+    //             if (typeof message !== "string" && message.error)
+    //             {
+    //                 message = message.error;
+    //             }
+    //             else
+    //             {
+    //                 message = message.message;
+    //             }
+    //             for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+    //                 node.textContent = message;
+    //             }
+    //         }
+    //     },
+    //     removedfile(file) {
+    //         // console.log('-------------removedfile-----------------------');
+    //         cargar_lista_archivo(myDropzone_ges,'ges');
+    //         if (file.previewElement != null && file.previewElement.parentNode != null) {
+    //             file.previewElement.parentNode.removeChild(file.previewElement);
+    //         }
+    //         return this._updateMaxFilesReachedClass();
+    //     },
+    //     canceled: function canceled(file) {
+    //         cargar_lista_archivo(myDropzone_ges,'ges');
+    //         return this.emit("error", file, this.options.dictUploadCanceled);
+    //     },
+    // };
 
     var lista_archivo = {};
     function cargar_lista_archivo(obj_dropzone, alias_examen)
@@ -357,8 +288,6 @@
                 }
             }
         });
-
-
     }
     /** CIERRE MANEJO DE IMAGENES */
 

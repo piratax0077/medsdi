@@ -1,19 +1,19 @@
 <div id="m_cons_archivos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="m_cons_archivosLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white" id="m_cons_archivosLabel">Documentos de esta consulta del Paciente:</h5>
+                <h5 class="modal-title text-white" id="m_cons_archivosLabel">Documentos</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#m_cons_archivos').modal('hide');" >
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <table id="table_atenciones_previas_archivos"class="display table table-striped table-hover dt-responsive nowrap pb-4" style="width:100%">
+                <table id="table_atenciones_previas_archivos"class="display table table-striped dt-responsive nowrap table-sm" style="width:100%">
                     <thead>
                         <tr>
-                            <th class="text-center align-middle">Fecha</th>
-                            <th class="text-center align-middle">Tipo</th>
-                            <th class="text-center align-middle">Ver</th>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Ver</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -23,7 +23,7 @@
                 <!--fin autollenado-->
             </div>
             <div class="modal-footer">
-                <button type="button mt-5" class="btn btn-danger" data-dismiss="modal" onclick="$('#m_cons_archivos').modal('hide');">Cerrar</button>
+                <button type="button mt-5" class="btn btn-danger-light-c" data-dismiss="modal" onclick="$('#m_cons_archivos').modal('hide');">Cerrar</button>
             </div>
         </div>
     </div>

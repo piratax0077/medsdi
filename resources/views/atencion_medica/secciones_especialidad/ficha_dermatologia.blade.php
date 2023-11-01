@@ -59,14 +59,14 @@
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <div class="form-row">
 															<div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 mt-2">
-                                                                <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</p>
+                                                                <label class="f-12 mb-0 font-weight-bold text-center" for="img_cons_dermato_pre">Imagenes Pre</label>
                                                                 <div id="img_cons_dermato_pre-c" class="collapse show" aria-labelledby="img_cons_dermato_pre" data-parent="#img_cons_dermato_pre">
                                                                     <div class="dropzone" id="mis-imagenes-cons-dermato-pre" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                 </div>
                                                             </div>
 
                                                             <div class="col-sm-4 mt-2">
-                                                                <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</p>
+                                                                <label class="f-12 mb-0 font-weight-bold text-center" for="img_cons_dermato_post">Imagenes Post</label>
                                                                 <div id="img_cons_dermato_post-c" class="collapse show" aria-labelledby="img_cons_dermato_post" data-parent="#img_cons_dermato_post">
                                                                     <div class="dropzone" id="mis-imagenes-cons-dermato-post" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                 </div>
@@ -168,7 +168,7 @@
                                                                             </div>
                                                                             <!--IMAGENES-->
                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</p>
+                                                                                <label class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</label>
                                                                                 <div id="imagenes_elim_cicat_pre-c" class="collapse show" aria-labelledby="imagenes_elim_cicat_pre" data-parent="#imagenes_elim_cicat_pre">
                                                                                     <div class="dropzone" id="mis-imagenes-elim_cicar_pre" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
@@ -268,13 +268,13 @@
                                                                             </div>
                                                                             <!--IMAGENES-->
                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</p>
+                                                                                <label class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</label>
                                                                                 <div id="imagenes_exfoliacion_pre-c" class="collapse show" aria-labelledby="imagenes_exfoliacion_pre" data-parent="#imagenes_exfoliacion_pre">
                                                                                     <div class="dropzone" id="mis-imagenes-imagenes-exfoliacion-pre" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</p>
+                                                                                <label class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</label>
                                                                                 <div id="imagenes_exfoliacion_post-c" class="collapse show" aria-labelledby="imagenes_exfoliacion_post" data-parent="#imagenes_exfoliacion_post">
                                                                                     <div class="dropzone" id="mis-imagenes-imagenes-exfoliacion-post" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
@@ -309,13 +309,13 @@
                                                                             </div>
                                                                             <!--IMAGENES-->
                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</p>
+                                                                                <label class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</label>
                                                                                 <div id="imagenes_dermabras_pre-c" class="collapse show" aria-labelledby="imagenes_dermabras_pre" data-parent="#imagenes_dermabras_pre">
                                                                                     <div class="dropzone" id="mis-imagenes-imagenes-dermabras-pre" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</p>
+                                                                                <label class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</label>
                                                                                 <div id="imagenes_dermabras_post-c" class="collapse show" aria-labelledby="imagenes_dermabras_post" data-parent="#imagenes_dermabras_post">
                                                                                     <div class="dropzone" id="mis-imagenes-imagenes-dermabras-post" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
@@ -346,13 +346,13 @@
                                                                             </div>
                                                                             <!--IMAGENES-->
                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</p>
+                                                                                <label class="f-12 mb-0 font-weight-bold text-center">Imagenes Pre</label>
                                                                                 <div id="imagenes_laser_pre-c" class="collapse show" aria-labelledby="imagenes_laser_pre" data-parent="#imagenes_laser_pre">
                                                                                     <div class="dropzone" id="mis-imagenes-imagenes-laser-pre" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                <p class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</p>
+                                                                                <label class="f-12 mb-0 font-weight-bold text-center">Imagenes Post</label>
                                                                                 <div id="imagenes_laser_post-c" class="collapse show" aria-labelledby="imagenes_laser_post" data-parent="#imagenes_laser_post">
                                                                                     <div class="dropzone" id="mis-imagenes-imagenes-laser-post" action="{{ route('profesional.imagen.carga') }}"></div>
                                                                                 </div>
@@ -416,7 +416,7 @@
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
                         </div>
                     </div>
-                    
+
                     <!--GUARDAR O IMPRIMIR FICHA-->
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="row mb-3">

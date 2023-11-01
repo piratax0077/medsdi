@@ -6,7 +6,7 @@
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             @if(isset($titulo) && $titulo == 'NO')
             {{--  nada  --}}
-            @else       
+            @else
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <h4 class="text-c-blue mt-4 f-20">Historial de atenciones</h4>
@@ -22,10 +22,10 @@
                                     <tr>
                                         <th>Fecha</th>
                                         <th>Diagnóstico</th>
-                                        <th>Recetas</th>
-                                        <th>Exámenes</th>
-                                        <th>Archivos </th>
                                         <th>Ficha</th>
+                                        <th>Exámenes</th>
+                                        <th>Recetas</th>
+                                        <th>Archivos </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -41,26 +41,18 @@
                                                 <td>{{ $f->hipotesis_diagnostico }}</td>
 
                                                 <td>
-                                                    <!--<button type="button" class="badge badge-info btn-link"  data-toggle="tooltip" data-placement="top" title="ver Receta"  @if (isset($f->id)) onclick="buscar_receta({{ $f->id }});" @endif><i class="#">Ver</i></button>-->
-                                                    <button type="button" class="btn btn-xs btn-warning-light"  @if (isset($f->id)) onclick="buscar_receta({{ $f->id }});" @endif><i class="feather icon-file-plus"></i> Ver</button>
+                                                    <button type="button" class="btn btn-xs btn-info-light" @if (isset($f->id)) onclick="buscar_ficha_atencion({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</button>
                                                 </td>
-
                                                 <td>
-                                                    <!-- <button type="button" class="btn btn-danger btn-sm btn-icon"  data-toggle="tooltip" data-placement="top" title="ver examenes" @if (isset($f->id)) onclick="buscar_examenes({{ $f->id }});" @endif><i class="feather icon-edit"></i></button>-->
                                                     <button type="button" class="btn btn-xs btn-success-light" @if (isset($f->id)) onclick="buscar_examenes({{ $f->id }});" @endif><i class="feather icon-activity"></i> Ver</button>
                                                 </td>
-
                                                 <td>
-                                                    <!--<button type="button" class="btn btn-success btn-icon" data-toggle="tooltip" data-placement="top" title="ver archivos" @if (isset($f->id)) onclick="buscar_archivos({{ $f->id }});" @endif> <i class="feather icon-edit"></i> </button>-->
+                                                    <button type="button" class="btn btn-xs btn-warning-light"  @if (isset($f->id)) onclick="buscar_receta({{ $f->id }});" @endif><i class="feather icon-file-plus"></i> Ver</button>
+                                                </td>
+                                                <td>
                                                     <button type="button" class="btn btn-xs btn-purple-light" @if (isset($f->id)) onclick="buscar_archivos({{ $f->id }});" @endif><i class="feather icon-folder"></i> Ver</button>
                                                 </td>
 
-                                                <form action="route()"></form>
-                                                <td>
-                                                    {{--  <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#m_consultaant">  --}}
-                                                    <!--<button type="button" style="border-radius: 15px;" class="btn btn-info btn-sm"  @if (isset($f->id)) onclick="buscar_ficha_atencion({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</button>-->
-                                                    <button type="button" class="btn btn-xs btn-info-light" @if (isset($f->id)) onclick="buscar_ficha_atencion({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</button>
-                                                </td>
                                             </tr>
                                         @endforeach
                                     @else
@@ -81,7 +73,7 @@
 @include('general.secciones_ficha.modal_atencion_previa.hist_cons_receta')
 @include('general.secciones_ficha.modal_atencion_previa.hist_cons_examen')
 @include('general.secciones_ficha.modal_atencion_previa.hist_cons_archivo')
-@include('general.secciones_ficha.modal_atencion_previa.hist_cons') 
+@include('general.secciones_ficha.modal_atencion_previa.hist_cons')
 <script>
     $(document).ready(function() {
         $('#table_atenciones_profesional').DataTable({

@@ -9,17 +9,17 @@
             <div class="card-body-aten-a">
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label class="floating-label-activo-sm">Motivo de consulta</label>
+                        <label class="floating-label-activo-sm" for="motivo">Motivo de consulta</label>
                         <input type="text" class="form-control form-control-sm" name="motivo" id="motivo">
                     </div>
                     <div class="form-group col-md-6">
-                        <label class="floating-label-activo-sm">Antecedentes Especialidad</label>
+                        <label class="floating-label-activo-sm" for="antecedentes">Antecedentes Especialidad</label>
                         <input type="text" class="form-control form-control-sm" name="antecedentes" id="antecedentes">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
-                        <label class="floating-label-activo-sm">Examen de la Especialidad</label>
+                        <label class="floating-label-activo-sm" for="examen_fisico">Examen de la Especialidad</label>
                         <textarea class="form-control caja-texto form-control-sm mb-9"  rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="examen_fisico" id="examen_fisico" placeholder="EXAMEN FISICO DE LA ESPECIALIDAD"></textarea>
                     </div>
                 </div>

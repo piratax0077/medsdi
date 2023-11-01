@@ -34,7 +34,7 @@ use App\Models\FichaCirugiaDigestivaTipo;
 use App\Models\FichaCirugiaGeneral;
 use App\Models\FichaCirugiaGeneralTipo;
 use App\Models\FichaOtorrino;
-use App\Models\FichaOrl;		
+use App\Models\FichaOrl;
 use App\Models\FichaOtorrinoTipo;
 use App\Models\GesRegistros;
 use App\Models\Hipertension;
@@ -81,6 +81,7 @@ use App\Models\NotificacionConfirmacion;
 use App\Models\PacientesDependientes;
 use App\Models\RecetaAudifono;
 use App\Models\RecetaControl;
+use App\Models\Recomendacion;
 use App\Models\ResultadoExamen;
 use App\Models\TipoAntecedente;
 use App\Models\TipoInforme;
@@ -4635,6 +4636,7 @@ class ficha_atencionController extends Controller
 
             $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
+            $ficha->indicaciones = $request->indicaciones;
 
             $ficha->cronico = $cronico;
             $ficha->ges = $ges;
@@ -6605,12 +6607,652 @@ class ficha_atencionController extends Controller
             $registro = FichaAtencion::find($request->id_ficha_atencion);
             $paciente = Paciente::find($registro->id_paciente);
 
-            $datos['estado'] = 1;
-            $datos['registros'] = $registro;
-            $datos['paciente'] = array(
-                'id' => $paciente->id,
-                'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos
-            );
+            if($registro)
+            {
+                $cant_recetas = Recomendacion::where('atencion', $request->id_ficha_atencion)->count();
+
+                $cant_examen_ppf = ExamenPPF::where('id_ficha_atencion', $request->id_ficha_atencion)->count();
+				
+                $profesional = Profesional::select('id', 'nombre', 'apellido_uno', 'apellido_dos', 'rut', 'email', 'id_especialidad', 'id_tipo_especialidad', 'id_sub_tipo_especialidad')
+                ->with(['Especialidad' => function ($query){
+                    $query->select('id', 'nombre');
+                }])
+                ->with(['TipoEspecialidad' => function ($query){
+                    $query->select('id', 'nombre');
+                }])
+                ->with(['SubTipoEspecialidad' => function ($query){
+                    $query->select('id', 'nombre');
+                }])
+                ->find($registro->id_profesional);
+
+                $registro->fichas = array();
+
+                switch (intval($profesional->id_especialidad))
+                {
+                    case 1: //MÉDICOS
+                        if(!empty($profesional->id_tipo_especialidad))
+                        {
+                            switch (intval($profesional->id_tipo_especialidad)) {
+                                case 1: //CIRUGIA
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        $temp_cirugia_general = FichaCirugiaGeneral::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+                                        if($temp_cirugia_general)
+                                        {
+                                            $registro['fichas']['cirugia_general'] = $temp_cirugia_general;
+                                        }
+                                        // switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                        //     case 1: // 1 Cirugía Abdominal General
+                                        //         break;
+                                        //     case 2: // 2 Cirugía Bariátrica
+                                        //         break;
+                                        //     case 3: // 3 Cirugia Broncopulmonar
+                                        //         break;
+                                        //     case 4: // 4 Cirugía Cardiovascular
+                                        //         break;
+                                        //     case 5: // 5 Cirugía Cardiovascular Adultos
+                                        //         break;
+                                        //     case 6: // 6 Cirugía Cardiovascular Niños
+                                        //         break;
+                                        //     case 7: // 7 Cirugía Coloproctológica
+                                        //         break;
+                                        //     case 8: // 8 Cirugía de Cabeza y Cuello
+                                        //         break;
+                                        //     case 9: // 9 Cirugía de la mama
+                                        //         break;
+                                        //     case 10: // 10 Cirugía del Tórax
+                                        //         break;
+                                        //     case 11: // 11 Cirugía digestiva
+                                        //         break;
+                                        //     case 12: // 12 Cirugía Gástrica
+                                        //         break;
+                                        //     case 13: // 13 Cirugía maxilofacial
+                                        //         break;
+                                        //     case 14: // 14 Cirugía Nefrourológica
+                                        //         break;
+                                        //     case 15: // 15 Cirugía Oncológica
+                                        //         break;
+                                        //     case 16: // 16 Cirugía Pancreas
+                                        //         break;
+                                        //     case 17: // 17 Cirugía Plástica y Reparadora
+                                        //         break;
+                                        //     case 18: // 18 Cirugía Vascular Periférica
+                                        //         break;
+                                        //     case 119: // 119 Cirugía General
+                                        //         break;
+                                        //     case 120: // 120 Cirugía y Traumatologia Pediatrica General
+                                        //         break;
+
+                                        // }
+                                    }
+                                    break;
+
+                                case 2: //ESPECIALIDADES MÉDICAS
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                            case 19:// 19	Dermatología
+                                                $temp_ficha = FichaDermo::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+                                                if($temp_ficha)
+                                                {
+                                                    $filtro_img = array();
+                                                    $filtro_img[] = array('id_ficha_atencion', $request->id_ficha_atencion);
+                                                    $filtro_img[] = array('id_ficha_dermo',$temp_ficha->id);
+                                                    $imagenes = FichaDermoImg::where($filtro_img)->get();
+
+                                                    $temp_ficha['img'] = $imagenes;
+                                                    $registro->fichas = array('dermato'=>$temp_ficha);
+                                                    // $registro['fichas']['dermato'] = $temp_ficha;
+                                                }
+                                                break;
+                                            case 20:// 20	Oftalmología
+                                                $temp_ficha_1 = FichaOft::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+                                                $temp_ficha_2 = FichaOftBiomicroscopia::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+                                                $temp_ficha_3 = FichaOftFondoOjo::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+                                                if($temp_ficha_1)
+                                                {
+                                                    $registro->fichas = array('oft'=>$temp_ficha_1);
+                                                    // $registro['fichas']['oft'] = $temp_ficha_1;
+                                                }
+                                                if($temp_ficha_2)
+                                                {
+                                                    $registro->fichas = array('oft'=>array('biomicroscopia'=>$temp_ficha_2));
+                                                    // $registro['fichas']['oft']['biomicroscopia'] = $temp_ficha_2;
+                                                }
+                                                if($temp_ficha_3)
+                                                {
+                                                    $registro->fichas = array('oft'=>array('fondo'=>$temp_ficha_3));
+                                                    // $registro['fichas']['oft']['fondo'] = $temp_ficha_3;
+                                                }
+                                                break;
+                                            case 21:// 21	Otorrinolaringología
+                                                $temp_ficha = FichaOtorrino::where('id_fichas_atenciones', $request->id_ficha_atencion)->first();
+                                                if($temp_ficha)
+                                                {
+                                                    $registro->fichas = array('orl'=>$temp_ficha);
+                                                }
+                                                break;
+                                            case 22:// 22	Urología
+                                                $temp_ficha = FichaUro::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+                                                if($temp_ficha)
+                                                {
+                                                    $registro->fichas = array('uro'=>$temp_ficha);
+                                                }
+                                                break;
+                                        }
+                                    }
+                                    break;
+
+                                case 3: //GINECO-OBSTETRÍCIA
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                            case 23:// 23	Ginecología endocrinológica
+                                                break;
+                                            case 24:// 24	Ginecología  Infantil
+                                                break;
+                                            case 25:// 25	Ginecología Infertilidad
+                                                break;
+                                            case 26:// 26	Ginecología Oncológica
+                                                break;
+                                            case 27:// 27	Ginecologia y Obtetricia General
+                                                break;
+                                            case 28:// 28	Medicina Materno Fetal
+                                                break;
+
+                                        }
+                                    }
+                                    break;
+                                case 4: //MEDICINA DE ALTURA
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                            case 29:// 29	Medicina de Altura
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case 5: //MEDICINA DEL TRABAJO
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                            case 30:// 30	Medicina del Trabajo
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case 6: //MEDICINA DEPORTIVA
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                            case 31:// 31	Medicina deportiva General
+                                                break;
+                                            case 32:// 32	Medicina deportiva Alto Rendimiento
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case 7: //MEDICINA FISICA Y REHABILITACIÓN
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                            case 33:// 33	Mdicina física y Rehabilitación General
+                                                break;
+                                            case 34:// 34	Mdicina física y Rehabilitación Neurológica
+                                                break;
+                                            case 35:// 35	Mdicina física y Rehabilitación Respiratoria
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case 8: //MEDICINA GENERAL
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                            case 36:// 36	Medicina Familiar
+                                                break;
+                                            case 37:// 37	Medicina general adultos y niños
+                                                break;
+                                            case 38:// 38	Medicina general a Domicilio
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case 9: //MEDICINA INTERNA
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                            case 39:// 39	Alimentación y Nutrición
+                                                break;
+                                            case 40:// 40	Broncopulmonar
+                                                break;
+                                            case 41:// 41	Diabetología
+                                                break;
+                                            case 42:// 42	Endocrinología
+                                                break;
+                                            case 43:// 43	Endoscopía Digestiva
+                                                break;
+                                            case 44:// 44	Gastroenterología
+                                                break;
+                                            case 45:// 45	Geriatría
+                                                break;
+                                            case 46:// 46	Hematología
+                                                break;
+                                            case 47:// 47	Hepatología
+                                                break;
+                                            case 48:// 48	Infectología
+                                                break;
+                                            case 49:// 49	Inmunología y Alérgias
+                                                break;
+                                            case 50:// 50	Medicina Nuclear
+                                                break;
+                                            case 51:// 51	Nefrología
+                                                break;
+                                            case 52:// 52	Nefrourología
+                                                break;
+                                            case 53:// 53	Oncología
+                                                break;
+                                            case 54:// 54	Parasitología
+                                                break;
+                                            case 55:// 55	Quimioterapia
+                                                break;
+                                            case 56:// 56	Radioterapia
+                                                break;
+                                            case 57:// 57	Reumatología
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case 10: //NEUROLOGÍA Y NEUROCIRUGÍA
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                            case 58:// 58	Neurología
+                                                break;
+                                            case 59:// 59	Neurocirugía
+                                                break;
+                                            case 60:// 60	Neuropsiquiatría
+                                                break;
+                                            case 61:// 61	Neuroradiología
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case 11: //PEDIATRÍA
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                            case 62:// 62	Alergología Pediátrica
+                                                break;
+                                            case 63:// 63	Alimentación y Nutrición  Infantil
+                                                break;
+                                            case 64:// 64	Broncopulmonar Infantil
+                                                break;
+                                            case 65:// 65	Cardiología Pediátrica
+                                                break;
+                                            case 66:// 66	Cirugía y Traumatología Pediatrica
+                                                break;
+                                            case 67:// 67	Dermatología Pediátrica
+                                                break;
+                                            case 68:// 68	Endocrinología Pediátrica
+                                                break;
+                                            case 69:// 69	Gastroenterología  Pediátrica
+                                                break;
+                                            case 70:// 70	Ginecología  Infantil
+                                                break;
+                                            case 71:// 71	Nefrología Pediátrica
+                                                break;
+                                            case 72:// 72	Neonatología
+                                                break;
+                                            case 73:// 73	Neurología Infantil
+                                                break;
+                                            case 74:// 74	Neurosiquiatría Infantil
+                                                break;
+                                            case 75:// 75	Oftalmología Pediátrica
+                                                break;
+                                            case 76:// 76	Oncología y Radioterapia  Infantil
+                                                break;
+                                            case 77:// 77	Otorrinolaringología Pediátrica
+                                                break;
+                                            case 78:// 78	Pediatría General
+                                                break;
+                                            case 79:// 79	Urología Pediátrica
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case 12: //SIQUIATRÍA
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                            case 80:// 80	Psiquiatría General
+                                                break;
+                                            case 81:// 81	Adicciones
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case 13: //TRAUMATOLOGIA Y ORTOPEDIA
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                            case 82:// 82	Traumatología Cadera
+                                                break;
+                                            case 83:// 83	Traumatología Codo
+                                                break;
+                                            case 84:// 84	Traumatología Columna
+                                                break;
+                                            case 85:// 85	Traumatología General
+                                                break;
+                                            case 86:// 86	Traumatología Hombro
+                                                break;
+                                            case 87:// 87	Traumatología Rodilla
+                                                break;
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                        break;
+                    case 2: //ODONTÓLOGOS
+                        if(!empty($profesional->id_tipo_especialidad))
+                        {
+                            switch (intval($profesional->id_tipo_especialidad))
+                            {
+                                case 14:// 14	CIRUGÍA MAXILOFACIAL
+                                    break;
+                                case 15:// 15	ENDODÓNCIA
+                                    break;
+                                case 16:// 16	IMPLANTOLOGÍA
+                                    break;
+                                case 17:// 17	ODONTOLOGÍA ESTETICA
+                                    break;
+                                case 18:// 18	ODONTOLOGÍA GENERAL
+                                    break;
+                                case 19:// 19	ODONTOPEDIATRÍA
+                                    break;
+                                case 20:// 20	ORTODÓNCIA
+                                    break;
+                                case 21:// 21	PERIODÓNCIA
+                                    break;
+                                case 22:// 22	REHABILITACIÓN ORAL
+                                    break;
+                                case 23:// 23	RADIOLOGÍA DENTAL
+                                    break;
+                                case 24:// 24	REHABILITACIÓN ORAL
+                                    break;
+                                case 56:// 56	ESPECIALISTA EN TRANSTORNOS TEMPOROMANDIBULARES
+                                    break;
+                            }
+                        }
+
+
+                        break;
+                    case 3: //KINESIOLOGIA
+                        if(!empty($profesional->id_tipo_especialidad))
+                        {
+                            switch (intval($profesional->id_tipo_especialidad))
+                            {
+                                case 25:// 25  KINESIOLOGIA GENERAL
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad))
+                                        {
+                                            case 88: // 88	Kinesiología Respiratoria
+                                                break;
+                                            case 89: // 89	Kinesiología Traumatológica
+                                                break;
+                                            case 90: // 90	Kinesiología Neurológica
+                                                break;
+                                            case 91: // 91	Kinesiología Tercera Edad
+                                                break;
+                                            case 92: // 92	Kinesiología Infantil
+                                                break;
+                                            case 93: // 93	Kinesiología Del Desarrollo
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case 26:// 26  KINESIOLOGIA ESPECIALIZADA
+                                    break;
+                                case 27:// 27  KINESIOLOGIA DOMICILIARIA
+                                    break;
+                            }
+                        }
+                        break;
+                    case 4: //FONOAUDIOLOGÍA
+                        if(!empty($profesional->id_tipo_especialidad))
+                        {
+                            switch (intval($profesional->id_tipo_especialidad))
+                            {
+                                case 28:// 28	FONOAUDIOLOGIA CLÍNICA ADULTOS Y NIÑOS
+                                    break;
+                                case 29:// 29	FONOAUDIOLOGIA EDUCACIONAL
+                                    break;
+                                case 30:// 30	FONOAUDIOLOGIA ESPECIALIZADA
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad))
+                                        {
+                                            case 94: // 94	Fonoaudiología Habla y Lenguaje
+                                                break;
+                                            case 95: // 95	Fonoaudiología Neurológica
+                                                break;
+                                            case 96: // 96	Fonoaudiología de la Audición
+                                                break;
+                                            case 97: // 97	Fonoaudiología del Canto
+                                                break;
+                                        }
+                                    }
+
+                                    break;
+                                case 55:// 55	EXMENES ORL
+                                    break;
+                            }
+                        }
+
+                        break;
+                    case 5: //NUTRICIÓN Y DIETÉTICA
+                        if(!empty($profesional->id_tipo_especialidad))
+                        {
+                            switch (intval($profesional->id_tipo_especialidad))
+                            {
+                                case 31:// 31	NUTRICIONISTA GENERAL
+                                    break;
+                                case 32:// 32	NUTRICIONISTA PEDIÁTRICA
+                                    break;
+                                case 33:// 33	NUTRICIONISTA ESPECIALIDAD
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad))
+                                        {
+                                            case 98: //98	Obesidad
+                                                break;
+                                            case 99: //99	Diabetes
+                                                break;
+                                            case 100: //100	Dietología
+                                                break;
+                                            case 101: //101	Transtornos Metabólicos
+                                                break;
+                                            case 102: //102	Tercera Edad
+                                                break;
+
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+
+                        break;
+                    case 6: //SICOLOGÍA
+                        if(!empty($profesional->id_tipo_especialidad))
+                        {
+                            switch (intval($profesional->id_tipo_especialidad))
+                            {
+                                case 34:// 34	SICOLOGÍA GENERAL ADULTOS
+                                    break;
+                                case 35:// 35	SICOLOGÍA GENERAL INFANTIL
+                                    break;
+                                case 36:// 36	SICOLOGÍA LABORAL
+                                    break;
+                                case 37:// 37	SICOLOGÍA ESPECIALIZADA
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad))
+                                        {
+                                            case 103: // 103	Sicología Adicciones
+                                                break;
+                                            case 104: // 104	Sicología de la Obesidad
+                                                break;
+                                            case 105: // 105	Sicología Oncológica
+                                                break;
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+
+                        break;
+                    case 7: //MATRÓN/A
+                        if(!empty($profesional->id_tipo_especialidad))
+                        {
+                            switch (intval($profesional->id_tipo_especialidad))
+                            {
+                                case 38:// 38	ATENCIÓN EMBARAZO
+                                    break;
+                                case 39:// 39	ANTICONCEPCIÓN
+                                    break;
+                                case 40:// 40	ATENCIÓN PUERPERIO
+                                    break;
+                                case 51:// 51	CONTROL NIÑO SANO
+                                    break;
+                                case 52:// 52	MATRON/A ATENCIÓN GENERAL
+                                    break;
+                            }
+                        }
+
+                        break;
+                    case 8: //ENFERMERA UNIVERSITARIA
+                        if(!empty($profesional->id_tipo_especialidad))
+                        {
+                            switch (intval($profesional->id_tipo_especialidad))
+                            {
+                                case 41:// 41	ENFERMERÍA GENERAL
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad))
+										{
+                                            case 106: // 106	Cuidado de enfermos
+                                                break;
+                                            case 107: // 107	Curaciones tratamientos
+                                                break;
+                                            case 108: // 108	Control de niño sano
+                                                break;
+										}
+									}
+                                    break;
+                                case 42:// 42	ENFERMERÍA ESPECIALIZADA
+                                    break;
+                                case 53:// 53	ENFERMERÍA CONTROL NIÑO SANO
+                                    break;
+                            }
+                        }
+
+                        break;
+                    case 9: //TERÁPIA OCUPACIONAL
+                        if(!empty($profesional->id_tipo_especialidad))
+                        {
+                            switch (intval($profesional->id_tipo_especialidad))
+                            {
+                                case 43:// 43	TERÁPIA OCUPACIONAL ADULTOS
+                                    break;
+                                case 44:// 44	TERÁPIA OCUPACIONAL NIÑOS
+                                    break;
+                            }
+                        }
+
+                        break;
+                    case 10: //TÉCNICO ENFERMERÍA
+                        if(!empty($profesional->id_tipo_especialidad))
+                        {
+                            switch (intval($profesional->id_tipo_especialidad))
+                            {
+                                case 45:// 45	ATENCIÓN TENS EN GENERAL
+                                    break;
+                                case 46:// 46	ATENCIÓN TENS ESPECIALIZADA
+                                    break;
+                            }
+                        }
+
+                        break;
+                    case 11: //TECNÓLOGO MÉDICO
+                        if(!empty($profesional->id_tipo_especialidad))
+                        {
+                            switch (intval($profesional->id_tipo_especialidad))
+                            {
+                                case 47:// 47	TECNOLOGÍA MÉDICA GENERAL
+                                    break;
+                                case 48:// 48	TECNOLOGÍA MÉDICA ESPECIALIZADA
+                                    if(!empty($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        switch (intval($profesional->id_sub_tipo_especialidad))
+										{
+                                            case 109: // 109	Laboratorio Radiología
+                                                break;
+                                            case 110: // 110	Laboratorio clínico
+                                                break;
+                                            case 111: // 111	Laboratorio Anatomía Patológica
+                                                break;
+                                            case 112: // 112	Laboratorio Otorrinolaringología
+                                                break;
+                                            case 113: // 113	Laboratorio Oftalmología
+                                                break;
+                                            case 114: // 114	Laboratorio Cardiología
+                                                break;
+                                            case 115: // 115	Laboratorio Neurología
+                                                break;
+                                            case 116: // 116	Laboratorio Dental
+                                                break;
+                                            case 117: // 117	Laboratorio Citopatología
+                                                break;
+                                            case 118: // 118	Laboratorio Inmunología
+                                                break;
+
+										}
+									}
+                                    break;
+                                case 54:// 54	TECNOLOGO ORL
+                                    break;
+                            }
+                        }
+
+                        break;
+                    case 12: //ARSENALERÍA
+                        if(!empty($profesional->id_tipo_especialidad))
+                        {
+                            switch (intval($profesional->id_tipo_especialidad))
+                            {
+                                case 49:// 49	ARSENALERÍA QUIRÚRGICA
+                                    break;
+                                case 50:// 50	ARSENALERÍA OBSTÉTRICA
+                                    break;
+                            }
+                        }
+                        break;
+                }
+				
+                $datos['estado'] = 1;
+                $datos['registros'] = $registro;
+                $datos['profesional'] = $profesional;
+                $datos['cant_recetas'] = $cant_recetas;
+                $datos['cant_examen_ppf'] = $cant_examen_ppf;
+
+                $datos['paciente'] = array(
+                    'id' => $paciente->id,
+                    'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos
+                );
+            }
+
         }
         else
         {

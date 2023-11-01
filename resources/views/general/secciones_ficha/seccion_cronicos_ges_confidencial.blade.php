@@ -227,18 +227,16 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                    <label class="floating-label-activo-sm">Peso</label>
+                                                    <label class="floating-label-activo-sm" for="registro_peso">Peso</label>
                                                     <input type="text" class="form-control form-control-sm" name="registro_peso" id="registro_peso">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                    <label class="floating-label-activo-sm">Variación</label>
-                                                    <input type="text" class="form-control form-control-sm"
-                                                        name="registro_peso_variacion" id="registro_peso_variacion">
+                                                    <label class="floating-label-activo-sm" for="registro_peso_variacion">Variación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="registro_peso_variacion" id="registro_peso_variacion">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                    <label class="floating-label-activo-sm">Peso Ideal</label>
-                                                    <input type="text" class="form-control form-control-sm" name="registro_peso_ideal"
-                                                        id="registro_peso_ideal">
+                                                    <label class="floating-label-activo-sm" for="registro_peso_ideal">Peso Ideal</label>
+                                                    <input type="text" class="form-control form-control-sm" name="registro_peso_ideal" id="registro_peso_ideal">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
                                                     <button type="button" onclick="registrar_control_obesidad();"
@@ -255,9 +253,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <table id="control_obesidad"
-                                                        class="display table table-striped dt-responsive nowrap pb-4 table-xs"
-                                                        style="width:100%">
+                                                    <table id="control_obesidad" class="display table table-striped dt-responsive nowrap pb-4 table-xs" style="width:100%">
                                                         <thead>
                                                             <tr>
                                                                 <th>Nº Control</th>

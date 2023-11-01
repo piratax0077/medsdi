@@ -245,8 +245,8 @@ class DetalleRecetaController extends Controller
             $detalle_receta->via_administracion = $via_administracion;
             $detalle_receta->periodo = $periodo;
             $detalle_receta->uso_cronico = $uso_cronico;
-            $detalle_receta->cantidad_compra = $cantidad_compra;            
-            $detalle_receta->cantidad = $this->obtenerCantidad($cantidad_compra);
+            $detalle_receta->cantidad_compra = $cantidad_compra;
+			$detalle_receta->cantidad = static::obtenerCantidad($cantidad_compra);
             $detalle_receta->cantidad_vendida = 0;
             $detalle_receta->comentario = $comentario;
 
@@ -395,7 +395,7 @@ class DetalleRecetaController extends Controller
 
     }
 
-    public function obtenerCantidad($texto)
+	static public function obtenerCantidad($texto)
     {
         $cantidad_text = $texto;
 
