@@ -51,6 +51,8 @@
                 </div>
                 <div class="row" id="ficha_imagenes">
                 </div>
+                <div class="row" id="ficha_examenes_espec">
+                </div>
 
                 <hr class="mt-0 mb-3">
 
@@ -188,14 +190,14 @@
                     }
 
                     var receta = 'NO';
-                    if(data.registros.cant_recetas>0)
+                    if(data.cant_recetas>0)
                         $('#texto_receta').html('SI');
                     else
                         $('#texto_receta').html('NO');
 
 
                     var examen = 'NO';
-                    if(data.registros.cant_examen_ppf>0)
+                    if(data.cant_examen_ppf>0)
                         $('#texto_examen').html('SI');
                     else
                         $('#texto_examen').html('NO');
@@ -328,7 +330,7 @@
                     // console.log(Object.keys(data.registros.fichas));
                     // console.log(Object.keys(data.registros.fichas).length);
                     $('#texto_ficha_esp').html('');
-                    var no_mostrar = ['id','id_fichas_atenciones','id_paciente','id_profesional','img','estado','created_at', 'updated_at']
+                    var no_mostrar = ['id','id_fichas_atenciones','id_paciente','id_profesional','img','estado','created_at', 'updated_at','examen_especial']
                     if(Object.keys(data.registros.fichas).length>0)
                     {
                         $.each(data.registros.fichas, function (key, ficha_esp)
@@ -374,6 +376,36 @@
                                         html += '   </a>';
                                         html += '</div>';
                                         $('#ficha_imagenes').append(html);
+                                    });
+                                }
+
+                                /** EXAMENES ESPECIALES */
+                                $('#ficha_examenes_espec').html('');
+                                if(key2 == 'examen_especial')
+                                {
+                                    $.each(value, function (key_exa, value_exa)
+                                    {
+                                        console.log(value_exa);
+                                        var html = '';
+                                        /** TITULO */
+                                        $('#ficha_examenes_espec').append('<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12"><span class="t-aten">'+value_exa.nombre+'</span> SI</div><div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-justify">');
+                                        // var info = $.parseJSON(value_exa.cuerpo);
+                                        // $.each(info, function (key_ex_det, value_ex_det) {
+                                        //     console.log(key_ex_det);
+                                        //     console.log(value_ex_det);
+                                        //     var titulo = $('label[for="' + $('#'+key_ex_det).attr('id') + '"]').text();
+                                        //     if(titulo != '')
+                                        //     {
+                                        //         var temp_key = key2.replaceAll('_', ' ');
+                                        //         titulo = toTitleCase(temp_key);
+                                        //     }
+
+                                        //     if(titulo != '' && value_ex_det != '')
+                                        //         $('#ficha_examenes_espec').append('<span style="color: #4984f1;">'+titulo+': </span> '+value_ex_det+',  ');
+                                        //     // $('#ficha_examenes_espec').append(html);
+                                        // });
+                                        $('#ficha_examenes_espec').append('</div>');
+
                                     });
                                 }
                             });

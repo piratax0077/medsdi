@@ -6,7 +6,6 @@
         </div>
     </div>
     <div class="row">
-
         @if(!empty(session('lic_token')) && session('lic_estado') == 1)
             @if (isset($fichaAtencion) && $fichaAtencion->hipotesis_diagnostico != null)
                 <div class="col-sm-12 col-md-6 text-center">

@@ -51,9 +51,12 @@ class ExamenEspecialidadController extends Controller
             if($template)
             {
                 $estructura = explode('|',$template->estructura);
+                $cant_estructura = count($estructura);
+                $cant_datos = 0;
                 $alias = $template->alias;
                 $info = array();
-                foreach ($estructura as $key => $value){
+                foreach ($estructura as $key => $value)
+                {
                     if($value == 'estado')
                         $info[$value] = '1';
                     else
@@ -66,10 +69,19 @@ class ExamenEspecialidadController extends Controller
                     $temp = str_replace('_fc','',$temp);
 
                     if(key_exists($temp,$info))
+                    {
                         $info[$temp] = $value_param;
+
+                        if( !empty($value_param) && !is_null($value_param) && $value_param != 'null' && $temp != 'id_fichas_atenciones' && $temp != 'id_ficha_otorrino' && $temp != 'id_paciente' && $temp != 'motivo' && $temp != 'estado')
+                        {
+                            $cant_datos++;
+                        }
+                    }
                 }
 
                 $datos['estado'] = 1;
+                $datos['cant_estructura'] = $cant_estructura;
+                $datos['cant_datos'] = $cant_datos;
                 $datos['msj'] = 'json';
                 $datos['json'] = json_encode($info);
                 // $datos['json'] = ($info);

@@ -113,7 +113,6 @@
         @include("general.modal.modal_no_disponible")
     </div>
     <!--Cierre: Container Completo-->
-	
 @endsection
 
 @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
