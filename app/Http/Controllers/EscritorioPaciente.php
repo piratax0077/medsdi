@@ -324,6 +324,9 @@ class EscritorioPaciente extends Controller
 
     public function miFichaMedica(Request $request)
     {
+       
+        
+
         //VALIDAR TOKEN
         $registro = Funciones::validTokenPermApp($request->token);
 
@@ -350,14 +353,14 @@ class EscritorioPaciente extends Controller
 
         if($direccion)
         {
-        $direccion_nombre = $direccion->direccion;
-        $numero_dir = $direccion->numero_dir;
-        $id_ciudad = $direccion->id_ciudad;
+            $direccion_nombre = $direccion->direccion;
+            $numero_dir = $direccion->numero_dir;
+            $id_ciudad = $direccion->id_ciudad;
 
-        $ciudad = Ciudad::find($id_ciudad);
-        $ciudad_nombre = $ciudad->nombre;
-        $region = Region::find($ciudad->id_region);
-        $region_nombre = $region->nombre;
+            $ciudad = Ciudad::find($id_ciudad);
+            $ciudad_nombre = $ciudad->nombre;
+            $region = Region::find($ciudad->id_region);
+            $region_nombre = $region->nombre;
         }else{
             $direccion_nombre = "";
             $numero_dir = "";
@@ -403,6 +406,8 @@ class EscritorioPaciente extends Controller
                 'parentezco'=>'N/A'
             );
         }
+
+        
 
         /* ANTECEDENTES */
 
@@ -454,6 +459,51 @@ class EscritorioPaciente extends Controller
         $especialidad = Especialidad::where('estado',1)->get();
         $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get();
 
+        /* --------------------------- HTML MODAL -------------------------- */
+        //MODALS - Externos
+        $contacto_emergencia_html = "
+            <table class='table table-round'>
+                <tr>
+                    <td>Nombre</td>
+                    <td>Apellido Materno</td>
+                    <td>Apellido Paterno</td>
+
+                    <td>Rut</td>
+                    <td>Edad</td>
+                    <td>Email</td>
+
+                    <td>Fecha Nacimiento</td>
+                    <td>Teléfono</td>
+                    <td>Parentezco</td>
+                </tr>
+                <tr>
+                    <td>$contacto_emergencia->nombre</td>
+                    <td>$contacto_emergencia->apellido_uno</td>
+                    <td>$contacto_emergencia->apellido_dos</td>
+
+                    <td>$contacto_emergencia->rut</td>
+                    <td>$contacto_emergencia->edad</td>
+                    <td>$contacto_emergencia->email</td>
+
+                    <td>$contacto_emergencia->fecha_nac</td>
+                    <td>$contacto_emergencia->telefono</td>
+                    <td>$contacto_emergencia->parentezco</td>
+                </tr>
+            </table>
+        ";
+
+        $datos = (object)array(
+            'contacto_emergencia' =>  $contacto_emergencia_html,
+            'tratamientos_activos' => '',
+            'confidencial' => '',
+            'responsables' => '',
+            'alergias' => '',
+            'cirugias' => ''
+        );
+
+
+        /* FIN --------------------------- HTML MODAL -------------------------- */
+
         return view('ficha_medica', [
             'id_usuario' => $id_usuario,
             'paciente' => $paciente,
@@ -465,7 +515,8 @@ class EscritorioPaciente extends Controller
             'fichas' => $fichas,
             'especialidad' => $especialidad,
             'sub_tipo_especialidad' => $sub_tipo_especialidad,
-            'direccion' => $direccion
+            'direccion' => $direccion,
+            'datos' => $datos // TEMPLATE PARA USO EN MODAL INCLUDE
 
         ]);
     }
