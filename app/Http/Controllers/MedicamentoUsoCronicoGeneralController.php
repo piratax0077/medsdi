@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Articulo;
 use App\Models\DetalleReceta;
 use App\Models\LugarAtencion;
 use App\Models\MedicamentoUsoCronicoGeneral;
 use App\Models\Paciente;
 use App\Models\Profesional;
+use App\Models\RecetaDosis;
+use App\Models\Recomendacion;
+use App\Models\RecomendacionDetalle;
 use Illuminate\Http\Request;
 
 class MedicamentoUsoCronicoGeneralController extends Controller
@@ -134,54 +138,144 @@ class MedicamentoUsoCronicoGeneralController extends Controller
 
     static public function ingresarMdicamentoNuevoAReceta(Request $request)
     {
+        $datos = array();
+
+        $articulo_encontrado = 0;
 
         $filtrotemp = array();
-        $filtrotemp[] = array('id_ficha',$request->id_ficha_atencion);
-        $filtrotemp[] = array('id_articulo',$request->id_medicament);
-        $result_busqueda = DetalleReceta::where($filtrotemp)->count();
-        if($result_busqueda == 0)
+        $filtrotemp[] = array('atencion',$request->id_ficha_atencion);
+        // $request->id_medicament
+        $result_busqueda = Recomendacion::where($filtrotemp)->get();
+        if($result_busqueda)
         {
-            $detalle_receta = new DetalleReceta();
-            $detalle_receta->id_ficha =  (int)$request->id_ficha_atencion;
-            $detalle_receta->id_ingreso_paciente = (int)0;
-            $detalle_receta->id_recuperacion = (int)0;
-            $detalle_receta->id_sala = (int)0;
-            $detalle_receta->id_articulo = $request->id_medicamento;
-            $detalle_receta->id_tipo_control = $request->id_medicamento_tipo_control;
-            $detalle_receta->producto = $request->nombre_medicamento;
-            $detalle_receta->presentacion = $request->dosis_medicamento;
-            $detalle_receta->posologia = $request->frecuencia_medicamento;
-            $detalle_receta->via_administracion = $request->via_administracion;
-            $detalle_receta->periodo = $request->periodo;
-            $detalle_receta->uso_cronico = 1;
-            $detalle_receta->cantidad_compra = $request->cantidad_comprar;
-            $detalle_receta->cantidad_vendida = 0;
-            $detalle_receta->comentario = '';
+            foreach ($result_busqueda as $key => $value)
+            {
+                $result_detalle = RecomendacionDetalle::where('id_recomendacion', $value->id)->get();
+                if($result_detalle)
+                {
+                    foreach ($result_detalle as $key_detalle => $value_detalle)
+                    {
+                        if(decrypt($value_detalle->id_articulo) == $request->id_medicament)
+                        {
+                            $articulo_encontrado++;
+                        }
+                    }
+                }
+            }
+        }
 
-            $profesional = Profesional::find($request->id_profesional);
-            $paciente = Paciente::find($request->id_paciente);
-            $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
+        if($articulo_encontrado == 0)
+        {
+            $id_receta = 0;
+            $cod_doc = 0;
 
-            // $detalle_receta->receta_token = encrypt( $dia.'_'.$profesional->nombre.'_'.$paciente->apellido_uno.'_'.$lugar_atencion->id );
+            $filtrotemp2 = array();
+            $filtrotemp2[] = array('atencion',$request->id_ficha_atencion);
+            $filtrotemp2[] = array('control',$request->id_medicamento_tipo_control);
 
-            $certificado_documento = CertificadoController::certificadoDocumento((int)$request->id_ficha_atencion, (int)$request->id_profesional, (int)$request->id_paciente, 1);
+            $buscar_receta_tipo = Recomendacion::where($filtrotemp2)->first();
+            if($buscar_receta_tipo)
+            {
+                $id_receta = $buscar_receta_tipo->id;
+                $cod_doc = $buscar_receta_tipo->cod_doc;
 
-            $dia = date('Y-m-d');
-            if($certificado_documento['estado'] == 1)
-                $detalle_receta->receta_token = $certificado_documento['certificado'];
-            else
-                $detalle_receta->receta_token = encrypt( $dia.'_'.$profesional->nombre.'_'.$paciente->apellido_uno.'_'.$lugar_atencion->id );
+                $result_detalle = (object) RecomendacionController::registrarDetalle(
+                    $id_receta,
+                    $request->id_medicamento_tipo_control, // $control - id_receta
+                    $request->id_medicamento, // $id_articulo - id_tipo_control
+                    $request->nombre_medicamento, // $articulo - id_producto
+                    $request->nombre_composicion_farmaco, // $farmaco - producto
+                    $request->id_dosis_medicamento, // $id_apariencia - id_presentacion
+                    $request->dosis_medicamento, // $apariencia - presentacion
+                    $request->id_frecuencia_medicamento, // $id_cuota - id_receta_dosis
+                    $request->frecuencia_medicamento, // $cuota - posologia
+                    $request->id_via_administracion, // $id_regimen - id_via_administracion
+                    $request->via_administracion, // $regimen - via_administracion
+                    $request->id_periodo, // $id_lapso - id_periodo
+                    $request->periodo, // $lapso - periodo
+                    1, // $uso_frecuente - uso_cronico
+                    $request->cantidad_comprar, // $volumen_compra - cantidad_compra
+                    $request->id_cantidad_comprar, // $volumen - cantidad
+                    0, // $volumen_entregado - cantidad_vendida
+                    $request->observaciones_medicamento, // $comentario - comentario
+                    $cod_doc // $cod_doc - token_doc
+                );
 
-
-            $detalle_receta->estado = 1;
-            if($detalle_receta->save()){
-                $datos['estado'] = 1;
-                $datos['msj'] = 'Registro Creado';
+                if($result_detalle->estado == 1)
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Medicamento agregado';
+                    $datos['resul_receta'] = $buscar_receta_tipo;
+                    $datos['result_det'] = $result_detalle;
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'falla en registro Medicamento';
+                    $datos['resul_receta'] = $buscar_receta_tipo;
+                    $datos['result_det'] = $result_detalle;
+                }
             }
             else
             {
-                $datos['estado'] = 0;
-                $datos['msj'] = 'Falla en el registro';
+                $token_doc_temp = (object)CertificadoController::certificadoDocumento((int)$request->id_ficha_atencion, (int)$request->id_profesional, (int)$request->id_paciente, 1);
+                $token_doc = $token_doc_temp->certificado;
+                $registro = (object)RecomendacionController::registrarRecomendacion(  $request->id_ficha_atencion, // $atencion
+                                                                '', // $salida
+                                                                '', // $herir
+                                                                '', // $cuadro
+                                                                $request->id_paciente, // $activo
+                                                                $request->id_profesional, // $aficionado
+                                                                $request->id_medicamento_tipo_control, // $control
+                                                                $token_doc, // $cod_doc
+                                                                session('lic_token'),// $token_auto, // $cod_auto
+                                                                '', // $info
+                                                            );
+                if($registro->estado)
+                {
+                    $id_receta = $registro->last_id;
+                    $cod_doc = $token_doc;
+
+                    $result_detalle = (object) RecomendacionController::registrarDetalle(
+                                $id_receta,
+                                $request->id_medicamento_tipo_control, // $control - id_receta
+                                $request->id_medicamento, // $id_articulo - id_tipo_control
+                                $request->nombre_medicamento, // $articulo - id_producto
+                                $request->nombre_composicion_farmaco, // $farmaco - producto
+                                $request->id_dosis_medicamento, // $id_apariencia - id_presentacion
+                                $request->dosis_medicamento, // $apariencia - presentacion
+                                $request->id_frecuencia_medicamento, // $id_cuota - id_receta_dosis
+                                $request->frecuencia_medicamento, // $cuota - posologia
+                                $request->id_via_administracion, // $id_regimen - id_via_administracion
+                                $request->via_administracion, // $regimen - via_administracion
+                                $request->id_periodo, // $id_lapso - id_periodo
+                                $request->periodo, // $lapso - periodo
+                                1, // $uso_frecuente - uso_cronico
+                                $request->cantidad_comprar, // $volumen_compra - cantidad_compra
+                                $request->id_cantidad_comprar, // $volumen - cantidad
+                                0, // $volumen_entregado - cantidad_vendida
+                                $request->observaciones_medicamento, // $comentario - comentario
+                                $cod_doc // $cod_doc - token_doc
+                    );
+                    if($result_detalle->estado == 1)
+                    {
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'Medicamento agregado';
+                        $datos['result_det'] = $result_detalle;
+                    }
+                    else
+                    {
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'falla en registro Medicamento';
+                        $datos['result_det'] = $result_detalle;
+                    }
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'falla generando receta';
+                    $datos['resul_receta'] = $registro;
+                }
             }
         }
         else
@@ -235,62 +329,322 @@ class MedicamentoUsoCronicoGeneralController extends Controller
             {
                 foreach ($resultMedCron as $key => $value)
                 {
+                    $articulo_encontrado = 0;
                     $filtrotemp = array();
-                    $filtrotemp[] = array('id_ficha',$request->id_ficha_atencion);
-                    $filtrotemp[] = array('id_articulo',$value->id_articulo);
-                    $result_busqueda = DetalleReceta::where($filtrotemp)->count();
-
-                    if($result_busqueda == 0)
+                    $filtrotemp[] = array('atencion',$request->id_ficha_atencion);
+                    // $request->id_medicament
+                    $result_busqueda = Recomendacion::where($filtrotemp)->get();
+                    if($result_busqueda)
                     {
-                        $detalle_receta = new DetalleReceta();
-                        $detalle_receta->id_ficha =  (int)$request->id_ficha_atencion;
-                        $detalle_receta->id_ingreso_paciente = (int)0;
-                        $detalle_receta->id_recuperacion = (int)0;
-                        $detalle_receta->id_sala = (int)0;
-                        $detalle_receta->id_articulo = $value->id_articulo;
-                        $detalle_receta->id_tipo_control = $value->id_tipo_control;
-                        $detalle_receta->producto = $value->nombre_medicamento;
-                        $detalle_receta->presentacion = $value->presentacion;
-                        $detalle_receta->posologia = $value->posologia;
-                        $detalle_receta->via_administracion = $value->via_administracion;
-                        $detalle_receta->periodo = $value->periodo;
-                        $detalle_receta->uso_cronico = 1;
-                        $detalle_receta->cantidad_compra = $value->cantidad;
-                        $detalle_receta->cantidad_vendida = 0;
-                        $detalle_receta->comentario = '';
-
-                        $profesional = Profesional::find($request->id_profesional);
-                        $paciente = Paciente::find($request->id_paciente);
-                        $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
-
-                        // $detalle_receta->receta_token = encrypt( $dia.'_'.$profesional->nombre.'_'.$paciente->apellido_uno.'_'.$lugar_atencion->id );
-
-                        $certificado_documento = CertificadoController::certificadoDocumento((int)$request->id_ficha_atencion, (int)$request->id_profesional, (int)$request->id_paciente, 1);
-
-                        $dia = date('Y-m-d');
-                        if($certificado_documento['estado'] == 1)
-                            $detalle_receta->receta_token = $certificado_documento['certificado'];
-                        else
-                            $detalle_receta->receta_token = encrypt( $dia.'_'.$profesional->nombre.'_'.$paciente->apellido_uno.'_'.$lugar_atencion->id );
-
-                        $detalle_receta->estado = 1;
-
-                        if($detalle_receta->save())
+                        foreach ($result_busqueda as $key2 => $value2)
                         {
-                            $datos['detalle'][$key]['estado'] = 1;
-                            $datos['detalle'][$key]['msj'] = 'Registro Creado';
+                            $result_detalle = RecomendacionDetalle::where('id_recomendacion', $value2->id)->get();
+                            if($result_detalle)
+                            {
+                                foreach ($result_detalle as $key_detalle => $value_detalle)
+                                {
+                                    if(decrypt($value_detalle->id_articulo) == $value->id_articulo)
+                                    {
+                                        $articulo_encontrado++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $datos['articulo_encontrado'][$key] = ''.$articulo_encontrado.'';
+
+                    if($articulo_encontrado == 0)
+                    {
+                        $filtrotemp2 = array();
+                        $filtrotemp2[] = array('atencion',$request->id_ficha_atencion);
+                        $filtrotemp2[] = array('control',$value->id_tipo_control);
+
+                        $buscar_receta_tipo = Recomendacion::where($filtrotemp2)->first();
+                        $datos['buscar_receta_tipo'] = $buscar_receta_tipo;
+                        if($buscar_receta_tipo)
+                        {
+                            $id_receta = $buscar_receta_tipo->id;
+                            $cod_doc = $buscar_receta_tipo->cod_doc;
+
+                            /** farmaco */
+                            $farmaco = '';
+                            $busqueda_farmaco = Articulo::where('nombre',$value->nombre_medicamento)->first();
+                            if($busqueda_farmaco)
+                                $farmaco = $busqueda_farmaco->droga;
+
+                            /** presentacion  y frecuencia (dosis-posologia) */
+                            /** presentacion */
+                            $id_presentacion = '';
+                            $presentacion = '';
+                            /** frecuencia */
+                            $id_frecuencia = '0';
+                            $frecuencia = $value->posologia;
+
+                            $temp_pre = array();
+                            $temp_pre[] = array('cod_parent', $value->id_articulo);
+                            $temp_pre[] = array('present', $value->presentacion);
+                            $busqueda_presentacion = Articulo::where($temp_pre)->first();
+                            if($busqueda_presentacion)
+                            {
+                                /** presentacion */
+                                $id_presentacion = $busqueda_presentacion->id;
+                                $presentacion = $busqueda_presentacion->present;
+
+                                /** frecuencia */
+                                $filtro_rec = array();
+                                $filtro_rec[] = array('cod_parent', $busqueda_presentacion->dosis);
+                                $filtro_rec[] = array('indic', $value->posologia);
+                                $receta_dosis = RecetaDosis::where($filtro_rec)->first();
+                                if($receta_dosis)
+                                    $id_frecuencia = $receta_dosis->id;
+
+                                $frecuencia = $value->posologia;
+                            }
+
+                            /** via administracion */
+                            $array_via = array(
+                                '',
+                                mb_strtoupper('Vía Oral'),
+                                mb_strtoupper('Vía Sublingual'),
+                                mb_strtoupper('Vía Tópica'),
+                                mb_strtoupper('Vía Oftalmológica'),
+                                mb_strtoupper('Vía Ótica'),
+                                mb_strtoupper('Vía Inhalatoria'),
+                                mb_strtoupper('Vía Nasal'),
+                                mb_strtoupper('Vía Rectal'),
+                                mb_strtoupper('Vía Vaginal'),
+                                mb_strtoupper('Vía parental'),
+                                mb_strtoupper('Otra Vía')
+                            );
+                            $id_via_administracion = '0';
+                            $via_administracion = $value->via_administracion;
+
+                            if(in_array(mb_strtoupper($value->via_administracion), $array_via))
+                            {
+                                $id_via_administracion = array_search(mb_strtoupper($value->via_administracion), $array_via);
+                            }
+
+                            /** periodo */
+                            $array_periodo = array(
+                                '',
+                                'SOS',
+                                'Dosis unica',
+                                '3 días',
+                                '5 días',
+                                '7 días',
+                                '10 días',
+                                '15 días',
+                                '30 días',
+                                'Permanente',
+                                'Vía parental',
+                                'Otro Periodo',
+                            );
+                            $id_periodo = 0;
+                            $periodo = $value->periodo;
+                            if(in_array(mb_strtoupper($periodo), $array_periodo))
+                            {
+                                $id_periodo = array_search(mb_strtoupper($periodo), $array_periodo);
+                            }
+
+                            /** cantidad */
+                            $texto_cantidad = $value->cantidad;
+                            $n1 = strpos($texto_cantidad, '(');
+                            $n2 = strpos($texto_cantidad, ')');
+                            $largo = ($n2-($n1+1));
+                            $numero_cantidad = (int)substr($texto_cantidad, $n1+1,$largo);
+
+
+                            $result_detalle = (object) RecomendacionController::registrarDetalle(
+                                $id_receta,
+                                $value->id_tipo_control, // $control - id_receta
+                                $value->id_articulo, // $id_articulo - id_tipo_control
+                                $value->nombre_medicamento, // $articulo - id_producto
+                                $farmaco, // $farmaco - producto
+                                $id_presentacion, // $id_apariencia - id_presentacion
+                                $presentacion, // $apariencia - presentacion
+                                $id_frecuencia, // $id_cuota - id_receta_dosis
+                                $frecuencia, // $cuota - posologia
+                                $id_via_administracion, // $id_regimen - id_via_administracion
+                                $via_administracion, // $regimen - via_administracion
+                                $id_periodo, // $id_lapso - id_periodo
+                                $periodo, // $lapso - periodo
+                                1, // $uso_frecuente - uso_cronico
+                                $texto_cantidad, // $volumen_compra - cantidad_compra
+                                $numero_cantidad, // $volumen - cantidad
+                                0, // $volumen_entregado - cantidad_vendida
+                                '', // $comentario - comentario
+                                $cod_doc // $cod_doc - token_doc
+                            );
+
+                            if($result_detalle->estado == 1)
+                            {
+                                $datos['estado'] = 1;
+                                $datos['msj'] = 'Medicamento agregado';
+                                $datos['resul_receta'] = $buscar_receta_tipo;
+                                $datos['result_det'] = $result_detalle;
+                            }
+                            else
+                            {
+                                $datos['estado'] = 0;
+                                $datos['msj'] = 'falla en registro Medicamento';
+                                $datos['resul_receta'] = $buscar_receta_tipo;
+                                $datos['result_det'] = $result_detalle;
+                            }
                         }
                         else
                         {
-                            $datos['detalle'][$key]['estado'] = 0;
-                            $datos['detalle'][$key]['msj'] = 'Falla en el registro';
-                        }
+                            /** registro de nueva receta */
+                            $token_doc_temp = (object)CertificadoController::certificadoDocumento((int)$request->id_ficha_atencion, (int)$value->id_profesional, (int)$value->id_paciente, 1);
+                            $token_doc = $token_doc_temp->certificado;
 
+                            $registro_receta = (object)RecomendacionController::registrarRecomendacion(  $request->id_ficha_atencion, // $atencion
+                                                                '', // $salida
+                                                                '', // $herir
+                                                                '', // $cuadro
+                                                                $value->id_paciente, // $activo
+                                                                $value->id_profesional, // $aficionado
+                                                                $value->id_tipo_control, // $control
+                                                                $token_doc, // $cod_doc
+                                                                session('lic_token'),// $token_auto, // $cod_auto
+                                                                '', // $info
+                                                            );
+                            if($registro_receta)
+                            {
+                                $id_receta = $registro_receta->last_id;
+                                $cod_doc = $token_doc;
+
+                                /** farmaco */
+                                $farmaco = '';
+                                $busqueda_farmaco = Articulo::where('nombre',$value->nombre_medicamento)->first();
+                                if($busqueda_farmaco)
+                                    $farmaco = $busqueda_farmaco->droga;
+
+                                /** presentacion  y frecuencia (dosis-posologia) */
+                                /** presentacion */
+                                $id_presentacion = '';
+                                $presentacion = '';
+                                /** frecuencia */
+                                $id_frecuencia = '0';
+                                $frecuencia = $value->posologia;
+
+                                $temp_pre = array();
+                                $temp_pre[] = array('cod_parent', $value->id_articulo);
+                                $temp_pre[] = array('present', $value->presentacion);
+                                $busqueda_presentacion = Articulo::where($temp_pre)->first();
+                                if($busqueda_presentacion)
+                                {
+                                    /** presentacion */
+                                    $id_presentacion = $busqueda_presentacion->id;
+                                    $presentacion = $busqueda_presentacion->present;
+
+                                    /** frecuencia */
+                                    $filtro_rec = array();
+                                    $filtro_rec[] = array('cod_parent', $busqueda_presentacion->dosis);
+                                    $filtro_rec[] = array('indic', $value->posologia);
+                                    $receta_dosis = RecetaDosis::where($filtro_rec)->first();
+                                    if($receta_dosis)
+                                        $id_frecuencia = $receta_dosis->id;
+
+                                    $frecuencia = $value->posologia;
+                                }
+
+                                /** via administracion */
+                                $array_via = array(
+                                    '',
+                                    mb_strtoupper('Vía Oral'),
+                                    mb_strtoupper('Vía Sublingual'),
+                                    mb_strtoupper('Vía Tópica'),
+                                    mb_strtoupper('Vía Oftalmológica'),
+                                    mb_strtoupper('Vía Ótica'),
+                                    mb_strtoupper('Vía Inhalatoria'),
+                                    mb_strtoupper('Vía Nasal'),
+                                    mb_strtoupper('Vía Rectal'),
+                                    mb_strtoupper('Vía Vaginal'),
+                                    mb_strtoupper('Vía parental'),
+                                    mb_strtoupper('Otra Vía')
+                                );
+                                $id_via_administracion = '0';
+                                $via_administracion = $value->via_administracion;
+
+                                if(in_array(mb_strtoupper($value->via_administracion), $array_via))
+                                {
+                                    $id_via_administracion = array_search(mb_strtoupper($value->via_administracion), $array_via);
+                                }
+
+                                /** periodo */
+                                $array_periodo = array(
+                                    '',
+                                    'SOS',
+                                    'Dosis unica',
+                                    '3 días',
+                                    '5 días',
+                                    '7 días',
+                                    '10 días',
+                                    '15 días',
+                                    '30 días',
+                                    'Permanente',
+                                    'Vía parental',
+                                    'Otro Periodo',
+                                );
+                                $id_periodo = 0;
+                                $periodo = $value->periodo;
+                                if(in_array(mb_strtoupper($periodo), $array_periodo))
+                                {
+                                    $id_periodo = array_search(mb_strtoupper($periodo), $array_periodo);
+                                }
+
+                                /** cantidad */
+                                $texto_cantidad = $value->cantidad;
+                                $n1 = strpos($texto_cantidad, '(');
+                                $n2 = strpos($texto_cantidad, ')');
+                                $largo = ($n2-($n1+1));
+                                $numero_cantidad = (int)substr($texto_cantidad, $n1+1,$largo);
+
+
+                                $result_detalle = (object) RecomendacionController::registrarDetalle(
+                                    $id_receta,
+                                    $value->id_tipo_control, // $control - id_receta
+                                    $value->id_articulo, // $id_articulo - id_tipo_control
+                                    $value->nombre_medicamento, // $articulo - id_producto
+                                    $farmaco, // $farmaco - producto
+                                    $id_presentacion, // $id_apariencia - id_presentacion
+                                    $presentacion, // $apariencia - presentacion
+                                    $id_frecuencia, // $id_cuota - id_receta_dosis
+                                    $frecuencia, // $cuota - posologia
+                                    $id_via_administracion, // $id_regimen - id_via_administracion
+                                    $via_administracion, // $regimen - via_administracion
+                                    $id_periodo, // $id_lapso - id_periodo
+                                    $periodo, // $lapso - periodo
+                                    1, // $uso_frecuente - uso_cronico
+                                    $texto_cantidad, // $volumen_compra - cantidad_compra
+                                    $numero_cantidad, // $volumen - cantidad
+                                    0, // $volumen_entregado - cantidad_vendida
+                                    '', // $comentario - comentario
+                                    $cod_doc // $cod_doc - token_doc
+                                );
+
+                                if($result_detalle->estado == 1)
+                                {
+                                    $datos['estado'] = 1;
+                                    $datos['msj'] = 'Medicamento agregado';
+                                    $datos['resul_receta'] = $buscar_receta_tipo;
+                                    $datos['result_det'] = $result_detalle;
+                                }
+                                else
+                                {
+                                    $datos['estado'] = 0;
+                                    $datos['msj'] = 'falla en registro Medicamento';
+                                    $datos['resul_receta'] = $buscar_receta_tipo;
+                                    $datos['result_det'] = $result_detalle;
+                                }
+                            }
+                        }
                     }
                     else
                     {
-                        $datos['detalle'][$key]['estado'] = 1;
-                        $datos['detalle'][$key]['msj'] = 'Medicamento ya existente en receta';
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'Medicamento ya existente en receta';
                     }
                 }
                 $datos['estado'] = 1;

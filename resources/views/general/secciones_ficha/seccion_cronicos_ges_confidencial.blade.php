@@ -7,123 +7,42 @@
         </div>
         <div id="cgc-c" class="collapse show" aria-labelledby="cgc" data-parent="#cgc">
             <div class="card-body-aten-a">
-                <form>
-                    <div class="row">
-                        <!--NUEVO ANTECEDENTE-->
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" onchange="ag_antecendente();" id="check_antecedentes" name="check_antecedentes" value="{!! old('check_antecedentes') !!}">
-                                            <label class="custom-control-label" for="check_antecedentes">Agregar antecedente</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" hidden>
-                                <div class="col-sm-12">
-                                    <div class="alert alert-warning mx-auto" role="alert">
-                                        <table class="table table-borderless mt-0 mb-0">
-                                            <tbody>
-                                                <tr id="tr_obesidad">
-                                                    <td class="align-middle pb-1 pt-1">Obesidad</td>
-                                                    <td class="align-middle pb-1 pt-1">
-                                                        <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                                            <i class="feather icon-x"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr id="tr_diabetes">
-                                                    <td class="align-middle pb-1 pt-1">Diabetes</td>
-                                                    <td class="align-middle pb-1 pt-1">
-                                                        <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                                            <i class="feather icon-x"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr id="tr_hipertesion">
-                                                    <td class="align-middle pb-1 pt-1">Hipertensión</td>
-                                                    <td class="align-middle pb-1 pt-1">
-                                                        <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                                            <i class="feather icon-x"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                <div class="row">
+                    <!--NUEVO ANTECEDENTE-->
+                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" onchange="ag_antecendente();" id="check_antecedentes" name="check_antecedentes" value="{!! old('check_antecedentes') !!}">
+                                        <label class="custom-control-label" for="check_antecedentes">Agregar antecedente</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {{-- CRONICO --}}
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" onchange="es_cronico();" id="enf_cronico" name="enf_cronico" data-toggle="modal" data-target="#form_enfermo_cronico" value="{!! old('enf_cronico') !!}">
-                                            <label class="custom-control-label" for="enf_cronico">¿Es enfermo crónico?</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" hidden>
-                                <div class="col-sm-12">
-                                    <div class="alert alert-warning mx-auto" role="alert">
-                                        <table class="table table-borderless mt-0 mb-0">
-                                            <tbody>
-                                                <tr id="tr_obesidad">
-                                                    <td class="align-middle pb-1 pt-1">Obesidad</td>
-                                                    <td class="align-middle pb-1 pt-1">
-                                                        <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                                            <i class="feather icon-x"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr id="tr_diabetes">
-                                                    <td class="align-middle pb-1 pt-1">Diabetes</td>
-                                                    <td class="align-middle pb-1 pt-1">
-                                                        <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                                            <i class="feather icon-x"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr id="tr_hipertesion">
-                                                    <td class="align-middle pb-1 pt-1">Hipertensión</td>
-                                                    <td class="align-middle pb-1 pt-1">
-                                                        <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
-                                                            <i class="feather icon-x"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- GES --}}
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="modal_ges" name="modal_ges" value="{!! old('modal_ges') !!}">
-                                            {{-- <label for="modal_ges" class="cr" data-toggle="modal"
-                                                    data-target="#form_ges"></label> --}}
-                                            <label class="custom-control-label" for="modal_ges">GES</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" hidden>
-                                <div class="alert alert-warning mx-auto my-0" role="alert">
+                        <div class="row" hidden>
+                            <div class="col-sm-12">
+                                <div class="alert alert-warning mx-auto" role="alert">
                                     <table class="table table-borderless mt-0 mb-0">
                                         <tbody>
-                                            <tr>
-                                                <td class="align-middle pb-1 pt-1">Paciente GES<br>PS.02
+                                            <tr id="tr_obesidad">
+                                                <td class="align-middle pb-1 pt-1">Obesidad</td>
+                                                <td class="align-middle pb-1 pt-1">
+                                                    <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
+                                                        <i class="feather icon-x"></i>
+                                                    </button>
                                                 </td>
+                                            </tr>
+                                            <tr id="tr_diabetes">
+                                                <td class="align-middle pb-1 pt-1">Diabetes</td>
+                                                <td class="align-middle pb-1 pt-1">
+                                                    <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
+                                                        <i class="feather icon-x"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr id="tr_hipertesion">
+                                                <td class="align-middle pb-1 pt-1">Hipertensión</td>
                                                 <td class="align-middle pb-1 pt-1">
                                                     <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
                                                         <i class="feather icon-x"></i>
@@ -135,29 +54,108 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="confidencial" name="confidencial" value="{!! old('confidencial') !!}" >
-                                            <label class="custom-control-label" for="confidencial">Confidencial</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" id="confidencial_descripcion" style="display: none">
-                                <div class="col-sm-12">
-                                    <div class="alert alert-warning mx-auto" role="alert">
-                                        <p class="text-dark f-14 pb-1 pt-1 mt-0 mb-0">Este registro
-                                            de atención médica es confidencial
-                                        </p>
+                    </div>
+                    {{-- CRONICO --}}
+                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" onchange="es_cronico();" id="enf_cronico" name="enf_cronico" data-toggle="modal" data-target="#form_enfermo_cronico" value="{!! old('enf_cronico') !!}">
+                                        <label class="custom-control-label" for="enf_cronico">¿Es enfermo crónico?</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="row" hidden>
+                            <div class="col-sm-12">
+                                <div class="alert alert-warning mx-auto" role="alert">
+                                    <table class="table table-borderless mt-0 mb-0">
+                                        <tbody>
+                                            <tr id="tr_obesidad">
+                                                <td class="align-middle pb-1 pt-1">Obesidad</td>
+                                                <td class="align-middle pb-1 pt-1">
+                                                    <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
+                                                        <i class="feather icon-x"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr id="tr_diabetes">
+                                                <td class="align-middle pb-1 pt-1">Diabetes</td>
+                                                <td class="align-middle pb-1 pt-1">
+                                                    <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
+                                                        <i class="feather icon-x"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr id="tr_hipertesion">
+                                                <td class="align-middle pb-1 pt-1">Hipertensión</td>
+                                                <td class="align-middle pb-1 pt-1">
+                                                    <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
+                                                        <i class="feather icon-x"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </form>
+                    {{-- GES --}}
+                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="modal_ges" name="modal_ges" value="{!! old('modal_ges') !!}">
+                                        {{-- <label for="modal_ges" class="cr" data-toggle="modal"
+                                                data-target="#form_ges"></label> --}}
+                                        <label class="custom-control-label" for="modal_ges">GES</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" hidden>
+                            <div class="alert alert-warning mx-auto my-0" role="alert">
+                                <table class="table table-borderless mt-0 mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="align-middle pb-1 pt-1">Paciente GES<br>PS.02
+                                            </td>
+                                            <td class="align-middle pb-1 pt-1">
+                                                <button type="button" class="btn  btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Quitar">
+                                                    <i class="feather icon-x"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="confidencial" name="confidencial" value="{!! old('confidencial') !!}" >
+                                        <label class="custom-control-label" for="confidencial">Confidencial</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="confidencial_descripcion" style="display: none">
+                            <div class="col-sm-12">
+                                <div class="alert alert-warning mx-auto" role="alert">
+                                    <p class="text-dark f-14 pb-1 pt-1 mt-0 mb-0">Este registro
+                                        de atención médica es confidencial
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -170,11 +168,12 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content bg-light">
             <div class="modal-header bg-info">
+
                 <div class="row">
-                    <div class="col-md-4">
-                        <h5 class="modal-title text-white">Controles de enfermedades crónicas</h5>
+                    <div class="col-md-6">
+                        <h5 class="modal-title text-white">Control de Enfermedades Crónicas</h5>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <select class="form-control form-control-sm" onchange="cambiar_enfermedad_cronica();" id="cronicos" name="cronicos" >
                             <option value="n_C">Seleccione control</option>
                             <option value="cpeso">Obesidad</option>
@@ -221,33 +220,31 @@
                                     <div class="tab-content" id="orl_adulto">
                                         <!--CONTROL-->
                                         <div class="tab-pane fade show active" id="obes-ctrl" role="tabpanel" aria-labelledby="obes-ctrl-tab">
-                                             <form>
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <h5 class="t-aten">Control</h5>
-                                                    </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <h5 class="t-aten">Control</h5>
                                                 </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">Peso</label>
-                                                        <input type="text" class="form-control form-control-sm" name="registro_peso" id="registro_peso">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">Variación</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="registro_peso_variacion" id="registro_peso_variacion">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">Peso Ideal</label>
-                                                        <input type="text" class="form-control form-control-sm" name="registro_peso_ideal"
-                                                            id="registro_peso_ideal">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <button type="button" onclick="registrar_control_obesidad();"
-                                                        class="btn btn-info-light-c btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
-                                                    </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                    <label class="floating-label-activo-sm">Peso</label>
+                                                    <input type="text" class="form-control form-control-sm" name="registro_peso" id="registro_peso">
                                                 </div>
-                                            </form>
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                    <label class="floating-label-activo-sm">Variación</label>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        name="registro_peso_variacion" id="registro_peso_variacion">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                    <label class="floating-label-activo-sm">Peso Ideal</label>
+                                                    <input type="text" class="form-control form-control-sm" name="registro_peso_ideal"
+                                                        id="registro_peso_ideal">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                    <button type="button" onclick="registrar_control_obesidad();"
+                                                    class="btn btn-info-light-c btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
+                                                </div>
+                                            </div>
                                         </div>
                                         <!--HISTORIAL DE CONTROLES-->
                                         <div class="tab-pane fade show" id="obes-hist" role="tabpanel" aria-labelledby="obes-hist-tab">
@@ -461,34 +458,32 @@
                                     <div class="tab-content" id="orl_adulto">
                                         <!--CONTROL-->
                                         <div class="tab-pane fade show active" id="hiper-ctrl" role="tabpanel" aria-labelledby="hiper-ctrl-tab">
-                                             <form>
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <h5 class="t-aten">Control</h5>
-                                                    </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <h5 class="t-aten">Control</h5>
                                                 </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">Presión Sistólica</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="presion_sistolica_hipertension" id="presion_sistolica_hipertension">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">Presión Diastólica</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="presion_diastolica_hipertension" id="presion_diastolica_hipertension">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">Presión Ideal</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="ideal_hipertension" id="ideal_hipertension">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                        <button type="button" onclick="registrar_hipertension();"
-                                                        class="btn btn-info-light-c btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
-                                                    </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                    <label class="floating-label-activo-sm">Presión Sistólica</label>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        name="presion_sistolica_hipertension" id="presion_sistolica_hipertension">
                                                 </div>
-                                            </form>
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                    <label class="floating-label-activo-sm">Presión Diastólica</label>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        name="presion_diastolica_hipertension" id="presion_diastolica_hipertension">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                    <label class="floating-label-activo-sm">Presión Ideal</label>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        name="ideal_hipertension" id="ideal_hipertension">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                                    <button type="button" onclick="registrar_hipertension();"
+                                                    class="btn btn-info-light-c btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
+                                                </div>
+                                            </div>
                                         </div>
                                         <!--HISTORIAL DE CONTROLES-->
                                         <div class="tab-pane fade show" id="hiper-hist" role="tabpanel" aria-labelledby="hiper-hist-tab">
@@ -696,52 +691,49 @@
                                     <div class="tab-content" id="orl_adulto">
                                         <!--CONTROL-->
                                         <div class="tab-pane fade show active" id="diabet-ctrl" role="tabpanel" aria-labelledby="diabet-ctrl-tab">
-                                             <form>
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <label class="floating-label-activo-sm">Peso</label>
-                                                        <input type="text" class="form-control form-control-sm" name="peso_diabetes"
-                                                            id="peso_diabetes">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <label class="floating-label-activo-sm">Piés</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pies_diabetes"
-                                                            id="pies_diabetes">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <label class="floating-label-activo-sm">Hg A1c</label>
-                                                        <input type="text" class="form-control form-control-sm" name="hga1c_diabetes"
-                                                            id="hga1c_diabetes">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <label class="floating-label-activo-sm">Colesterol</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="colesterol_diabetes" id="colesterol_diabetes">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <label class="floating-label-activo-sm">Creatina</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="creatina_diabetes" id="creatina_diabetes">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <label class="floating-label-activo-sm">Glicosilada postprandial</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="glicosilada_postprandial_diabetes"
-                                                            id="glicosilada_postprandial_diabetes">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <label class="floating-label-activo-sm">Glicosilada ayuno</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="glicosilada_ayuno_diabetes" id="glicosilada_ayuno_diabetes">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <button type="button" onclick="registrar_diabetes();"
-                                                            class="btn btn-info-light-c btn-sm btn-block"><i
-                                                                class="feather icon-save"></i> Guardar control</button>
-                                                    </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-12 col-md-3">
+                                                    <label class="floating-label-activo-sm">Peso</label>
+                                                    <input type="text" class="form-control form-control-sm" name="peso_diabetes"
+                                                        id="peso_diabetes">
                                                 </div>
-                                            </form>
-
+                                                <div class="form-group col-sm-12 col-md-3">
+                                                    <label class="floating-label-activo-sm">Piés</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pies_diabetes"
+                                                        id="pies_diabetes">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-3">
+                                                    <label class="floating-label-activo-sm">Hg A1c</label>
+                                                    <input type="text" class="form-control form-control-sm" name="hga1c_diabetes"
+                                                        id="hga1c_diabetes">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-3">
+                                                    <label class="floating-label-activo-sm">Colesterol</label>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        name="colesterol_diabetes" id="colesterol_diabetes">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-3">
+                                                    <label class="floating-label-activo-sm">Creatina</label>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        name="creatina_diabetes" id="creatina_diabetes">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-3">
+                                                    <label class="floating-label-activo-sm">Glicosilada postprandial</label>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        name="glicosilada_postprandial_diabetes"
+                                                        id="glicosilada_postprandial_diabetes">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-3">
+                                                    <label class="floating-label-activo-sm">Glicosilada ayuno</label>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        name="glicosilada_ayuno_diabetes" id="glicosilada_ayuno_diabetes">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-3">
+                                                    <button type="button" onclick="registrar_diabetes();"
+                                                        class="btn btn-info-light-c btn-sm btn-block"><i
+                                                            class="feather icon-save"></i> Guardar control</button>
+                                                </div>
+                                            </div>
                                         </div>
                                         <!--HISTORIAL DE CONTROLES-->
                                         <div class="tab-pane fade show" id="diabet-hist" role="tabpanel" aria-labelledby="diabet-hist-tab">
@@ -965,28 +957,28 @@
                                     <div class="tab-content" id="tab_cinsufren">
                                         <!--CONTROL-->
                                         <div class="tab-pane fade show active" id="renal-ctrl" role="tabpanel" aria-labelledby="renal-ctrl-tab">
-                                             <form>
-                                                <!--<div class="form-row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <h5 class="t-aten">Control</h5>
-                                                    </div>
-                                                </div>-->
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <h5 class="t-aten">Control</h5>
-                                                    </div>
+
+                                            <!--<div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <h5 class="t-aten">Control</h5>
                                                 </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-2 col-md-2">
-                                                        <label class="floating-label-activo-sm">Peso</label>
-                                                        <input type="text" class="form-control form-control-sm" name="registro_peso" id="registro_peso">
-                                                    </div>
-                                                    <div class="form-group col-sm-4 col-md-4">
-                                                        <button type="button" onclick="registrar_control_insuficiencia_renal();"
-                                                        class="btn btn-info-light-c btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
-                                                    </div>
+                                            </div>-->
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <h5 class="t-aten">Control</h5>
                                                 </div>
-                                            </form>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-2 col-md-2">
+                                                    <label class="floating-label-activo-sm">Peso</label>
+                                                    <input type="text" class="form-control form-control-sm" name="registro_peso" id="registro_peso">
+                                                </div>
+                                                <div class="form-group col-sm-4 col-md-4">
+                                                    <button type="button" onclick="registrar_control_insuficiencia_renal();"
+                                                    class="btn btn-info-light-c btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
+                                                </div>
+                                            </div>
+
                                         </div>
                                         <!--HISTORIAL DE CONTROLES-->
                                         <div class="tab-pane fade show" id="renal-hist" role="tabpanel" aria-labelledby="renal-hist-tab">
@@ -1216,8 +1208,6 @@
         </div>
     </div>
 </div>
-
-
 <!-- MODAL AÑADIR ANTECEDENTE-->
 <div id="m_agregar_antecedente" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="form_enfermedad_cronica" aria-hidden="true">
     <div class="modal-dialog modal-lg  modal-dialog-centered" role="document">
@@ -2045,14 +2035,19 @@
         var id_medicamento = $('#id_medicamento_'+tipo).val();
         var id_medicamento_tipo_control = $('#id_medicamento_tipo_control_'+tipo).val();
         var nombre_composicion_farmaco = $('#nombre_composicion_farmaco_'+tipo).val();
+        var id_dosis_medicamento = $('#dosis_medicamento_'+tipo).val();
         var dosis_medicamento = $('#dosis_medicamento_'+tipo).val();
+        var id_frecuencia_medicamento = $('#frecuencia_medicamento_'+tipo).val();
         var frecuencia_medicamento = $('#frecuencia_medicamento_'+tipo).val();
         var dosis_medicamento_2 = $('#dosis_medicamento_'+tipo+'_2').val();
         var frecuencia_medicamento_2 = $('#frecuencia_medicamento_'+tipo+'_2').val();
+        var id_via_administracion = $('#via_administracion_'+tipo).val();
         var via_administracion = $('#via_administracion_'+tipo).val();
         var observaciones_medicamento = $('#observaciones_medicamento_'+tipo).val();
+        var id_periodo = $('#periodo_'+tipo).val();
         var periodo = $('#periodo_'+tipo).val();
         var observaciones_periodo = $('#observaciones_periodo_'+tipo).val();
+        var id_cantidad_comprar = $('#cantidad_comprar_'+tipo).val();
         var cantidad_comprar = $('#cantidad_comprar_'+tipo).val();
         var otra_cantidad_a_comprar = $('#otra_cantidad_a_comprar_'+tipo).val();
 
@@ -2197,11 +2192,16 @@
                     id_medicamento : id_medicamento,
                     id_medicamento_tipo_control : id_medicamento_tipo_control,
                     nombre_composicion_farmaco : nombre_composicion_farmaco,
+                    id_dosis_medicamento : id_dosis_medicamento,
                     dosis_medicamento : dosis_medicamento,
+                    id_frecuencia_medicamento : id_frecuencia_medicamento,
                     frecuencia_medicamento : frecuencia_medicamento,
+                    id_via_administracion : id_via_administracion,
                     via_administracion : via_administracion,
                     observaciones_medicamento : observaciones_medicamento,
+                    id_periodo : id_periodo,
                     periodo : periodo,
+                    id_cantidad_comprar : id_cantidad_comprar,
                     cantidad_comprar : cantidad_comprar,
 
                     tipo_enfermedad:tipo_enfermedad,
@@ -2670,7 +2670,7 @@
                 select_cant_comp.find('option').remove();
                 select_cant_comp.append('<option value="0">Seleccione</option>');
                 $(data).each(function(i, v) { // indice, valor
-                    select_cant_comp.append('<option value="' + v.id + '">' + v.cant +'</option>');
+                    select_cant_comp.append('<option value="' + v.cantidad + '">' + v.cant +'</option>');
                 });
                 select_cant_comp.append('<option value="999">Otra Cantidad</option>');
             }
