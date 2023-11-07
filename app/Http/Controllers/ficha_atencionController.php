@@ -6954,6 +6954,8 @@ class ficha_atencionController extends Controller
                                                 $registro->fichas = array('digestiva_general'=>$temp_ficha);
                                                 break;
                                             case 12: // 12 Cirugía Gástrica
+                                                $temp_ficha = FichaCirugiaDigestivaGeneralAdulto::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+                                                $registro->fichas = array('digestiva_general'=>$temp_ficha);
                                                 break;
                                             case 13: // 13 Cirugía maxilofacial
                                                 break;
