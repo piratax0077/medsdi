@@ -966,7 +966,7 @@ Route::group([
 
  /** ENFERMERIA  */
   Route::group([
-    'middleware' => ['role:Enfermera|Admin'],
+    'middleware' => ['role:Enfermera|Tens|Admin'],
     'prefix' => 'Enfermeria',
 ], function () {
     Route::get('/Enfermera_administrativa', [App\Http\Controllers\EnfermeriaController::class, 'enfermera_administrativa'])->name('app.enfermeria.enfermera_administrativa');

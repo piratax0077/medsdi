@@ -325,12 +325,49 @@
                     }
 
 
-                    // console.log(data.registros.fichas);
-                    // console.log(typeof data.registros.fichas);
-                    // console.log(Object.keys(data.registros.fichas));
-                    // console.log(Object.keys(data.registros.fichas).length);
                     $('#texto_ficha_esp').html('');
                     var no_mostrar = ['id','id_fichas_atenciones','id_paciente','id_profesional','img','estado','created_at', 'updated_at','examen_especial']
+
+                    /** POST QUIRURGICO */
+                    if(Object.keys(data.registros.post_quirurgico).length>0)
+                    {
+                        $.each(data.registros.post_quirurgico, function (key, post_q)
+                        {
+                            console.log(post_q);
+
+                            $.each(post_q, function (keyq, value_q)
+                            {
+                                /** INFORMACION */
+                                if(jQuery.inArray( keyq, no_mostrar ) == -1)
+                                {
+                                    if(value_q != '' && value_q != '0' && value_q != 'null' && value_q != null)
+                                    {
+                                        // validar si es checkbox
+                                        if($('#'+value_q).prop('type') == 'checkbox')
+                                        {
+                                            if(value_q == 1)
+                                                value_q = 'SI';
+                                            else
+                                                value_q = 'NO';
+                                        }
+
+                                        // validar si es select
+                                        if($('#'+value_q).prop('nodeName') == 'SELECT')
+                                        {
+                                            value_q = $('#'+keyq+' option[value=2]').text();
+                                        }
+                                        // var temp_key = keyq.replaceAll('_', ' ');
+                                        // $('#texto_ficha_esp').append('<span style="color: #4984f1;">'+toTitleCase(temp_key)+':</span> '+value_q+',  ');
+                                        var titulo = $('label[for="' + $('#'+keyq).attr('id') + '"]').text();
+                                        if(titulo != '' && value_q != '')
+                                            $('#texto_ficha_esp').append('<span style="color: #4984f1;">'+titulo+':</span> '+value_q+',  ');
+                                    }
+                                }
+                            });
+                        });
+                    }
+
+                    /** FIAS EXTRAS */
                     if(Object.keys(data.registros.fichas).length>0)
                     {
                         $.each(data.registros.fichas, function (key, ficha_esp)
@@ -344,10 +381,19 @@
                                 {
                                     if(value != '' && value != '0' && value != 'null' && value != null)
                                     {
+                                        // validar si es checkbox
+                                        if($('#'+key2).prop('type') == 'checkbox')
+                                        {
+                                            if(value == 1)
+                                                value = 'SI';
+                                            else
+                                                value = 'NO';
+                                        }
+
                                         // validar si es select
                                         if($('#'+key2).prop('nodeName') == 'SELECT')
                                         {
-                                            value = $('#disfonia option[value=2]').text();
+                                            value = $('#'+key2+' option[value=2]').text();
                                         }
 
                                         // var temp_key = key2.replaceAll('_', ' ');

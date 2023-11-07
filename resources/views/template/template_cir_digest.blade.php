@@ -75,12 +75,10 @@
 
     <!-- Modal de la vista -->
     @yield('Modals')
-    @yield('Modals-med-exa')
+    @yield('modals-med-exa')
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
-    @include('atencion_medica.secciones_especialidad.ficha_cirugia_digest_tipo')
-    @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_clasif_colon')
-	@include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia')
+
 
 
     <!-- Modal de la vista fin -->
@@ -120,6 +118,8 @@
     <!--Sidebars-->
     <script src="{{ asset('js/bs_canvas.js') }}"></script>
 
+    <!--SELECT 2-->
+    <script src="{{ asset('js/plugins/select2.full.min.js') }}"></script>
 
     <!--Formularios Modals-->
     <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>

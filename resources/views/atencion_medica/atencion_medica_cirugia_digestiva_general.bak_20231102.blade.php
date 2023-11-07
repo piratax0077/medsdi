@@ -41,15 +41,23 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
-                                    <li class="nav-item">
-                                        @if(!empty(session('lic_token')) && session('lic_estado') == 1)
-										    <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
+                                   <li class="nav-item">										
+										@if(!empty(session('lic_token')) && session('lic_estado') == 1)
+										<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
 										@else
 											<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>
-										@endif
+										@endif 
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
+                                        {{-- <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a> --}}
+                                        @if (request('token'))
+                                            <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
+                                        @else
+                                            @php
+                                                $url_temp = 'Profesional/Paciente/Ficha_consulta?_token='.request('_token').'&id_hora_realizar='.request('id_hora_realizar').'&lugar_atencion_id='.request('lugar_atencion_id').'';
+                                            @endphp
+                                            <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $paciente->id_usuario,'urla'=> $url_temp,'urln' => $url_temp, 'id_tipo' => 9]) }}">FMU</a>
+                                        @endif
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
@@ -99,20 +107,22 @@
                 </div>
             </div>
         </div>
-        <!-- SIDE BAR CIR DIGEST GENERAL -->
-        @include("general.modal.modal_no_disponible")
+
+        <!-- SIDE BAR ORL -->
         @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
         @include("atencion_medica.include.sidebar_derecho_cirugia_digest"){{-- modales y data de sidebar especialidad --}}
+
+        <!--Modals de especialidad -->
+        {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
+
+        <!--Modals formularios generales-->
+        {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
+        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")--}}
+
+
     </div>
     <!--Cierre: Container Completo-->
-
-    <!-- MODALES DE LA VISTA -->
-    @include('atencion_medica.secciones_especialidad.ficha_cirugia_digest_tipo')
-    @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_clasif_colon')
+	@include("general.modal.modal_no_disponible")
 	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
-    @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_eda')
-    @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_edb')
-    @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
-    @include('general.hospitalizacion.modals.in_solic_pabellon')
 @endsection
 @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
