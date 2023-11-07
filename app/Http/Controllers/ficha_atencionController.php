@@ -3704,28 +3704,28 @@ class ficha_atencionController extends Controller
                     $ficha_cd->id_ficha_cirugia = $ficha_cirugia_gen_adul->id;
                     $ficha_cd->id_profesional = $id_profesional;
                     $ficha_cd->id_paciente = $id_paciente;
-                    // $ficha_cd->cda_mc = $request->cda_mc;
-                    // $ficha_cd->cda_ex_fis = $request->cda_ex_fis;
-                    // $ficha_cd->urgencia_cdga = $request->urgencia_cdga;
-                    // $ficha_cd->obs_egp_cda = $request->obs_egp_cda;
-                    // $ficha_cd->tto_med_cda = $request->tto_med_cda;
-                    // $ficha_cd->rec_tto_cda = $request->rec_tto_cda;
-                    // $ficha_cd->pr_cda = $request->pr_cda;
-                    // $ficha_cd->tipo_proc_cda = $request->tipo_proc_cda;
-                    // $ficha_cd->plan_proc_cda = $request->plan_proc_cda;
-                    // $ficha_cd->cirug_cda = $request->cirug_cda;
-                    // $ficha_cd->obs_plan_trat_cda = $request->obs_plan_trat_cda;
-                    // $ficha_cd->cdb_ex_fisico_ab = $request->cdb_ex_fisico_ab;
-                    // $ficha_cd->cdb_ex_tr = $request->cdb_ex_tr;
-                    // $ficha_cd->urgencia_cdb = $request->urgencia_cdb;
-                    // $ficha_cd->obs_egp_cdb  = $request->obs_egp_cdb ;
-                    // $ficha_cd->tto_med_cdb = $request->tto_med_cdb;
-                    // $ficha_cd->rec_tto_cdb = $request->rec_tto_cdb;
-                    // $ficha_cd->pr_cdb = $request->pr_cdb;
-                    // $ficha_cd->tipo_proc_cdb = $request->tipo_proc_cdb;
-                    // $ficha_cd->plan_proc_cdb = $request->plan_proc_cdb;
-                    // $ficha_cd->cirug_cdb = $request->cirug_cdb;
-                    // $ficha_cd->obs_plan_trat_cdb = $request->obs_plan_trat_cdb;
+                    $ficha_cd->cda_mc = $request->cda_mc;
+                    $ficha_cd->cda_ex_fis = $request->cda_ex_fis;
+                    $ficha_cd->urgencia_cda = $request->urgencia_cda;
+                    $ficha_cd->obs_egp_cda = $request->obs_egp_cda;
+                    $ficha_cd->tto_med_cda = $request->tto_med_cda;
+                    $ficha_cd->rec_tto_cda = $request->rec_tto_cda;
+                    $ficha_cd->pr_cda = $request->pr_cda;
+                    $ficha_cd->tipo_proc_cda = $request->tipo_proc_cda;
+                    $ficha_cd->plan_proc_cda = $request->plan_proc_cda;
+                    $ficha_cd->cirug_cda = $request->cirug_cda;
+                    $ficha_cd->obs_plan_trat_cda = $request->obs_plan_trat_cda;
+                    $ficha_cd->cdb_ex_fisico_ab = $request->cdb_ex_fisico_ab;
+                    $ficha_cd->cdb_ex_tr = $request->cdb_ex_tr;
+                    $ficha_cd->urgencia_cdb = $request->urgencia_cdb;
+                    $ficha_cd->obs_egp_cdb  = $request->obs_egp_cdb ;
+                    $ficha_cd->tto_med_cdb = $request->tto_med_cdb;
+                    $ficha_cd->rec_tto_cdb = $request->rec_tto_cdb;
+                    $ficha_cd->pr_cdb = $request->pr_cdb;
+                    $ficha_cd->tipo_proc_cdb = $request->tipo_proc_cdb;
+                    $ficha_cd->plan_proc_cdb = $request->plan_proc_cdb;
+                    $ficha_cd->cirug_cdb = $request->cirug_cdb;
+                    $ficha_cd->obs_plan_trat_cdb = $request->obs_plan_trat_cdb;
                     $ficha_cd->cdg_mc = $request->cdg_mc;
                     $ficha_cd->cdg_ex_fis = $request->cdg_ex_fis;
                     $ficha_cd->urgencia_cdg = $request->urgencia_cdg;
@@ -3920,7 +3920,7 @@ class ficha_atencionController extends Controller
             return back()->with('error', $mensaje)->withInput();
         }
     }
-	
+
     /** REGISTRO FICHA ATENCION Y UROLOGIA*/
     public function store_uro(Request $request)
     {
