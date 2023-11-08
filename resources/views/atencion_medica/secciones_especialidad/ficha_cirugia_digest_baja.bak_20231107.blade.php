@@ -30,25 +30,6 @@
                     <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
                     <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
                     <input type="hidden" name="tipo_examen_especial" id="tipo_examen_especial" value="{{ $lista_examen_especial }}">
-                    @php
-                        /** carga de id examen de espcialidad tipo  */
-                        $temp = $lista_examen_especial;
-
-                        $array_temp = explode('|',$temp);
-                        //var_dump($array_temp);
-                        $array_temp2 = array();
-                        foreach($array_temp as $key=>$value)
-                        {
-                            $array_temp2[] = explode(',',$value);
-                        }
-                        $array_examen_especialidad_tipo = array();
-                        foreach($array_temp2 as $key=>$value)
-                        {
-                            $array_examen_especialidad_tipo[$value[0]] = $value[1];
-                        }
-                        // var_dump($array_examen_especialidad_tipo);
-                    @endphp
-
                     @csrf
                     <div class="tab-content" id="orl-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
@@ -60,17 +41,14 @@
                                         <!--Formulario / Menor de edad-->
                                         @include('general.secciones_ficha.seccion_menor')
                                         <!--Cierre: Formulario / Menor de edad-->
-
-                                        <!-- Motivo consulta -->
+                                        <!--Motivo consulta-->
                                         @include('general.secciones_ficha.motivo')
-                                        <!-- cierre Motivo consulta -->
-
                                         <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
                                         <div class="col-sm-12 col-md-12">
                                             <div class="card-a">
                                                 <div class="card-header-a" id="exam_esp_b_cdb">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_b_cdb_c" aria-expanded="false" aria-controls="exam_esp_b_cdb_c">
-                                                        Examen especialidad C.Digestiva Baja
+                                                        Detalle Examen Especialidad
                                                     </button>
                                                 </div>
                                                 <div id="exam_esp_b_cdb_c" class="collapse" aria-labelledby="exam_esp_b_cdb" data-parent="#exam_esp_b_cdb">
@@ -94,56 +72,44 @@
                                                                     <div class="tab-pane fade show active" id="cir_dig_sint" role="tabpanel" aria-labelledby="cir_dig_sint_tab">
                                                                         <div class="row">
                                                                             <div class="col-md-12">
-                                                                                <div class="card">
-                                                                                    <div class="card-body">
-                                                                                        <div class="row">
-                                                                                            <div class="col-sm-12">
-                                                                                                <div class="tab-content" id="v-pills-tabContent">
-                                                                                                    <div class="tab-pane fade show active" id="sint_dol" role="tabpanel" aria-labelledby="sint_dol-tab">
-                                                                                                        <div class="col-sm-12 col-md-12">
-                                                                                                            <div class="form-row">
-                                                                                                                <div class="col-md-12">
-                                                                                                                    <div class="form-group" id="div_detalle_transito_intest" >
-                                                                                                                        <label class="floating-label-activo-sm" for="cdb_ex_fisico_ab">Examen físico Abdominal</label>
-                                                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="2" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest baja" data-tipo="cirugia digest baja" onfocus="this.rows=3" onblur="this.rows=2;" name="cdb_ex_fisico" id="cdb_ex_fisico" placeholder="DOLOR, PRESENCIA DE MASAS PALPABLES,SOSPECHA ORGANO COMPROMETIDO "></textarea>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-12">
-                                                                                                                    <div class="form-group" id="div_detalle_transito_intest" >
-                                                                                                                        <label class="floating-label-activo-sm" for="cdb_ex_tr">Examen Tránsito</label>
-                                                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="2" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest baja" data-tipo="cirugia digest baja" onfocus="this.rows=3" onblur="this.rows=2;" name="cdb_ex_trans" id="cdb_ex_trans" placeholder="DOLOR, PRESENCIA DE SANGRE,COMPROMISO ESTADO GENERAL OTROS"></textarea>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4">
-                                                                                                                    <div class="form-group">
-                                                                                                                        <label class="floating-label-activo-sm" for="urgencia_cdb">Es Urgencia Qx.?</label>
-                                                                                                                        <select name="" id="urgencia_cdb" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest baja" data-tipo="cirugia digest baja" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cdb','div_detalle_urgencia_cdb','obs_urgencia_cdb',2);">
-                                                                                                                            <option value="1" selected>No</option>
-                                                                                                                            <option value="2">Si</option>
-                                                                                                                        </select>
-                                                                                                                    </div>
-                                                                                                                    <div class="form-group col-md-12" id="div_detalle_urgencia_cdb" style="display:none">
-                                                                                                                        <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingresohosp();"><i class="feather icon-save"></i> Orden de Hospitalización </button>
-                                                                                                                        <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="sol_pabellon();"><i class="feather icon-save"></i> Solicitar Pabellón</button>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                                <div class=" col-md-8">
-                                                                                                                    <div class="form-group">
-                                                                                                                        <label class="floating-label-activo-sm" for="obs_egp_cdb">Observaciones Estado General Paciente</label>
-                                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest baja" data-tipo="cirugia digest baja" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_cdb" id="obs_egp_cdb" placeholder="ANOTE APRECIACIÓN SOBRE ESTADO GENERAL DEL PACIENTE"></textarea>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
+
+                                                                                <h5 style="text-align:center;">Cirugía Digestiva Baja</h5>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr>
+                                                                        <div class="form-row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="form-group" id="div_detalle_transito_intest" >
+                                                                                    <label class="floating-label-activo-sm" for="cdb_ex_fisico_ab">Examen físico Abdominal</label>
+                                                                                    <textarea class="form-control caja-texto form-control-sm" rows="2" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest baja" data-tipo="cirugia digest baja" onfocus="this.rows=3" onblur="this.rows=2;" name="cdb_ex_fisico" id="cdb_ex_fisico" placeholder="DOLOR, PRESENCIA DE MASAS PALPABLES,SOSPECHA ORGANO COMPROMETIDO "></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-12">
+                                                                                <div class="form-group" id="div_detalle_transito_intest" >
+                                                                                    <label class="floating-label-activo-sm" for="cdb_ex_tr">Examen Tránsito</label>
+                                                                                    <textarea class="form-control caja-texto form-control-sm" rows="2" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest baja" data-tipo="cirugia digest baja" onfocus="this.rows=3" onblur="this.rows=2;" name="cdb_ex_trans" id="cdb_ex_trans" placeholder="DOLOR, PRESENCIA DE SANGRE,COMPROMISO ESTADO GENERAL OTROS"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm" for="urgencia_cdb">Es Urgencia Qx.?</label>
+                                                                                    <select name="" id="urgencia_cdb" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest baja" data-tipo="cirugia digest baja" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cdb','div_detalle_urgencia_cdb','obs_urgencia_cdb',2);">
+                                                                                        <option value="1" selected>No</option>
+                                                                                        <option value="2">Si</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group col-md-12" id="div_detalle_urgencia_cdb" style="display:none">
+                                                                                    <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingresohosp()";<i class="feather icon-save"></i> Orden de Hospitalización </button>
+                                                                                    <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="sol_pabellon()";<i class="feather icon-save"></i> Solicitar Pabellón</button>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class=" col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm" for="obs_egp_cdb">Observaciones Estado General Paciente</label>
+                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest baja" data-tipo="cirugia digest baja" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_cdb" id="obs_egp_cdb" placeholder="ANOTE APRECIACIÓN SOBRE ESTADO GENERAL DEL PACIENTE"></textarea>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
                                                                         <div class="row">
                                                                             <div class="col-sm-4 col-md-4 mb-3">
                                                                                 <div class="form-group">
@@ -168,6 +134,10 @@
                                                                     </div>
                                                                     <!--PLAN DE TRATAMIENTO-->
                                                                     <div class="tab-pane fade show" id="ex_plan_tto" role="tabpanel" aria-labelledby="ex_plan_tto-tab">
+                                                                        <script type="text/javascript">
+                                                                            $(document).ready(function() {
+                                                                             });
+                                                                        </script>
                                                                         <div class="row">
                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                 <h6 class="f-16 text-c-blue mb-3">Plan de Tratamiento</h6>
@@ -188,8 +158,8 @@
                                                                                             <div id="contentTto_cdb" style="display: none;">
                                                                                                 <div class="form-row">
                                                                                                     <div class="form-group col-md-12 mt-1">
-                                                                                                        <label class="floating-label-activo-sm" for="rec_tto_cdb">Recomendaciones</label>
-                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Recomendaciones" data-seccion="Plan de Tratamiento" data-tipo="recomendaciones médicas"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="rec_tto_cdb" id="rec_tto_cdb"></textarea>
+                                                                                                        <label class="floating-label-activo-sm" for="rec_tto_cdg">Recomendaciones</label>
+                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Recomendaciones" data-seccion="Plan de Tratamiento" data-tipo="recomendaciones médicas"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="rec_tto_cdg" id="rec_tto_cdg"></textarea>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
@@ -255,6 +225,10 @@
                                                                                     <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Plan de tratamiento" data-seccion=" Plan de tratamiento" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_plan_trat_cdb" id="obs_plan_trat_cdb"></textarea>
                                                                                 </div>
                                                                             </div>
+                                                                            @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_eda')
+                                                                            @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_edb')
+                                                                            @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
+                                                                            @include('general.hospitalizacion.modals.in_solic_pabellon')
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -264,12 +238,9 @@
                                                 </div>
                                             </div>
                                         </div>
-
 										<!--CIRUGIA GENERAL-->
                                         @include('general.secciones_ficha.cirugia_general.cirugia_adulto')
 										<!--cierre CIRUGIA GENERAL-->
-
-                                        <!-- hospitalizacion -->
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="card-a">
                                                 <div class="card-header-a" id="hospitalizar_paciente">
@@ -284,76 +255,35 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- cierre hospitalizacion -->
-
-                                        <!-- control post qx -->
-                                        @include('general.secciones_ficha.control_cirugia_gen')
-                                        <!-- cierre control post qx -->
+                                          <!-- control post qx -->
+                                          @include('general.secciones_ficha.control_cirugia_gen')
 
                                         <!-- cierre control post qx -->
-                                        <!--Formulario / Signos vitales y otros-->
-                                        {{-- @include('general.secciones_ficha.signos_vitales') --}}
+                                         <!--Formulario / Signos vitales y otros-->
+                                         @include('general.secciones_ficha.signos_vitales')
                                         <!--Cierre: Formulario / Signos vitales y otros-->
-
-                                        <!-- ges -->
                                         @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
-                                        <!-- cierre ges -->
-
                                         <hr>
-
                                         <!--Diagnóstico-->
                                         @include('general.secciones_ficha.diagnostico')
-                                        <!-- cierre Diagnóstico -->
-                                    </div>
-
-                                    {{--  div de botones  --}}
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                                                @include('general.secciones_ficha.seccion_receta_examen_comunes')
-                                                <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                                <!--GUARDAR O IMPRIMIR FICHA-->
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="row mb-3">
-                                        <div class="col-md-12 text-center">
-                                            <input type="submit" class="btn btn-info-light-c mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                                            <input type="submit" class="btn btn-success-light-c mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
-                                        </div>
                                     </div>
                                 </div>
-                                <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
                             </div>
                         </div>
                         <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
-
                         <!--INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
                        <div class="tab-pane fade" id="colonoscopia" role="tabpanel" aria-labelledby="colonoscopia-tab">
                            <div class="row bg-white shadow-none rounded mx-1">
                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="tit-gen">Informe Colonoscopía</h6>
-                                            <hr>
-                                        </div>
-                                    </div>
-                                    <div class="row div_form_examen_edb">
-                                        <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_edb" id="id_examen_especialidad_tipo_edb" value="{{ $array_examen_especialidad_tipo['edb'] }}">
+                                   <div class="row">
+                                       <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                           <h6 class="tit-gen">Informe Colonoscopía</h6>
+                                           <hr>
+                                       </div>
+                                   </div>
+                                   <div class="row">
                                         {!! $examen['edb'] !!}
-                                    </div>
-                                    <!--GUARDAR EXAMEN-->
-                                    <div class="row">
-                                        <div class="col-md-12 text-center mb-3">
-                                            <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
-                                            <button type="button" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('edb');">Ver Examen PDF</button>
-                                        </div>
-                                    </div>
+                                   </div>
                                </div>
                            </div>
                        </div>
@@ -361,7 +291,28 @@
                     </div>
                 </form>
             </div>
-
+              {{--  div de botones  --}}
+              <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+                             @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--GUARDAR O IMPRIMIR FICHA-->
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="row mb-3">
+                    <div class="col-md-12 text-center">
+                        <input type="submit" class="btn btn-info-light-c mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+                        <input type="submit" class="btn btn-success-light-c mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+                    </div>
+                </div>
+            </div>
+            <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
         </div>
     </div>
 </div>
@@ -398,9 +349,16 @@
                 $('#ingreso_sol_pab_modal').modal('hide');
             }
         });
-
         $(document).ready(function() {
             /* formatear rut */
+            $("#solicitado_por_rut_eda").rut({
+                formatOn: 'keyup',
+                minimumLength: 2,
+                validateOn: 'change',
+                useThousandsSeparator : false
+            });
+
+             /* formatear rut */
             $("#solicitado_por_rut_edb").rut({
                 formatOn: 'keyup',
                 minimumLength: 2,
@@ -409,7 +367,7 @@
             });
             /** fin formulario pestaña 1 */
 
-            $('#descripcion_hipotesis').keyup(function(){
+            $('#hip_diag_spec').keyup(function(){
                 if($.trim(this.value) != '')
                 {
                    if( lic_token != '' && lic_estado == 1)
@@ -437,7 +395,7 @@
                 }
             });
 
-            $("#descripcion_cie").autocomplete({
+            $("#descripcion_cie_esp").autocomplete({
                 source: function(request, response) {
                     // Fetch data
                     $.ajax({
@@ -455,21 +413,44 @@
                 },
                 select: function(event, ui) {
                     // Set selection
-                    $('#descripcion_cie').val(ui.item.label); // display the selected text
-                    $('#id_descripcion_cie').val(ui.item.value); // save selected id to input
+                    $('#descripcion_cie_esp').val(ui.item.label); // display the selected text
+                    $('#id_descripcion_cie_esp').val(ui.item.value); // save selected id to input
+                    return false;
+                }
+            });
+
+            $("#lic_descripcion_cie").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getCie10') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    // Set selection
+                    $('#lic_descripcion_cie').val(ui.item.label); // display the selected text
+                    $('#id_lic_descripcion_cie').val(ui.item.value); // save selected id to input
                     return false;
                 }
             });
 
         })
-
-        /** MENSAJE*/
-        /** CARGAR mensaje */
-        $('#mensaje_ficha').html('<strong>Solo el campo Hipótesis diagnóstica es obligatorio el resto es opcional</strong>');
-        $('#mensaje_ficha').show();
-        setTimeout(function(){
-            $('#mensaje_ficha').hide();
-        }, 5000);
+				/** MENSAJE*/
+			    /** CARGAR mensaje */
+				$('#mensaje_ficha').html('<strong>Solo el campo Hipótesis diagnóstica es obligatorio el resto es opcional</strong>');
+				$('#mensaje_ficha').show();
+				setTimeout(function(){
+					$('#mensaje_ficha').hide();
+				}, 5000);
 
         function cargarIgual(input){
 
@@ -713,6 +694,105 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         }
+
+
+        /* function guardar_tipo_ficha_cg()
+        {
+            var registro_f_t_cg_nombre = $('#registro_f_t_cg_nombre').val();
+            var registro_f_t_cg_descripcion = $('#registro_f_t_cg_descripcion').val();
+            var _token = CSRF_TOKEN;
+            if(registro_f_t_cg_nombre == ''){
+                swal({
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Nombre",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+            }
+            if(registro_f_t_cg_descripcion == ''){
+                swal({
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+            }
+
+
+            var data = [];
+            data.registro_f_t_cg_nombre = registro_f_t_cg_nombre;
+            data.registro_f_t_cg_descripcion = registro_f_t_cg_descripcion;
+
+            $('#registro_f_t_cg_detalle').find('input,textarea').each(function(key, elemento){
+                {{--  console.log($(elemento).attr('id'));  --}}
+                {{--  console.log($(elemento).val());  --}}
+                {{--  console.log($(elemento).prop('nodeName'));  --}}
+                {{--  console.log('*******');  --}}
+
+                data[$(elemento).attr('id')] = $(elemento).val();
+
+            });
+
+            {{--  console.log(data);  --}}
+            url = "{{ route('profesional.ficha_tipo_cg') }}";
+            $.ajax({
+
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id_profesional : $('#id_profesional_fc').val(),
+                    ind_esp_cirugia : '',
+                    nombre : data.registro_f_t_cg_nombre,
+                    descripcion : data.registro_f_t_cg_descripcion,
+                    organo_cg : data.modal_agregar_tipo_organo_cg,
+                    obs_organo_cg : data.observaciones_obs_organo_cg,
+                    ceg_cg : data.modal_agregar_tipo_ceg_cg,
+                    obs_ceg_cg : data.observaciones_obs_ceg_cg,
+                    masa_cg : data.modal_agregar_tipo_masa_cg,
+                    obs_masas_cg : data.observaciones_obs_masas_cg,
+                    urgencia_cg : data.modal_agregar_tipo_urgencia_cg,
+                    obs_urgencia_cg : data.observaciones_obs_urgencia_cg,
+                    so_cg : data.modal_agregar_tipo_so_cg,
+                    obs_so_cg : data.observaciones_obs_so_cg,
+                    obs_egp_cg : data.observaciones_obs_egp_cg,
+                    obs_gen_ex_esp_cg : data.observaciones_obs_gen_ex_esp_cg,
+                },
+            })
+            .done(function(data)
+            {
+                {{--  console.log('-----------------------');  --}}
+                {{--  console.log(data);  --}}
+                {{--  console.log('-----------------------');  --}}
+                if(data.estado == 1)
+                {
+                    $('#modal_registrar_ficha_tipo_dg').modal('hide');
+                    swal({
+                        title: "Tipo Ficha Registrado",
+                        icon: "success",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Registrar Tipo Ficha.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+        */
 
         function cargar_info_ficha_tipo_cdg(select, div_descripcion)
         {
@@ -1011,7 +1091,108 @@
         }
 
         /** MANEJO DE IMAGENES */
-       var myDropzone_edb ;
+        var myDropzone_eda ;
+        Dropzone.options.misImagenesEda = {
+            init:function()
+            {
+                myDropzone_eda = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzone_eda,'eda');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzone_eda,'eda');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzone_eda,'eda');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var myDropzone_edb ;
         Dropzone.options.misImagenesEdb = {
             init:function()
             {
@@ -1237,70 +1418,6 @@
             {
                 // $('#'+input_solitado_por).attr('readonly', false);
                 $('#'+input_solitado_por).val();
-            }
-        }
-
-        /** PERVISUALIZACION DE EXAMEN */
-        function visualizar_pdf_examen(tipo_examen)
-        {
-            if(tipo_examen!='')
-            {
-                var array_datos = {};
-                $('.div_form_examen_'+tipo_examen).find('input,textarea,select').each(function (key, element){
-                    var key_temp = element.id.replace('_'+tipo_examen,'');
-
-                    if(key_temp == 'biopsia' || key_temp == 'muestra_hp')
-                    {
-                        if(element.value == 1)
-                        {
-                            array_datos[key_temp] = 'SI';
-                        }
-                        else
-                        {
-                            array_datos[key_temp] = 'NO';
-                        }
-                    }
-                    else if(key_temp == 'muestra_hp_resultado')
-                    {
-                        if(element.value == 1)
-                        {
-                            array_datos[key_temp] = 'Positivo';
-                        }
-                        else
-                        {
-                            array_datos[key_temp] = 'Negativa';
-                        }
-                    }
-                    else
-                    {
-                        array_datos[key_temp] = element.value;
-                    }
-                });
-
-                var imagenes = $('#input_lista_imagenes').val();
-                if(imagenes != '')
-                {
-                    imagenes = JSON.parse(imagenes);
-                    imagenes = JSON.stringify(JSON.stringify(imagenes[tipo_examen]));
-                    // console.log(imagenes );
-                }
-
-                // console.log(JSON.stringify(array_datos));
-
-                var data ='id_ficha='+$('#id_fc').val()+'&contenido='+JSON.stringify(array_datos)+'&imagenes='+imagenes;
-                Fancybox.show(
-                    [
-                        {
-                        src: '{{ route("pdf.visualizar.examen") }}?'+data,
-                        type: "iframe",
-                        preload: false,
-                        },
-                    ]
-                );
-            }
-            else
-            {
-                console.log('tipo examen no especificado');
             }
         }
 

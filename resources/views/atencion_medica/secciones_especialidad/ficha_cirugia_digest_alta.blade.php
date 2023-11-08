@@ -345,7 +345,7 @@
                                         {!! $examen['eda'] !!}
                                     </div>
                                     <!--GUARDAR EXAMEN-->
-                                   <div class="row">
+                                    <div class="row">
                                         <div class="col-md-12 text-center mb-3">
                                             <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
                                             <button type="button" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('eda');">Ver Examen PDF</button>

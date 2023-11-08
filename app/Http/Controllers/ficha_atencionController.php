@@ -3704,51 +3704,71 @@ class ficha_atencionController extends Controller
                     $ficha_cd->id_ficha_cirugia = $ficha_cirugia_gen_adul->id;
                     $ficha_cd->id_profesional = $id_profesional;
                     $ficha_cd->id_paciente = $id_paciente;
+
+                    /** CIRUGIA DIGESTIVA ALTA */
                     $ficha_cd->cda_mc = $request->cda_mc;
                     $ficha_cd->cda_ex_fis = $request->cda_ex_fis;
                     $ficha_cd->urgencia_cda = $request->urgencia_cda;
                     $ficha_cd->obs_egp_cda = $request->obs_egp_cda;
                     $ficha_cd->tto_med_cda = $request->tto_med_cda;
                     $ficha_cd->rec_tto_cda = $request->rec_tto_cda;
-                    $ficha_cd->pr_cda = $request->pr_cda;
+                    if ($request->pr_cda == 'on') {
+                        $ficha_cd->pr_cda = 1;
+                    } else {
+                        $ficha_cd->pr_cda = 0;
+                    }
                     $ficha_cd->tipo_proc_cda = $request->tipo_proc_cda;
                     $ficha_cd->plan_proc_cda = $request->plan_proc_cda;
-                    $ficha_cd->cirug_cda = $request->cirug_cda;
+                    if ($request->cirug_cda == 'on') {
+                        $ficha_cd->cirug_cda = 1;
+                    } else {
+                        $ficha_cd->cirug_cda = 0;
+                    }
                     $ficha_cd->obs_plan_trat_cda = $request->obs_plan_trat_cda;
+
+                    /** CIRUGIA DIGESTIVA BAJA */
                     $ficha_cd->cdb_ex_fisico_ab = $request->cdb_ex_fisico_ab;
                     $ficha_cd->cdb_ex_tr = $request->cdb_ex_tr;
                     $ficha_cd->urgencia_cdb = $request->urgencia_cdb;
                     $ficha_cd->obs_egp_cdb  = $request->obs_egp_cdb ;
                     $ficha_cd->tto_med_cdb = $request->tto_med_cdb;
                     $ficha_cd->rec_tto_cdb = $request->rec_tto_cdb;
-                    $ficha_cd->pr_cdb = $request->pr_cdb;
+                    if ($request->pr_cdb == 'on') {
+                        $ficha_cd->pr_cdb = 1;
+                    } else {
+                        $ficha_cd->pr_cdb = 0;
+                    }
                     $ficha_cd->tipo_proc_cdb = $request->tipo_proc_cdb;
                     $ficha_cd->plan_proc_cdb = $request->plan_proc_cdb;
-                    $ficha_cd->cirug_cdb = $request->cirug_cdb;
+                    if ($request->cirug_cdb == 'on') {
+                        $ficha_cd->cirug_cdb = 1;
+                    } else {
+                        $ficha_cd->cirug_cdb = 0;
+                    }
                     $ficha_cd->obs_plan_trat_cdb = $request->obs_plan_trat_cdb;
+
+                    /** CIRUGIA DIGESTIVA GENERAL */
                     $ficha_cd->cdg_mc = $request->cdg_mc;
                     $ficha_cd->cdg_ex_fis = $request->cdg_ex_fis;
                     $ficha_cd->urgencia_cdg = $request->urgencia_cdg;
                     $ficha_cd->obs_egp_cdg  = $request->obs_egp_cdg ;
                     $ficha_cd->tto_med_cdg = $request->tto_med_cdg;
                     $ficha_cd->rec_tto_cdg = $request->rec_tto_cdg;
-
                     if ($request->pr_cdg == 'on') {
                         $ficha_cd->pr_cdg = 1;
                     } else {
                         $ficha_cd->pr_cdg = 0;
                     }
-
                     $ficha_cd->tipo_proc_cdg = $request->tipo_proc_cdg;
                     $ficha_cd->plan_proc_cdg = $request->plan_proc_cdg;
-
                     if ($request->cirug_cdg == 'on') {
                         $ficha_cd->cirug_cdg = 1;
                     } else {
                         $ficha_cd->cirug_cdg = 0;
                     }
-
                     $ficha_cd->obs_plan_trat_cdg = $request->obs_plan_trat_cdg;
+
+                    /** OTROS */
                     $ficha_cd->otro = $request->otro;
                     $ficha_cd->otro1 = $request->otro1;
                     $ficha_cd->estado = 1;
@@ -6942,6 +6962,8 @@ class ficha_atencionController extends Controller
                                             case 6: // 6 Cirugía Cardiovascular Niños
                                                 break;
                                             case 7: // 7 Cirugía Coloproctológica
+                                                $temp_ficha = FichaCirugiaDigestivaGeneralAdulto::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+                                                $registro->fichas = array('digestiva_general'=>$temp_ficha);
                                                 break;
                                             case 8: // 8 Cirugía de Cabeza y Cuello
                                                 break;
