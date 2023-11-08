@@ -75,7 +75,7 @@
 
     <!-- Modal de la vista -->
     @yield('Modals')
-    @yield('modals-med-exa')
+    @yield('Modals-med-exa')
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
 
