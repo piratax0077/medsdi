@@ -186,6 +186,7 @@ return array(
     'App\\Models\\ControlMaxilarInferior' => $baseDir . '/app/Models/ControlMaxilarInferior.php',
     'App\\Models\\ControlMaxilarSuperior' => $baseDir . '/app/Models/ControlMaxilarSuperior.php',
     'App\\Models\\ControlObesidad' => $baseDir . '/app/Models/ControlObesidad.php',
+    'App\\Models\\ControlPostQuirurgico' => $baseDir . '/app/Models/ControlPostQuirurgico.php',
     'App\\Models\\ControlPostQx' => $baseDir . '/app/Models/ControlPostQx.php',
     'App\\Models\\DeclaracionEno' => $baseDir . '/app/Models/DeclaracionEno.php',
     'App\\Models\\DetalleReceta' => $baseDir . '/app/Models/DetalleReceta.php',

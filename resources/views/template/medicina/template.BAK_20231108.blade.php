@@ -14,22 +14,19 @@
         <link rel="stylesheet" href="{{ asset('css/boton-flotante.css') }}?t={{ time() }}">
         <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="{{ asset('js/jquery-ui/jquery-3.6.0.min.js') }}"></script>
         <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
-
         <!-- data tables css -->
         <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
-
         <!-- fileupload-custom css -->
-        <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
-        <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
-
+        <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}?t={{ time() }}">
+       <!-- autocomplete-->
+        <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}?t={{ time() }}">
         <!--Accordion-->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
-
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
         <!--Card Sidebar-->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/card_sidebar.css') }}?t={{ time() }}">
 
@@ -61,7 +58,6 @@
                 overflow: auto;
             }
         </style>
-        @yield('css-btn-autorizacion')
     </head>
     <body>
         @include('template.medicina.header')
@@ -71,10 +67,10 @@
 
         <!-- Modal de la vista -->
         @yield('Modals')
-        @yield('modals-med-exa')
+        @yield('Modals-med-exa')
         @yield('Modals-med-exa-esp')
         @yield('modal-ficha-general-espc')
-
+       {{--  @include('atencion_pediatrica.secciones_especialidad.ficha_pediatria_tipo')--}}
 
         <!-- Modal de la vista fin -->
 
@@ -131,17 +127,17 @@
         <script src="{{ asset('js/check_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
         <!-- file-upload Js -->
-        <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
-        <!-- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script> -->
+        <script src="{{ asset('js/plugins/dropzone-amd-module.min.js') }}"></script>
 
         <!-- mensajes -->
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
-    {{-- autocomplete
+
+
+        {{-- autocomplete
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+
         <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
-
-
         {{--  @include('template.templateAutorizacion')  --}}
 
 
@@ -207,7 +203,8 @@
                     });
                 @endif
             });
-
+        </script>
+        <script>
             /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
             function  envio_indicaciones_pdf(id_modal){
                 let url = "{{ route('indicacion.medica.registro.envio') }}";
@@ -299,8 +296,6 @@
         @yield('page-script-med-exa') {{--  seccion receta y exmaenes --}}
         @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
         @yield('js-sidebar') {{-- seccion js side bar --}}
-        @yield('js-lic') {{-- seccion js side bar --}}
-        @yield('page-script-btn-autorizacion')
     </body>
 
     </html>

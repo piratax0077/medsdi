@@ -111,7 +111,8 @@
 
         <!-- SIDE BAR ORL -->
         @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
-
+		@include("atencion_medica.include.sidebar_derecho_cirugia_general")
+		
         <!--Modals de especialidad -->
         {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
 
@@ -119,11 +120,10 @@
         {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")--}}
 
-
     </div>
     <!--Cierre: Container Completo-->
-	 @include("general.modal.modal_no_disponible")
+	@include("general.modal.modal_no_disponible")
 	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
-    @include("atencion_medica.include.sidebar_derecho_cirugia_general")
+    
 @endsection
 @include('app.profesional.modales.boton_flotante_agenda_autorizacion')

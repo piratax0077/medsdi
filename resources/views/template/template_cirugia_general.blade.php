@@ -79,10 +79,6 @@
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
 
-
-	@include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia')
-
-
     <!-- Modal de la vista fin -->
     <footer>
         {{--  @include('template.include.footer')  --}}

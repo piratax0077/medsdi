@@ -818,6 +818,7 @@ class ComposerStaticInitd459a58ec74f07a7ef1bd14a09a45cec
         'App\\Models\\ControlMaxilarInferior' => __DIR__ . '/../..' . '/app/Models/ControlMaxilarInferior.php',
         'App\\Models\\ControlMaxilarSuperior' => __DIR__ . '/../..' . '/app/Models/ControlMaxilarSuperior.php',
         'App\\Models\\ControlObesidad' => __DIR__ . '/../..' . '/app/Models/ControlObesidad.php',
+        'App\\Models\\ControlPostQuirurgico' => __DIR__ . '/../..' . '/app/Models/ControlPostQuirurgico.php',
         'App\\Models\\ControlPostQx' => __DIR__ . '/../..' . '/app/Models/ControlPostQx.php',
         'App\\Models\\DeclaracionEno' => __DIR__ . '/../..' . '/app/Models/DeclaracionEno.php',
         'App\\Models\\DetalleReceta' => __DIR__ . '/../..' . '/app/Models/DetalleReceta.php',

@@ -2433,6 +2433,10 @@ class ficha_atencionController extends Controller
             $id_profesional = $request->id_profesional_fc;
             $id_paciente = $request->id_paciente_fc;
 
+            $ficha->motivo = $request->motivo;
+            $ficha->antecedentes = $request->antecedentes;
+            $ficha->examen_fisico = $request->examen_fisico;
+
             $ges = 0;
             if ($request->modal_ges == 'on') {
                 $ges = 1;
@@ -2453,11 +2457,6 @@ class ficha_atencionController extends Controller
             } else {
                 $confidencial = 0;
             }
-
-            $ficha->motivo = $request->descripcion_consulta;
-            $ficha->antecedentes = $request->descripcion_antecedentes;
-            $ficha->examen_fisico = $request->descripcion_examen_fisico;
-
             //Signos vitales
             if ($request->temperatura != '') {
                 $ficha->temperatura = $request->temperatura;
@@ -2547,6 +2546,7 @@ class ficha_atencionController extends Controller
 
             $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
+            $ficha->indicaciones = $request->indicaciones;
 
             $ficha->cronico = $cronico;
             $ficha->ges = $ges;
@@ -2575,95 +2575,7 @@ class ficha_atencionController extends Controller
                     $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.';
                 }
                 $mensaje .= '\n' . $mensaje_estado_hora_medica;
-
-
-                /**examenes */
-                // $mensaje_examenes = '';
-                // if ($request->examenes == '[]') {
-                //    $mensaje_examenes = 'No se han agregado Examenes a Ficha Clínica.';
-                // } else {
-                //     $examenes = json_decode($request->examenes);
-
-                //     if (!$examenes == null) {
-                //         for ($i = 0; $i < count($examenes); ++$i) {
-                //             $examen = new ExamenPPF();
-                //             $examen->examen = $examenes[$i]->nombre_examen;
-                //             $examen->tipo_examen = $examenes[$i]->tipo;
-
-                //             switch ($examenes[$i]->prioridad) {
-                //                 case 'Baja':
-                //                     $examen->id_prioridad = 1;
-                //                     break;
-                //                 case 'Media':
-                //                     $examen->id_prioridad = 2;
-                //                     break;
-                //                 case 'Alta':
-                //                     $examen->id_prioridad = 3;
-                //                     break;
-                //                 case 'Urgente':
-                //                     $examen->id_prioridad = 4;
-                //                     break;
-                //             }
-
-                //             $examen->id_prioridad = 2;
-                //             $examen->id_profesional = $id_profesional;
-                //             $examen->id_ficha_atencion = $ficha->id;
-                //             $examen->id_paciente = $id_paciente;
-                //             $examen->tipo_ficha = 0;
-
-                //             if (!$examen->save()) {
-                //                 $mensaje_examenes .= 'Problema al registrar el examen '.$examenes[$i]->nombre_examen.'.';
-                //             }
-                //         }
-                //     }
-                // }
-
-                /**medicamentos */
-                // $mensaje_medicamento = '';
-                // if ($request->medicamentos == '[]' ) {
-                //    $mensaje_medicamento = 'No se han agregado Medicamentos a Ficha Clínica.';
-                // } else {
-
-                //     $medicamentos = json_decode($request->medicamentos);
-
-                //     for ($i = 0; $i < count($medicamentos); ++$i) {
-
-                //         //dd($medicamentos);
-                //         $detalle_receta = new DetalleReceta();
-                //         $detalle_receta->id_ficha =  $ficha->id;
-                //         // $detalle_receta->id_ingreso_paciente = $medicamentos[$i]->ddd;
-                //         // $detalle_receta->id_recuperacion = $medicamentos[$i]->ddd;
-                //         // $detalle_receta->id_sala = $medicamentos[$i]->ddd;
-                //         $detalle_receta->id_articulo = $medicamentos[$i]->id_producto;
-                //         $detalle_receta->producto = $medicamentos[$i]->medicamento;
-                //         $detalle_receta->presentacion = $medicamentos[$i]->presentacion;
-                //         $detalle_receta->posologia = $medicamentos[$i]->posologia;
-                //         $detalle_receta->via_administracion = $medicamentos[$i]->via_administracion;
-                //         $detalle_receta->periodo = $medicamentos[$i]->periodo;
-                //         $detalle_receta->cantidad_compra = $medicamentos[$i]->compra;
-                //         $detalle_receta->cantidad_vendida = 0;
-                //         // $detalle_receta->comentario = $medicamentos[$i]->ddd;
-                //         // $detalle_receta->receta_token = $token_receta = encrypt( date('Ymd').'_'.$profesional->nombre.'_'.$paciente->apellido_uno.'_'.$lugar_atencion->id );
-                //         $detalle_receta->estado = 1;
-
-                //         if (!$detalle_receta->save()) {
-                //             $mensaje_medicamento .= 'Problema al registrar el medicamento '.$$medicamentos[$i]->medicamento.'.';
-                //         }
-                //     }
-                // }
-
-
-                // if($mensaje_medicamento != '')
-                // {
-                //     $mensaje .= '\n' . $mensaje_medicamento;
-                //     $tipo_mensaje = 'warning';
-                // }
-                // if($mensaje_examenes != '')
-                // {
-                //     $mensaje .= '\n' . $mensaje_examenes;
-                //     $tipo_mensaje = 'warning';
-                // }
-
+				
                 if($request->cerrarsession == 0 || $request->cerrarsession =='')
                 {
                     /** redireccion Redirect funciona correcto */
@@ -3159,7 +3071,7 @@ class ficha_atencionController extends Controller
     {
         $campos_requeridos = 0;
         $mensaje = '';
-        if(empty( trim($request->hip_diag_spec)))
+        if(empty( trim($request->descripcion_hipotesis)))
         {
             $campos_requeridos = 1;
             $mensaje = 'El Diagnóstico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
@@ -3173,6 +3085,10 @@ class ficha_atencionController extends Controller
             $ficha = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
             $id_profesional = $request->id_profesional_fc;
             $id_paciente = $request->id_paciente_fc;
+
+            $ficha->motivo = $request->motivo;
+            $ficha->antecedentes = $request->antecedentes;
+            $ficha->examen_fisico = $request->examen_fisico;
 
             $ges = 0;
             if ($request->modal_ges == 'on') {
@@ -3194,10 +3110,6 @@ class ficha_atencionController extends Controller
             } else {
                 $confidencial = 0;
             }
-
-            $ficha->motivo = $request->descripcion_consulta_cdg;
-            $ficha->antecedentes = $request->antec_especialidad_cdg;
-            // $ficha->examen_fisico = $request->descripcion_examen_fisico;
 
             //Signos vitales
             if ($request->temperatura != '') {
@@ -3286,12 +3198,13 @@ class ficha_atencionController extends Controller
                 $ficha->ct_traslado = null;
             }
 
-            $ficha->hipotesis_diagnostico = $request->hip_diag_spec;
-            $ficha->diagnostico_ce10 = $request->descripcion_cie_esp;
+            $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
+            $ficha->diagnostico_ce10 = $request->descripcion_cie;
+			$ficha->indicaciones = $request->indicaciones;
 
-            // $ficha->cronico = $cronico;
-            // $ficha->ges = $ges;
-            // $ficha->confidencial = $confidencial;
+            $ficha->cronico = $cronico;
+            $ficha->ges = $ges;
+            $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
             $ficha->finalizada = 1;
@@ -3304,6 +3217,34 @@ class ficha_atencionController extends Controller
             {
                 $tipo_mensaje = 'success';
                 $mensaje = 'Ficha Clínica guardada de forma correcta\n';
+
+                /** REGISTRO DE CONTROL POST QUIRURGICO */
+                if( !empty($request->eg_cpq_cg) ||  !empty($request->hoc_cpa_cg) ||  !empty($request->masas_cpq_cg) ||  !empty($request->obs_egp_cpq_cg))
+                {
+                    $control_post_q = new ControlPostQuirurgico();
+                    $control_post_q->id_ficha_atencion = $ficha->id;
+                    $control_post_q->id_profesional = $id_profesional;
+                    $control_post_q->id_paciente = $id_paciente;
+                    $control_post_q->eg_cpq_cg = $request->eg_cpq_cg;
+                    $control_post_q->hoc_cpa_cg = $request->hoc_cpa_cg;
+                    $control_post_q->masas_cpq_cg = $request->masas_cpq_cg;
+                    $control_post_q->obs_egp_cpq_cg = $request->obs_egp_cpq_cg;
+                    $control_post_q->estado = 1;
+
+                    if($control_post_q->save())
+                    {
+                        $mensaje .='Control Post Quirurgico registrado\n';
+                    }
+                    else
+                    {
+                        $mensaje .='Problema en el registro de Control Post Quirurgico\n';
+                    }
+                }
+                else
+                {
+                    $mensaje .='Registro de Control Post Quirurgico no requerido\n';
+                }
+
                 /** registro ficha_cir_general_adulto  */
                 $ficha_cirugia_gen_adul = new FichaCirugiaGeneralAdulto();
                 $ficha_cirugia_gen_adul->id_ficha_atencion = $ficha->id;
@@ -3313,12 +3254,29 @@ class ficha_atencionController extends Controller
                 $ficha_cirugia_gen_adul->ex_seg = $request->ex_seg;
                 $ficha_cirugia_gen_adul->cir_grl_urgencia = $request->cir_grl_urgencia;
                 $ficha_cirugia_gen_adul->obs_est_grl = $request->obs_est_grl;
-                $ficha_cirugia_gen_adul->tto_med_cg = $request->tto_med_cg;
+
+                if ($request->tto_med_cg == 'on') {
+                    $ficha_cirugia_gen_adul->tto_med_cg = 1;
+                } else {
+                    $ficha_cirugia_gen_adul->tto_med_cg = 0;
+                }
+
                 $ficha_cirugia_gen_adul->rec_tto_cg = $request->rec_tto_cg;
-                $ficha_cirugia_gen_adul->pr_cg = $request->pr_cg;
+
+                if ($request->pr_cg == 'on') {
+                    $ficha_cirugia_gen_adul->pr_cg = 1;
+                } else {
+                    $ficha_cirugia_gen_adul->pr_cg = 0;
+                }
+
                 $ficha_cirugia_gen_adul->tipo_proc_cg = $request->tipo_proc_cg;
                 $ficha_cirugia_gen_adul->plan_proc_cg = $request->plan_proc_cg;
-                $ficha_cirugia_gen_adul->plan_cirugia = $request->plan_cirugia;
+                if ($request->plan_cirugia == 'on') {
+                    $ficha_cirugia_gen_adul->plan_cirugia = 1;
+                } else {
+                    $ficha_cirugia_gen_adul->plan_cirugia = 0;
+                }
+
                 $ficha_cirugia_gen_adul->otro = $request->otro;
                 $ficha_cirugia_gen_adul->otro1 = $request->otro1;
                 $ficha_cirugia_gen_adul->estado = '1';
@@ -3331,59 +3289,6 @@ class ficha_atencionController extends Controller
                 {
                     $mensaje .= 'Ficha Cirugia General Adulto presentó problema al guardar\n';
                 }
-
-                /** registro de ficha Cirugia General  */
-                // $ficha_cg = new FichaCirugiaGeneral();
-                // $ficha_cg->id_ficha_atencion = $ficha->id;
-                // $ficha_cg->id_profesional = $id_profesional;
-                // $ficha_cg->id_paciente = $id_paciente;
-                // $ficha_cg->ind_esp_cirugia = $request->ind_esp_cirugia;
-                // $ficha_cg->e_general = $request->e_general;
-                // $ficha_cg->obs_e_general = $request->obs_e_general;
-                // $ficha_cg->e_signos_vit = $request->e_signos_vit;
-                // $ficha_cg->obs_e_signos_vit = $request->obs_e_signos_vit;
-                // $ficha_cg->e_dolor_loc = $request->e_dolor_loc;
-                // $ficha_cg->obs_e_dolor_loc = $request->obs_e_dolor_loc;
-                // $ficha_cg->masas_pal = $request->masas_pal;
-                // $ficha_cg->obs_masas_pal = $request->obs_masas_pal;
-                // $ficha_cg->e_piel_fan = $request->e_piel_fan;
-                // $ficha_cg->obs_e_piel_fan = $request->obs_e_piel_fan;
-                // $ficha_cg->ex_cabcuello = $request->ex_cabcuello;
-                // $ficha_cg->obs_ex_cabcuello = $request->obs_ex_cabcuello;
-                // $ficha_cg->ex_torax = $request->ex_torax;
-                // $ficha_cg->obs_ex_torax = $request->obs_ex_torax;
-                // $ficha_cg->ex_abdomen = $request->ex_abdomen;
-                // $ficha_cg->obs_ex_abdomen = $request->obs_ex_abdomen;
-                // $ficha_cg->ex_muscesq = $request->ex_muscesq;
-                // $ficha_cg->obs_ex_muscesq = $request->obs_ex_muscesq;
-                // $ficha_cg->ex_o_sent = $request->ex_o_sent;
-                // $ficha_cg->obs_ex_o_sent = $request->obs_ex_o_sent;
-                // $ficha_cg->obs_ex_segmentario = $request->obs_ex_segmentario;
-                // $ficha_cg->urgencia_cg = $request->urgencia_cg;
-                // $ficha_cg->obs_urgencia_cg = $request->obs_urgencia_cg;
-                // $ficha_cg->hosp_cg = $request->hosp_cg;
-                // $ficha_cg->obs_hosp_cg = $request->obs_hosp_cg;
-                // $ficha_cg->otrotto_cg = $request->otrotto_cg;
-                // $ficha_cg->obs_otrotto_cg = $request->obs_otrotto_cg;
-                // $ficha_cg->obs_plan_tratamiento = $request->obs_plan_tratamiento;
-                // $ficha_cg->hospen_cg = $request->hospen_cg;
-                // $ficha_cg->obs_hospen_cg = $request->obs_hospen_cg;
-                // $ficha_cg->hosp_enserv_cg = $request->hosp_enserv_cg;
-                // $ficha_cg->obs_hosp_enserv_cg = $request->obs_hosp_enserv_cg;
-                // $ficha_cg->otro_tto_cg = $request->otro_tto_cg;
-                // $ficha_cg->obs_otro_tto_cg = $request->obs_otro_tto_cg;
-                // $ficha_cg->obs_hospitalizacion_cg = $request->obs_hospitalizacion_cg;
-                // // $ficha_cg->otro = '';
-                // $ficha_cg->estado = 1;
-
-                // if($ficha_cg->save())
-                // {
-                //     $mensaje = 'Ficha Cirugia General guardada de forma correcta\n';
-                // }
-                // else
-                // {
-                //     $mensaje .= 'Ficha Cirugia General presentó problema al guardar\n';
-                // }
 
                 // finalizar hora medica
                 $hora_medica->id_estado = 6;
@@ -3655,7 +3560,6 @@ class ficha_atencionController extends Controller
                 {
                     $mensaje .='Registro de Control Post Quirurgico no requerido\n';
                 }
-
 
                 /** REGISTRO FICHA CIRUGIA GENERAL ADULTO - ficha_cir_general_adulto  */
                 $ficha_cirugia_gen_adul = new FichaCirugiaGeneralAdulto();
@@ -6992,6 +6896,7 @@ class ficha_atencionController extends Controller
                                             case 18: // 18 Cirugía Vascular Periférica
                                                 break;
                                             case 119: // 119 Cirugía General
+                                                /** NO REQUIERE CONSULTA ADICIONAL */
                                                 break;
                                             case 120: // 120 Cirugía y Traumatologia Pediatrica General
                                                 break;

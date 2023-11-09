@@ -7,7 +7,7 @@
         </header>
         <div class="bs-canvas-content">
             <div class="accordion" id="accordion_side_bar">
-                <div class="card-sidebar">
+                {{-- <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_solicitud_examenes">
                         <h2 class="mb-0">
                             <button class="btn btn-light btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse_solicitud_examenes" aria-expanded="true" aria-controls="collapse_solicitud_examenes"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
@@ -21,9 +21,7 @@
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="mostrar_modal_examen_cirguria();">+ Solicitud de Exámenes </button>
                         </div>
                     </div>
-                    @include('app.cirugia.modals.modals_cesarea.modal_indicar_medicamentos')
-                    @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
-                </div>
+                </div> --}}
                 <!-- SECCION CONSENTIMIENTOS -->
                 @include('general.sidebar.seccion_consentimientos')
 
@@ -41,7 +39,7 @@
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="imc()";>+ Calculadora de IMC</button>
                         </div>
                     </div>
-                      @include("general.modal.m_ucodigofonasa")
+                    @include("general.modal.m_ucodigofonasa")
                     @include("general.modal.m_uimc")
                 </div>
                 <div class="card-sidebar">
