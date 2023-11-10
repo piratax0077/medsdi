@@ -1,7 +1,6 @@
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">
-
             <div class="col-sm-12 col-md-12">
                 <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
                     <li class="nav-item-secciones">
@@ -61,12 +60,6 @@
                         <div class="tab-pane fade show active" id="atencion_cirugia_gen" role="tabpanel" aria-labelledby="atencion_cirugia_gen-tab">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-12 mt-3 mb-0">
-                                            <h6 class="f-16 text-c-blue">Ficha de atención general</h6>
-                                            <hr>
-                                        </div>
-                                    </div>
                                     <!--FORMULARIOS-->
                                     <div class="row">
                                         <!--Formulario / Menor de edad-->
@@ -76,19 +69,19 @@
                                         <!--Motivo consulta-->
                                         @include('general.secciones_ficha.motivo')
 
-                                        <!-- examen especialidad cirugia digestivo -->
-                                        <div class="col-sm-12 col-md-12">
+                                        <!-- Examen especialidad cirugia digestivo -->
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="card-a">
                                                 <div class="card-header-a" id="exam_esp_cdg">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_cdg_c" aria-expanded="false" aria-controls="exam_esp_cdg_c">
-                                                        Examen especialidad C.Digestiva
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_cdg_c" aria-expanded="false" aria-controls="exam_esp_cdg_c">
+                                                        Examen especialidad C. Digestiva
                                                     </button>
                                                 </div>
                                                 <div id="exam_esp_cdg_c" class="collapse" aria-labelledby="exam_esp_cdg" data-parent="#exam_esp_cdg">
                                                     <div class="card-body-aten-a">
                                                         <div class="row">
                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                <ul class="nav nav-tabs-aten nav-fill mb-10" id="cir_dig" role="tablist">
+                                                                <ul class="nav nav-tabs-aten nav-fill mb-2" id="cir_dig" role="tablist">
                                                                     <li class="nav-item">
                                                                         <a class="nav-link-aten text-reset active" id="cir_dig_sint_tab" data-toggle="tab" href="#cir_dig_sint" role="tab" aria-controls="cir_dig_sint" aria-selected="true">Motivo de consulta Sintomas Generales</a>
                                                                     </li>
@@ -103,59 +96,49 @@
                                                                 <div class="tab-content" id="cir_digest_adulto">
                                                                     <!--SINTOMAS GENERALES-->
                                                                     <div class="tab-pane fade show active" id="cir_dig_sint" role="tabpanel" aria-labelledby="cir_dig_sint_tab">
-                                                                        <div class="row">
-                                                                            <div class="col-md-12">
-                                                                                <div class="card">
-                                                                                    <div class="card-body">
-                                                                                        <div class="row">
-                                                                                            <div class="col-sm-12">
-                                                                                                <div class="tab-content" id="v-pills-tabContent">
-                                                                                                    <div class="tab-pane fade show active" id="sint_dol" role="tabpanel" aria-labelledby="sint_dol-tab">
-                                                                                                        <div class="col-sm-12 col-md-12">
-                                                                                                            <div class="form-row">
-                                                                                                                <div class="col-md-12">
-                                                                                                                    <div class="form-group" id="div_detalle_transito_intest" >
-                                                                                                                        <label class="floating-label-activo-sm" for="cdg_mc">Motivo de consulta</label>
-                                                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="2" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest genenal" data-tipo="cirugia digest genenal" onfocus="this.rows=3" onblur="this.rows=2;" name="cdg_mc" id="cdg_mc" placeholder=" RGE , HEMORRAGIAS, DOLOR, ZONA,SINTOMAS ACOMPAÑANTES OTROS "></textarea>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-12">
-                                                                                                                    <div class="form-group" id="div_detalle_transito_intest" >
-                                                                                                                        <label class="floating-label-activo-sm" for="cdg_ex_fis">Examen Físico</label>
-                                                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="2" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest genenal" data-tipo="cirugia digest genenal" onfocus="this.rows=3" onblur="this.rows=2;" name="cdg_ex_fis" id="cdg_ex_fis" placeholder="CEG, PRESENCIA DE SANGRE, SOSP. DE ORGANO MASAS OTROS"></textarea>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-4">
-                                                                                                                    <div class="form-group">
-                                                                                                                        <label class="floating-label-activo-sm" for="urgencia_cdg">Es Urgencia Qx.?</label>
-                                                                                                                        <select name="urgencia_cdg" id="urgencia_cdg" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest genenal" data-tipo="cirugia digest genenal" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cdg','div_detalle_urgencia_cdg','obs_urgencia_cdg',2);">
-                                                                                                                            <option value="1" selected>No</option>
-                                                                                                                            <option value="2">Si</option>
-                                                                                                                        </select>
-                                                                                                                    </div>
-                                                                                                                    <div class="form-group col-md-12" id="div_detalle_urgencia_cdg" style="display:none">
-                                                                                                                        <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingresohosp()";<i class="feather icon-save"></i> Orden de Hospitalización </button>
-                                                                                                                        <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="sol_pabellon()";<i class="feather icon-save"></i> Solicitar Pabellón</button>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                                <div class=" col-md-8">
-                                                                                                                    <div class="form-group">
-                                                                                                                        <label class="floating-label-activo-sm" for="obs_egp_cdg">Observaciones Estado General Paciente</label>
-                                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest general" data-tipo="cirugia digest general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_cdg" id="obs_egp_cdg" placeholder="ANOTE APRECIACIÓN SOBRE ESTADO GENERAL DEL PACIENTE"></textarea>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <h6 class="t-aten">Motivo de consulta</h6>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="row">
-                                                                            <div class="col-md-4">
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <div class="form-group" id="div_detalle_transito_intest">
+                                                                                    <label class="floating-label-activo-sm" for="cdg_mc">Motivo de consulta</label>
+                                                                                    <textarea class="form-control caja-texto form-control-sm" rows="2" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest genenal" data-tipo="cirugia digest genenal" onfocus="this.rows=3" onblur="this.rows=2;" name="cdg_mc" id="cdg_mc" placeholder=" RGE , HEMORRAGIAS, DOLOR, ZONA,SINTOMAS ACOMPAÑANTES OTROS "></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <div class="form-group" id="div_detalle_transito_intest">
+                                                                                    <label class="floating-label-activo-sm" for="cdg_ex_fis">Examen Físico</label>
+                                                                                    <textarea class="form-control caja-texto form-control-sm" rows="2" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest genenal" data-tipo="cirugia digest genenal" onfocus="this.rows=3" onblur="this.rows=2;" name="cdg_ex_fis" id="cdg_ex_fis" placeholder="CEG, PRESENCIA DE SANGRE, SOSP. DE ORGANO MASAS OTROS"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm" for="urgencia_cdg">¿Es Urgencia Qx.?</label>
+                                                                                    <select name="urgencia_cdg" id="urgencia_cdg" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest genenal" data-tipo="cirugia digest genenal" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cdg','div_detalle_urgencia_cdg','obs_urgencia_cdg',2);">
+                                                                                        <option value="1" selected>No</option>
+                                                                                        <option value="2">Si</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-sm-12 col-md-12 col-md-8 col-xl-8">
+                                                                                <label class="floating-label-activo-sm" for="obs_egp_cdg">Obs. Estado General Paciente</label>
+                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest general" data-tipo="cirugia digest general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_cdg" id="obs_egp_cdg" placeholder="ANOTE APRECIACIÓN SOBRE ESTADO GENERAL DEL PACIENTE"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row" id="div_detalle_urgencia_cdg" style="display:none">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 my-1">
+                                                                                <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="ingresohosp()";><i class="feather icon-edit-1"></i> Orden de Hospitalización </button>
+                                                                            </div>
+                                                                            <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 my-1">
+                                                                                <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_pabellon()";><i class="feather icon-edit-1"></i> Solicitar Pabellón</button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr>
+                                                                        <div class="row mb-2">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                                                                 <div class="form-group">
                                                                                     <label class="floating-label-activo-sm">Carga Ficha Tipo</label>
                                                                                     <select class="form-control form-control-sm" id="select_ficha_tipo_ex_especialidad_cdg" onchange="cargar_info_ficha_tipo_cdg('select_ficha_tipo_ex_especialidad_cdg','descripcion_ficha_tipo_ex_especialidad_cdg');">
@@ -168,11 +151,11 @@
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="col-md-4">
-                                                                                <span id="descripcion_ficha_tipo_ex_especialidad_cdg"></span>
+                                                                            <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                                                <p><span id="descripcion_ficha_tipo_ex_especialidad_cdg"></span></p>
                                                                             </div>
-                                                                            <div class="col-sm-4 col-md-4 mb-3">
-                                                                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="abrir_modal_guardar_tipo('form-oft-g','registro_f_t_oft_detalle','oft_g');"><i class="fas fa-save"></i> Guardar nueva ficha tipo</button>
+                                                                            <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 text-center">
+                                                                                <button type="button" class="btn btn-info-light-c btn-sm" onclick="abrir_modal_guardar_tipo('form-oft-g','registro_f_t_oft_detalle','oft_g');"><i class="feather icon-save"></i> Guardar nueva ficha tipo</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -182,21 +165,19 @@
                                                                                $(document).ready(function() {
                                                                                 });
                                                                         </script>
-                                                                        <div class="form-row mt-2">
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0">
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-0">
                                                                                 <h6 class="t-aten">Plan de Tratamiento</h6>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="form-row">
-                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 mt-0">
+                                                                        <div class="form-row ">
+                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-0 mt-0">
                                                                                 <label class="ml-0" for="tto_med_cdg"><strong>Tratamiento médico</strong></label>
                                                                                 <div class="switch switch-success d-inline m-r-10">
                                                                                     <input type="checkbox" id="tto_med_cdg" name="tto_med_cdg" value="1" onchange="javascript:showContentTmcdg()" />
                                                                                     <label for="tto_med_cdg" class="cr"></label>
                                                                                 </div>
-                                                                            </div>
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <div id="contentTto_cdg" style="display: none;">
+                                                                                    <div id="contentTto_cdg" style="display: none;">
                                                                                     <div class="form-row">
                                                                                         <div class="form-group col-md-12 mt-1">
                                                                                             <label class="floating-label-activo-sm" for="rec_tto_cdg">Recomendaciones</label>
@@ -205,15 +186,13 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 mt-0">
+                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-0 mt-0">
                                                                                 <label class="ml-0"><strong>Procedimiento</strong></label>
-                                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                                    <input type="checkbox" id="pr_cdg" name="pr_cdg" value="1" onchange="javascript: showContentProc_cdg()" />
-                                                                                    <label for="pr_cdg" class="cr"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <div id="contentProc_cdg" style="display: none;">
+                                                                                    <div class="switch switch-success d-inline m-r-10">
+                                                                                        <input type="checkbox" id="pr_cdg" name="pr_cdg" value="1" onchange="javascript: showContentProc_cdg()" />
+                                                                                        <label for="pr_cdg" class="cr"></label>
+                                                                                    </div>
+                                                                                    <div id="contentProc_cdg" style="display: none;">
                                                                                     <div class="form-row">
                                                                                         <div class="form-group col-md-4">
                                                                                             <label class="floating-label-activo-sm" for="tipo_proc_cdg"> Tipo</label>
@@ -226,41 +205,29 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-
-                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0">
-                                                                                <div class="form-group">
-                                                                                    <div class="switch switch-success d-inline m-r-10">
-                                                                                        <label class="ml-0"><strong>Cirugía</strong></label>
-                                                                                        <input type="checkbox" class="custom-control-input" id="cirug_cdg" name="cirug_cdg" value="{!! old('cirug_cdg') !!}">
-                                                                                        <label class="cr" for="cirug_cdg"></label>
-                                                                                    </div>
+                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3 mb-0">
+                                                                                <div class="switch switch-success d-inline m-r-10">
+                                                                                    <label class="ml-0"><strong>Cirugía</strong></label>
+                                                                                    <input type="checkbox" class="custom-control-input" id="cirug_cdg" name="cirug_cdg" value="{!! old('cirug_cdg') !!}">
+                                                                                    <label class="cr" for="cirug_cdg"></label>
                                                                                 </div>
-
-                                                                                <div class="form-row">
-                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                        <div class="form-group">
-                                                                                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="sol_examen_endosc_eda()";><i class="feather icon-info"></i> Solicitar Endoscopía Alta</button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                        <div class="form-group">
-                                                                                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="sol_examen_endosc_edb()";><i class="feather icon-info"></i> Solicitar Endoscopía Baja</button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                        <div class="form-group">
-                                                                                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="mostrar_modal_examen_examenes_tipo()";><i class="feather icon-info"></i> Examenes Tipo</button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="form-row">
-                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                        <div class="form-group">
-                                                                                            <label class="floating-label-activo-sm"for="obs_plan_trat_cdg">Obs. Plan de tratamiento</label>
-                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Plan de tratamiento" data-seccion=" Plan de tratamiento" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_plan_trat_cdg" id="obs_plan_trat_cdg"></textarea>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row mb-3">
+                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-1">
+                                                                                <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_endosc_eda()";><i class="feather icon-edit-1"></i> Solicitar Endoscopía Alta</button>
+                                                                            </div>
+                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-1">
+                                                                                <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_endosc_edb()";><i class="feather icon-edit-1"></i> Solicitar Endoscopía Baja</button>
+                                                                            </div>
+                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-1">
+                                                                                <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="mostrar_modal_examen_examenes_tipo()";><i class="feather icon-edit-1"></i> Examenes Tipo</button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row mt-3">
+                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <label class="floating-label-activo-sm"for="obs_plan_trat_cdg">Obs. Plan de tratamiento</label>
+                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Plan de tratamiento" data-seccion=" Plan de tratamiento" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_plan_trat_cdg" id="obs_plan_trat_cdg"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -271,12 +238,11 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!--CIRUGIA GENERAL-->
                                         @include('general.secciones_ficha.cirugia_general.cirugia_adulto')
 										<!--cierre CIRUGIA GENERAL-->
 
-                                        <!-- hospitalizacion -->
+                                        <!-- Hospitalizacion -->
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="card-a">
                                                 <div class="card-header-a" id="hospitalizar_paciente">
@@ -291,7 +257,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- cierre hospitalizacion -->
 
                                         <!-- control post qx -->
                                         @include('general.secciones_ficha.control_cirugia_gen')
@@ -310,7 +275,6 @@
                                         @include('general.secciones_ficha.diagnostico')
                                         <!-- cierre Diagnóstico -->
                                     </div>
-
 									{{--  div de botones  --}}
 									<div class="card">
 										<div class="card-body">
@@ -319,7 +283,6 @@
 											<!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
 										</div>
 									</div>
-
                                 </div>
                                 <!--GUARDAR O IMPRIMIR FICHA-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -330,7 +293,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
@@ -439,7 +401,7 @@
                 useThousandsSeparator : false
             });
 
-            /* formatear rut */
+             /* formatear rut */
             $("#solicitado_por_rut_edb").rut({
                 formatOn: 'keyup',
                 minimumLength: 2,
@@ -775,6 +737,8 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         }
+
+
 
         function cargar_info_ficha_tipo_cdg(select, div_descripcion)
         {
