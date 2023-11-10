@@ -6,7 +6,7 @@
     @include('atencion_medica.include.head_dermat')
 
 
-    <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
+     <link rel="icon" href="{{ asset('images/sdi-icon.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?t={{ time() }}">
     <link rel="stylesheet" href="{{ asset('css/style_index.css') }}?t={{ time() }}">
 
