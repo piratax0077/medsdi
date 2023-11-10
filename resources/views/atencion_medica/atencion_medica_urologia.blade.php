@@ -39,15 +39,15 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <ul class="nav nav-tabs profile-tabs nav-fill mt-2" id="myTab" role="tablist">
-                                   <li class="nav-item">
+                                    <li class="nav-item">
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
-                                   </li>
-                                    <li class="nav-item">										
-										@if(!empty(session('lic_token')) && session('lic_estado') == 1)
-										<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        @if(!empty(session('lic_token')) && session('lic_estado') == 1)
+										    <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
 										@else
 											<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>
-										@endif 
+										@endif
                                     </li>
                                     <li class="nav-item">
                                         @if (request('token'))
@@ -114,11 +114,16 @@
         @include("atencion_medica.include.sidebar_derecho_uro"){{-- modales y data de sidebar especialidad --}}
 
         <!--Modals de especialidad -->
-		@include("general.modal.modal_no_disponible")
+        @include("general.modal.modal_no_disponible")
         @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
 
-        <!--Modals formularios generales-->
     </div>
+
+    <!--Modals formularios generales-->
+    @include('atencion_medica.secciones_especialidad.ficha_uro_tipo')
+    {{-- @include("general.hospitalizacion.modals.in_solic_pabellon") --}}
+    {{-- @include("general.hospitalizacion.modals.ingreso_hosp") --}}
+
     <!--Cierre: Container Completo-->
 @endsection
 @include('app.profesional.modales.boton_flotante_agenda_autorizacion')

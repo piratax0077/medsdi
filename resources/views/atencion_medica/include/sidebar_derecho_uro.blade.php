@@ -7,7 +7,6 @@
         </header>
         <div class="bs-canvas-content">
             <div class="accordion" id="accordion_side_bar">
-			<!--
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_solicitud_examenes">
                         <h2 class="mb-0">
@@ -22,12 +21,12 @@
 
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ex_orina()";>+ Exámenes de orina</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="est_hormo()";>+ Exámenes hormonales</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="rx_uro ()";>+ Orden radiología</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="sol_examen_cistoscopia()";>+ Sol. Cistoscopía</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="biopsia()";>+ Biopsias</button>
+
                          </div>
                     </div>
                 </div>
-				-->
 
                 <!-- SECCION CONSENTIMIENTOS -->
                @include('general.sidebar.seccion_consentimientos')
@@ -50,27 +49,25 @@
 						@include("general.modal.m_uimc")
 
                 </div>
-				<div class="card-sidebar">
-					<div class="card-header-sidebar" id="heading_hosp">
-						<h2 class="mb-0">
-						<button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_hosp" aria-expanded="false" aria-controls="collapse_hosp"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
-						FORMULARIOS DE HOSPITALIZACIÓN
-						</button>
-						</h2>
-					</div>
-					<div id="collapse_hosp" class="collapse" aria-labelledby="headinghospm" data-parent="#accordion_side_bar">
-						<div id="collapse_hosp" class="collapse" aria-labelledby="headinghospm" data-parent="#accordion_side_bar">
-							<div class="card-body-sidebar">
-								<button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="sol_pabellon()";>+ Solicitud Pabellón</button>
-								<button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingresohosp()";>+ Hospitalización </button>
-								<button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="r_ingreso()";>+ Requisitos de ingreso</button>
-							</div>
-						</div>
-						@include("general.hospitalizacion.modals.in_solic_pabellon")
-						@include("general.hospitalizacion.modals.ingreso_hosp")
-						@include("general.modal.m_req_ingreso")
-					</div>
-				</div>
+                <div class="card-sidebar">
+                    <div class="card-header-sidebar" id="heading_hosp">
+                        <h2 class="mb-0">
+                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_hosp" aria-expanded="false" aria-controls="collapse_hosp"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                        FORMULARIOS DE HOSPITALIZACIÓN
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapse_hosp" class="collapse" aria-labelledby="headinghospm" data-parent="#accordion_side_bar">
+                        <div class="card-body-sidebar">
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="sol_pabellon()";>+ Solicitud Pabellón</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ingresohosp()";>+ Hospitalización </button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="r_ingreso()";>+ Requisitos de ingreso</button>
+                        </div>
+                    </div>
+                    @include("general.hospitalizacion.modals.in_solic_pabellon")
+                    @include("general.hospitalizacion.modals.ingreso_hosp")
+                    @include("general.modal.m_req_ingreso")
+                </div>
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_recom">
                         <h2 class="mb-0">
@@ -115,6 +112,5 @@
         </div>
     </div>
     <!--FORMULARIOS GENERALES-->
-
-
-
+    @include('atencion_medica.formularios.modal_atencion_especialidad.urologia.modal_sol_cisto')
+    @include('atencion_medica.formularios.modal_atencion_especialidad.urologia.indicar_examen_esp')

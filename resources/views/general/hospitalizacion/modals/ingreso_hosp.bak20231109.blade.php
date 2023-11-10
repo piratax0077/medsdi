@@ -288,34 +288,33 @@
 </div>
 <script>
 
-    function ingresohosp(seccion)
-    {
+    function ingresohosp() {
 
-        console.log($('#in_hosp_nom_inst'+seccion).val());
+        console.log($('#in_hosp_nom_inst').val());
 
-        if($('#in_hosp_hospen'+seccion).length > 0)
-            $('#hospen').val($('#in_hosp_hospen'+seccion).val());
+        if($('#in_hosp_hospen').length > 0)
+            $('#hospen').val($('#in_hosp_hospen').val());
 
-        if($('#in_hosp_obs_hospen'+seccion).length > 0)
-            $('#obs_hospen').val($('#in_hosp_obs_hospen'+seccion).val());
+        if($('#in_hosp_obs_hospen').length > 0)
+            $('#obs_hospen').val($('#in_hosp_obs_hospen').val());
 
-        if($('#in_hosp_nom_inst'+seccion).length > 0)
-            $('#nom_inst').val($('#in_hosp_nom_inst'+seccion).val());
+        if($('#in_hosp_nom_inst').length > 0)
+            $('#nom_inst').val($('#in_hosp_nom_inst').val());
 
-        if($('#in_hosp_hosp_enserv'+seccion).length > 0)
-            $('#hosp_enserv').val($('#in_hosp_hosp_enserv'+seccion).val());
+        if($('#in_hosp_hosp_enserv').length > 0)
+            $('#hosp_enserv').val($('#in_hosp_hosp_enserv').val());
 
-        if($('#in_hosp_obs_hosp_enserv'+seccion).length > 0)
-            $('#obs_hosp_enserv').val($('#in_hosp_obs_hosp_enserv'+seccion).val());
+        if($('#in_hosp_obs_hosp_enserv').length > 0)
+            $('#obs_hosp_enserv').val($('#in_hosp_obs_hosp_enserv').val());
 
-        if($('#in_hosp_motivo_hosp'+seccion).length > 0)
-            $('#motivo_hosp').val($('#in_hosp_motivo_hosp'+seccion).val());
+        if($('#in_hosp_motivo_hosp').length > 0)
+            $('#motivo_hosp').val($('#in_hosp_motivo_hosp').val());
 
-        if($('#in_hosp_obs_motivo_hosp'+seccion).length > 0)
-            $('#obs_motivo_hosp').val($('#in_hosp_obs_motivo_hosp'+seccion).val());
+        if($('#in_hosp_obs_motivo_hosp').length > 0)
+            $('#obs_motivo_hosp').val($('#in_hosp_obs_motivo_hosp').val());
 
-        if($('#in_hosp_obs_hospitalizar'+seccion).length > 0)
-            $('#obs_hospitalizar').val($('#in_hosp_obs_hospitalizar'+seccion).val());
+        if($('#in_hosp_obs_hospitalizar').length > 0)
+            $('#obs_hospitalizar').val($('#in_hosp_obs_hospitalizar').val());
 
 
         evaluar_para_carga_detalle('hospen','div_detalle_hospen','obs_hospen',3);

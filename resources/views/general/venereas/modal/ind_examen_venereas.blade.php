@@ -106,50 +106,51 @@
         </div>
     </div>
 </div>
-<script>
 
+<script>
     function sol_examen_esp_est_ven()
     {
         $('#indicar_examen_est_ven').modal('show');
     }
-    function cerrarsol_examen_esp_est_ven(){
+
+    function cerrarsol_examen_esp_est_ven()
+    {
         $('#indicar_examen_est_ven').modal ('hide');
     }
-    {{--  METODOS DE EXAMENES
-    function mostrar_modal_examen_cirguria() {
 
-        {{--  $("#indicar_examenes").modal("show");
-        ver_examenes_ficha_medica();
-        ver_examenes_ficha_medica_esp();
-        $('#indicar_examenes').modal({backdrop: 'static', keyboard: false});
+    {{--  METODOS DE EXAMENES --}}
+    // function mostrar_modal_examen_cirguria() {
+    //     $("#indicar_examenes").modal("show");
+    //     ver_examenes_ficha_medica();
+    //     ver_examenes_ficha_medica_esp();
+    //     $('#indicar_examenes').modal({backdrop: 'static', keyboard: false});
+    // }
 
-    }
-
-    function cerrarModalExamenesFicha()
-    {
-        swal({
-            title: "Ingreso de examen(es).",
-            text: 'Al "Aceptar" cierra la ventana sin aplicar cambios.\n Debe "Generar Orden de Examen" para guardar cambios.',
-            icon: "warning",
-            buttons: ["Aceptar", 'Cancelar'],
-        }).then((result) => {
-            if (result == true)
-            {
-                console.log('regresar');
-            } else {
-
-                $('#indicar_examenes').modal('hide');
-            }
-        })
-    }
-  --}}
+    // function cerrarModalExamenesFicha()
+    // {
+    //     swal({
+    //         title: "Ingreso de examen(es).",
+    //         text: 'Al "Aceptar" cierra la ventana sin aplicar cambios.\n Debe "Generar Orden de Examen" para guardar cambios.',
+    //         icon: "warning",
+    //         buttons: ["Aceptar", 'Cancelar'],
+    //     }).then((result) => {
+    //         if (result == true)
+    //         {
+    //             console.log('regresar');
+    //         }
+    //         else
+    //         {
+    //             $('#indicar_examenes').modal('hide');
+    //         }
+    //     })
+    // }
 
     function indicar_examen_cirugia()
     {
         var tipo_examen = $("#tipo_examen option:selected").text();
         var id_tipo_examen = $("#tipo_examen").val();
-        {{--  var sub_tipo_examen = $("#sub_tipo_examen option:selected").text();  --}}
-        {{--  var examen = $("#examen option:selected").text();  --}}
+        // var sub_tipo_examen = $("#sub_tipo_examen option:selected").text();
+        // var examen = $("#examen option:selected").text();
         var prioridad = $("#prioridad option:selected").text();
 
         // var imagenologia_con_contraste = 'N/C';
@@ -159,28 +160,31 @@
         var valido = 0;
         var mensaje = '';
 
-        if( $.trim(tipo_examen) == '' || $.trim(tipo_examen) == 'Seleccione...' || $.trim(tipo_examen) == 'Seleccione' ){
+        if( $.trim(tipo_examen) == '' || $.trim(tipo_examen) == 'Seleccione...' || $.trim(tipo_examen) == 'Seleccione' )
+        {
             valido = 1;
             mensaje += ' Debe seleccionar Tipo Examen\n';
         }
-        // if( $.trim(sub_tipo_examen) == '' || $.trim(sub_tipo_examen) == 'Seleccione...' || $.trim(sub_tipo_examen) == 'Seleccione' ){
+        // if( $.trim(sub_tipo_examen) == '' || $.trim(sub_tipo_examen) == 'Seleccione...' || $.trim(sub_tipo_examen) == 'Seleccione' )
+        // {
         //     valido = 1;
         //     mensaje += ' Debe seleccionar Sub Tipo Examen\n';
         // }
-        {{--  if( $.trim(examen) == '' || $.trim(examen) == 'Seleccione...' || $.trim(examen) == 'Seleccione' ){
-            valido = 1;
-            mensaje += ' Debe seleccionar Examen\n';
-        }  --}}
-        if( $.trim(prioridad) == '' || $.trim(prioridad) == 'Seleccione...' || $.trim(prioridad) == 'Seleccione' ){
+        // if( $.trim(examen) == '' || $.trim(examen) == 'Seleccione...' || $.trim(examen) == 'Seleccione' )
+        // {
+        //     valido = 1;
+        //     mensaje += ' Debe seleccionar Examen\n';
+        // }
+        if( $.trim(prioridad) == '' || $.trim(prioridad) == 'Seleccione...' || $.trim(prioridad) == 'Seleccione' )
+        {
             valido = 1;
             mensaje += ' Debe seleccionar Prioridad\n';
         }
 
-
         if(valido == 0)
         {
             $('.examenes_sin_registros').remove();
-            {{--  var i = 1; //contador para asignar id al boton que borrara la fila  --}}
+            // var i = 1; //contador para asignar id al boton que borrara la fila
             var i = $('#tabla_examen_cirugia tr').length; //contador para asignar id al boton que borrara la fila
             var fila = '';
                 fila += '<tr class="tr_examen_cirugia" id="row' + i + '">';
@@ -198,56 +202,53 @@
             i++;
             $('#tabla_examen_cirugia tr:first').after(fila);
 
-            {{--  if($('#imagenologia_con_contraste').prop('checked'))
-            {
-                $('#tabla_examen_cirugia tr').each(function(key, value)
-                {
-                    $(value).find('td').each(function(key_td, value_td)
-                    {
-                        if(key_td == 0)
-                        {
-                            if($(value_td).text() == 'CREATININA EN SANGRE')
-                            {
-                                creatinina = 1;
-                            }
-                        }
-                    });
-                });
-                if(creatinina == 0)
-                {
-                    fila = '';
-                    fila += '<tr class="tr_examen_cirugia" id="row' + i + '">';
-                    fila +=     '<td class="text-center align-middle text-wrap">CREATININA EN SANGRE</td>';
-                    fila +=     '<td class="text-center align-middle text-wrap">SANGRE</td>';
-                    //fila =     '<td>' + sub_tipo_examen + '</td>';
-                    fila +=     '<td class="text-center align-middle text-wrap">Media</td>';
-                    fila +=     '<td class="text-center align-middle text-wrap">N/C</td>';
-                    fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_contraste(\'row' + i + '\');">Quitar</div></td>';
-                    fila += '</tr>';
-                    $('#tabla_examen_cirugia tr:first').after(fila);
-                    i++;
-                    creatinina = 1;
-                }
-            }  --}}
-
-
-
+            // if($('#imagenologia_con_contraste').prop('checked'))
+            // {
+            //     $('#tabla_examen_cirugia tr').each(function(key, value)
+            //     {
+            //         $(value).find('td').each(function(key_td, value_td)
+            //         {
+            //             if(key_td == 0)
+            //             {
+            //                 if($(value_td).text() == 'CREATININA EN SANGRE')
+            //                 {
+            //                     creatinina = 1;
+            //                 }
+            //             }
+            //         });
+            //     });
+            //     if(creatinina == 0)
+            //     {
+            //         fila = '';
+            //         fila += '<tr class="tr_examen_cirugia" id="row' + i + '">';
+            //         fila +=     '<td class="text-center align-middle text-wrap">CREATININA EN SANGRE</td>';
+            //         fila +=     '<td class="text-center align-middle text-wrap">SANGRE</td>';
+            //         //fila =     '<td>' + sub_tipo_examen + '</td>';
+            //         fila +=     '<td class="text-center align-middle text-wrap">Media</td>';
+            //         fila +=     '<td class="text-center align-middle text-wrap">N/C</td>';
+            //         fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_contraste(\'row' + i + '\');">Quitar</div></td>';
+            //         fila += '</tr>';
+            //         $('#tabla_examen_cirugia tr:first').after(fila);
+            //         i++;
+            //         creatinina = 1;
+            //     }
+            // }
 
             $("#tipo_examen").val('');
-            {{--  $("#sub_tipo_examen").val('');
-            $("#examen").val('');  --}}
+            // $("#sub_tipo_examen").val('');
+            // $("#examen").val('');
             $("#prioridad").val(2);
             $('#imagenologia_con_contraste').prop('checked', false);
             $('#mensaje_imagenologia_con_contraste').hide();
 
-            {{--  $("#adicionados1").text(""); //esta instruccion limpia el div adicioandos para que no se vayan acumulando  --}}
-            {{--  var nFilas = $("#tabla_examen_cirugia tr").length;  --}}
-            {{--  $("#adicionados1").append(nFilas - 1);  --}}
-            {{--  $("#sub_tipo_examen").empty();  --}}
-            {{--  $("#examen").empty();  --}}
-            //$("#frecuencia").empty();
-            //$("#periodo").empty();
-            //$("#prioridad").empty();
+            // $("#adicionados1").text(""); //esta instruccion limpia el div adicioandos para que no se vayan acumulando
+            // var nFilas = $("#tabla_examen_cirugia tr").length;
+            // $("#adicionados1").append(nFilas - 1);
+            // $("#sub_tipo_examen").empty();
+            // $("#examen").empty();
+            // $("#frecuencia").empty();
+            // $("#periodo").empty();
+            // $("#prioridad").empty();
         }
         else
         {
@@ -262,7 +263,8 @@
 
     }
 
-    function eliminar_examen(id_row){
+    function eliminar_examen(id_row)
+    {
         $('#tabla_examen_cirugia [id='+id_row+']').remove();
     }
 
@@ -287,7 +289,8 @@
     }
 
 
-    function registro_examen_ficha() {
+    function registro_examen_ficha()
+    {
         var rows1 = [];
         $('#tabla_examen_cirugia tr').each(function(i, n) {
             if (i > 0) {
@@ -310,69 +313,63 @@
         let tipo_ficha = 1;
         var _token = CSRF_TOKEN;
 
-
         let url = "{{ route('examenes.registro_examenes') }}";
         $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                _token: _token,
+                examenes: JSON.stringify(rows1),
+                id_ficha_atencion: id_ficha_atencion,
+                id_profesional: id_profesional,
+                id_paciente: id_paciente,
+                tipo_ficha: tipo_ficha,
+            },
+        })
+        .done(function(data) {
+            console.log(data)
 
-                url: url,
-                type: "post",
-                data: {
-                    _token: _token,
-                    examenes: JSON.stringify(rows1),
-                    id_ficha_atencion: id_ficha_atencion,
-                    id_profesional: id_profesional,
-                    id_paciente: id_paciente,
-                    tipo_ficha: tipo_ficha,
-                },
-            })
-            .done(function(data) {
+            if (data != null) {
+
+                {{--  data = JSON.parse(data);  --}}
                 console.log(data)
 
-                if (data != null) {
-
-                    {{--  data = JSON.parse(data);  --}}
-                    console.log(data)
-
-                    if(data.falla == '0'){
-                        swal({
-                            title: "Ingreso de examen(es).",
-                            text: 'Examenes registrados con Exito.',
-                            icon: "success",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        });
-                    }
-                    else
-                    {
-                        swal({
-                            title: "Ingreso de examen(es).",
-                            text: 'Falla en el registro, Intente nuevamente.',
-                            icon: "warning",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        });
-                    }
-
-
-
-                } else {
-
+                if(data.falla == '0'){
                     swal({
                         title: "Ingreso de examen(es).",
-                        text: 'Sin Retorno de Registro, Intente nuevamente.',
-                        icon: "error",
+                        text: 'Examenes registrados con Exito.',
+                        icon: "success",
                         // buttons: "Aceptar",
                         //SuccessMode: true,
                     });
-
                 }
+                else
+                {
+                    swal({
+                        title: "Ingreso de examen(es).",
+                        text: 'Falla en el registro, Intente nuevamente.',
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                }
+            } else {
 
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
+                swal({
+                    title: "Ingreso de examen(es).",
+                    text: 'Sin Retorno de Registro, Intente nuevamente.',
+                    icon: "error",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
     }
-
 
     function ver_pdf_orden_examenes(id_ficha_atencion)
     {

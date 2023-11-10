@@ -2575,7 +2575,7 @@ class ficha_atencionController extends Controller
                     $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.';
                 }
                 $mensaje .= '\n' . $mensaje_estado_hora_medica;
-				
+
                 if($request->cerrarsession == 0 || $request->cerrarsession =='')
                 {
                     /** redireccion Redirect funciona correcto */
@@ -3850,83 +3850,69 @@ class ficha_atencionController extends Controller
     {
         $campos_requeridos = 0;
         $mensaje = '';
+
+
         if(empty( trim($request->descripcion_hipotesis)))
         {
             $campos_requeridos = 1;
-            $mensaje = 'El Diagnóstico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
+            $mensaje .= 'El Diagnóstico es Requerido.\n';
+            $mensaje .='Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
         }
         else
         {
-            if(!empty($request->diag_endos_eda))
+
+            if(empty($request->mc_ex_fisico_cons) || empty($request->obs_egp_uro))
             {
-                if($request->diag_endos_eda != 'Test de ureasa No tomado')
+                $campos_requeridos = 1;
+                if(empty($request->mc_ex_fisico_cons))
                 {
-                    if(empty($request->id_profesional_solicitado_por_cisto))
-                    {
-                        if(empty($request->solicitado_por_rut_cisto))
-                        {
-                            $campos_requeridos = 1;
-                            $mensaje = 'Cistocopía - Campo requerido RUT del Solicitante.\n';
-                        }
-                        if(empty($request->solicitado_por_nombre_cisto))
-                        {
-                            $campos_requeridos = 1;
-                            $mensaje = 'Cistocopía - Campo requerido NOMBRE del Solicitante.\n';
-                        }
-                        if(empty($request->solicitado_por_apellido_cisto))
-                        {
-                            $campos_requeridos = 1;
-                            $mensaje = 'Cistocopía - Campo requerido APELLIDO del Solicitante.\n';
-                        }
-                        if(empty($request->solicitado_por_telefono_cisto) || empty($request->solicitado_por_email_cisto))
-                        {
-                            $campos_requeridos = 1;
-                            $mensaje = 'Cistocopía - Campo requerido TELÉFONO o EMAIL del Solicitante.\n';
-                        }
-                    }
+                    $mensaje .= 'El Motivo de consulta y Examen general es Requerido\n';
                 }
 
-            }
-
-            if( !empty($request->vol_vac_uro_flujo) || !empty($request->q_flujo_uro_flujo) || !empty($request->m_curva_uro_flujo)
-                    || !empty($request->residuo_uro_flujo) || !empty($request->comentrarios_uro_flujo) )
-            {
-                if(empty($request->id_profesional_solicitado_por_uro_flujo))
+                if(empty($request->obs_egp_uro))
                 {
-
-                    if(empty($request->solicitado_por_rut_uro_flujo))
-                    {
-                        $campos_requeridos = 1;
-                        $mensaje = 'Uroflujometría - Campo requerido RUT del Solicitante.\n'; }
-                    if(empty($request->solicitado_por_nombre_uro_flujo))
-                    {
-                        $campos_requeridos = 1;
-                        $mensaje = 'Uroflujometría - Campo requerido NOMBRE del Solicitante.\n';
-                    }
-                    if(empty($request->solicitado_por_apellido_uro_flujo))
-                    {
-                        $campos_requeridos = 1;
-                        $mensaje = 'Uroflujometría - Campo requerido APELLIDO del Solicitante.\n';
-                    }
-                    if(empty($request->solicitado_por_telefono_uro_flujo) || empty($request->solicitado_por_email_uro_flujo))
-                    {
-                        $campos_requeridos = 1;
-                        $mensaje = 'Uroflujometría - Campo requerido TELÉFONO o EMAIL del Solicitante.\n';
-                    }
+                    $mensaje .= 'El Estado General del Paciente es Requerido\n';
                 }
             }
             else
             {
-                $array_imagenes = (array)json_decode($request->input_lista_imagenes);
-                $temp = array();
-                if(isset($array_imagenes['uro_flujo']))
-                    $temp = (array)$array_imagenes['uro_flujo'];
-
-                if( count($temp) > 0)
+                if(!empty($request->diag_endos_eda))
                 {
+                    if($request->diag_endos_eda != 'Test de ureasa No tomado')
+                    {
+                        if(empty($request->id_profesional_solicitado_por_cisto))
+                        {
+                            if(empty($request->solicitado_por_rut_cisto))
+                            {
+                                $campos_requeridos = 1;
+                                $mensaje = 'Cistocopía - Campo requerido RUT del Solicitante.\n';
+                            }
+                            if(empty($request->solicitado_por_nombre_cisto))
+                            {
+                                $campos_requeridos = 1;
+                                $mensaje = 'Cistocopía - Campo requerido NOMBRE del Solicitante.\n';
+                            }
+                            if(empty($request->solicitado_por_apellido_cisto))
+                            {
+                                $campos_requeridos = 1;
+                                $mensaje = 'Cistocopía - Campo requerido APELLIDO del Solicitante.\n';
+                            }
+                            if(empty($request->solicitado_por_telefono_cisto) || empty($request->solicitado_por_email_cisto))
+                            {
+                                $campos_requeridos = 1;
+                                $mensaje = 'Cistocopía - Campo requerido TELÉFONO o EMAIL del Solicitante.\n';
+                            }
+                        }
+                    }
 
+                }
+
+                if( !empty($request->vol_vac_uro_flujo) || !empty($request->q_flujo_uro_flujo) || !empty($request->m_curva_uro_flujo)
+                        || !empty($request->residuo_uro_flujo) || !empty($request->comentrarios_uro_flujo) )
+                {
                     if(empty($request->id_profesional_solicitado_por_uro_flujo))
                     {
+
                         if(empty($request->solicitado_por_rut_uro_flujo))
                         {
                             $campos_requeridos = 1;
@@ -3948,8 +3934,68 @@ class ficha_atencionController extends Controller
                         }
                     }
                 }
+                else
+                {
+                    $array_imagenes = (array)json_decode($request->input_lista_imagenes);
+                    $temp = array();
+                    if(isset($array_imagenes['uro_flujo']))
+                        $temp = (array)$array_imagenes['uro_flujo'];
+
+                    if( count($temp) > 0)
+                    {
+
+                        if(empty($request->id_profesional_solicitado_por_uro_flujo))
+                        {
+                            if(empty($request->solicitado_por_rut_uro_flujo))
+                            {
+                                $campos_requeridos = 1;
+                                $mensaje = 'Uroflujometría - Campo requerido RUT del Solicitante.\n'; }
+                            if(empty($request->solicitado_por_nombre_uro_flujo))
+                            {
+                                $campos_requeridos = 1;
+                                $mensaje = 'Uroflujometría - Campo requerido NOMBRE del Solicitante.\n';
+                            }
+                            if(empty($request->solicitado_por_apellido_uro_flujo))
+                            {
+                                $campos_requeridos = 1;
+                                $mensaje = 'Uroflujometría - Campo requerido APELLIDO del Solicitante.\n';
+                            }
+                            if(empty($request->solicitado_por_telefono_uro_flujo) || empty($request->solicitado_por_email_uro_flujo))
+                            {
+                                $campos_requeridos = 1;
+                                $mensaje = 'Uroflujometría - Campo requerido TELÉFONO o EMAIL del Solicitante.\n';
+                            }
+                        }
+                    }
+                }
             }
+
+            /** validacion de veneria */
+            if(
+                !empty($request->select_1_ven_sint) ||  !empty($request->select_2_ven_ant_pat_ant) ||  !empty($request->ot_ant_ven_pat) ||  !empty($request->select_6_ven_gen) ||
+                !empty($request->select_7_ven_ant_cond) || !empty($request->select_8_ven_prot) || !empty($request->select_9_ven_cont_sos) || !empty($request->select_3_ven_ant_pat_pater) ||
+                !empty($request->select_4_ven_ant_pat_mater) || !empty($request->select_5_pat_ssfam) || !empty($request->ven_ex_fg) || !empty($request->ven_ex_pm) ||
+                !empty($request->ven_obs_egp) || !empty($request->ven_gen_masc) || !empty($request->ven_gen_fem) || !empty($request->imagenes_ven_pre) ||
+                !empty($request->imagenes_ven_post) || !empty($request->obs_fotos_ven) || !empty($request->tto_ven) || !empty($request->pr_ven) ||
+                !empty($request->hosp_ven) || !empty($request->recom_tto_ven) || !empty($request->tipo_proc_ven) || !empty($request->plan_ven_proc) ||
+                !empty($request->obs_plan_tratamiento) || !empty($request->diagnostico_ven) || !empty($request->descripcion_cie_ven) || !empty($request->indicaciones_ven)
+            ){
+
+                if(empty($request->select_1_ven_sint))
+                {
+                    $campos_requeridos = 1;
+                    $mensaje .= 'Venereas - El Sintomatología actual es Requerido.\n';
+                }
+
+                if(empty($request->diagnostico_ven))
+                {
+                    $campos_requeridos = 1;
+                    $mensaje .= 'Venereas - El Diagnóstico de Veneria es Requerido.\n';
+                }
+            }
+            $mensaje .='Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
         }
+
 
         if($campos_requeridos == 0)
         {
@@ -3959,34 +4005,128 @@ class ficha_atencionController extends Controller
             $id_profesional = $request->id_profesional_fc;
             $id_paciente = $request->id_paciente_fc;
 
+            $ficha->motivo = $request->motivo;
+            $ficha->antecedentes = $request->antecedentes;
+            $ficha->examen_fisico = $request->examen_fisico;
+
             $ges = 0;
-            if ($request->modal_ges == 'on') {
+            // if ($request->modal_ges == 'on') {
+            if ($request->modal_ges == '1') {
                 $ges = 1;
             } else {
                 $ges = 0;
             }
 
             $cronico = 0;
-            if ($request->enf_cronico == 'on') {
+            // if ($request->enf_cronico == 'on') {
+            if ($request->enf_cronico == '1') {
                 $cronico = 1;
             } else {
                 $cronico = 0;
             }
 
             $confidencial = 0;
-            if ($request->confidencial == 'on') {
+            // if ($request->confidencial == 'on') {
+            if ($request->confidencial == '1') {
                 $confidencial = 1;
             } else {
                 $confidencial = 0;
             }
 
-            $ficha->motivo = $request->descripcion_consulta_uro;
-            $ficha->antecedentes = $request->antec_especialidad_uro;
+            //Signos vitales
+            if ($request->temperatura != '') {
+                $ficha->temperatura = $request->temperatura;
+            } else {
+                $ficha->temperatura = null;
+            }
+
+            if ($request->pulso != '') {
+                $ficha->pulso = $request->pulso;
+            } else {
+                $ficha->pulso = null;
+            }
+
+            if ($request->frecuencia_reposo != '') {
+                $ficha->frecuencia_reposo = $request->frecuencia_reposo;
+            } else {
+                $ficha->frecuencia_reposo = null;
+            }
+
+            if ($request->peso != '') {
+                $ficha->peso = $request->peso;
+            } else {
+                $ficha->peso = null;
+            }
+
+            if ($request->talla != '') {
+                $ficha->talla = $request->talla;
+            } else {
+                $ficha->talla = null;
+            }
+
+            if ($request->imc != '') {
+                $ficha->imc = $request->imc;
+            } else {
+                $ficha->imc = null;
+            }
+
+            if ($request->estado_nutricional != '') {
+                $ficha->estado_nutricional = $request->estado_nutricional;
+            } else {
+                $ficha->estado_nutricional = null;
+            }
+
+            //presion Arterial
+            if ($request->presion_bi != '') {
+                $ficha->presion_bi = $request->presion_bi;
+            } else {
+                $ficha->presion_bi = null;
+            }
+
+            if ($request->presion_bd != '') {
+                $ficha->presion_bd = $request->presion_bd;
+            } else {
+                $ficha->presion_bd = null;
+            }
+
+            if ($request->presion_de_pie != '') {
+                $ficha->presion_de_pie = $request->presion_de_pie;
+            } else {
+                $ficha->presion_de_pie = null;
+            }
+
+            if ($request->presion_sentado != '') {
+                $ficha->presion_sentado = $request->presion_sentado;
+            } else {
+                $ficha->presion_sentado = null;
+            }
+
+            //comunicacion y Traslado
+            if ($request->ct_estado_conciencia != '') {
+                $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
+            } else {
+                $ficha->ct_estado_conciencia = null;
+            }
+
+            if ($request->ct_lenguaje != '') {
+                $ficha->ct_lenguaje = $request->ct_lenguaje;
+            } else {
+                $ficha->ct_lenguaje = null;
+            }
+
+            if ($request->ct_traslado != '') {
+                $ficha->ct_traslado = $request->ct_traslado;
+            } else {
+                $ficha->ct_traslado = null;
+            }
 
             $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
-            // $ficha->indicaciones = $request->ind_uro; /// ????????????????
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
+			$ficha->indicaciones = $request->indicaciones;
 
+            $ficha->cronico = $cronico;
+            $ficha->ges = $ges;
+            $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
             $ficha->finalizada = 1;
@@ -4000,71 +4140,45 @@ class ficha_atencionController extends Controller
                 $tipo_mensaje = 'success';
                 $mensaje = 'Ficha Clínica guardada de forma correcta\n';
 
-                // /** registro de ficha Urologia  */
-                // $ficha_uro = new FichaUro();
-                // $ficha_uro->id_fichas_atenciones = $ficha->id;
-                // $ficha_uro->id_profesional = $id_profesional;
-                // $ficha_uro->id_paciente = $id_paciente;
-
-                // $ficha_uro->descripcion_consulta_uro = $request->descripcion_consulta_uro;
-                // $ficha_uro->antec_especialidad_uro = $request->antec_especialidad_uro;
-                // $ficha_uro->tipo_antecedente = $request->tipo_antecedente;
-                // $ficha_uro->antec_nuevo = $request->antec_nuevo;
-                // $ficha_uro->costo_vert_ld = $request->costo_vert_ld;
-                // $ficha_uro->obs_costo_vert_ld = $request->obs_costo_vert_ld;
-                // $ficha_uro->costo_vert_li = $request->costo_vert_li;
-                // $ficha_uro->obs_costo_vert_lI = $request->obs_costo_vert_lI;
-                // $ficha_uro->examen_abd = $request->examen_abd;
-                // $ficha_uro->obs_examen_abd = $request->obs_examen_abd;
-                // $ficha_uro->tacto_rec = $request->tacto_rec;
-                // $ficha_uro->obs_tacto_rec = $request->obs_tacto_rec;
-                // $ficha_uro->antigeno_prost = $request->antigeno_prost;
-                // $ficha_uro->obs_antigeno_prost = $request->obs_antigeno_prost;
-                // $ficha_uro->biopsia_uro = $request->biopsia_uro;
-                // $ficha_uro->obs_biopsia_uro = $request->obs_biopsia_uro;
-                // $ficha_uro->ingle = $request->ingle;
-                // $ficha_uro->obs_detalle_ingle = $request->obs_detalle_ingle;
-                // $ficha_uro->habitos_micionales = $request->habitos_micionales;
-                // $ficha_uro->obs_habitos_micionales = $request->obs_habitos_micionales;
-                // $ficha_uro->funcion_pene = $request->funcion_pene;
-                // $ficha_uro->obs_funcion_pene = $request->obs_funcion_pene;
-                // $ficha_uro->sintomas_funcionales = $request->sintomas_funcionales;
-                // $ficha_uro->obs_sintomas_funcionales = $request->obs_sintomas_funcionales;
-                // $ficha_uro->uretra_masc = $request->uretra_masc;
-                // $ficha_uro->obs_detalle_uretra_masc = $request->obs_detalle_uretra_masc;
-                // $ficha_uro->examen_pene = $request->examen_pene;
-                // $ficha_uro->obs_pene_anormal = $request->obs_pene_anormal;
-                // $ficha_uro->examen_test = $request->examen_test;
-                // $ficha_uro->obs_test_anormal = $request->obs_test_anormal;
-                // $ficha_uro->vulva = $request->vulva;
-                // $ficha_uro->obs_det_vulva = $request->obs_det_vulva;
-                // $ficha_uro->vagina = $request->vagina;
-                // $ficha_uro->obs_detalle_uretra_fem = $request->obs_detalle_uretra_fem;
-                // $ficha_uro->examen_horm = $request->examen_horm;
-                // $ficha_uro->obs_examen_horm = $request->obs_examen_horm;
-                // $ficha_uro->obs_ex_uro = $request->obs_ex_uro;
-
                 // $ficha_uro->estado = 1;
                 $ficha_urologia = new FichaUrologiaAdulto();
                 $ficha_urologia->id_ficha_atencion = $ficha->id;
                 $ficha_urologia->id_profesional= $id_profesional;
                 $ficha_urologia->id_paciente = $id_paciente;
+
                 $ficha_urologia->mc_ex_fisico_cons=$request->mc_ex_fisico_cons;
                 $ficha_urologia->uro_gen_ext=$request->uro_gen_ext;
                 $ficha_urologia->uro_gen_int=$request->uro_gen_int;
                 $ficha_urologia->urgencia_uro=$request->urgencia_uro;
                 $ficha_urologia->obs_egp_uro=$request->obs_egp_uro;
                 $ficha_urologia->uro_res_exam=$request->uro_res_exam;
+
                 $ficha_urologia->imagen_uro_pre=$request->imagen_uro_pre;
                 $ficha_urologia->imagen_uro_post=$request->imagen_uro_post;
                 $ficha_urologia->obs_fotos_uro=$request->obs_fotos_uro;
-                $ficha_urologia->tto_uro=$request->tto_uro;
+
+                if ($request->tto_uro == '1') {
+                    $ficha_urologia->tto_uro = 1;
+                } else {
+                    $ficha_urologia->tto_uro = 0;
+                }
                 $ficha_urologia->rec_tto_uro=$request->rec_tto_uro;
-                $ficha_urologia->pr_uro=$request->pr_uro;
+
+                if ($request->pr_uro == '1') {
+                    $ficha_urologia->pr_uro = 1;
+                } else {
+                    $ficha_urologia->pr_uro = 0;
+                }
                 $ficha_urologia->tipo_proc_uro=$request->tipo_proc_uro;
                 $ficha_urologia->plan_proc_uro=$request->plan_proc_uro;
-                $ficha_urologia->urogen_cir=$request->urogen_cir;
+
+                if ($request->urogen_cir == '1') {
+                    $ficha_urologia->urogen_cir = 1;
+                } else {
+                    $ficha_urologia->urogen_cir = 0;
+                }
                 $ficha_urologia->obs_gen_plan_tto=$request->obs_gen_plan_tto;
+
                 $ficha_urologia->otro=$request->otro;
                 $ficha_urologia->otro1=$request->otro1;
                 $ficha_urologia->estado= 1;
@@ -4073,47 +4187,6 @@ class ficha_atencionController extends Controller
                 {
 
                     $mensaje = 'Ficha Urologia guardada de forma correcta\n';
-
-                    $ficha_venerea = new FichaVenereas ();
-                    $ficha_venerea->id_ficha_atencion = $ficha->id;
-                    $ficha_venerea->id_profesional= $id_profesional;
-                    $ficha_venerea->id_paciente = $id_paciente;
-                    $ficha_venerea->select_1_ven_sint=$request->select_1_ven_sint;
-                    $ficha_venerea->select_2_ven_ant_pat_ant=$request->select_2_ven_ant_pat_ant;
-                    $ficha_venerea->ot_ant_ven_pat=$request->ot_ant_ven_pat;
-                    $ficha_venerea->select_6_ven_gen=$request->select_6_ven_gen;
-                    $ficha_venerea->select_7_ven_ant_cond=$request->select_7_ven_ant_cond;
-                    $ficha_venerea->select_8_ven_prot=$request->select_8_ven_prot;
-                    $ficha_venerea->select_9_ven_cont_sos=$request->select_9_ven_cont_sos;
-                    $ficha_venerea->select_3_ven_ant_pat_pater=$request->select_3_ven_ant_pat_pater;
-                    $ficha_venerea->select_4_ven_ant_pat_mater=$request->select_4_ven_ant_pat_mater;
-                    $ficha_venerea->select_5_pat_ssfam=$request->select_5_pat_ssfam;
-                    $ficha_venerea->ven_ex_fg=$request->ven_ex_fg;
-                    $ficha_venerea->ven_ex_pm=$request->ven_ex_pm;
-                    $ficha_venerea->ven_obs_egp=$request->ven_obs_egp;
-                    $ficha_venerea->ven_gen_masc=$request->ven_gen_masc;
-                    $ficha_venerea->ven_gen_fem=$request->ven_gen_fem;
-                    $ficha_venerea->imagenes_ven_pre=$request->imagenes_ven_pre;
-                    $ficha_venerea->imagenes_ven_post=$request->imagenes_ven_post;
-                    $ficha_venerea->obs_fotos_ven=$request->obs_fotos_ven;
-                    $ficha_venerea->tto_ven=$request->tto_ven;
-                    $ficha_venerea->pr_ven=$request->pr_ven;
-                    $ficha_venerea->hosp_ven=$request->hosp_ven;
-                    $ficha_venerea->recom_tto_ven=$request->recom_tto_ven;
-                    $ficha_venerea->tipo_proc_ven=$request->tipo_proc_ven;
-                    $ficha_venerea->plan_ven_proc=$request->plan_ven_proc;
-                    $ficha_venerea->obs_plan_tratamiento=$request->obs_plan_tratamiento;
-                    $ficha_venerea->otro=$request->otro;
-                    $ficha_venerea->otro1=$request->otro1;
-                    $ficha_venerea->estado= 1;
-                    if($ficha_venerea->save())
-                    {
-                        $mensaje = 'Ficha Venéreas guardada de forma correcta\n';
-                    }
-                    else
-                    {
-                        $mensaje = 'Falla en el registro de Ficha Venéreas\n';
-                    }
 
                     /** REGISTRO DE EXAMEN */
                     $lista_examen_especialidad = explode('|',$request->tipo_examen_especial);
@@ -4152,7 +4225,7 @@ class ficha_atencionController extends Controller
                                     unset($parametro[$key]);
                             }
 
-                            $parametro['id_ficha_uro'] = $ficha_uro->id;
+                            $parametro['id_ficha_uro'] = $ficha_urologia->id;
 
                             if(isset($array_imagenes[$temp_value_examen_tipo[0]]))
                                 if(count($array_imagenes[$temp_value_examen_tipo[0]]) > 0)
@@ -4170,7 +4243,7 @@ class ficha_atencionController extends Controller
                                 $examen->id_examen_tipo = $temp_value_examen_tipo[1];
                                 $examen->id_sub_tipo_especialidad = $profesional->id_sub_tipo_especialidad;
                                 $examen->id_ficha_atencion = $ficha->id;
-                                $examen->id_ficha_especialidad = $ficha_uro->id;
+                                $examen->id_ficha_especialidad = $ficha_urologia->id;
                                 $examen->id_paciente = $id_paciente;
                                 $examen->id_profesional = $id_profesional;
                                 $examen->nombre = $template->nombre;
@@ -4246,6 +4319,82 @@ class ficha_atencionController extends Controller
                             // $mensaje .= 'caso de '.$temp_value_examen_tipo[0].' validacion='.$validacion.'\n';
                         }
                     }
+
+                    if(
+                        !empty($request->select_1_ven_sint) ||  !empty($request->select_2_ven_ant_pat_ant) ||  !empty($request->ot_ant_ven_pat) ||  !empty($request->select_6_ven_gen) ||
+                        !empty($request->select_7_ven_ant_cond) || !empty($request->select_8_ven_prot) || !empty($request->select_9_ven_cont_sos) || !empty($request->select_3_ven_ant_pat_pater) ||
+                        !empty($request->select_4_ven_ant_pat_mater) || !empty($request->select_5_pat_ssfam) || !empty($request->ven_ex_fg) || !empty($request->ven_ex_pm) ||
+                        !empty($request->ven_obs_egp) || !empty($request->ven_gen_masc) || !empty($request->ven_gen_fem) || !empty($request->imagenes_ven_pre) ||
+                        !empty($request->imagenes_ven_post) || !empty($request->obs_fotos_ven) || !empty($request->tto_ven) || !empty($request->pr_ven) ||
+                        !empty($request->hosp_ven) || !empty($request->recom_tto_ven) || !empty($request->tipo_proc_ven) || !empty($request->plan_ven_proc) ||
+                        !empty($request->obs_plan_tratamiento) || !empty($request->diagnostico_ven) || !empty($request->descripcion_cie_ven) || !empty($request->indicaciones_ven)
+                    ){
+                        $ficha_venerea = new FichaVenereas ();
+                        $ficha_venerea->id_ficha_atencion = $ficha->id;
+                        $ficha_venerea->id_profesional= $id_profesional;
+                        $ficha_venerea->id_paciente = $id_paciente;
+                        $ficha_venerea->select_1_ven_sint = $request->select_1_ven_sint;
+                        $ficha_venerea->select_2_ven_ant_pat_ant = $request->select_2_ven_ant_pat_ant;
+                        $ficha_venerea->ot_ant_ven_pat = $request->ot_ant_ven_pat;
+                        $ficha_venerea->select_6_ven_gen = $request->select_6_ven_gen;
+                        $ficha_venerea->select_7_ven_ant_cond = $request->select_7_ven_ant_cond;
+                        $ficha_venerea->select_8_ven_prot = $request->select_8_ven_prot;
+                        $ficha_venerea->select_9_ven_cont_sos = $request->select_9_ven_cont_sos;
+                        $ficha_venerea->select_3_ven_ant_pat_pater = $request->select_3_ven_ant_pat_pater;
+                        $ficha_venerea->select_4_ven_ant_pat_mater = $request->select_4_ven_ant_pat_mater;
+                        $ficha_venerea->select_5_pat_ssfam = $request->select_5_pat_ssfam;
+                        $ficha_venerea->ven_ex_fg = $request->ven_ex_fg;
+                        $ficha_venerea->ven_ex_pm = $request->ven_ex_pm;
+                        $ficha_venerea->ven_obs_egp = $request->ven_obs_egp;
+                        $ficha_venerea->ven_gen_masc = $request->ven_gen_masc;
+                        $ficha_venerea->ven_gen_fem = $request->ven_gen_fem;
+
+                        $ficha_venerea->imagenes_ven_pre = $request->imagenes_ven_pre;
+                        $ficha_venerea->imagenes_ven_post = $request->imagenes_ven_post;
+                        $ficha_venerea->obs_fotos_ven = $request->obs_fotos_ven;
+
+                        if($request->tto_ven == 1)
+                            $ficha_venerea->tto_ven = 1;
+                        else
+                            $ficha_venerea->tto_ven = 0;
+
+                        $ficha_venerea->recom_tto_ven = $request->recom_tto_ven;
+
+
+                        if($request->pr_ven == 1)
+                            $ficha_venerea->pr_ven = 1;
+                        else
+                            $ficha_venerea->pr_ven = 0;
+
+                        $ficha_venerea->tipo_proc_ven = $request->tipo_proc_ven;
+                        $ficha_venerea->plan_ven_proc = $request->plan_ven_proc;
+
+
+                        if($request->hosp_ven == 1)
+                            $ficha_venerea->hosp_ven = 1;
+                        else
+                            $ficha_venerea->hosp_ven = 0;
+
+
+
+                        $ficha_venerea->obs_plan_tratamiento = $request->obs_plan_tratamiento;
+                        $ficha_venerea->diagnostico_ven = $request->diagnostico_ven;
+                        $ficha_venerea->descripcion_cie_ven = $request->descripcion_cie_ven;
+                        $ficha_venerea->indicaciones_ven = $request->indicaciones_ven;
+                        $ficha_venerea->otro = $request->otro;
+                        $ficha_venerea->otro1 = $request->otro1;
+                        $ficha_venerea->estado= 1;
+
+                        if($ficha_venerea->save())
+                        {
+                            $mensaje = 'Ficha Venéreas guardada de forma correcta\n';
+                        }
+                        else
+                        {
+                            $mensaje = 'Falla en el registro de Ficha Venéreas\n';
+                        }
+                    }
+
 
                 }
                 else

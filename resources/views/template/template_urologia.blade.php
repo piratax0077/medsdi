@@ -81,10 +81,10 @@
 
     <!-- Modal de la vista -->
     @yield('Modals')
-    @yield('Modals-med-exa')
+    @yield('modals-med-exa')
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
-    @include('atencion_medica.secciones_especialidad.ficha_uro_tipo')
+
 
 
     <!-- Modal de la vista fin -->
@@ -272,4 +272,5 @@
     @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
     @yield('js-sidebar') {{-- seccion js side bar --}}
     @yield('js-lic') {{-- seccion js side bar --}}
+    @yield('script-veneria')
 	@yield('page-script-btn-autorizacion')
