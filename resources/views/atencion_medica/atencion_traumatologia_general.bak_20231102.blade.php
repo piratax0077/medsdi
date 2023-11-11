@@ -42,25 +42,22 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
-                                    <li class="nav-item" id="nav-licencia">
-                                        @if (request('token') && request('lic') == 1)
-                                        <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
-                                        @else
-                                            @php
-                                                $url_temp = 'Profesional/Paciente/Ficha_consulta?_token='.request('_token').'&id_hora_realizar='.request('id_hora_realizar').'&lugar_atencion_id='.request('lugar_atencion_id').'';
-                                            @endphp
-                                            <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $profesional->id_usuario,'urla'=> $url_temp.'&lic=0','urln' => $url_temp.'&lic=1&tab=licencia-tab', 'id_tipo' => 12]) }}">Licencia</a>
-                                        @endif
-
+                                    <li class="nav-item">										
+										@if(!empty(session('lic_token')) && session('lic_estado') == 1)
+										<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
+										@else
+											<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>
+										@endif 
                                     </li>
                                     <li class="nav-item">
-                                        @if (request('token') && request('fmu') == 1)
+                                        {{-- <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a> --}}
+                                        @if (request('token'))
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
                                         @else
                                             @php
                                                 $url_temp = 'Profesional/Paciente/Ficha_consulta?_token='.request('_token').'&id_hora_realizar='.request('id_hora_realizar').'&lugar_atencion_id='.request('lugar_atencion_id').'';
                                             @endphp
-                                            <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $paciente->id_usuario,'urla'=> $url_temp.'&fmu=0','urln' => $url_temp.'&fmu=1', 'id_tipo' => 2]) }}">FMU</a>
+                                            <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $paciente->id_usuario,'urla'=> $url_temp,'urln' => $url_temp, 'id_tipo' => 9]) }}">FMU</a>
                                         @endif
                                     </li>
                                     <li class="nav-item">
@@ -93,7 +90,7 @@
                         </div>
                         <!--Ficha Médica Única-->
                         <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
-                            @include('general.secciones_ficha.fmu')
+                            @include('atencion_medica.secciones_ficha.fmu')
                         </div>
                         <!--Atenciones previas-->
                         <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
@@ -114,9 +111,20 @@
 
         <!-- SIDE BAR ORL -->
         @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
-        @include("atencion_medica.include.sidebar_derecho_traumato")
-        @include("general.modal.modal_no_disponible")
 
-        {{-- @include('general.hospitalizacion.modals.in_solic_pabellon') --}}
+        <!--Modals de especialidad -->
+        {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
+
+        <!--Modals formularios generales-->
+        {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
+        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")--}}
+
+
+    </div>
+    <!--Cierre: Container Completo-->
+	@include("general.modal.modal_no_disponible")
+	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
+    @include("general.hospitalizacion.modals.ingreso_hosp")
+    @include("atencion_medica.include.sidebar_derecho_traumato")
 @endsection
 @include('app.profesional.modales.boton_flotante_agenda_autorizacion')

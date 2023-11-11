@@ -70,6 +70,7 @@ use App\Models\FichaOftFondoOjo;
 use App\Models\FichaOftFondoOjoTipo;
 use App\Models\FichaOftTipo;
 use App\Models\FichaOrtopedia;
+use App\Models\FichaOrtopediaAdulto;
 use App\Models\FichaPediatriaCns;
 use App\Models\FichaPediatriaGeneral;
 use App\Models\FichaPediatriaGeneralTipo;
@@ -5119,10 +5120,11 @@ class ficha_atencionController extends Controller
     {
         $campos_requeridos = 1;
         $mensaje = '';
-        if(empty( trim($request->descripcion_hipotesis_trau)) && empty( trim($request->descripcion_hipotesis_ort)))
+        if(empty( trim($request->descripcion_hipotesis)) )
         {
             $campos_requeridos = 0;
-            $mensaje = 'El Diagnóstico de Traumatologia o Ortopedia Requerido.\n Su Ficha Clínica NO ha sido Guardada aún.';
+            $mensaje .= 'El Diagnóstico es Requerido.\n';
+            $mensaje .='Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
         }
 
         if($campos_requeridos)
@@ -5134,21 +5136,9 @@ class ficha_atencionController extends Controller
             $id_profesional = $request->id_profesional_fc;
             $id_paciente = $request->id_paciente_fc;
 
-
-            /** REGISTRO TRUMATOLOGIA */
-            if(!empty(trim($request->descripcion_hipotesis_trau)))
-            {
-                $ficha->motivo = $request->descripcion_consula;
-                $ficha->antecedentes = $request->antec_especialidad_gen;
-            }
-
-            /** REGISTRO ORTOPEDIA */
-            if(!empty(trim($request->descripcion_hipotesis_ort)))
-            {
-                $ficha->motivo = '';
-                $ficha->antecedentes = '';
-            }
-
+            $ficha->motivo = $request->motivo;
+            $ficha->antecedentes = $request->antecedentes;
+            $ficha->examen_fisico = $request->examen_fisico;
 
             $ges = 0;
             // if ($request->modal_ges == 'on') {
@@ -5258,28 +5248,17 @@ class ficha_atencionController extends Controller
             //     $ficha->ct_traslado = null;
             // }
 
-            /** REGISTRO TRUMATOLOGIA */
-            if(!empty(trim($request->descripcion_hipotesis_trau)))
-            {
-                $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis_trau;
-                $ficha->diagnostico_ce10 = $request->descripcion_cie_esp_trau;
-            }
+            $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
+            $ficha->diagnostico_ce10 = $request->descripcion_cie;
+			$ficha->indicaciones = $request->indicaciones;
 
-            /** REGISTRO ORTOPEDIA */
-            if(!empty(trim($request->descripcion_hipotesis_ort)))
-            {
-
-                $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis_ort;
-                $ficha->diagnostico_ce10 = $request->descripcion_cie_esp_ort;
-            }
-
-
-            $ficha->cronico = $cronico;
-            $ficha->ges = $ges;
-            $ficha->confidencial = $confidencial;
+            // $ficha->cronico = $cronico;
+            // $ficha->ges = $ges;
+            // $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
             $ficha->finalizada = 1;
+
             if (!$ficha->save())
             {
                 return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
@@ -5289,78 +5268,6 @@ class ficha_atencionController extends Controller
                 $tipo_mensaje = 'success';
                 $mensaje .= 'Ficha Clínica guardada de forma correcta\n';
 
-                $registros_ficha = 0;
-
-                /** REGISTRO TRUMATOLOGIA */
-                // if(!empty(trim($request->descripcion_hipotesis_trau)))
-                // {
-
-                //     $ficha_trau = new FichaTraumatologia();
-                //     $ficha_trau->id_lugar_atencion = $request->id_lugar_atencion;
-                //     $ficha_trau->id_ficha_atencion = $ficha->id;
-                //     $ficha_trau->id_paciente = $id_paciente;
-                //     $ficha_trau->id_responsable = $request->id_responsable;
-                //     $ficha_trau->id_profesional = $id_profesional;
-
-                //     $ficha_trau->sintoma_cons = $request->sintoma_cons;
-                //     $ficha_trau->obs_sintoma_cons = $request->obs_sintoma_cons;
-                //     $ficha_trau->descripcion_consula = $request->descripcion_consula;
-                //     $ficha_trau->antec_especialidad_cig = $request->antec_especialidad_cig;
-                //     $ficha_trau->antec_especialidad_gen = $request->antec_especialidad_gen;
-                //     $ficha_trau->e_localizacion = $request->e_localizacion;
-                //     $ficha_trau->e_obs_localizacion = $request->e_obs_localizacion;
-                //     $ficha_trau->e_signos_sintomas = $request->e_signos_sintomas;
-                //     $ficha_trau->obs_e_signos_sintomas = $request->obs_e_signos_sintomas;
-                //     $ficha_trau->e_crecimiento = $request->e_crecimiento;
-                //     $ficha_trau->obs_e_crecimiento = $request->obs_e_crecimiento;
-                //     $ficha_trau->obs_e_masas_tumores = $request->obs_e_masas_tumores;
-                //     $ficha_trau->e_causa_trau = $request->e_causa_trau;
-                //     $ficha_trau->obs_e_causa_trau = $request->obs_e_causa_trau;
-                //     $ficha_trau->e_cab_cuello_trau = $request->e_cab_cuello_trau;
-                //     $ficha_trau->obs_e_cab_cuello_trau = $request->obs_e_cab_cuello_trau;
-                //     $ficha_trau->e_columna_trau = $request->e_columna_trau;
-                //     $ficha_trau->obs_e_columna_trau = $request->obs_e_columna_trau;
-                //     $ficha_trau->e_parrilla_trau = $request->e_parrilla_trau;
-                //     $ficha_trau->obs_e_parrilla_trau = $request->obs_e_parrilla_trau;
-                //     $ficha_trau->e_ext_sup_trau = $request->e_ext_sup_trau;
-                //     $ficha_trau->obs_e_ext_sup_trau = $request->obs_e_ext_sup_trau;
-                //     $ficha_trau->e_pelvis_trau = $request->e_pelvis_trau;
-                //     $ficha_trau->obs_e_pelvis_trau = $request->obs_e_pelvis_trau;
-                //     $ficha_trau->e_ext_infer_trau = $request->e_ext_infer_trau;
-                //     $ficha_trau->obs_e_ext_infer_trau = $request->obs_e_ext_infer_trau;
-                //     $ficha_trau->e_tend_lig_trau = $request->e_tend_lig_trau;
-                //     $ficha_trau->obs_e_tend_lig_trau = $request->obs_e_tend_lig_trau;
-                //     $ficha_trau->eval_eva_trau = $request->eval_eva_trau;
-                //     $ficha_trau->obs_ex_segmentario = $request->obs_ex_segmentario;
-                //     $ficha_trau->hospen = $request->hospen;
-                //     $ficha_trau->obs_hospen = $request->obs_hospen;
-                //     $ficha_trau->nom_inst = $request->nom_inst;
-                //     $ficha_trau->hosp_enserv = $request->hosp_enserv;
-                //     $ficha_trau->obs_hosp_enserv = $request->obs_hosp_enserv;
-                //     $ficha_trau->motivo_hosp = $request->motivo_hosp;
-                //     $ficha_trau->obs_motivo_hosp = $request->obs_motivo_hosp;
-                //     $ficha_trau->obs_hospitalizar = $request->obs_hospitalizar;
-                //     $ficha_trau->eg_cpq_cg = $request->eg_cpq_cg;
-                //     $ficha_trau->hoc_cpa_cg = $request->hoc_cpa_cg;
-                //     $ficha_trau->estado_inmovil_cpq_cg = $request->estado_inmovil_cpq_cg;
-                //     $ficha_trau->masas_cpq_cg = $request->masas_cpq_cg;
-                //     $ficha_trau->estudios_rx_cpq_cg = $request->estudios_rx_cpq_cg;
-                //     $ficha_trau->obs_egp_cpq_cg = $request->obs_egp_cpq_cg;
-                //     $ficha_trau->descripcion_hipotesis_trau = $request->descripcion_hipotesis_trau;
-                //     $ficha_trau->ind_esp_cirugia_trau = $request->ind_esp_cirugia_trau;
-                //     $ficha_trau->descripcion_cie_esp_trau = $request->descripcion_cie_esp_trau;
-
-                //     if($ficha_trau->save())
-                //     {
-                //         $mensaje .= 'Ficha Clínica Traumatologia guardada de forma correcta\n';
-                //         $registros_ficha++;
-
-                //     }
-                //     else
-                //     {
-                //         $mensaje .= 'Ficha Clínica Traumatologia problema al registrar\n';
-                //     }
-                // }
 				// /** registro de ficha Traumatologia  */
 				$ficha_trauma_ad = new FichaTraumatologiaAdulto();
 				$ficha_trauma_ad->id_ficha_atencion = $ficha->id;
@@ -5372,20 +5279,35 @@ class ficha_atencionController extends Controller
 				$ficha_trauma_ad->obs_egp_tr = $request->obs_egp_tr;
 				$ficha_trauma_ad->mc_masas_tu = $request->mc_masas_tu ;
 				$ficha_trauma_ad->egp_trauma_mt = $request->egp_trauma_mt;
-				$ficha_trauma_ad->tto_trauma = $request->tto_trauma;
+
+                if ($request->tto_trauma == '1') {
+                    $ficha_trauma_ad->tto_trauma = 1;
+                } else {
+                    $ficha_trauma_ad->tto_trauma = 0;
+                }
 				$ficha_trauma_ad->rec_tto_trauma = $request->rec_tto_trauma;
-				$ficha_trauma_ad->pr_trauma = $request->pr_trauma;
+
+                if ($request->pr_trauma == '1') {
+                    $ficha_trauma_ad->pr_trauma = 1;
+                } else {
+                    $ficha_trauma_ad->pr_trauma = 0;
+                }
 				$ficha_trauma_ad->tipo_proc_trauma = $request->tipo_proc_trauma;
 				$ficha_trauma_ad->plan_proc_trauma = $request->plan_proc_trauma;
-				$ficha_trauma_ad->tr_gen_cir = $request->tr_gen_cir;
-				$ficha_trauma_ad->obs_gen_plan_tto= $request->obs_gen_plan_tto;
+
+                if ($request->tr_gen_cir == '1') {
+                    $ficha_trauma_ad->tr_gen_cir = 1;
+                } else {
+                    $ficha_trauma_ad->tr_gen_cir = 0;
+                }
+
+                $ficha_trauma_ad->obs_gen_plan_tto= $request->obs_gen_plan_tto;
 				$ficha_trauma_ad->otro=$request->otro;
 				$ficha_trauma_ad->otro1=$request->otro1;
 				$ficha_trauma_ad->estado= 1;
 				if($ficha_trauma_ad->save())
 				{
 					$mensaje .= 'Ficha Clínica Traumatología guardada de forma correcta\n';
-					$registros_ficha++;
 				}
 				else
 				{
@@ -5393,127 +5315,89 @@ class ficha_atencionController extends Controller
 				}
 
                 /** REGISTRO ORTOPEDIA */
-                // if(!empty(trim($request->descripcion_hipotesis_ort)))
-                // {
-                //     $ficha_ort = new FichaOrtopedia();
-                //     $ficha_ort->id_lugar_atencion = $request->id_lugar_atencion;
-                //     $ficha_ort->id_ficha_atencion = $ficha->id;
-                //     $ficha_ort->id_paciente = $id_paciente;
-                //     $ficha_ort->id_responsable = $request->id_responsable;
-                //     $ficha_ort->id_profesional = $id_profesional;
-                //     $ficha_ort->peso_ort_inf = $request->peso_ort_inf;
-                //     $ficha_ort->talla_ort_inf = $request->talla_ort_inf;
-                //     $ficha_ort->e_lact_mov_ort_inf = $request->e_lact_mov_ort_inf;
-                //     $ficha_ort->obs_e_lact_mov_ort_inf = $request->obs_e_lact_mov_ort_inf;
-                //     $ficha_ort->e_mov_cerv_ort_inf = $request->e_mov_cerv_ort_inf;
-                //     $ficha_ort->e_musc_ester_ort_inf = $request->e_musc_ester_ort_inf;
-                //     $ficha_ort->e_test_adams_ort_inf = $request->e_test_adams_ort_inf;
-                //     $ficha_ort->e_ang_vello_ort_inf = $request->e_ang_vello_ort_inf;
-                //     $ficha_ort->e_cifo_lum_ort_inf = $request->e_cifo_lum_ort_inf;
-                //     $ficha_ort->e_flx_codo_ort_inf = $request->e_flx_codo_ort_inf;
-                //     $ficha_ort->e_dedo_resort_ort_inf = $request->e_dedo_resort_ort_inf;
-                //     $ficha_ort->e_rigidez_ort_inf = $request->e_rigidez_ort_inf;
-                //     $ficha_ort->e_cadera_below_ort_inf = $request->e_cadera_below_ort_inf;
-                //     $ficha_ort->e_abduccion_ort_inf = $request->e_abduccion_ort_inf;
-                //     $ficha_ort->e_plieg_poplit_ort_inf = $request->e_plieg_poplit_ort_inf;
-                //     $ficha_ort->e_rodi_flx_recur_ort_inf = $request->e_rodi_flx_recur_ort_inf;
-                //     $ficha_ort->e_pie_flex_dor_ort_inf = $request->e_pie_flex_dor_ort_inf;
-                //     $ficha_ort->e_pie_val_retro_ort_inf = $request->e_pie_val_retro_ort_inf;
-                //     $ficha_ort->e_asp_plant_ort_inf = $request->e_asp_plant_ort_inf;
-                //     $ficha_ort->obs_ort_lactante = $request->obs_ort_lactante;
-                //     $ficha_ort->peso_ort_adul = $request->peso_ort_adul;
-                //     $ficha_ort->talla_ort_adul = $request->talla_ort_adul;
-                //     $ficha_ort->e_manipulacion_ort_adul = $request->e_manipulacion_ort_adul;
-                //     $ficha_ort->obs_e_manipulacion_ort_adul = $request->obs_e_manipulacion_ort_adul;
-                //     $ficha_ort->e_eval_eva_ort_adul = $request->e_eval_eva_ort_adul;
-                //     $ficha_ort->e_carac_dolo_ort_adul = $request->e_carac_dolo_ort_adul;
-                //     $ficha_ort->obs_e_carac_dolo_ort_adul = $request->obs_e_carac_dolo_ort_adul;
-                //     $ficha_ort->e_agravant_ort_adul = $request->e_agravant_ort_adul;
-                //     $ficha_ort->e_marcha_ort_adul = $request->e_marcha_ort_adul;
-                //     $ficha_ort->obs_e_marcha_ort_adul = $request->obs_e_marcha_ort_adul;
-                //     $ficha_ort->e_postura_ort_adul = $request->e_postura_ort_adul;
-                //     $ficha_ort->obs_e_postura_ort_adul = $request->obs_e_postura_ort_adul;
-                //     $ficha_ort->e_mov_vert_ort_adul = $request->e_mov_vert_ort_adul;
-                //     $ficha_ort->e_ritm_lum_pelv_ort_adul = $request->e_ritm_lum_pelv_ort_adul;
-                //     $ficha_ort->e_indice_sagital_ort_adul = $request->e_indice_sagital_ort_adul;
-                //     $ficha_ort->e_irri_radic_ort_adul = $request->e_irri_radic_ort_adul;
-                //     $ficha_ort->e_neuro_basi_ort_adul = $request->e_neuro_basi_ort_adul;
-                //     $ficha_ort->e_balan_arti_ort_adul = $request->e_balan_arti_ort_adul;
-                //     $ficha_ort->e_balan_mus_manu_ort_adul = $request->e_balan_mus_manu_ort_adul;
-                //     $ficha_ort->e_hiper_arti_ort_adul = $request->e_hiper_arti_ort_adul;
-                //     $ficha_ort->e_dis_infe_ort_adul = $request->e_dis_infe_ort_adul;
-                //     $ficha_ort->e_signo_inflam_ort_adul = $request->e_signo_inflam_ort_adul;
-                //     $ficha_ort->e_test_clin_ort_adul = $request->e_test_clin_ort_adul;
-                //     $ficha_ort->obs_ort_adul = $request->obs_ort_adul;
-                //     $ficha_ort->descripcion_hipotesis_ort = $request->descripcion_hipotesis_ort;
-                //     $ficha_ort->ind_esp_cirugia_ort = $request->ind_esp_cirugia_ort;
-                //     $ficha_ort->descripcion_cie_esp_ort = $request->descripcion_cie_esp_ort;
+                if(
+                    !empty($request->orto_peso_ad) || !empty($request->orto_talla_ad) || !empty($request->orto_manip_ad) || !empty($request->orto_dolor_ad) ||
+                    !empty($request->orto_marpos_ad) || !empty($request->orto_ea_mv_ad) || !empty($request->orto_ea_rlp_ad) || !empty($request->orto_ea_icls_ad) ||
+                    !empty($request->orto_ea_ir_ad) || !empty($request->orto_ea_nb_ad) || !empty($request->obs_e_ext_sup) || !empty($request->orto_ep_bmm_ad) ||
+                    !empty($request->orto_ep_hlart_ad) || !empty($request->orto_ep_dism_minf_ad) || !empty($request->orto_ep_si_ad) || !empty($request->orto_ep_tc_ad) ||
+                    !empty($request->orto_ep_com_ad) || !empty($request->orto_ep_obgen_ad)
+                ){
 
-                //     if($ficha_ort->save())
-                //     {
-                //         $mensaje .= 'Ficha Clínica Ortopedia guardada de forma correcta\n';
-                //         $registros_ficha++;
+                    $ficha_orto_adult = new FichaOrtopediaAdulto();
+                    $ficha_orto_adult->id_ficha_atencion = $ficha->id;
+                    $ficha_orto_adult->id_profesional= $id_profesional;
+                    $ficha_orto_adult->id_ficha_trauma= $ficha_trauma_ad->id;
+                    $ficha_orto_adult->id_paciente = $id_paciente;
+                    $ficha_orto_adult->orto_peso_ad = $request->orto_peso_ad;
+                    $ficha_orto_adult->orto_talla_ad = $request->orto_talla_ad;
+                    $ficha_orto_adult->orto_manip_ad = $request->orto_manip_ad;
+                    $ficha_orto_adult->orto_dolor_ad = $request->orto_dolor_ad;
+                    $ficha_orto_adult->orto_marpos_ad = $request->orto_marpos_ad;
+                    $ficha_orto_adult->orto_ea_mv_ad = $request->orto_ea_mv_ad;
+                    $ficha_orto_adult->orto_ea_rlp_ad = $request->orto_ea_rlp_ad;
+                    $ficha_orto_adult->orto_ea_icls_ad = $request->orto_ea_icls_ad;
+                    $ficha_orto_adult->orto_ea_ir_ad = $request->orto_ea_ir_ad;
+                    $ficha_orto_adult->orto_ea_nb_ad = $request->orto_ea_nb_ad;
+                    $ficha_orto_adult->obs_e_ext_sup = $request->obs_e_ext_sup;
+                    $ficha_orto_adult->orto_ep_bmm_ad = $request->orto_ep_bmm_ad;
+                    $ficha_orto_adult->orto_ep_hlart_ad = $request->orto_ep_hlart_ad;
+                    $ficha_orto_adult->orto_ep_dism_minf_ad = $request->orto_ep_dism_minf_ad;
+                    $ficha_orto_adult->orto_ep_si_ad = $request->orto_ep_si_ad;
+                    $ficha_orto_adult->orto_ep_tc_ad = $request->orto_ep_tc_ad;
+                    $ficha_orto_adult->orto_ep_com_ad = $request->orto_ep_com_ad;
+                    $ficha_orto_adult->orto_ep_obgen_ad = $request->orto_ep_obgen_ad;
+                    $ficha_orto_adult->otro = $request->otro;
+                    $ficha_orto_adult->otro1 = $request->otro1;
+                    $ficha_orto_adult->estado = 1;
 
-                //     }
-                //     else
-                //     {
-                //         $mensaje .= 'Ficha Clínica Ortopedia problema al registrar\n';
-                //     }
-
-                // }
-                $ficha_orto_adult = new FichaOrtopediaAdulto();
-                $ficha_orto_adult->id_ficha_atencion = $ficha->id;
-                $ficha_orto_adult->id_profesional= $id_profesional;
-                $ficha_orto_adult->id_paciente = $id_paciente;
-                $ficha_orto_adult->peso_ped =$request->peso_ped;
-                $ficha_orto_adult->talla_ped =$request->talla_ped;
-                $ficha_orto_adult->mov_espont =$request->mov_espont;
-                $ficha_orto_adult->obs_gen_ex_esp =$request->obs_gen_ex_esp;
-                $ficha_orto_adult->exp_ax_mov_cerv =$request->exp_ax_mov_cerv;
-                $ficha_orto_adult->exp_ax_mus_ecm =$request->exp_ax_mus_ecm;
-                $ficha_orto_adult->exp_ax_t_adms =$request->exp_ax_t_adms;
-                $ficha_orto_adult->exp_ax_angiom =$request->exp_ax_angiom;
-                $ficha_orto_adult->exp_ax_cif_lumb =$request->exp_ax_cif_lumb;
-                $ficha_orto_adult->fe_ext_msup =$request->fe_ext_msup;
-                $ficha_orto_adult->dedo_res_ext_msup =$request->dedo_res_ext_msup;
-                $ficha_orto_adult->rig_ext_msup =$request->rig_ext_msup;
-                $ficha_orto_adult->ex_msup_com =$request->ex_msup_com;
-                $ficha_orto_adult->ex_minf_cad_orland =$request->ex_minf_cad_orland;
-                $ficha_orto_adult->ex_minf_abd =$request->ex_minf_abd;
-                $ficha_orto_adult->ex_minf_pp =$request->ex_minf_pp;
-                $ficha_orto_adult->ex_minf_rfr =$request->ex_minf_rfr;
-                $ficha_orto_adult->ex_minf_p_fd =$request->ex_minf_p_fd;
-                $ficha_orto_adult->ex_minf_p_vvrp =$request->ex_minf_p_vvrp;
-                $ficha_orto_adult->ex_minf_aspl=$request->ex_minf_aspl;
-                $ficha_orto_adult->obs_ex_oij=$request->obs_ex_oij;
-                $ficha_orto_adult->otro=$request->otro;
-                $ficha_orto_adult->otro1=$request->otro1;
-                $ficha_orto_adult->estado= 1;
-                if($ficha_orto_adult->save())
-                {
-                    $mensaje .= 'Ficha Clínica Ortopedia guardada de forma correcta\n';
-                    $registros_ficha++;
-
-                }
-                else
-                {
-                    $mensaje .= 'Ficha Clínica Ortopedia problema al registrar\n';
-                }
-
-                if($registros_ficha > 0)
-                {
-                    //  finalizar hora medica
-                    $hora_medica->id_estado = 6;
-                    $mensaje_estado_hora_medica = '';
-                    if (!$hora_medica->save()) {
-                        $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
+                    if($ficha_orto_adult->save())
+                    {
+                        $mensaje .= 'Ficha Clínica Ortopedia guardada de forma correcta\n';
                     }
                     else
                     {
-                        $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.\n';
+                        $mensaje .= 'Ficha Clínica Ortopedia problema al registrar\n';
                     }
-                    $mensaje .= $mensaje_estado_hora_medica;
                 }
+
+                /** REGISTRO DE CONTROL POST QUIRURGICO */
+                if( !empty($request->eg_cpq_cg) ||  !empty($request->hoc_cpa_cg) ||  !empty($request->masas_cpq_cg) ||  !empty($request->obs_egp_cpq_cg))
+                {
+                    $control_post_q = new ControlPostQuirurgico();
+                    $control_post_q->id_ficha_atencion = $ficha->id;
+                    $control_post_q->id_profesional = $id_profesional;
+                    $control_post_q->id_paciente = $id_paciente;
+                    $control_post_q->eg_cpq_cg = $request->eg_cpq_cg;
+                    $control_post_q->hoc_cpa_cg = $request->hoc_cpa_cg;
+                    $control_post_q->masas_cpq_cg = $request->masas_cpq_cg;
+                    $control_post_q->obs_egp_cpq_cg = $request->obs_egp_cpq_cg;
+                    $control_post_q->estado = 1;
+
+                    if($control_post_q->save())
+                    {
+                        $mensaje .='Control Post Quirurgico registrado\n';
+                    }
+                    else
+                    {
+                        $mensaje .='Problema en el registro de Control Post Quirurgico\n';
+                    }
+                }
+                else
+                {
+                    $mensaje .='Registro de Control Post Quirurgico no requerido\n';
+                }
+
+                //  finalizar hora medica
+                $hora_medica->id_estado = 6;
+                $mensaje_estado_hora_medica = '';
+                if (!$hora_medica->save()) {
+                    $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
+                }
+                else
+                {
+                    $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.\n';
+                }
+                $mensaje .= $mensaje_estado_hora_medica;
 
 
                 if($request->cerrarsession == 0 || $request->cerrarsession =='')
@@ -7308,6 +7192,13 @@ class ficha_atencionController extends Controller
                                 case 13: //TRAUMATOLOGIA Y ORTOPEDIA
                                     if(!empty($profesional->id_sub_tipo_especialidad))
                                     {
+                                        $temp_trumatologia = FichaTraumatologiaAdulto::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+                                        if($temp_trumatologia)
+                                        {
+											$registro->fichas = array('traumatologia_adulto'=>$temp_trumatologia);
+                                            // $registro['fichas']['traulatologia_adulto'] = $temp_trumatologia;
+                                        }
+
                                         switch (intval($profesional->id_sub_tipo_especialidad)) {
                                             case 82:// 82	Traumatología Cadera
                                                 break;
@@ -7316,6 +7207,8 @@ class ficha_atencionController extends Controller
                                             case 84:// 84	Traumatología Columna
                                                 break;
                                             case 85:// 85	Traumatología General
+                                                $temp_ficha = FichaOrtopediaAdulto::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+                                                $registro->fichas = array('traumatologia_ortopedia'=>$temp_ficha);
                                                 break;
                                             case 86:// 86	Traumatología Hombro
                                                 break;

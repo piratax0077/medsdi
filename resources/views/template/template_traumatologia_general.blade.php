@@ -65,9 +65,10 @@
             z-index: 2006;
             overflow: auto;
         }
-
     </style>
+
     @yield('css-btn-autorizacion')
+
 </head>
 <body>
     @include('template.header')
@@ -76,7 +77,7 @@
 
     <!-- Modal de la vista -->
     @yield('Modals')
-    @yield('Modals-med-exa')
+    @yield('modals-med-exa')
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
     @include('atencion_medica.secciones_especialidad.ficha_cirugia_digest_tipo')
@@ -139,8 +140,10 @@
 
     <!--Check-->
     <script src="{{ asset('js/check_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
+
     <!--especialidad-->
     <script src="{{ asset('js/traumato.js') }}?upd={{ random_int(1111,9999) }}"></script>
+
     <!-- file-upload Js -->
     <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
     <!-- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script> -->
@@ -148,12 +151,9 @@
     <!-- mensajes -->
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
- {{-- autocomplete
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    {{-- autocomplete --}}
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> --}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
-
-
-    {{--  @include('template.templateAutorizacion')  --}}
 
 
     <!-- form-advance custom js -->
