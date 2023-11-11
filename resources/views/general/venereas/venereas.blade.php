@@ -1,4 +1,7 @@
- @if(isset($seccion_tipo) && $seccion_tipo != '')
+{{-- SECCION REQUIERE SER AGREGADA AL TEMPLATE --}}
+{{-- @yield('script-veneria') --}}
+
+@if(isset($seccion_tipo) && $seccion_tipo != '')
     <div class="tab-pane fade show" id="in-ven{{ '-'.$seccion_tipo }}" role="tabpanel" aria-labelledby="in-ven{{ '-'.$seccion_tipo }}-tab">
 @else
     <div class="tab-pane fade show" id="in-ven" role="tabpanel" aria-labelledby="in-ven-tab">
@@ -608,6 +611,7 @@
     });
 </script>
 
+{{-- SECCION REQUIERE SER AGREGADA AL TEMPLATE --}}
 @section('script-veneria')
     <script>
         /** MANEJO DE IMAGENES */

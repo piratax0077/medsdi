@@ -2664,19 +2664,19 @@ class ficha_atencionController extends Controller
             $ficha->antecedentes = $request->antecedentes;
             $ficha->examen_fisico = $request->examen_fisico;
 
-            $ges = 0;
-            if ($request->modal_ges == 'on') {
-                $ges = 1;
-            } else {
-                $ges = 0;
-            }
+            // $ges = 0;
+            // if ($request->modal_ges == 'on') {
+            //     $ges = 1;
+            // } else {
+            //     $ges = 0;
+            // }
 
-            $cronico = 0;
-            if ($request->enf_cronico == 'on') {
-                $cronico = 1;
-            } else {
-                $cronico = 0;
-            }
+            // $cronico = 0;
+            // if ($request->enf_cronico == 'on') {
+            //     $cronico = 1;
+            // } else {
+            //     $cronico = 0;
+            // }
 
             $confidencial = 0;
             if ($request->confidencial == 'on') {
@@ -2685,99 +2685,99 @@ class ficha_atencionController extends Controller
                 $confidencial = 0;
             }
 
-            //Signos vitales
-            if ($request->temperatura != '') {
-                $ficha->temperatura = $request->temperatura;
-            } else {
-                $ficha->temperatura = null;
-            }
+            // //Signos vitales
+            // if ($request->temperatura != '') {
+            //     $ficha->temperatura = $request->temperatura;
+            // } else {
+            //     $ficha->temperatura = null;
+            // }
 
-            if ($request->pulso != '') {
-                $ficha->pulso = $request->pulso;
-            } else {
-                $ficha->pulso = null;
-            }
+            // if ($request->pulso != '') {
+            //     $ficha->pulso = $request->pulso;
+            // } else {
+            //     $ficha->pulso = null;
+            // }
 
-            if ($request->frecuencia_reposo != '') {
-                $ficha->frecuencia_reposo = $request->frecuencia_reposo;
-            } else {
-                $ficha->frecuencia_reposo = null;
-            }
+            // if ($request->frecuencia_reposo != '') {
+            //     $ficha->frecuencia_reposo = $request->frecuencia_reposo;
+            // } else {
+            //     $ficha->frecuencia_reposo = null;
+            // }
 
-            if ($request->peso != '') {
-                $ficha->peso = $request->peso;
-            } else {
-                $ficha->peso = null;
-            }
+            // if ($request->peso != '') {
+            //     $ficha->peso = $request->peso;
+            // } else {
+            //     $ficha->peso = null;
+            // }
 
-            if ($request->talla != '') {
-                $ficha->talla = $request->talla;
-            } else {
-                $ficha->talla = null;
-            }
+            // if ($request->talla != '') {
+            //     $ficha->talla = $request->talla;
+            // } else {
+            //     $ficha->talla = null;
+            // }
 
-            if ($request->imc != '') {
-                $ficha->imc = $request->imc;
-            } else {
-                $ficha->imc = null;
-            }
+            // if ($request->imc != '') {
+            //     $ficha->imc = $request->imc;
+            // } else {
+            //     $ficha->imc = null;
+            // }
 
-            if ($request->estado_nutricional != '') {
-                $ficha->estado_nutricional = $request->estado_nutricional;
-            } else {
-                $ficha->estado_nutricional = null;
-            }
+            // if ($request->estado_nutricional != '') {
+            //     $ficha->estado_nutricional = $request->estado_nutricional;
+            // } else {
+            //     $ficha->estado_nutricional = null;
+            // }
 
-            //presion Arterial
-            if ($request->presion_bi != '') {
-                $ficha->presion_bi = $request->presion_bi;
-            } else {
-                $ficha->presion_bi = null;
-            }
+            // //presion Arterial
+            // if ($request->presion_bi != '') {
+            //     $ficha->presion_bi = $request->presion_bi;
+            // } else {
+            //     $ficha->presion_bi = null;
+            // }
 
-            if ($request->presion_bd != '') {
-                $ficha->presion_bd = $request->presion_bd;
-            } else {
-                $ficha->presion_bd = null;
-            }
+            // if ($request->presion_bd != '') {
+            //     $ficha->presion_bd = $request->presion_bd;
+            // } else {
+            //     $ficha->presion_bd = null;
+            // }
 
-            if ($request->presion_de_pie != '') {
-                $ficha->presion_de_pie = $request->presion_de_pie;
-            } else {
-                $ficha->presion_de_pie = null;
-            }
+            // if ($request->presion_de_pie != '') {
+            //     $ficha->presion_de_pie = $request->presion_de_pie;
+            // } else {
+            //     $ficha->presion_de_pie = null;
+            // }
 
-            if ($request->presion_sentado != '') {
-                $ficha->presion_sentado = $request->presion_sentado;
-            } else {
-                $ficha->presion_sentado = null;
-            }
+            // if ($request->presion_sentado != '') {
+            //     $ficha->presion_sentado = $request->presion_sentado;
+            // } else {
+            //     $ficha->presion_sentado = null;
+            // }
 
-            //comunicacion y Traslado
-            if ($request->ct_estado_conciencia != '') {
-                $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
-            } else {
-                $ficha->ct_estado_conciencia = null;
-            }
+            // //comunicacion y Traslado
+            // if ($request->ct_estado_conciencia != '') {
+            //     $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
+            // } else {
+            //     $ficha->ct_estado_conciencia = null;
+            // }
 
-            if ($request->ct_lenguaje != '') {
-                $ficha->ct_lenguaje = $request->ct_lenguaje;
-            } else {
-                $ficha->ct_lenguaje = null;
-            }
+            // if ($request->ct_lenguaje != '') {
+            //     $ficha->ct_lenguaje = $request->ct_lenguaje;
+            // } else {
+            //     $ficha->ct_lenguaje = null;
+            // }
 
-            if ($request->ct_traslado != '') {
-                $ficha->ct_traslado = $request->ct_traslado;
-            } else {
-                $ficha->ct_traslado = null;
-            }
+            // if ($request->ct_traslado != '') {
+            //     $ficha->ct_traslado = $request->ct_traslado;
+            // } else {
+            //     $ficha->ct_traslado = null;
+            // }
 
             $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
 			$ficha->indicaciones = $request->indicaciones;
 
-            $ficha->cronico = $cronico;
-            $ficha->ges = $ges;
+            // $ficha->cronico = $cronico;
+            // $ficha->ges = $ges;
             $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
@@ -3091,19 +3091,19 @@ class ficha_atencionController extends Controller
             $ficha->antecedentes = $request->antecedentes;
             $ficha->examen_fisico = $request->examen_fisico;
 
-            $ges = 0;
-            if ($request->modal_ges == 'on') {
-                $ges = 1;
-            } else {
-                $ges = 0;
-            }
+            // $ges = 0;
+            // if ($request->modal_ges == 'on') {
+            //     $ges = 1;
+            // } else {
+            //     $ges = 0;
+            // }
 
-            $cronico = 0;
-            if ($request->enf_cronico == 'on') {
-                $cronico = 1;
-            } else {
-                $cronico = 0;
-            }
+            // $cronico = 0;
+            // if ($request->enf_cronico == 'on') {
+            //     $cronico = 1;
+            // } else {
+            //     $cronico = 0;
+            // }
 
             $confidencial = 0;
             if ($request->confidencial == 'on') {
@@ -3112,99 +3112,99 @@ class ficha_atencionController extends Controller
                 $confidencial = 0;
             }
 
-            //Signos vitales
-            if ($request->temperatura != '') {
-                $ficha->temperatura = $request->temperatura;
-            } else {
-                $ficha->temperatura = null;
-            }
+            // //Signos vitales
+            // if ($request->temperatura != '') {
+            //     $ficha->temperatura = $request->temperatura;
+            // } else {
+            //     $ficha->temperatura = null;
+            // }
 
-            if ($request->pulso != '') {
-                $ficha->pulso = $request->pulso;
-            } else {
-                $ficha->pulso = null;
-            }
+            // if ($request->pulso != '') {
+            //     $ficha->pulso = $request->pulso;
+            // } else {
+            //     $ficha->pulso = null;
+            // }
 
-            if ($request->frecuencia_reposo != '') {
-                $ficha->frecuencia_reposo = $request->frecuencia_reposo;
-            } else {
-                $ficha->frecuencia_reposo = null;
-            }
+            // if ($request->frecuencia_reposo != '') {
+            //     $ficha->frecuencia_reposo = $request->frecuencia_reposo;
+            // } else {
+            //     $ficha->frecuencia_reposo = null;
+            // }
 
-            if ($request->peso != '') {
-                $ficha->peso = $request->peso;
-            } else {
-                $ficha->peso = null;
-            }
+            // if ($request->peso != '') {
+            //     $ficha->peso = $request->peso;
+            // } else {
+            //     $ficha->peso = null;
+            // }
 
-            if ($request->talla != '') {
-                $ficha->talla = $request->talla;
-            } else {
-                $ficha->talla = null;
-            }
+            // if ($request->talla != '') {
+            //     $ficha->talla = $request->talla;
+            // } else {
+            //     $ficha->talla = null;
+            // }
 
-            if ($request->imc != '') {
-                $ficha->imc = $request->imc;
-            } else {
-                $ficha->imc = null;
-            }
+            // if ($request->imc != '') {
+            //     $ficha->imc = $request->imc;
+            // } else {
+            //     $ficha->imc = null;
+            // }
 
-            if ($request->estado_nutricional != '') {
-                $ficha->estado_nutricional = $request->estado_nutricional;
-            } else {
-                $ficha->estado_nutricional = null;
-            }
+            // if ($request->estado_nutricional != '') {
+            //     $ficha->estado_nutricional = $request->estado_nutricional;
+            // } else {
+            //     $ficha->estado_nutricional = null;
+            // }
 
-            //presion Arterial
-            if ($request->presion_bi != '') {
-                $ficha->presion_bi = $request->presion_bi;
-            } else {
-                $ficha->presion_bi = null;
-            }
+            // //presion Arterial
+            // if ($request->presion_bi != '') {
+            //     $ficha->presion_bi = $request->presion_bi;
+            // } else {
+            //     $ficha->presion_bi = null;
+            // }
 
-            if ($request->presion_bd != '') {
-                $ficha->presion_bd = $request->presion_bd;
-            } else {
-                $ficha->presion_bd = null;
-            }
+            // if ($request->presion_bd != '') {
+            //     $ficha->presion_bd = $request->presion_bd;
+            // } else {
+            //     $ficha->presion_bd = null;
+            // }
 
-            if ($request->presion_de_pie != '') {
-                $ficha->presion_de_pie = $request->presion_de_pie;
-            } else {
-                $ficha->presion_de_pie = null;
-            }
+            // if ($request->presion_de_pie != '') {
+            //     $ficha->presion_de_pie = $request->presion_de_pie;
+            // } else {
+            //     $ficha->presion_de_pie = null;
+            // }
 
-            if ($request->presion_sentado != '') {
-                $ficha->presion_sentado = $request->presion_sentado;
-            } else {
-                $ficha->presion_sentado = null;
-            }
+            // if ($request->presion_sentado != '') {
+            //     $ficha->presion_sentado = $request->presion_sentado;
+            // } else {
+            //     $ficha->presion_sentado = null;
+            // }
 
-            //comunicacion y Traslado
-            if ($request->ct_estado_conciencia != '') {
-                $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
-            } else {
-                $ficha->ct_estado_conciencia = null;
-            }
+            // //comunicacion y Traslado
+            // if ($request->ct_estado_conciencia != '') {
+            //     $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
+            // } else {
+            //     $ficha->ct_estado_conciencia = null;
+            // }
 
-            if ($request->ct_lenguaje != '') {
-                $ficha->ct_lenguaje = $request->ct_lenguaje;
-            } else {
-                $ficha->ct_lenguaje = null;
-            }
+            // if ($request->ct_lenguaje != '') {
+            //     $ficha->ct_lenguaje = $request->ct_lenguaje;
+            // } else {
+            //     $ficha->ct_lenguaje = null;
+            // }
 
-            if ($request->ct_traslado != '') {
-                $ficha->ct_traslado = $request->ct_traslado;
-            } else {
-                $ficha->ct_traslado = null;
-            }
+            // if ($request->ct_traslado != '') {
+            //     $ficha->ct_traslado = $request->ct_traslado;
+            // } else {
+            //     $ficha->ct_traslado = null;
+            // }
 
             $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
 			$ficha->indicaciones = $request->indicaciones;
 
-            $ficha->cronico = $cronico;
-            $ficha->ges = $ges;
+            // $ficha->cronico = $cronico;
+            // $ficha->ges = $ges;
             $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
@@ -3407,19 +3407,19 @@ class ficha_atencionController extends Controller
             $ficha->antecedentes = $request->antecedentes;
             $ficha->examen_fisico = $request->examen_fisico;
 
-            $ges = 0;
-            if ($request->modal_ges == 'on') {
-                $ges = 1;
-            } else {
-                $ges = 0;
-            }
+            // $ges = 0;
+            // if ($request->modal_ges == 'on') {
+            //     $ges = 1;
+            // } else {
+            //     $ges = 0;
+            // }
 
-            $cronico = 0;
-            if ($request->enf_cronico == 'on') {
-                $cronico = 1;
-            } else {
-                $cronico = 0;
-            }
+            // $cronico = 0;
+            // if ($request->enf_cronico == 'on') {
+            //     $cronico = 1;
+            // } else {
+            //     $cronico = 0;
+            // }
 
             $confidencial = 0;
             if ($request->confidencial == 'on') {
@@ -3428,99 +3428,99 @@ class ficha_atencionController extends Controller
                 $confidencial = 0;
             }
 
-            //Signos vitales
-            if ($request->temperatura != '') {
-                $ficha->temperatura = $request->temperatura;
-            } else {
-                $ficha->temperatura = null;
-            }
+            // //Signos vitales
+            // if ($request->temperatura != '') {
+            //     $ficha->temperatura = $request->temperatura;
+            // } else {
+            //     $ficha->temperatura = null;
+            // }
 
-            if ($request->pulso != '') {
-                $ficha->pulso = $request->pulso;
-            } else {
-                $ficha->pulso = null;
-            }
+            // if ($request->pulso != '') {
+            //     $ficha->pulso = $request->pulso;
+            // } else {
+            //     $ficha->pulso = null;
+            // }
 
-            if ($request->frecuencia_reposo != '') {
-                $ficha->frecuencia_reposo = $request->frecuencia_reposo;
-            } else {
-                $ficha->frecuencia_reposo = null;
-            }
+            // if ($request->frecuencia_reposo != '') {
+            //     $ficha->frecuencia_reposo = $request->frecuencia_reposo;
+            // } else {
+            //     $ficha->frecuencia_reposo = null;
+            // }
 
-            if ($request->peso != '') {
-                $ficha->peso = $request->peso;
-            } else {
-                $ficha->peso = null;
-            }
+            // if ($request->peso != '') {
+            //     $ficha->peso = $request->peso;
+            // } else {
+            //     $ficha->peso = null;
+            // }
 
-            if ($request->talla != '') {
-                $ficha->talla = $request->talla;
-            } else {
-                $ficha->talla = null;
-            }
+            // if ($request->talla != '') {
+            //     $ficha->talla = $request->talla;
+            // } else {
+            //     $ficha->talla = null;
+            // }
 
-            if ($request->imc != '') {
-                $ficha->imc = $request->imc;
-            } else {
-                $ficha->imc = null;
-            }
+            // if ($request->imc != '') {
+            //     $ficha->imc = $request->imc;
+            // } else {
+            //     $ficha->imc = null;
+            // }
 
-            if ($request->estado_nutricional != '') {
-                $ficha->estado_nutricional = $request->estado_nutricional;
-            } else {
-                $ficha->estado_nutricional = null;
-            }
+            // if ($request->estado_nutricional != '') {
+            //     $ficha->estado_nutricional = $request->estado_nutricional;
+            // } else {
+            //     $ficha->estado_nutricional = null;
+            // }
 
-            //presion Arterial
-            if ($request->presion_bi != '') {
-                $ficha->presion_bi = $request->presion_bi;
-            } else {
-                $ficha->presion_bi = null;
-            }
+            // //presion Arterial
+            // if ($request->presion_bi != '') {
+            //     $ficha->presion_bi = $request->presion_bi;
+            // } else {
+            //     $ficha->presion_bi = null;
+            // }
 
-            if ($request->presion_bd != '') {
-                $ficha->presion_bd = $request->presion_bd;
-            } else {
-                $ficha->presion_bd = null;
-            }
+            // if ($request->presion_bd != '') {
+            //     $ficha->presion_bd = $request->presion_bd;
+            // } else {
+            //     $ficha->presion_bd = null;
+            // }
 
-            if ($request->presion_de_pie != '') {
-                $ficha->presion_de_pie = $request->presion_de_pie;
-            } else {
-                $ficha->presion_de_pie = null;
-            }
+            // if ($request->presion_de_pie != '') {
+            //     $ficha->presion_de_pie = $request->presion_de_pie;
+            // } else {
+            //     $ficha->presion_de_pie = null;
+            // }
 
-            if ($request->presion_sentado != '') {
-                $ficha->presion_sentado = $request->presion_sentado;
-            } else {
-                $ficha->presion_sentado = null;
-            }
+            // if ($request->presion_sentado != '') {
+            //     $ficha->presion_sentado = $request->presion_sentado;
+            // } else {
+            //     $ficha->presion_sentado = null;
+            // }
 
-            //comunicacion y Traslado
-            if ($request->ct_estado_conciencia != '') {
-                $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
-            } else {
-                $ficha->ct_estado_conciencia = null;
-            }
+            // //comunicacion y Traslado
+            // if ($request->ct_estado_conciencia != '') {
+            //     $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
+            // } else {
+            //     $ficha->ct_estado_conciencia = null;
+            // }
 
-            if ($request->ct_lenguaje != '') {
-                $ficha->ct_lenguaje = $request->ct_lenguaje;
-            } else {
-                $ficha->ct_lenguaje = null;
-            }
+            // if ($request->ct_lenguaje != '') {
+            //     $ficha->ct_lenguaje = $request->ct_lenguaje;
+            // } else {
+            //     $ficha->ct_lenguaje = null;
+            // }
 
-            if ($request->ct_traslado != '') {
-                $ficha->ct_traslado = $request->ct_traslado;
-            } else {
-                $ficha->ct_traslado = null;
-            }
+            // if ($request->ct_traslado != '') {
+            //     $ficha->ct_traslado = $request->ct_traslado;
+            // } else {
+            //     $ficha->ct_traslado = null;
+            // }
 
             $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
 			$ficha->indicaciones = $request->indicaciones;
 
-            $ficha->cronico = $cronico;
-            $ficha->ges = $ges;
+            // $ficha->cronico = $cronico;
+            // $ficha->ges = $ges;
             $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
@@ -4010,21 +4010,21 @@ class ficha_atencionController extends Controller
             $ficha->antecedentes = $request->antecedentes;
             $ficha->examen_fisico = $request->examen_fisico;
 
-            $ges = 0;
-            // if ($request->modal_ges == 'on') {
-            if ($request->modal_ges == '1') {
-                $ges = 1;
-            } else {
-                $ges = 0;
-            }
+            // $ges = 0;
+            // // if ($request->modal_ges == 'on') {
+            // if ($request->modal_ges == '1') {
+            //     $ges = 1;
+            // } else {
+            //     $ges = 0;
+            // }
 
-            $cronico = 0;
-            // if ($request->enf_cronico == 'on') {
-            if ($request->enf_cronico == '1') {
-                $cronico = 1;
-            } else {
-                $cronico = 0;
-            }
+            // $cronico = 0;
+            // // if ($request->enf_cronico == 'on') {
+            // if ($request->enf_cronico == '1') {
+            //     $cronico = 1;
+            // } else {
+            //     $cronico = 0;
+            // }
 
             $confidencial = 0;
             // if ($request->confidencial == 'on') {
@@ -4034,99 +4034,99 @@ class ficha_atencionController extends Controller
                 $confidencial = 0;
             }
 
-            //Signos vitales
-            if ($request->temperatura != '') {
-                $ficha->temperatura = $request->temperatura;
-            } else {
-                $ficha->temperatura = null;
-            }
+            // //Signos vitales
+            // if ($request->temperatura != '') {
+            //     $ficha->temperatura = $request->temperatura;
+            // } else {
+            //     $ficha->temperatura = null;
+            // }
 
-            if ($request->pulso != '') {
-                $ficha->pulso = $request->pulso;
-            } else {
-                $ficha->pulso = null;
-            }
+            // if ($request->pulso != '') {
+            //     $ficha->pulso = $request->pulso;
+            // } else {
+            //     $ficha->pulso = null;
+            // }
 
-            if ($request->frecuencia_reposo != '') {
-                $ficha->frecuencia_reposo = $request->frecuencia_reposo;
-            } else {
-                $ficha->frecuencia_reposo = null;
-            }
+            // if ($request->frecuencia_reposo != '') {
+            //     $ficha->frecuencia_reposo = $request->frecuencia_reposo;
+            // } else {
+            //     $ficha->frecuencia_reposo = null;
+            // }
 
-            if ($request->peso != '') {
-                $ficha->peso = $request->peso;
-            } else {
-                $ficha->peso = null;
-            }
+            // if ($request->peso != '') {
+            //     $ficha->peso = $request->peso;
+            // } else {
+            //     $ficha->peso = null;
+            // }
 
-            if ($request->talla != '') {
-                $ficha->talla = $request->talla;
-            } else {
-                $ficha->talla = null;
-            }
+            // if ($request->talla != '') {
+            //     $ficha->talla = $request->talla;
+            // } else {
+            //     $ficha->talla = null;
+            // }
 
-            if ($request->imc != '') {
-                $ficha->imc = $request->imc;
-            } else {
-                $ficha->imc = null;
-            }
+            // if ($request->imc != '') {
+            //     $ficha->imc = $request->imc;
+            // } else {
+            //     $ficha->imc = null;
+            // }
 
-            if ($request->estado_nutricional != '') {
-                $ficha->estado_nutricional = $request->estado_nutricional;
-            } else {
-                $ficha->estado_nutricional = null;
-            }
+            // if ($request->estado_nutricional != '') {
+            //     $ficha->estado_nutricional = $request->estado_nutricional;
+            // } else {
+            //     $ficha->estado_nutricional = null;
+            // }
 
-            //presion Arterial
-            if ($request->presion_bi != '') {
-                $ficha->presion_bi = $request->presion_bi;
-            } else {
-                $ficha->presion_bi = null;
-            }
+            // //presion Arterial
+            // if ($request->presion_bi != '') {
+            //     $ficha->presion_bi = $request->presion_bi;
+            // } else {
+            //     $ficha->presion_bi = null;
+            // }
 
-            if ($request->presion_bd != '') {
-                $ficha->presion_bd = $request->presion_bd;
-            } else {
-                $ficha->presion_bd = null;
-            }
+            // if ($request->presion_bd != '') {
+            //     $ficha->presion_bd = $request->presion_bd;
+            // } else {
+            //     $ficha->presion_bd = null;
+            // }
 
-            if ($request->presion_de_pie != '') {
-                $ficha->presion_de_pie = $request->presion_de_pie;
-            } else {
-                $ficha->presion_de_pie = null;
-            }
+            // if ($request->presion_de_pie != '') {
+            //     $ficha->presion_de_pie = $request->presion_de_pie;
+            // } else {
+            //     $ficha->presion_de_pie = null;
+            // }
 
-            if ($request->presion_sentado != '') {
-                $ficha->presion_sentado = $request->presion_sentado;
-            } else {
-                $ficha->presion_sentado = null;
-            }
+            // if ($request->presion_sentado != '') {
+            //     $ficha->presion_sentado = $request->presion_sentado;
+            // } else {
+            //     $ficha->presion_sentado = null;
+            // }
 
-            //comunicacion y Traslado
-            if ($request->ct_estado_conciencia != '') {
-                $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
-            } else {
-                $ficha->ct_estado_conciencia = null;
-            }
+            // //comunicacion y Traslado
+            // if ($request->ct_estado_conciencia != '') {
+            //     $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
+            // } else {
+            //     $ficha->ct_estado_conciencia = null;
+            // }
 
-            if ($request->ct_lenguaje != '') {
-                $ficha->ct_lenguaje = $request->ct_lenguaje;
-            } else {
-                $ficha->ct_lenguaje = null;
-            }
+            // if ($request->ct_lenguaje != '') {
+            //     $ficha->ct_lenguaje = $request->ct_lenguaje;
+            // } else {
+            //     $ficha->ct_lenguaje = null;
+            // }
 
-            if ($request->ct_traslado != '') {
-                $ficha->ct_traslado = $request->ct_traslado;
-            } else {
-                $ficha->ct_traslado = null;
-            }
+            // if ($request->ct_traslado != '') {
+            //     $ficha->ct_traslado = $request->ct_traslado;
+            // } else {
+            //     $ficha->ct_traslado = null;
+            // }
 
             $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
 			$ficha->indicaciones = $request->indicaciones;
 
-            $ficha->cronico = $cronico;
-            $ficha->ges = $ges;
+            // $ficha->cronico = $cronico;
+            // $ficha->ges = $ges;
             $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
@@ -4321,6 +4321,7 @@ class ficha_atencionController extends Controller
                         }
                     }
 
+                    /** REGISTRO DE VENEREAS */
                     if(
                         !empty($request->select_1_ven_sint) ||  !empty($request->select_2_ven_ant_pat_ant) ||  !empty($request->ot_ant_ven_pat) ||  !empty($request->select_6_ven_gen) ||
                         !empty($request->select_7_ven_ant_cond) || !empty($request->select_8_ven_prot) || !empty($request->select_9_ven_cont_sos) || !empty($request->select_3_ven_ant_pat_pater) ||
@@ -4804,8 +4805,38 @@ class ficha_atencionController extends Controller
         if(empty( trim($request->descripcion_hipotesis)))
         {
             $campos_requeridos = 0;
-            $mensaje = 'El Diagnóstico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
+            $mensaje = 'El Diagnóstico es Requerido.\n';
         }
+
+        /** validacion de veneria */
+        if(
+            !empty($request->select_1_ven_sint) ||  !empty($request->select_2_ven_ant_pat_ant) ||  !empty($request->ot_ant_ven_pat) ||  !empty($request->select_6_ven_gen) ||
+            !empty($request->select_7_ven_ant_cond) || !empty($request->select_8_ven_prot) || !empty($request->select_9_ven_cont_sos) || !empty($request->select_3_ven_ant_pat_pater) ||
+            !empty($request->select_4_ven_ant_pat_mater) || !empty($request->select_5_pat_ssfam) || !empty($request->ven_ex_fg) || !empty($request->ven_ex_pm) ||
+            !empty($request->ven_obs_egp) || !empty($request->ven_gen_masc) || !empty($request->ven_gen_fem) || !empty($request->imagenes_ven_pre) ||
+            !empty($request->imagenes_ven_post) || !empty($request->obs_fotos_ven) || !empty($request->tto_ven) || !empty($request->pr_ven) ||
+            !empty($request->hosp_ven) || !empty($request->recom_tto_ven) || !empty($request->tipo_proc_ven) || !empty($request->plan_ven_proc) ||
+            !empty($request->obs_plan_tratamiento) || !empty($request->diagnostico_ven) || !empty($request->descripcion_cie_ven) || !empty($request->indicaciones_ven)
+        ){
+
+            if(empty($request->select_1_ven_sint))
+            {
+                $campos_requeridos = 0;
+                $mensaje .= 'Venereas - El Sintomatología actual es Requerido.\n';
+            }
+
+            if(empty($request->diagnostico_ven))
+            {
+                $campos_requeridos = 0;
+                $mensaje .= 'Venereas - El Diagnóstico de Veneria es Requerido.\n';
+            }
+        }
+
+        if($campos_requeridos == 0)
+        {
+            $mensaje .='Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
+        }
+
         if($campos_requeridos)
         {
             /** FICHA ATENCION  */
@@ -4819,19 +4850,19 @@ class ficha_atencionController extends Controller
             $ficha->antecedentes = $request->antecedentes;
             $ficha->examen_fisico = $request->examen_fisico;
 
-            $ges = 0;
-            if ($request->modal_ges == 'on') {
-                $ges = 1;
-            } else {
-                $ges = 0;
-            }
+            // $ges = 0;
+            // if ($request->modal_ges == 'on') {
+            //     $ges = 1;
+            // } else {
+            //     $ges = 0;
+            // }
 
-            $cronico = 0;
-            if ($request->enf_cronico == 'on') {
-                $cronico = 1;
-            } else {
-                $cronico = 0;
-            }
+            // $cronico = 0;
+            // if ($request->enf_cronico == 'on') {
+            //     $cronico = 1;
+            // } else {
+            //     $cronico = 0;
+            // }
 
             $confidencial = 0;
             if ($request->confidencial == 'on') {
@@ -4840,99 +4871,99 @@ class ficha_atencionController extends Controller
                 $confidencial = 0;
             }
 
-            //Signos vitales
-            if ($request->temperatura != '') {
-                $ficha->temperatura = $request->temperatura;
-            } else {
-                $ficha->temperatura = null;
-            }
+            // //Signos vitales
+            // if ($request->temperatura != '') {
+            //     $ficha->temperatura = $request->temperatura;
+            // } else {
+            //     $ficha->temperatura = null;
+            // }
 
-            if ($request->pulso != '') {
-                $ficha->pulso = $request->pulso;
-            } else {
-                $ficha->pulso = null;
-            }
+            // if ($request->pulso != '') {
+            //     $ficha->pulso = $request->pulso;
+            // } else {
+            //     $ficha->pulso = null;
+            // }
 
-            if ($request->frecuencia_reposo != '') {
-                $ficha->frecuencia_reposo = $request->frecuencia_reposo;
-            } else {
-                $ficha->frecuencia_reposo = null;
-            }
+            // if ($request->frecuencia_reposo != '') {
+            //     $ficha->frecuencia_reposo = $request->frecuencia_reposo;
+            // } else {
+            //     $ficha->frecuencia_reposo = null;
+            // }
 
-            if ($request->peso != '') {
-                $ficha->peso = $request->peso;
-            } else {
-                $ficha->peso = null;
-            }
+            // if ($request->peso != '') {
+            //     $ficha->peso = $request->peso;
+            // } else {
+            //     $ficha->peso = null;
+            // }
 
-            if ($request->talla != '') {
-                $ficha->talla = $request->talla;
-            } else {
-                $ficha->talla = null;
-            }
+            // if ($request->talla != '') {
+            //     $ficha->talla = $request->talla;
+            // } else {
+            //     $ficha->talla = null;
+            // }
 
-            if ($request->imc != '') {
-                $ficha->imc = $request->imc;
-            } else {
-                $ficha->imc = null;
-            }
+            // if ($request->imc != '') {
+            //     $ficha->imc = $request->imc;
+            // } else {
+            //     $ficha->imc = null;
+            // }
 
-            if ($request->estado_nutricional != '') {
-                $ficha->estado_nutricional = $request->estado_nutricional;
-            } else {
-                $ficha->estado_nutricional = null;
-            }
+            // if ($request->estado_nutricional != '') {
+            //     $ficha->estado_nutricional = $request->estado_nutricional;
+            // } else {
+            //     $ficha->estado_nutricional = null;
+            // }
 
-            //presion Arterial
-            if ($request->presion_bi != '') {
-                $ficha->presion_bi = $request->presion_bi;
-            } else {
-                $ficha->presion_bi = null;
-            }
+            // //presion Arterial
+            // if ($request->presion_bi != '') {
+            //     $ficha->presion_bi = $request->presion_bi;
+            // } else {
+            //     $ficha->presion_bi = null;
+            // }
 
-            if ($request->presion_bd != '') {
-                $ficha->presion_bd = $request->presion_bd;
-            } else {
-                $ficha->presion_bd = null;
-            }
+            // if ($request->presion_bd != '') {
+            //     $ficha->presion_bd = $request->presion_bd;
+            // } else {
+            //     $ficha->presion_bd = null;
+            // }
 
-            if ($request->presion_de_pie != '') {
-                $ficha->presion_de_pie = $request->presion_de_pie;
-            } else {
-                $ficha->presion_de_pie = null;
-            }
+            // if ($request->presion_de_pie != '') {
+            //     $ficha->presion_de_pie = $request->presion_de_pie;
+            // } else {
+            //     $ficha->presion_de_pie = null;
+            // }
 
-            if ($request->presion_sentado != '') {
-                $ficha->presion_sentado = $request->presion_sentado;
-            } else {
-                $ficha->presion_sentado = null;
-            }
+            // if ($request->presion_sentado != '') {
+            //     $ficha->presion_sentado = $request->presion_sentado;
+            // } else {
+            //     $ficha->presion_sentado = null;
+            // }
 
-            //comunicacion y Traslado
-            if ($request->ct_estado_conciencia != '') {
-                $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
-            } else {
-                $ficha->ct_estado_conciencia = null;
-            }
+            // //comunicacion y Traslado
+            // if ($request->ct_estado_conciencia != '') {
+            //     $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
+            // } else {
+            //     $ficha->ct_estado_conciencia = null;
+            // }
 
-            if ($request->ct_lenguaje != '') {
-                $ficha->ct_lenguaje = $request->ct_lenguaje;
-            } else {
-                $ficha->ct_lenguaje = null;
-            }
+            // if ($request->ct_lenguaje != '') {
+            //     $ficha->ct_lenguaje = $request->ct_lenguaje;
+            // } else {
+            //     $ficha->ct_lenguaje = null;
+            // }
 
-            if ($request->ct_traslado != '') {
-                $ficha->ct_traslado = $request->ct_traslado;
-            } else {
-                $ficha->ct_traslado = null;
-            }
+            // if ($request->ct_traslado != '') {
+            //     $ficha->ct_traslado = $request->ct_traslado;
+            // } else {
+            //     $ficha->ct_traslado = null;
+            // }
 
             $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
             $ficha->indicaciones = $request->indicaciones;
 
-            $ficha->cronico = $cronico;
-            $ficha->ges = $ges;
+            // $ficha->cronico = $cronico;
+            // $ficha->ges = $ges;
             $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
@@ -5093,6 +5124,82 @@ class ficha_atencionController extends Controller
                     $mensaje .= 'Ficha Clínica Dermatologia problema al registrar\n';
                 }
 
+                /** REGISTRO DE VENEREAS */
+                if(
+                    !empty($request->select_1_ven_sint) ||  !empty($request->select_2_ven_ant_pat_ant) ||  !empty($request->ot_ant_ven_pat) ||  !empty($request->select_6_ven_gen) ||
+                    !empty($request->select_7_ven_ant_cond) || !empty($request->select_8_ven_prot) || !empty($request->select_9_ven_cont_sos) || !empty($request->select_3_ven_ant_pat_pater) ||
+                    !empty($request->select_4_ven_ant_pat_mater) || !empty($request->select_5_pat_ssfam) || !empty($request->ven_ex_fg) || !empty($request->ven_ex_pm) ||
+                    !empty($request->ven_obs_egp) || !empty($request->ven_gen_masc) || !empty($request->ven_gen_fem) || !empty($request->imagenes_ven_pre) ||
+                    !empty($request->imagenes_ven_post) || !empty($request->obs_fotos_ven) || !empty($request->tto_ven) || !empty($request->pr_ven) ||
+                    !empty($request->hosp_ven) || !empty($request->recom_tto_ven) || !empty($request->tipo_proc_ven) || !empty($request->plan_ven_proc) ||
+                    !empty($request->obs_plan_tratamiento) || !empty($request->diagnostico_ven) || !empty($request->descripcion_cie_ven) || !empty($request->indicaciones_ven)
+                ){
+                    $ficha_venerea = new FichaVenereas ();
+                    $ficha_venerea->id_ficha_atencion = $ficha->id;
+                    $ficha_venerea->id_profesional= $id_profesional;
+                    $ficha_venerea->id_paciente = $id_paciente;
+                    $ficha_venerea->select_1_ven_sint = $request->select_1_ven_sint;
+                    $ficha_venerea->select_2_ven_ant_pat_ant = $request->select_2_ven_ant_pat_ant;
+                    $ficha_venerea->ot_ant_ven_pat = $request->ot_ant_ven_pat;
+                    $ficha_venerea->select_6_ven_gen = $request->select_6_ven_gen;
+                    $ficha_venerea->select_7_ven_ant_cond = $request->select_7_ven_ant_cond;
+                    $ficha_venerea->select_8_ven_prot = $request->select_8_ven_prot;
+                    $ficha_venerea->select_9_ven_cont_sos = $request->select_9_ven_cont_sos;
+                    $ficha_venerea->select_3_ven_ant_pat_pater = $request->select_3_ven_ant_pat_pater;
+                    $ficha_venerea->select_4_ven_ant_pat_mater = $request->select_4_ven_ant_pat_mater;
+                    $ficha_venerea->select_5_pat_ssfam = $request->select_5_pat_ssfam;
+                    $ficha_venerea->ven_ex_fg = $request->ven_ex_fg;
+                    $ficha_venerea->ven_ex_pm = $request->ven_ex_pm;
+                    $ficha_venerea->ven_obs_egp = $request->ven_obs_egp;
+                    $ficha_venerea->ven_gen_masc = $request->ven_gen_masc;
+                    $ficha_venerea->ven_gen_fem = $request->ven_gen_fem;
+
+                    $ficha_venerea->imagenes_ven_pre = $request->imagenes_ven_pre;
+                    $ficha_venerea->imagenes_ven_post = $request->imagenes_ven_post;
+                    $ficha_venerea->obs_fotos_ven = $request->obs_fotos_ven;
+
+                    if($request->tto_ven == 1)
+                        $ficha_venerea->tto_ven = 1;
+                    else
+                        $ficha_venerea->tto_ven = 0;
+
+                    $ficha_venerea->recom_tto_ven = $request->recom_tto_ven;
+
+
+                    if($request->pr_ven == 1)
+                        $ficha_venerea->pr_ven = 1;
+                    else
+                        $ficha_venerea->pr_ven = 0;
+
+                    $ficha_venerea->tipo_proc_ven = $request->tipo_proc_ven;
+                    $ficha_venerea->plan_ven_proc = $request->plan_ven_proc;
+
+
+                    if($request->hosp_ven == 1)
+                        $ficha_venerea->hosp_ven = 1;
+                    else
+                        $ficha_venerea->hosp_ven = 0;
+
+
+
+                    $ficha_venerea->obs_plan_tratamiento = $request->obs_plan_tratamiento;
+                    $ficha_venerea->diagnostico_ven = $request->diagnostico_ven;
+                    $ficha_venerea->descripcion_cie_ven = $request->descripcion_cie_ven;
+                    $ficha_venerea->indicaciones_ven = $request->indicaciones_ven;
+                    $ficha_venerea->otro = $request->otro;
+                    $ficha_venerea->otro1 = $request->otro1;
+                    $ficha_venerea->estado= 1;
+
+                    if($ficha_venerea->save())
+                    {
+                        $mensaje = 'Ficha Venéreas guardada de forma correcta\n';
+                    }
+                    else
+                    {
+                        $mensaje = 'Falla en el registro de Ficha Venéreas\n';
+                    }
+                }
+
                 if($request->cerrarsession == 0 || $request->cerrarsession =='')
                 {
                     /** redireccion Redirect funciona correcto */
@@ -5140,14 +5247,14 @@ class ficha_atencionController extends Controller
             $ficha->antecedentes = $request->antecedentes;
             $ficha->examen_fisico = $request->examen_fisico;
 
-            $ges = 0;
+            // $ges = 0;
             // if ($request->modal_ges == 'on') {
             //     $ges = 1;
             // } else {
             //     $ges = 0;
             // }
 
-            $cronico = 0;
+            // $cronico = 0;
             // if ($request->enf_cronico == 'on') {
             //     $cronico = 1;
             // } else {
@@ -5155,11 +5262,11 @@ class ficha_atencionController extends Controller
             // }
 
             $confidencial = 0;
-            // if ($request->confidencial == 'on') {
-            //     $confidencial = 1;
-            // } else {
-            //     $confidencial = 0;
-            // }
+            if ($request->confidencial == 'on') {
+                $confidencial = 1;
+            } else {
+                $confidencial = 0;
+            }
 
             //Signos vitales
             // if ($request->temperatura != '') {
@@ -5254,7 +5361,7 @@ class ficha_atencionController extends Controller
 
             // $ficha->cronico = $cronico;
             // $ficha->ges = $ges;
-            // $ficha->confidencial = $confidencial;
+            $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
             $ficha->finalizada = 1;

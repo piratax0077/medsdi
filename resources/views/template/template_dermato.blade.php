@@ -269,6 +269,7 @@
     @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
     @yield('js-sidebar') {{-- seccion js side bar --}}
     @yield('js-lic') {{-- seccion js side bar --}}
+    @yield('script-veneria')
 	@yield('page-script-btn-autorizacion')
 </body>
 
