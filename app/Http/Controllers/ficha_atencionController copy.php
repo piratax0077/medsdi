@@ -64,7 +64,6 @@ use App\Models\FichaCirugiaDigestivaGeneralAdulto;
 use App\Models\FichaDermo;
 use App\Models\FichaDermoImg;
 use App\Models\FichaOft;
-use App\Models\FichaOftalmologiaAdulto;
 use App\Models\FichaOftBiomicroscopia;
 use App\Models\FichaOftBiomicroscopiaTipo;
 use App\Models\FichaOftFondoOjo;
@@ -92,13 +91,6 @@ use App\Models\TipoAntecedente;
 use App\Models\TipoInforme;
 use App\Models\FichaUrologiaAdulto;
 use App\Models\FichaVenereas;
-use App\Models\OftalmoExamenAgudezaVisual;
-use App\Models\OftalmoExamenCampoVisual;
-use App\Models\OftalmoExamenEstrabismo;
-use App\Models\OftalmoExamenMovOculares;
-use App\Models\OftalmoExamenNeurologico;
-use App\Models\OftalmoExamenPresionOcular;
-use App\Models\OftalmoExamenVisionColores;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -407,37 +399,6 @@ class ficha_atencionController extends Controller
         {
             //traumatologia
             $ruta_blade = 'atencion_medica.atencion_traumatologia_general';
-
-            $fichaTipo = '';
-            $examen = '';
-            $lista_examen_especial = '';
-
-            /** examenes de la especialidad */
-            $examenes_especialidad = '';
-
-            /** examenes radiologicos */
-            $examenes_radiologicos = '';
-        }
-
-        else if($profesional->id_sub_tipo_especialidad == 58)
-        {
-            //neurologia
-            $ruta_blade = 'atencion_medica.atencion_medica_neurologia';
-
-            $fichaTipo = '';
-            $examen = '';
-            $lista_examen_especial = '';
-
-            /** examenes de la especialidad */
-            $examenes_especialidad = '';
-
-            /** examenes radiologicos */
-            $examenes_radiologicos = '';
-        }
-        else if($profesional->id_sub_tipo_especialidad == 59)
-        {
-            //neurocirugia
-            $ruta_blade = 'atencion_medica.atencion_medica_neurocirugia';
 
             $fichaTipo = '';
             $examen = '';
@@ -2478,23 +2439,25 @@ class ficha_atencionController extends Controller
             $ficha->examen_fisico = $request->examen_fisico;
 
             $ges = 0;
-            // if ($request->modal_ges == 'on' || $request->modal_ges == '1') {
-            if ($request->has('modal_ges')) {
+            if ($request->modal_ges == 'on') {
                 $ges = 1;
+            } else {
+                $ges = 0;
             }
 
             $cronico = 0;
-            // if ($request->enf_cronico == 'on' || $request->enf_cronico == '1') {
-            if ($request->has('enf_cronico')) {
+            if ($request->enf_cronico == 'on') {
                 $cronico = 1;
+            } else {
+                $cronico = 0;
             }
 
             $confidencial = 0;
-            // if ($request->confidencial == 'on' || $request->confidencial == '1') {
-            if ($request->has('confidencial')) {
+            if ($request->confidencial == 'on') {
                 $confidencial = 1;
+            } else {
+                $confidencial = 0;
             }
-
             //Signos vitales
             if ($request->temperatura != '') {
                 $ficha->temperatura = $request->temperatura;
@@ -2701,22 +2664,25 @@ class ficha_atencionController extends Controller
             $ficha->antecedentes = $request->antecedentes;
             $ficha->examen_fisico = $request->examen_fisico;
 
-            $ges = 0;
-            // if ($request->modal_ges == 'on' || $request->modal_ges == '1') {
-            if ($request->has('modal_ges')) {
-                $ges = 1;
-            }
+            // $ges = 0;
+            // if ($request->modal_ges == 'on') {
+            //     $ges = 1;
+            // } else {
+            //     $ges = 0;
+            // }
 
-            $cronico = 0;
-            // if ($request->enf_cronico == 'on' || $request->enf_cronico == '1') {
-            if ($request->has('enf_cronico')) {
-                $cronico = 1;
-            }
+            // $cronico = 0;
+            // if ($request->enf_cronico == 'on') {
+            //     $cronico = 1;
+            // } else {
+            //     $cronico = 0;
+            // }
 
             $confidencial = 0;
-            // if ($request->confidencial == 'on' || $request->confidencial == '1') {
-            if ($request->has('confidencial')) {
+            if ($request->confidencial == 'on') {
                 $confidencial = 1;
+            } else {
+                $confidencial = 0;
             }
 
             // //Signos vitales
@@ -2810,8 +2776,8 @@ class ficha_atencionController extends Controller
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
 			$ficha->indicaciones = $request->indicaciones;
 
-            $ficha->cronico = $cronico;
-            $ficha->ges = $ges;
+            // $ficha->cronico = $cronico;
+            // $ficha->ges = $ges;
             $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
@@ -3125,22 +3091,25 @@ class ficha_atencionController extends Controller
             $ficha->antecedentes = $request->antecedentes;
             $ficha->examen_fisico = $request->examen_fisico;
 
-            $ges = 0;
-            // if ($request->modal_ges == 'on' || $request->modal_ges == '1') {
-            if ($request->has('modal_ges')) {
-                $ges = 1;
-            }
+            // $ges = 0;
+            // if ($request->modal_ges == 'on') {
+            //     $ges = 1;
+            // } else {
+            //     $ges = 0;
+            // }
 
-            $cronico = 0;
-            // if ($request->enf_cronico == 'on' || $request->enf_cronico == '1') {
-            if ($request->has('enf_cronico')) {
-                $cronico = 1;
-            }
+            // $cronico = 0;
+            // if ($request->enf_cronico == 'on') {
+            //     $cronico = 1;
+            // } else {
+            //     $cronico = 0;
+            // }
 
             $confidencial = 0;
-            // if ($request->confidencial == 'on' || $request->confidencial == '1') {
-            if ($request->has('confidencial')) {
+            if ($request->confidencial == 'on') {
                 $confidencial = 1;
+            } else {
+                $confidencial = 0;
             }
 
             // //Signos vitales
@@ -3234,8 +3203,8 @@ class ficha_atencionController extends Controller
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
 			$ficha->indicaciones = $request->indicaciones;
 
-            $ficha->cronico = $cronico;
-            $ficha->ges = $ges;
+            // $ficha->cronico = $cronico;
+            // $ficha->ges = $ges;
             $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
@@ -3438,22 +3407,25 @@ class ficha_atencionController extends Controller
             $ficha->antecedentes = $request->antecedentes;
             $ficha->examen_fisico = $request->examen_fisico;
 
-            $ges = 0;
-            // if ($request->modal_ges == 'on' || $request->modal_ges == '1') {
-            if ($request->has('modal_ges')) {
-                $ges = 1;
-            }
+            // $ges = 0;
+            // if ($request->modal_ges == 'on') {
+            //     $ges = 1;
+            // } else {
+            //     $ges = 0;
+            // }
 
-            $cronico = 0;
-            // if ($request->enf_cronico == 'on' || $request->enf_cronico == '1') {
-            if ($request->has('enf_cronico')) {
-                $cronico = 1;
-            }
+            // $cronico = 0;
+            // if ($request->enf_cronico == 'on') {
+            //     $cronico = 1;
+            // } else {
+            //     $cronico = 0;
+            // }
 
             $confidencial = 0;
-            // if ($request->confidencial == 'on' || $request->confidencial == '1') {
-            if ($request->has('confidencial')) {
+            if ($request->confidencial == 'on') {
                 $confidencial = 1;
+            } else {
+                $confidencial = 0;
             }
 
             // //Signos vitales
@@ -3547,8 +3519,8 @@ class ficha_atencionController extends Controller
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
 			$ficha->indicaciones = $request->indicaciones;
 
-            $ficha->cronico = $cronico;
-            $ficha->ges = $ges;
+            // $ficha->cronico = $cronico;
+            // $ficha->ges = $ges;
             $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
@@ -4038,22 +4010,28 @@ class ficha_atencionController extends Controller
             $ficha->antecedentes = $request->antecedentes;
             $ficha->examen_fisico = $request->examen_fisico;
 
-            $ges = 0;
-            // if ($request->modal_ges == 'on' || $request->modal_ges == '1') {
-            if ($request->has('modal_ges')) {
-                $ges = 1;
-            }
+            // $ges = 0;
+            // // if ($request->modal_ges == 'on') {
+            // if ($request->modal_ges == '1') {
+            //     $ges = 1;
+            // } else {
+            //     $ges = 0;
+            // }
 
-            $cronico = 0;
-            // if ($request->enf_cronico == 'on' || $request->enf_cronico == '1') {
-            if ($request->has('enf_cronico')) {
-                $cronico = 1;
-            }
+            // $cronico = 0;
+            // // if ($request->enf_cronico == 'on') {
+            // if ($request->enf_cronico == '1') {
+            //     $cronico = 1;
+            // } else {
+            //     $cronico = 0;
+            // }
 
             $confidencial = 0;
-            // if ($request->confidencial == 'on' || $request->confidencial == '1') {
-            if ($request->has('confidencial')) {
+            // if ($request->confidencial == 'on') {
+            if ($request->confidencial == '1') {
                 $confidencial = 1;
+            } else {
+                $confidencial = 0;
             }
 
             // //Signos vitales
@@ -4147,8 +4125,8 @@ class ficha_atencionController extends Controller
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
 			$ficha->indicaciones = $request->indicaciones;
 
-            $ficha->cronico = $cronico;
-            $ficha->ges = $ges;
+            // $ficha->cronico = $cronico;
+            // $ficha->ges = $ges;
             $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
@@ -4462,6 +4440,7 @@ class ficha_atencionController extends Controller
     /** REGISTRO FICHA ATENCION Y OFTALMOLOGIA*/
     public function store_oft(Request $request)
     {
+
         $campos_requeridos = 1;
         $mensaje = '';
         if(empty( trim($request->descripcion_hipotesis)))
@@ -4479,26 +4458,27 @@ class ficha_atencionController extends Controller
             $id_profesional = $request->id_profesional_fc;
             $id_paciente = $request->id_paciente_fc;
 
-            $ficha->motivo = $request->motivo;
-            $ficha->antecedentes = $request->antecedentes;
-            $ficha->examen_fisico = $request->examen_fisico;
-
+            $ficha->motivo = $request->descripcion_consulta_oftalmo;
+            $ficha->antecedentes = $request->antec_especialidad_oftalmo;
             $ges = 0;
-            // if ($request->modal_ges == 'on' || $request->modal_ges == '1') {
-            if ($request->has('modal_ges')) {
+            if ($request->modal_ges == 'on') {
                 $ges = 1;
+            } else {
+                $ges = 0;
             }
 
             $cronico = 0;
-            // if ($request->enf_cronico == 'on' || $request->enf_cronico == '1') {
-            if ($request->has('enf_cronico')) {
+            if ($request->enf_cronico == 'on') {
                 $cronico = 1;
+            } else {
+                $cronico = 0;
             }
 
             $confidencial = 0;
-            // if ($request->confidencial == 'on' || $request->confidencial == '1') {
-            if ($request->has('confidencial')) {
+            if ($request->confidencial == 'on') {
                 $confidencial = 1;
+            } else {
+                $confidencial = 0;
             }
 
 
@@ -4591,7 +4571,6 @@ class ficha_atencionController extends Controller
 
             $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
-			$ficha->indicaciones = $request->indicaciones;
 
             $ficha->cronico = $cronico;
             $ficha->ges = $ges;
@@ -4608,28 +4587,53 @@ class ficha_atencionController extends Controller
             {
                 $tipo_mensaje = 'success';
                 $mensaje .= 'Ficha Clínica guardada de forma correcta\n';
-                /** REGISTRO FICHA OFT  FichaOftalmologiaAdulto */
-                $ficha_oft = new FichaOftalmologiaAdulto();
+                /** REGISTRO FICHA OFT */
+                $ficha_oft = new FichaOft();
+
                 $ficha_oft->id_ficha_atencion = $ficha->id;
-                $ficha_oft->id_profesional = $id_profesional;
                 $ficha_oft->id_paciente = $id_paciente;
-                $ficha_oft->tto_ojo = $request->tto_ojo;
-                $ficha_oft->rec_tto_ojo = $request->rec_tto_ojo;
-                $ficha_oft->pr_ojo = $request->pr_ojo;
-                $ficha_oft->tipo_proc_ojo = $request->tipo_proc_ojo;
-                $ficha_oft->plan_proc_ojo = $request->plan_proc_ojo;
-                $ficha_oft->r_lentes = $request->r_lentes;
-                $ficha_oft->ojo_cir = $request->ojo_cir;
-                $ficha_oft->obs_gen_plan_tto = $request->obs_gen_plan_tto;
-                $ficha_oft->obs_ex_generales = $request->obs_ex_generales;
-                $ficha_oft->otro = $request->otro;
-                $ficha_oft->otro1 = $request->otro1;
+                $ficha_oft->id_profesional = $id_profesional;
+                $ficha_oft->descripcion_consulta_oftalmo = $request->descripcion_consulta_oftalmo;
+                $ficha_oft->antec_especialidad_oftalmo = $request->antec_especialidad_oftalmo;
+                $ficha_oft->agudeza_visual_subj_od = $request->agudeza_visual_subj_od;
+                $ficha_oft->obs_agudeza_visual_subj_od = $request->obs_agudeza_visual_subj_od;
+                $ficha_oft->agudeza_visual_subj_oi = $request->agudeza_visual_subj_oi;
+                $ficha_oft->obs_agudeza_visual_subj_oi = $request->obs_agudeza_visual_subj_oi;
+                $ficha_oft->agudeza_visual_obj_od = $request->agudeza_visual_obj_od;
+                $ficha_oft->obs_agudeza_visual_obj_od = $request->obs_agudeza_visual_obj_od;
+                $ficha_oft->agudeza_visual_obj_oi = $request->agudeza_visual_obj_oi;
+                $ficha_oft->obs_agudeza_visual_obj_oi = $request->obs_agudeza_visual_obj_oi;
+                $ficha_oft->mov_oculares = $request->mov_oculares;
+                $ficha_oft->obs_mov_oculares = $request->obs_mov_oculares;
+                $ficha_oft->autorefracto_od = $request->autorefracto_od;
+                $ficha_oft->obs_autorefracto_od = $request->obs_autorefracto_od;
+                $ficha_oft->autorefracto_oi = $request->autorefracto_oi;
+                $ficha_oft->obs_autorefracto_oi = $request->obs_autorefracto_oi;
+                $ficha_oft->presion_ocular_od = $request->presion_ocular_od;
+                $ficha_oft->obs_presion_ocular_od = $request->obs_presion_ocular_od;
+                $ficha_oft->valor_presion_ocular_od = $request->valor_presion_ocular_od;
+                $ficha_oft->presion_ocular_oi = $request->presion_ocular_oi;
+                $ficha_oft->obs_presion_ocular_oi = $request->obs_presion_ocular_oi;
+                $ficha_oft->valor_presion_ocular_oi = $request->valor_presion_ocular_oi;
+                $ficha_oft->campo_visual_od = $request->campo_visual_od;
+                $ficha_oft->obs_campo_visual_od = $request->obs_campo_visual_od;
+                $ficha_oft->campo_visual_oi = $request->campo_visual_oi;
+                $ficha_oft->obs_campo_visual_oi = $request->obs_campo_visual_oi;
+                $ficha_oft->campo_otros_ex_general = $request->campo_otros_ex_general;
+                $ficha_oft->descripcion_hipotesis = $request->descripcion_hipotesis;
+                $ficha_oft->ind_oft = $request->ind_oft;
+                $ficha_oft->descripcion_cie = $request->descripcion_cie;
+                $ficha_oft->tratamiento = $request->tratamiento;
+                $ficha_oft->lentes = $request->lentes;
+                $ficha_oft->procedimiento = $request->procedimiento;
+                $ficha_oft->cirugia = $request->cirugia;
+                $ficha_oft->otro = '';
+                $ficha_oft->otro2 = '';
                 $ficha_oft->estado = 1;
 
                 if($ficha_oft->save())
                 {
                     $mensaje .= 'Ficha Clínica Oftalmologia guardada de forma correcta\n';
-
                     //  finalizar hora medica
                     $hora_medica->id_estado = 6;
                     $mensaje_estado_hora_medica = '';
@@ -4643,21 +4647,21 @@ class ficha_atencionController extends Controller
                     $mensaje .= $mensaje_estado_hora_medica;
 
 
-                    /** REGISTRO FICHA OFTALMOLOGIA Biomicroscopia   */
+                    /** REGISTRO FICHA OFTALMOLOGIA Biomicroscopia */
                     if( !empty($request->parpbiood) || !empty($request->obs_parpbiood) || !empty($request->conjuntiva_bio_od) ||
                         !empty($request->obs_conjuntiva_bio_od) || !empty($request->biocornea_od) || !empty($request->obs_biocornea_od) ||
                         !empty($request->camara_ant_od) || !empty($request->obs_camara_ant_od) || !empty($request->tyndall_od) ||
                         !empty($request->obs_tyndall_od) || !empty($request->cristalino_bio_od) || !empty($request->obs_cristalino_bio_od) ||
-                        // !empty($request->campo_otros_bio_od) ||
-                        !empty($request->parpbiooi) || !empty($request->obs_parpbiooi) ||
+                        !empty($request->campo_otros_bio_od) || !empty($request->parpbiooi) || !empty($request->obs_parpbiooi) ||
                         !empty($request->conjuntiva_bio_oi) || !empty($request->obs_conjuntiva_bio_oi) || !empty($request->biocornea_oi) ||
                         !empty($request->obs_biocornea_oi) || !empty($request->camara_ant_oi) || !empty($request->obs_camara_ant_oi) ||
                         !empty($request->tyndall_oi) || !empty($request->obs_tyndall_oi) || !empty($request->cristalino_bio_oi) ||
-                        !empty($request->obs_cristalino_bio_oi || !empty($request->otro))
+                        !empty($request->obs_cristalino_bio_oi)
                     )
                     {
 
                         $ficha_bio = new FichaOftBiomicroscopia();
+
                         $ficha_bio->id_ficha_atencion = $ficha->id;
                         $ficha_bio->id_ficha_oft = $ficha_oft->id;
                         $ficha_bio->id_paciente = $id_paciente;
@@ -4674,6 +4678,7 @@ class ficha_atencionController extends Controller
                         $ficha_bio->obs_tyndall_od = $request->obs_tyndall_od;
                         $ficha_bio->cristalino_bio_od = $request->cristalino_bio_od;
                         $ficha_bio->obs_cristalino_bio_od = $request->obs_cristalino_bio_od;
+                        $ficha_bio->campo_otros_bio_od = $request->campo_otros_bio_od;
                         $ficha_bio->parpbiooi = $request->parpbiooi;
                         $ficha_bio->obs_parpbiooi = $request->obs_parpbiooi;
                         $ficha_bio->conjuntiva_bio_oi = $request->conjuntiva_bio_oi;
@@ -4686,23 +4691,22 @@ class ficha_atencionController extends Controller
                         $ficha_bio->obs_tyndall_oi = $request->obs_tyndall_oi;
                         $ficha_bio->cristalino_bio_oi = $request->cristalino_bio_oi;
                         $ficha_bio->obs_cristalino_bio_oi = $request->obs_cristalino_bio_oi;
-                        //$ficha_bio->campo_otros_bio_od = $request->campo_otros_bio_od;
-                        $ficha_bio->otro = $request->otro;
+                        $ficha_bio->otro = '';
                         $ficha_bio->otro2 = '';
                         $ficha_bio->estado = 1;
 
                         if($ficha_bio->save())
                         {
-                            $mensaje .= 'Biomicroscopia registrada con exito\n';
+                            $mensaje .= 'Ficha Clínica Oftalmolagia Biomicroscopia registrada\n';
                         }
                         else
                         {
-                            $mensaje .= 'Biomicroscopia con problema al registrar\n';
+                            $mensaje .= 'Ficha Clínica Oftalmolagia Biomicroscopia problema al registrar\n';
                         }
                     }
                     else
                     {
-                        // $mensaje .= 'Ficha Clínica Oftalmolagia Biomicroscopia no requiere ser registrado\n';
+                        $mensaje .= 'Ficha Clínica Oftalmolagia Biomicroscopia no requiere ser registrado\n';
                     }
 
                     /** REGISTRO FICHA OFTALMOLOGIA Fondo de Ojo */
@@ -4717,11 +4721,11 @@ class ficha_atencionController extends Controller
                         !empty($request->obs_periferia_fo_oi) || !empty($request->campo_fo_otros_oi) )
                     {
                         $ficha_fo = new FichaOftFondoOjo();
+
                         $ficha_fo->id_ficha_atencion = $ficha->id;
                         $ficha_fo->id_ficha_oft = $ficha_oft->id;
                         $ficha_fo->id_paciente = $id_paciente;
                         $ficha_fo->id_profesional = $id_profesional;
-
                         $ficha_fo->papilas_fo_od = $request->papilas_fo_od;
                         $ficha_fo->obs_papilas_fo_od = $request->obs_papilas_fo_od;
                         $ficha_fo->excavacion_fo_od = $request->excavacion_fo_od;
@@ -4748,319 +4752,22 @@ class ficha_atencionController extends Controller
                         $ficha_fo->periferia_fo_oi = $request->periferia_fo_oi;
                         $ficha_fo->obs_periferia_fo_oi = $request->obs_periferia_fo_oi;
                         $ficha_fo->campo_fo_otros_oi = $request->campo_fo_otros_oi;
-                        $ficha_fo->otro2 = $request->otro2;
+                        $ficha_fo->otro = '';
+                        $ficha_fo->otro2 = '';
                         $ficha_fo->estado = 1;
 
                         if($ficha_fo->save())
                         {
-                            $mensaje .= 'Examen de Fondo de Ojo registrada correctamente\n';
+                            $mensaje .= 'Ficha Clínica Oftalmolagia Fondo de Ojo registrada\n';
                         }
                         else
                         {
-                            $mensaje .= 'Examen de Fondo de Ojo C/problemas al registrar\n';
+                            $mensaje .= 'Ficha Clínica Oftalmolagia Fondo de Ojo problema al registrar\n';
                         }
                     }
                     else
                     {
-                        // $mensaje .= 'Ficha Clínica Oftalmolagia Fondo de Ojo no requiere ser registrado\n';
-                    }
-
-
-                    /** REGISTRO FICHA OFTALMOLOGIA oftalmo_examen_agudeza_visual */
-                    if(
-                        !empty($request->av_subj_sc_od) || !empty($request->obs_av_subj_sc_od) || !empty($request->av_subj_sc_oi) ||
-                        !empty($request->obs_av_subj_sc_oi) || !empty($request->av_cc_od) || !empty($request->obs_av_cc_od) ||
-                        !empty($request->av_cc_oi) || !empty($request->obs_av_cc_oi) || !empty($request->av_autorefrac_od) ||
-                        !empty($request->obs_av_autorefrac_od) || !empty($request->av_autorefrac_oi) || !empty($request->obs_av_autorefrac_oi) ||
-                        !empty($request->av_ret_od_cc) || !empty($request->av_ret_oi_cc) || !empty($request->av_ret_od_sc) ||
-                        !empty($request->av_ret_oi_sc) || !empty($request->av_add) || !empty($request->av_dip) ||
-                        !empty($request->av_pris_od) || !empty($request->av_pris_oi)
-                    )
-                    {
-                        $ficha_oftalmo_examen_agudeza_visual = new OftalmoExamenAgudezaVisual();
-                        $ficha_oftalmo_examen_agudeza_visual->id_ficha_atencion = $ficha->id;
-                        $ficha_oftalmo_examen_agudeza_visual->id_oftalmologia_adulto = $ficha_oft->id;
-                        $ficha_oftalmo_examen_agudeza_visual->id_paciente = $id_paciente;
-                        $ficha_oftalmo_examen_agudeza_visual->id_profesional = $id_profesional;
-                        $ficha_oftalmo_examen_agudeza_visual->av_subj_sc_od = $request->av_subj_sc_od;
-                        $ficha_oftalmo_examen_agudeza_visual->obs_av_subj_sc_od = $request->obs_av_subj_sc_od;
-                        $ficha_oftalmo_examen_agudeza_visual->av_subj_sc_oi = $request->av_subj_sc_oi;
-                        $ficha_oftalmo_examen_agudeza_visual->obs_av_subj_sc_oi = $request->obs_av_subj_sc_oi;
-                        $ficha_oftalmo_examen_agudeza_visual->av_cc_od = $request->av_cc_od;
-                        $ficha_oftalmo_examen_agudeza_visual->obs_av_cc_od = $request->obs_av_cc_od;
-                        $ficha_oftalmo_examen_agudeza_visual->av_cc_oi = $request->av_cc_oi;
-                        $ficha_oftalmo_examen_agudeza_visual->obs_av_cc_oi = $request->obs_av_cc_oi;
-                        $ficha_oftalmo_examen_agudeza_visual->av_autorefrac_od = $request->av_autorefrac_od;
-                        $ficha_oftalmo_examen_agudeza_visual->obs_av_autorefrac_od = $request->obs_av_autorefrac_od;
-                        $ficha_oftalmo_examen_agudeza_visual->av_autorefrac_oi = $request->av_autorefrac_oi;
-                        $ficha_oftalmo_examen_agudeza_visual->obs_av_autorefrac_oi = $request->obs_av_autorefrac_oi;
-                        $ficha_oftalmo_examen_agudeza_visual->av_ret_od_cc = $request->av_ret_od_cc;
-                        $ficha_oftalmo_examen_agudeza_visual->av_ret_oi_cc = $request->av_ret_oi_cc;
-                        $ficha_oftalmo_examen_agudeza_visual->av_ret_od_sc = $request->av_ret_od_sc;
-                        $ficha_oftalmo_examen_agudeza_visual->av_ret_oi_sc = $request->av_ret_oi_sc;
-                        $ficha_oftalmo_examen_agudeza_visual->av_add = $request->av_add;
-                        $ficha_oftalmo_examen_agudeza_visual->av_dip = $request->av_dip;
-                        $ficha_oftalmo_examen_agudeza_visual->av_pris_od = $request->av_pris_od;
-                        $ficha_oftalmo_examen_agudeza_visual->av_pris_oi = $request->av_pris_oi;
-                        $ficha_oftalmo_examen_agudeza_visual->otro = '';
-                        $ficha_oftalmo_examen_agudeza_visual->otro1 = '';
-                        $ficha_oftalmo_examen_agudeza_visual->estado = 1;
-
-                        if($ficha_oftalmo_examen_agudeza_visual->save())
-                        {
-                            $mensaje .='Examen Agudeza Visual registrado con exito.\n';
-                        }
-                        else
-                        {
-                            $mensaje .= 'Falla en el registro de Examen Agudeza Visual.\n';
-                        }
-                    }
-                    else
-                    {
-                        // $mensaje .= 'no hace falta registrar';
-                    }
-
-                    /** REGISTRO FICHA OFTALMOLOGIA oftalmo_examen_neurologico */
-                    if(
-                        !empty($request->ne_mov_oculares) || !empty($request->obs_ne_mov_oculares) || !empty($request->ne_pupul) ||
-                        !empty($request->obs_ne_pupul) || !empty($request->ne_rfm) || !empty($request->obs_ne_rfm) ||
-                        !empty($request->ne_dpar) || !empty($request->obs_ne_dpar) || !empty($request->ne_diplo) ||
-                        !empty($request->obs_ne_diplo)
-                    )
-                    {
-                        $ficha_oftalmo_examen_neurologico = new OftalmoExamenNeurologico();
-                        $ficha_oftalmo_examen_neurologico->id_ficha_atencion = $ficha->id;
-                        $ficha_oftalmo_examen_neurologico->id_oftalmologia_adulto = $ficha_oft->id;
-                        $ficha_oftalmo_examen_neurologico->id_paciente = $id_paciente;
-                        $ficha_oftalmo_examen_neurologico->id_profesional = $id_profesional;
-                        $ficha_oftalmo_examen_neurologico->ne_mov_oculares = $request->ne_mov_oculares;
-                        $ficha_oftalmo_examen_neurologico->obs_ne_mov_oculares = $request->obs_ne_mov_oculares;
-                        $ficha_oftalmo_examen_neurologico->ne_pupul = $request->ne_pupul;
-                        $ficha_oftalmo_examen_neurologico->obs_ne_pupul = $request->obs_ne_pupul;
-                        $ficha_oftalmo_examen_neurologico->ne_rfm = $request->ne_rfm;
-                        $ficha_oftalmo_examen_neurologico->obs_ne_rfm = $request->obs_ne_rfm;
-                        $ficha_oftalmo_examen_neurologico->ne_dpar = $request->ne_dpar;
-                        $ficha_oftalmo_examen_neurologico->obs_ne_dpar = $request->obs_ne_dpar;
-                        $ficha_oftalmo_examen_neurologico->ne_diplo = $request->ne_diplo;
-                        $ficha_oftalmo_examen_neurologico->obs_ne_diplo = $request->obs_ne_diplo;
-                        $ficha_oftalmo_examen_neurologico->otro = $request->otro;
-                        $ficha_oftalmo_examen_neurologico->otro1 = $request->otro1;
-                        $ficha_oftalmo_examen_neurologico->estado = 1;
-
-                        if($ficha_oftalmo_examen_neurologico->save())
-                        {
-                            $mensaje .= 'Examen Neurológico registrado con Exito\n';
-                        }
-                        else
-                        {
-                            $mensaje .= 'Examen Neurológico con Falla en el registro\n';
-                        }
-                    }
-                    else
-                    {
-                        // $mensaje .= 'no hace falta registrar';
-                    }
-
-                    /** REGISTRO FICHA OFTALMOLOGIA oftalmo_examen_presion_ocular */
-                    if(
-                        !empty($request->po_od) || !empty($request->obs_po_od) || !empty($request->po_val_od) ||
-                        !empty($request->po_oi) || !empty($request->obs_po_oi) || !empty($request->po_val_oi)
-                    )
-                    {
-                        $ficha_oftalmo_examen_presion_ocular = new OftalmoExamenPresionOcular();
-                        $ficha_oftalmo_examen_presion_ocular->id_ficha_atencion = $ficha->id;
-                        $ficha_oftalmo_examen_presion_ocular->id_oftalmologia_adulto = $ficha_oft->id;
-                        $ficha_oftalmo_examen_presion_ocular->id_paciente = $id_paciente;
-                        $ficha_oftalmo_examen_presion_ocular->id_profesional = $id_profesional;
-                        $ficha_oftalmo_examen_presion_ocular->po_od = $request->po_od;
-                        $ficha_oftalmo_examen_presion_ocular->obs_po_od = $request->obs_po_od;
-                        $ficha_oftalmo_examen_presion_ocular->po_val_od = $request->po_val_od;
-                        $ficha_oftalmo_examen_presion_ocular->po_oi = $request->po_oi;
-                        $ficha_oftalmo_examen_presion_ocular->obs_po_oi = $request->obs_po_oi;
-                        $ficha_oftalmo_examen_presion_ocular->po_val_oi = $request->po_val_oi;
-                        $ficha_oftalmo_examen_presion_ocular->otro = $request->otro;
-                        $ficha_oftalmo_examen_presion_ocular->otro1 = $request->otro1;
-                        $ficha_oftalmo_examen_presion_ocular->estado = 1;
-
-                        if($ficha_oftalmo_examen_presion_ocular->save())
-                        {
-                            $mensaje .= 'Examen Presión Ocular registrado con Exito\n';
-                        }
-                        else
-                        {
-                            $mensaje .= 'Examen Presión Ocular Falla en el registro\n';
-                        }
-                    }
-                    else
-                    {
-                        // $mensaje .= 'no hace falta registrar';
-                    }
-
-                    /** REGISTRO FICHA OFTALMOLOGIA oftalmo_examen_vision_colores */
-                    if( !empty($request->v_col_test) || !empty($request->obs_v_col_test) || !empty($request->v_col_tipo) || !empty($request->obs_tipo_v_col) )
-                    {
-                        $ficha_oftalmo_examen_vision_colores = new OftalmoExamenVisionColores();
-
-                        $ficha_oftalmo_examen_vision_colores->id_ficha_atencion = $ficha->id;
-                        $ficha_oftalmo_examen_vision_colores->id_oftalmologia_adulto = $ficha_oft->id;
-                        $ficha_oftalmo_examen_vision_colores->id_paciente = $id_paciente;
-                        $ficha_oftalmo_examen_vision_colores->id_profesional = $id_profesional;
-                        $ficha_oftalmo_examen_vision_colores->v_col_test = $request->v_col_test;
-                        $ficha_oftalmo_examen_vision_colores->obs_v_col_test = $request->obs_v_col_test;
-                        $ficha_oftalmo_examen_vision_colores->v_col_tipo = $request->v_col_tipo;
-                        $ficha_oftalmo_examen_vision_colores->obs_tipo_v_col = $request->obs_tipo_v_col;
-                        $ficha_oftalmo_examen_vision_colores->otro = $request->otro;
-                        $ficha_oftalmo_examen_vision_colores->otro1 = $request->otro1;
-                        $ficha_oftalmo_examen_vision_colores->estado = 1;
-                        if($ficha_oftalmo_examen_vision_colores->save())
-                        {
-                            $mensaje .= 'Examen Vision Colores registrado con Exito\n';
-                        }
-                        else
-                        {
-                            $mensaje .= 'Examen Vision Colores Falla en el registro\n';
-                        }
-                    }
-                    else
-                    {
-                        // $mensaje .= 'no hace falta registrar';
-                    }
-                    /** REGISTRO FICHA OFTALMOLOGIA oftalmo_examen_estrabismo */
-                    if(
-                        !empty($request->est_ct_int) || !empty($request->obs_est_ct_int) || !empty($request->est_ct_alt) ||
-                        !empty($request->obs_est_ct_alt) || !empty($request->est_ct_prisma) || !empty($request->obs_est_ct_prisma) ||
-                        !empty($request->est_test_hirsch) || !empty($request->obs_est_test_hirsch) || !empty($request->est_Krim) ||
-                        !empty($request->obs_est_Krim) || !empty($request->est_ot_est) || !empty($request->obs_est_estr)
-                    )
-                    {
-                        $ficha_oftalmo_examen_estrabismo = new OftalmoExamenEstrabismo();
-                        $ficha_oftalmo_examen_estrabismo->id_ficha_atencion = $ficha->id;
-                        $ficha_oftalmo_examen_estrabismo->id_oftalmologia_adulto = $ficha_oft->id;
-                        $ficha_oftalmo_examen_estrabismo->id_paciente = $id_paciente;
-                        $ficha_oftalmo_examen_estrabismo->id_profesional = $id_profesional;
-                        $ficha_oftalmo_examen_estrabismo->est_ct_int = $request->est_ct_int;
-                        $ficha_oftalmo_examen_estrabismo->obs_est_ct_int = $request->obs_est_ct_int;
-                        $ficha_oftalmo_examen_estrabismo->est_ct_alt = $request->est_ct_alt;
-                        $ficha_oftalmo_examen_estrabismo->obs_est_ct_alt = $request->obs_est_ct_alt;
-                        $ficha_oftalmo_examen_estrabismo->est_ct_prisma = $request->est_ct_prisma;
-                        $ficha_oftalmo_examen_estrabismo->obs_est_ct_prisma = $request->obs_est_ct_prisma;
-                        $ficha_oftalmo_examen_estrabismo->est_test_hirsch = $request->est_test_hirsch;
-                        $ficha_oftalmo_examen_estrabismo->obs_est_test_hirsch = $request->obs_est_test_hirsch;
-                        $ficha_oftalmo_examen_estrabismo->est_Krim = $request->est_Krim;
-                        $ficha_oftalmo_examen_estrabismo->obs_est_Krim = $request->obs_est_Krim;
-                        $ficha_oftalmo_examen_estrabismo->est_ot_est = $request->est_ot_est;
-                        $ficha_oftalmo_examen_estrabismo->obs_est_estr = $request->obs_est_estr;
-                        $ficha_oftalmo_examen_estrabismo->otro = $request->otro;
-                        $ficha_oftalmo_examen_estrabismo->otro1 = $request->otro1;
-                        $ficha_oftalmo_examen_estrabismo->estado = 1;
-                        if($ficha_oftalmo_examen_estrabismo->save())
-                        {
-                            $mensaje .= 'Examen Estrabismo registrado con Exito\n';
-                        }
-                        else
-                        {
-                            $mensaje .= 'Examen Estrabismo Falla en el registro \n';
-                        }
-                    }
-                    else
-                    {
-                        // $mensaje .= 'no hace falta registrar';
-                    }
-
-                    /** REGISTRO FICHA OFTALMOLOGIA oftalmo_examen_mov_oculares */
-                    if(
-                        !empty($request->ducciones) || !empty($request->obs_ducc) || !empty($request->versiones) ||
-                        !empty($request->obs_versiones) || !empty($request->vergencia) || !empty($request->obs_vergencia) ||
-                        !empty($request->estereop) || !empty($request->obs_estereop)
-                    )
-                    {
-                        $ficha_oftalmo_examen_mov_oculares = new OftalmoExamenMovOculares();
-
-                        $ficha_oftalmo_examen_mov_oculares->id_ficha_atencion = $ficha->id;
-                        $ficha_oftalmo_examen_mov_oculares->id_oftalmologia_adulto = $ficha_oft->id;
-                        $ficha_oftalmo_examen_mov_oculares->id_paciente = $id_paciente;
-                        $ficha_oftalmo_examen_mov_oculares->id_profesional = $id_profesional;
-                        $ficha_oftalmo_examen_mov_oculares->ducciones = $request->ducciones;
-                        $ficha_oftalmo_examen_mov_oculares->obs_ducc = $request->obs_ducc;
-                        $ficha_oftalmo_examen_mov_oculares->versiones = $request->versiones;
-                        $ficha_oftalmo_examen_mov_oculares->obs_versiones = $request->obs_versiones;
-                        $ficha_oftalmo_examen_mov_oculares->vergencia = $request->vergencia;
-                        $ficha_oftalmo_examen_mov_oculares->obs_vergencia=  $request->obs_vergencia;
-                        $ficha_oftalmo_examen_mov_oculares->estereop = $request->estereop;
-                        $ficha_oftalmo_examen_mov_oculares->obs_estereop = $request->obs_estereop;
-                        $ficha_oftalmo_examen_mov_oculares->otro = $request->otro;
-                        $ficha_oftalmo_examen_mov_oculares->otro1 = $request->otro1;
-                        $ficha_oftalmo_examen_mov_oculares->estado = 1;
-
-                        if($ficha_oftalmo_examen_mov_oculares->save())
-                        {
-                            $mensaje .= 'Examen Movimiento Oculares registrado con Exito\n';
-                        }
-                        else
-                        {
-                            $mensaje .= 'Examen Movimiento Oculares Falla en el registro \n';
-                        }
-                    }
-                    else
-                    {
-                        // $mensaje .= 'no hace falta registrar';
-                    }
-
-                    /** REGISTRO FICHA OFTALMOLOGIA oftalmo_examen_campo_visual */
-                    if( !empty($request->campo_visual_od) || !empty($request->obs_campo_visual_od) || !empty($request->campo_visual_oi) || !empty($request->obs_campo_visual_oi) )
-                    {
-                        $ficha_oftalmo_examen_campo_visual = new OftalmoExamenCampoVisual();
-
-                        $ficha_oftalmo_examen_campo_visual->id_ficha_atencion = $ficha->id;
-                        $ficha_oftalmo_examen_campo_visual->id_oftalmologia_adulto = $ficha_oft->id;
-                        $ficha_oftalmo_examen_campo_visual->id_paciente = $id_paciente;
-                        $ficha_oftalmo_examen_campo_visual->id_profesional = $id_profesional;
-                        $ficha_oftalmo_examen_campo_visual->campo_visual_od = $request->campo_visual_od;
-                        $ficha_oftalmo_examen_campo_visual->obs_campo_visual_od = $request->obs_campo_visual_od;
-                        $ficha_oftalmo_examen_campo_visual->campo_visual_oi = $request->campo_visual_oi;
-                        $ficha_oftalmo_examen_campo_visual->obs_campo_visual_oi = $request->obs_campo_visual_oi;
-                        $ficha_oftalmo_examen_campo_visual->otro = $request->otro;
-                        $ficha_oftalmo_examen_campo_visual->otro1 = $request->otro1;
-                        $ficha_oftalmo_examen_campo_visual->estado = 1;
-                        if($ficha_oftalmo_examen_campo_visual->save())
-                        {
-                            $mensaje .= 'Examen Campo Visual registrado con Exito\n';
-                        }
-                        else
-                        {
-                            $mensaje .= 'Examen Campo Visual Falla en el registro\n';
-                        }
-                    }
-                    else
-                    {
-                        // $mensaje .= 'no hace falta registrar';
-                    }
-
-                    /** REGISTRO DE CONTROL POST QUIRURGICO */
-                    if( !empty($request->eg_cpq_cg) ||  !empty($request->hoc_cpa_cg) ||  !empty($request->masas_cpq_cg) ||  !empty($request->obs_egp_cpq_cg))
-                    {
-                        $control_post_q = new ControlPostQuirurgico();
-                        $control_post_q->id_ficha_atencion = $ficha->id;
-                        $control_post_q->id_profesional = $id_profesional;
-                        $control_post_q->id_paciente = $id_paciente;
-                        $control_post_q->eg_cpq_cg = $request->eg_cpq_cg;
-                        $control_post_q->hoc_cpa_cg = $request->hoc_cpa_cg;
-                        $control_post_q->masas_cpq_cg = $request->masas_cpq_cg;
-                        $control_post_q->obs_egp_cpq_cg = $request->obs_egp_cpq_cg;
-                        $control_post_q->estado = 1;
-
-                        if($control_post_q->save())
-                        {
-                            $mensaje .='Control Post Quirurgico registrado con Exito\n';
-                        }
-                        else
-                        {
-                            $mensaje .='Control Post Quirurgico Falla en registro\n';
-                        }
-                    }
-                    else
-                    {
-                        // $mensaje .='Registro de Control Post Quirurgico no requerido\n';
+                        $mensaje .= 'Ficha Clínica Oftalmolagia Fondo de Ojo no requiere ser registrado\n';
                     }
 
                     if($request->cerrarsession == 0 || $request->cerrarsession =='')
@@ -5079,7 +4786,7 @@ class ficha_atencionController extends Controller
                 }
                 else
                 {
-                    $mensaje .= 'Ficha Clínica Oftalmolagia con problema al registrar\n';
+                    $mensaje .= 'Ficha Clínica Oftalmolagia problema al registrar\n';
                 }
             }
 
@@ -5143,22 +4850,25 @@ class ficha_atencionController extends Controller
             $ficha->antecedentes = $request->antecedentes;
             $ficha->examen_fisico = $request->examen_fisico;
 
-            $ges = 0;
-            // if ($request->modal_ges == 'on' || $request->modal_ges == '1') {
-            if ($request->has('modal_ges')) {
-                $ges = 1;
-            }
+            // $ges = 0;
+            // if ($request->modal_ges == 'on') {
+            //     $ges = 1;
+            // } else {
+            //     $ges = 0;
+            // }
 
-            $cronico = 0;
-            // if ($request->enf_cronico == 'on' || $request->enf_cronico == '1') {
-            if ($request->has('enf_cronico')) {
-                $cronico = 1;
-            }
+            // $cronico = 0;
+            // if ($request->enf_cronico == 'on') {
+            //     $cronico = 1;
+            // } else {
+            //     $cronico = 0;
+            // }
 
             $confidencial = 0;
-            // if ($request->confidencial == 'on' || $request->confidencial == '1') {
-            if ($request->has('confidencial')) {
+            if ($request->confidencial == 'on') {
                 $confidencial = 1;
+            } else {
+                $confidencial = 0;
             }
 
             // //Signos vitales
@@ -5252,8 +4962,8 @@ class ficha_atencionController extends Controller
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
             $ficha->indicaciones = $request->indicaciones;
 
-            $ficha->cronico = $cronico;
-            $ficha->ges = $ges;
+            // $ficha->cronico = $cronico;
+            // $ficha->ges = $ges;
             $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
@@ -5537,22 +5247,25 @@ class ficha_atencionController extends Controller
             $ficha->antecedentes = $request->antecedentes;
             $ficha->examen_fisico = $request->examen_fisico;
 
-            $ges = 0;
-            // if ($request->modal_ges == 'on' || $request->modal_ges == '1') {
-            if ($request->has('modal_ges')) {
-                $ges = 1;
-            }
+            // $ges = 0;
+            // if ($request->modal_ges == 'on') {
+            //     $ges = 1;
+            // } else {
+            //     $ges = 0;
+            // }
 
-            $cronico = 0;
-            // if ($request->enf_cronico == 'on' || $request->enf_cronico == '1') {
-            if ($request->has('enf_cronico')) {
-                $cronico = 1;
-            }
+            // $cronico = 0;
+            // if ($request->enf_cronico == 'on') {
+            //     $cronico = 1;
+            // } else {
+            //     $cronico = 0;
+            // }
 
             $confidencial = 0;
-            // if ($request->confidencial == 'on' || $request->confidencial == '1') {
-            if ($request->has('confidencial')) {
+            if ($request->confidencial == 'on') {
                 $confidencial = 1;
+            } else {
+                $confidencial = 0;
             }
 
             //Signos vitales
@@ -5646,8 +5359,8 @@ class ficha_atencionController extends Controller
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
 			$ficha->indicaciones = $request->indicaciones;
 
-            $ficha->cronico = $cronico;
-            $ficha->ges = $ges;
+            // $ficha->cronico = $cronico;
+            // $ficha->ges = $ges;
             $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
@@ -7225,7 +6938,6 @@ class ficha_atencionController extends Controller
         $datos = array();
         $error = array();
         $valido = 1;
-        $html_base = '';
 
         if(empty($request->id_ficha_atencion))
         {
@@ -7352,73 +7064,24 @@ class ficha_atencionController extends Controller
                                                 }
                                                 break;
                                             case 20:// 20	Oftalmología
-                                                $html_base_temp = SubTipoEspecialidad::select('html_ver')->find(20);
-                                                $html_base = $html_base_temp->html_ver;
-                                                $temp_ficha_1 = FichaOftalmologiaAdulto::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+                                                $temp_ficha_1 = FichaOft::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
                                                 $temp_ficha_2 = FichaOftBiomicroscopia::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
                                                 $temp_ficha_3 = FichaOftFondoOjo::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
-                                                $temp_ficha_4 = OftalmoExamenAgudezaVisual::where('id_ficha_atencion', $request->id_ficha_atencion)->first();// oftalmo_examen_agudeza_visual
-                                                $temp_ficha_5 = OftalmoExamenNeurologico::where('id_ficha_atencion', $request->id_ficha_atencion)->first();// oftalmo_examen_neurologico
-                                                $temp_ficha_6 = OftalmoExamenPresionOcular::where('id_ficha_atencion', $request->id_ficha_atencion)->first();// oftalmo_examen_presion_ocular
-                                                $temp_ficha_7 = OftalmoExamenVisionColores::where('id_ficha_atencion', $request->id_ficha_atencion)->first();// oftalmo_examen_vision_colores
-                                                $temp_ficha_8 = OftalmoExamenEstrabismo::where('id_ficha_atencion', $request->id_ficha_atencion)->first();// oftalmo_examen_estrabismo
-                                                $temp_ficha_9 = OftalmoExamenMovOculares::where('id_ficha_atencion', $request->id_ficha_atencion)->first();// oftalmo_examen_mov_oculares
-                                                $temp_ficha_10 = OftalmoExamenCampoVisual::where('id_ficha_atencion', $request->id_ficha_atencion)->first();// oftalmo_examen_campo_visual
-                                                $array_temp = array();
                                                 if($temp_ficha_1)
                                                 {
-                                                    $array_temp['oft'] = $temp_ficha_1;
-                                                    // $registro->fichas = array('oft'=>$temp_ficha_1);
+                                                    $registro->fichas = array('oft'=>$temp_ficha_1);
                                                     // $registro['fichas']['oft'] = $temp_ficha_1;
                                                 }
                                                 if($temp_ficha_2)
                                                 {
-                                                    $array_temp['biomicroscopia'] = $temp_ficha_2;
-                                                    // $registro->fichas = array('biomicroscopia'=>$temp_ficha_2);
+                                                    $registro->fichas = array('oft'=>array('biomicroscopia'=>$temp_ficha_2));
                                                     // $registro['fichas']['oft']['biomicroscopia'] = $temp_ficha_2;
                                                 }
                                                 if($temp_ficha_3)
                                                 {
-                                                    $array_temp['fondo'] = $temp_ficha_3;
-                                                    // $registro->fichas = array('fondo'=>$temp_ficha_3);
+                                                    $registro->fichas = array('oft'=>array('fondo'=>$temp_ficha_3));
                                                     // $registro['fichas']['oft']['fondo'] = $temp_ficha_3;
                                                 }
-                                                if($temp_ficha_4)
-                                                {
-                                                    $array_temp['agudeza_visual'] = $temp_ficha_4;
-                                                    // $registro->fichas = array('agudeza_visual'=>$temp_ficha_4);
-                                                }
-                                                if($temp_ficha_5)
-                                                {
-                                                    $array_temp['neurologico'] = $temp_ficha_5;
-                                                    // $registro->fichas = array('neurologico'=>$temp_ficha_5);
-                                                }
-                                                if($temp_ficha_6)
-                                                {
-                                                    $array_temp['presion_ocular'] = $temp_ficha_6;
-                                                    // $registro->fichas = array('presion_ocular'=>$temp_ficha_6);
-                                                }
-                                                if($temp_ficha_7)
-                                                {
-                                                    $array_temp['vision_colores'] = $temp_ficha_7;
-                                                    // $registro->fichas = array('vision_colores'=>$temp_ficha_7);
-                                                }
-                                                if($temp_ficha_8)
-                                                {
-                                                    $array_temp['estrabismo'] = $temp_ficha_8;
-                                                    // $registro->fichas = array('estrabismo'=>$temp_ficha_8);
-                                                }
-                                                if($temp_ficha_9)
-                                                {
-                                                    $array_temp['mov_oculares'] = $temp_ficha_9;
-                                                    // $registro->fichas = array('mov_oculares'=>$temp_ficha_9);
-                                                }
-                                                if($temp_ficha_10)
-                                                {
-                                                    $array_temp['campo_visual'] = $temp_ficha_10;
-                                                    // $registro->fichas = array('campo_visual'=>$temp_ficha_10);
-                                                }
-                                                $registro->fichas = $array_temp;
                                                 break;
                                             case 21:// 21	Otorrinolaringología
                                                 // $temp_ficha = FichaOtorrino::where('id_fichas_atenciones', $request->id_ficha_atencion)->first();
@@ -7956,7 +7619,6 @@ class ficha_atencionController extends Controller
                 $datos['profesional'] = $profesional;
                 $datos['cant_recetas'] = $cant_recetas;
                 $datos['cant_examen_ppf'] = $cant_examen_ppf;
-                $datos['html_base'] = $html_base;
 
                 $datos['paciente'] = array(
                     'id' => $paciente->id,

@@ -75,7 +75,7 @@
 
     <!-- Modal de la vista -->
     @yield('Modals')
-    @yield('Modals-med-exa')
+    @yield('modals-med-exa')
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
     @include('atencion_medica.secciones_especialidad.ficha_oftalmo_tipo')
@@ -164,8 +164,7 @@
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-    </script>
-    <script>
+
         /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
         function  envio_indicaciones_pdf(id_modal){
             let url = "{{ route('indicacion.medica.registro.envio') }}";

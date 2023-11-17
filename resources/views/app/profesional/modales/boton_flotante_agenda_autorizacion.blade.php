@@ -160,6 +160,7 @@
                 success:function(data){
 
                     $('#modal_autorizacion_mensaje').html('<h3>'+data.msj+'</h3>');
+                    $('#r_lentes').attr('disabled', true);
 
                     if(data.estado == 0)
                     {
@@ -188,6 +189,7 @@
                         $('#modal_autorizacion_btn_solicitar').attr('disabled', true);
                         $('#modal_autorizacion_btn_cancelar').attr('disabled', false);
 
+
                         $('.btn-agenda-autorizacion').removeClass('btn-danger');
                         $('.btn-agenda-autorizacion').addClass('btn-info');
 
@@ -203,6 +205,7 @@
                         if($("#descripcion_hipotesis"))
                         {
                             $("#descripcion_hipotesis").trigger("keyup");
+                            $('#r_lentes').attr('disabled', false);
                         }
 
                         if($("#hip_diag_spec"))

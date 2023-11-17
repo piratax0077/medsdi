@@ -96,7 +96,7 @@
 									<optgroup label="OTROS">
                                         <option value="46">TAC CEREBRO CON CONTRASTE</option>
                                     </optgroup>
-									
+
                                 </select>
                             </div>
                         </div>
@@ -161,8 +161,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info">
-                Guardar</button>
+                <button type="submit" class="btn btn-info">Guardar</button>
             </div>
         </div>
     </div>

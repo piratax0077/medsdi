@@ -45,10 +45,6 @@ function i_audif() {
     $('#indicar_audif').modal('show');
 }
 
-function i_lente() {
-    $('#indicar_lente').modal('show');
-}
-
 
 /** Indicar examen **/
 function i_examen() {

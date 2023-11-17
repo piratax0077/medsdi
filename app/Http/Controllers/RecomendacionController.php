@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FichaAtencion;
 use App\Models\LugarAtencion;
+use App\Models\OftalmoRecetaLente;
 use App\Models\Paciente;
 use App\Models\Profesional;
 use App\Models\RecetaAudifono;
@@ -634,6 +635,29 @@ class RecomendacionController extends Controller
 
         if($valido)
         {
+
+            $ficha_atencion = FichaAtencion::find($request->id_ficha_atencion);
+
+            $lugar_atencion = LugarAtencion::select('id', 'nombre', 'rut', 'email', 'telefono', 'id_direccion')->find($ficha_atencion->id_lugar_atencion);
+
+            $profesional = Profesional::select('profesionales.id as id', 'profesionales.nombre as nombre', 'profesionales.apellido_uno as apellido_uno', 'profesionales.apellido_dos as apellido_dos',
+                                                'profesionales.sexo as sexo', 'profesionales.rut as rut', 'profesionales.email as email', 'profesionales.telefono_uno as telefono_uno', 'profesionales.id_direccion as id_direccion',
+                                                'profesionales.id_especialidad as id_especialidad', 'especialidades.nombre as nombre_especialidades',
+                                                'profesionales.id_tipo_especialidad as id_tipo_especialidad', 'tipos_especialidad.nombre as nombre_tipo_especialidad',
+                                                'profesionales.id_sub_tipo_especialidad as id_sub_tipo_especialidad', 'sub_tipo_especialidad.nombre as nombre_sub_tipo_especialidad')
+                                        ->join('especialidades', 'especialidades.id', '=', 'profesionales.id_especialidad')
+                                        ->join('tipos_especialidad', 'tipos_especialidad.id', '=', 'profesionales.id_tipo_especialidad')
+                                        ->join('sub_tipo_especialidad', 'sub_tipo_especialidad.id', '=', 'profesionales.id_sub_tipo_especialidad')
+                                        ->find($ficha_atencion->id_profesional);
+
+            $paciente = Paciente::select('pacientes.id as id', 'pacientes.rut as rut', 'pacientes.nombres as nombres', 'pacientes.apellido_uno as apellido_uno', 'pacientes.apellido_dos as apellido_dos',
+                                            'pacientes.telefono_uno as telefono_uno', 'pacientes.sexo as sexo', 'pacientes.email as email', 'pacientes.fecha_nac as fecha_nac', 'pacientes.id_prevision as id_prevision',
+                                            'pacientes.id_direccion as id_direccion', 'pacientes.id_antecedente as id_antecedente', 'direcciones.direccion as direccion', 'direcciones.numero_dir as numero_dir',
+                                            'ciudades.nombre as ciudad_nombre', 'regiones.nombre as region_nombre')
+                                        ->join('direcciones', 'pacientes.id_direccion', '=', 'direcciones.id')
+                                        ->join('ciudades', 'ciudades.id', '=', 'direcciones.id_ciudad')
+                                        ->join('regiones', 'regiones.id', '=', 'ciudades.id_region')
+                                        ->find($ficha_atencion->id_paciente);
             $filtro = array();
             if(!empty($request->id_ficha_atencion))
                 $filtro[] = array('atencion', $request->id_ficha_atencion);
@@ -646,29 +670,6 @@ class RecomendacionController extends Controller
             {
                 foreach ($recomendacion as $key => $value)
                 {
-                    $ficha_atencion = FichaAtencion::find($value->atencion);
-
-                    $lugar_atencion = LugarAtencion::select('id', 'nombre', 'rut', 'email', 'telefono', 'id_direccion')->find($ficha_atencion->id_lugar_atencion);
-
-                    $profesional = Profesional::select('profesionales.id as id', 'profesionales.nombre as nombre', 'profesionales.apellido_uno as apellido_uno', 'profesionales.apellido_dos as apellido_dos',
-                                                        'profesionales.sexo as sexo', 'profesionales.rut as rut', 'profesionales.email as email', 'profesionales.telefono_uno as telefono_uno', 'profesionales.id_direccion as id_direccion',
-                                                        'profesionales.id_especialidad as id_especialidad', 'especialidades.nombre as nombre_especialidades',
-                                                        'profesionales.id_tipo_especialidad as id_tipo_especialidad', 'tipos_especialidad.nombre as nombre_tipo_especialidad',
-                                                        'profesionales.id_sub_tipo_especialidad as id_sub_tipo_especialidad', 'sub_tipo_especialidad.nombre as nombre_sub_tipo_especialidad')
-                                                ->join('especialidades', 'especialidades.id', '=', 'profesionales.id_especialidad')
-                                                ->join('tipos_especialidad', 'tipos_especialidad.id', '=', 'profesionales.id_tipo_especialidad')
-                                                ->join('sub_tipo_especialidad', 'sub_tipo_especialidad.id', '=', 'profesionales.id_sub_tipo_especialidad')
-                                                ->find($ficha_atencion->id_profesional);
-
-                    $paciente = Paciente::select('pacientes.id as id', 'pacientes.rut as rut', 'pacientes.nombres as nombres', 'pacientes.apellido_uno as apellido_uno', 'pacientes.apellido_dos as apellido_dos',
-                                                    'pacientes.telefono_uno as telefono_uno', 'pacientes.sexo as sexo', 'pacientes.email as email', 'pacientes.fecha_nac as fecha_nac', 'pacientes.id_prevision as id_prevision',
-                                                    'pacientes.id_direccion as id_direccion', 'pacientes.id_antecedente as id_antecedente', 'direcciones.direccion as direccion', 'direcciones.numero_dir as numero_dir',
-                                                    'ciudades.nombre as ciudad_nombre', 'regiones.nombre as region_nombre')
-                                                ->join('direcciones', 'pacientes.id_direccion', '=', 'direcciones.id')
-                                                ->join('ciudades', 'ciudades.id', '=', 'direcciones.id_ciudad')
-                                                ->join('regiones', 'regiones.id', '=', 'ciudades.id_region')
-                                                ->find($ficha_atencion->id_paciente);
-
                     $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 1);
                     if($temp_token['estado'] == 1)
                     {
@@ -750,8 +751,51 @@ class RecomendacionController extends Controller
                 $detalleOrlAudifono = RecetaAudifono::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
                 if($detalleOrlAudifono)
                 {
+                    $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 1);
+                    if($temp_token['estado'] == 1)
+                    {
+                        $token_receta = $temp_token['certificado'];
+                        $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                        $qr_documento = GeneradorQrController::generar($url_documento);
+                    }
+                    else
+                    {
+                        $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, rand(111,999), $paciente->id, 1);
+                        $token_receta = $temp_token['certificado'];
+                        $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                        $qr_documento = GeneradorQrController::generar($url_documento);
+                    }
+                    $recetaAudifonos[0]['qr'] = (object)array('documento' => $qr_documento, 'token' =>$token_receta );
+
+                    $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+                    if($temp_token['estado'] == 1)
+                    {
+                        $token_profesional = $temp_token['certificado'];
+                        $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                        $qr_profesional = GeneradorQrController::generar($url_profesional);
+                    }
+                    else
+                    {
+                        $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                        $token_profesional = $temp_token['certificado'];
+                        $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                        $qr_profesional = GeneradorQrController::generar($url_profesional);
+                    }
+                    $recetaAudifonos[0]['qr_prof'] = (object)array('profesional' => $qr_profesional);
+
+
+                    $qr_id = GeneradorQrController::generar(encrypt($ficha_atencion->id));
+                    $recetaAudifonos[0]['qr_id'] = $qr_id;
+
+                    $recetaAudifonos[0]['ficha_atencion'] = $ficha_atencion;
+                    $recetaAudifonos[0]['lugar_atencion'] = $lugar_atencion;
+                    $recetaAudifonos[0]['profesional'] = $profesional;
+                    $recetaAudifonos[0]['paciente'] = $paciente;
+                    $recetaAudifonos[0]['detalle'] = (object)array();
+
                     $cantidad_recetas ++;
                     $arrayTipo = array('','Intracanal', 'Retroauricular', 'Audigafas', 'Implante', 'Otro Tipo');
+
                     $array_medicamento = array(
                         'tipo' => $arrayTipo[$detalleOrlAudifono->tipo],
                         'od' => $detalleOrlAudifono->od,
@@ -762,18 +806,100 @@ class RecomendacionController extends Controller
                         'especificacion_bi' => $detalleOrlAudifono->especificacion_bi,
                         'especificacion_general' => $detalleOrlAudifono->especificacion_general,
                     );
-                    $nombre_control = 'ORL_AUDIFONO';
-                    $recetaAudifonos = $array_medicamento;
+                    // $nombre_control = 'ORL_AUDIFONO';
+                    $recetaAudifonos[0]['detalle'] = new ArrayObject($array_medicamento);
+                }
+
+                /** ESPECIALIDAD OFTALMOLOGIA (LENTES) */
+                $recetaLentes = array();
+                $detalleLente = OftalmoRecetaLente::where('id_ficha_atencion', $request->id_ficha_atencion)->where('estado', 1)->get();
+
+                if($detalleLente)
+                {
+
+                    $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 1);
+                    if($temp_token['estado'] == 1)
+                    {
+                        $token_receta = $temp_token['certificado'];
+                        $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                        $qr_documento = GeneradorQrController::generar($url_documento);
+                    }
+                    else
+                    {
+                        $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, rand(111,999), $paciente->id, 1);
+                        $token_receta = $temp_token['certificado'];
+                        $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                        $qr_documento = GeneradorQrController::generar($url_documento);
+                    }
+                    $recetaLentes[0]['qr'] = (object)array('documento' => $qr_documento, 'token' =>$token_receta );
+
+                    $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+                    if($temp_token['estado'] == 1)
+                    {
+                        $token_profesional = $temp_token['certificado'];
+                        $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                        $qr_profesional = GeneradorQrController::generar($url_profesional);
+                    }
+                    else
+                    {
+                        $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                        $token_profesional = $temp_token['certificado'];
+                        $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                        $qr_profesional = GeneradorQrController::generar($url_profesional);
+                    }
+                    $recetaLentes[0]['qr_prof'] = (object)array('profesional' => $qr_profesional);
+
+
+                    $qr_id = GeneradorQrController::generar(encrypt($ficha_atencion->id));
+                    $recetaLentes[0]['qr_id'] = $qr_id;
+
+                    $recetaLentes[0]['ficha_atencion'] = $ficha_atencion;
+                    $recetaLentes[0]['lugar_atencion'] = $lugar_atencion;
+                    $recetaLentes[0]['profesional'] = $profesional;
+                    $recetaLentes[0]['paciente'] = $paciente;
+                    $recetaLentes[0]['detalle'] = (object)array();
+
+                    $cantidad_recetas ++;
+                    $arrayTipo = array('', 'Opticos monofocales', 'Opticos bifocales', 'Opticos trifocales', 'Progresivos', 'Opticos de sol', 'Contacto');
+                    $arrayPara = array('', 'Lentes de cerca', 'Lentes intermedios', 'Lentes ópticos');
+
+                    $temp_val = array();
+                    foreach ($detalleLente as $key => $value)
+                    {
+
+                        $temp_val[$key] = array(
+                            'tipo_lentes' => $arrayTipo[$value->tipo_lentes],
+                            'lentes_para' => $value->lentes_para_texto,
+                            'r_oi_esfera' => $value->r_oi_esfera,
+                            'r_oi_cilindro' => $value->r_oi_cilindro,
+                            'r_oi_valor_eje' => $value->r_oi_valor_eje,
+                            'r_oi_add' => $value->r_oi_add,
+                            'r_oi_prisma' => $value->r_oi_prisma,
+                            'r_oi_dip' => $value->r_oi_dip,
+                            'r_oi_obs' => $value->r_oi_obs,
+                            'r_od_esfera' => $value->r_od_esfera,
+                            'r_od_cilindro' => $value->r_od_cilindro,
+                            'r_od_valor_eje' => $value->r_od_valor_eje,
+                            'r_od_add' => $value->r_od_add,
+                            'r_od_prisma' => $value->r_od_prisma,
+                            'r_od_dip' => $value->r_od_dip,
+                            'r_od_obs' => $value->r_od_obs,
+                            'r_obs' => $value->r_obs,
+                        );
+                    }
+                    $recetaLentes[0]['detalle'] = new ArrayObject($temp_val);
                 }
 
                 // echo ($cantidad_recetas);
                 // echo json_encode($recomendacion);
+                // echo json_encode($paciente);
+                // echo json_encode($detalleLente);
                 // die();
 
                 if($cantidad_recetas > 0)
-                    return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas', 'recetaAudifonos'), 'Receta Medica '.$paciente->rut, 'pdf_receta_medica_2');
+                    return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas', 'recetaAudifonos', 'recetaLentes'), 'Receta Medica '.$paciente->rut, 'pdf_receta_medica_2');
                 else
-                    return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas', 'recetaAudifonos'), 'Receta Medica ', 'pdf_receta_medica_2');
+                    return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas', 'recetaAudifonos', 'recetaLentes'), 'Receta Medica ', 'pdf_receta_medica_2');
                 exit();
 
             }
