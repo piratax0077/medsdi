@@ -1530,6 +1530,18 @@ Route::group([
     Route::post('/autocomplete/producto/categoria/ver_registros', [App\Http\Controllers\ProductoBodegaController::class, 'getProductoBodegaCategoriaAutocomplete'])->name('bodega.autocomplete.productoVerCategoria');
 });
 
+/** INSTITUCION */
+Route::group([
+    'middleware' => ['role:admin|Ministerio'],
+    'prefix' => 'direccion/salud',
+], function () {
+    Route::get('/index', [App\Http\Controllers\DireccionSaludController::class, 'index'])->name('ministerio.home');
+    Route::get('/ges', [App\Http\Controllers\DireccionSaludController::class, 'cargarGes'])->name('ministerio.ges');
+    Route::get('/enfermedades/notificacion/obligatoria', [App\Http\Controllers\DireccionSaludController::class, 'cargarEnfNotiOblig'])->name('ministerio.enfer_noti_obliga');
+    Route::get('/control/medicamento', [App\Http\Controllers\DireccionSaludController::class, 'CargarControlMedicamento'])->name('ministerio.control_medicamento');
+    Route::get('/control/farmacia', [App\Http\Controllers\DireccionSaludController::class, 'CargarControlFarmacia'])->name('ministerio.control_farmacia');
+});
+
 
 /** web */
 Route::get('/profesional/especialidad', [App\Http\Controllers\EscritorioGeneral::class, 'cargar_especialidad'])->name('web.profesional.buscar_especialidad');

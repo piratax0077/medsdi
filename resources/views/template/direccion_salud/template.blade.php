@@ -2,9 +2,14 @@
 <html lang="es">
 
 <head>
-
-    @include('atencion_medica.include.head_dermat')
-
+    <title>Dirección Salud</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="">
+    <meta name="author" content="Redmedichile" />
+    <link rel="icon" href="{{ asset('/images/favicon.ico') }}" type="image/x-icon">
 
     <link rel="icon" href="{{ asset('images/sdi-icon.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?t={{ time() }}">
@@ -72,23 +77,15 @@
             overflow: auto;
         }
     </style>
-    @yield('css-btn-autorizacion')
+
 </head>
+
 <body>
-    @include('template.header')
-    @include('template.menuProfesional')
-    @yield('Content')
 
-    <!-- Modal de la vista -->
-    @yield('Modals')
-    @yield('modals-med-exa')
-    @yield('Modals-med-exa-esp')
-    @yield('modal-ficha-general-espc')
+    @include('template.direccion_salud.menu')
+    @include('template.direccion_salud.header')
 
-
-    <!-- Modal de la vista fin -->
-
-
+    @yield('content')
 
     <!-- Required Js -->
     <script src="{{ asset('js/vendor-all.min.js') }}"></script>
@@ -153,8 +150,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
-
-
     {{--  @include('template.templateAutorizacion')  --}}
 
 
@@ -175,102 +170,14 @@
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+        $(document).ready(function () {
+
+        });
+
     </script>
-    <script>
-        /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
-        function  envio_indicaciones_pdf(id_modal){
-            let url = "{{ route('indicacion.medica.registro.envio') }}";
-            var id_tipo_documento = 1;
-            var id_paciente = $('#id_paciente_fc').val();
-            var id_profesional = $('#id_profesional_fc').val();
-            var id_ficha_atencion = $('#id_fc').val();
-            var id_lugar_atencion = $('#id_lugar_atencion').val();
-            var observacion = '';
-            // var observacion = $('#observacion').val();
-            var documento = '';
-            var url_documento = '';
-            var cuerpo = '';
-            var otro = '';
-            var token = CSRF_TOKEN;
 
-            if(id_tipo_documento == 1)
-            {
-                documento = $('#'+id_modal+' embed').attr('data-documento');
-                url_documento = $('#'+id_modal+' embed').attr('data-url');
-            }
-            else
-            {
-                // cuerpo = $('#cuerpo').val();
-            }
-            var datos = {};
-            datos._token = token;
-            datos.id_tipo_documento = id_tipo_documento;
-            datos.id_paciente = id_paciente;
-            datos.id_profesional = id_profesional;
-            datos.id_ficha_atencion = id_ficha_atencion;
-            datos.id_lugar_atencion = id_lugar_atencion;
-            datos.observacion = observacion;
-            datos.documento = documento;
-            datos.url = url_documento;
-            datos.cuerpo = cuerpo;
-            datos.otro = otro;
-
-            $.ajax({
-                url: url,
-                type: 'post',
-                dataType: "json",
-                data: datos,
-                success: function(data) {
-                    // console.log(data);
-                    if(data.estado == 1)
-                    {
-                        var mensaje = '';
-                        mensaje = 'Documento asignado al Paciente para visualizar en su escritorio.\n';
-                        if(data.update_correo.estado == 1)
-                            mensaje = 'Documento enviado por correo al Paciente.\n';
-                        else
-                            mensaje = 'Problema al enviar Documento por correo al Paciente.\n';
-
-                        swal({
-                            title: "Indicación Enviada al Paciente",
-                            text: mensaje,
-                            icon: "success",
-                        });
-                    }
-                    else
-                    {
-                        var texto_error = '';
-
-                        if(data.estado ==  0)
-                        {
-                            if('error' in data)
-                            {
-                                $.each(data.error, function (indexInArray, valueOfElement) {
-                                    texto_error += indexInArray+': '+valueOfElement+'\n';
-                                });
-                            }
-                        }
-                        swal({
-                            title: "Indicación Enviada al Paciente",
-                            text: data.msj+'\n'+texto_error,
-                            icon: "warning",
-                        });
-                    }
-                }
-            });
-        }
-        /** FIN METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
-    </script>
-    @yield('js_inferior')
     @yield('page-script')
-    @yield('page-script-ficha-atencion'){{-- ficha_orl.blade --}}
-    @yield('js-ficha-general-espc') {{-- seccion js fiche general especialidad --}}
-    @yield('page-script-med-exa') {{--  seccion receta y exmaenes --}}
-    @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
-    @yield('js-sidebar') {{-- seccion js side bar --}}
-    @yield('js-lic') {{-- seccion js side bar --}}
-    @yield('script-veneria')
-	@yield('page-script-btn-autorizacion')
-</body>
 
+</body>
 </html>

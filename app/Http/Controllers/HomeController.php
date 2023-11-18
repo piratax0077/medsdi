@@ -86,6 +86,9 @@ class HomeController extends Controller
             case 'Adm_Institucion':
                 return redirect()->route('adm_cm.home');
                 break;
+            case 'Ministerio':
+                return redirect()->route('ministerio.home');
+                break;
             default:
                 return redirect('/Acceso');
                 break;
@@ -123,8 +126,8 @@ class HomeController extends Controller
                 return redirect()->route('asistentedentaltecn.home');
                 break;
             case 'AsistenteDental':// asistente dental
-                    return redirect()->route('asistentedental.home');
-                    break;
+                return redirect()->route('asistentedental.home');
+                break;
             case 'AsistenteOnline': // asistente online (institucion / consulta)
                 return redirect()->route('asistenteon.home');
                 break;
@@ -142,6 +145,9 @@ class HomeController extends Controller
                 break;
             case 'Institucion':
                 return redirect()->route('institucion.home');
+                break;
+            case 'Ministerio':
+                return redirect()->route('ministerio.home');
                 break;
             default:
                 return redirect('/');
