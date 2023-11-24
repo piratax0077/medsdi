@@ -17,6 +17,7 @@ use App\Models\Sugerencias;
 use App\Models\Ciudad;
 use App\Models\CnsTipo;
 use App\Models\CnsTipoTemplate;
+use App\Models\ContactoEmergencia;
 use App\Models\ControlObesidad;
 use App\Models\ControlPostQuirurgico;
 use App\Models\DeclaracionEno;
@@ -92,6 +93,7 @@ use App\Models\TipoAntecedente;
 use App\Models\TipoInforme;
 use App\Models\FichaUrologiaAdulto;
 use App\Models\FichaVenereas;
+use App\Models\GrupoSanguineo;
 use App\Models\OftalmoExamenAgudezaVisual;
 use App\Models\OftalmoExamenCampoVisual;
 use App\Models\OftalmoExamenEstrabismo;
@@ -99,6 +101,7 @@ use App\Models\OftalmoExamenMovOculares;
 use App\Models\OftalmoExamenNeurologico;
 use App\Models\OftalmoExamenPresionOcular;
 use App\Models\OftalmoExamenVisionColores;
+use App\Models\RecomendacionDetalle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -202,6 +205,40 @@ class ficha_atencionController extends Controller
 
         /* FMU CONTACTO EMERGENCIA */
         $pacientes_contacto_emergencia = PacienteContactoEmergencia::with('ContactoEmergencia')->where('id_paciente',$paciente->id)->get();
+		
+		/* CONTACTO EMERGENCIA */
+        $pacientes_contacto_emergencia = PacienteContactoEmergencia::where('id_paciente',$paciente->id)->first();
+        if(is_object($pacientes_contacto_emergencia))
+        {
+            $contacto_emergencia = ContactoEmergencia::find($pacientes_contacto_emergencia->id_contacto);
+
+            list($ano,$mes,$dia) = explode("-",$paciente->fecha_nac);
+            $ano_diferencia  = date("Y") - $ano;
+            $mes_diferencia = date("m") - $mes;
+            $dia_diferencia   = date("d") - $dia;
+            if ($dia_diferencia < 0 || $mes_diferencia < 0)
+            $ano_diferencia--;
+
+            $edad = $ano_diferencia;
+            $contacto_emergencia->fecha_nac = $dia.'-'.$mes.'-'.$ano;
+            $contacto_emergencia->edad = $edad;
+
+        }
+        else
+        {
+            $contacto_emergencia = (object) array(
+                'nombre'=>'N/A',
+                'apellido_uno'=>'N/A',
+                'apellido_dos'=>'N/A',
+                'rut'=>'N/A',
+                'edad'=>'N/A',
+                'email'=>'N/A',
+                'fecha_nac'=>'N/A',
+                'telefono'=>'N/A',
+                'parentezco'=>'N/A'
+            );
+        }
+		
         /** FMU ALERGIAS */
         $paciente_alergias = Antecedente::where('id_paciente', $paciente->id)->where('id_tipo_antecedente', 5)->get();
 
@@ -248,9 +285,15 @@ class ficha_atencionController extends Controller
             $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
         $fichaAtencion = FichaAtencion::where($filtro_fichaAtencion)->first();
 
-        $antecedentes = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+        /* ANTECEDENTES */
+        $antecedentes = Antecedente::where('id_paciente',$paciente->id)->with('users','paciente','tipo_antecendente','profesional')->get();
+        foreach ($antecedentes as $valor)
+        {
+            $valor['antecedente_data'] = json_decode($valor['data']);
+        }
 
-        if (isset($antecedentes))
+        $antecedentes_paciente = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+        if (isset($antecedentes_paciente))
         {
             $medicamentos_cronicos = AntecedenteMedicamentoCronico::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
             $alergias = AntecedenteAlergiaPaciente::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
@@ -1140,6 +1183,7 @@ class ficha_atencionController extends Controller
                 $resultado_examen[$key]['obj_tipo_examen'] = $result_tipo_ex;
             }
         }
+
         // INTERCONSULTA
         $filtro_inter = array();
         $filtro_inter[] = array('id_paciente', $paciente->id);
@@ -1158,9 +1202,303 @@ class ficha_atencionController extends Controller
         // $ges = GesRegistros::where($filtro_ges)->first();
 
         // ESPECIALIDAD -> PROFESION
-        $especialidad = Especialidad::all();
+        $especialidad = Especialidad::where('estado',1)->get();
+        $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get();
 
 		$tipo_antecedente = TipoAntecedente::all();
+
+
+        /* ANTECEDENTES */
+        $id_antecedente = $paciente->id_antecedente;
+        if($id_antecedente!=null)
+        {
+            $antecedentes_paciente = AntecedentesPaciente::find($id_antecedente);
+        }
+        else
+        {
+            $antecedentes_paciente = (object) array(
+                'id'=>'',
+                'transfusion'=>'N/A',
+                'dona_organos'=>'N/A',
+                'dona_organos_parcial'=>'N/A',
+                'dona_sangre'=>'N/A',
+                'impedimento_donar'=>'N/A',
+                'comentario_gs'=>'N/A',
+                'comentarios'=>'N/A',
+                'hepatitis'=>'N/A',
+                'comentario_hepa'=>'N/A',
+                'id_grupo_sanguineo'=>0,
+            );
+        }
+
+        /* SANGUINEO */
+        $id_grupo_sanguineo = $antecedentes_paciente->id_grupo_sanguineo;
+        if($id_grupo_sanguineo!=0)
+        {
+            $grupo_sanguineo = GrupoSanguineo::find($id_grupo_sanguineo);
+        }
+        else
+        {
+            $grupo_sanguineo = (object) array(
+                'id'=> 0,
+                'nombre_gs'=> 'N/A',
+                'descripcion_gs'=> 'N/A'
+            );
+        }
+
+        /** RESPONSABLES */
+        $responsables = '';
+        /** validar si es dependiente */
+        $array_id_responsable = PacientesDependientes::where('id_paciente', $paciente->id)->pluck('id_responsable')->toArray();
+        if(count($array_id_responsable) > 0)
+        {
+            $responsables = Paciente::whereIn('id', $array_id_responsable)->get();
+        }
+
+        /** RECETAS */
+        $fecha_actual = date("d-m-Y");
+        $regisrto_result = array();
+        $lista_recetas = Recomendacion::whereDate('created_at', '>=', date("Y-m-d",strtotime($fecha_actual."- 1 week")) )->pluck('id')->toArray();
+        if($lista_recetas)
+        {
+            $registros = Recomendacion::whereIn('id', $lista_recetas)->get();
+            if($registros)
+            {
+                $regisrto_result = array();
+                foreach ($registros as $key => $value)
+                {
+                    $detalle = RecomendacionDetalle::where('id_recomendacion',$value->id)->get();
+                    $detalle_temp = array();
+                    if($detalle)
+                    {
+                        $detalle_temp = array();
+                        foreach ($detalle as $key_det => $value_det)
+                        {
+                            $detalle_temp[] = array(
+                                'id' => $value_det->id,
+                                'id_receta' => $value_det->id_recomendacion,
+                                'id_tipo_control' => decrypt($value_det->control),
+                                'id_producto' => decrypt($value_det->id_articulo),
+                                'producto' => decrypt($value_det->articulo),
+                                'farmaco' => decrypt($value_det->componente),
+                                'id_presentacion' => decrypt($value_det->id_apariencia),
+                                'presentacion' => decrypt($value_det->apariencia),
+                                'id_receta_dosis' => decrypt($value_det->id_cuota),
+                                'posologia' => decrypt($value_det->cuota),
+                                'id_via_administracion' => decrypt($value_det->id_regimen),
+                                'via_administracion' => decrypt($value_det->regimen),
+                                'id_periodo' => decrypt($value_det->id_lapso),
+                                'periodo' => decrypt($value_det->lapso),
+                                'uso_cronico' => decrypt($value_det->uso_frecuente),
+                                'cantidad_compra' => decrypt($value_det->volumen_compra),
+                                'cantidad' => decrypt($value_det->volumen),
+                                'cantidad_vendida' => decrypt($value_det->volumen_entregado),
+                                'comentario' => decrypt($value_det->comentario),
+                                'token_doc' => decrypt($value_det->cod_doc),
+                                'estado' => $value_det->estado,
+                                'created_at' => $value_det->created_at,
+                                'updated_at' => $value_det->updated_at,
+                            );
+                        }
+                    }
+
+                    $regisrto_result[] = array(
+                        'id' => $value->id,
+                        'id_ficha_atencion' => $value->atencion,
+                        'id_ingreso_paciente' => $value->salida,
+                        'id_recuperacion' => $value->herir,
+                        'id_sala' => $value->cuadro,
+                        'id_paciente' => $value->activo,
+                        'id_profesional' => $value->aficionado,
+                        'id_tipo_control' => $value->control,
+                        'token_doc' => $value->cod_doc,
+                        'token_auto' => $value->cod_auto,
+                        'pdf' => $value->info,
+                        'estado' => $value->estado,
+                        'detalle' => $detalle_temp,
+                        'created_at' => $value->created_at,
+                        'updated_at' => $value->updated_at,
+                    );
+                }
+            }
+        }
+
+        /** Control enfermedades Cronicas */
+        $control_enfer_cronicas = array();
+        /** obsidad */
+        $obesidad = ControlObesidad::where('id_paciente', $paciente->id)->get();
+        if($obesidad)
+        {
+            foreach ($obesidad as $key => $value)
+            {
+                $temp = array(
+                    'fecha' => date('d-m-Y', strtotime($value->created_at)),
+                    'tipo' => 'Obesidad',
+                    'detalle' => array(
+                        'Peso' => $value->peso,
+                        'Variación' => $value->variacion,
+                        'Ideal' => $value->ideal,
+                    )
+                );
+                $control_enfer_cronicas[] = $temp;
+            }
+        }
+
+        /** diabetes */
+        $diabetes = Diabete::where('id_paciente', $paciente->id)->get();
+        if($diabetes)
+        {
+            foreach ($diabetes as $key => $value)
+            {
+                $temp = array(
+                    'fecha' => date('d-m-Y', strtotime($value->created_at)),
+                    'tipo' => 'Diabetes',
+                    'detalle' => array(
+                        'Peso' => $value->peso,
+                        'Piés' => $value->pies,
+                        'HG A1c' => $value->hgac1,
+                        'Colesterol' => $value->colesterol,
+                        'Creatina' => $value->creatina,
+                        'Glicosilada postprandial' => $value->glicosilada_postprandial,
+                        'Glicosilada ayuno' => $value->glicosinada_ayuno,
+                    )
+                );
+                $control_enfer_cronicas[] = $temp;
+            }
+        }
+
+        /** hipertensiones */
+        $hipertension = Hipertension::where('id_paciente', $paciente->id)->get();
+        if($hipertension)
+        {
+            foreach ($hipertension as $key => $value)
+            {
+                $temp = array(
+                    'fecha' => date('d-m-Y', strtotime($value->created_at)),
+                    'tipo' => 'Hipertensión',
+                    'detalle' => array(
+                        'Presión Sistólica' => $value->sistolica,
+                        'Presión Diastólica' => $value->diastolica,
+                        'Presión Ideal' => $value->ideal,
+                    )
+                );
+                $control_enfer_cronicas[] = $temp;
+            }
+        }
+
+        /* --------------------------- HTML MODAL -------------------------- */
+        //MODALS - Externos
+        $contacto_emergencia_html = "
+            <table class='table table-bordered table-xs'>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido Materno</th>
+                        <th>Apellido Paterno</th>
+                        <th>Rut</th>
+                        <th>Edad</th>
+                        <th>Email</th>
+                        <th>Fecha Nacimiento</th>
+                        <th>Teléfono</th>
+                        <th>Parentezco</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>$contacto_emergencia->nombre</td>
+                        <td>$contacto_emergencia->apellido_uno</td>
+                        <td>$contacto_emergencia->apellido_dos</td>
+
+                        <td>$contacto_emergencia->rut</td>
+                        <td>$contacto_emergencia->edad</td>
+                        <td>$contacto_emergencia->email</td>
+
+                        <td>$contacto_emergencia->fecha_nac</td>
+                        <td>$contacto_emergencia->telefono</td>
+                        <td>$contacto_emergencia->parentezco</td>
+                    </tr>
+                </tbody>
+            </table>
+        ";
+
+        $responsables_html = "
+            <table class='table table-bordered table-xs'>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido Materno</th>
+                        <th>Apellido Paterno</th>
+                        <th>Rut</th>
+                        <th>Email</th>
+                        <th>Teléfono </th>
+                    </tr>
+                </thead>
+                <tbody>";
+                if($responsables)
+                {
+                    foreach ($responsables as $key => $value)
+                    {
+                        $responsables_html .= "<tr>
+                            <td>$value->nombres</td>
+                            <td>$value->apellido_uno</td>
+                            <td>$value->apellido_dos</td>
+                            <td>$value->rut</td>
+                            <td>$value->email</td>
+                            <td>$value->telefono</td>
+                        </tr>";
+                    }
+                }
+        $responsables_html .=     "</tbody>
+            </table>";
+
+        // $regisrto_result
+        $receta_activa_html = "
+            <table class='table table-bordered table-xs'>
+            <thead>
+                <tr>
+                    <th>Fecha Receta</th>
+                    <th>Producto</th>
+                    <th>Presentación</th>
+                    <th>Posologia</th>
+                    <th>Via<br/>Administracion</th>
+                    <th>Periodo</th>
+                    <th>Cantidad Compra</th>
+                </tr>
+            </thead>
+            <tbody>";
+            if($regisrto_result)
+            {
+                foreach ($regisrto_result as $key => $value)
+                {
+                    foreach ($value['detalle'] as $key_detalle => $value_detalle)
+                    {
+                        $receta_activa_html .= "
+                            <tr>
+                                <td>".date('d-m-Y', strtotime($value['created_at']))."</td>
+                                <td>".$value_detalle['producto']."<br/><span style=\"font-size:10px;\">".$value_detalle['farmaco']."</span></td>
+                                <td>".$value_detalle['presentacion']."</td>
+                                <td>".$value_detalle['posologia']."</td>
+                                <td>".$value_detalle['via_administracion']."</td>
+                                <td>".$value_detalle['periodo']."</td>
+                                <td>".$value_detalle['cantidad_compra']."</td>
+                            </tr>";
+                    }
+                }
+            }
+        $receta_activa_html .= "
+            </tbody>
+        </table>";
+
+        $datos = (object)array(
+            'contacto_emergencia' =>  $contacto_emergencia_html,
+            'tratamientos_activos' => $receta_activa_html,
+            'confidencial' => '',
+            'responsables' => $responsables_html,
+
+        );
+
+
+        /* FIN --------------------------- HTML MODAL -------------------------- */
 
         return view($ruta_blade)->with(
             [
@@ -1181,9 +1519,9 @@ class ficha_atencionController extends Controller
                 'diabetes' => $diabetes,
                 'ciudad' => $ciudad,
                 'examenMedico' => $examenMedico,
-                'medicamentos_cronicos' => $medicamentos_cronicos,
-                'alergias' => $alergias,
-                'antecedentes_quirurgicos' => $antecedentes_quirurgicos,
+                // 'medicamentos_cronicos' => $medicamentos_cronicos,
+                // 'alergias' => $alergias,
+                // 'antecedentes_quirurgicos' => $antecedentes_quirurgicos,
                 'patoligias_cronicas' => $patoligias_cronicas,
                 'fichaAtencion' => $fichaAtencion,
                 'id_lugar_atencion' => $request->lugar_atencion_id,
@@ -1205,6 +1543,24 @@ class ficha_atencionController extends Controller
 				'resultado_examen' => $resultado_examen,
                 'tipo_antecedente' => $tipo_antecedente,
                 'receta_control' => $receta_control,
+
+                /** FMU */
+                // 'id_usuario' => $id_usuario,
+                //// 'paciente' => $paciente,
+                // 'contacto_emergencia' => $contacto_emergencia,
+                'antecedentes_paciente' => $antecedentes_paciente,
+                'grupo_sanguineo' => $grupo_sanguineo,
+                'antecedentes' => $antecedentes,
+                'token' => $request->token,
+                'fichas' => $fichas,
+                'especialidad' => $especialidad,
+                'sub_tipo_especialidad' => $sub_tipo_especialidad,
+                'direccion' => $direccion,
+                'datos' => $datos, // TEMPLATE PARA USO EN MODAL INCLUDE
+                'tratamiento_activo' => $regisrto_result,
+                //// 'examenes_especialidad_realizados' => $examenes_especialidad_realizados,
+                //// 'resultado_examen' => $resultado_examen,
+                'control_enfer_cronicas' => $control_enfer_cronicas,
 
                 // 'ficha_ges' => $ges,
                 // 'direccion' => $direccion,

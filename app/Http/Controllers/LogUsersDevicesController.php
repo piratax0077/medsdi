@@ -381,7 +381,6 @@ class LogUsersDevicesController extends Controller
 
                     break;
 
-
                     case 8: //  Profesional Provisorio
                          $data = json_decode($value['msg'],false);
                         $id = $data->id;

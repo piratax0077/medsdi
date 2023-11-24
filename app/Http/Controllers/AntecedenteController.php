@@ -31,7 +31,7 @@ class AntecedenteController extends Controller
             $filtros[] = array('comentario',$request->comentario);
         if($request->estado!='')
             $filtros[] = array('estado',$request->estado);
-        
+
 
         /* CANTIDAD REGISTROS X PAG */
         $cant_reg = Antecedente::where($filtros)->count();
@@ -46,7 +46,7 @@ class AntecedenteController extends Controller
 
             $datos['estado'] = 1;
             $datos['cantidad_registros'] = $cant_reg;
-            $datos['request'] = $request->all();           
+            $datos['request'] = $request->all();
             $datos['registros'] = $registros;
 
         }else{
@@ -99,7 +99,7 @@ class AntecedenteController extends Controller
 
                 if($registros->count())
                 {
-                    
+
                         $registros['antecedente_data'] = json_decode($registros['data'],true);
 
                     $datos['estado'] = 1;
@@ -173,7 +173,7 @@ class AntecedenteController extends Controller
             $error['estado'] = 'campo requerido';
             $campos_requeridos = 1;
         }
-        
+
         /* FIN - VALIDACION CAMPOS */
 
         if($campos_requeridos==0)
@@ -184,7 +184,7 @@ class AntecedenteController extends Controller
             $registro->id_users = $request->id_users;
             $registro->comentario = $request->comentario;
             //GUARDADO DE DATOS
-            $data_json = $this->estructuraJson($request);                                    
+            $data_json = $this->estructuraJson($request);
             $registro->data = $data_json;
 
             $registro->estado = $request->estado;
@@ -194,7 +194,7 @@ class AntecedenteController extends Controller
 				$datos['estado'] = 1;
                 $datos['msg'] = 'Registros Creado';
                 $datos['request_data'] = $request->all();
-				
+
 				if( $request->id_tipo_antecedente == 7)
                 {
 					$profesional = Profesional::where('id_usuario', $request->id_users)->get()->first();
@@ -302,7 +302,7 @@ class AntecedenteController extends Controller
                     $registro->comentario = $request->comentario;
 
                 //GUARDADO DE DATOS
-                $data_json = $this->estructuraJson($request);                                    
+                $data_json = $this->estructuraJson($request);
                 $registro->data = $data_json;
 
                 if($registro->save())
@@ -353,7 +353,7 @@ class AntecedenteController extends Controller
 
             if($registro->count()>0)
             {
-             
+
                     $registro->estado = $request->estado;
                     if($registro->save())
                     {
@@ -365,7 +365,7 @@ class AntecedenteController extends Controller
                         $datos['msg'] = 'Problemas al actualizar el registro';
                         $datos['request'] = $request->all();
                     }
-                
+
 
             }else{
                 $datos['estado'] = 0;
@@ -387,11 +387,12 @@ class AntecedenteController extends Controller
     {
         $params = $request->all();
 
-        extract($params);        
+        extract($params);
         $nombre = isset($nombre)==true?$nombre:'';
         $fecha = isset($fecha)==true?$fecha:'';
         $procedimiento = isset($procedimiento)==true?$procedimiento:'';
         $detalle = isset($detalle)==true?$detalle:'';
+        $incidene = isset($incidene)==true?$incidene:'';
         $profesional = isset($profesional)==true?$profesional:'';
         $rut_responsable = isset($rut_responsable)==true?$rut_responsable:'';
         $comentario = isset($comentario)==true?$comentario:'';
@@ -414,12 +415,13 @@ class AntecedenteController extends Controller
         $discapacidad_tipo = isset($discapacidad_tipo)==true?$discapacidad_tipo:'';
         $discapacidad_grado = isset($discapacidad_grado)==true?$discapacidad_grado:'';
         $discapacidad_permanente = isset($discapacidad_permanente)==true?$discapacidad_permanente:'';
-        
+
         $json_data = array(
             'nombre'=>$nombre,
             'fecha'=>$fecha,
             'procedimiento'=>$procedimiento,
             'detalle'=>$detalle,
+            'incidene'=>$incidene,
             'profesional'=>$profesional,
             'rut_responsable'=>$rut_responsable,
             'comentario'=>$comentario,
@@ -445,7 +447,7 @@ class AntecedenteController extends Controller
             'fecha_regitro'=>date('d-m-Y')
         );
 
-        /* JSON */ 
+        /* JSON */
         /*
           {
             "nombre":"",
@@ -473,7 +475,7 @@ class AntecedenteController extends Controller
             "discapacidad_tipo":"",
             "discapacidad_grado":"",
             "discapacidad_permanente":"",
-          } 
+          }
         */
 
         return json_encode($json_data);

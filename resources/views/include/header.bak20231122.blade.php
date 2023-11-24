@@ -62,11 +62,9 @@
     <!--formulario sm-->
     <link rel="stylesheet" href="{{ asset('css/cara_dental.css') }}">
 
-    <!-- fancy box -->
-    <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
-    <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
-
-
+ 
+   
+    
     <style>
         .ui-front {
             position: absolute;

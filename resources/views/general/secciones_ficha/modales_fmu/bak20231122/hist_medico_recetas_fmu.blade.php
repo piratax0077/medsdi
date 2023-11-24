@@ -40,44 +40,46 @@
     </div>
 </div>
 <script>
+    {{--  function buscar_receta_fmu() {
+        $('#m_cons_receta_fmu').modal('show');
+    }  --}}
     function buscar_receta_fmu(id_ficha_clinica)
-    {
-        url = "{{ route('profesional.receta.ver') }}";
-        id_ficha = id_ficha_clinica;
-        $('#tabla_receta tbody').empty();
-
-        $.ajax({
-                url: url,
-                type: "get",
-                data: {
-                    id_ficha: id_ficha
-                },
-                dataType: "json",
-        })
-        .done(function(data)
         {
-            if (data != null)
+
+            {{--  url = '{{ route('buscar.recetas') }}';  --}}
+            url = "{{ route('detalle_receta.ver_medicamentos') }}";
+            id_ficha = id_ficha_clinica;
+            $('#tabla_receta tbody').empty();
+
+            $.ajax({
+                    url: url,
+                    type: "get",
+                    data: {
+                        id_ficha: id_ficha
+                    },
+                    dataType: "json",
+            })
+            .done(function(data)
             {
-
-                // $('#id_ficha_receta').text('Receta de Paciente: ' + data.paciente.nombre_paciente);
-
-                if(data.estado == 1)
+                if (data != null)
                 {
-                    $('#tabla_atenciones_previas_receta tbody').html('');
-                    $.each(data.registros, function(index, value)
-                    {
-                        var fecha = formatDate(value.created_at);
 
-                        $.each(value.detalle, function(index_2, value_2)
+                    $('#id_ficha_receta').text('Receta de Paciente: ' + data.paciente.nombre_paciente);
+
+                    if(data.estado == 1)
+                    {
+                        $('#tabla_atenciones_previas_receta tbody').html('');
+                        $.each(data.registros, function(index, value)
                         {
+                            var fecha = formatDate(value.created_at);
                             //var salida = formato(fecha);
-                            var medicamento = value_2.producto;
-                            var presentacion = value_2.presentacion;
-                            var posologia = value_2.posologia;
-                            var via_administracion = value_2.via_administracion;
-                            var periodo = value_2.periodo;
-                            var uso_cronico = value_2.uso_cronico;
-                            var cantidad_compr = value_2.cantidad_compra;
+                            var medicamento = value.producto;
+                            var presentacion = value.presentacion;
+                            var posologia = value.posologia;
+                            var via_administracion = value.via_administracion;
+                            var periodo = value.periodo;
+                            var uso_cronico = value.uso_cronico;
+                            var cantidad_compr = value.cantidad_compra;
 
                             if(uso_cronico == 1)
                                 uso_cronico = 'USO CRONICO';
@@ -99,36 +101,30 @@
 
                             $('#tabla_atenciones_previas_receta tbody').append(fila);
                         });
+                    }
+                    else
+                    {
+                        $('#tabla_atenciones_previas_receta tbody').html('');
+                        var fila = '<tr><td colspan="8"><span><h5>no existen registros</h5></span></td></tr>';
+                        $('#tabla_atenciones_previas_receta tbody').append(fila);
+                    }
 
-
-
-
-
-                    });
-                }
-                else
-                {
+                } else {
                     $('#tabla_atenciones_previas_receta tbody').html('');
                     var fila = '<tr><td colspan="8"><span><h5>no existen registros</h5></span></td></tr>';
                     $('#tabla_atenciones_previas_receta tbody').append(fila);
                 }
+                $('#m_cons_receta_fmu').modal('show');
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
 
-            } else {
-                $('#tabla_atenciones_previas_receta tbody').html('');
-                var fila = '<tr><td colspan="8"><span><h5>no existen registros</h5></span></td></tr>';
-                $('#tabla_atenciones_previas_receta tbody').append(fila);
-            }
-            $('#m_cons_receta_fmu').modal('show');
-        })
-        .fail(function(jqXHR, ajaxOptions, thrownError) {
-            console.log(jqXHR, ajaxOptions, thrownError)
-        });
-
-        $('#tabla_atenciones_previas_receta').dataTable().fnClearTable();
-        $('#tabla_atenciones_previas_receta').dataTable().fnDestroy();
-        $('#tabla_atenciones_previas_receta').DataTable({
-            responsive: true,
-            "bPaginate": false,
-        });
-    }
+            $('#tabla_atenciones_previas_receta').dataTable().fnClearTable();
+            $('#tabla_atenciones_previas_receta').dataTable().fnDestroy();
+            $('#tabla_atenciones_previas_receta').DataTable({
+                responsive: true,
+                "bPaginate": false,
+            });
+        }
 </script>

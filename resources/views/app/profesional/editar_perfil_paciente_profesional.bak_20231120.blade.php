@@ -41,8 +41,17 @@
                                                 <div class="position-relative d-inline-block">
                                                     <img class="img-radius img-fluid wid-100"  src="{{ asset('images/iconos/usuario.svg') }}" alt="User image">
                                                 </div>
+                                                {{--  <div class="overlay">
+                                                    <span>Actualizar</span>
+                                                </div>  --}}
                                             </div>
                                         </a>
+                                        {{--  <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#"><i
+                                                    class="feather icon-upload-cloud mr-2"></i>Cambiar foto de perfil</a>
+                                            <a class="dropdown-item" href="#"><i
+                                                    class="feather icon-trash-2 mr-2"></i>Eliminar fotografía</a>
+                                        </div>  --}}
                                     </div>
                                 </div>
                             </div>
@@ -203,7 +212,6 @@
                             </div>
                         </div>
                         <!--Cierre: Tab Información Personal-->
-
                         <!--Tab Contactos de Emergencia-->
                         <div class="tab-pane fade" id="emergencia" role="tabpanel" aria-labelledby="emergencia-tab">
                             <div class="row">
@@ -297,16 +305,16 @@
                             </div>
                         </div>
                         <!--Cierre: Tab Contactos de Emergencia-->
-
                         <!--Tab Datos médicos  OJO   IDENTIFICAR AL PROFESIONAL RESPONSABLE Y PONER UN ALERT DICIENDO LO IMPORTANTE QUE ES EL LLENADO CORRECTO-->
                         <div class="tab-pane fade" id="datmedicos" role="tabpanel" aria-labelledby="datmedicos-tab">
-                            {{-- Datos del médico responsable del llenado y/o Actualización de datos --}}
                             <div class="row">
                                 <div class="col-md-12">
                                     <!--Card Datos profesional-->
                                     <div class="card">
                                         <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
-                                            <h5 class="mb-0 text-white">Datos del médico responsable del llenado y/o Actualización de datos </h5>
+                                            <h5 class="mb-0 text-white">Datos del médico responsable del llenado y/o
+                                                Actualización de datos </h5>
+
                                         </div>
                                         <!--Datos profesional-->
                                         <div class="card-body border-top info_basica_sos collapse show"
@@ -315,31 +323,40 @@
                                                 <div class="col-md-6">
                                                     <form>
                                                         <div class="form-group row">
-                                                            <label class="col-sm-4 col-form-label font-weight-bolder">Rut del Profesional</label>
-                                                            <div class="col-sm-7 my-auto ml-2">{{ $profesional->rut }}</div>
+                                                            <label class="col-sm-4 col-form-label font-weight-bolder">Rut
+                                                                del Profesional</label>
+                                                            <div class="col-sm-7 my-auto ml-2">{{ $profesional->rut }}
+                                                            </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-sm-4 col-form-label font-weight-bolder">Nombres y Apellidos</label>
-                                                            <div class="col-sm-7 my-auto ml-2">{{ $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos }}</div>
+                                                            <label
+                                                                class="col-sm-4 col-form-label font-weight-bolder">Nombres
+                                                                y Apellidos</label>
+                                                            <div class="col-sm-7 my-auto ml-2">
+                                                                {{ $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos }}
+                                                            </div>
                                                         </div>
                                                     </form>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <form>
                                                         <div class="form-group row">
-                                                            <label class="col-sm-4 col-form-label font-weight-bolder">Fecha de Actualización</label>
+                                                            <label class="col-sm-4 col-form-label font-weight-bolder">Fecha
+                                                                de Actualización</label>
                                                             <div class="col-sm-7 my-auto ml-2"> 12/01/2021 * </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-sm-4 col-form-label font-weight-bolder">Especialidad</label>
-                                                            <div class="col-sm-7 my-auto ml-2">{{ $profesional->Especialidad()->first()->nombre }}</div>
+                                                            <label
+                                                                class="col-sm-4 col-form-label font-weight-bolder">Especialidad</label>
+                                                            <div class="col-sm-7 my-auto ml-2">
+                                                                {{ $profesional->Especialidad()->first()->nombre }}
+                                                            </div>
                                                         </div>
                                                     </form>
                                                 </div>
                                             </div>
                                         </div>
                                         <!--Cierre: Datos profesional-->
-
                                         <!--(Editar)Datos profesional-->
                                         <div class="card-body border-top info_basica_sos collapse" id="info_basica_sos_2">
                                             <div class="row">
@@ -412,8 +429,6 @@
                                     <!--Cierre: Card Datos profesional-->
                                 </div>
                             </div>
-
-                            {{-- Antecedentes I (Transfusiones y Donación de Órganos) --}}
                             <div class="row">
                                 <div class="col-md-12">
                                     <!--Card Datos Sangre Donación de Organos-->
@@ -426,7 +441,7 @@
                                         </div>
                                         <!--Sangre Donación de Organo-->
                                         <div class="card-body border-top info_residencial_sos collapse show" id="info_residencial_sos_1">
-
+                                            
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
@@ -831,7 +846,6 @@
                             @include('app.profesional.edicion_paciente.antecedentes_paciente_dos')
                         </div>
                         <!--Cierre: Tab Tab Datos médicos-->
-
                         <!--Tab Cambiar Contraseñas-->
                         <div class="tab-pane fade" id="pass" role="tabpanel" aria-labelledby="pass-tab">
                             <div class="row">
@@ -924,7 +938,11 @@
         </div>
     </div>
     <!--Cierre: Container Completo-->
-    @include('app.profesional.modales.agregar_contacto_emergencia')
-    @include('app.profesional.modales.informacion_contacto_emergencia')
+    @include(
+        'app.profesional.modales.agregar_contacto_emergencia'
+    )
+    @include(
+        'app.profesional.modales.informacion_contacto_emergencia'
+    )
     @include('app.profesional.modales.editar_contacto_emergencia')
 @endsection

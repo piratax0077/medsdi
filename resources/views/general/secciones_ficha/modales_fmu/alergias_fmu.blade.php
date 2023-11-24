@@ -5,22 +5,38 @@
 				<h5 class="modal-title text-white mt-1">Alergias</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
-			<div class="modal-body"> {{--  
-                @if($paciente_alergias)
-                    @foreach ( $paciente_alergias as $alergia )
-                        @php
-                            $alergia_array = json_decode($alergia->data);
-                        @endphp
-                        <div class="form-group">
-                            <label><span style="font-weight:bold">TIPO</span>: <span>{{  $alergia_array->nombre }}</span></label>
-                        </div>
-                        <div class="form-group">
-                            <label><span style="font-weight:bold">ALERGICO</span>: <span>{{ $alergia_array->comentario }}</span></label>
-                        </div>
-                    @endforeach
-                @endif
- --}}
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-xs">
+                            <thead>
+                                <tr>
+                                    <th>Nombre Alergia</th>
+                                    <th>Comentario</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bloque-registros-6">
+                                @if (isset($antecedentes))
+                                    @foreach ($antecedentes as $data)
+                                        @if($data->id_tipo_antecedente==6)
+                                            <tr>
+                                                <td>{{ $data->antecedente_data->nombre }}</td>
+                                                <td>{{ $data->comentario }}</td>
+                                                <td>{{ $data->antecedente_data->fecha_regitro }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                @endif
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" onclick="$('#m_alergias_fmu').modal('hide');">Cerrar</button>
+            </div>
 		</div>
 	</div>
 </div>

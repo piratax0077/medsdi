@@ -7,19 +7,7 @@
 			</div>
 			<div class="modal-body">
 
-                <div class="row">
-                    <div class="col-md-12">
-                        @if(isset($datos->responsables))
-                           {!! $datos->responsables !!}
-                        @endif
-                    </div>
-                </div>
-
 			</div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-danger" onclick="$('#m_responsables_fmu').modal('hide');">Cerrar</button>
-            </div>
 		</div>
 	</div>
 </div>

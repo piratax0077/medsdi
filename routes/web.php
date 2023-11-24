@@ -627,6 +627,13 @@ Route::group([
     Route::get('/licencia/autorizacion/validar', [App\Http\Controllers\LicenciaAprobacionController::class, 'validarAutorizacion'])->name('profesional.licencia.validar');
     Route::get('/licencia/autorizacion/cancelar', [App\Http\Controllers\LicenciaAprobacionController::class, 'cancelarAutorizacion'])->name('profesional.licencia.cancelar');
 
+    /** PERMISOS PARA FMU */
+    Route::get('/aprobar/fmu/aceptar', [App\Http\Controllers\FmuAprobacionController::class, 'fmuEvaluacion'])->name('profesional.fmu.evalueacion.aceptar');
+    Route::get('/aprobar/fmu/rechazar', [App\Http\Controllers\FmuAprobacionController::class, 'fmuEvaluacion'])->name('profesional.fmu.evalueacion.rechazar');
+    Route::get('/fmu/autorizacion/soliciar', [App\Http\Controllers\FmuAprobacionController::class, 'solicitarAutorizacion'])->name('profesional.fmu.solicitar');
+    Route::get('/fmu/autorizacion/validar', [App\Http\Controllers\FmuAprobacionController::class, 'validarAutorizacion'])->name('profesional.fmu.validar');
+    Route::get('/fmu/autorizacion/cancelar', [App\Http\Controllers\FmuAprobacionController::class, 'cancelarAutorizacion'])->name('profesional.fmu.cancelar');
+	
     /** REGISTRO DE RECOMENDACION */
     Route::post('/receta/registro', [App\Http\Controllers\RecomendacionController::class, 'registroRecomendacion'])->name('profesional.receta.registro');
     Route::get('/receta/ver', [App\Http\Controllers\RecomendacionController::class, 'verRecomendaciones'])->name('profesional.receta.ver');
@@ -635,8 +642,7 @@ Route::group([
     /** RECETA DE LENTES */
     Route::post('/receta/lente/registro', [App\Http\Controllers\OftarmoRecetaLenteController::class, 'registrar'])->name('receta.oftalmo.lente.registrar');
     Route::get('/receta/lente/ver', [App\Http\Controllers\OftarmoRecetaLenteController::class, 'verRegistros'])->name('receta.oftalmo.lente.ver');
-
-
+	
 });
 
 Route::group([
@@ -1541,7 +1547,6 @@ Route::group([
     Route::get('/control/medicamento', [App\Http\Controllers\DireccionSaludController::class, 'CargarControlMedicamento'])->name('ministerio.control_medicamento');
     Route::get('/control/farmacia', [App\Http\Controllers\DireccionSaludController::class, 'CargarControlFarmacia'])->name('ministerio.control_farmacia');
 });
-
 
 /** web */
 Route::get('/profesional/especialidad', [App\Http\Controllers\EscritorioGeneral::class, 'cargar_especialidad'])->name('web.profesional.buscar_especialidad');

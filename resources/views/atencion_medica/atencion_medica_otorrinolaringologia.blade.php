@@ -48,14 +48,11 @@
                                             <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>
                                         @endif
                                     </li>
-                                    <li class="nav-item">
-                                        @if (request('token') && request('fmu') == 1)
+                                    <li class="nav-item" id="nav-fmu">
+                                        @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
                                         @else
-                                            @php
-                                                $url_temp = 'Profesional/Paciente/Ficha_consulta?_token='.request('_token').'&id_hora_realizar='.request('id_hora_realizar').'&lugar_atencion_id='.request('lugar_atencion_id').'';
-                                            @endphp
-                                            <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $paciente->id_usuario,'urla'=> $url_temp.'&fmu=0','urln' => $url_temp.'&fmu=1', 'id_tipo' => 2]) }}">FMU</a>
+                                            <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
                                         @endif
                                     </li>
                                     <li class="nav-item">
@@ -113,7 +110,7 @@
         @include("general.modal.modal_no_disponible")
     </div>
     <!--Cierre: Container Completo-->
-	
+
 @endsection
 
 @include('app.profesional.modales.boton_flotante_agenda_autorizacion')

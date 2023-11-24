@@ -16,7 +16,7 @@
     <style>
         .btn-agenda-autorizacion {
             display: block;
-            position: fixed;
+            position: fixed !important;
             color: #fff;
             padding: 8px;
             text-align: center;
@@ -37,6 +37,30 @@
             /* background-color: #03a6a6; */
             transition: 0.3s;
         }
+
+        .btn-agenda-autorizacion-fmu {
+            display: block;
+            position: fixed !important;
+            color: #fff;
+            padding: 8px;
+            text-align: center;
+            right: 0;
+            bottom: 56%;
+            z-index: 2;
+            cursor: pointer;
+            /* background-color: #1cbebe; */
+            transition: 0.3s;
+            font-size: 0.9em;
+            line-height: 12px;
+            border-radius: 10% 0 0 10%;
+        }
+
+        .btn-agenda-autorizacion-fmu:hover {
+            color: #fff;
+            padding-right: 20px;
+            /* background-color: #03a6a6; */
+            transition: 0.3s;
+        }
     </style>
 @endsection
 
@@ -46,6 +70,15 @@
         <button class="btn btn-agenda-autorizacion btn-info shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-22"></i> <br>Autorización</button>
     @else
         <button class="btn btn-agenda-autorizacion btn-danger shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-22"></i> <br>Autorización</button>
+    @endif
+</div>
+
+<!-- BOTÓN FLOTANTE AUTORIZACION (AUTORIZACION FMU) -->
+<div class="bs-offset-main bs-canvas-anim">
+    @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
+        <button class="btn btn-agenda-autorizacion-fmu btn-info shadow-sm" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-lock f-22"></i> <br>FMU</button>
+    @else
+        <button class="btn btn-agenda-autorizacion-fmu btn-danger shadow-sm" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-lock f-22"></i> <br>FMU</button>
     @endif
 </div>
 
@@ -91,9 +124,53 @@
     </div>
 </div>
 
+<div id="modal_autorizacion_fmu" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Recepcion de bonos" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_autorizacion_fmuLabel">Autorización FMU</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_autorizacion_fmu();"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-xs btn-success" id="modal_autorizacion_fmu_btn_solicitar" onclick="solicitar_autorizacion_fmu();" disabled>Solicitar Autorización para ver FMU</button>
+                        </div>
+                        <div class="col-md-12 text-center mt-3">
+                            <button class="btn btn-xs btn-danger" id="modal_autorizacion_fmu_btn_cancelar" onclick="cancelar_autorizacion_fmu();" >Cerrar Autorización para ver FMU</button>
+                        </div>
+                    @else
+                        <div class="col-md-12 text-center ">
+                            <button class="btn btn-xs btn-success" id="modal_autorizacion_fmu_btn_solicitar" onclick="solicitar_autorizacion_fmu();">Solicitar Autorización para ver FMU</button>
+                        </div>
+                        <div class="col-md-12 text-center mt-3">
+                            <button class="btn btn-xs btn-danger" id="modal_autorizacion_fmu_btn_cancelar" onclick="cancelar_autorizacion_fmu();" disabled>Cerrar Autorización para ver FMU</button>
+                        </div>
+                    @endif
+                </div>
+                <div class="row">
+                    <div class="col-md-6" id="modal_autorizacion_fmu_imagen">
+                        {{--  --}}
+                    </div>
+                    <div class="col-md-6" id="modal_autorizacion_fmu_mensaje">
+                        {{--  --}}
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-body">
+                <button class="btn btn-sm btn-danger" onclick="cerrar_autorizacion_fmu();">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--SCRIPT (DEJARLO EN JS CON JOHAN)-->
 @section('page-script-btn-autorizacion')
     <script type="text/javascript">
+
+        /** seccion licencia */
         var lic_token = '{{  session('lic_token') }}';
         var lic_estado = '{{  session('lic_estado') }}';
 
@@ -386,6 +463,239 @@
                             {
                                 $("#hip_diag_spec").trigger("keyup");
                             }
+
+                        }
+                    }
+                    else
+                    {
+                        console.log('error');
+                        console.log(data);
+                    }
+                }
+            });
+        }
+
+        /*******************************/
+        /** seccion FMU */
+        var fmu_token = '{{  session('fmu_token') }}';
+        var fmu_estado = '{{  session('fmu_estado') }}';
+
+        function  abrir_autorizacion_fmu()
+        {
+            $('#modal_autorizacion_fmu').modal('show');
+            $('#modal_autorizacion_fmu_imagen').html('');
+            $('#modal_autorizacion_fmu_mensaje').html('');
+        }
+
+        function  cerrar_autorizacion_fmu()
+        {
+            $('#modal_autorizacion_fmu').modal('hide');
+        }
+
+        function solicitar_autorizacion_fmu()
+        {
+            $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', true);
+            $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', true);
+
+            var id_lugar_atencion = $('#id_lugar_atencion').val();
+            var id_paciente = $('#id_paciente_fc').val();
+            let url = "{{ route('profesional.fmu.solicitar') }}";
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    id_lugar_atencion : id_lugar_atencion,
+                    id_paciente : id_paciente
+                },
+                success:function(data){
+                    if (data !== 'null')
+                    {
+                        console.log(data);
+                        if(data.estado == 1)
+                        {
+                            $('#modal_autorizacion_fmu_imagen').html('<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">');
+                            $('#modal_autorizacion_fmu_mensaje').html('<h3>En espera de Aprobación</h3>');
+
+                            validar_autorizacion_fmu(data.log_users_devices.token);
+                        }
+                        else
+                        {
+                            $('#modal_autorizacion_fmu_imagen').html('<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">');
+                            $('#modal_autorizacion_fmu_mensaje').html('<h3>Problema al solicitar Aprobación.</h3>');
+                        }
+                    }
+                    else
+                    {
+                        console.log('error');
+                        console.log(data);
+                    }
+                }
+            });
+        }
+
+        function validar_autorizacion_fmu(token)
+        {
+            let url = "{{ route('profesional.fmu.validar') }}";
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    token : token,
+                },
+                success:function(data){
+
+                    $('#modal_autorizacion_fmu_mensaje').html('<h3>'+data.msj+'</h3>');
+
+                    if(data.estado == 0)
+                    {
+                        setTimeout(function(){
+                            validar_autorizacion_fmu(token);
+                        }, 2000);
+                        $('#nav-fmu').html('<a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>');
+                        fmu_token = '';
+                        fmu_estado = '';
+
+                    }
+                    else if(data.estado == 1)
+                    {
+                        $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid" src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
+
+                        $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', true);
+                        $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', false);
+
+
+                        $('.btn-agenda-autorizacion-fmu').removeClass('btn-danger');
+                        $('.btn-agenda-autorizacion-fmu').addClass('btn-info');
+
+                        setTimeout(function(){
+                            $('#modal_autorizacion_fmu').modal('hide');
+                        }, 3000);
+
+                        $('#nav-fmu').html('<a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>');
+                        $("#fmu-tab").trigger("click");
+
+                        fmu_token = data.fmu_token;
+                        fmu_estado = data.fmu_estado;
+
+                    }
+                    else if(data.estado == 2)
+                    {
+                        $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid" src="{{ asset('images/iconos/error.svg') }}" alt="Rechazado">');
+
+                        $('.btn-agenda-autorizacion-fmu').addClass('btn-danger');
+                        $('.btn-agenda-autorizacion-fmu').removeClass('btn-info');
+
+                        setTimeout(function(){
+                            $('#modal_autorizacion_fmu').modal('hide');
+                        }, 3000);
+
+                        $('#nav-fmu').html('<a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>');
+
+                        fmu_token = '';
+                        fmu_estado = '';
+
+                    }
+                    else if(data.estado == 3)
+                    {
+                        $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid" src="{{ asset('images/iconos/error.svg') }}" alt="Cancelado">');
+
+                        $('.btn-agenda-autorizacion-fmu').addClass('btn-danger');
+                        $('.btn-agenda-autorizacion-fmu').removeClass('btn-info');
+
+                        setTimeout(function(){
+                            $('#modal_autorizacion_fmu').modal('hide');
+                        }, 3000);
+
+                        $('#nav-fmu').html('<a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>');
+
+                        fmu_token = '';
+                        fmu_estado = '';
+
+                    }
+                    else if(data.estado == 4)
+                    {
+                        $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid" src="{{ asset('images/iconos/error.svg') }}" alt="Aprobado Expirado">');
+
+                        $('.btn-agenda-autorizacion-fmu').addClass('btn-danger');
+                        $('.btn-agenda-autorizacion-fmu').removeClass('btn-info');
+
+                        setTimeout(function(){
+                            $('#modal_autorizacion_fmu').modal('hide');
+                        }, 3000);
+
+                        $('#nav-fmu').html('<a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>');
+
+                        fmu_token = '';
+                        fmu_estado = '';
+
+                    }
+                    else
+                    {
+                        setTimeout(function(){
+                            validar_autorizacion_fmu(token);
+                        }, 3000);
+
+                        $('#nav-fmu').html('<a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>');
+
+                        fmu_token = '';
+                        fmu_estado = '';
+
+                    }
+                }
+            });
+        }
+
+        function cancelar_autorizacion_fmu()
+        {
+            $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', true);
+            $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', true);
+
+            let url = "{{ route('profesional.fmu.cancelar') }}";
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {},
+                success:function(data){
+                    if (data !== 'null')
+                    {
+                        console.log(data);
+                        if(data.estado == 1)
+                        {
+                            $('#modal_autorizacion_fmu_imagen').html('<img src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
+                            $('#modal_autorizacion_fmu_mensaje').html('<h3>Autorización Finalizada</h3>');
+                            $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', false);
+                            $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', true);
+
+                            $('.btn-agenda-autorizacion-fmu').addClass('btn-danger');
+                            $('.btn-agenda-autorizacion-fmu').removeClass('btn-info');
+
+                            setTimeout(function(){
+                                $('#modal_autorizacion_fmu_imagen').html('');
+                                $('#modal_autorizacion_fmu_mensaje').html('');
+                            },5000);
+
+                            $('#nav-fmu').html('<a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>');
+
+                            fmu_token = '';
+                            fmu_estado = '';
+
+                        }
+                        else
+                        {
+                            $('#modal_autorizacion_fmu_imagen').html('<img src="{{ asset('images/iconos/error.svg') }}" alt="Error">');
+                            $('#modal_autorizacion_fmu_mensaje').html('<h3>Problema al Finalizar Aprobación.</h3>');
+                            $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', true);
+                            $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', false);
+
+                            setTimeout(function(){
+                                $('#modal_autorizacion_imagen_fmu').html('');
+                                $('#modal_autorizacion_mensaje_fmu').html('');
+                            },5000);
+
+                            $('#nav-fmu').html('<a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>');
+
+                            fmu_token = '';
+                            fmu_estado = '';
 
                         }
                     }

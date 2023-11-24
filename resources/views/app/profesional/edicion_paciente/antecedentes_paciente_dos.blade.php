@@ -46,8 +46,21 @@
 
         var html = '';
 
+        // 1	Antecedentes Anestesias Pacientes
+        // 2	Patologías Crónicas
+        // 3	Antecedentes Cirugias y Procedimientos
+        // 4	Antecedentes Hemorragias Pacientes
+        // 5	Solicitud de Antecedentes a servicios asistenciales
+        // 6	Antecedentes de Alergias
+        // 7	Antecedentes de Medicamento Crónico
+        // 8	Presenta alguna discapacidad ?
+
         switch(tipo){
-            case 1:
+            case 1: // 1    Antecedentes Anestesias Pacientes
+                // Procedimiento
+                // Incidentes
+                // Profesional
+                // Fecha
                 html+=`
                     <table>
 						<tr>
@@ -58,11 +71,19 @@
                             <td>Incidente</td>
                             <td><textarea class="form-control" id="comentario"></textarea></td>
                         </tr>
+                        <tr>
+                            <td>Fecha</td>
+                            <td><input class="form-control" type="date" id="fecha"></td>
+                        </tr>
                     </table>
                 `;
             break;
 
-            case 2:
+            case 2: // 2    Patologías Crónicas
+                // Nombre
+                // Comentario
+                // Profesional
+                // Fecha
                 html+=`
                     <table>
                         <tr>
@@ -77,7 +98,12 @@
                 `;
             break;
 
-            case 3:
+            case 3: // 3    Antecedentes Cirugias y Procedimientos
+                // Fecha
+                // Procedimiento
+                // Incidente
+                // Profesional
+                // Fecha data
                 html+=`
                     <table>
 						<tr>
@@ -96,24 +122,32 @@
                 `;
             break;
 
-            case 4:
+            case 4: // 4    Antecedentes Hemorragias Pacientes
+                // Fecha
+                // Incidente
+                // Detalle
                 html+=`
                     <table>
                         <tr>
-                            <td>Procedimiento</td>
-                            <td><input class="form-control" type="text" id="procedimiento"></td>
+                            <td>Fecha Cirugía</td>
+                            <td><input class="form-control" type="date" id="fecha"></td>
+                        </tr>
+                        <tr>
+                            <td>Incidente</td>
+                            <td><textarea class="form-control" id="incidene"></textarea></td>
                         </tr>
                         <tr>
                             <td>Detalle</td>
-                            <td><textarea class="form-control" id="comentario"></textarea></td>
+                            <td><textarea class="form-control" id="detalle"></textarea></td>
                         </tr>
                     </table>
                 `;
             break;
 
-
-            case 5:
-
+            case 5: // 5    Solicitud de Antecedentes a servicios asistenciales
+                // Patología
+                // Clínica o servicio
+                // Fecha Aproximada
                 html+=`
                     <table>
                         <tr>
@@ -132,7 +166,7 @@
                 `;
             break;
 
-            case 6:
+            case 6: // 6    Antecedentes de Alergias
                 html+=`
                     <table>
                         <tr>
@@ -147,16 +181,12 @@
                 `;
             break;
 
-            case 7:
+            case 7: // 7    Antecedentes de Medicamento Crónico
                 html+=`
                     <table>
                         <tr>
                             <td>Nombre Medicamento</td>
-                            <td>
-								<div class="form-group">
-									<input class="form-control form-control-sm" type="text" id="nombre_medicamento_cronico">
-								</div>
-							</td>
+                            <td><input class="form-control form-control-sm" type="text" id="nombre_medicamento_cronico"></td>
                         </tr>
                         <tr>
                             <td>Dosis</td>
@@ -166,7 +196,8 @@
                     </table>
                 `;
             break;
-		    case 8:
+
+		    case 8: // 8    Presenta alguna discapacidad ?
                 html+=`
                     <table>
                         <tr>
@@ -579,7 +610,7 @@
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <h6 class="text-c-blue d-inline">ANESTESIAS PACIENTE</h6>
                                         @if(Auth::user()->hasRole('Profesional'))
-                                        <button class="btn btn-info btn-xxs fas fa-plus d-inline" onclick="verModalAgregar('show',1,0)"></button>
+                                        <button class="btn btn-info btn-xxs feather icon-plus d-inline" onclick="verModalAgregar('show',1,0)"></button>
                                         @endif
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -607,83 +638,14 @@
                                     </div>
                                 </div>
                             </div>
-                             <!--FRACTURAS
-                            <div class="tab-pane fade show" id="fractu" role="tabpanel" aria-labelledby="fractu-tab">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="text-c-blue">FRACTURAS</h6>
 
-                                    </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered table-xs">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Fecha</th>
-                                                        <th>Procedimiento</th>
-                                                        <th>Incidente</th>
-                                                        <th>Profesional</th>
-                                                        <th>Fecha data</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="bloque-registros-3">
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
-                            <!--CIRUGÍAS Y PROCEDIMIENTOS-->
-                            <div class="tab-pane fade show" id="cirug-proce" role="tabpanel" aria-labelledby="cirug-proce-tab">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
-                                        <h6 class="text-c-blue d-inline">CIRUGÍAS Y PROCEDIMIENTOS</h6>
-                                        @if(Auth::user()->hasRole('Profesional'))
-                                        <button class="btn btn-info btn-xxs  fas fa-plus d-inline" onclick="verModalAgregar('show',3,0)"></button>
-                                        @endif
-                                    </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered table-xs">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Fecha</th>
-                                                        <th>Procedimiento</th>
-                                                        <th>Incidente</th>
-                                                        <th>Profesional</th>
-                                                        <th>Fecha data</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="bloque-registros-3">
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <!--PATOLOGÍAS CRÓNICAS-->
                             <div class="tab-pane fade show" id="pat-cro" role="tabpanel" aria-labelledby="pat-cro-tab">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <h6 class="text-c-blue d-inline">PATOLOGÍAS CRÓNICAS</h6>
                                          @if(Auth::user()->hasRole('Profesional'))
-                                        <button class="btn btn-info btn-xxs fas fa-plus d-inline" onclick="verModalAgregar('show',2,0)"></button>
+                                        <button class="btn btn-info btn-xxs feather icon-plus d-inline" onclick="verModalAgregar('show',2,0)"></button>
                                         @endif
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -703,6 +665,7 @@
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>
+                                                        <td></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -710,13 +673,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--MEDICAMENTOS CRÓNICOS-->
-                            <div class="tab-pane fade show" id="med-cro" role="tabpanel" aria-labelledby="med-cro-tab">
+
+                            <!--CIRUGÍAS Y PROCEDIMIENTOS-->
+                            <div class="tab-pane fade show" id="cirug-proce" role="tabpanel" aria-labelledby="cirug-proce-tab">
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="text-c-blue d-inline">MEDICAMENTOS CRÓNICOS</h6>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                                        <h6 class="text-c-blue d-inline">CIRUGÍAS Y PROCEDIMIENTOS</h6>
                                         @if(Auth::user()->hasRole('Profesional'))
-                                        <button class="btn btn-info btn-xxs fas fa-plus d-inline" onclick="verModalAgregar('show',7,0)"></button>
+                                        <button class="btn btn-info btn-xxs  feather icon-plus d-inline" onclick="verModalAgregar('show',3,0)"></button>
                                         @endif
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -724,14 +688,19 @@
                                             <table class="table table-bordered table-xs">
                                                 <thead>
                                                     <tr>
-                                                        <th>Nombre Medicamento Crónico</th>
-                                                        <th>Dosis</th>
                                                         <th>Fecha</th>
+                                                        <th>Procedimiento</th>
+                                                        <th>Incidente</th>
+                                                        <th>Profesional</th>
+                                                        <th>Fecha data</th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="bloque-registros-7">
+                                                <tbody id="bloque-registros-3">
                                                     <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>
@@ -742,13 +711,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--ALERGIAS-->
-                            <div class="tab-pane fade show" id="alergias" role="tabpanel" aria-labelledby="alergias-tab">
+
+                            <!--HEMORAGIAS-->
+                            <div class="tab-pane fade show" id="cirug-proce" role="tabpanel" aria-labelledby="cirug-proce-tab">
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="text-c-blue d-inline">ALERGIAS</h6>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                                        <h6 class="text-c-blue d-inline">HEMORAGIAS</h6>
                                         @if(Auth::user()->hasRole('Profesional'))
-                                        <button class="btn btn-info btn-xxs  fas fa-plus d-inline" onclick="verModalAgregar('show',6,0)"></button>
+                                        <button class="btn btn-info btn-xxs  feather icon-plus d-inline" onclick="verModalAgregar('show',4,0)"></button>
                                         @endif
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -756,14 +726,15 @@
                                             <table class="table table-bordered table-xs">
                                                 <thead>
                                                     <tr>
-                                                        <th>Nombre Alergia</th>
-                                                        <th>Comentario</th>
                                                         <th>Fecha</th>
+                                                        <th>Incidente</th>
+                                                        <th>Detalle</th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="bloque-registros-6">
+                                                <tbody id="bloque-registros-3">
                                                     <tr>
+                                                        <td></td>
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>
@@ -774,13 +745,14 @@
                                     </div>
                                 </div>
                             </div>
+
                             <!--SOLICITUDES DE ANTECEDENTES DE SERVICIOS ASISTENCIALES-->
                             <div class="tab-pane fade show" id="ant-serv-asistenciales" role="tabpanel" aria-labelledby="ant-serv-asistenciales-tab">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <h6 class="text-c-blue d-inline">SOLICITUDES DE ANTECEDENTES DE SERVICIOS ASISTENCIALES</h6>
                                          @if(Auth::user()->hasRole('Profesional'))
-                                        <button class="btn btn-info btn-xxs fas fa-plus d-inline" onclick="verModalAgregar('show',5,0)"></button>
+                                        <button class="btn btn-info btn-xxs feather icon-plus d-inline" onclick="verModalAgregar('show',5,0)"></button>
                                         @endif
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -806,13 +778,81 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!--ALERGIAS-->
+                            <div class="tab-pane fade show" id="alergias" role="tabpanel" aria-labelledby="alergias-tab">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <h6 class="text-c-blue d-inline">ALERGIAS</h6>
+                                        @if(Auth::user()->hasRole('Profesional'))
+                                        <button class="btn btn-info btn-xxs  feather icon-plus d-inline" onclick="verModalAgregar('show',6,0)"></button>
+                                        @endif
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-xs">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nombre Alergia</th>
+                                                        <th>Comentario</th>
+                                                        <th>Fecha</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bloque-registros-6">
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--MEDICAMENTOS CRÓNICOS-->
+                            <div class="tab-pane fade show" id="med-cro" role="tabpanel" aria-labelledby="med-cro-tab">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <h6 class="text-c-blue d-inline">MEDICAMENTOS CRÓNICOS</h6>
+                                        @if(Auth::user()->hasRole('Profesional'))
+                                        <button class="btn btn-info btn-xxs feather icon-plus d-inline" onclick="verModalAgregar('show',7,0)"></button>
+                                        @endif
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-xs">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nombre Medicamento Crónico</th>
+                                                        <th>Dosis</th>
+                                                        <th>Fecha</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bloque-registros-7">
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                             <!--DISCAPACIDADES-->
                             <div class="tab-pane fade show" id="discapacidad" role="tabpanel" aria-labelledby="discapacidad-tab">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <h6 class="text-c-blue d-inline">DISCAPACIDADES</h6>
                                         @if(Auth::user()->hasRole('Profesional'))
-                                        <button class="btn btn-info btn-xxs fas fa-plus d-inline" onclick="verModalAgregar('show',8,0)"></button>
+                                        <button class="btn btn-info btn-xxs feather icon-plus d-inline" onclick="verModalAgregar('show',8,0)"></button>
                                         @endif
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -841,6 +881,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -850,581 +891,59 @@
 
 
 
-        <!--MODAL-->
-        <div class="modal" id="modal-ingreso" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="title-antecedente">Agregar antecedente</h5>
-                    <button type="button" class="close" onclick="verModalAgregar('hide')" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="body-modal-inputs">
-
-                </div>
-                <div class="modal-footer">
-                    <input type="hidden" value="" id="id-antecedente-m">
-                    <input type="hidden" value="" id="tipo-antecedente-m">
-                    <input type="hidden" value="{{$userData['rut']}}" id="user-rut">
-                    <input type="hidden" value="{{$userData['profesion']}}" id="user-profesion">
-                    <input type="hidden" value="{{$userData['nombre']}} {{$userData['apellido_uno']}} {{$userData['apellido_dos']}}" id="user-profesional">
-                    <input type="hidden" value="{{Auth::user()->id}}" id="user-id">
-                    <button type="button" class="btn btn-sm btn-primary-light-c" id="agregar-antecedente" onclick="agregarAntecedente()"><i class="feather icon-save"></i> Agregar antecedentes</button>
-                    <button type="button" class="btn btn-sm btn-primary-light-c" id="modificar-antecedente" onclick="modificarAntecedente()"><i class="feather icon-edit"></i> Modificar antecedentes</button>
-                    <button type="button" class="btn btn-sm btn-danger-light-c" onclick="verModalAgregar('hide')"><i class="feather icon-x"></i> Cerrar</button>
-                </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal" id="modal-confirmar" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Desactivar Antecedente</h5>
-                        <button type="button" class="close" onclick="verModalDesactivar('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    </div>
-                    <div class="modal-body">
-                        <p class="mb-0">Desea desactivar el antecedente ingresado.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" value="" id="id-antecedente-m-desactivar">
-                        <input type="hidden" value="" id="tipo-antecedente-m-desactivar">
-                        <button type="button" class="btn  btn-danger mr-0" onclick="eliminarAntecedente()">Desactivar</button>
-                        <button type="button" class="btn  btn-primary" onclick="verModalDesactivar('hide')">Cerrar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-				{{-- ANESTESIAS PACIENTE 1 --}}
-                <!--<div class="col-sm-12 col-md-12">
-                    <div class="card">
-                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
-                            <h5 class="mb-0 text-white">
-                                Anestesias Paciente
-                            </h5>
-                            @if(Auth::user()->hasRole('Profesional'))
-                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)"></button>
-                            @endif
-                        </div>
-                        <div class="card-body border-top collapse show" >
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row form-group">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Procedimiento</th>
-                                                        <th>Incidentes</th>
-                                                        <th>Profesional</th>
-                                                        <th>Fecha</th>
-                                                        <th>Acción</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="bloque-registros-1">
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>-->
-
-                {{-- ANTECEDENTES FRACTURAS PACIENTES 3 --}}
-                <!--<div class="col-sm-12 col-md-12">
-                    <div class="card">
-                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
-                            <h5 class="mb-0 text-white">
-                                Antecedentes Cirugias y Procedimientos
-                            </h5>
-                            @if(Auth::user()->hasRole('Profesional'))
-                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',3,0)"></button>
-                            @endif
-                        </div>
-
-                        <div class="card-body border-top collapse show" >
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row form-group">
-                                            <table class="table table-bordered table-xs">
-                                                <thead>
-                                                    <tr>
-														<th>Fecha</th>
-                                                        <th>Procedimiento</th>
-                                                        <th>Incidente</th>
-                                                        <th>Profesional</th>
-                                                        <th>Fecha data</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="bloque-registros-3">
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>-->
-
-				{{-- ANTECEDENTES CIRUGIAS 2 --}}
-                <!--<div class="col-sm-12 col-md-12">
-                    <div class="card">
-                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
-                            <h5 class="mb-0 text-white">
-                                Patologías Crónicas
-                            </h5>
-                            @if(Auth::user()->hasRole('Profesional'))
-                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',2,0)"></button>
-                            @endif
-                        </div>
-
-                        <div class="card-body border-top collapse show" >
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row form-group">
-                                            <table class="table table-bordered table-xs">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nombre</th>
-                                                        <th>Comentario</th>
-                                                        <th>Profesional</th>
-                                                        <th>Fecha</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="bloque-registros-2">
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>-->
-
-                {{-- ANTECEDENTE MEDICAMENTO ENFERMEDADES CRONICAS 7 --}}
-                <!--<div class="col-sm-12 col-md-12">
-                    <div class="card">
-                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
-                            <h5 class="mb-0 text-white">
-                                    Antecedentes de Medicamento Crónico
-                            </h5>
-                            @if(Auth::user()->hasRole('Profesional'))
-                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',7,0)"></button>
-                            @endif
-                        </div>
-
-                        <div class="card-body border-top collapse show" >
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row form-group">
-                                            <table class="table table-bordered table-xs">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nombre Medicamento Crónico</th>
-                                                        <th>Dosis</th>
-                                                        <th>Fecha</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="bloque-registros-7">
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
-
-				{{-- ANTECEDENTE ALERGIAS 6 --}}
-				<!--<div class="col-sm-12 col-md-12">
-                    <div class="card">
-                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
-                            <h5 class="mb-0 text-white">
-                                    Antecedentes de Alergias
-                            </h5>
-                            @if(Auth::user()->hasRole('Profesional'))
-                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',6,0)"></button>
-                            @endif
-                        </div>
-
-                        <div class="card-body border-top collapse show" >
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row form-group">
-                                            <table class="table table-bordered table-xs">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nombre Alergia</th>
-                                                        <th>Comentario</th>
-                                                        <th>Fecha</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="bloque-registros-6">
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>-->
-
-				{{-- ANTECEDENTE SERVICIOS ASISTENCIALES 5 --}}
-				<!--<div class="col-sm-12 col-md-12">
-                    <div class="card">
-                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
-                            <h5 class="mb-0 text-white">
-                                   Solicitud de Antecedentes a servicios asistenciales
-                            </h5>
-                            @if(Auth::user()->hasRole('Profesional'))
-                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',5,0)"></button>
-                            @endif
-                        </div>
-
-                        <div class="card-body border-top collapse show" >
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row form-group">
-                                            <table class="table table-bordered table-xs">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Patología</th>
-                                                        <th>Clínica o servicio</th>
-                                                        <th>Fecha Aproximada</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="bloque-registros-5">
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>-->
-
-				{{-- DISCAPACIDAD  8 --}}
-				<!--<div class="col-sm-12 col-md-12">
-                    <div class="card">
-                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
-                            <h5 class="mb-0 text-white">
-                                    Presenta alguna discapacidad ?
-                            </h5>
-                            @if(Auth::user()->hasRole('Profesional'))
-                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',8,0)"></button>
-                            @endif
-                        </div>
-
-                        <div class="card-body border-top collapse show" >
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row form-group">
-                                            <table class="table table-bordered table-xs">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Discapacidad</th>
-                                                        <th>Grado</th>
-														<th>Reversibilidad</th>
-                                                        <th>Fecha</th>
-                                                        <th>Acción</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="bloque-registros-8">
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>-->
-
-
-
-
-
-<!-- ANTECEDENTE CONFIDENCIAL
-<div class="row">
-    <div class="col-md-12">
-            Card Datos Confidenciales
-        <div class="card">
-            <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
-                <h5 class="mb-0 text-white">Antecedentes III (Datos Confidenciales)</h5>
-                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right div_data" data-toggle="collapse" data-target=".info_confidencial_sos" aria-expanded="false" aria-controls="info_confidencial_sos_1 info_confidencial_sos_2" style="display: none;">
-                    <i class="feather icon-edit"></i>
+    <!--MODAL-->
+    <div class="modal" id="modal-ingreso" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="title-antecedente">Agregar antecedente</h5>
+                <button type="button" class="close" onclick="verModalAgregar('hide')" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
-         SOLICITUD DE PERMISO PARA VER
-            <div class="card-body border-top info_confidencial_sos collapse show div_autorizacion" id="info_confidencial_permiso" >
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <div class="form-row">
-                            <input type="hidden" name="id_tipo_autorizacion_acompanante" id="id_tipo_autorizacion_acompanante" value="5">
-                            <input type="hidden" name="id_control" id="id_control" value="{{ $paciente->id }}">
-                            <div class="form-group col-md-3">
-                                <label class="floating-label-activo-sm">Rut</label>
-                                @if (\Carbon\Carbon::parse($paciente->fecha_nac)->age < 18)
-                                    <input type="text" class="form-control form-control-sm" name="rut_acompanante" id="rut_acompanante" oninput="formatoRut(this)">
-                                @else
-                                    <input type="text" class="form-control form-control-sm" name="rut_acompanante" id="rut_acompanante" oninput="formatoRut(this)" value="{{ $paciente->rut }}" readonly>
-                                @endif
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="floating-label-activo-sm">Nombres</label>
-                                @if (\Carbon\Carbon::parse($paciente->fecha_nac)->age < 18)
-                                    <input type="text" class="form-control form-control-sm" name="nombre_acompanante" id="nombre_acompanante">
-                                @else
-                                    <input type="text" class="form-control form-control-sm" name="nombre_acompanante" id="nombre_acompanante" value="{{ $paciente->nombres }}" readonly>
-                                @endif
-
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="floating-label-activo-sm">Apellidos</label>
-                                @if (\Carbon\Carbon::parse($paciente->fecha_nac)->age < 18)
-                                    <input type="text" class="form-control form-control-sm" name="apell_acompanante" id="apell_acompanante">
-                                @else
-                                    <input type="text" class="form-control form-control-sm" name="apell_acompanante" id="apell_acompanante" value="{{ $paciente->apellido_uno.' '.$paciente->apellido_dos }}" readonly>
-                                @endif
-
-                            </div>
-                            <div class="form-group col-md-3" id="">
-                                <label class="floating-label-activo-sm">Relación</label>
-                                <select name="relacion_acompanante" id="relacion_acompanante" class="form-control form-control-sm">
-                                    @if (\Carbon\Carbon::parse($paciente->fecha_nac)->age < 18)
-                                        <option value="0">Seleccione</option>
-                                        <option value="1">Madre</option>
-                                        <option value="2">Padre</option>
-                                    @else
-                                        <option value="99" checked>Paciente</option>
-                                    @endif
-                                </select>
-                            </div>
-                            <div class="form-group col-md-3" id="">
-                                <label class="floating-label-activo-sm">Forme de envio</label>
-                                <select name="tipo_medio_acompanante" id="tipo_medio_acompanante" class="form-control form-control-sm">
-                                    <option value="1">SMS</option>
-                                    <option value="2">EMAIL</option>
-
-                                </select>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="floating-label-activo-sm">Teléfono</label>
-                                @if (\Carbon\Carbon::parse($paciente->fecha_nac)->age < 18)
-                                    <input type="text" class="form-control form-control-sm" name="tel_acompanante" id="tel_acompanante">
-                                @else
-                                    <input type="text" class="form-control form-control-sm" name="tel_acompanante" id="tel_acompanante" value="{{ $paciente->telefono_uno }}" readonly>
-                                @endif
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="floating-label-activo-sm">Email</label>
-                                @if (\Carbon\Carbon::parse($paciente->fecha_nac)->age < 18)
-                                    <input type="text" class="form-control form-control-sm" name="email_acompanante" id="email_acompanante">
-                                @else
-                                    <input type="text" class="form-control form-control-sm" name="email_acompanante" id="email_acompanante" value="{{ $paciente->email }}" readonly>
-                                @endif
-
-                            </div>
-                            <div class="form-group col-md-3">
-                                <button type="button" class="btn btn-success btn-block btn-sm" onclick="solicitar_autorizacion();"><i class="fa fa-plus"></i> Autoriza el examen</button>
-                                genera codigo de aceptación al teléfono del responsable
-                            </div>
-
-                            {{--  <div class="form-group col-md-6">
-                                <label class="floating-label-activo-sm">Nombre del acompañante</label>
-                                <input type="text" class="form-control form-control-sm" name="nombre_acompanante" id="nombre_acompanante" value="{!! old('nombre_acompanante') !!}">
-                            </div>
-                            <div class="form-group col-md-6" id="form_0">
-                                <label class="floating-label-activo-sm">Relaci&oacute;n</label>
-                                <input type="text" class="form-control form-control-sm" name="relacion_acompanante" id="relacion_acompanante" value="{!! old('relacion_acompanante') !!}">
-                            </div>  --}}
-                        </div>
-
-                    </div>
-                </div>
-            </div>-->
-
-
-            <!-- INFO ANTECEDENTE CONFIDENCIAL
-            <div class="card-body border-top info_confidencial_sos collapse div_data show" id="info_confidencial_sos_1" style="display: none;">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group row">
-                            <label class="col-sm-6 col-form-label font-weight-bolder">¿Acepta Romper Clave en caso de Urgencia?</label>
-                            <div class="col-sm-5 col-form-label">
-                                @if ($ant_confidenciales != null && $ant_confidenciales->rompeclave == 1)
-                                    SI
-                                @else
-                                    NO
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                    <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group row">
-                            <label class="col-sm-6 col-form-label font-weight-bolder">Antecedentes Médicos</label>
-                            <div class="col-sm-5 my-auto ml-2">
-                                @if ($ant_confidenciales != null && $ant_confidenciales->antecedentes != '')
-                                    {{ trim($ant_confidenciales->antecedentes) }}
-                                @endif
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-6 col-form-label font-weight-bolder">Otros Antecedentes</label>
-                            <div class="col-sm-5 my-auto ml-2">
-                                @if ($ant_confidenciales != null && $ant_confidenciales->otros_antecedentes != '')
-                                    {{ trim($ant_confidenciales->otros_antecedentes) }}
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="modal-body" id="body-modal-inputs">
 
             </div>
-            Cierre: confidencial-->
-            <!--(Editar) confidencial
-            <div class="card-body border-top info_confidencial_sos collapse "id="info_confidencial_sos_2">
-                <div class="row">
-
-                        <div class="col-sm-6" >
-                            <label class="font-weight-bolder">¿Autoriza  romper clave en caso de urgencia?</label>
-                        </div>
-                        <div class="col-sm-5 my-auto">
-                            @if ($ant_confidenciales != null && $ant_confidenciales->rompeclave == 1)
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_rompe_clave" id="edit_rompe_clave" value="1" checked>
-                                    <label class="form-check-label" for="rompe_clave_si">Si</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_rompe_clave" id="edit_rompe_clave" value="0">
-                                    <label class="form-check-label" for="rompe_clave_no">No</label>
-                                </div>
-                            @else
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_rompe_clave" id="edit_rompe_clave" value="1">
-                                    <label class="form-check-label" for="rompe_clave_si">Si</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_rompe_clave" id="edit_rompe_clave" value="0" checked>
-                                    <label class="form-check-label" for="rompe_clave_no">No</label>
-                                </div>
-                            @endif
-                        </div>
-
-                </div>
-
-
-                <div class="row">
-                        <div class="col-sm-12">
-                            <div class="col-sm-12 mt-2">
-                                <div class="form-group fill">
-                                        <label id="" name="" class="floating-label-activo-sm">Antecedentes Médicos Confidenciales </label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="antecedentes_medicos_conf" id="antecedentes_medicos_conf">@if ($ant_confidenciales != null && $ant_confidenciales->antecedentes != ''){{ trim($ant_confidenciales->antecedentes) }}@endif</textarea>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-                <div class="row">
-                        <div class="col-sm-12">
-                            <div class="col-sm-12 mt-2">
-                                <div class="form-group fill">
-                                        <label id="" name="" class="floating-label-activo-sm">Otros Antecedentes Personales</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="otros_antecedentes_medicos_conf" id="otros_antecedentes_medicos_conf">@if ($ant_confidenciales != null && $ant_confidenciales->otros_antecedentes != ''){{ trim($ant_confidenciales->otros_antecedentes) }}@endif</textarea>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-                <div class="row">
-                        <div class="col-sm-12 d-flex justify-content-end">
-                            <div data-toggle="collapse" data-target=".info_confidencial_sos" aria-expanded="false" aria-controls="info_confidencial_sos_1 info_confidencial_sos_2" class="btn btn-danger mr-2">Cancelar</div>
-                            <button type="button" onclick="editar_ant_confidencial_paciente({{ $paciente->id }});" class="btn btn-primary">Guardar Cambios</button>
-                        </div>
-                </div>
+            <div class="modal-footer">
+                <input type="hidden" value="" id="id-antecedente-m">
+                <input type="hidden" value="" id="tipo-antecedente-m">
+                <input type="hidden" value="{{$userData['rut']}}" id="user-rut">
+                <input type="hidden" value="{{$userData['profesion']}}" id="user-profesion">
+                <input type="hidden" value="{{$userData['nombre']}} {{$userData['apellido_uno']}} {{$userData['apellido_dos']}}" id="user-profesional">
+                <input type="hidden" value="{{Auth::user()->id}}" id="user-id">
+                <button type="button" class="btn btn-sm btn-primary-light-c" id="agregar-antecedente" onclick="agregarAntecedente()"><i class="feather icon-save"></i> Agregar antecedentes</button>
+                <button type="button" class="btn btn-sm btn-primary-light-c" id="modificar-antecedente" onclick="modificarAntecedente()"><i class="feather icon-edit"></i> Modificar antecedentes</button>
+                <button type="button" class="btn btn-sm btn-danger-light-c" onclick="verModalAgregar('hide')"><i class="feather icon-x"></i> Cerrar</button>
             </div>
-            cierre(Editar) confidencial
+            </div>
         </div>
-
     </div>
-</div>-->
 
-@include('atencion_medica.formularios.modal_atencion_general.modal_autorizacion')
+    <div class="modal" id="modal-confirmar" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Desactivar Antecedente</h5>
+                    <button type="button" class="close" onclick="verModalDesactivar('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0">Desea desactivar el antecedente ingresado.</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" value="" id="id-antecedente-m-desactivar">
+                    <input type="hidden" value="" id="tipo-antecedente-m-desactivar">
+                    <button type="button" class="btn  btn-danger mr-0" onclick="eliminarAntecedente()">Desactivar</button>
+                    <button type="button" class="btn  btn-primary" onclick="verModalDesactivar('hide')">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- @include('atencion_medica.formularios.modal_atencion_general.modal_autorizacion') --}}
 
 <script>
     setTimeout(() => {
-        for (let index = 1; index <= 7; index++)
+        for (let index = 1; index <= 8; index++)
         {
             cargarRegistrosAntecedentes(index);
         }

@@ -202,10 +202,17 @@ class Funciones{
         $log_users_devices->msg = json_encode($msj);
         if($tipo_id != 12)
         {
-            if($id_user_create == $id_user_recept)
+            if($tipo_id == 2 && $id_user_recept==83)
+            {
                 $log_users_devices->estado = 1;
+            }
             else
-                $log_users_devices->estado = 0;
+            {
+                if($id_user_create == $id_user_recept)
+                    $log_users_devices->estado = 1;
+                else
+                    $log_users_devices->estado = 0;
+            }
         }
         else
         {
