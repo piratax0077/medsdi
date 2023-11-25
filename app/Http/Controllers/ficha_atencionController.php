@@ -205,7 +205,7 @@ class ficha_atencionController extends Controller
 
         /* FMU CONTACTO EMERGENCIA */
         $pacientes_contacto_emergencia = PacienteContactoEmergencia::with('ContactoEmergencia')->where('id_paciente',$paciente->id)->get();
-		
+
 		/* CONTACTO EMERGENCIA */
         $pacientes_contacto_emergencia = PacienteContactoEmergencia::where('id_paciente',$paciente->id)->first();
         if(is_object($pacientes_contacto_emergencia))
@@ -238,7 +238,7 @@ class ficha_atencionController extends Controller
                 'parentezco'=>'N/A'
             );
         }
-		
+
         /** FMU ALERGIAS */
         $paciente_alergias = Antecedente::where('id_paciente', $paciente->id)->where('id_tipo_antecedente', 5)->get();
 
@@ -1294,7 +1294,7 @@ class ficha_atencionController extends Controller
                                 'cantidad' => decrypt($value_det->volumen),
                                 'cantidad_vendida' => decrypt($value_det->volumen_entregado),
                                 'comentario' => decrypt($value_det->comentario),
-                                'token_doc' => decrypt($value_det->cod_doc),
+                                'token_doc' => $value_det->cod_doc,
                                 'estado' => $value_det->estado,
                                 'created_at' => $value_det->created_at,
                                 'updated_at' => $value_det->updated_at,

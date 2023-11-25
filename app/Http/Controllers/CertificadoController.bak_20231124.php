@@ -8,7 +8,6 @@ use App\Models\FichaAtencion;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\Profesional;
-use App\Models\RecetaControl;
 use App\Models\SubTipoEspecialidad;
 use App\Models\TipoEspecialidad;
 use Illuminate\Http\Request;
@@ -217,7 +216,7 @@ class CertificadoController extends Controller
             $profesional_temp = $profesional.substr(str_shuffle($permitted_chars), 0, (6-strlen($profesional)));
             $paciente_temp = $paciente.substr(str_shuffle($permitted_chars), 0, (6-strlen($paciente)));
             $tipo_temp = $tipo.substr(str_shuffle($permitted_chars), 0, (2-strlen($tipo)));
-            $receta_temp = $receta.substr(str_shuffle($permitted_chars), 0, (6-strlen($receta)));
+            $receta_temp = $tipo.substr(str_shuffle($permitted_chars), 0, (6-strlen($receta)));
 
             $certificado = $tipo_temp.'-'.$ficha_temp.'-'.$profesional_temp.'-'.$paciente_temp.'-'.$receta_temp;
 
@@ -235,11 +234,6 @@ class CertificadoController extends Controller
         return $datos;
     }
 
-    public function validarCertificadoDocumento_r(Request $request)
-    {
-        return static::validarCertificadoDocumento($request->tkx);
-    }
-
     static public function validarCertificadoDocumento($token)
     {
         $datos = array();
@@ -254,10 +248,10 @@ class CertificadoController extends Controller
 
         if($campo_requerido)
         {
-            $token_normal = base64_decode($token);
 
-            /** token con 30 caracteres */
-            if(strlen($token_normal)==30)
+            $token_normal = base64_decode($token);
+            /** token con 23 caracteres */
+            if(strlen($token_normal)==23)
             {
                 /** divide en tres seccion */
                 $array_token = explode('-',$token_normal);
@@ -293,8 +287,7 @@ class CertificadoController extends Controller
                 $id_paciente = substr($numeros[3],0,(strlen($numeros[3])-1));
                 $id_receta = substr($numeros[4],0,(strlen($numeros[4])-1));
 
-                $datos['documento'] = $id_tipo;
-                if( !empty($id_ficha) || !empty($id_profesional) || !empty($id_paciente) || !empty($id_receta) )
+                if( !empty($id_ficha) || !empty($id_profesional) || !empty($id_paciente) )
                 {
                     /** carga de datos de carda elemento */
                     $ficha = FichaAtencion::select('id', 'id_lugar_atencion', 'motivo', 'hipotesis_diagnostico', 'id_paciente', 'id_profesional')->find($id_ficha);
@@ -353,39 +346,29 @@ class CertificadoController extends Controller
                                                 $valido = 1;
                                                 $retorno_valido = 1;
 
-                                                $request_temp = new Request(array(
-                                                    'id_ficha' => $id_ficha,
-                                                    'id' => $id_receta,
-                                                ));
-
-                                                $detalles_receta_temp = (object)RecomendacionController::verRecomendaciones($request_temp);
-
-                                                if($detalles_receta_temp->estado == 1)
+                                                $filtro_receta = array();
+                                                $filtro_receta[] = array('id_ficha', $id_ficha);
+                                                $detalles_receta = DetalleReceta::where($filtro_receta)->get();
+                                                if($detalles_receta)
                                                 {
-                                                    $detalles_receta = $detalles_receta_temp->registros;
-                                                    if($detalles_receta)
-                                                    {
-                                                        foreach ($detalles_receta as $key_detalle => $value_detalle)
-                                                        {
-                                                            if(static::validarTokenDocumento($token, $value_detalle['token_doc']) == false)
-                                                            {
-                                                                $valido = 0;
-                                                                $retorno_valido = 0;
-                                                            }
-                                                        }
+                                                    foreach ($detalles_receta as $key_detalle => $value_detalle) {
 
-                                                        if($valido)
+                                                        if(static::validarTokenDocumento($token, $value_detalle->receta_token) == false)
                                                         {
-                                                            $datos['registros']['detalle'] = $detalles_receta;
+                                                            $valido = 0;
+                                                            $retorno_valido = 0;
                                                         }
                                                     }
-                                                    else
+                                                    if($valido)
                                                     {
-                                                        $valido = 0;
-                                                        $retorno_valido = 0;
+                                                        $datos['registros']['detalle'] = $detalles_receta;
                                                     }
                                                 }
-
+                                                else
+                                                {
+                                                    $valido = 0;
+                                                    $retorno_valido = 0;
+                                                }
                                                 break;
                                             // 2. RECETA ESPECIALIDADES
                                             case '2':
@@ -459,10 +442,10 @@ class CertificadoController extends Controller
                                         {
                                             /** retorno */
                                             $datos['estado'] = 1;
-                                            // $datos['token'] = $token;
-                                            // $datos['registros']['ficha'] = $ficha;
-                                            // $datos['registros']['profesional'] = $profesional;
-                                            // $datos['registros']['paciente'] = $paciente;
+                                            $datos['token'] = $token;
+                                            $datos['registros']['ficha'] = $ficha;
+                                            $datos['registros']['profesional'] = $profesional;
+                                            $datos['registros']['paciente'] = $paciente;
                                         }
                                         else
                                         {
@@ -536,7 +519,7 @@ class CertificadoController extends Controller
         $token_normal1 = base64_decode($token1);
         $token_normal2 = base64_decode($token2);
         /** token con 23 caracteres */
-        if(strlen($token_normal1)==30 && strlen($token_normal2)==30)
+        if(strlen($token_normal1)==23 && strlen($token_normal2)==23)
         {
             /** token 1 */
             $array_token1 = explode('-',$token_normal1);
@@ -570,7 +553,6 @@ class CertificadoController extends Controller
             $id_ficha1 = substr($numeros1[1],0,(strlen($numeros1[1])-1));
             $id_profesional1 = substr($numeros1[2],0,(strlen($numeros1[2])-1));
             $id_paciente1 = substr($numeros1[3],0,(strlen($numeros1[3])-1));
-            $id_receta1 = substr($numeros1[4],0,(strlen($numeros1[4])-1));
 
             /** token 2 */
             $array_token2 = explode('-',$token_normal2);
@@ -604,9 +586,8 @@ class CertificadoController extends Controller
             $id_ficha2 = substr($numeros2[1],0,(strlen($numeros2[1])-1));
             $id_profesional2 = substr($numeros2[2],0,(strlen($numeros2[2])-1));
             $id_paciente2 = substr($numeros2[3],0,(strlen($numeros2[3])-1));
-            $id_receta2 = substr($numeros2[4],0,(strlen($numeros2[4])-1));
 
-            if( $id_tipo1 == $id_tipo2 && $id_ficha1 == $id_ficha2 && $id_profesional1 == $id_profesional2 && $id_paciente1 == $id_paciente2 && $id_receta1 == $id_receta2 )
+            if( $id_tipo1 == $id_tipo2 && $id_ficha1 == $id_ficha2 && $id_profesional1 == $id_profesional2 && $id_paciente1 == $id_paciente2 )
                 $return = 1;
             else
                 $return = 0;
@@ -655,274 +636,11 @@ class CertificadoController extends Controller
         {
             // $retorno = route('validacion_documento_').'?tkx='.$token;
             $retorno = action([CertificadoController::class, 'validarDocumento'], ['tkx' => $token]);
-            // $retorno = action([CertificadoController::class, 'validarCertificadoDocumento_r'], ['tkx' => $token]);
         }
         else
         {
             $retorno = env('APP_URL');
         }
         return $retorno;
-    }
-
-    public function validarDocumento(Request $request)
-    {
-        $valido = 1;
-        $validar = '';
-        $card_informacion = '';
-        if(empty($request->tkx))
-        {
-            $mensaje = 'Identificador de Documento Faltante.';
-            $valido = 0;
-        }
-        else
-        {
-            $validar = (object)static::validarCertificadoDocumento($request->tkx);
-
-            /** DOCUMENTO VALIDO */
-            if($validar->estado == 1)
-            {
-                $mensaje = 'Documento Valido.';
-                switch ($validar->documento) {
-                    // 1. RECETA
-                    case '1':
-
-                        $info = $validar->registros['detalle'][0];
-                        $cantidad_item = count($info['detalle']);
-
-                        $paciente = Paciente::select('nombres', 'apellido_uno', 'apellido_dos')->find($info['id_paciente']);
-                        $profesional = Profesional::select('nombre', 'apellido_uno', 'apellido_dos')->find($info['id_profesional']);
-                        $tipo_control = RecetaControl::where('tipo_control', $info['id_tipo_control'])->first();
-                        $html = '';
-                        $html .= '<div class="row">';
-						$html .= '	<div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
-                        $html .= '        <div class="card" style="color: #000;">';
-                        $html .= '            <div class="card-head text-center ">';
-                        $html .= '                <h5 class="card-title">Validación QR de Documento</h5>';
-                        $html .= '            </div>';
-                        $html .= '            <div class="card-body">';
-                        $html .= '                <h4 class="card-subtitle mb-2 text-success text-center ">Valido</h4>';
-                        $html .= '                <p class="card-text text-center ">Información del documento:</p>';
-                        $html .= '                <ul style="list-style: none;">';
-                        $html .= '                    <li style="margin-bottom: 5px;">Tipo: RECETA MEDICA - <span style="font-weight: bold;">'.mb_strtoupper($tipo_control->descripcion).'</span></li>';
-                        $html .= '                    <li style="margin-bottom: 5px;">Fecha: '.date('d-m-Y', strtotime($info['created_at'])).'</li>';
-                        $html .= '                    <li style="margin-bottom: 5px;">Paciente: '.mb_strtoupper($paciente->nombres).' '.mb_strtoupper($paciente->apellido_uno).' '.mb_strtoupper($paciente->apellido_dos).'</li>';
-                        $html .= '                    <li style="margin-bottom: 5px;">Profesional: '.mb_strtoupper($profesional->nombre).' '.mb_strtoupper($profesional->apellido_uno).' '.mb_strtoupper($profesional->apellido_dos).'</li>';
-                        $html .= '                    <li style="margin-bottom: 5px;">Cantidad Item: '.$cantidad_item.' </li>';
-                        // http://medichile_sistema.test/pdf_receta/receta_medicamentos?id_ficha_atencion=447&id_receta=128
-                        $url_receta = route('pdf.receta_medicamentos', ['id_ficha_atencion' => $info['id_ficha_atencion'], 'id_receta'=>$info['id'] ]);
-                        $html .= '                    <li style="margin-bottom: 5px;"><a href="'.$url_receta.'" target="_blank" class="btn btn-success btn-sm" onclick="">Ver Documento</a></li>';
-                        $html .= '                </ul>';
-                        $html .= '            </div>';
-                        $html .= '        </div>';
-                        $html .= '    </div>';
-                        $html .= '</div>';
-
-                        $card_informacion = $html;
-
-                        break;
-                    // 2. RECETA ESPECIALIDADES
-                    case '2':
-                        break;
-                    // 3. EXAMEN
-                    case '3':
-                        break;
-                    // 4. EXAMEN ESPECIALIDADES
-                    case '4':
-                        break;
-                    // 5. CONSENTIMIENTOS INFORMADOS
-                    case '5':
-                        break;
-                    // 6. INFORME DE EXAMENES
-                    case '6':
-                        break;
-                    // 7. CERTIFICADO DE REPOSO
-                    case '7':
-                        break;
-                    // 8. INTER CONSULTA
-                    case '8':
-                        break;
-                    // 9. RESPUESTA INTERCONSULTA
-                    case '9':
-                        break;
-                    // 10. INFORM MEDICO
-                    case '10':
-                        break;
-                    // 11. CONSTANCIA GES
-                    case '11':
-                        break;
-                    // 12. REMBOLSO GASTOS MEDICOS
-                    case '12':
-                        break;
-                    // 13. LICENCIA
-                    case '13':
-                        break;
-                    // 14. FICHA MEDICA UNICA
-                    case '14':
-                        break;
-                    // 15. ORDEN HOSPITALIZACION
-                    case '15':
-                        break;
-                    // 17. SOLICITUD DE PABELLON
-                    case '17':
-                        break;
-                    // 18. EPICRISIS
-                    case '18':
-                        break;
-                    // 19. PROTOCOLO OPERATORIO
-                    case '19':
-                        break;
-                    // 20. CARNE DE ALTA
-                    case '20':
-                        break;
-                    // 21. CARNE DE VACUNA
-                    case '21':
-                        break;
-                    // 22. USO INTERNO
-                    case '22':
-                        break;
-                    // 23. CARNET VACUNAS
-                    case '23':
-                        break;
-                    default:
-                        # code...
-                        break;
-                }
-            }
-            /** DOCUMENTO NO VALIDO */
-            else
-            {
-                $mensaje = 'Documento NO Valido.';
-                /** CON TIPO DE DOCUMENTO */
-                if(isset($validar->documento))
-                {
-                    switch ($validar->documento) {
-                        // 1. RECETA
-                        case '1':
-                            $html = '';
-                            $html .= '<div class="row">';
-                            $html .= '	<div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
-                            $html .= '        <div class="card" style="color: #000;">';
-                            $html .= '            <div class="card-head text-center ">';
-                            $html .= '                <h5 class="card-title">Validación QR de Documento</h5>';
-                            $html .= '            </div>';
-                            $html .= '            <div class="card-body">';
-                            $html .= '                <h4 class="card-subtitle mb-2 text-danger text-center ">NO Valido</h4>';
-                            $html .= '            </div>';
-                            $html .= '        </div>';
-                            $html .= '    </div>';
-                            $html .= '</div>';
-
-                            $card_informacion = $html;
-
-                            break;
-                        // 2. RECETA ESPECIALIDADES
-                        case '2':
-                            break;
-                        // 3. EXAMEN
-                        case '3':
-                            break;
-                        // 4. EXAMEN ESPECIALIDADES
-                        case '4':
-                            break;
-                        // 5. CONSENTIMIENTOS INFORMADOS
-                        case '5':
-                            break;
-                        // 6. INFORME DE EXAMENES
-                        case '6':
-                            break;
-                        // 7. CERTIFICADO DE REPOSO
-                        case '7':
-                            break;
-                        // 8. INTER CONSULTA
-                        case '8':
-                            break;
-                        // 9. RESPUESTA INTERCONSULTA
-                        case '9':
-                            break;
-                        // 10. INFORM MEDICO
-                        case '10':
-                            break;
-                        // 11. CONSTANCIA GES
-                        case '11':
-                            break;
-                        // 12. REMBOLSO GASTOS MEDICOS
-                        case '12':
-                            break;
-                        // 13. LICENCIA
-                        case '13':
-                            break;
-                        // 14. FICHA MEDICA UNICA
-                        case '14':
-                            break;
-                        // 15. ORDEN HOSPITALIZACION
-                        case '15':
-                            break;
-                        // 17. SOLICITUD DE PABELLON
-                        case '17':
-                            break;
-                        // 18. EPICRISIS
-                        case '18':
-                            break;
-                        // 19. PROTOCOLO OPERATORIO
-                        case '19':
-                            break;
-                        // 20. CARNE DE ALTA
-                        case '20':
-                            break;
-                        // 21. CARNE DE VACUNA
-                        case '21':
-                            break;
-                        // 22. USO INTERNO
-                        case '22':
-                            break;
-                        // 23. CARNET VACUNAS
-                        case '23':
-                            break;
-                        default:
-                            $html = '';
-                            $html .= '<div class="row">';
-                            $html .= '	<div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
-                            $html .= '        <div class="card" style="color: #000;">';
-                            $html .= '            <div class="card-head text-center ">';
-                            $html .= '                <h5 class="card-title">Validación QR de Documento</h5>';
-                            $html .= '            </div>';
-                            $html .= '            <div class="card-body">';
-                            $html .= '                <h4 class="card-subtitle mb-2 text-danger text-center ">Identificador No Valido</h4>';
-                            $html .= '            </div>';
-                            $html .= '        </div>';
-                            $html .= '    </div>';
-                            $html .= '</div>';
-
-                            $card_informacion = $html;
-                            break;
-                    }
-                }
-                /** SIN TIPO DE DOCUMENTO */
-                else
-                {
-                    $html = '';
-                    $html .= '<div class="row">';
-                    $html .= '	<div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
-                    $html .= '        <div class="card" style="color: #000;">';
-                    $html .= '            <div class="card-head text-center ">';
-                    $html .= '                <h5 class="card-title">Validación QR de Documento</h5>';
-                    $html .= '            </div>';
-                    $html .= '            <div class="card-body">';
-                    $html .= '                <h4 class="card-subtitle mb-2 text-danger text-center ">Identificador No Valido</h4>';
-                    $html .= '            </div>';
-                    $html .= '        </div>';
-                    $html .= '    </div>';
-                    $html .= '</div>';
-
-                    $card_informacion = $html;
-                }
-            }
-        }
-
-        return view('documento_validacion.validacion')->with([
-            'validacion' => $validar,
-            'mensaje' => $mensaje,
-            'card_informacion' => $card_informacion,
-        ]);
     }
 }

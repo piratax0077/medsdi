@@ -112,6 +112,13 @@ class RecomendacionController extends Controller
                 $datos['estado'] = 1;
                 $datos['msj'] = 'Exito';
                 $datos['last_id'] = $registro->id;
+
+                $token_doc_temp = (object)CertificadoController::certificadoDocumento((int)$atencion, (int)$aficionado, (int)$activo, 1, $registro->id);
+                $token_doc = $token_doc_temp->certificado;
+
+                $registro_2 = Recomendacion::find($registro->id);
+                $registro_2->cod_doc = $token_doc;
+                $registro_2->save();
             }
             else
             {
@@ -273,6 +280,9 @@ class RecomendacionController extends Controller
 
         if($valido)
         {
+
+            $registro_recomendacion = Recomendacion::find($id_recomendacion);
+
             $registro = new RecomendacionDetalle();
             $registro->id_recomendacion = $id_recomendacion; //id_receta
             $registro->control = encrypt($control); //id_tipo_control
@@ -300,7 +310,7 @@ class RecomendacionController extends Controller
             $registro->volumen = encrypt($volumen); //cantidad
             $registro->volumen_entregado = encrypt($volumen_entregado); //cantidad_vendida
             $registro->comentario = encrypt($comentario); //comentario
-            $registro->cod_doc = encrypt($cod_doc); //token_doc
+            $registro->cod_doc = $registro_recomendacion->cod_doc; //token_doc
 
             if($registro->save())
             {
@@ -523,13 +533,15 @@ class RecomendacionController extends Controller
     }
 
     /** CARGAR RECETAS */
-    public function verRecomendaciones(Request $request)
+    static public function verRecomendaciones(Request $request)
     {
         $datos = array();
         $error = array();
         $valido = 1;
         $filtros = array();
 
+        if(!empty($request->id))
+            $filtros[] = array('id', $request->id);
         if(!empty($request->id_ficha))
             $filtros[] = array('atencion', $request->id_ficha);
         if(!empty($request->id_ingreso_paciente))
@@ -581,7 +593,7 @@ class RecomendacionController extends Controller
                             'cantidad' => decrypt($value_det->volumen),
                             'cantidad_vendida' => decrypt($value_det->volumen_entregado),
                             'comentario' => decrypt($value_det->comentario),
-                            'token_doc' => decrypt($value_det->cod_doc),
+                            'token_doc' => $value_det->cod_doc,
                             'estado' => $value_det->estado,
                             'created_at' => $value_det->created_at,
                             'updated_at' => $value_det->updated_at,
@@ -670,7 +682,7 @@ class RecomendacionController extends Controller
             {
                 foreach ($recomendacion as $key => $value)
                 {
-                    $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 1);
+                    $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 1, $value->id);
                     if($temp_token['estado'] == 1)
                     {
                         $token_receta = $temp_token['certificado'];
@@ -703,7 +715,8 @@ class RecomendacionController extends Controller
                     $recomendacion[$key]['qr_prof'] = (object)array('profesional' => $qr_profesional);
 
 
-                    $qr_id = GeneradorQrController::generar(encrypt($ficha_atencion->id));
+                    // $qr_id = GeneradorQrController::generar(encrypt($ficha_atencion->id));
+                    $qr_id = GeneradorQrController::generar(encrypt($value->id));
                     $recomendacion[$key]['qr_id'] = $qr_id;
 
                     $recomendacion[$key]['ficha_atencion'] = $ficha_atencion;
@@ -738,7 +751,7 @@ class RecomendacionController extends Controller
                                 'cantidad' => decrypt($value_det->volumen),
                                 'cantidad_vendida' => decrypt($value_det->volumen_entregado),
                                 'comentario' => decrypt($value_det->comentario),
-                                'token_doc' => decrypt($value_det->cod_doc),
+                                'token_doc' => $value_det->cod_doc,
                                 'estado' => $value_det->estado,
                             );
                         }

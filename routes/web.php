@@ -633,7 +633,7 @@ Route::group([
     Route::get('/fmu/autorizacion/soliciar', [App\Http\Controllers\FmuAprobacionController::class, 'solicitarAutorizacion'])->name('profesional.fmu.solicitar');
     Route::get('/fmu/autorizacion/validar', [App\Http\Controllers\FmuAprobacionController::class, 'validarAutorizacion'])->name('profesional.fmu.validar');
     Route::get('/fmu/autorizacion/cancelar', [App\Http\Controllers\FmuAprobacionController::class, 'cancelarAutorizacion'])->name('profesional.fmu.cancelar');
-	
+
     /** REGISTRO DE RECOMENDACION */
     Route::post('/receta/registro', [App\Http\Controllers\RecomendacionController::class, 'registroRecomendacion'])->name('profesional.receta.registro');
     Route::get('/receta/ver', [App\Http\Controllers\RecomendacionController::class, 'verRecomendaciones'])->name('profesional.receta.ver');
@@ -642,7 +642,6 @@ Route::group([
     /** RECETA DE LENTES */
     Route::post('/receta/lente/registro', [App\Http\Controllers\OftarmoRecetaLenteController::class, 'registrar'])->name('receta.oftalmo.lente.registrar');
     Route::get('/receta/lente/ver', [App\Http\Controllers\OftarmoRecetaLenteController::class, 'verRegistros'])->name('receta.oftalmo.lente.ver');
-	
 });
 
 Route::group([
@@ -1588,6 +1587,7 @@ Route::get('/qr', [App\Http\Controllers\GeneradorQrController::class, 'generar']
 
 
 Route::get('/validacion/documento', [App\Http\Controllers\CertificadoController::class, 'validarDocumento'])->name('validacion_documento_');
+Route::get('/validacion/documento2', [App\Http\Controllers\CertificadoController::class, 'validarCertificadoDocumento_r'])->name('validacion_documento_2');
 Route::get('/validacion/profesional', [App\Http\Controllers\CertificadoController::class, 'validarProfesional'])->name('validacion_profesional_');
 
 
