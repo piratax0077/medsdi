@@ -1588,7 +1588,9 @@ Route::get('/qr', [App\Http\Controllers\GeneradorQrController::class, 'generar']
 
 Route::get('/validacion/documento', [App\Http\Controllers\CertificadoController::class, 'validarDocumento'])->name('validacion_documento_');
 Route::get('/validacion/documento2', [App\Http\Controllers\CertificadoController::class, 'validarCertificadoDocumento_r'])->name('validacion_documento_2');
-Route::get('/validacion/profesional', [App\Http\Controllers\CertificadoController::class, 'validarProfesional'])->name('validacion_profesional_');
+
+Route::get('/validacion/profesional', [App\Http\Controllers\CertificadoController::class, 'validarCertificadoProfesional_r'])->name('validacion_profesional_');
+Route::get('/validacion/profesional2', [App\Http\Controllers\CertificadoController::class, 'validarProfesional'])->name('validacion_profesional_2');
 
 
 Route::get('/pdf/examen', [App\Http\Controllers\ExamenEspecialidadController::class, 'generarPDF_r'])->name('pdf.examen_especialidad');

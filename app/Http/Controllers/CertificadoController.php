@@ -6,8 +6,11 @@ use App\Models\DetalleReceta;
 use App\Models\Especialidad;
 use App\Models\FichaAtencion;
 use App\Models\LugarAtencion;
+use App\Models\OftalmoRecetaLente;
 use App\Models\Paciente;
 use App\Models\Profesional;
+use App\Models\ProfesionalFirma;
+use App\Models\RecetaAudifono;
 use App\Models\RecetaControl;
 use App\Models\SubTipoEspecialidad;
 use App\Models\TipoEspecialidad;
@@ -29,7 +32,7 @@ class CertificadoController extends Controller
         return $datos;
     }
 
-    static public function certificadoProfesional($id_profesional)
+    static public function certificadoProfesional($id_profesional, $auto, $id_tipo_documento, $id_documento)
     {
         $datos = array();
         $error = array();
@@ -38,6 +41,24 @@ class CertificadoController extends Controller
         if(empty($id_profesional))
         {
             $error['id_profesional'] = 'campo requerido';
+            $campo_requerido = 0;
+        }
+
+        if(empty($auto))
+        {
+            $error['auto'] = 'campo requerido';
+            $campo_requerido = 0;
+        }
+
+        if(empty($id_tipo_documento))
+        {
+            $error['id_tipo_documento'] = 'campo requerido';
+            $campo_requerido = 0;
+        }
+
+        if(empty($id_documento))
+        {
+            $error['id_documento'] = 'campo requerido';
             $campo_requerido = 0;
         }
 
@@ -51,11 +72,18 @@ class CertificadoController extends Controller
                 $id = $profesional->id;
 
                 /** cantidad de caracteres en id */
-                $cantidad = strlen($id);
+                // $cantidad = strlen($id);
 
                 /** completando a 10 caracteres */
                 $permitted_chars = '#\ABCDEFGHIJKLMNOPQRSTUVWXYZ&=';
-                $certificado = $id.rand(0,9).substr(str_shuffle($permitted_chars), 0, (9-$cantidad));
+
+                // $certificado = $id.rand(0,9).substr(str_shuffle($permitted_chars), 0, (9-$cantidad));
+                $parte_1 = $id.rand(0,9).substr(str_shuffle($permitted_chars), 0, (8-strlen($id)));
+                $parte_2 = $id_tipo_documento.rand(0,9).substr(str_shuffle($permitted_chars), 0, (8-strlen($id_tipo_documento)));
+                $parte_3 = $id_documento.rand(0,9).substr(str_shuffle($permitted_chars), 0, (8-strlen($id_documento)));
+                // $parte_4 = $auto.substr(str_shuffle($permitted_chars), 0, (8-strlen($auto)));
+                $parte_4 = $auto;
+                $certificado = $parte_1.'-'.$parte_2.'-'.$parte_3.'-'.$parte_4;
 
                 $datos['estado'] = 1;
                 $datos['certificado'] = base64_encode($certificado);
@@ -75,6 +103,11 @@ class CertificadoController extends Controller
         return $datos;
     }
 
+    static public function validarCertificadoProfesional_r(Request $request)
+    {
+        return static::validarCertificadoProfesional($request->tkx);
+    }
+
     static public function validarCertificadoProfesional($token)
     {
         $datos = array();
@@ -90,30 +123,52 @@ class CertificadoController extends Controller
         if($campo_requerido)
         {
             $token_normal = base64_decode($token);
-            if(strlen($token_normal)==10)
-            {
-                $array_token = str_split($token_normal);
-                $numeros = '';
-                $letras = '';
+            $array_token = explode('-',$token_normal);
 
-                foreach($array_token as $value)
+            // $datos['array_token'] = $array_token;
+
+            if( strlen($array_token[0]) == 9 && strlen($array_token[1]) == 9 && strlen($array_token[2]) == 9 )
+            {
+                $numeros = array();
+                $letras = array();
+
+                foreach($array_token as $key_elementos => $value_elementos)
                 {
-                    if(is_numeric($value))
+                    $array_value_elementos = str_split($value_elementos);
+
+                    foreach($array_value_elementos as $value)
                     {
-                        $numeros .= $value;
-                    }
-                    else
-                    {
-                        $letras .= $value;
+                        if(is_numeric($value))
+                        {
+                            if(isset($numeros[$key_elementos]))
+                                $numeros[$key_elementos] = $numeros[$key_elementos].$value;
+                            else
+                                $numeros[$key_elementos] = $value;
+                        }
+                        else
+                        {
+                            if(isset($letras[$key_elementos]))
+                                $letras[$key_elementos] = $letras[$key_elementos].$value;
+                            else
+                                $letras[$key_elementos] = $value;
+                        }
                     }
                 }
 
-                $id_valido = substr($numeros,0,(strlen($numeros)-1));
+                $id_profesional = substr($numeros[0],0,(strlen($numeros[0])-1));
+                $id_tipo_documento = substr($numeros[1],0,(strlen($numeros[1])-1));
+                $id_documento = substr($numeros[2],0,(strlen($numeros[2])-1));
+                $auto = $array_token[3];
 
-                if( !empty($id_valido) )
+                // $datos['id_profesional'] = $id_profesional;
+                $datos['documento'] = $id_tipo_documento;
+                // $datos['id_documento'] = $id_documento;
+                // $datos['auto'] = $auto;
+
+                if(  !empty($id_profesional) || !empty($id_tipo_documento) || !empty($id_documento) || !empty($auto) )
                 {
 
-                    $profesional = Profesional::select('id', 'nombre', 'apellido_uno', 'apellido_dos','rut','email', 'certificado', 'numero_certificado', 'id_especialidad', 'id_tipo_especialidad', 'id_sub_tipo_especialidad')->find($id_valido);
+                    $profesional = Profesional::select('id', 'nombre', 'apellido_uno', 'apellido_dos','rut','email', 'certificado', 'numero_certificado', 'id_especialidad', 'id_tipo_especialidad', 'id_sub_tipo_especialidad')->find($id_profesional);
 
                     if($profesional)
                     {
@@ -136,31 +191,196 @@ class CertificadoController extends Controller
                         unset($profesional->id );
                         unset($profesional->id_especialidad );
                         unset($profesional->id_tipo_especialidad );
-                        unset($profesional->id_sub_tipo_especialidad );
+                        unset($profesional->id_tipo_especialidad );
 
-                        $datos['estado'] = 1;
-                        $datos['token'] = $token;
-                        $datos['registro'] = $profesional;
+                        unset($profesional->certificado );
+                        unset($profesional->numero_certificado );
+
+                        $datos['profesional']['estado'] = 1;
+                        // $datos['profesional']['token'] = $token;
+                        $datos['profesional']['registro'] = $profesional;
+
+                        /** VALIDAR DOCUMENTO RELACIONADO */
+                        /** buscar documento por tipo */
+
+                        $datos['inf_documento']['estado'] = 0;
+
+                        /** CARGA DE DETALLE Y/O PDF */
+                        switch ($id_tipo_documento) {
+                            // 1. RECETA
+                            case '1':
+                                $request_temp = new Request(array(
+                                    'token_auto' => $auto,
+                                    'id' => $id_documento,
+                                ));
+
+                                $detalles_receta_temp = (object)RecomendacionController::verRecomendaciones($request_temp);
+
+                                if($detalles_receta_temp->estado == 1)
+                                {
+                                    // var_dump($detalles_receta_temp->registros);
+                                    if(!empty($detalles_receta_temp->registros))
+                                    {
+                                        $detalles_receta = $detalles_receta_temp->registros[0];
+                                        if(count($detalles_receta) > 0)
+                                        {
+                                            $datos['inf_documento']['estado'] = 1;
+                                            // $datos['inf_documento']['registros'] = $detalles_receta;
+                                            $datos['inf_documento']['url'] = route('profesional.receta.pdf',[ 'id_ficha_atencion' => $detalles_receta['id_ficha_atencion'], 'id_receta' => $detalles_receta['id']]);
+                                        }
+                                        else
+                                        {
+                                            $datos['inf_documento']['estado'] = 0;
+                                            $datos['inf_documento']['msj'] = 'Receta no encontrada';
+                                        }
+                                    }
+                                    else
+                                    {
+                                        $datos['inf_documento']['estado'] = 0;
+                                        $datos['inf_documento']['msj'] = 'Receta no encontrada';
+                                    }
+                                }
+                                else
+                                {
+                                    $datos['inf_documento']['estado'] = 0;
+                                    $datos['inf_documento']['msj'] = 'Receta no encontrada';
+                                }
+
+                                break;
+                            // 2. RECETA ESPECIALIDADES - OTORINO - AUDIFONOS
+                            case '2':
+                                $filtro = array();
+                                $filtro[] = array('cod_auto' ,$auto);
+                                $filtro[] = array('id' ,$id_documento);
+                                $detalle_audifono = RecetaAudifono::where($filtro)->first();
+
+                                if($detalle_audifono)
+                                {
+                                    $datos['inf_documento']['estado'] = 1;
+                                    // $datos['inf_documento']['registros'] = $detalle_audifono;
+                                    $datos['inf_documento']['url'] = route('profesional.receta.pdf',[ 'id_ficha_atencion' => $detalle_audifono['id_ficha_atencion'], 'id_receta' => '']);
+                                }
+                                else
+                                {
+                                    $datos['inf_documento']['estado'] = 0;
+                                    $datos['inf_documento']['msj'] = 'Receta no encontrada';
+                                }
+
+                                break;
+                            // 3. EXAMEN
+                            case '3':
+                                break;
+                            // 4. EXAMEN ESPECIALIDADES
+                            case '4':
+                                break;
+                            // 5. CONSENTIMIENTOS INFORMADOS
+                            case '5':
+                                break;
+                            // 6. INFORME DE EXAMENES
+                            case '6':
+                                break;
+                            // 7. CERTIFICADO DE REPOSO
+                            case '7':
+                                break;
+                            // 8. INTER CONSULTA
+                            case '8':
+                                break;
+                            // 9. RESPUESTA INTERCONSULTA
+                            case '9':
+                                break;
+                            // 10. INFORM MEDICO
+                            case '10':
+                                break;
+                            // 11. CONSTANCIA GES
+                            case '11':
+                                break;
+                            // 12. REMBOLSO GASTOS MEDICOS
+                            case '12':
+                                break;
+                            // 13. LICENCIA
+                            case '13':
+                                break;
+                            // 14. FICHA MEDICA UNICA
+                            case '14':
+                                break;
+                            // 15. ORDEN HOSPITALIZACION
+                            case '15':
+                                break;
+                            // 17. SOLICITUD DE PABELLON
+                            case '17':
+                                break;
+                            // 18. EPICRISIS
+                            case '18':
+                                break;
+                            // 19. PROTOCOLO OPERATORIO
+                            case '19':
+                                break;
+                            // 20. CARNE DE ALTA
+                            case '20':
+                                break;
+                            // 21. CARNE DE VACUNA
+                            case '21':
+                                break;
+                            // 22. USO INTERNO
+                            case '22':
+                                break;
+                            // 23. CARNET VACUNAS
+                            case '23':
+                                break;
+                            // 24. RECETA ESPECIALIDADES - OFTALMOLOGIA - LENTES
+                            case '24':
+                                $filtro = array();
+                                $filtro[] = array('cod_auto' ,$auto);
+                                $filtro[] = array('id' ,$id_documento);
+                                $receta_lentes = OftalmoRecetaLente::where($filtro)->first();
+
+                                if($receta_lentes)
+                                {
+                                    $datos['inf_documento']['estado'] = 1;
+                                    // $datos['inf_documento']['registros'] = $receta_lentes;
+                                    $datos['inf_documento']['url'] = route('profesional.receta.pdf',[ 'id_ficha_atencion' => $receta_lentes['id_ficha_atencion'], 'id_receta' => '']);
+                                }
+                                else
+                                {
+                                    $datos['inf_documento']['estado'] = 0;
+                                    $datos['inf_documento']['msj'] = 'Receta no encontrada';
+                                }
+                                break;
+                            default:
+                                # code...
+                                break;
+                        }
+
+                        if($datos['inf_documento']['estado'] == 1 && $datos['profesional']['estado'] == 1)
+                        {
+                            $datos['estado'] = 1;
+                            $datos['msj'] = 'Firma de Profesional valida.';
+                        }
+                        else
+                        {
+                            $datos['estado'] = 0;
+                            $datos['msj'] = 'Firma de Profesional no Valida o no corresponde al docuemnto.';
+                        }
+
                     }
                     else
                     {
                         $datos['estado'] = 0;
-                        $datos['msj'] = 'Token no valido 2';
+                        $datos['msj'] = 'Token no valido 1';
                     }
                 }
                 else
                 {
                     $datos['estado'] = 0;
-                    $datos['msj'] = 'Token no valido 1';
+                    $datos['msj'] = 'Token no valido 2';
                 }
+
             }
             else
             {
                 $datos['estado'] = 0;
                 $datos['msj'] = 'Token no valido 3';
             }
-
-
         }
         else
         {
@@ -170,6 +390,350 @@ class CertificadoController extends Controller
         }
         return $datos;
     }
+
+    public function validarProfesional(Request $request)
+    {
+        $valido = 1;
+        $validar = '';
+        $card_informacion = '';
+        if(empty($request->tkx))
+        {
+            $mensaje = 'Identificador de Documento Faltante.';
+            $valido = 0;
+        }
+        else
+        {
+            $validar = (object)static::validarCertificadoProfesional($request->tkx);
+
+            // echo json_encode($validar);
+
+            /** DOCUMENTO VALIDO */
+            if($validar->estado == 1)
+            {
+                $mensaje = 'Documento Valido.';
+                switch ($validar->documento) {
+                    // 1. RECETA
+                    case '1':
+
+                        $profesional = (object)$validar->profesional;
+                        $inf_documento = (object)$validar->inf_documento;
+
+                        $html = '';
+                        $html .= '<div class="row">';
+						$html .= '	<div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
+                        $html .= '        <div class="card" style="color: #000;">';
+                        $html .= '            <div class="card-head text-center ">';
+                        $html .= '                <h5 class="card-title">Validación QR de Firma</h5>';
+                        $html .= '            </div>';
+                        $html .= '            <div class="card-body">';
+                        $html .= '                <h4 class="card-subtitle mb-2 text-success text-center ">Valido</h4>';
+                        $html .= '                <p class="card-text text-center ">Información de Firma:</p>';
+                        $html .= '                <ul style="list-style: none;">';
+                        $html .= '                    <li style="margin-bottom: 5px;">Tipo: RECETA MEDICA </span></li>';
+                        $html .= '                    <li style="margin-bottom: 5px;">Profesional: '.mb_strtoupper($profesional->registro->nombre).' '.mb_strtoupper($profesional->registro->apellido_uno).' '.mb_strtoupper($profesional->registro->apellido_dos).'</li>';
+                        $html .= '                    <li style="margin-bottom: 5px;"><a href="'.$inf_documento->url.'" target="_blank" class="btn btn-success btn-sm" onclick="">Ver Documento</a></li>';
+                        $html .= '                </ul>';
+                        $html .= '            </div>';
+                        $html .= '        </div>';
+                        $html .= '    </div>';
+                        $html .= '</div>';
+
+                        $card_informacion = $html;
+
+                        break;
+                    // 2. RECETA ESPECIALIDADES - OTORINO - AUDIFONOS
+                    case '2':
+                        $profesional = (object)$validar->profesional;
+                        $inf_documento = (object)$validar->inf_documento;
+
+                        $html = '';
+                        $html .= '<div class="row">';
+						$html .= '	<div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
+                        $html .= '        <div class="card" style="color: #000;">';
+                        $html .= '            <div class="card-head text-center ">';
+                        $html .= '                <h5 class="card-title">Validación QR de Firma</h5>';
+                        $html .= '            </div>';
+                        $html .= '            <div class="card-body">';
+                        $html .= '                <h4 class="card-subtitle mb-2 text-success text-center ">Valido</h4>';
+                        $html .= '                <p class="card-text text-center ">Información de Firma:</p>';
+                        $html .= '                <ul style="list-style: none;">';
+                        $html .= '                    <li style="margin-bottom: 5px;">Tipo: RECETA MEDICA </span></li>';
+                        $html .= '                    <li style="margin-bottom: 5px;">Profesional: '.mb_strtoupper($profesional->registro->nombre).' '.mb_strtoupper($profesional->registro->apellido_uno).' '.mb_strtoupper($profesional->registro->apellido_dos).'</li>';
+                        $html .= '                    <li style="margin-bottom: 5px;"><a href="'.$inf_documento->url.'" target="_blank" class="btn btn-success btn-sm" onclick="">Ver Documento</a></li>';
+                        $html .= '                </ul>';
+                        $html .= '            </div>';
+                        $html .= '        </div>';
+                        $html .= '    </div>';
+                        $html .= '</div>';
+
+                        $card_informacion = $html;
+
+                        break;
+                    // 3. EXAMEN
+                    case '3':
+                        break;
+                    // 4. EXAMEN ESPECIALIDADES
+                    case '4':
+                        break;
+                    // 5. CONSENTIMIENTOS INFORMADOS
+                    case '5':
+                        break;
+                    // 6. INFORME DE EXAMENES
+                    case '6':
+                        break;
+                    // 7. CERTIFICADO DE REPOSO
+                    case '7':
+                        break;
+                    // 8. INTER CONSULTA
+                    case '8':
+                        break;
+                    // 9. RESPUESTA INTERCONSULTA
+                    case '9':
+                        break;
+                    // 10. INFORM MEDICO
+                    case '10':
+                        break;
+                    // 11. CONSTANCIA GES
+                    case '11':
+                        break;
+                    // 12. REMBOLSO GASTOS MEDICOS
+                    case '12':
+                        break;
+                    // 13. LICENCIA
+                    case '13':
+                        break;
+                    // 14. FICHA MEDICA UNICA
+                    case '14':
+                        break;
+                    // 15. ORDEN HOSPITALIZACION
+                    case '15':
+                        break;
+                    // 17. SOLICITUD DE PABELLON
+                    case '17':
+                        break;
+                    // 18. EPICRISIS
+                    case '18':
+                        break;
+                    // 19. PROTOCOLO OPERATORIO
+                    case '19':
+                        break;
+                    // 20. CARNE DE ALTA
+                    case '20':
+                        break;
+                    // 21. CARNE DE VACUNA
+                    case '21':
+                        break;
+                    // 22. USO INTERNO
+                    case '22':
+                        break;
+                    // 23. CARNET VACUNAS
+                    case '23':
+                        break;
+                    // 24. RECETA ESPECIALIDADES - OFTALMOLOGIA - LENTES
+                    case '24':
+                        $profesional = (object)$validar->profesional;
+                        $inf_documento = (object)$validar->inf_documento;
+
+                        $html = '';
+                        $html .= '<div class="row">';
+						$html .= '	<div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
+                        $html .= '        <div class="card" style="color: #000;">';
+                        $html .= '            <div class="card-head text-center ">';
+                        $html .= '                <h5 class="card-title">Validación QR de Firma</h5>';
+                        $html .= '            </div>';
+                        $html .= '            <div class="card-body">';
+                        $html .= '                <h4 class="card-subtitle mb-2 text-success text-center ">Valido</h4>';
+                        $html .= '                <p class="card-text text-center ">Información de Firma:</p>';
+                        $html .= '                <ul style="list-style: none;">';
+                        $html .= '                    <li style="margin-bottom: 5px;">Tipo: RECETA MEDICA </span></li>';
+                        $html .= '                    <li style="margin-bottom: 5px;">Profesional: '.mb_strtoupper($profesional->registro->nombre).' '.mb_strtoupper($profesional->registro->apellido_uno).' '.mb_strtoupper($profesional->registro->apellido_dos).'</li>';
+                        $html .= '                    <li style="margin-bottom: 5px;"><a href="'.$inf_documento->url.'" target="_blank" class="btn btn-success btn-sm" onclick="">Ver Documento</a></li>';
+                        $html .= '                </ul>';
+                        $html .= '            </div>';
+                        $html .= '        </div>';
+                        $html .= '    </div>';
+                        $html .= '</div>';
+
+                        $card_informacion = $html;
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            }
+            /** DOCUMENTO NO VALIDO */
+            else
+            {
+                $mensaje = 'Documento NO Valido.';
+                /** CON TIPO DE DOCUMENTO */
+                if(isset($validar->documento))
+                {
+                    switch ($validar->documento) {
+                        // 1. RECETA
+                        case '1':
+                            $html = '';
+                            $html .= '<div class="row">';
+                            $html .= '	<div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
+                            $html .= '        <div class="card" style="color: #000;">';
+                            $html .= '            <div class="card-head text-center ">';
+                            $html .= '                <h5 class="card-title">Validación QR de Firma</h5>';
+                            $html .= '            </div>';
+                            $html .= '            <div class="card-body">';
+                            $html .= '                <h4 class="card-subtitle mb-2 text-danger text-center ">Firma No Valida para el Documento</h4>';
+                            $html .= '            </div>';
+                            $html .= '        </div>';
+                            $html .= '    </div>';
+                            $html .= '</div>';
+
+                            $card_informacion = $html;
+
+                            break;
+                        // 2. RECETA ESPECIALIDADES
+                        case '2':
+                            $html = '';
+                            $html .= '<div class="row">';
+                            $html .= '	<div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
+                            $html .= '        <div class="card" style="color: #000;">';
+                            $html .= '            <div class="card-head text-center ">';
+                            $html .= '                <h5 class="card-title">Validación QR de Firma</h5>';
+                            $html .= '            </div>';
+                            $html .= '            <div class="card-body">';
+                            $html .= '                <h4 class="card-subtitle mb-2 text-danger text-center ">Firma No Valida para el Documento</h4>';
+                            $html .= '            </div>';
+                            $html .= '        </div>';
+                            $html .= '    </div>';
+                            $html .= '</div>';
+
+                            $card_informacion = $html;
+
+                            break;
+                        // 3. EXAMEN
+                        case '3':
+                            break;
+                        // 4. EXAMEN ESPECIALIDADES
+                        case '4':
+                            break;
+                        // 5. CONSENTIMIENTOS INFORMADOS
+                        case '5':
+                            break;
+                        // 6. INFORME DE EXAMENES
+                        case '6':
+                            break;
+                        // 7. CERTIFICADO DE REPOSO
+                        case '7':
+                            break;
+                        // 8. INTER CONSULTA
+                        case '8':
+                            break;
+                        // 9. RESPUESTA INTERCONSULTA
+                        case '9':
+                            break;
+                        // 10. INFORM MEDICO
+                        case '10':
+                            break;
+                        // 11. CONSTANCIA GES
+                        case '11':
+                            break;
+                        // 12. REMBOLSO GASTOS MEDICOS
+                        case '12':
+                            break;
+                        // 13. LICENCIA
+                        case '13':
+                            break;
+                        // 14. FICHA MEDICA UNICA
+                        case '14':
+                            break;
+                        // 15. ORDEN HOSPITALIZACION
+                        case '15':
+                            break;
+                        // 17. SOLICITUD DE PABELLON
+                        case '17':
+                            break;
+                        // 18. EPICRISIS
+                        case '18':
+                            break;
+                        // 19. PROTOCOLO OPERATORIO
+                        case '19':
+                            break;
+                        // 20. CARNE DE ALTA
+                        case '20':
+                            break;
+                        // 21. CARNE DE VACUNA
+                        case '21':
+                            break;
+                        // 22. USO INTERNO
+                        case '22':
+                            break;
+                        // 23. CARNET VACUNAS
+                        case '23':
+                            break;
+                        // 24. RECETA ESPECIALIDADES - OFTALMOLOGIA - LENTES
+                        case '24':
+                            $html = '';
+                            $html .= '<div class="row">';
+                            $html .= '	<div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
+                            $html .= '        <div class="card" style="color: #000;">';
+                            $html .= '            <div class="card-head text-center ">';
+                            $html .= '                <h5 class="card-title">Validación QR de Firma</h5>';
+                            $html .= '            </div>';
+                            $html .= '            <div class="card-body">';
+                            $html .= '                <h4 class="card-subtitle mb-2 text-danger text-center ">Firma No Valida para el Documento</h4>';
+                            $html .= '            </div>';
+                            $html .= '        </div>';
+                            $html .= '    </div>';
+                            $html .= '</div>';
+
+                            $card_informacion = $html;
+
+                            break;
+                        default:
+                            $html = '';
+                            $html .= '<div class="row">';
+                            $html .= '	<div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
+                            $html .= '        <div class="card" style="color: #000;">';
+                            $html .= '            <div class="card-head text-center ">';
+                            $html .= '                <h5 class="card-title">Validación QR de Documento</h5>';
+                            $html .= '            </div>';
+                            $html .= '            <div class="card-body">';
+                            $html .= '                <h4 class="card-subtitle mb-2 text-danger text-center ">Identificador No Valido</h4>';
+                            $html .= '            </div>';
+                            $html .= '        </div>';
+                            $html .= '    </div>';
+                            $html .= '</div>';
+
+                            $card_informacion = $html;
+                            break;
+                    }
+                }
+                /** SIN TIPO DE DOCUMENTO */
+                else
+                {
+                    $html = '';
+                    $html .= '<div class="row">';
+                    $html .= '	<div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">';
+                    $html .= '        <div class="card" style="color: #000;">';
+                    $html .= '            <div class="card-head text-center ">';
+                    $html .= '                <h5 class="card-title">Validación QR de Documento</h5>';
+                    $html .= '            </div>';
+                    $html .= '            <div class="card-body">';
+                    $html .= '                <h4 class="card-subtitle mb-2 text-danger text-center ">Identificador No Valido</h4>';
+                    $html .= '            </div>';
+                    $html .= '        </div>';
+                    $html .= '    </div>';
+                    $html .= '</div>';
+
+                    $card_informacion = $html;
+                }
+            }
+        }
+
+        return view('documento_validacion.validacion_firma')->with([
+            'validacion' => $validar,
+            'mensaje' => $mensaje,
+            'card_informacion' => $card_informacion,
+        ]);
+    }
+
 
     static public function certificadoDocumento( $id_ficha, $id_profesional, $id_paciente, $tipo_documento, $id_receta = 0 )
     {
@@ -449,6 +1013,9 @@ class CertificadoController extends Controller
                                                 break;
                                             // 23. CARNET VACUNAS
                                             case '23':
+                                                break;
+                                            // 24. RECETA ESPECIALIDADES - OFTALMOLOGIA - LENTES
+                                            case '24':
                                                 break;
                                             default:
                                                 # code...
@@ -783,6 +1350,9 @@ class CertificadoController extends Controller
                     // 23. CARNET VACUNAS
                     case '23':
                         break;
+                    // 24. RECETA ESPECIALIDADES - OFTALMOLOGIA - LENTES
+                    case '24':
+                        break;
                     default:
                         # code...
                         break;
@@ -878,6 +1448,9 @@ class CertificadoController extends Controller
                         // 23. CARNET VACUNAS
                         case '23':
                             break;
+                        // 24. RECETA ESPECIALIDADES - OFTALMOLOGIA - LENTES
+                        case '24':
+                            break;
                         default:
                             $html = '';
                             $html .= '<div class="row">';
@@ -924,5 +1497,42 @@ class CertificadoController extends Controller
             'mensaje' => $mensaje,
             'card_informacion' => $card_informacion,
         ]);
+    }
+
+    static public function registroProfesionalFirma($id_profesional, $token, $id_log, $id_tipo_documento, $id_documento)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $registro = new ProfesionalFirma();
+            $registro->id_profesional = $id_profesional;
+            $registro->id_autorizacion = $token;
+            $registro->id_log = $id_log;
+            $registro->id_tipo = $id_tipo_documento;
+            $registro->id_documento = $id_documento;
+
+            if($registro->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'falla registro';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campo requerido';
+            $datos['error'] = $error;
+        }
+
+
+        return $datos;
     }
 }

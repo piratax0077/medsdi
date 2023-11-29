@@ -63,6 +63,7 @@ class OftarmoRecetaLenteController extends Controller
             $registro->r_od_dip = $request->r_od_dip;
             $registro->r_od_obs = $request->r_od_obs;
             $registro->r_obs = $request->r_obs;
+            $registro->cod_auto = session('lic_token');
             $registro->estado = 1;
 
             if($registro->save())

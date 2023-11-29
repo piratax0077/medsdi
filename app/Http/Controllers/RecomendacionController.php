@@ -119,6 +119,12 @@ class RecomendacionController extends Controller
                 $registro_2 = Recomendacion::find($registro->id);
                 $registro_2->cod_doc = $token_doc;
                 $registro_2->save();
+
+                /** REGISTRAR FIRMA PROFESIONAL */
+                $papeleria_token = session('lic_token');
+                $papeleria_log_id = session('lic_log_id');
+                $prof_firma_registro = (object)CertificadoController::registroProfesionalFirma((int)$aficionado, $papeleria_token, $papeleria_log_id, "1", $registro->id);
+
             }
             else
             {
@@ -558,6 +564,8 @@ class RecomendacionController extends Controller
             $filtros[] = array('control', $request->id_tipo_control);
         if(!empty($request->token_doc))
             $filtros[] = array('cod_doc', $request->token_doc);
+        if(!empty($request->token_auto))
+            $filtros[] = array('cod_auto', $request->token_auto);
 
         $registros = Recomendacion::where($filtros)->get();
 
@@ -698,7 +706,7 @@ class RecomendacionController extends Controller
                     }
                     $recomendacion[$key]['qr'] = (object)array('documento' => $qr_documento, 'token' =>$token_receta );
 
-                    $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+                    $temp_token = CertificadoController::certificadoProfesional($profesional->id, $value->cod_auto, 1, $value->id);
                     if($temp_token['estado'] == 1)
                     {
                         $token_profesional = $temp_token['certificado'];
@@ -707,7 +715,7 @@ class RecomendacionController extends Controller
                     }
                     else
                     {
-                        $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                        $temp_token = CertificadoController::certificadoProfesional(rand(1114,999), $value->cod_auto, 1, $value->id);
                         $token_profesional = $temp_token['certificado'];
                         $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
                         $qr_profesional = GeneradorQrController::generar($url_profesional);
@@ -780,7 +788,7 @@ class RecomendacionController extends Controller
                     }
                     $recetaAudifonos[0]['qr'] = (object)array('documento' => $qr_documento, 'token' =>$token_receta );
 
-                    $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+                    $temp_token = CertificadoController::certificadoProfesional($profesional->id, $detalleOrlAudifono->cod_auto, 2, $detalleOrlAudifono->id);
                     if($temp_token['estado'] == 1)
                     {
                         $token_profesional = $temp_token['certificado'];
@@ -789,7 +797,7 @@ class RecomendacionController extends Controller
                     }
                     else
                     {
-                        $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                        $temp_token = CertificadoController::certificadoProfesional(rand(1114,999), $detalleOrlAudifono->cod_auto, 2, $detalleOrlAudifono->id);
                         $token_profesional = $temp_token['certificado'];
                         $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
                         $qr_profesional = GeneradorQrController::generar($url_profesional);
@@ -825,11 +833,10 @@ class RecomendacionController extends Controller
 
                 /** ESPECIALIDAD OFTALMOLOGIA (LENTES) */
                 $recetaLentes = array();
-                $detalleLente = OftalmoRecetaLente::where('id_ficha_atencion', $request->id_ficha_atencion)->where('estado', 1)->get();
+                $detalleLente = OftalmoRecetaLente::where('id_ficha_atencion', $request->id_ficha_atencion)->where('estado', 1)->orderBy('id','DESC')->first();
 
                 if($detalleLente)
                 {
-
                     $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 1);
                     if($temp_token['estado'] == 1)
                     {
@@ -846,7 +853,7 @@ class RecomendacionController extends Controller
                     }
                     $recetaLentes[0]['qr'] = (object)array('documento' => $qr_documento, 'token' =>$token_receta );
 
-                    $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+                    $temp_token = CertificadoController::certificadoProfesional($profesional->id, $detalleLente->cod_auto, 24, $detalleLente->id);
                     if($temp_token['estado'] == 1)
                     {
                         $token_profesional = $temp_token['certificado'];
@@ -855,7 +862,7 @@ class RecomendacionController extends Controller
                     }
                     else
                     {
-                        $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                        $temp_token = CertificadoController::certificadoProfesional(rand(1114,999), $detalleLente->cod_auto, 24, $detalleLente->id);
                         $token_profesional = $temp_token['certificado'];
                         $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
                         $qr_profesional = GeneradorQrController::generar($url_profesional);

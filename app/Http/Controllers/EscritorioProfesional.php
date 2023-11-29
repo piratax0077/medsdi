@@ -2898,6 +2898,7 @@ class EscritorioProfesional extends Controller
         $registros->bi = $request->bi;
         $registros->especificacion_bi = $request->especificacion_bi;
         $registros->especificacion_general = $request->especificacion_general;
+        $registros->cod_auto = session('lic_token');
 
         if($registros->save())
         {

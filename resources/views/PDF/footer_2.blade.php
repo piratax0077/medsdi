@@ -22,9 +22,10 @@
                         </div>
                         <div style="line-height: 10px; font-weight: lighter; font-family: Poppins; font-size: 10px;">Firma Digital Avanzada SDI</div>
                         <div style="line-height: 10px; font-weight: bold; font-family: Poppins;">Dr. {{ Str::upper( $receta->profesional->nombre.' '.$receta->profesional->apellido_uno) }}</div>
-                        @if (isset($receta->cod_auto))
+                        <div style="line-height: 10px; font-weight: lighter; font-family: Poppins;">{{ $receta->qr_prof->profesional }}</div>
+                        {{-- @if (isset($receta->cod_auto))
                             <div style="line-height: 10px; font-weight: lighter; font-family: Poppins;">{{ $receta->cod_auto }}</div>
-                        @endif
+                        @endif --}}
                     </th>
                 </tr>
             </tbody>
