@@ -16,71 +16,67 @@
     <style>
         .btn-agenda-autorizacion {
             display: block;
-            position: fixed !important;
-            color: #fff;
-            padding: 8px;
+            width: 135px;
+            font-weight: 600;
+            font-size: 0.77rem;
+            position: fixed;
+            right: -55px;
+            top: 190px;
             text-align: center;
-            right: 0;
-            bottom: 64%;
-            z-index: 2;
-            cursor: pointer;
-            /* background-color: #1cbebe; */
+            z-index: 1000000000;
             transition: 0.3s;
-            font-size: 0.9em;
-            line-height: 12px;
-            border-radius: 10% 0 0 10%;
+            cursor: pointer;
+            transform: rotate(90deg);
+
         }
+
+
 
         .btn-agenda-autorizacion:hover {
             color: #fff;
-            padding-right: 20px;
-            /* background-color: #03a6a6; */
-            transition: 0.3s;
         }
 
         .btn-agenda-autorizacion-fmu {
-            display: block;
-            position: fixed !important;
-            color: #fff;
-            padding: 8px;
+           display: block;
+            width: 60px;
+            padding-left: 3px;
+            font-weight: 600;
+            font-size: 0.77rem;
+            position: fixed;
+            right: -18px;
+            top: 80px;
             text-align: center;
-            right: 0;
-            bottom: 56%;
-            z-index: 2;
-            cursor: pointer;
-            /* background-color: #1cbebe; */
+            z-index: 1000000000;
             transition: 0.3s;
-            font-size: 0.9em;
-            line-height: 12px;
-            border-radius: 10% 0 0 10%;
+            cursor: pointer;
+            transform: rotate(90deg) ;
         }
 
-        .btn-agenda-autorizacion-fmu:hover {
-            color: #fff;
-            padding-right: 20px;
-            /* background-color: #03a6a6; */
-            transition: 0.3s;
-        }
+      
     </style>
+  
+ 
 @endsection
 
 <!-- BOTÓN FLOTANTE AUTORIZACION (AUTORIZACION LICENCIA) -->
-<div class="bs-offset-main bs-canvas-anim">
+
     @if(!empty(session('lic_token')) && session('lic_estado') == 1)
-        <button class="btn btn-agenda-autorizacion btn-info shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-22"></i> <br>Autorización</button>
+        <button class="btn btn-agenda-autorizacion btn-info btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> AUTORIZACIÓN</button>
     @else
-        <button class="btn btn-agenda-autorizacion btn-danger shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-22"></i> <br>Autorización</button>
+        <button class="btn btn-agenda-autorizacion btn-danger btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> AUTORIZACIÓN</button>
     @endif
-</div>
+
 
 <!-- BOTÓN FLOTANTE AUTORIZACION (AUTORIZACION FMU) -->
-<div class="bs-offset-main bs-canvas-anim">
+
     @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
-        <button class="btn btn-agenda-autorizacion-fmu btn-info shadow-sm" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-lock f-22"></i> <br>FMU</button>
+        <button class="btn btn-agenda-autorizacion-fmu btn-info btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-file f-12"></i> FMU</button>
     @else
-        <button class="btn btn-agenda-autorizacion-fmu btn-danger shadow-sm" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-lock f-22"></i> <br>FMU</button>
+        <button class="btn btn-agenda-autorizacion-fmu btn-danger btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-file f-12"></i> FMU</button>
     @endif
-</div>
+
+
+
 
 <div id="modal_autorizacion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Recepcion de bonos" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -178,7 +174,7 @@
         {
             $('#modal_autorizacion').modal('show');
             $('#modal_autorizacion_imagen').html('');
-            $('#modal_autorizacion_mensaje').html('');
+            $('#modal_autorizacion_mensaje').html('');			
         }
 
         function  cerrar_autorizacion()

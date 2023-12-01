@@ -14,6 +14,7 @@ use App\Models\RecetaAudifono;
 use App\Models\RecetaControl;
 use App\Models\SubTipoEspecialidad;
 use App\Models\TipoEspecialidad;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -931,6 +932,9 @@ class CertificadoController extends Controller
                                                     {
                                                         foreach ($detalles_receta as $key_detalle => $value_detalle)
                                                         {
+                                                            // var_dump($value_detalle['id_tipo_control']);
+                                                            $control = RecetaControl::where('tipo_control', $value_detalle['id_tipo_control'])->first();
+                                                            $detalles_receta[$key_detalle]['tipo_control'] = $control;
                                                             if(static::validarTokenDocumento($token, $value_detalle['token_doc']) == false)
                                                             {
                                                                 $valido = 0;
@@ -1028,8 +1032,8 @@ class CertificadoController extends Controller
                                             $datos['estado'] = 1;
                                             // $datos['token'] = $token;
                                             // $datos['registros']['ficha'] = $ficha;
-                                            // $datos['registros']['profesional'] = $profesional;
-                                            // $datos['registros']['paciente'] = $paciente;
+                                            $datos['registros']['profesional'] = $profesional;
+                                            $datos['registros']['paciente'] = $paciente;
                                         }
                                         else
                                         {
@@ -1532,6 +1536,344 @@ class CertificadoController extends Controller
             $datos['error'] = $error;
         }
 
+
+        return $datos;
+    }
+
+    /*** validar seccion */
+
+    public function validarCertificado(Request $request)
+    {
+        $datos = array();
+        $inf_paciente = array();
+        $inf_profesional = array();
+        $inf_documento = array();
+
+        $info = (object)static::validarCertificadoDocumento($request->tkx_3);
+        if($info->estado == 1)
+        {
+            if($info->documento == 1)
+            {
+
+                if(isset($info->registros['paciente']) && !empty($info->registros['paciente']))
+                {
+                    $inf_paciente = array(
+                        'nombre' => mb_strtoupper($info->registros['paciente']['nombres']),
+                        'apellido_uno' => mb_strtoupper($info->registros['paciente']['apellido_uno']),
+                        'apellido_dos' => mb_strtoupper($info->registros['paciente']['apellido_dos']),
+                        'rut' => $info->registros['paciente']['rut'],
+                        // 'email' => $info->registros['paciente']['email'],
+                    );
+                }
+
+                if(isset($info->registros['profesional']) && !empty($info->registros['profesional']))
+                {
+                    $inf_profesional = array(
+                        'nombre' => mb_strtoupper($info->registros['profesional']['nombre']),
+                        'apellido_uno' => mb_strtoupper($info->registros['profesional']['apellido_uno']),
+                        'apellido_dos' => mb_strtoupper($info->registros['profesional']['apellido_dos']),
+                        'rut' => $info->registros['profesional']['rut'],
+                        // 'email' => $info->registros['profesional']['email'],
+                        // 'especialidad' => $info->registros['profesional']['especialidad'],
+                        // 'tipo_especialidad' => $info->registros['profesional']['tipo_especialidad'],
+                        // 'sub_tipo_especialidad' => $info->registros['profesional']['sub_tipo_especialidad'],
+                        // 'certificado' => $info->registros['profesional']['certificado'],
+                        // 'numero_certificado' => $info->registros['profesional']['numero_certificado'],
+                    );
+                }
+
+                if(isset($info->registros['detalle']) && !empty($info->registros['detalle']))
+                {
+                    if(!empty($info->registros['detalle'][0]))
+                    {
+                        $inf_documento = array(
+                            'tipo_control' => mb_strtoupper($info->registros['detalle'][0]['tipo_control']['descripcion']),
+                            'cantidad_item' => count($info->registros['detalle'][0]['detalle']),
+                            'fecha_elaboracion' => date('d-m-Y', strtotime($info->registros['detalle'][0]['created_at'])),
+                        );
+                    }
+                }
+
+                $datos['estado'] = 1;
+                $datos['paciente'] = $inf_paciente;
+                $datos['profesional'] = $inf_profesional;
+                $datos['documento'] = $inf_documento;
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'documento no valido';
+        }
+
+        return $datos;
+
+    }
+    public function validarFirmaDocumento(Request $request)
+    {
+        $datos = array();
+        $inf_paciente = array();
+        $inf_profesional = array();
+        $inf_documento = array();
+        $inf_prof_firma = array();
+
+        $info = (object)static::validarCertificadoDocumento($request->tkx_3);
+        if($info->estado == 1)
+        {
+
+            if(isset($info->registros['paciente']) && !empty($info->registros['paciente']))
+            {
+                $inf_paciente = array(
+                    'nombre' => mb_strtoupper($info->registros['paciente']['nombres']),
+                    'apellido_uno' => mb_strtoupper($info->registros['paciente']['apellido_uno']),
+                    'apellido_dos' => mb_strtoupper($info->registros['paciente']['apellido_dos']),
+                    'rut' => $info->registros['paciente']['rut'],
+                    // 'email' => $info->registros['paciente']['email'],
+                );
+            }
+
+            if(isset($info->registros['profesional']) && !empty($info->registros['profesional']))
+            {
+                $inf_profesional = array(
+                    'nombre' => mb_strtoupper($info->registros['profesional']['nombre']),
+                    'apellido_uno' => mb_strtoupper($info->registros['profesional']['apellido_uno']),
+                    'apellido_dos' => mb_strtoupper($info->registros['profesional']['apellido_dos']),
+                    'rut' => $info->registros['profesional']['rut'],
+                    // 'email' => $info->registros['profesional']['email'],
+                    // 'especialidad' => $info->registros['profesional']['especialidad'],
+                    // 'tipo_especialidad' => $info->registros['profesional']['tipo_especialidad'],
+                    // 'sub_tipo_especialidad' => $info->registros['profesional']['sub_tipo_especialidad'],
+                    // 'certificado' => $info->registros['profesional']['certificado'],
+                    // 'numero_certificado' => $info->registros['profesional']['numero_certificado'],
+                );
+            }
+
+            if(isset($info->registros['detalle']) && !empty($info->registros['detalle']))
+            {
+                if(!empty($info->registros['detalle'][0]))
+                {
+                    $filtro_prof_firma = array();
+                    $filtro_prof_firma[] = array('id_autorizacion', $info->registros['detalle'][0]['token_auto']);
+                    $filtro_prof_firma[] = array('id_tipo', $info->documento);
+                    $filtro_prof_firma[] = array('id_documento', $info->registros['detalle'][0]['id']);
+                    $prof_firma = ProfesionalFirma::where($filtro_prof_firma)->first();
+
+                    if($prof_firma)
+                    {
+                        $inf_prof_firma = array(
+                            'estado' => 1,
+                            'tipo_documento' => $prof_firma->id_tipo,
+                            'numero_documento' => $prof_firma->id_documento,
+                            'msj' => 'Firma Valida para Documento especifico.',
+                            'fecha_autorizacion' => date('d-m-Y H:i', strtotime($prof_firma->created_at)),
+                        );
+                    }
+                    else
+                    {
+                        $inf_prof_firma = array(
+                            'estado' => 0,
+                            'tipo_documento' => 0,
+                            'numero_documento' => 0,
+                            'msj' => 'Firma NO valida para Documento.',
+                            'fecha_autorizacion' => ''
+                        );
+                    }
+                    $inf_documento = array(
+                        'tipo_control' => mb_strtoupper($info->registros['detalle'][0]['tipo_control']['descripcion']),
+                        'cantidad_item' => count($info->registros['detalle'][0]['detalle']),
+                        'fecha_elaboracion' => date('d-m-Y', strtotime($info->registros['detalle'][0]['created_at'])),
+                    );
+                }
+            }
+
+            $datos['estado'] = 1;
+            $datos['paciente'] = $inf_paciente;
+            $datos['profesional'] = $inf_profesional;
+            $datos['profesional_firma'] = $inf_prof_firma;
+            $datos['documento'] = $inf_documento;
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'documento no valido';
+        }
+
+        return $datos;
+    }
+    public function validarFechaDocumento(Request $request)
+    {
+        $datos = array();
+        $inf_paciente = array();
+        $inf_profesional = array();
+        $inf_documento = array();
+        // $inf_prof_firma = array();
+
+        $info = (object)static::validarCertificadoDocumento($request->tkx_3);
+        if($info->estado == 1)
+        {
+
+            if(isset($info->registros['paciente']) && !empty($info->registros['paciente']))
+            {
+                $inf_paciente = array(
+                    'nombre' => mb_strtoupper($info->registros['paciente']['nombres']),
+                    'apellido_uno' => mb_strtoupper($info->registros['paciente']['apellido_uno']),
+                    'apellido_dos' => mb_strtoupper($info->registros['paciente']['apellido_dos']),
+                    'rut' => $info->registros['paciente']['rut'],
+                    // 'email' => $info->registros['paciente']['email'],
+                );
+            }
+
+            if(isset($info->registros['profesional']) && !empty($info->registros['profesional']))
+            {
+                $inf_profesional = array(
+                    'nombre' => mb_strtoupper($info->registros['profesional']['nombre']),
+                    'apellido_uno' => mb_strtoupper($info->registros['profesional']['apellido_uno']),
+                    'apellido_dos' => mb_strtoupper($info->registros['profesional']['apellido_dos']),
+                    'rut' => $info->registros['profesional']['rut'],
+                    // 'email' => $info->registros['profesional']['email'],
+                    // 'especialidad' => $info->registros['profesional']['especialidad'],
+                    // 'tipo_especialidad' => $info->registros['profesional']['tipo_especialidad'],
+                    // 'sub_tipo_especialidad' => $info->registros['profesional']['sub_tipo_especialidad'],
+                    // 'certificado' => $info->registros['profesional']['certificado'],
+                    // 'numero_certificado' => $info->registros['profesional']['numero_certificado'],
+                );
+            }
+
+            if(isset($info->registros['detalle']) && !empty($info->registros['detalle']))
+            {
+                if(!empty($info->registros['detalle'][0]))
+                {
+                    $fecha1= new DateTime($info->registros['detalle'][0]['created_at']);
+                    $fecha2= new DateTime(date('Y-m-d H:i:s'));
+                    $diff = $fecha1->diff($fecha2);
+
+                    $inf_documento = array(
+                        'tipo_control' => mb_strtoupper($info->registros['detalle'][0]['tipo_control']['descripcion']),
+                        'cantidad_item' => count($info->registros['detalle'][0]['detalle']),
+                        'fecha_elaboracion' => date('d-m-Y', strtotime($info->registros['detalle'][0]['created_at'])),
+                        'dias_elaborado' => $diff->days,
+                    );
+                }
+            }
+
+            $datos['estado'] = 1;
+            $datos['paciente'] = $inf_paciente;
+            $datos['profesional'] = $inf_profesional;
+            $datos['documento'] = $inf_documento;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'documento no valido';
+        }
+
+        return $datos;
+    }
+    // public function validar_estado_documento(Request $request)
+    // {
+    //     return static::validarCertificadoProfesional($request->tkx_3);
+    // }
+    public function validarPacienteDocumento(Request $request)
+    {
+        $datos = array();
+        $inf_paciente = array();
+        $inf_profesional = array();
+        $inf_documento = array();
+
+        $info = (object)static::validarCertificadoDocumento($request->tkx_3);
+        if($info->estado == 1)
+        {
+            if($info->documento == 1)
+            {
+
+                if(isset($info->registros['paciente']) && !empty($info->registros['paciente']))
+                {
+                    $inf_paciente = array(
+                        'nombre' => mb_strtoupper($info->registros['paciente']['nombres']),
+                        'apellido_uno' => mb_strtoupper($info->registros['paciente']['apellido_uno']),
+                        'apellido_dos' => mb_strtoupper($info->registros['paciente']['apellido_dos']),
+                        'rut' => $info->registros['paciente']['rut'],
+                        'email' => $info->registros['paciente']['email'],
+                    );
+                }
+
+                if(isset($info->registros['detalle']) && !empty($info->registros['detalle']))
+                {
+                    if(!empty($info->registros['detalle'][0]))
+                    {
+                        $inf_documento = array(
+                            'tipo_control' => mb_strtoupper($info->registros['detalle'][0]['tipo_control']['descripcion']),
+                            'cantidad_item' => count($info->registros['detalle'][0]['detalle']),
+                            'fecha_elaboracion' => date('d-m-Y', strtotime($info->registros['detalle'][0]['created_at'])),
+                        );
+                    }
+                }
+
+                $datos['estado'] = 1;
+                $datos['paciente'] = $inf_paciente;
+                $datos['documento'] = $inf_documento;
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'documento no valido';
+        }
+
+        return $datos;
+
+    }
+
+    public function validarProfesionalDocumento(Request $request)
+    {
+        $datos = array();
+        $inf_paciente = array();
+        $inf_profesional = array();
+        $inf_documento = array();
+        // $inf_prof_firma = array();
+
+        $info = (object)static::validarCertificadoDocumento($request->tkx_3);
+        if($info->estado == 1)
+        {
+            if(isset($info->registros['profesional']) && !empty($info->registros['profesional']))
+            {
+                $inf_profesional = array(
+                    'nombre' => mb_strtoupper($info->registros['profesional']['nombre']),
+                    'apellido_uno' => mb_strtoupper($info->registros['profesional']['apellido_uno']),
+                    'apellido_dos' => mb_strtoupper($info->registros['profesional']['apellido_dos']),
+                    'rut' => $info->registros['profesional']['rut'],
+                    'email' => $info->registros['profesional']['email'],
+                    'especialidad' => mb_strtoupper($info->registros['profesional']['especialidad']),
+                    'tipo_especialidad' => mb_strtoupper($info->registros['profesional']['tipo_especialidad']),
+                    'sub_tipo_especialidad' => mb_strtoupper($info->registros['profesional']['sub_tipo_especialidad']),
+                    'certificado' => $info->registros['profesional']['certificado'],
+                    'numero_certificado' => $info->registros['profesional']['numero_certificado'],
+                );
+            }
+
+            if(isset($info->registros['detalle']) && !empty($info->registros['detalle']))
+            {
+                if(!empty($info->registros['detalle'][0]))
+                {
+                    $inf_documento = array(
+                        'tipo_control' => mb_strtoupper($info->registros['detalle'][0]['tipo_control']['descripcion']),
+                        'cantidad_item' => count($info->registros['detalle'][0]['detalle']),
+                        'fecha_elaboracion' => date('d-m-Y', strtotime($info->registros['detalle'][0]['created_at'])),
+                    );
+                }
+            }
+
+            $datos['estado'] = 1;
+            $datos['paciente'] = $inf_paciente;
+            $datos['profesional'] = $inf_profesional;
+            $datos['documento'] = $inf_documento;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'documento no valido';
+        }
 
         return $datos;
     }

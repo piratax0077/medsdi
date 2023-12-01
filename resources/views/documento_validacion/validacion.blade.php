@@ -83,20 +83,32 @@
 						</div>
 						<div class="row">
 							<div class="col-sm-12 col-md-12 col-lg-6 col-xl-4 mx-auto text-center">
-								<button type="button" class="btn btn-modal-validar btn-lg btn-block">Validar certificado</button>
-								<button type="button" class="btn btn-modal-validar btn-lg btn-block">Validar firma</button>
-								<button type="button" class="btn btn-modal-validar btn-lg btn-block">Validar fecha</button>
-								<button type="button" class="btn btn-modal-validar btn-lg btn-block">Validar estado de documento</button>
-								<button type="button" class="btn btn-modal-validar btn-lg btn-block">Validar nombre de paciente</button>
-								<button type="button" class="btn btn-modal-validar btn-lg btn-block">Validar nombre de profesional</button>
+								<button type="button" class="btn btn-modal-validar btn-lg btn-block" onclick="abrir_validar_certificado();">Validar Certificado de Documento</button>
+								<button type="button" class="btn btn-modal-validar btn-lg btn-block" onclick="abrir_validar_firma_documento();">Validar Firma del Profesional</button>
+								<button type="button" class="btn btn-modal-validar btn-lg btn-block" onclick="abrir_validar_fecha_documento();">Validar Fecha Elaboración</button>
+								{{-- <button type="button" class="btn btn-modal-validar btn-lg btn-block" onclick="abrir_validar_estado_documento();">Validar estado de documento</button> --}}
+								<button type="button" class="btn btn-modal-validar btn-lg btn-block" onclick="abrir_validar_paciente_documento();">Validar Paciente</button>
+								<button type="button" class="btn btn-modal-validar btn-lg btn-block" onclick="abrir_validar_profesional_documento();">Validar Profesional</button>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
+        @include('documento_validacion.modal.certificado')
+        @include('documento_validacion.modal.firma')
+        @include('documento_validacion.modal.fecha')
+        {{-- @include('documento_validacion.modal.estado_documento') --}}
+        @include('documento_validacion.modal.paciente')
+        @include('documento_validacion.modal.profesional')
+
 	</div>
 	<!--CIERRE CONTENIDO-->
+
+
+
+
 
 	<script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
 	<script src="{{ asset('js/plugins/bootstrap.min.js') }}"></script>

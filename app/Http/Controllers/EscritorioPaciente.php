@@ -506,7 +506,7 @@ class EscritorioPaciente extends Controller
                                 'cantidad' => decrypt($value_det->volumen),
                                 'cantidad_vendida' => decrypt($value_det->volumen_entregado),
                                 'comentario' => decrypt($value_det->comentario),
-                                'token_doc' => decrypt($value_det->cod_doc),
+                                'token_doc' => $value_det->cod_doc,
                                 'estado' => $value_det->estado,
                                 'created_at' => $value_det->created_at,
                                 'updated_at' => $value_det->updated_at,

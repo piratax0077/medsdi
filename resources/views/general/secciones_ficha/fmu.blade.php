@@ -1,9 +1,10 @@
 <!-- BASE -->
-@extends('layouts.base')
+{{-- @extends('layouts.base') --}}
 
-@section('content')
+{{-- @section('content') --}}
 
-<div class="container">
+{{-- <div class="container"> --}}
+<div class="">
     <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
         <div class="col-md-12 py-0 px-1 shadow-none">
             <div class="row mx-0">
@@ -494,10 +495,10 @@
         </div>
     </div>
 </div>
-@endsection
+{{-- @endsection --}}
 
 
-@section('page-styles')
+{{-- @section('page-styles') --}}
 <!-- data tables css -->
 <link rel="stylesheet" href="{{ asset('css/ficha_medica_unica.css') }}">
 <!-- Estilo cards -->
@@ -509,7 +510,7 @@
         background-color: #f3f3f3!important;
     }
 </style>
-@endsection
+{{-- @endsection --}}
 
 
 <!-- SCRIPT -->

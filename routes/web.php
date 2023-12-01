@@ -637,11 +637,25 @@ Route::group([
     /** REGISTRO DE RECOMENDACION */
     Route::post('/receta/registro', [App\Http\Controllers\RecomendacionController::class, 'registroRecomendacion'])->name('profesional.receta.registro');
     Route::get('/receta/ver', [App\Http\Controllers\RecomendacionController::class, 'verRecomendaciones'])->name('profesional.receta.ver');
-    Route::get('/receta/pdf', [App\Http\Controllers\RecomendacionController::class, 'verPDF'])->name('profesional.receta.pdf');
+    // Route::get('/receta/pdf', [App\Http\Controllers\RecomendacionController::class, 'verPDF'])->name('profesional.receta.pdf');
 
+	/** GINECO OBSTETRICO */
+    Route::post('/ficha/ginecologia/obstetricia/registrar', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'store'])->name('fichaAtencion.registrar_ficha_gine_obst');
     /** RECETA DE LENTES */
     Route::post('/receta/lente/registro', [App\Http\Controllers\OftarmoRecetaLenteController::class, 'registrar'])->name('receta.oftalmo.lente.registrar');
     Route::get('/receta/lente/ver', [App\Http\Controllers\OftarmoRecetaLenteController::class, 'verRegistros'])->name('receta.oftalmo.lente.ver');
+});
+
+Route::group([
+    'middleware' => ['guest'],
+    'prefix' => 'receta',
+], function () {
+    Route::get('pdf', [App\Http\Controllers\RecomendacionController::class, 'verPDF'])->name('profesional.receta.pdf');
+    Route::post('validar.certificado', [App\Http\Controllers\CertificadoController::class, 'validarCertificado'])->name('validar.certificado');
+    Route::post('validar.firma.documento', [App\Http\Controllers\CertificadoController::class, 'validarFirmaDocumento'])->name('validar.firma.documento');
+    Route::post('validar.fecha.documento', [App\Http\Controllers\CertificadoController::class, 'validarFechaDocumento'])->name('validar.fecha.documento');
+    Route::post('validar.paciente.documento', [App\Http\Controllers\CertificadoController::class, 'validarPacienteDocumento'])->name('validar.paciente.documento');
+    Route::post('validar.profesional.documento', [App\Http\Controllers\CertificadoController::class, 'validarProfesionalDocumento'])->name('validar.profesional.documento');
 });
 
 Route::group([
