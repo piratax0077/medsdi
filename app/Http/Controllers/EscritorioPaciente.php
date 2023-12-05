@@ -1221,9 +1221,37 @@ class EscritorioPaciente extends Controller
     /* Receta Online*/
     public function receta_misrecetas()
     {
-        $fichas = FichaAtencion::where('id_paciente', Auth::user()->id)->get();
 
-        return view('app.paciente.receta.mis_recetas', ['fichas' => $fichas]);
+        // $fichas = FichaAtencion::where('id_paciente', Auth::user()->id)->get();
+        // return view('app.paciente.receta.mis_recetas', ['fichas' => $fichas]);
+
+        $recetas = '';
+
+        $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
+
+        $request_receta = new Request(array(
+            'id_paciente' => $paciente->id,
+        ));
+        $recetas_temp = (object)RecomendacionController::verRecomendaciones($request_receta);
+        if($recetas_temp->estado == 1)
+        {
+            foreach ($recetas_temp->registros as $key => $value)
+            {
+                // $recetas_temp[$key]['profesional'] = Profesional::select('id','nombre', 'apellido_uno', 'apellido_dos', 'rut' )->where('id', $value['id_profesional'])->first();
+                $recetas_temp->registros[$key]['profesional'] = Profesional::select('id','nombre', 'apellido_uno', 'apellido_dos', 'rut', 'id_tipo_especialidad', 'id_sub_tipo_especialidad')
+                                                                    ->with(['TipoEspecialidad'=>function($query){
+                                                                        $query->select('id', 'nombre');
+                                                                    }])
+                                                                    ->with(['SubTipoEspecialidad'=>function($query){
+                                                                        $query->select('id', 'nombre');
+                                                                    }])
+                                                                    ->where('id', $value['id_profesional'])->first();
+                unset($recetas_temp->registros[$key]['detalle']);
+            }
+            $recetas = $recetas_temp->registros;
+        }
+
+        return view('app.paciente.receta.mis_recetas', ['recetas' => $recetas]);
     }
 
     public function receta_misexamenes()
@@ -1270,14 +1298,16 @@ class EscritorioPaciente extends Controller
 
     public function receta_miscertificados()
     {
-        $fichas = FichaAtencion::where('id_paciente', Auth::user()->id)->get();
+        $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
+        $fichas = FichaAtencion::where('id_paciente', $paciente->id)->get();
 
         return view('app.paciente.receta.mis_certificados', ['fichas' => $fichas]);
     }
 
     public function receta_mislicencias()
     {
-        $fichas = FichaAtencion::where('id_paciente', Auth::user()->id)->get();
+        $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
+        $fichas = FichaAtencion::where('id_paciente', $paciente->id)->get();
 
         return view('app.paciente.receta.mis_licencias', ['fichas' => $fichas]);
     }

@@ -46,7 +46,8 @@ class FichaAtencion extends Model
 
     {
 
-        return $this->belongsToMany(Licencia::class, 'licencias_ppf', 'id_ficha_atencion', 'id_licencia');
+        // return $this->belongsToMany(Licencia::class, 'licencias_ppf', 'id_ficha_atencion', 'id_licencia');
+        return $this->hasMany(Licencia::class, 'id_ficha_atencion', 'id' );
 
     }
 

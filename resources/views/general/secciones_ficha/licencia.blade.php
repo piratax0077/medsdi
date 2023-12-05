@@ -9,6 +9,11 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 pt-3 d-inline float-left">
                         <h6 class="f-20 text-c-blue float-left mb-3">Licencia médica</h6>
+                        @if (isset($licencia->id))
+                            <input type="hidden" name="id_licencia_fc" id="id_licencia_fc" value="{{ $licencia->id }}">
+                        @else
+                            <input type="hidden" name="id_licencia_fc" id="id_licencia_fc" value="">
+                        @endif
                         {{-- mensaje --}}
                         <div class="alert alert-success" role="alert" style="display: none" id="mensaje_licencia"></div>
                     </div>
@@ -19,16 +24,45 @@
                         <!--SWITCH TIPO ENFERMEDAD-->
                         <div class="form-row mb-3">
                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="enf_com_1" checked="checked">
-                                    <label class="custom-control-label" for="enf_com_1">Enfermedad común o maternal</label>
-                                </div>
+                                @if (isset($licencia->enfermedad_comun))
+                                    @if ($licencia->enfermedad_comun == 1)
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="enf_com_1" checked="checked">
+                                            <label class="custom-control-label" for="enf_com_1">Enfermedad común o maternal</label>
+                                        </div>
+                                    @else
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="enf_com_1">
+                                            <label class="custom-control-label" for="enf_com_1">Enfermedad común o maternal</label>
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="enf_com_1" checked="checked">
+                                        <label class="custom-control-label" for="enf_com_1">Enfermedad común o maternal</label>
+                                    </div>
+                                @endif
                             </div>
                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="lab_1">
-                                    <label class="custom-control-label" for="lab_1">Laboral</label>
-                                </div>
+                                @if (isset($licencia->laboral))
+                                    @if ($licencia->laboral == 1)
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="lab_1" checked="checked">
+                                            <label class="custom-control-label" for="lab_1">Laboral</label>
+                                        </div>
+                                    @else
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="lab_1">
+                                            <label class="custom-control-label" for="lab_1">Laboral</label>
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="lab_1">
+                                        <label class="custom-control-label" for="lab_1">Laboral</label>
+                                    </div>
+                                @endif
+
                             </div>
                         </div>
 
@@ -46,18 +80,34 @@
                                             <div class="form-row">
                                                 <div class="form-group col-md-3">
                                                     <label class="floating-label-activo-sm">Previsión</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prevision_lic" id="prevision_lic" value="{{ $paciente->prevision->nombre }}">
+                                                    @if (isset($licencia->paciente_prevision_text))
+                                                        <input type="text" class="form-control form-control-sm" name="prevision_lic" id="prevision_lic" value="{{ $licencia->paciente_prevision_text }}">
+                                                    @else
+                                                        <input type="text" class="form-control form-control-sm" name="prevision_lic" id="prevision_lic" value="{{ $paciente->prevision->nombre }}">
+                                                    @endif
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label class="floating-label-activo-sm">Rut</label>
-                                                    <input type="text" class="form-control form-control-sm" name="rut_paciente_lic" id="rut_paciente_lic" value="{{ $paciente->rut }}">
+                                                    @if (isset($licencia->rut_paciente))
+                                                        <input type="text" class="form-control form-control-sm" name="rut_paciente_lic" id="rut_paciente_lic" value="{{ $licencia->rut_paciente }}">
+                                                    @else
+                                                        <input type="text" class="form-control form-control-sm" name="rut_paciente_lic" id="rut_paciente_lic" value="{{ $paciente->rut }}">
+                                                    @endif
+
 
                                                 </div>
                                                 <div class="form-group col-md-3">
-                                                    @if (request('token') && request('compin') == 1)
+
+                                                    {{-- @if (request('token') && request('compin') == 1)
                                                         <button type="button" class="btn btn-sm btn-success-light btn-block">Autorizado</button>
                                                     @else
                                                         <button type="button" class="btn btn-sm btn-primary-light btn-block" onclick="l_autoriz_compin()";>Solicitar autorización</button>
+                                                    @endif --}}
+
+                                                    @if(!empty(session('lic_pac_token')) && session('lic_pac_estado') == 1)
+                                                        <button type="button" id="btn_lic_auto_compim" class="btn btn-sm btn-success-light btn-block">Autorizado</button>
+                                                    @else
+                                                        <button type="button" id="btn_lic_auto_compim" class="btn btn-sm btn-primary-light btn-block" onclick="l_autoriz_compin();">Solicitar autorización</button>
                                                     @endif
                                                 </div>
                                                 <div class="form-group col-md-3">
@@ -70,8 +120,16 @@
                             </div>
                         </div>
 
-                        @if (request('token') && request('compin') == 1)
-
+                        @if(!empty(session('lic_pac_token')) && session('lic_pac_estado') == 1)
+                            @php
+                                $estilo_cuerpo_lic = '';
+                            @endphp
+                        @else
+                            @php
+                                $estilo_cuerpo_lic = 'display: none;';
+                            @endphp
+                        @endif
+                        <div id="div_cuerpo_lic" style="{{ $estilo_cuerpo_lic }}">
                             <!--EMPLEADOR-->
                             <div class="form-row">
                                 <div class="col-md-12 col-lg-12 col-xl-12">
@@ -87,19 +145,35 @@
                                                     <input type="hidden" name="id_empleador" id="id_empleador" value="123">
                                                     <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Nombre</label>
-                                                        <input type="text" name="empleador_nombre" id="empleador_nombre" class="form-control form-control-sm" value="EMPRESA DEMO" readonly/>
+                                                        @if (isset($licencia->empleador_nombre))
+                                                            <input type="text" name="empleador_nombre" id="empleador_nombre" class="form-control form-control-sm" value="{{ $licencia->empleador_nombre }}" readonly/>
+                                                        @else
+                                                            <input type="text" name="empleador_nombre" id="empleador_nombre" class="form-control form-control-sm" value="EMPRESA DEMO" readonly/>
+                                                        @endif
                                                     </div>
                                                     <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">RUT</label>
-                                                        <input type="text" name="empleador_rut" id="empleador_rut" class="form-control form-control-sm" value="76.156.456.5" readonly/>
+                                                        @if (isset($licencia->empleador_rut))
+                                                            <input type="text" name="empleador_rut" id="empleador_rut" class="form-control form-control-sm" value="{{ $licencia->empleador_rut }}" readonly/>
+                                                        @else
+                                                            <input type="text" name="empleador_rut" id="empleador_rut" class="form-control form-control-sm" value="76.156.456.5" readonly/>
+                                                        @endif
                                                     </div>
                                                     <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Direccion</label>
-                                                        <input type="text" name="empleador_direccion" id="empleador_direccion" class="form-control form-control-sm" value="Calle DEMO #123, Viña" readonly/>
+                                                        @if (isset($licencia->empleador_direccion))
+                                                            <input type="text" name="empleador_direccion" id="empleador_direccion" class="form-control form-control-sm" value="{{ $licencia->empleador_direccion }}" readonly/>
+                                                        @else
+                                                            <input type="text" name="empleador_direccion" id="empleador_direccion" class="form-control form-control-sm" value="Calle DEMO #123, Viña" readonly/>
+                                                        @endif
                                                     </div>
                                                     <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Email</label>
-                                                        <input type="text" name="empleador_email" id="empleador_email" class="form-control form-control-sm" value="contacto@empresa_demo.cl" readonly/>
+                                                        @if (isset($licencia->empleador_email))
+                                                            <input type="text" name="empleador_email" id="empleador_email" class="form-control form-control-sm" value="{{ $licencia->empleador_email }}" readonly/>
+                                                        @else
+                                                            <input type="text" name="empleador_email" id="empleador_email" class="form-control form-control-sm" value="contacto@empresa_demo.cl" readonly/>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -122,24 +196,75 @@
                                                 <div class="form-row">
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Desde</label>
-                                                        <input type="date" name="fecha" id="fecha" class="form-control form-control-sm" onchange="sumaFecha($('#num_dias_reposo').val(),$('#fecha').val());"/>
+                                                        @if (isset($licencia->fecha_inicio))
+                                                            <input type="date" name="fecha" id="fecha" class="form-control form-control-sm" onchange="sumaFecha($('#num_dias_reposo').val(),$('#fecha').val());" value="{{ $licencia->fecha_inicio }}"/>
+                                                        @else
+                                                            <input type="date" name="fecha" id="fecha" class="form-control form-control-sm" onchange="sumaFecha($('#num_dias_reposo').val(),$('#fecha').val());" value="{{ date('d-m-Y') }}"/>
+                                                        @endif
+
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">N° días</label>
-                                                        <input type="text" name="num_dias_reposo" id="num_dias_reposo" class="form-control form-control-sm" onchange="sumaFecha($('#num_dias_reposo').val(),$('#fecha').val());"/>
+                                                        @if (isset($licencia->num_dias_reposo))
+                                                            <input type="text" name="num_dias_reposo" id="num_dias_reposo" class="form-control form-control-sm" onchange="sumaFecha($('#num_dias_reposo').val(),$('#fecha').val());" value="{{ $licencia->num_dias_reposo }}"/>
+                                                        @else
+                                                            <input type="text" name="num_dias_reposo" id="num_dias_reposo" class="form-control form-control-sm" onchange="sumaFecha($('#num_dias_reposo').val(),$('#fecha').val());" value=""/>
+                                                        @endif
+
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Hasta</label>
-                                                        <input type="text" name="hasta" id="hasta" class="form-control form-control-sm" value="" readonly/>
+                                                        @if (isset($licencia->fecha_termino))
+                                                            <input type="text" name="hasta" id="hasta" class="form-control form-control-sm" value="{{ $licencia->fecha_termino }}" readonly/>
+                                                        @else
+                                                            <input type="text" name="hasta" id="hasta" class="form-control form-control-sm" value="" readonly/>
+                                                        @endif
+
                                                     </div>
                                                     <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                         <div class="form-group">
                                                             <label class="floating-label-activo-sm">Tipo de reposo</label>
                                                             <select name='l_tipo_reposo'  id='l_tipo_reposo' class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('l_tipo_reposo','div_tipo_reposo','ot_tipo_reposo',4);">
-                                                                <option selected  value="1">Total</option>
-                                                                <option value="2">Mañanas</option>
-                                                                <option value="3">Tarde</option>
-                                                                <option value="4">Otro tipo</option>
+                                                                @if(isset($licencia->tipo_reposo))
+                                                                    @switch($licencia->tipo_reposo)
+                                                                        @case(1)
+                                                                            <option selected value="1">Total</option>
+                                                                            <option value="2">Mañanas</option>
+                                                                            <option value="3">Tarde</option>
+                                                                            <option value="4">Otro tipo</option>
+                                                                            @break
+                                                                        @case(2)
+                                                                            <option value="1">Total</option>
+                                                                            <option selected value="2">Mañanas</option>
+                                                                            <option value="3">Tarde</option>
+                                                                            <option value="4">Otro tipo</option>
+                                                                            @break
+                                                                        @case(3)
+                                                                            <option value="1">Total</option>
+                                                                            <option value="2">Mañanas</option>
+                                                                            <option selected value="3">Tarde</option>
+                                                                            <option value="4">Otro tipo</option>
+                                                                            @break
+                                                                        @case(4)
+                                                                            <option value="1">Total</option>
+                                                                            <option value="2">Mañanas</option>
+                                                                            <option value="3">Tarde</option>
+                                                                            <option selected value="4">Otro tipo</option>
+                                                                            @break
+
+                                                                        @default
+                                                                            <option selected  value="1">Total</option>
+                                                                            <option value="2">Mañanas</option>
+                                                                            <option value="3">Tarde</option>
+                                                                            <option value="4">Otro tipo</option>
+                                                                    @endswitch
+                                                                @else
+                                                                    <option selected  value="1">Total</option>
+                                                                    <option value="2">Mañanas</option>
+                                                                    <option value="3">Tarde</option>
+                                                                    <option value="4">Otro tipo</option>
+                                                                @endif
+
                                                             </select>
                                                         </div>
                                                         <div class="form-group" id='div_tipo_reposo' style="display:none;">
@@ -151,9 +276,35 @@
                                                         <div class="form-group">
                                                             <label class="floating-label-activo-sm">Lugar de reposo</label>
                                                             <select name='l_lugar_reposo'  id='l_lugar_reposo' class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('l_lugar_reposo','div_lugar_reposo','ot_lugar_reposo',3);">
-                                                                <option selected  value="1">Su Casa</option>
-                                                                <option value="2">Hospitalizado</option>
-                                                                <option value="3">Otro Lugar</option>
+                                                                @if(isset($licencia->lugar_reposo))
+                                                                    @switch($licencia->lugar_reposo)
+                                                                        @case(1)
+                                                                            <option selected value="1">Su Casa</option>
+                                                                            <option value="2">Hospitalizado</option>
+                                                                            <option value="3">Otro Lugar</option>
+                                                                            @break
+
+                                                                        @case(2)
+                                                                            <option value="1">Su Casa</option>
+                                                                            <option selected value="2">Hospitalizado</option>
+                                                                            <option value="3">Otro Lugar</option>
+                                                                            @break
+
+                                                                        @case(3)
+                                                                            <option value="1">Su Casa</option>
+                                                                            <option value="2">Hospitalizado</option>
+                                                                            <option selected value="3">Otro Lugar</option>
+                                                                            @break
+                                                                        @default
+                                                                            <option selected  value="1">Su Casa</option>
+                                                                            <option value="2">Hospitalizado</option>
+                                                                            <option value="3">Otro Lugar</option>
+                                                                    @endswitch
+                                                                @else
+                                                                    <option selected  value="1">Su Casa</option>
+                                                                    <option value="2">Hospitalizado</option>
+                                                                    <option value="3">Otro Lugar</option>
+                                                                @endif
                                                             </select>
                                                         </div>
                                                         <div class="form-group" id='div_lugar_reposo' style="display:none;">
@@ -184,25 +335,107 @@
                                                         <div class="form-group col-md-6">
                                                             <label class="floating-label-activo-sm"> Tipo de licencia</label>
                                                             <select class="form-control d-inline form-control-sm" name="tipo_licencia" id="tipo_licencia">
-                                                                <option>Seleccione una opción</option>
-                                                                <option selected value= "1"> Tipo 1: enfermedad o accidente común.</option>
-                                                                <option value= "2">Tipo 2: medicina preventiva.</option>
-                                                                <option value= "3">Tipo 3: pre y postnatal.</option>
-                                                                <option value= "4">Tipo 4: enfermedad grave del niño menor del año</option>
-                                                                <option value= "5">Tipo 5: Patología del Embarazo</option>
+                                                                @if(isset($licencia->tipo_licencia))
+                                                                    @switch($licencia->licencia)
+                                                                        @case(1)
+                                                                            <option>Seleccione una opción</option>
+                                                                            <option selected value= "1"> Tipo 1: enfermedad o accidente común.</option>
+                                                                            <option value= "2">Tipo 2: medicina preventiva.</option>
+                                                                            <option value= "3">Tipo 3: pre y postnatal.</option>
+                                                                            <option value= "4">Tipo 4: enfermedad grave del niño menor del año</option>
+                                                                            <option value= "5">Tipo 5: Patología del Embarazo</option>
+                                                                            @break
+                                                                        @case(2)
+                                                                            <option>Seleccione una opción</option>
+                                                                            <option value= "1"> Tipo 1: enfermedad o accidente común.</option>
+                                                                            <option selected value= "2">Tipo 2: medicina preventiva.</option>
+                                                                            <option value= "3">Tipo 3: pre y postnatal.</option>
+                                                                            <option value= "4">Tipo 4: enfermedad grave del niño menor del año</option>
+                                                                            <option value= "5">Tipo 5: Patología del Embarazo</option>
+                                                                            @break
+                                                                        @case(3)
+                                                                            <option>Seleccione una opción</option>
+                                                                            <option value= "1"> Tipo 1: enfermedad o accidente común.</option>
+                                                                            <option value= "2">Tipo 2: medicina preventiva.</option>
+                                                                            <option selected value= "3">Tipo 3: pre y postnatal.</option>
+                                                                            <option value= "4">Tipo 4: enfermedad grave del niño menor del año</option>
+                                                                            <option value= "5">Tipo 5: Patología del Embarazo</option>
+                                                                            @break
+                                                                        @case(4)
+                                                                            <option>Seleccione una opción</option>
+                                                                            <option value= "1"> Tipo 1: enfermedad o accidente común.</option>
+                                                                            <option value= "2">Tipo 2: medicina preventiva.</option>
+                                                                            <option value= "3">Tipo 3: pre y postnatal.</option>
+                                                                            <option selected value= "4">Tipo 4: enfermedad grave del niño menor del año</option>
+                                                                            <option value= "5">Tipo 5: Patología del Embarazo</option>
+                                                                            @break
+                                                                        @case(5)
+                                                                            <option>Seleccione una opción</option>
+                                                                            <option value= "1"> Tipo 1: enfermedad o accidente común.</option>
+                                                                            <option value= "2">Tipo 2: medicina preventiva.</option>
+                                                                            <option value= "3">Tipo 3: pre y postnatal.</option>
+                                                                            <option value= "4">Tipo 4: enfermedad grave del niño menor del año</option>
+                                                                            <option selected value= "5">Tipo 5: Patología del Embarazo</option>
+                                                                            @break
+                                                                        @default
+                                                                            <option>Seleccione una opción</option>
+                                                                            <option selected value= "1"> Tipo 1: enfermedad o accidente común.</option>
+                                                                            <option value= "2">Tipo 2: medicina preventiva.</option>
+                                                                            <option value= "3">Tipo 3: pre y postnatal.</option>
+                                                                            <option value= "4">Tipo 4: enfermedad grave del niño menor del año</option>
+                                                                            <option value= "5">Tipo 5: Patología del Embarazo</option>
+                                                                    @endswitch
+                                                                @else
+                                                                    <option>Seleccione una opción</option>
+                                                                    <option selected value= "1"> Tipo 1: enfermedad o accidente común.</option>
+                                                                    <option value= "2">Tipo 2: medicina preventiva.</option>
+                                                                    <option value= "3">Tipo 3: pre y postnatal.</option>
+                                                                    <option value= "4">Tipo 4: enfermedad grave del niño menor del año</option>
+                                                                    <option value= "5">Tipo 5: Patología del Embarazo</option>
+                                                                @endif
                                                             </select>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                            <div class="custom-control custom-switch">
-                                                                <input type="checkbox" class="custom-control-input" id="info_licencia_1" checked="checked">
-                                                                <label class="custom-control-label" for="info_licencia_1">Recuperabilidad laboral</label>
-                                                            </div>
+                                                            @if (isset($licencia->recuperabilidad_laboral))
+                                                                @if ($licencia->recuperabilidad_laboral == 1)
+                                                                    <div class="custom-control custom-switch">
+                                                                        <input type="checkbox" class="custom-control-input" id="info_licencia_1" checked="checked">
+                                                                        <label class="custom-control-label" for="info_licencia_1">Recuperabilidad laboral</label>
+                                                                    </div>
+                                                                @else
+                                                                    <div class="custom-control custom-switch">
+                                                                        <input type="checkbox" class="custom-control-input" id="info_licencia_1" >
+                                                                        <label class="custom-control-label" for="info_licencia_1">Recuperabilidad laboral</label>
+                                                                    </div>
+                                                                @endif
+                                                            @else
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" class="custom-control-input" id="info_licencia_1" checked="checked">
+                                                                    <label class="custom-control-label" for="info_licencia_1">Recuperabilidad laboral</label>
+                                                                </div>
+                                                            @endif
+
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                            <div class="custom-control custom-switch">
-                                                                <input type="checkbox" class="custom-control-input" id="info_licencia_2">
-                                                                <label class="custom-control-label" for="info_licencia_2">Inicio trámite de invalidez</label>
-                                                            </div>
+                                                            @if (isset($licencia->tramite_invalidez))
+                                                                @if ($licencia->tramite_invalidez == 1)
+                                                                    <div class="custom-control custom-switch">
+                                                                        <input type="checkbox" class="custom-control-input" id="info_licencia_2" checked="checked">
+                                                                        <label class="custom-control-label" for="info_licencia_2">Inicio trámite de invalidez</label>
+                                                                    </div>
+                                                                @else
+                                                                    <div class="custom-control custom-switch">
+                                                                        <input type="checkbox" class="custom-control-input" id="info_licencia_2">
+                                                                        <label class="custom-control-label" for="info_licencia_2">Inicio trámite de invalidez</label>
+                                                                    </div>
+                                                                @endif
+                                                            @else
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" class="custom-control-input" id="info_licencia_2">
+                                                                    <label class="custom-control-label" for="info_licencia_2">Inicio trámite de invalidez</label>
+                                                                </div>
+                                                            @endif
+
                                                         </div>
                                                     </div>
                                                 </form>
@@ -225,28 +458,39 @@
                                             <div class="card-body-aten-a shadow-none">
                                                 <div class="form-row">
                                                     <div class="form-group col-md-6">
-                                                        @if (isset($fichaAtencion) &&
-                                                        $fichaAtencion->hipotesis_diagnostico != null)
-                                                        <label class="floating-label-activo-sm">Hipótesis
-                                                            Diagnóstica</label>
-                                                        <input type="text" class="form-control form-control-sm"  data-input_igual="hip-diag_spec,descripcion_hipotesis" name="lic_descripcion_hipotesis" id="lic_descripcion_hipotesis" value="{{ $fichaAtencion->hipotesis_diagnostico }}" onchange="cargarIgual('lic_descripcion_hipotesis')">
+                                                        @if (isset($licencia->descripcion_hipotesis))
+                                                            <label class="floating-label-activo-sm">Hipótesis Diagnóstica</label>
+                                                            <input type="text" class="form-control form-control-sm"  data-input_igual="hip-diag_spec,descripcion_hipotesis" name="lic_descripcion_hipotesis" id="lic_descripcion_hipotesis" value="{{ $licencia->descripcion_hipotesis }}" onchange="cargarIgual('lic_descripcion_hipotesis')">
                                                         @else
-                                                        <label class="floating-label-activo-sm">Hipótesis
-                                                            Diagnóstica</label>
-                                                        <input type="text" class="form-control form-control-sm" data-input_igual="hip-diag_spec,descripcion_hipotesis"  name="lic_descripcion_hipotesis" id="lic_descripcion_hipotesis" value="{!! old('descripcion_hipotesis') !!}" onchange="cargarIgual('lic_descripcion_hipotesis')">
+                                                            @if (isset($fichaAtencion) && $fichaAtencion->hipotesis_diagnostico != null)
+                                                                <label class="floating-label-activo-sm">Hipótesis Diagnóstica</label>
+                                                                <input type="text" class="form-control form-control-sm"  data-input_igual="hip-diag_spec,descripcion_hipotesis" name="lic_descripcion_hipotesis" id="lic_descripcion_hipotesis" value="{{ $fichaAtencion->hipotesis_diagnostico }}" onchange="cargarIgual('lic_descripcion_hipotesis')">
+                                                            @else
+                                                                <label class="floating-label-activo-sm">Hipótesis Diagnóstica</label>
+                                                                <input type="text" class="form-control form-control-sm" data-input_igual="hip-diag_spec,descripcion_hipotesis"  name="lic_descripcion_hipotesis" id="lic_descripcion_hipotesis" value="{!! old('descripcion_hipotesis') !!}" onchange="cargarIgual('lic_descripcion_hipotesis')">
+                                                            @endif
                                                         @endif
+
+
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        @if (isset($fichaAtencion) && $fichaAtencion->diagnostico_ce10
-                                                        != null)
-                                                        <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
-                                                        <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="lic_descripcion_cie" id="lic_descripcion_cie" value="{{ $fichaAtencion->diagnostico_ce10 }}" onchange="cargarIgual('lic_descripcion_cie')">
-                                                        <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_lic_descripcion_cie" id="id_lic_descripcion_cie" value="{{ $fichaAtencion->diagnostico_ce10 }}" onchange="cargarIgual('id_lic_descripcion_cie')">
+
+                                                        @if (isset($licencia->descripcion_cie))
+                                                            <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
+                                                            <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="lic_descripcion_cie" id="lic_descripcion_cie" value="{{ $licencia->descripcion_cie }}" onchange="cargarIgual('lic_descripcion_cie')">
+                                                            <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_lic_descripcion_cie" id="id_lic_descripcion_cie" value="{{ $licencia->id_descripcion_cie }}" onchange="cargarIgual('id_lic_descripcion_cie')">
                                                         @else
-                                                        <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
-                                                        <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="lic_descripcion_cie" id="lic_descripcion_cie" value="{!! old('lic_descripcion_cie') !!}" onchange="cargarIgual('lic_descripcion_cie')">
-                                                        <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_lic_descripcion_cie" id="id_lic_descripcion_cie" value="{!! old('id_lic_descripcion_cie') !!}" onchange="cargarIgual('id_lic_descripcion_cie')">
+                                                            @if (isset($fichaAtencion) && $fichaAtencion->diagnostico_ce10 != null)
+                                                                <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
+                                                                <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="lic_descripcion_cie" id="lic_descripcion_cie" value="{{ $fichaAtencion->diagnostico_ce10 }}" onchange="cargarIgual('lic_descripcion_cie')">
+                                                                <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_lic_descripcion_cie" id="id_lic_descripcion_cie" value="{{ $fichaAtencion->diagnostico_ce10 }}" onchange="cargarIgual('id_lic_descripcion_cie')">
+                                                            @else
+                                                                <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
+                                                                <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="lic_descripcion_cie" id="lic_descripcion_cie" value="{!! old('lic_descripcion_cie') !!}" onchange="cargarIgual('lic_descripcion_cie')">
+                                                                <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_lic_descripcion_cie" id="id_lic_descripcion_cie" value="{!! old('id_lic_descripcion_cie') !!}" onchange="cargarIgual('id_lic_descripcion_cie')">
+                                                            @endif
                                                         @endif
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -269,7 +513,7 @@
                                                 <div class="form-row">
                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <label class="floating-label">Descripción</label>
-                                                        <textarea class="form-control form-control-sm"rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="otros_ant_desc" id="otros_ant_desc"></textarea>
+                                                        <textarea class="form-control form-control-sm"rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="otros_ant_desc" id="otros_ant_desc">@if (isset($licencia->otros_ant_desc)){{ $licencia->otros_ant_desc }}@endif</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -302,22 +546,24 @@
 
                             <!--BOTONES ACCION-->
                             <div class="row pb-3">
-                                {{-- <div class="col-md-3 text-center mb-3">
-                                    <button type="button" class="btn btn-sm btn-info-light-c btn-block" onclick="l_autoriz_app()";><i class="feather icon-loader"></i> Solicitar autorización</button><!--profesional y paciente-->
-                                    @include('general.secciones_ficha.modal.m_esperando_app')
-                                </div> --}}
-                                <div class="col-md-3 text-center mb-3">
-                                    <button type="button" class="btn btn-sm btn-primary-light-c btn-block"><i class="feather icon-file-text"></i> Ver PDF</button>
-                                </div>
-                                <div class="col-md-3 text-center mb-3">
-                                    <button type="button" class="btn btn-sm btn-primary-light-c btn-block" onclick="registrar_licencia();"><i class="feather icon-mail"></i> Enviar</button>
-                                </div>
-                                <div class="col-md-3 text-center mb-3">
-                                    <button type="button" class="btn btn-sm btn-primary-light-c btn-block"><i class="feather icon-printer"></i> Imprimir</button>
-                                </div>
-                            </div>
+                                @if (isset($licencia->id))
+                                    <div class="col-md-6 text-center mb-3">
+                                        <button type="button" id="btn_pdf_licencia" class="btn btn-sm btn-primary-light-c btn-block" onclick="abri_pdf_licencia()"><i class="feather icon-file-text"></i> Ver PDF</button>
+                                    </div>
+                                    <div class="col-md-6 text-center mb-3">
+                                        <button type="button" id="btn_enviar_licencia" disabled="disabled" class="btn btn-sm btn-primary-light-c btn-block" onclick="registrar_licencia();"><i class="feather icon-mail"></i> Registrar y Enviar</button>
+                                    </div>
+                                @else
+                                    <div class="col-md-6 text-center mb-3">
+                                        <button type="button" id="btn_pdf_licencia" disabled="disabled" class="btn btn-sm btn-primary-light-c btn-block" onclick="abri_pdf_licencia()"><i class="feather icon-file-text"></i> Ver PDF</button>
+                                    </div>
+                                    <div class="col-md-6 text-center mb-3">
+                                        <button type="button" id="btn_enviar_licencia" class="btn btn-sm btn-primary-light-c btn-block" onclick="registrar_licencia();"><i class="feather icon-mail"></i> Registrar y Enviar</button>
+                                    </div>
+                                @endif
 
-                        @endif
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -326,8 +572,11 @@
     </div>
 </div>
 
+
 @include('general.secciones_ficha.modal.m_autor_compin')
 @include('general.secciones_ficha.modal.m_info_empleadores')
+
+
 
 @section('js-lic')
 <script>
@@ -643,8 +892,11 @@
                 if(resp.estado == 1)
                 {
                     /** cargar registro de licencia */
-                    //
 
+                    $('#id_licencia_fc').val(resp.registro.id);
+
+                    $('#btn_pdf_licencia').attr('disabled', false);
+                    $('#btn_enviar_licencia').attr('disabled', true);
 
                     swal({
                         title: "Registro de Licencia",
@@ -654,6 +906,8 @@
                 }
                 else
                 {
+                    $('#btn_pdf_licencia').attr('disabled', true);
+                    $('#btn_enviar_licencia').attr('disabled', false);
                     var mensaje = '';
                     if(resp.error)
                     {
@@ -688,6 +942,20 @@
         .fail(function(jqXHR, ajaxOptions, thrownError) {
             console.log(jqXHR, ajaxOptions, thrownError)
         });
+    }
+
+    function abri_pdf_licencia()
+    {
+        var id_licencia = $('#id_licencia_fc').val();
+        Fancybox.show(
+            [
+                {
+                    src: "{{ route('paciente.licencia.pdf') }}?id_licencia="+id_licencia,
+                    type: "iframe",
+                    preload: false,
+                },
+            ]
+        );
     }
 </script>
 @endsection

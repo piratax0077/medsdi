@@ -49,7 +49,7 @@
                                     @foreach ($examenes_especialidad_realizados as $exam)
                                         @if ($exam->HoraMedica->id_estado == 6)
                                             <tr>
-                                                <td>{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
+                                                <td data-sort=" {{ date('Y-m-d', strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}">{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
                                                 <td>{{ $exam->id }}</td>
                                                 <td>{{ $exam->profesional->nombre.' '.$exam->profesional->apellido_uno.' '.$exam->profesional->apellido_dos }}</td>
                                                 <td>{{ $exam->nombre }}</td>
@@ -126,6 +126,7 @@
     $(document).ready(function () {
         $('#tabla_examenes_paciente_ro').DataTable({
             responsive: true,
+            order: [[0, "desc"]]
         });
     });
 

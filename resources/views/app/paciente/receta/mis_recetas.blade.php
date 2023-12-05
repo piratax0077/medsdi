@@ -12,13 +12,9 @@
                                 <h5 class="m-b-10 font-weight-bold">Mis Recetas</h5>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.home') }}" data-toggle="tooltip"
-                                        data-placement="top" title="Volver a mi escritorio"><i
-                                            class="feather icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta') }}" data-toggle="tooltip"
-                                        data-placement="top" title="Volver a inicio de receta online">Receta Online</a></li>
-                                <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta.receta') }}">Mis
-                                        Recetas</a></li>
+                                <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta') }}" data-toggle="tooltip" data-placement="top" title="Volver a inicio de receta online">Receta Online</a></li>
+                                <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta.receta') }}">Mis Recetas</a></li>
                             </ul>
                         </div>
                     </div>
@@ -32,45 +28,35 @@
                             <h4 class="text-c-blue f-20 d-inline ml-4 my-1 py-1">Mis Recetas</h4>
                         </div>
                         <div class="card-body">
-                            <table id="tabla_recetas_paciente_ro"
-                                class="display table table-striped  dt-responsive nowrap table-xs"
-                                style="width:100%">
+                            <table id="tabla_recetas_paciente_ro" class="display table table-striped  dt-responsive nowrap table-xs" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>Fecha</th>
                                         <th>Profesional</th>
-                                        <th>Diagnóstico</th>
-                                        <th>Estado</th>
                                         <th>Receta</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (isset($fichas))
-                                        @foreach ($fichas as $f)
-                                            @foreach ($f->Recetas()->get() as $r)
-                                                <tr>
-                                                    <td class="text-wrap align-middle">
-                                                        {{ \Carbon\Carbon::parse($r->created_at)->format('d/m/Y') }}
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        <strong>{{ $f->Profesional()->first()->nombre }}
-                                                            {{ $f->Profesional()->first()->apellido_uno }}
-                                                            {{ $f->Profesional()->first()->apellido_dos }}
-                                                        </strong>
-                                                        <br>
-                                                        {{ $f->Profesional()->first()->especialidad()->first()->txt_esp }}
-                                                    </td>
-                                                    <td class="align-middle">{{ $f->diagnostico }}
-                                                    </td>
-                                                    <td class="align-middle">Enviado</td>
-                                                    <td class="text-center align-middle">
-                                                        <button href="#!" class="btn btn-danger btn-sm"
-                                                            data-toggle="modal" data-target="#m_cons_receta"><i
-                                                                class="feather icon-file-plus"></i> Ver
-                                                            Receta</button>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                    @if (isset($recetas))
+                                        @foreach ($recetas as $receta)
+                                            <tr>
+                                                <td class="text-wrap align-middle" data-sort=" {{ date('Y-m-d', strtotime($receta['created_at'])) }}">
+                                                    {{ date('d-m-Y', strtotime($receta['created_at'])) }}
+                                                </td>
+                                                <td class="align-middle">
+                                                    <strong>{{ $receta['profesional']['nombre'] }} {{ $receta['profesional']['apellido_uno'] }} {{ $receta['profesional']['apellido_dos'] }} </strong>
+                                                    <br>
+                                                    <span style="font-size:9px;">
+                                                        {{ $receta['profesional']['TipoEspecialidad']['nombre'] }}
+                                                        @if($receta['profesional']['SubTipoEspecialidad']['nombre'])
+                                                            - {{ $receta['profesional']['SubTipoEspecialidad']['nombre'] }}
+                                                        @endif
+                                                    </span>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <div onclick="ver_pdf_receta_retenido({{ $receta['id_ficha_atencion'] }}, {{ $receta['id'] }})" class="btn btn-danger btn-sm"><i class="feather icon-file-plus"></i> Ver Receta</div>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     @endif
                                 </tbody>
@@ -88,7 +74,21 @@
         $(document).ready(function() {
             $('#tabla_recetas_paciente_ro').DataTable({
                 responsive: true,
+                order: [[0, "desc"]]
             });
         });
+
+        function ver_pdf_receta_retenido(id_ficha_atencion, id_receta)
+        {
+            Fancybox.show(
+                [
+                    {
+                        src: "{{ route('pdf.receta_medicamentos') }}?id_ficha_atencion="+id_ficha_atencion+'&id_receta='+id_receta,
+                        type: "iframe",
+                        preload: false,
+                    },
+                ]
+            );
+        }
     </script>
 @endsection

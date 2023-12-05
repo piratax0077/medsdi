@@ -1500,6 +1500,9 @@ class ficha_atencionController extends Controller
 
         /* FIN --------------------------- HTML MODAL -------------------------- */
 
+
+        $licencia = Licencia::where('id_ficha_atencion', $id_ficha_atencion)->first();
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1567,6 +1570,7 @@ class ficha_atencionController extends Controller
                 /*'contacto' => $contacto,
                 'contacto_direccion'=> $contacto_direccion,
                 'contacto_ciudad' => $contacto_ciudad,*/
+                'licencia' => $licencia,
 
             ]
         );

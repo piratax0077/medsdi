@@ -62,9 +62,7 @@
                                         {{ $f->Profesional()->first()->especialidad()->first()->txt_esp }}</td>
                                         <td>Enviado a Isapre</td>
                                         <td>
-                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
-                                                data-target="#m_cons_ex"><i class="feather icon-file-plus"></i> Ver
-                                                licencia</button>
+                                            <button type="button" class="btn btn-warning btn-sm" onclick="abri_pdf_licencia('{{ $l->id }}');"><i class="feather icon-file-plus"></i>Ver licencia</button>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -80,10 +78,6 @@
 </div>
 <!--Cierre: Container Completo-->
 
-
-
-@endsection
-@section('page-script')
 <script>
     $(document).ready(function () {
         $('#tabla_licencia_paciente_ro').DataTable({
@@ -91,5 +85,21 @@
         });
     });
 
+    function abri_pdf_licencia(id_licencia)
+    {
+        Fancybox.show(
+            [
+                {
+                    src: "{{ route('paciente.licencia.pdf') }}?id_licencia="+id_licencia,
+                    type: "iframe",
+                    preload: false,
+                },
+            ]
+        );
+    }
 </script>
+
 @endsection
+{{-- @section('page-script')
+
+@endsection --}}

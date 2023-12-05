@@ -315,6 +315,7 @@ Route::group([
     Route::get('Receta_Online/Mis_Examenes', [App\Http\Controllers\EscritorioPaciente::class, 'receta_misexamenes'])->name('paciente.receta.examen');
     Route::get('Receta_Online/Mis_Certificados', [App\Http\Controllers\EscritorioPaciente::class, 'receta_miscertificados'])->name('paciente.receta.certificado');
     Route::get('Receta_Online/Mis_Licencias', [App\Http\Controllers\EscritorioPaciente::class, 'receta_mislicencias'])->name('paciente.receta.licencia');
+    Route::get('Receta_Online/licencia/pdf', [App\Http\Controllers\LicenciaAprobacionController::class, 'pdfLicenciaPaciente'])->name('paciente.licencia.pdf');
 
     /* 3.- Perfil */
     Route::post('Perfil/editinfo', [App\Http\Controllers\EscritorioPaciente::class, 'editInfor'])->name('paciente.perfil.editinfo');
@@ -626,6 +627,11 @@ Route::group([
     Route::get('/licencia/autorizacion/soliciar', [App\Http\Controllers\LicenciaAprobacionController::class, 'solicitarAutorizacion'])->name('profesional.licencia.solicitar');
     Route::get('/licencia/autorizacion/validar', [App\Http\Controllers\LicenciaAprobacionController::class, 'validarAutorizacion'])->name('profesional.licencia.validar');
     Route::get('/licencia/autorizacion/cancelar', [App\Http\Controllers\LicenciaAprobacionController::class, 'cancelarAutorizacion'])->name('profesional.licencia.cancelar');
+    /** SOLICITUD PERMISO A PACIENTE */
+    Route::get('/licencia/paciente/autorizacion/soliciar', [App\Http\Controllers\LicenciaAprobacionController::class, 'solicitarPacienteAutorizacion'])->name('profesional.paciente.licencia.solicitar');
+    Route::get('/licencia/paciente/autorizacion/validar', [App\Http\Controllers\LicenciaAprobacionController::class, 'validarPacienteAutorizacion'])->name('profesional.paciente.licencia.validar');
+    Route::get('/licencia/paciente/autorizacion/cancelar', [App\Http\Controllers\LicenciaAprobacionController::class, 'cancelarPacienteAutorizacion'])->name('profesional.paciente.licencia.cancelar');
+
 
     /** PERMISOS PARA FMU */
     Route::get('/aprobar/fmu/aceptar', [App\Http\Controllers\FmuAprobacionController::class, 'fmuEvaluacion'])->name('profesional.fmu.evalueacion.aceptar');
@@ -647,7 +653,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => ['guest'],
+    'middleware' => ['guest', 'role:Profesional|Paciente|Admin'],
     'prefix' => 'receta',
 ], function () {
     Route::get('pdf', [App\Http\Controllers\RecomendacionController::class, 'verPDF'])->name('profesional.receta.pdf');
