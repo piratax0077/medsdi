@@ -8,8 +8,10 @@ use App\Models\LogUsersDevices;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\Profesional;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LicenciaAprobacionController extends Controller
 {
@@ -384,37 +386,145 @@ class LicenciaAprobacionController extends Controller
 
             if(!empty($profesional) && !empty($paciente))
             {
-                $id_user_create = Auth::user()->id;
-                $id_user_recept = $paciente->id_usuario;
-                $evento = 'Licencia';
-                $nombre = $paciente->nombres;
-                $apellido_p = $paciente->apellido_uno;
-                $apellido_m = $paciente->apellido_dos;
-                $lugar = $lugar_atencion->nombre;
-                $profesional_log = $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos;
-                $tipo = 'Licencia';
-                $tipo_id = '12';
-
-                // $log_users_devices = new LogUsersDevices();
-                $funcion = new Funciones();
-                $log_users_devices = (object) $funcion->generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional_log,$tipo,$tipo_id);
-
-                $datos['log_users_devices'] = $log_users_devices->app;
-
-                if($log_users_devices->app['estado'] == 1)
+                if(!empty($paciente->id_usuario))
                 {
-                    $datos['estado'] = 1;
-                    $datos['msj'] = 'Solicitud enviada';
-                    session(['lic_pac_token' => $log_users_devices->app['token']]);
-                    session(['lic_pac_log_id' => $log_users_devices->app['last_id']]);
+                    $id_user_create = Auth::user()->id;
+                    $id_user_recept = $paciente->id_usuario;
+                    $evento = 'Licencia';
+                    $nombre = $paciente->nombres;
+                    $apellido_p = $paciente->apellido_uno;
+                    $apellido_m = $paciente->apellido_dos;
+                    $lugar = $lugar_atencion->nombre;
+                    $profesional_log = $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos;
+                    $tipo = 'Licencia';
+                    $tipo_id = '12';
+
+                    // $log_users_devices = new LogUsersDevices();
+                    $funcion = new Funciones();
+                    $log_users_devices = (object) $funcion->generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional_log,$tipo,$tipo_id);
+
+                    $datos['log_users_devices'] = $log_users_devices->app;
+
+                    if($log_users_devices->app['estado'] == 1)
+                    {
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'Solicitud enviada';
+                        session(['lic_pac_token' => $log_users_devices->app['token']]);
+                        session(['lic_pac_log_id' => $log_users_devices->app['last_id']]);
+                    }
+                    else
+                    {
+
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'Falla en solicitud';
+                        session(['lic_pac_token' => '']);
+                        session(['lic_pac_log_id' => '']);
+                    }
                 }
                 else
                 {
-                    $datos['estado'] = 0;
-                    $datos['msj'] = 'Falla en solicitud';
-                    session(['lic_pac_token' => '']);
-                    session(['lic_pac_log_id' => '']);
+                    $pass_temp = random_int('1111','9999');
+                    $user = new User();
+                    $user->email = $paciente->email;
+                    $user->password = Hash::make($pass_temp);
+                    $user->name = $paciente->nombres.' '.$paciente->apellido_uno;
+                    if ($user->save())
+                    {
+                        $datos['user']['estado'] = 1;
+                        $datos['user']['msj'] = 'usuario creado';
+
+                        $user->assignRole('Paciente');
+                        $paciente->id_usuario = $user->id;
+
+                        if($paciente->save())
+                        {
+                            $datos['paciente']['estado'] = 1;
+                            $datos['paciente']['msj'] = 'paciente actualizado';
+
+                            /** envio de correo notificacion de usuario nuevo al paciente */
+                            $blade = 'bienvenida_paciente_usuario';
+                            $to = array(
+                                    array('email' => $paciente->email,'name' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos),
+                                );
+                            $cc = array();
+                            $bcc = array();
+                            $asunto = 'MED-SDI - Bienvenido!';
+                            $body = array(
+                                        'nombre'=>$paciente->nombres . ' ' .$paciente->apellido_uno . ' ' .$paciente->apellido_dos,
+                                        'user' => $paciente->email,
+                                        'pass' => $pass_temp
+                                        );
+                            $archivo = '';/** pendiente */
+                            $id_institucion = '';
+
+                            $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                            if($result_mail['estado'])
+                            {
+                                $datos['user']['mail']['estado'] = 1;
+                                $datos['user']['mail']['msj'] = 'Notificacion de bienvenida enviado';
+                            }
+                            else
+                            {
+                                $datos['user']['mail']['estado'] = 0;
+                                $datos['user']['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                            }
+                            /** FIN envio de correo notificacion de usuario nuevo al paciente */
+
+                            $id_user_create = Auth::user()->id;
+                            $id_user_recept = $paciente->id_usuario;
+                            $evento = 'Licencia';
+                            $nombre = $paciente->nombres;
+                            $apellido_p = $paciente->apellido_uno;
+                            $apellido_m = $paciente->apellido_dos;
+                            $lugar = $lugar_atencion->nombre;
+                            $profesional_log = $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos;
+                            $tipo = 'Licencia';
+                            $tipo_id = '11';
+
+                            // $log_users_devices = new LogUsersDevices();
+                            $funcion = new Funciones();
+                            $log_users_devices = (object) $funcion->generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional_log,$tipo,$tipo_id);
+
+                            $datos['log_users_devices'] = $log_users_devices->app;
+
+                            if($log_users_devices->app['estado'] == 1)
+                            {
+                                $datos['estado'] = 1;
+                                $datos['msj'] = 'Solicitud enviada';
+                                session(['lic_pac_token' => $log_users_devices->app['token']]);
+                                session(['lic_pac_log_id' => $log_users_devices->app['last_id']]);
+                            }
+                            else
+                            {
+
+                                $datos['estado'] = 0;
+                                $datos['msj'] = 'Falla en solicitud';
+                                session(['lic_pac_token' => '']);
+                                session(['lic_pac_log_id' => '']);
+                            }
+                        }
+                        else
+                        {
+                            $datos['paciente']['estado'] = 0;
+                            $datos['paciente']['msj'] = 'paciente no actualizado';
+                            $datos['estado'] = 0;
+                            $datos['msj'] = 'Problema al asignar el nuevo usuario al paciente.';
+                            session(['lic_pac_token' => '']);
+                            session(['lic_pac_log_id' => '']);
+                        }
+                    }
+                    else
+                    {
+                        $datos['user']['estado'] = 0;
+                        $datos['user']['msj'] = 'usuario no creado';
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'Problema para generar un nuevo usuario para el paciente.';
+                        session(['lic_pac_token' => '']);
+                        session(['lic_pac_log_id' => '']);
+                    }
                 }
+
             }
             else
             {
