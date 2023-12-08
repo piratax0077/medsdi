@@ -205,7 +205,7 @@ class ficha_atencionController extends Controller
 
         /* FMU CONTACTO EMERGENCIA */
         $pacientes_contacto_emergencia = PacienteContactoEmergencia::with('ContactoEmergencia')->where('id_paciente',$paciente->id)->get();
-		
+
 		/* CONTACTO EMERGENCIA */
         $pacientes_contacto_emergencia = PacienteContactoEmergencia::where('id_paciente',$paciente->id)->first();
         if(is_object($pacientes_contacto_emergencia))
@@ -238,7 +238,7 @@ class ficha_atencionController extends Controller
                 'parentezco'=>'N/A'
             );
         }
-		
+
         /** FMU ALERGIAS */
         $paciente_alergias = Antecedente::where('id_paciente', $paciente->id)->where('id_tipo_antecedente', 5)->get();
 
@@ -1499,8 +1499,8 @@ class ficha_atencionController extends Controller
 
 
         /* FIN --------------------------- HTML MODAL -------------------------- */
-		
-		
+
+
         $licencia = Licencia::where('id_ficha_atencion', $id_ficha_atencion)->first();
 
         return view($ruta_blade)->with(
@@ -1571,7 +1571,7 @@ class ficha_atencionController extends Controller
                 'contacto_direccion'=> $contacto_direccion,
                 'contacto_ciudad' => $contacto_ciudad,*/
                 'licencia' => $licencia,
-				
+
             ]
         );
     }
@@ -2128,7 +2128,7 @@ class ficha_atencionController extends Controller
 
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
             $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
-			
+
             $certificado = new CertificadoReposo();
             $certificado->fecha_inicio = $request->fecha_inicio_certificado;
             $certificado->fecha_termino = $request->fecha_termino_certificado;
@@ -2661,7 +2661,7 @@ class ficha_atencionController extends Controller
             $informe->id_profesional = $profesional->id;
             $informe->id_lugar_atencion = $request->id_lugar_atencion;
             $informe->cod_auto = session('lic_token');
-			
+
             if (!$informe->save())
             {
                 $datos['estado'] = 0;
@@ -2673,9 +2673,9 @@ class ficha_atencionController extends Controller
                 $papeleria_token = session('lic_token');
                 $papeleria_log_id = session('lic_log_id');
                 $prof_firma_registro = (object)CertificadoController::registroProfesionalFirma((int)$profesional->id, $papeleria_token, $papeleria_log_id, "10", $informe->id);
-				
+
                 $delete  = InformeMedico::where('id_ficha_atencion', $hora_medica->id_ficha_atencion)->where('id_tipo_informe', $tipo_informe)->whereNotIn('id', [$informe->id])->delete();
-                
+
 				$datos['estado'] = 1;
                 $datos['mjs'] = 'registro exitoso';
                 $datos['delete'] = $delete;
