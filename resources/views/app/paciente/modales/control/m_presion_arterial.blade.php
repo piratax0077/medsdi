@@ -21,15 +21,15 @@
 
 				    <div class="form-group col-sm-12 col-md-3">
 				        <label class="floating-label-activo">P.Sistólica</label>
-				        <input type="text" class="form-control form-control-sm" name="c_presion_sistolica" id="c_presion_sistolica"></input>
+				        <input type="text" class="form-control form-control-sm" name="c_presion_sistolica" id="c_presion_sistolica"/>
 				    </div>
 				    <div class="form-group col-sm-12 col-md-3">
 				        <label class="floating-label-activo">P.Diastólica</label>
-				        <input type="text" class="form-control form-control-sm" name="c_presion_diastólica" id="c_presion_diastólica"></input>
+				        <input type="text" class="form-control form-control-sm" name="c_presion_diastólica" id="c_presion_diastólica"/>
 				    </div>
 				    <div class="form-group col-sm-12 col-md-3">
 				        <label class="floating-label-activo">Pulso</label>
-				        <input type="text" class="form-control form-control-sm" name="c_presion_pulso" id="c_presion_pulso"></input>
+				        <input type="text" class="form-control form-control-sm" name="c_presion_pulso" id="c_presion_pulso"/>
 				    </div>
 				    <div class="form-group col-sm-12 col-md-6">
 				        <label class="floating-label-activo">Comentarios</label>
@@ -65,11 +65,8 @@
 		</div>
 	</div>
 </div>
+
 <script>
-
-
-
-
     function ctrl_presion()
     {
         ver_registros_c_presion('reg-c-presion');
@@ -155,11 +152,6 @@
                 {
                     $.each(data.registros, function (key, value)
                     {
-
-
-
-
-
                         var html = '';
                         html += '<tr>';
                         html += '    <td>'+value.fecha+'</td>';

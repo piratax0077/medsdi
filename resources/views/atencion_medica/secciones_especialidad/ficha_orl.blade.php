@@ -352,12 +352,12 @@
                                     </div>
                                 </div>
                                 <!--Formulario / Signos vitales y otros-->
-                                {{--  @include('general.secciones_ficha.signos_vitales')  --}}
+                                @include('general.secciones_ficha.signos_vitales')
                                 <!--Cierre: Formulario / Signos vitales y otros-->
                                 <!--Diagnóstico-->
                                 @include('general.secciones_ficha.diagnostico')
                                 <!--CRONICOS / GES / CONFIDENCIAL -->
-                                {{--  @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')  --}}
+                                @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
                                 <!--Diagnóstico-->
 
 

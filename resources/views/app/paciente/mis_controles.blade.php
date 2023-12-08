@@ -11,7 +11,8 @@
                                 <h5 class="m-b-10 font-weight-bold">Controles</h5>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="escritorio_subadmin_laboratorio.php" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather       icon-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta') }}" data-toggle="tooltip" data-placement="top" title="Volver a inicio de receta online">Receta Online</a></li>
                                 <li class="breadcrumb-item"><a href="#">Controles</a></li>
                             </ul>
                         </div>
@@ -74,28 +75,9 @@
     </div>
     <!--**** CIERRE CONTAINER BASE ****-->
 
+    @include("app.paciente.modales.control.m_presion_arterial")
 	@include("app.paciente.modales.control.m_glicemia")
     @include("app.paciente.modales.control.m_peso")
-    @include("app.paciente.modales.control.m_presion_arterial")
     @include("app.paciente.modales.control.m_oxigeno")
     @include("app.paciente.modales.control.m_vol_orina")
-
-	<script type="text/javascript">
-		function ctrl_glicemia() {
-			$('#c_glicemia').modal('show');
-		}
-		function ctrl_presion() {
-			$('#c_presion_arterial').modal('show');
-		}
-
-		function ctrl_peso() {
-			$('#c_peso').modal('show');
-		}
-        function ctrl_oxig() {
-			$('#oxigeno_diario').modal('show');
-		}
-        function ctrl_orina() {
-			$('#vol_orina').modal('show');
-		}
-	</script>
 @endsection
