@@ -214,12 +214,12 @@
             }
 
             .texto-vertical-2 {
-                font-size: 0.65em;
+                font-size: 0.5em;
                 position: fixed;
                 writing-mode: vertical-lr;
                 transform: rotate(270deg);
                 /* right: -320px; */
-                right: -360px;
+                right: -300px;
                 top: 400px;
                 font-family: Poppins;
             }

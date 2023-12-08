@@ -18,4 +18,9 @@ class InformeMedico extends Model
     {
         return $this->hasOne(TipoInforme::class, 'id', 'id_tipo_informe');
     }
+
+    public function Profesional()
+    {
+        return $this->hasOne(Profesional::class, 'id', 'id_profesional');
+    }
 }

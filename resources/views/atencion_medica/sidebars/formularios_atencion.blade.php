@@ -21,73 +21,95 @@
                 <div id="collapse_form_generales" class="collapse" aria-labelledby="heading_form_generales"
                     data-parent="#accordion_formularios_atencion">
                     <div class="card-body-sidebar">
-                        <!--Boton Modal Formulario certificado de reposo-->
-                        @if (auth()->user()->can('profesional.premium.pacientes.reposo_medico'))
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_certificado_reposo">
-                                + Certificado de reposo
-                            </button>
-                        @else
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_certificado_reposo">
-                                + Certificado de reposo
-                            </button>
-                        @endif
-
-                        @if (auth()->user()->can('profesional.premium.pacientes.interconsulta'))
-                            <!--Boton Modal Formulario de interconsulta-->
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta">
-                                + Crear Interconsulta
-                            </button>
-                        @else
-                            <!--Boton Modal Formulario de interconsulta-->
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta">
-                                + Crear Interconsulta
-                            </button>
-                        @endif
-
-                        @if (auth()->user()->can('profesional.premium.pacientes.interconsulta'))
-                            <!--Boton Modal Formulario de interconsulta respuesta-->
-                            @if($interconsulta)
-                                <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta_respuesta">
-                                    + Responder Interconsulta
+                        @if(!empty(session('lic_token')) && session('lic_estado') == 1)
+                            <!--Boton Modal Formulario certificado de reposo-->
+                            @if (auth()->user()->can('profesional.premium.pacientes.reposo_medico'))
+                                <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_certificado_reposo">
+                                    + Certificado de reposo
                                 </button>
                             @else
-                                <button type="button" class="btn btn-sm btn-info btn-block text-left  disabled" style="cursor: not-allowed;">
-                                    + Responder Interconsulta
+                                <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_certificado_reposo">
+                                    + Certificado de reposo
+                                </button>
+                            @endif
+
+                            @if (auth()->user()->can('profesional.premium.pacientes.interconsulta'))
+                                <!--Boton Modal Formulario de interconsulta-->
+                                <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta">
+                                    + Crear Interconsulta
+                                </button>
+                            @else
+                                <!--Boton Modal Formulario de interconsulta-->
+                                <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta">
+                                    + Crear Interconsulta
+                                </button>
+                            @endif
+
+                            @if (auth()->user()->can('profesional.premium.pacientes.interconsulta'))
+                                <!--Boton Modal Formulario de interconsulta respuesta-->
+                                @if($interconsulta)
+                                    <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta_respuesta">
+                                        + Responder Interconsulta
+                                    </button>
+                                @else
+                                    <button type="button" class="btn btn-sm btn-info btn-block text-left  disabled" style="cursor: not-allowed;">
+                                        + Responder Interconsulta
+                                    </button>
+                                @endif
+                            @else
+                                <!--Boton Modal Formulario de interconsulta respuesta-->
+                                @if($interconsulta)
+                                    <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta_respuesta">
+                                        + Responder Interconsulta
+                                    </button>
+                                @else
+                                    <button type="button" class="btn btn-sm btn-info btn-block text-left  disabled" style="cursor: not-allowed;">
+                                        + Responder Interconsulta
+                                    </button>
+                                @endif
+                            @endif
+
+                            @if (auth()->user()->can('profesional.premium.pacientes.informe_medico'))
+                                <!--Boton Modal Formulario de informe médico-->
+                                <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_inf_medico">
+                                    + Informe Médico
+                                </button>
+                            @else
+                                <!--Boton Modal Formulario de informe médico-->
+                                <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_inf_medico">
+                                    + Informe Médico
+                                </button>
+                            @endif
+
+                            @if (auth()->user()->can('profesional.premium.pacientes.uso_personal'))
+                                <!--Boton Modal formulario uso personal-->
+                                <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_uso_personal">
+                                    + Uso Personal
+                                </button>
+                            @else
+                                <!--Boton Modal formulario uso personal-->
+                                <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_uso_personal">
+                                    + Uso Personal
                                 </button>
                             @endif
                         @else
+                            <!--Boton Modal Formulario certificado de reposo-->
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_certificado_reposo" disabled='true'>
+                                + Certificado de reposo
+                            </button>
+                            <!--Boton Modal Formulario de interconsulta-->
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta" disabled='true'>
+                                + Crear Interconsulta
+                            </button>
                             <!--Boton Modal Formulario de interconsulta respuesta-->
-                            @if($interconsulta)
-                                <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta_respuesta">
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta_respuesta" disabled='true'>
                                     + Responder Interconsulta
-                                </button>
-                            @else
-                                <button type="button" class="btn btn-sm btn-info btn-block text-left  disabled" style="cursor: not-allowed;">
-                                    + Responder Interconsulta
-                                </button>
-                            @endif
-                        @endif
-
-                        @if (auth()->user()->can('profesional.premium.pacientes.informe_medico'))
-                            <!--Boton Modal Formulario de informe médico-->
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_inf_medico">
+                            </button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_inf_medico" disabled='true'>
                                 + Informe Médico
                             </button>
-                        @else
-                            <!--Boton Modal Formulario de informe médico-->
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_inf_medico">
-                                + Informe Médico
-                            </button>
-                        @endif
-
-                        @if (auth()->user()->can('profesional.premium.pacientes.uso_personal'))
                             <!--Boton Modal formulario uso personal-->
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_uso_personal">
-                                + Uso Personal
-                            </button>
-                        @else
-                            <!--Boton Modal formulario uso personal-->
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_uso_personal">
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_uso_personal" disabled='true'>
                                 + Uso Personal
                             </button>
                         @endif

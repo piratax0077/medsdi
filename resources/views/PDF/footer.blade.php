@@ -36,7 +36,7 @@
                         </div>
                         <div style="line-height: 10px; font-weight: lighter; font-family: Poppins; font-size: 10px;">Firma Digital Avanzada SDI</div>
                         <div style="line-height: 10px; font-weight: bold; font-family: Poppins;">Dr. {{ $cuerpo['array_profesional']['nombre'] }}</div>
-                        <div style="line-height: 10px; font-weight: lighter; font-family: Poppins;">{{ $cuerpo['array_profesional']['token'] }}</div>
+                        {{-- <div style="line-height: 10px; font-weight: lighter; font-family: Poppins;">{{ $cuerpo['array_profesional']['token'] }}</div> --}}
                     </th>
                 @endif
 

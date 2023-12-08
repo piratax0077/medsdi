@@ -24,10 +24,10 @@
                     <div style="line-height: 10px; font-weight: lighter; font-family: Poppins; font-size: 10px;">Firma Digital Avanzada SDI</div>
                     @if(!empty($cuerpo['array_ficha_atencion_resp']))
                         <div style="line-height: 10px; font-weight: bold; font-family: Poppins;">Dr. {{ $cuerpo['array_profesional_resp']['nombre'] }}</div>
-                        <div style="line-height: 10px; font-weight: lighter; font-family: Poppins;">{{ $cuerpo['array_profesional_resp']['token'] }}</div>
+                        {{-- <div style="line-height: 10px; font-weight: lighter; font-family: Poppins;">{{ $cuerpo['array_profesional_resp']['token'] }}</div> --}}
                     @else
                         <div style="line-height: 10px; font-weight: bold; font-family: Poppins;">Dr. {{ $cuerpo['array_profesional_soli']['nombre'] }}</div>
-                        <div style="line-height: 10px; font-weight: lighter; font-family: Poppins;">{{ $cuerpo['array_profesional_soli']['token'] }}</div>
+                        {{-- <div style="line-height: 10px; font-weight: lighter; font-family: Poppins;">{{ $cuerpo['array_profesional_soli']['token'] }}</div> --}}
                     @endif
                 </th>
             </tr>

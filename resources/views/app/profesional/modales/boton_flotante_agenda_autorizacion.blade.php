@@ -52,10 +52,10 @@
             transform: rotate(90deg) ;
         }
 
-      
+
     </style>
-  
- 
+
+
 @endsection
 
 <!-- BOTÓN FLOTANTE AUTORIZACION (AUTORIZACION LICENCIA) -->
@@ -174,7 +174,7 @@
         {
             $('#modal_autorizacion').modal('show');
             $('#modal_autorizacion_imagen').html('');
-            $('#modal_autorizacion_mensaje').html('');			
+            $('#modal_autorizacion_mensaje').html('');
         }
 
         function  cerrar_autorizacion()
@@ -254,6 +254,12 @@
                             $("#hip_diag_spec").trigger("keyup");
                         }
 
+                        $('.accion_modal_certificado_reposo').attr('disabled', true);
+                        $('.accion_modal_interconsulta').attr('disabled', true);
+                        $('.accion_modal_interconsulta_respuesta').attr('disabled', true);
+                        $('.accion_modal_inf_medico').attr('disabled', true);
+                        $('.accion_modal_uso_personal').attr('disabled', true);
+
                     }
                     else if(data.estado == 1)
                     {
@@ -286,6 +292,18 @@
                             $("#hip_diag_spec").trigger("keyup");
                         }
 
+                        $('.accion_modal_certificado_reposo').attr('disabled', false);
+                        $('.accion_modal_interconsulta').attr('disabled', false);
+
+                        @if($interconsulta)
+                            $('.accion_modal_interconsulta_respuesta').attr('disabled', false);
+                        @else
+                            $('.accion_modal_interconsulta_respuesta').attr('disabled', true);
+                        @endif
+
+                        $('.accion_modal_inf_medico').attr('disabled', false);
+                        $('.accion_modal_uso_personal').attr('disabled', false);
+
                     }
                     else if(data.estado == 2)
                     {
@@ -312,6 +330,12 @@
                             $("#hip_diag_spec").trigger("keyup");
                         }
 
+                        $('.accion_modal_certificado_reposo').attr('disabled', true);
+                        $('.accion_modal_interconsulta').attr('disabled', true);
+                        $('.accion_modal_interconsulta_respuesta').attr('disabled', true);
+                        $('.accion_modal_inf_medico').attr('disabled', true);
+                        $('.accion_modal_uso_personal').attr('disabled', true);
+
                     }
                     else if(data.estado == 3)
                     {
@@ -337,6 +361,11 @@
                         {
                             $("#hip_diag_spec").trigger("keyup");
                         }
+                        $('.accion_modal_certificado_reposo').attr('disabled', true);
+                        $('.accion_modal_interconsulta').attr('disabled', true);
+                        $('.accion_modal_interconsulta_respuesta').attr('disabled', true);
+                        $('.accion_modal_inf_medico').attr('disabled', true);
+                        $('.accion_modal_uso_personal').attr('disabled', true);
 
                     }
                     else if(data.estado == 4)
@@ -363,6 +392,11 @@
                         {
                             $("#hip_diag_spec").trigger("keyup");
                         }
+                        $('.accion_modal_certificado_reposo').attr('disabled', true);
+                        $('.accion_modal_interconsulta').attr('disabled', true);
+                        $('.accion_modal_interconsulta_respuesta').attr('disabled', true);
+                        $('.accion_modal_inf_medico').attr('disabled', true);
+                        $('.accion_modal_uso_personal').attr('disabled', true);
 
                     }
                     else
@@ -384,6 +418,12 @@
                         {
                             $("#hip_diag_spec").trigger("keyup");
                         }
+
+                        $('.accion_modal_certificado_reposo').attr('disabled', true);
+                        $('.accion_modal_interconsulta').attr('disabled', true);
+                        $('.accion_modal_interconsulta_respuesta').attr('disabled', true);
+                        $('.accion_modal_inf_medico').attr('disabled', true);
+                        $('.accion_modal_uso_personal').attr('disabled', true);
 
                     }
                 }
@@ -433,6 +473,12 @@
                                 $("#hip_diag_spec").trigger("keyup");
                             }
 
+                            $('.accion_modal_certificado_reposo').attr('disabled', true);
+                            $('.accion_modal_interconsulta').attr('disabled', true);
+                            $('.accion_modal_interconsulta_respuesta').attr('disabled', true);
+                            $('.accion_modal_inf_medico').attr('disabled', true);
+                            $('.accion_modal_uso_personal').attr('disabled', true);
+
                         }
                         else
                         {
@@ -459,6 +505,18 @@
                             {
                                 $("#hip_diag_spec").trigger("keyup");
                             }
+
+                            $('.accion_modal_certificado_reposo').attr('disabled', false);
+                            $('.accion_modal_interconsulta').attr('disabled', false);
+
+                            @if($interconsulta)
+                                $('.accion_modal_interconsulta_respuesta').attr('disabled', false);
+                            @else
+                                $('.accion_modal_interconsulta_respuesta').attr('disabled', true);
+                            @endif
+
+                            $('.accion_modal_inf_medico').attr('disabled', false);
+                            $('.accion_modal_uso_personal').attr('disabled', false);
 
                         }
                     }

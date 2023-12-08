@@ -39,11 +39,14 @@ use Illuminate\Support\Facades\Session;
 
 use App\Helpers\Funciones;
 use App\Models\AcompananteDependiente;
+use App\Models\CertificadoReposo;
 use App\Models\ControlObesidad;
 use App\Models\Diabete;
 use App\Models\ExamenEspecialidad;
 use App\Models\ExamenMedico;
 use App\Models\Hipertension;
+use App\Models\InformeMedico;
+use App\Models\Interconsulta;
 use App\Models\LogUsersDevices;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -57,6 +60,7 @@ use App\Models\PacientesDependientes;
 use App\Models\Recomendacion;
 use App\Models\RecomendacionDetalle;
 use App\Models\ResultadoExamen;
+use App\Models\UsoPersonal;
 use DateTime;
 
 class EscritorioPaciente extends Controller
@@ -1299,9 +1303,101 @@ class EscritorioPaciente extends Controller
     public function receta_miscertificados()
     {
         $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
-        $fichas = FichaAtencion::where('id_paciente', $paciente->id)->get();
+        // $fichas = FichaAtencion::where('id_paciente', $paciente->id)->get();
+        $certificado_reposo = CertificadoReposo::with(['Profesional' => function($query){
+                                        $query->select('id','nombre', 'apellido_uno', 'apellido_dos', 'id_especialidad', 'id_tipo_especialidad', 'id_sub_tipo_especialidad')
+                                                    ->with(['Especialidad' => function($query2){
+                                                        $query2->select('id', 'nombre');
+                                                    }])
+                                                    ->with(['TipoEspecialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ->with(['SubTipoEspecialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ;
+                                    }])
+                                    ->where('id_paciente', $paciente->id)->get();
 
-        return view('app.paciente.receta.mis_certificados', ['fichas' => $fichas]);
+        $interconsulta = Interconsulta::with(['profesional' => function($query){
+                                        $query->select('id','nombre', 'apellido_uno', 'apellido_dos', 'id_especialidad', 'id_tipo_especialidad', 'id_sub_tipo_especialidad')
+                                                    ->with(['Especialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ->with(['TipoEspecialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ->with(['SubTipoEspecialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ;
+                                    }])
+                                    ->with(['ProfesionalInter' => function($query){
+                                        $query->select('id','nombre', 'apellido_uno', 'apellido_dos', 'id_especialidad', 'id_tipo_especialidad', 'id_sub_tipo_especialidad')
+                                                    ->with(['Especialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ->with(['TipoEspecialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ->with(['SubTipoEspecialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ;
+                                    }])
+                                    ->with(['ProfesionalResp' => function($query){
+                                        $query->select('id','nombre', 'apellido_uno', 'apellido_dos', 'id_especialidad', 'id_tipo_especialidad', 'id_sub_tipo_especialidad')
+                                                    ->with(['Especialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ->with(['TipoEspecialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ->with(['SubTipoEspecialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ;
+                                    }])
+                                    ->where('id_paciente', $paciente->id)->get();
+        // ProfesionalInter
+        // ProfesionalResp
+        $informe_medico = InformeMedico::with(['Profesional' => function($query){
+                                        $query->select('id','nombre', 'apellido_uno', 'apellido_dos', 'id_especialidad', 'id_tipo_especialidad', 'id_sub_tipo_especialidad')
+                                                    ->with(['Especialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ->with(['TipoEspecialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ->with(['SubTipoEspecialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ;
+                                    }])
+                                    ->where('id_paciente', $paciente->id)->get();
+
+        $uso_personal = UsoPersonal::with(['profesional' => function($query){
+                                        $query->select('id','nombre', 'apellido_uno', 'apellido_dos', 'id_especialidad', 'id_tipo_especialidad', 'id_sub_tipo_especialidad')
+                                                    ->with(['Especialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ->with(['TipoEspecialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ->with(['SubTipoEspecialidad' => function($query){
+                                                        $query->select('id', 'nombre');
+                                                    }])
+                                                    ;
+                                    }])
+                                    ->where('id_paciente', $paciente->id)->get();
+
+
+        return view('app.paciente.receta.mis_certificados', [
+            'certificado_reposo' => $certificado_reposo,
+            'interconsulta' => $interconsulta,
+            'informe_medico' => $informe_medico,
+            'uso_personal' => $uso_personal,
+        ]);
     }
 
     public function receta_mislicencias()

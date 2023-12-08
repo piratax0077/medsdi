@@ -347,6 +347,9 @@ class CertificadoController extends Controller
                                     $datos['inf_documento']['msj'] = 'Receta no encontrada';
                                 }
                                 break;
+                            // 25. USOS PERSONALES
+                            case '25':
+                                break;
                             default:
                                 # code...
                                 break;
@@ -557,6 +560,9 @@ class CertificadoController extends Controller
 
                         $card_informacion = $html;
                         break;
+                    // 25. USOS PERSONALES
+                    case '25':
+                        break;
                     default:
                         # code...
                         break;
@@ -686,6 +692,9 @@ class CertificadoController extends Controller
 
                             $card_informacion = $html;
 
+                            break;
+                        // 25. USOS PERSONALES
+                        case '25':
                             break;
                         default:
                             $html = '';
@@ -1020,6 +1029,9 @@ class CertificadoController extends Controller
                                                 break;
                                             // 24. RECETA ESPECIALIDADES - OFTALMOLOGIA - LENTES
                                             case '24':
+                                                break;
+                                            // 25. USOS PERSONALES
+                                            case '25':
                                                 break;
                                             default:
                                                 # code...
@@ -1357,6 +1369,9 @@ class CertificadoController extends Controller
                     // 24. RECETA ESPECIALIDADES - OFTALMOLOGIA - LENTES
                     case '24':
                         break;
+                    // 25. USOS PERSONALES
+                    case '25':
+                        break;
                     default:
                         # code...
                         break;
@@ -1454,6 +1469,9 @@ class CertificadoController extends Controller
                             break;
                         // 24. RECETA ESPECIALIDADES - OFTALMOLOGIA - LENTES
                         case '24':
+                            break;
+                        // 25. USOS PERSONALES
+                        case '25':
                             break;
                         default:
                             $html = '';
