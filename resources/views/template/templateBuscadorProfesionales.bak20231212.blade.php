@@ -45,10 +45,6 @@
 
 
     @yield('page-styles')
-
-    <!-- flatpickr -->
-    <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
-
     <style>
 
         #calendario_reserva_buscador {
@@ -162,9 +158,6 @@
     <!--select2 -->
     <script src="{{ asset('js/plugins/select2.full.min.js')}}"></script>
 
-    <!-- flatpickr -->
-    <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
-
     <!-- TEMPLATE BUSCADOR DE PROFESIONAL -->
     <script>
 
@@ -255,10 +248,9 @@
             // asigno id profesioanl
             $('#modal_reserva_hora_id_profesional').val(id_profesional);
 
-            carga_calendario_profesional();
-
             // cargo lugares de atencion  y asigno lugar con hora mas proxima
             lugar_atencion_profesional($('#modal_reserva_hora_id_profesional'), 'modal_reserva_hora_lugar_atencion', id_lugar_atencion)
+
             $('#reservar_hora').modal('show');
         }
 
@@ -601,15 +593,12 @@
 
         function carga_calendario_profesional()
         {
-            $('#modal_reserva_fecha').val('');
-            $('#modal_reserva_fecha').attr('disabled',true);
-            $('#modal_reserva_hora_lista_horas').html('');
-
             let id_profesional = $('#modal_reserva_hora_id_profesional').val();
             let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
+            console.log('cargando calendario');
             let url = "{{ route('profesional.DiasLaboralesProfesionaLugarAtencionBuscador') }}";
-
             $.ajax({
+
                     url: url,
                     type: "get",
                     data: {
@@ -643,37 +632,10 @@
 
                             $('#modal_reserva_dias_atencion').html(dias_texto);
 
-                            /** calendario */
-                            $('#modal_reserva_fecha').attr('disabled',false);
-
-                            $("#modal_reserva_fecha").flatpickr({
-                                "disable": [
-                                    function(date) {
-                                        return !dias_activos.includes(String(date.getDay()));
-                                    }
-                                ],
-                                minDate: "today",
-                                maxDate: new Date().fp_incr(60), // 14 days from now
-                                locale: {
-                                    firstDayOfWeek: 1,
-                                    weekdays: {
-                                    shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                                    longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-                                    },
-                                    months: {
-                                    shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Оct', 'Nov', 'Dic'],
-                                    longhand: ['Enero', 'Febrero', 'Мarzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                                    },
-                                },
-                            });
-                            /** fin calendario */
-
                         }
                         else
                         {
                             $('#modal_reserva_dias_atencion').html('NO INFORMADOS');
-                            $('#modal_reserva_fecha').attr('disabled',true);
-                            $('#modal_reserva_fecha_seleccionada').html('');
                         }
 
                     } else {
@@ -1115,8 +1077,6 @@
     </script>
 
     @yield('page-script')
-
-
 </body>
 </html>
 

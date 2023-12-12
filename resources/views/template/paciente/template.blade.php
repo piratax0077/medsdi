@@ -54,6 +54,8 @@
     <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
     <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
 
+    <!-- flatpickr -->
+    <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
 
     @yield('page-styles')
 
@@ -131,6 +133,9 @@
 
 
     @yield('page-script')
+
+    <!-- flatpickr -->
+    <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');

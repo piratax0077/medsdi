@@ -50,6 +50,10 @@
 
     @yield('page-styles')
 
+    <!-- flatpickr -->
+    <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
+
+
 </head>
 
 <body>
@@ -125,7 +129,11 @@
 
     @yield('page-script')
 
+    <!-- flatpickr -->
+    <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
+
     <script>
+
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         $(document).ready(function () {
