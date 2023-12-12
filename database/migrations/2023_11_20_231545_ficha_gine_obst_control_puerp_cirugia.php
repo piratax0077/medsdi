@@ -13,7 +13,7 @@ class FichaGineObstControlPuerpCirugia extends Migration
      */
     public function up()
     {
-        Schema::create('ficha_gineco_cont_puerp_cir', function (Blueprint $table) {
+        Schema::create('ficha_gin_cont_puerp_cir', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_paciente');
             $table->bigInteger('id_profesional');

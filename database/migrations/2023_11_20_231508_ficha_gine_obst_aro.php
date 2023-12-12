@@ -13,7 +13,7 @@ class FichaGineObstAro extends Migration
      */
     public function up()
     {
-        Schema::create('ficha_gineco_obst_aro', function (Blueprint $table) {
+        Schema::create('ficha_gin_obst_aro', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_paciente');
             $table->bigInteger('id_profesional');

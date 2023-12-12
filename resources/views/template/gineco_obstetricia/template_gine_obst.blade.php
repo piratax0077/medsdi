@@ -76,7 +76,7 @@
         @yield('Modals-med-exa')
         @yield('Modals-med-exa-esp')
         @yield('modal-ficha-general-espc')
-        @include('atencion_medica.secciones_especialidad.ficha_orl_tipo')
+        {{-- @include('atencion_medica.secciones_especialidad.ficha_orl_tipo') --}}
 
         <!-- Modal de la vista fin -->
 

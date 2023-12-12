@@ -13,7 +13,7 @@ class FichaGineObstAntecedentes extends Migration
      */
     public function up()
     {
-        Schema::create('ficha_gineco_obst_antec', function (Blueprint $table) {
+        Schema::create('ficha_gin_obst_antec', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_paciente');
             $table->bigInteger('id_profesional');

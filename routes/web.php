@@ -646,6 +646,7 @@ Route::group([
     // Route::get('/receta/pdf', [App\Http\Controllers\RecomendacionController::class, 'verPDF'])->name('profesional.receta.pdf');
 
 	/** GINECO OBSTETRICO */
+
     Route::post('/ficha/ginecologia/obstetricia/registrar', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'store'])->name('fichaAtencion.registrar_ficha_gine_obst');
     /** RECETA DE LENTES */
     Route::post('/receta/lente/registro', [App\Http\Controllers\OftarmoRecetaLenteController::class, 'registrar'])->name('receta.oftalmo.lente.registrar');

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class FichaGinecoContObstetrico extends Migration
+class FichaGinContObstetrico extends Migration
 {
     /**
      * Run the migrations.
@@ -53,7 +53,7 @@ class FichaGinecoContObstetrico extends Migration
             $table->string('feto_aut')->nullable();
             $table->string('feto_obs_grl')->nullable();
             $table->integer('cont_rutina')->nullable();
-            $table->integerg('der_emb_aro')->nullable();
+            $table->integer('der_emb_aro')->nullable();
             $table->integer('sol_hosp')->nullable();
             $table->string('otro')->nullable();
             $table->string('otro1')->nullable();

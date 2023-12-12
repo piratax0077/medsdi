@@ -13,7 +13,7 @@ class FichaGineObstAntecedentesAro extends Migration
      */
     public function up()
     {
-        Schema::create('ficha_gineco_obst_ant_aro', function (Blueprint $table) {
+        Schema::create('ficha_gine_obst_ant_aro', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_paciente');
             $table->bigInteger('id_profesional');
@@ -47,7 +47,7 @@ class FichaGineObstAntecedentesAro extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ficha_gin_obst_ant_aro');
+        Schema::dropIfExists('ficha_gine_obst_ant_aro');
     }
 }
 

@@ -41,6 +41,7 @@ function ciclo() {
     $('#ciclo_modal').modal('show');
 }
 
+
 /** Métodos anticonceptivos **/
 function anticoncep() {
     $('#anticonceptivo_modal').modal('show');
@@ -245,6 +246,10 @@ $('#ant_mamas_gine').click(function() {
 /** Modal Antecedentes hormonales **/
 $('#ant_hormo_gine').click(function() {
     $('#form_10_gine').toggle();
+});
+
+$('#gine_mecanicos').click(function() {
+    $('#mecanicos_go').toggle();
 });
 
 /** Modal desarrollo tunner **/
