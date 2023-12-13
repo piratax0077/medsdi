@@ -385,11 +385,82 @@
                     <div class="tab-pane fade" id="info-academico" role="tabpanel" aria-labelledby="info-academico-tab">
                         {{-- formulario para agregar  --}}
                         <div class="row">
-                            <div class="col-md-12 pb-3">
+                            <div class="col-md-12">
                                 <h5 class="f-20 text-c-blue d-inline mr-2 pt-1">Antecedentes acedémicos</h5>
                                 <button type="button" class="btn btn-info-light-c btn-xs d-inline" onclick="info_academica_m();"><i class="feather icon-plus"></i> Añadir</button>
                             </div>
-
+                            <div class="col-md-12">
+                                <!--Card profesion-->
+                                <div class="card">
+                                    <div class="card-body d-flex align-items-center justify-content-between bg-primary">
+                                        <h5 class="mb-0 text-white">Agregar antecedentes Académicos</h5>
+                                        <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".agregar_academico" aria-expanded="false" aria-controls="agregar_academico">
+                                            <i class="feather icon-plus"></i>
+                                        </button>
+                                    </div>
+                                    <!--(agregar)profesion-->
+                                    @if($perfil_academico == NULL)
+                                    <div class="card-body collapse show agregar_academico" id="agregar">
+                                    @else
+                                    <div class="card-body collapse agregar_academico" id="agregar">
+                                    @endif
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label font-weight-bolder">Tipo Antecedente Académico</label>
+                                            <div class="col-sm-7">
+                                                <select class="form-control" name="id_tipo_antecedente_academico" id="id_tipo_antecedente_academico">
+                                                    <option value="0">Seleccionar</option>
+                                                    @foreach($tipo_ant_academico as $key_t_ant_acade => $value_t_ant_acade)
+                                                        <option value="{{ $value_t_ant_acade->id }}">{{ $value_t_ant_acade->nombre }} </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label font-weight-bolder">Profesión</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" placeholder="Profesión" id="agregar_ant_academico_profesion" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label font-weight-bolder">Universidad</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" placeholder="Universidad de Titulo" id="agregar_ant_academico_universidad" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label font-weight-bolder">Año de Titulo</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" placeholder="Año de Titulo" id="agregar_ant_academico_anio" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label font-weight-bolder">Ciudad y País</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" placeholder="Ciudad y País" id="agregar_ant_academico_ciudad_pais" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label font-weight-bolder">N° SUPERSALUD</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" placeholder="N° SUPERSALUD" id="agregar_ant_academico_supersalud" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label font-weight-bolder">N° Colegio Profesional</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" placeholder="N° Colegio Profesional" id="agregar_ant_academico_numero_colegio" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-12 col-form-label"></label>
+                                            <div class="col-sm-12 d-flex justify-content-end">
+                                                <button class="btn btn-info" onclick="agregar_registro_academico();">Guardar cambios</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <!--Cierre: (Editar)profesion-->
+                                </div>
+                            </div>
                             <div class="row">
                                 @if($perfil_academico != NULL)
                                     @foreach($perfil_academico as $key_academico => $value_academico)
@@ -479,7 +550,7 @@
                         </div>
                     </div>
 
-
+                    
                     @include('general.seccion_perfil.seccion_liquidacion')
                 </div>
             </div>
@@ -488,5 +559,6 @@
     <!--Cierre: Container Completo-->
     <!--MODALS-->
     @include('app.profesional.modales.info_academica')
-
+    @include('app.profesional.modales.datos_bancarios')
+      
 @endsection

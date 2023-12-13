@@ -140,17 +140,8 @@
 
     <!--PERFIL PROFESIONAL-->
     <script type="text/javascript">
-        function info_academica_m() {
-                $('#info_academica_modal').modal('show');
-                }
-    </script>
-    <script type="text/javascript">
-        function cta_banco_m() {
-                $('#cta_banco_modal').modal('show');
-                }
-    </script>
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-    <script>
         var CalendarEl = null;
         if($('#agenda').length > 0)
         {
@@ -572,11 +563,6 @@
                 CalendarEl.render();
             });
         }
-
-    </script>
-
-    <script>
-        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         function formatDate(date) {
             var d = new Date(date),
@@ -1452,7 +1438,6 @@
                 });
         }
 
-
         function modal_agregar_contacto_emergencia() {
 
             $('#agregar_contacto_emergencia').modal('show');
@@ -1463,8 +1448,6 @@
             $('#form_contacto_nuevo').hide();
             //  $(this).find('form').trigger('reset');
         }
-
-
 
         function autorizacion_ficha_medica_unica(id) {
 
@@ -1575,7 +1558,9 @@
                             //  alert('No tiene lugares de atención asignados, favor registrar uno');
                         } else {
                             $('#modal_seleccionar_lugar_atencion').modal('show');
+                            validar_seleccionar_lugar_atencion();
                         }
+
 
                     }
                     // $(data).each(function(i, v) { // indice, valor
@@ -1588,6 +1573,15 @@
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
+        }
+
+        function validar_seleccionar_lugar_atencion()
+        {
+            var valor = $('#lugares_atencion').val();
+            if(valor == "" || valor == 0)
+                $('#btn_modal_seleccionar_lugar_atencion_ir').attr('disabled', true);
+            else
+                $('#btn_modal_seleccionar_lugar_atencion_ir').attr('disabled', false);
         }
 
         function seleccionar_lugar_atencion_agenda() {
@@ -1783,7 +1777,6 @@
                 });
         }
 
-
         function guardar_valores_lugar_atencion() {
 
 
@@ -1825,7 +1818,6 @@
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
         };
-
 
         function editar_contacto_emergencia() {
 
@@ -1961,7 +1953,6 @@
                 });
             }
         };
-
 
         function eliminar_contacto_paciente(contacto, paciente) {
 
@@ -2203,8 +2194,6 @@
 
         }
 
-
-
         function buscar_asistente_profesional() {
 
             let rut_asistente = $('#rut_nuevo_asistente').val();
@@ -2286,57 +2275,6 @@
                 });
 
         };
-
-        //funciones Mis lugares de atencion
-
-        /*    function buscar_asistente() {
-
-                let rut_asistente = $('#rut_asistente').val();
-                let url = "{{ route('profesional.buscar_asistente') }}";
-
-                $.ajax({
-
-                        url: url,
-                        type: "get",
-                        data: {
-                            rut_asistente: rut_asistente,
-                        },
-                    })
-                    .done(function(data) {
-
-                        if (data !== 'null') {
-
-                            data = JSON.parse(data);
-
-                            $('#buscar_datos_asistente').hide();
-
-                            $('#datos_asistente').show();
-                            $('#datos_rut_asistente').text(data.rut);
-                            $('#id_asistente_lugar_atencion').val(data.id);
-                            $('#datos_nombre_asistente').text(data.nombres + ' ' + data.apellido_uno + ' ' + data
-                                .apellido_dos);
-                            $('#datos_email_asistente').text(data.email);
-                            $('#datos_telefono_asistente').text(data.telefono_uno);
-
-
-
-
-                        } else {
-
-                            alert('Asistente no encontrada en el sistema');
-                            $('#rut_asistente').val('');
-
-
-                        }
-
-                    })
-                    .fail(function(jqXHR, ajaxOptions, thrownError) {
-                        console.log(jqXHR, ajaxOptions, thrownError)
-                    });
-
-            };*/
-
-
 
         function ver_lugar_atencion(id) {
 
@@ -2534,102 +2472,102 @@
         };
 
         function buscar_archivos(id_ficha_clinica)
-    {
+        {
 
-        url = "{{ route('ficha_atencion.ver_archivos') }}";
-        id_ficha = id_ficha_clinica;
-        $('#table_atenciones_previas_archivos tbody').html('');
+            url = "{{ route('ficha_atencion.ver_archivos') }}";
+            id_ficha = id_ficha_clinica;
+            $('#table_atenciones_previas_archivos tbody').html('');
 
-        $.ajax({
-                url: url,
-                type: "get",
-                data: {
-                    id_ficha_atencion: id_ficha
-                },
-                dataType: "json",
-            })
-            .done(function(data) {
-                if (data != null) {
+            $.ajax({
+                    url: url,
+                    type: "get",
+                    data: {
+                        id_ficha_atencion: id_ficha
+                    },
+                    dataType: "json",
+                })
+                .done(function(data) {
+                    if (data != null) {
 
-                    $('#m_cons_archivosLabel').text('Documentos de esta consulta del Paciente: ' + data.paciente.nombre);
-                    if(data.estado == 1)
-                    {
-                        $('#table_atenciones_previas_archivos tbody').html('');
-                        var j = 1; //contador para asignar id al boton que borrara la fila
-                        $.each(data.registros, function(index, value)
+                        $('#m_cons_archivosLabel').text('Documentos de esta consulta del Paciente: ' + data.paciente.nombre);
+                        if(data.estado == 1)
                         {
-                            var fecha = formatDate(value.fecha);
-                            var tipo = value.tipo;
-                            var id = value.id;
-                            var id_ficha_archivo = value.id_ficha;
-                            var url = value.url;
+                            $('#table_atenciones_previas_archivos tbody').html('');
+                            var j = 1; //contador para asignar id al boton que borrara la fila
+                            $.each(data.registros, function(index, value)
+                            {
+                                var fecha = formatDate(value.fecha);
+                                var tipo = value.tipo;
+                                var id = value.id;
+                                var id_ficha_archivo = value.id_ficha;
+                                var url = value.url;
 
-                            var metodo='';
-                            switch (tipo) {
-                                case 'Certificado de Reposo':
-                                    metodo = 'ver_pdf_certificado_reposo';
-                                    break;
-                                case 'Interconsulta':
-                                    metodo = '';
-                                    break;
-                                case 'Informen Medico':
-                                    metodo = 'ver_pdf_informe_medico';
-                                    break;
-                                case 'Uso Personal':
-                                    metodo = 'ver_pdf_uso_personal';
-                                    break;
+                                var metodo='';
+                                switch (tipo) {
+                                    case 'Certificado de Reposo':
+                                        metodo = 'ver_pdf_certificado_reposo';
+                                        break;
+                                    case 'Interconsulta':
+                                        metodo = '';
+                                        break;
+                                    case 'Informen Medico':
+                                        metodo = 'ver_pdf_informe_medico';
+                                        break;
+                                    case 'Uso Personal':
+                                        metodo = 'ver_pdf_uso_personal';
+                                        break;
 
-                                default:
-                                    metodo = '';
-                                    break;
-                            }
+                                    default:
+                                        metodo = '';
+                                        break;
+                                }
 
-                            var fila = '';
-                            fila += '<tr class="tr_examen" id="row' + j + '">';
-                            fila += '    <td class="text-center align-middle">' + fecha + '</td>';
-                            fila += '    <td class="text-center align-middle">' + tipo + '</td>';
-                            if(metodo != '')
-                                fila += '    <td class="text-center align-middle"><div onclick="'+metodo+'('+id_ficha_archivo+'); $(\'#m_cons_archivos\').modal(\'hide\');" class="btn btn-success btn-sm has-ripple"><i class="feather icon-folder"></i> Ver Archivo</div></td>';
-                            else
-                                fila += '    <td class="text-center align-middle"><div class="btn btn-success btn-sm has-ripple disabled"><i class="feather icon-folder"></i> Ver Archivo</div></td>';
-                            fila += '</tr>';
+                                var fila = '';
+                                fila += '<tr class="tr_examen" id="row' + j + '">';
+                                fila += '    <td class="text-center align-middle">' + fecha + '</td>';
+                                fila += '    <td class="text-center align-middle">' + tipo + '</td>';
+                                if(metodo != '')
+                                    fila += '    <td class="text-center align-middle"><div onclick="'+metodo+'('+id_ficha_archivo+'); $(\'#m_cons_archivos\').modal(\'hide\');" class="btn btn-success btn-sm has-ripple"><i class="feather icon-folder"></i> Ver Archivo</div></td>';
+                                else
+                                    fila += '    <td class="text-center align-middle"><div class="btn btn-success btn-sm has-ripple disabled"><i class="feather icon-folder"></i> Ver Archivo</div></td>';
+                                fila += '</tr>';
 
-                            j++;
+                                j++;
 
+                                $('#table_atenciones_previas_archivos tbody').append(fila);
+
+                            });
+                        }
+                        else
+                        {
+                            $('#table_atenciones_previas_archivos tbody').html('');
+                            var fila = '<tr><td colspan="3"><span><h5>no existen registros</h5></span></td></tr>';
                             $('#table_atenciones_previas_archivos tbody').append(fila);
+                        }
 
-                        });
                     }
                     else
                     {
                         $('#table_atenciones_previas_archivos tbody').html('');
-                        var fila = '<tr><td colspan="3"><span><h5>no existen registros</h5></span></td></tr>';
+                        var fila = '<tr><td colspan="3"><span><h5>no existen registros</h5></span></td></tr>'
                         $('#table_atenciones_previas_archivos tbody').append(fila);
                     }
+                    $('#m_cons_archivos').modal('show');
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
 
-                }
-                else
-                {
-                    $('#table_atenciones_previas_archivos tbody').html('');
-                    var fila = '<tr><td colspan="3"><span><h5>no existen registros</h5></span></td></tr>'
-                    $('#table_atenciones_previas_archivos tbody').append(fila);
-                }
-                $('#m_cons_archivos').modal('show');
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-            $('#table_atenciones_previas_archivos').dataTable().fnClearTable();
-            $('#table_atenciones_previas_archivos').dataTable().fnDestroy();
-            $('#table_atenciones_previas_archivos').DataTable({
-                responsive: true,
-                "bPaginate": false,
-            });
+                $('#table_atenciones_previas_archivos').dataTable().fnClearTable();
+                $('#table_atenciones_previas_archivos').dataTable().fnDestroy();
+                $('#table_atenciones_previas_archivos').DataTable({
+                    responsive: true,
+                    "bPaginate": false,
+                });
 
 
 
-    }
+        }
 
         function validar_email_agenda() {
 
@@ -3019,98 +2957,98 @@
         }
 
         function buscar_examenes(id_ficha_clinica)
-    {
+        {
 
-        {{-- url = "{{ route('buscar.examenes_ficha') }}"; --}}
-        url = "{{ route('examenes.ver_examenes') }}";
-        id_ficha = id_ficha_clinica;
-        $('#table_atecion_previa_tabla_examen_paciente tbody').html('');
+            {{-- url = "{{ route('buscar.examenes_ficha') }}"; --}}
+            url = "{{ route('examenes.ver_examenes') }}";
+            id_ficha = id_ficha_clinica;
+            $('#table_atecion_previa_tabla_examen_paciente tbody').html('');
 
-        $.ajax({
-                url: url,
-                type: "get",
-                data: {
-                    id_ficha_atencion: id_ficha
-                },
-                dataType: "json",
-            })
-            .done(function(data) {
-                if (data != null) {
+            $.ajax({
+                    url: url,
+                    type: "get",
+                    data: {
+                        id_ficha_atencion: id_ficha
+                    },
+                    dataType: "json",
+                })
+                .done(function(data) {
+                    if (data != null) {
 
-                    $('#id_ficha_examen').text('Exámenes de: ' + data.paciente.nombre_paciente);
-                    if(data.estado == 1)
-                    {
-                        $('#table_atecion_previa_tabla_examen_paciente tbody').html('');
-                        var j = 1; //contador para asignar id al boton que borrara la fila
-                        $.each(data.registros, function(index, value)
+                        $('#id_ficha_examen').text('Exámenes de: ' + data.paciente.nombre_paciente);
+                        if(data.estado == 1)
                         {
-                            var fecha = formatDate(value.created_at);
-                            //var salida = formato(fecha);
-                            var examen = value.examen;
-                            var tipo_examen = value.tipo_examen;
-                            var prioridad = value.id_prioridad;
+                            $('#table_atecion_previa_tabla_examen_paciente tbody').html('');
+                            var j = 1; //contador para asignar id al boton que borrara la fila
+                            $.each(data.registros, function(index, value)
+                            {
+                                var fecha = formatDate(value.created_at);
+                                //var salida = formato(fecha);
+                                var examen = value.examen;
+                                var tipo_examen = value.tipo_examen;
+                                var prioridad = value.id_prioridad;
 
-                            switch (prioridad) {
-                                case 1:
-                                    prioridad = 'Baja';
-                                    break;
-                                case 2:
-                                    prioridad = 'Media';
-                                    break;
-                                case 3:
-                                    prioridad = 'Alta';
-                                    break;
-                                case 4:
-                                    prioridad = 'Urgente';
-                                    break;
+                                switch (prioridad) {
+                                    case 1:
+                                        prioridad = 'Baja';
+                                        break;
+                                    case 2:
+                                        prioridad = 'Media';
+                                        break;
+                                    case 3:
+                                        prioridad = 'Alta';
+                                        break;
+                                    case 4:
+                                        prioridad = 'Urgente';
+                                        break;
 
-                                default:
-                                    prioridad = 'Sin Prioridad';
-                                    break;
-                            }
+                                    default:
+                                        prioridad = 'Sin Prioridad';
+                                        break;
+                                }
 
-                            var fila = '';
-                            fila += '<tr class="tr_examen" id="row' + j + '">';
-                            fila += '    <td class="text-center align-middle">' + fecha + '</td>';
-                            fila += '    <td class="text-center align-middle">' + examen + '</td>';
-                            fila += '    <td class="text-center align-middle">' + tipo_examen + '</td>';
-                            fila += '    <td class="text-center align-middle">' + prioridad + '</td>';
-                            fila += '</tr>'; //esto seria lo que contendria la fila
+                                var fila = '';
+                                fila += '<tr class="tr_examen" id="row' + j + '">';
+                                fila += '    <td class="text-center align-middle">' + fecha + '</td>';
+                                fila += '    <td class="text-center align-middle">' + examen + '</td>';
+                                fila += '    <td class="text-center align-middle">' + tipo_examen + '</td>';
+                                fila += '    <td class="text-center align-middle">' + prioridad + '</td>';
+                                fila += '</tr>'; //esto seria lo que contendria la fila
 
-                            j++;
+                                j++;
 
+                                $('#table_atecion_previa_tabla_examen_paciente tbody').append(fila);
+
+                            });
+                        }
+                        else
+                        {
+                            $('#table_atecion_previa_tabla_examen_paciente tbody').html('');
+                            var fila = '<tr><td colspan="4"><span><h5>no existen registros</h5></span></td></tr>';
                             $('#table_atecion_previa_tabla_examen_paciente tbody').append(fila);
+                        }
 
-                        });
                     }
                     else
                     {
                         $('#table_atecion_previa_tabla_examen_paciente tbody').html('');
-                        var fila = '<tr><td colspan="4"><span><h5>no existen registros</h5></span></td></tr>';
+                        var fila = '<tr><td colspan="4"><span><h5>no existen registros</h5></span></td></tr>'
                         $('#table_atecion_previa_tabla_examen_paciente tbody').append(fila);
                     }
+                    $('#m_cons_examen').modal('show');
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
 
-                }
-                else
-                {
-                    $('#table_atecion_previa_tabla_examen_paciente tbody').html('');
-                    var fila = '<tr><td colspan="4"><span><h5>no existen registros</h5></span></td></tr>'
-                    $('#table_atecion_previa_tabla_examen_paciente tbody').append(fila);
-                }
-                $('#m_cons_examen').modal('show');
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
+                $('#table_atecion_previa_tabla_examen_paciente').dataTable().fnClearTable();
+                $('#table_atecion_previa_tabla_examen_paciente').dataTable().fnDestroy();
+                $('#table_atecion_previa_tabla_examen_paciente').DataTable({
+                    responsive: true,
+                    "bPaginate": false,
+                });
 
-            $('#table_atecion_previa_tabla_examen_paciente').dataTable().fnClearTable();
-            $('#table_atecion_previa_tabla_examen_paciente').dataTable().fnDestroy();
-            $('#table_atecion_previa_tabla_examen_paciente').DataTable({
-                responsive: true,
-                "bPaginate": false,
-            });
-
-    }
+        }
 
         function buscar_receta_ficha(id) {
 
@@ -6838,64 +6776,7 @@
             });
     }
 
-    function agregar_registro_academico() {
-        var id_tipo_antecedente_academico = $('#id_tipo_antecedente_academico').val();
-        var profesion = $('#agregar_ant_academico_profesion').val();
-        var universidad = $('#agregar_ant_academico_universidad').val();
-        var anio = $('#agregar_ant_academico_anio').val();
-        var ciudad_pais = $('#agregar_ant_academico_ciudad_pais').val();
-        var supersalud = $('#agregar_ant_academico_supersalud').val();
-        var numero_colegio = $('#agregar_ant_academico_numero_colegio').val();
 
-        let url = "{{ route('profesional.agregar_antecedente_academico') }}";
-        let token = CSRF_TOKEN;
-
-        $.ajax({
-
-                url: url,
-                type: "POST",
-                data: {
-                    _token: CSRF_TOKEN,
-                    id_tipo_antecedente_academico: id_tipo_antecedente_academico,
-                    nombre: profesion,
-                    universidad: universidad,
-                    anio: anio,
-                    ciudad_pais: ciudad_pais,
-                    supersalud: supersalud,
-                    numero_colegio: numero_colegio,
-                },
-            })
-            .done(function(data) {
-
-                if (data.estado == 1) {
-
-                    swal({
-                        title: "se a agregado antecedentes académicos",
-                        icon: "success",
-                        buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                    setTimeout(function() {
-                        location.reload()
-                    }, 100);
-                    // alert('se modifico antecedentes del paciente');
-                    // location.reload();
-
-                } else {
-                    swal({
-                        title: "Error al agregar los antecedentes académicos",
-                        icon: "error",
-                        buttons: "Aceptar",
-                        DangerMode: true,
-                    })
-                    // alert('Error al modificar los antecedentes');
-                }
-
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-    }
 
  </script>
 

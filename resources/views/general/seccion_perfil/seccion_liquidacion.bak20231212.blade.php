@@ -1,12 +1,91 @@
 <!--Tab perfil persona liquidacion -->
-<div class="tab-pane fade" id="info-liquidacion" role="tabpanel" aria-labelledby="info-liquidacion-tab">
+<div class="tab-pane fade" id="info_liquidacion" role="tabpanel" aria-labelledby="liquidacion-tab">
     {{-- formulario para agregar  --}}
     <div class="row">
-        <div class="col-md-12 pb-3">
-            <h5 class="f-20 text-c-blue d-inline mr-2 pt-1">Cuentas bancarias para depósito</h5>
-            <button type="button" class="btn btn-info-light-c btn-xs d-inline" onclick="cta_banco_m();"><i class="feather icon-plus"></i> Añadir</button>
-        </div>
+        <div class="col-md-12">
+            <!--Card persona-->
+            <div class="card">
+                <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                    <h5 class="mb-0 text-white">Agregar Datos para Deposito</h5>
+                    <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".agregar_datos_liquidacion" aria-expanded="false" aria-controls="agregar_datos_liquidacion">
+                        <i class="feather icon-plus"></i>
+                    </button>
 
+                    @if (isset($asistente))
+                        @php
+                            $persona = $asistente;
+                        @endphp
+                    @elseif(isset($profesional))
+                        @php
+                            $persona = $profesional;
+                        @endphp
+                    @endif
+                    <input type="hidden" class="form-control" id="liquidacion_email" value="{{ $persona->email }}">
+                </div>
+                <!--(agregar)persona-->
+                @if($liquidacion == NULL)
+                    <div class="card-body border-top collapse show agregar_datos_liquidacion" id="agregar">
+                @else
+                    <div class="card-body border-top collapse agregar_datos_liquidacion" id="agregar">
+                @endif
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" placeholder="rut" name="liquidacion_rut" id="liquidacion_rut" value="{{ $persona->rut }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bolder">Titular</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" placeholder="Nombre" name="liquidacion_nombre" id="liquidacion_nombre" value="{{ $persona->nombre.' '.$persona->apellido_uno.' '.$persona->apellido_dos }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bolder">Banco</label>
+                        <div class="col-sm-7">
+                            <select name="liquidacion_banco" id="liquidacion_banco" class="form-control control-sm">
+                                <option value="">Seleccione</option>
+                                @foreach ( $bancos as $banco)
+                                    <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bolder">Cuenta</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" placeholder="Cuenta Numero" id="liquidacion_cuenta" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bolder">Tipo Cuenta</label>
+                        <div class="col-sm-7">
+                            <select name="liquidacion_tipo_cuenta" id="liquidacion_tipo_cuenta" class="form-control control-sm">
+                                <option value="">Seleccione</option>
+                                <option value="Corriente">Corriente</option>
+                                <option value="Ahorro">Ahorro</option>
+                                <option value="Vista">Vista</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bolder">Principal</label>
+                        <div class="col-sm-7 switch switch-success d-inline ">
+                            <input type="checkbox" id="liquidacion_principal" name="liquidacion_principal" value="">
+                            <label for="liquidacion_principal" class="cr"></label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-form-label"></label>
+                        <div class="col-sm-12 d-flex justify-content-end">
+                            <button class="btn btn-info" onclick="agregar_registro_liquidacion();">Guardar Cambios</button>
+                        </div>
+                    </div>
+                </div>
+                <!--Cierre: (agregar)profesion-->
+            </div>
+        </div>
         <div class="row">
             @if($liquidacion != NULL)
                 @foreach($liquidacion as $key_liqu => $value_liqu)
@@ -154,19 +233,7 @@
     </div>
 </div>
 
-@include('app.profesional.modales.datos_bancarios')
-
 <script>
-
-    function cta_banco_m()
-    {
-        $('#cta_banco_modal').modal('show');
-    }
-
-    function cerrar_cta_banco_m()
-    {
-        $('#cta_banco_modal').modal('hide');
-    }
 
     function agregar_registro_liquidacion()
     {

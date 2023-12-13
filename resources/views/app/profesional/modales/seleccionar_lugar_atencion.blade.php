@@ -11,26 +11,21 @@
             <form method="GET" action="{{ route('profesional.mi_agenda') }}">
                 <div class="modal-body">
 
-
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="lugares_atencion">Lugar de Atención</label>
-                                <select name="lugares_atencion" id="lugares_atencion" class="form-control">
+                                <select name="lugares_atencion" id="lugares_atencion" class="form-control" onchange="validar_seleccionar_lugar_atencion();">
                                     <option value="">Seleccione...</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
-
-
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" onclick="cerrar_modal();"
-                        data-dismiss="modal">Cancelar</button>
-                    <button type="submit" data-dismiss="modal" class="btn btn-info">
-                        Ir a mi agenda</button>
+                    <button type="button" class="btn btn-danger" onclick="cerrar_modal();" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" data-dismiss="modal" class="btn btn-info" id="btn_modal_seleccionar_lugar_atencion_ir"> Ir a mi agenda</button>
                 </div>
             </form>
         </div>

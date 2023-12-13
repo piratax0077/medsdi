@@ -194,6 +194,9 @@ class LiquidacionReciboController extends Controller
                 $datos['estado'] = 1;
                 $datos['msj'] = 'registro';
                 $datos['last_id'] = $liquidacion->id;
+
+                $update_temp = LiquidacionRecibo::where('id_seccion', $id_seccion)->where('id','!=',$liquidacion->id)->update(['principal' => 0]);
+                $datos['update'] = $update_temp;
             }
             else
             {
