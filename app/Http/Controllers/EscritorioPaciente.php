@@ -984,8 +984,6 @@ class EscritorioPaciente extends Controller
 
     public function perfil()
     {
-
-
         $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
         $previsiones = Prevision::all();
         $regiones = Region::all();
@@ -1018,8 +1016,7 @@ class EscritorioPaciente extends Controller
         $userData = Funciones::userData($id_usuario);
 
 
-        return view(
-            'app.paciente.perfil_paciente',
+        return view('app.paciente.perfil_paciente',
             [
                 'userData' => $userData,
                 'paciente' => $paciente,

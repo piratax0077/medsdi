@@ -285,54 +285,54 @@
 
     const agregarAntecedente = () => {
 
-    $('#title-antecedente').html('Agregar Antecedente');
+        $('#title-antecedente').html('Agregar Antecedente');
 
-    var data = {};
-    var url = '{{Request::root()}}/api/antecedente/registrar';
-    var tipo = $('#tipo-antecedente-m').val();
+        var data = {};
+        var url = '{{Request::root()}}/api/antecedente/registrar';
+        var tipo = $('#tipo-antecedente-m').val();
 
-    /* CAMPOS */
-    data.nombre = $('#nombre').val();
-    data.comentario = $('#comentario').val();
-    data.procedimiento = $('#procedimiento').val();
-    data.nombre_medicamento_cronico = $('#nombre_medicamento_cronico').val();
-    data.fecha = $('#fecha').val();
-    data.dosis = $('#dosis').val();
-    data.institucion = $('#institucion').val();
-    data.discapacidad_tipo = $('#discapacidad_tipo').val();
-    data.discapacidad_grado = $('#discapacidad_grado').val();
-    data.discapacidad_permanente = $('#discapacidad_permanente').val();
-
-
-
-    data.id_paciente = $('#id_paciente').val();
-    data.id_tipo_antecedente = $('#tipo-antecedente-m').val();
-    data.id_users = $('#user-id').val();
-    data.rut_responsable =$('#user-rut').val();
-    data.profesion = $('#user-profesion').val();
-    data.profesional = $('#user-profesional').val();
-    data.estado = 1;
+        /* CAMPOS */
+        data.nombre = $('#nombre').val();
+        data.comentario = $('#comentario').val();
+        data.procedimiento = $('#procedimiento').val();
+        data.nombre_medicamento_cronico = $('#nombre_medicamento_cronico').val();
+        data.fecha = $('#fecha').val();
+        data.dosis = $('#dosis').val();
+        data.institucion = $('#institucion').val();
+        data.discapacidad_tipo = $('#discapacidad_tipo').val();
+        data.discapacidad_grado = $('#discapacidad_grado').val();
+        data.discapacidad_permanente = $('#discapacidad_permanente').val();
 
 
-    $.ajax({
-        url: url,
-        type: "POST",
-        data: data,
-        success: (resp)=>{
-            if(resp.estado==1)
-            {
-                cargarRegistrosAntecedentes(parseInt(tipo));
-                msg('Antecedente','Registro Ingresado.','success');
-                $('#modal-ingreso').modal('hide');
 
-            }else{
-                msg('Antecedente','Campo Obligatorio: '+JSON.stringify(resp.error),'danger');
+        data.id_paciente = $('#id_paciente').val();
+        data.id_tipo_antecedente = $('#tipo-antecedente-m').val();
+        data.id_users = $('#user-id').val();
+        data.rut_responsable =$('#user-rut').val();
+        data.profesion = $('#user-profesion').val();
+        data.profesional = $('#user-profesional').val();
+        data.estado = 1;
+
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: data,
+            success: (resp)=>{
+                if(resp.estado==1)
+                {
+                    cargarRegistrosAntecedentes(parseInt(tipo));
+                    msg('Antecedente','Registro Ingresado.','success');
+                    $('#modal-ingreso').modal('hide');
+
+                }else{
+                    msg('Antecedente','Campo Obligatorio: '+JSON.stringify(resp.error),'danger');
+                }
+            },
+            error: (resp)=>{
+                console.warn(resp);
             }
-        },
-        error: (resp)=>{
-            console.warn(resp);
-        }
-    });
+        });
     }
 
     const modificarAntecedente = () =>
@@ -340,85 +340,85 @@
 
         $('#title-antecedente').html('Modificar Antecedente');
 
-    var data = {};
-    var url = '{{Request::root()}}/api/antecedente/modificar';
-    var tipo = $('#tipo-antecedente-m').val();
+        var data = {};
+        var url = '{{Request::root()}}/api/antecedente/modificar';
+        var tipo = $('#tipo-antecedente-m').val();
 
-    /* CAMPOS */
-    data.id = $('#id-antecedente-m').val();
-    data.nombre = $('#nombre').val();
-    data.comentario = $('#comentario').val();
-    data.procedimiento = $('#procedimiento').val();
-    data.nombre_medicamento_cronico = $('#nombre_medicamento_cronico').val();
-    data.fecha = $('#fecha').val();
-    data.dosis = $('#dosis').val();
-    data.institucion = $('#institucion').val();
-	data.discapacidad_tipo = $('#discapacidad_tipo').val();
-    data.discapacidad_grado = $('#discapacidad_grado').val();
-    data.discapacidad_permanente = $('#discapacidad_permanente').val();
-
-
-    data.id_paciente = $('#id_paciente').val();
-    data.id_tipo_antecedente = $('#tipo-antecedente-m').val();
-    data.id_users = $('#user-id').val();
-    data.rut_responsable =$('#user-rut').val();
-    data.profesion = $('#user-profesion').val();
-    data.profesional = $('#user-profesional').val();
-    data.estado = 1;
+        /* CAMPOS */
+        data.id = $('#id-antecedente-m').val();
+        data.nombre = $('#nombre').val();
+        data.comentario = $('#comentario').val();
+        data.procedimiento = $('#procedimiento').val();
+        data.nombre_medicamento_cronico = $('#nombre_medicamento_cronico').val();
+        data.fecha = $('#fecha').val();
+        data.dosis = $('#dosis').val();
+        data.institucion = $('#institucion').val();
+        data.discapacidad_tipo = $('#discapacidad_tipo').val();
+        data.discapacidad_grado = $('#discapacidad_grado').val();
+        data.discapacidad_permanente = $('#discapacidad_permanente').val();
 
 
-    $.ajax({
-        url: url,
-        type: "POST",
-        data: data,
-        success: (resp)=>{
-            if(resp.estado==1)
-            {
-                cargarRegistrosAntecedentes(parseInt(tipo));
-                msg('Antecedente','Registro Modificado.','success');
-                $('#modal-ingreso').modal('hide');
+        data.id_paciente = $('#id_paciente').val();
+        data.id_tipo_antecedente = $('#tipo-antecedente-m').val();
+        data.id_users = $('#user-id').val();
+        data.rut_responsable =$('#user-rut').val();
+        data.profesion = $('#user-profesion').val();
+        data.profesional = $('#user-profesional').val();
+        data.estado = 1;
 
-            }else{
-                msg('Antecedente','Campo Obligatorio: '+JSON.stringify(resp.error),'danger');
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: data,
+            success: (resp)=>{
+                if(resp.estado==1)
+                {
+                    cargarRegistrosAntecedentes(parseInt(tipo));
+                    msg('Antecedente','Registro Modificado.','success');
+                    $('#modal-ingreso').modal('hide');
+
+                }else{
+                    msg('Antecedente','Campo Obligatorio: '+JSON.stringify(resp.error),'danger');
+                }
+            },
+            error: (resp)=>{
+                console.warn(resp);
             }
-        },
-        error: (resp)=>{
-            console.warn(resp);
-        }
-    });
+        });
     }
 
 
     const eliminarAntecedente = () => {
 
-    var data = {};
-    var url = '{{Request::root()}}/api/antecedente/estado';
-    var tipo =   $('#tipo-antecedente-m-desactivar').val();
+        var data = {};
+        var url = '{{Request::root()}}/api/antecedente/estado';
+        var tipo =   $('#tipo-antecedente-m-desactivar').val();
 
-    /* CAMPOS */
-    data.id = $('#id-antecedente-m-desactivar').val();
-    data.estado = 0;
+        /* CAMPOS */
+        data.id = $('#id-antecedente-m-desactivar').val();
+        data.estado = 0;
 
 
-    $.ajax({
-    url: url,
-    type: "POST",
-    data: data,
-    success: (resp)=>{
-        if(resp.estado==1)
-        {
-            cargarRegistrosAntecedentes(parseInt(tipo));
-            msg('Antecedente','Registro Desactivado.','success');
-            $('#modal-confirmar').modal('hide');
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: data,
+            success: (resp)=>{
+                if(resp.estado==1)
+                {
+                    cargarRegistrosAntecedentes(parseInt(tipo));
+                    msg('Antecedente','Registro Desactivado.','success');
+                    $('#modal-confirmar').modal('hide');
 
-        }else{
-            msg('Antecedente','Campo Obligatorio: '+JSON.stringify(resp.error),'danger');
-        }
-    },
-    error: (resp)=>{
-        console.warn(resp);
-    }
-    });
+                }else{
+                    msg('Antecedente','Campo Obligatorio: '+JSON.stringify(resp.error),'danger');
+                }
+            },
+            error: (resp)=>{
+                console.warn(resp);
+            }
+        });
     }
 
     const msg = (title,text,icon) => {
@@ -433,134 +433,134 @@
 
     const cargarRegistrosAntecedentes = (tipo) => {
 
-    var data = {};
-    var url = '{{Request::root()}}/api/antecedente/ver_registros';
+        var data = {};
+        var url = '{{Request::root()}}/api/antecedente/ver_registros';
 
-    data.id_tipo_antecedente = tipo;
-    data.estado = 1;
-
-
-    $.ajax({
-        url: url,
-        type: "GET",
-        data: data,
-        success: (resp)=>{
-            if(resp.estado==1)
-            {
-                var html_ = '';
-                var permiso_ = '';
-                var id_users = parseInt($('#user-id').val());
-
-                resp.registros.forEach(e => {
-
-                    permiso_ = '';
-                    if(e.id_users == id_users)
-                    permiso_ = `
-                        <buttom class="btn btn-icon btn-info feather icon-edit-2" onclick="verModalAgregar('show',${tipo},${e.id})"></buttom>
-                        <buttom class="btn btn-icon btn-danger feather icon-x-square" onclick="verModalDesactivar('show',${tipo},${e.id})"></buttom>
-                    `;
+        data.id_tipo_antecedente = tipo;
+        data.estado = 1;
 
 
-                    switch(tipo)
-                    {
-                        case 1:
-                            html_ +=`
-                                <tr>
-                                    <td>${e.antecedente_data.procedimiento}</td>
-                                    <td>${e.antecedente_data.comentario}</td>
-                                    <td>${e.antecedente_data.profesional}<br/>${e.antecedente_data.rut_responsable}</td>
-                                    <td>${e.antecedente_data.fecha_regitro}</td>
-                                    <td>${permiso_}</td>
-                                </tr>
-                            `;
-                        break;
-                        case 2:
-                            html_ +=`
-                                <tr>
-                                    <td>${e.antecedente_data.nombre}</td>
-                                    <td>${e.antecedente_data.comentario}</td>
-									<td>${e.antecedente_data.profesional} <br/>${e.antecedente_data.rut_responsable}</td>
-                                    <td>${e.antecedente_data.fecha_regitro}</td>
-                                    <td>${permiso_}</td>
-                                </tr>
-                            `;
-                        break;
-                        case 3:
-                            html_ +=`
-                                <tr>
-									<td>${e.antecedente_data.fecha}</td>
-                                    <td>${e.antecedente_data.procedimiento}</td>
-                                    <td>${e.antecedente_data.comentario}</td>
-                                    <td>${e.antecedente_data.profesional} <br/>${e.antecedente_data.rut_responsable}</td>
-                                    <td>${e.antecedente_data.fecha_regitro}</td>
-                                    <td>${permiso_}</td>
-                                </tr>
-                            `;
-                        break;
-                        case 4:
-                            html_ +=`
-                                <tr>
-                                    <td>${e.antecedente_data.procedimiento}</td>
-                                    <td>${e.antecedente_data.comentario}</td>
-                                    <td>${e.antecedente_data.rut_responsable}</td>
-                                    <td>${e.antecedente_data.profesional}</td>
-                                    <td>${e.antecedente_data.fecha_regitro}</td>
-                                    <td>${permiso_}</td>
-                                </tr>
-                            `;
-                        break;
-                        case 5:
-                            html_ +=`
-                                <tr>
-                                    <td>${e.antecedente_data.procedimiento}</td>
-                                    <td>${e.antecedente_data.institucion}</td>
-                                    <td>${e.antecedente_data.fecha}</td>
-                                    <td>${permiso_}</td>
-                                </tr>
-                            `;
-                        break;
-                        case 6:
-                            html_ +=`
-                                <tr>
-                                    <td>${e.antecedente_data.nombre}</td>
-									<td>${e.antecedente_data.comentario}</td>
-                                    <td>${e.antecedente_data.fecha_regitro}</td>
-                                    <td>${permiso_}</td>
-                                </tr>
-                            `;
-                        break;
-                        case 7:
-                            html_ +=`
-                                <tr>
-                                    <td>${e.antecedente_data.nombre_medicamento_cronico}</td>
-                                    <td>${e.antecedente_data.dosis}</td>
-                                    <td>${e.antecedente_data.fecha_regitro}</td>
-                                    <td>${permiso_}</td>
-                                </tr>
-                            `;
-                        break;
-						case 8:
-                            html_ +=`
-                                <tr>
-                                    <td>${e.antecedente_data.discapacidad_tipo}</td>
-                                    <td>${e.antecedente_data.discapacidad_grado}</td>
-									<td>${e.antecedente_data.discapacidad_permanente}</td>
-                                    <td>${e.antecedente_data.fecha_regitro}</td>
-                                    <td>${permiso_}</td>
-                                </tr>
-                            `;
-                        break;
-                    }
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: data,
+            success: (resp)=>{
+                if(resp.estado==1)
+                {
+                    var html_ = '';
+                    var permiso_ = '';
+                    var id_users = parseInt($('#user-id').val());
 
-                });
+                    resp.registros.forEach(e => {
 
-               $('#bloque-registros-'+tipo).html(html_);
+                        permiso_ = '';
+                        if(e.id_users == id_users)
+                        permiso_ = `
+                            <buttom class="btn btn-icon btn-info feather icon-edit-2" onclick="verModalAgregar('show',${tipo},${e.id})"></buttom>
+                            <buttom class="btn btn-icon btn-danger feather icon-x-square" onclick="verModalDesactivar('show',${tipo},${e.id})"></buttom>
+                        `;
+
+
+                        switch(tipo)
+                        {
+                            case 1:
+                                html_ +=`
+                                    <tr>
+                                        <td>${e.antecedente_data.procedimiento}</td>
+                                        <td>${e.antecedente_data.comentario}</td>
+                                        <td>${e.antecedente_data.profesional}<br/>${e.antecedente_data.rut_responsable}</td>
+                                        <td>${e.antecedente_data.fecha_regitro}</td>
+                                        <td>${permiso_}</td>
+                                    </tr>
+                                `;
+                            break;
+                            case 2:
+                                html_ +=`
+                                    <tr>
+                                        <td>${e.antecedente_data.nombre}</td>
+                                        <td>${e.antecedente_data.comentario}</td>
+                                        <td>${e.antecedente_data.profesional} <br/>${e.antecedente_data.rut_responsable}</td>
+                                        <td>${e.antecedente_data.fecha_regitro}</td>
+                                        <td>${permiso_}</td>
+                                    </tr>
+                                `;
+                            break;
+                            case 3:
+                                html_ +=`
+                                    <tr>
+                                        <td>${e.antecedente_data.fecha}</td>
+                                        <td>${e.antecedente_data.procedimiento}</td>
+                                        <td>${e.antecedente_data.comentario}</td>
+                                        <td>${e.antecedente_data.profesional} <br/>${e.antecedente_data.rut_responsable}</td>
+                                        <td>${e.antecedente_data.fecha_regitro}</td>
+                                        <td>${permiso_}</td>
+                                    </tr>
+                                `;
+                            break;
+                            case 4:
+                                html_ +=`
+                                    <tr>
+                                        <td>${e.antecedente_data.procedimiento}</td>
+                                        <td>${e.antecedente_data.comentario}</td>
+                                        <td>${e.antecedente_data.rut_responsable}</td>
+                                        <td>${e.antecedente_data.profesional}</td>
+                                        <td>${e.antecedente_data.fecha_regitro}</td>
+                                        <td>${permiso_}</td>
+                                    </tr>
+                                `;
+                            break;
+                            case 5:
+                                html_ +=`
+                                    <tr>
+                                        <td>${e.antecedente_data.procedimiento}</td>
+                                        <td>${e.antecedente_data.institucion}</td>
+                                        <td>${e.antecedente_data.fecha}</td>
+                                        <td>${permiso_}</td>
+                                    </tr>
+                                `;
+                            break;
+                            case 6:
+                                html_ +=`
+                                    <tr>
+                                        <td>${e.antecedente_data.nombre}</td>
+                                        <td>${e.antecedente_data.comentario}</td>
+                                        <td>${e.antecedente_data.fecha_regitro}</td>
+                                        <td>${permiso_}</td>
+                                    </tr>
+                                `;
+                            break;
+                            case 7:
+                                html_ +=`
+                                    <tr>
+                                        <td>${e.antecedente_data.nombre_medicamento_cronico}</td>
+                                        <td>${e.antecedente_data.dosis}</td>
+                                        <td>${e.antecedente_data.fecha_regitro}</td>
+                                        <td>${permiso_}</td>
+                                    </tr>
+                                `;
+                            break;
+                            case 8:
+                                html_ +=`
+                                    <tr>
+                                        <td>${e.antecedente_data.discapacidad_tipo}</td>
+                                        <td>${e.antecedente_data.discapacidad_grado}</td>
+                                        <td>${e.antecedente_data.discapacidad_permanente}</td>
+                                        <td>${e.antecedente_data.fecha_regitro}</td>
+                                        <td>${permiso_}</td>
+                                    </tr>
+                                `;
+                            break;
+                        }
+
+                    });
+
+                $('#bloque-registros-'+tipo).html(html_);
+                }
+            },
+            error: (resp)=>{
+                console.warn(resp);
             }
-        },
-        error: (resp)=>{
-            console.warn(resp);
-        }
-    });
+        });
     }
 
 </script>

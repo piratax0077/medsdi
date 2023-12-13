@@ -56,7 +56,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-reset" id="emergencia-tab" data-toggle="tab" href="#emergencia" role="tab" aria-controls="emergencia" aria-selected="false">Contactos de emergencia</a>
                                 </li>
-
+                                
                                 <li class="nav-item">
                                     <a class="nav-link text-reset" id="datmedicos-tab" data-toggle="tab" href="#datmedicos" role="tab" aria-controls="datmedicos" aria-selected="false">Datos médicos</a>
                                 </li>
@@ -171,7 +171,7 @@
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="floating-label-activo">Segundo Apellido</label>
-
+                          
                                                     <input type="text" class="form-control form-control-sm" id="perfil_apellido_dos" name="perfil_apellido_dos" placeholder="Segundo Apellido" value="{{ $paciente->apellido_dos }}">
                                                 </div>
                                             </div>
@@ -305,7 +305,7 @@
                                     <!--Cierre: Residencia-->
                                     <!--(Editar) Residencia-->
                                     <div class="card-body border-top info_residencial collapse " id="info_residencial_2">
-                                        <form action="{{ ROUTE('paciente.perfil.editdirec') }}" method="GET">
+                                        <form action="{{ ROUTE('paciente.perfil.editdirec') }}" method="GET">                          
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="floating-label-activo">Región</label>
@@ -452,7 +452,7 @@
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="tab-content" id="d-med">
                                     <!--MÉDICO RESPONSABLE DE LA ACTUALIZACIÓN DE DATOS-->
-                                    <div class="tab-pane fade " id="act-datos" role="tabpanel" aria-labelledby="atect-datos-tab">
+                                    <div class="tab-pane fade show active" id="act-datos" role="tabpanel" aria-labelledby="atect-datos-tab">
                                         <div class="row">
                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                 <!--Card Datos profesional-->
@@ -569,9 +569,9 @@
                                                             <table class="table table-bordered table-xs p-10">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th>Fecha</th>
+                                                                        <th>Fecha</th> 
                                                                         <th>Profesional</th>
-                                                                        <th>Actualización</th>
+                                                                        <th>Actualización</th>                                                      
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -579,13 +579,13 @@
                                                                         <td>00/00/0000 <br>00:00:00</td>
                                                                         <td>00.000.000-0<br>Nombre Apellidos<br>Especialidad</td>
                                                                         <td class="text-wrap" style="font-size: 12px!important;">Medicamentos crónicos</td>
-                                                                    </tr>
+                                                                    </tr> 
                                                                     <tr>
                                                                         <td>00/00/0000 <br>00:00:00</td>
                                                                         <td>6187674-k<br>Jaime Kriman Astorga<br>Otorrinolaringologo</td>
                                                                         <td class="text-wrap" style="font-size: 12px!important;"> ¿Donante de sangre? | Órganos a donar | Alergias</td>
 
-                                                                    </tr>
+                                                                    </tr>                                               
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -594,18 +594,18 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <!--TRANSFUSIONES Y DONACIÓN DE ÓRGANOS-->
-                                    <div class="tab-pane fade show active" id="tran-donacion" role="tabpanel" aria-labelledby="tran-donacion-tab">
+                                    <div class="tab-pane fade show " id="tran-donacion" role="tabpanel" aria-labelledby="tran-donacion-tab">
                                        <div class="row">
                                             <div class="col-md-12">
                                                 <!--Card Datos Sangre Donación de Organos-->
                                                 <div class="card">
                                                     <div class="card-header d-flex align-items-center justify-content-between bg-c-blue">
-                                                        <h5 class="mb-0 text-white">Antecedentes I (Transfusiones y Donación de Órganos)</h5>
-                                                        {{-- <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_residencial_sos" aria-expanded="false" aria-controls="info_residencial_sos_1 info_residencial_sos_2">
+                                                        <h5 class="mb-0 text-white">Antecedentes I (Transfusiones y Donación de
+                                                            Órganos)</h5>
+                                                        <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_residencial_sos" aria-expanded="false" aria-controls="info_residencial_sos_1 info_residencial_sos_2">
                                                             <i class="feather icon-edit"></i>
-                                                        </button> --}}
+                                                        </button>
                                                     </div>
                                                     <!--Sangre Donación de Organo-->
                                                     <div class="card-body info_residencial_sos collapse show" id="info_residencial_sos_1">
@@ -646,25 +646,24 @@
                                                                 <label class="font-weight-bolder ml-0 mb-0">Comentarios de grupo sanguíneo</label>
                                                                 <div>
                                                                     @if ($paciente->Antecedentes()->first() != null)
-                                                                        @if ($paciente->Antecedentes()->first()->GrupoSanguineo()->first() != null)
-                                                                            {{ $paciente->Antecedentes()->first()->GrupoSanguineo()->first()->descripcion_gs }}
-                                                                        @endif
+                                                                    @if ($paciente->Antecedentes()->first()->GrupoSanguineo()->first() != null)
+                                                                    {{ $paciente->Antecedentes()->first()->GrupoSanguineo()->first()->descripcion_gs }}
+                                                                    @endif
                                                                     @else
-                                                                        Sin registro
+                                                                    Sin registro
                                                                     @endif
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-row">
                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
-                                                                <label class="font-weight-bolder ml-0 mb-0">Vacuna o Hepatitis</label>
-                                                                <div>
-                                                                    @if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->hepatitis == 1)
-                                                                        SI
-                                                                    @else
-                                                                        NO
-                                                                    @endif
-                                                                </div>
+                                                                <label class="font-weight-bolder ml-0 mb-0">Vacuna o
+                                                                        Hepatitis</label>
+                                                                <div>@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->hepatitis == 1)
+                                                                SI
+                                                                @else
+                                                                NO
+                                                                @endif</div>
                                                             </div>
                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
                                                                 <label class="font-weight-bolder ml-0 mb-0">Comentarios</label>
@@ -687,7 +686,7 @@
                                                             </div>
                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
                                                                 <label class="font-weight-bolder ml-0 mb-0">¿Donante parcial de órganos?</label>
-                                                                <div>@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->dona_organos_parcial == 1)
+                                                                <div>@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->dona_organos == 2)
                                                                         SI
                                                                         @else
                                                                         NO
@@ -697,32 +696,25 @@
                                                         </div>
                                                         <div class="form-row">
                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
-                                                                <label class="font-weight-bolder ml-0 mb-0">Órganos a donar</label>
-                                                                <div>
-                                                                    @if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->comentarios != '')
-                                                                        {{ $paciente->Antecedentes()->first()->comentarios }}
-                                                                    @else
-                                                                        Sin Registros
-                                                                    @endif
-                                                                </div>
+                                                                <label class="font-weight-bolder ml-0 mb-0">Órganos a
+                                                                        donar</label>
+                                                                <div>NO</div>
                                                             </div>
                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
                                                                 <label class="font-weight-bolder ml-0 mb-0">Impedimento para donar</label>
-                                                                <div>
-                                                                    @if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->impedimento_donar != '')
+                                                                <div>@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->impedimento_donar != '')
                                                                         {{ $paciente->Antecedentes()->first()->impedimento_donar }}
-                                                                    @else
+                                                                        @else
                                                                         Sin Registros
-                                                                    @endif
+                                                                        @endif
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <!--Cierre: Sangre Donación de Organo-->
                                                     <!--(Editar) Sangre Donación de Organo-->
-                                                    {{--
                                                     <div class="card-body info_residencial_sos collapse " id="info_residencial_sos_2">
-
+                                                        
                                                             <div class="form-row">
                                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                                                     <label class="floating-label-activo">¿Acepta transfusión?</label>
@@ -851,7 +843,7 @@
                                                                 <div class="form-group row">
                                                                     <label class="col-sm-4 col-form-label font-weight-bolder">¿Donante
                                                                         de Sangre?</label>
-
+                                                       
 
                                                                     @if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->dona_sangre == 1)
                                                                     <div class="col-sm-7 my-auto">
@@ -1060,7 +1052,7 @@
                                                                 <div class="form-group row">
                                                                     <label class="col-sm-4 col-form-label font-weight-bolder">Impedimento
                                                                         para donar</label>
-
+                                                                   
 
 
                                                                     <div class="col-sm-7">
@@ -1080,16 +1072,14 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    --}}
                                                     <!--cierre(Editar) Sangre Donación de Organo-->
                                                 </div>
                                                 <!--Cierre: Datos Sangre Donación de Organos-->
                                             </div>
                                         </div>
                                     </div>
-
                                     <!--ATENCIÓN ESPECIALIDAD GENERAL-->
-                                    <div class="tab-pane fade " id="a-general" role="tabpanel" aria-labelledby="a-general-tab">
+                                    <div class="tab-pane fade show " id="a-general" role="tabpanel" aria-labelledby="a-general-tab">
                                         @include( 'app.profesional.edicion_paciente.antecedentes_paciente_dos' )
                                     </div>
                                 </div>
