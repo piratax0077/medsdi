@@ -127,6 +127,29 @@ class EscritorioPaciente extends Controller
         $region = Region::all();
         $prevision = Prevision::all();
 
+        $hora_medica = HoraMedica::select('horas_medicas.id', 'horas_medicas.fecha_consulta', 'horas_medicas.hora_inicio', 'horas_medicas.hora_termino', 'horas_medicas.alias_examen',
+                                            'horas_medicas.comentarios_confirmacion', 'horas_medicas.fecha_confirmacion', 'horas_medicas.comentarios_cancelacion', 'horas_medicas.fecha_cancelacion',
+                                            'horas_medicas.fecha_realizacion_consulta', 'horas_medicas.id_ficha_atencion', 'horas_medicas.id_profesional', 'horas_medicas.id_lugar_atencion',
+                                            'horas_medicas.id_asistente', 'horas_medicas.id_paciente', 'horas_medicas.acomp_representante', 'horas_medicas.acomp_acompanante',
+                                            'horas_medicas.acomp_lista', 'horas_medicas.autorizacion_atencion', 'horas_medicas.id_log_users_devices', 'horas_medicas.id_estado',
+                                            'profesionales.nombre as nombre_profesional', 'profesionales.apellido_uno as apellido_uno_profesional',
+                                            'lugares_atencion.nombre as nombre_lugar_atencion', 'direcciones.direccion as direccion_lugar_atencion', 'direcciones.numero_dir as numero_dir_lugar_atencion',
+                                            'especialidades.nombre as nombre_especialidad', 'tipos_especialidad.nombre as nombre_tipo_especialidad', 'sub_tipo_especialidad.nombre as nombre_sub_tipo_especialidad',
+                                            'parametros.valor as texto_estado', 'parametros.color as color_estado')
+                                    ->join('profesionales', 'profesionales.id', '=', 'horas_medicas.id_profesional')
+                                    ->join('especialidades', 'especialidades.id', '=', 'profesionales.id_especialidad')
+                                    ->join('tipos_especialidad', 'tipos_especialidad.id', '=', 'profesionales.id_tipo_especialidad')
+                                    ->rightJoin('sub_tipo_especialidad', 'sub_tipo_especialidad.id', '=', 'profesionales.id_sub_tipo_especialidad')
+                                    ->join('lugares_atencion', 'lugares_atencion.id', '=', 'horas_medicas.id_lugar_atencion')
+                                    ->join('direcciones', 'direcciones.id', '=', 'lugares_atencion.id_direccion')
+                                    ->join('parametros', function ($join) {
+                                        $join->on('parametros.id', '=', 'Horas_medicas.id_estado')
+                                                ->where('parametros.referencia', '=', 'Agenda_Estado');
+                                    })
+                                    ->where('id_paciente', $paciente->id)
+                                    ->orderBy('fecha_consulta', 'DESC')
+                                    ->orderBy('hora_inicio', 'DESC')
+                                    ->get();
 
         if (isset($paciente)) {
 
@@ -140,7 +163,7 @@ class EscritorioPaciente extends Controller
 
             }
             else
-                return view('app.paciente.escritorio_paciente')->with('paciente', $paciente);
+                return view('app.paciente.escritorio_paciente')->with(['paciente' => $paciente, 'hora_medica' => $hora_medica]);
         }
 
         /** formulario nuevos */
@@ -1512,7 +1535,6 @@ class EscritorioPaciente extends Controller
         return redirect()->route('paciente.perfil');
     }
 
-
     public function getPacienteUser(Request $request)
     {
         // var_dump($request->all());
@@ -1779,12 +1801,10 @@ class EscritorioPaciente extends Controller
 
 
 	/** MIS CONTROLES PERSONALES */
-
 	public function mis_controles()
 	{
 		return view('app.paciente.mis_controles');
 	}
-
 
     public function CambiocontrasenaLiberacionBienvenida(Request $request)
     {
@@ -2066,8 +2086,6 @@ class EscritorioPaciente extends Controller
         return $datos;
 
     }
-
-
 
     public function registroControlPeso(Request $request)
     {
@@ -2479,11 +2497,6 @@ class EscritorioPaciente extends Controller
 
     }
 
-
-
-
-
-
     public function registroControlOrina(Request $request)
     {
         $datos = array();
@@ -2607,6 +2620,70 @@ class EscritorioPaciente extends Controller
 
         return $datos;
 
+    }
+
+    public function cargarHorasMedicas(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        $id_usuario = '';
+
+        $usuario_temp = Paciente::where('id_usuario', Auth::user()->id)->first();
+
+        if($usuario_temp)
+        {
+            $id_usuario = $usuario_temp->id;
+        }
+        else
+        {
+            $id_usuario = $request->id_usuario;
+        }
+
+        if(empty($id_usuario))
+        {
+            $error['USUARIO'] = 'Campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $hora_medica = HoraMedica::select('horas_medicas.id', 'horas_medicas.fecha_consulta', 'horas_medicas.hora_inicio', 'horas_medicas.hora_termino', 'horas_medicas.alias_examen',
+                                            'horas_medicas.comentarios_confirmacion', 'horas_medicas.fecha_confirmacion', 'horas_medicas.comentarios_cancelacion', 'horas_medicas.fecha_cancelacion',
+                                            'horas_medicas.fecha_realizacion_consulta', 'horas_medicas.id_ficha_atencion', 'horas_medicas.id_profesional', 'horas_medicas.id_lugar_atencion',
+                                            'horas_medicas.id_asistente', 'horas_medicas.id_paciente', 'horas_medicas.acomp_representante', 'horas_medicas.acomp_acompanante',
+                                            'horas_medicas.acomp_lista', 'horas_medicas.autorizacion_atencion', 'horas_medicas.id_log_users_devices', 'horas_medicas.id_estado',
+                                            'profesionales.nombre as nombre_profesional', 'profesionales.apellido_uno as apellido_uno_profesional',
+                                            'lugares_atencion.nombre as nombre_lugar_atencion', 'direcciones.direccion as direccion_lugar_atencion', 'direcciones.numero_dir as numero_dir_lugar_atencion',
+                                            'especialidades.nombre as nombre_especialidad', 'tipos_especialidad.nombre as nombre_tipo_especialidad', 'sub_tipo_especialidad.nombre as nombre_sub_tipo_especialidad',
+                                            'parametros.valor as texto_estado', 'parametros.color as color_estado')
+                                    ->join('profesionales', 'profesionales.id', '=', 'horas_medicas.id_profesional')
+                                    ->join('especialidades', 'especialidades.id', '=', 'profesionales.id_especialidad')
+                                    ->join('tipos_especialidad', 'tipos_especialidad.id', '=', 'profesionales.id_tipo_especialidad')
+                                    ->rightJoin('sub_tipo_especialidad', 'sub_tipo_especialidad.id', '=', 'profesionales.id_sub_tipo_especialidad')
+                                    ->join('lugares_atencion', 'lugares_atencion.id', '=', 'horas_medicas.id_lugar_atencion')
+                                    ->join('direcciones', 'direcciones.id', '=', 'lugares_atencion.id_direccion')
+                                    ->join('parametros', function ($join) {
+                                        $join->on('parametros.id', '=', 'Horas_medicas.id_estado')
+                                                ->where('parametros.referencia', '=', 'Agenda_Estado');
+                                    })
+                                    ->where('id_paciente', $id_usuario)
+                                    ->orderBy('fecha_consulta', 'DESC')
+                                    ->orderBy('hora_inicio', 'DESC')
+                                    ->get();
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $hora_medica;
+        }
+        else
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
     }
 
 }

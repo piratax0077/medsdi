@@ -401,6 +401,14 @@ Route::group([
     Route::post('acompanante/asignacion', [App\Http\Controllers\AcompananteController::class, 'registrarAcompananteAsignacionPaciente'])->name('paciente.acompanante.asignacion');
     Route::get('acompanante/ver/asignacion', [App\Http\Controllers\AcompananteController::class, 'verRegistros'])->name('paciente.acompanante.ver');
 
+    /** CONFIRMACION HORA MEDICA */
+    Route::post('hora/medica/confirmar', [App\Http\Controllers\EscritorioProfesional::class, 'confirmar_hora'])->name('hora.medica.confirmar');
+    Route::post('hora/medica/cancelar', [App\Http\Controllers\EscritorioProfesional::class, 'cancelar_hora'])->name('hora.medica.cancelar');
+
+    /** VER HORAS MEDICAS */
+    Route::get('hora/medica/ver', [App\Http\Controllers\EscritorioPaciente::class, 'cargarHorasMedicas'])->name('paciente.hora.medica.ver');
+
+
 });
 
 /** INICIO DE LICENCIA */
