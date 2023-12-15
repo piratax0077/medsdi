@@ -128,8 +128,9 @@
     @include('app.asistente.modales.horas_extras_agendar')
 
     {{-- hora examen --}}
-    @include('app.asistente.modales.horas_examen')
-    @include('app.asistente.modales.horas_examen_agendar')
+    @include('app.general.asistente.reserva_hora_examen.horas_examen')
+    @include('app.general.asistente.reserva_hora_examen.horas_examen_agendar')
+
 @endsection
 
 @section('page-script')

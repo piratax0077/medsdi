@@ -47,6 +47,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @yield('page-styles')
+
+    <!-- flatpickr -->
+    <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
+
     <style>
         #loading {
             display: none;
@@ -155,6 +159,8 @@
     <!-- rut -->
     <script src="{{ asset('js/rut.js') }}"></script>
 
+    <!-- flatpickr -->
+    <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');

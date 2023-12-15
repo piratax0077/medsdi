@@ -143,7 +143,7 @@ class EscritorioPaciente extends Controller
                                     ->join('lugares_atencion', 'lugares_atencion.id', '=', 'horas_medicas.id_lugar_atencion')
                                     ->join('direcciones', 'direcciones.id', '=', 'lugares_atencion.id_direccion')
                                     ->join('parametros', function ($join) {
-                                        $join->on('parametros.id', '=', 'Horas_medicas.id_estado')
+                                        $join->on('parametros.id', '=', 'horas_medicas.id_estado')
                                                 ->where('parametros.referencia', '=', 'Agenda_Estado');
                                     })
                                     ->where('id_paciente', $paciente->id)
@@ -1563,16 +1563,24 @@ class EscritorioPaciente extends Controller
             /** BUSCAR INFORMACION DE DEPENDIENTES */
             $info_depen = PacientesDependientes::where('id_paciente', $paciente->id)->first();
 
-            /** BUSCAR RESPONSABLES */
-            $filtro_temp = array();
-            $filtro_temp[] = array('id_dependiente', $info_depen->id_paciente);
-            $registro_depen = AcompananteDependiente::where($filtro_temp)->where('id_tipo', 1)->with('acompanante');
-            $registro_temp = AcompananteDependiente::where('id_responsable', $info_depen->id_responsable)->whereNull('id_dependiente')->where('id_tipo', 2)->with('acompanante')->union($registro_depen)->get();
-            $paciente['acompanante'] = $registro_temp;
+            if($info_depen)
+            {
+                /** BUSCAR RESPONSABLES */
+                $filtro_temp = array();
+                $filtro_temp[] = array('id_dependiente', $info_depen->id_paciente);
+                $registro_depen = AcompananteDependiente::where($filtro_temp)->where('id_tipo', 1)->with('acompanante');
+                $registro_temp = AcompananteDependiente::where('id_responsable', $info_depen->id_responsable)->whereNull('id_dependiente')->where('id_tipo', 2)->with('acompanante')->union($registro_depen)->get();
+                $paciente['acompanante'] = $registro_temp;
 
-            /** BUSCAR REPRESENTENATE */
-            $registro_representante = Paciente::where('id_usuario', Auth::user()->id)->first();
-            $paciente['representante'] = $registro_representante;
+                /** BUSCAR REPRESENTENATE */
+                $registro_representante = Paciente::where('id_usuario', Auth::user()->id)->first();
+                $paciente['representante'] = $registro_representante;
+            }
+            else
+            {
+                $paciente['acompanante'] = null;
+                $paciente['representante'] = null;
+            }
 
             $paciente['edad'] = $this->obtener_edad_segun_fecha($paciente->fecha_nac);
         }
@@ -2662,7 +2670,7 @@ class EscritorioPaciente extends Controller
                                     ->join('lugares_atencion', 'lugares_atencion.id', '=', 'horas_medicas.id_lugar_atencion')
                                     ->join('direcciones', 'direcciones.id', '=', 'lugares_atencion.id_direccion')
                                     ->join('parametros', function ($join) {
-                                        $join->on('parametros.id', '=', 'Horas_medicas.id_estado')
+                                        $join->on('parametros.id', '=', 'horas_medicas.id_estado')
                                                 ->where('parametros.referencia', '=', 'Agenda_Estado');
                                     })
                                     ->where('id_paciente', $id_usuario)

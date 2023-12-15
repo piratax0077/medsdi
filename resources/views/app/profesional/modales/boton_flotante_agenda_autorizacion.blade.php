@@ -277,7 +277,7 @@
                         }, 3000);
 
                         $('#nav-licencia').html('<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>');
-                        $("#licencia-tab").trigger("click");
+                        // $("#licencia-tab").trigger("click");
 
                         lic_token = data.lic_token;
                         lic_estado = data.lic_estado;

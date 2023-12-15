@@ -3462,22 +3462,32 @@
                 })
                 .done(function(data) {
                     if (data != null) {
-                        data = JSON.parse(data);
+                        // data = JSON.parse(data);
                         // console.log(data);
+                        if(data.estado == 1)
+                        {
+                            swal({
+                                title: "Exito!",
+                                text: "Hora medica agendada correctamente",
+                                type: "success",
+                                confirmButtonText: "Cool"
+                            });
 
-                        swal({
-                            title: "Exito!",
-                            text: "Hora medica agendada correctamente",
-                            type: "success",
-                            confirmButtonText: "Cool"
-                        });
-                        setTimeout(function() {
-                            location.reload()
-                        }, 100);
-                        $('#reservar_hora').modal('hide');
-                        // location.reload();
-
-                    } else {
+                            cargarAgendaProfesional('{{ $profesional->id }}',fecha_consulta);
+                            $('#agenda_agregar_paciente').modal('hide');
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Hora medica",
+                                text: data.msj,
+                                type: "error",
+                                confirmButtonText: "Cool"
+                            });
+                        }
+                    }
+                    else
+                    {
                         swal({
                             title: "Error!",
                             text: "Paciente no encontrado en el sistema",
@@ -3486,7 +3496,6 @@
                         });
                         // alert('Paciente no encontrado en el sistema');
                     }
-
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     console.log(jqXHR, ajaxOptions, thrownError)

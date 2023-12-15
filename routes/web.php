@@ -662,7 +662,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => ['guest', 'role:Profesional|Paciente|Admin'],
+    // 'middleware' => ['guest', 'role:Profesional|Paciente|Admin'],
     'prefix' => 'receta',
 ], function () {
     Route::get('pdf', [App\Http\Controllers\RecomendacionController::class, 'verPDF'])->name('profesional.receta.pdf');

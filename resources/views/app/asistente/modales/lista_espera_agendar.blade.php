@@ -22,10 +22,8 @@
                         <div class="col-md-12">
                             <div class="form-row">
                                 <div class="form-group col-md-12 mb-2 mt-0">
-                                    {{--  <input type="date" id="calendario" name="calendario">  --}}
-                                    {{--  <div id="calendario_reserva_buscador" name="calendario_reserva_buscador" class="calendar fc fc-unthemed fc-ltr"></div>  --}}
                                     <label class="floating-label-active-sm mb-0">Seleccione una fecha</label>
-                                    <input class="form-control form-control-sm" type="date" name="modal_agendar_lista_espera_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_agendar_lista_espera_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  />
+                                    <input class="form-control form-control-sm" type="date" name="modal_agendar_lista_espera_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_agendar_lista_espera_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?> />
                                 </div>
                             </div>
                         </div>
@@ -141,7 +139,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger close_le_agenda_agregar_paciente" onclick="$('#le_agenda_agregar_paciente').modal('hide');" data-dismiss="modal">Cancelar</button>
-                            <button type="button" onclick="agendar_hora_le();" class="btn btn-info">Agendar Hora</button>
+                            <button type="button" onclick="agendar_hora_lista_espera();" class="btn btn-info">Agendar Hora</button>
 
                         </div>
                     </div>
@@ -165,15 +163,20 @@
     /** ABRIR MODAL */
     function abrir_agendar_lista_epera(id, id_paciente)
     {
+        console.log('abrir_agendar_lista_epera resources\views\app\asistente\modales\lista_espera_agendar.blade.php');
         $('#modal_agendar_lista_espera').modal('show');
         $('#agendar_id_lista_espera').val(id);
         $('#agendar_id_paciente').val(id_paciente);
-        carga_calendario_profesional();
+        carga_calendario_profesional_lista_espera_agendar();
     }
 
     /** CARGA DIA DE TRABAJO DE PROFESIONAL */
-    function carga_calendario_profesional()
+    function carga_calendario_profesional_lista_espera_agendar()
     {
+        $('#modal_agendar_lista_espera_fecha').val('');
+        // $('#modal_agendar_lista_espera_fecha').attr('disabled',true);
+        $('#modal_agendar_lista_espera_lista_horas').html('');
+
         let id_profesional = $('#agenda_profesional_asistente').val();
         let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
         console.log('cargando calendario');
@@ -212,10 +215,37 @@
 
                     $('#modal_agendar_lista_espera_dias_atencion').html(dias_texto);
 
+                    /** calendario */
+                    // $('#modal_agendar_lista_espera_fecha').attr('disabled',false);
+
+                    $("#modal_agendar_lista_espera_fecha").flatpickr({
+                        "disable": [
+                            function(date) {
+                                return !dias_activos.includes(String(date.getDay()));
+                            }
+                        ],
+                        minDate: "today",
+                        maxDate: new Date().fp_incr(60), // 14 days from now
+                        locale: {
+                            firstDayOfWeek: 1,
+                            weekdays: {
+                            shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                            longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                            },
+                            months: {
+                            shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Оct', 'Nov', 'Dic'],
+                            longhand: ['Enero', 'Febrero', 'Мarzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                            },
+                        },
+                    });
+                    /** fin calendario */
+
                 }
                 else
                 {
-                    $('#modal_agendar_lista_espera_dias_atencion').html('NO INFORMADOS');
+                    $('#modal_agendar_lista_espera_lista_horas').html('NO INFORMADOS');
+                    // $('#modal_agendar_lista_espera_fecha').attr('disabled',true);
+                    $('#modal_agendar_lista_espera_fecha_seleccionada').html('');
                 }
 
             } else {
@@ -360,7 +390,7 @@
     }
 
     {{--  GENERAR HORA USUARIO EXISTENTE  --}}
-    function agendar_hora_le() {
+    function agendar_hora_lista_espera() {
 
         let url = "{{ route('agenda.paciente.solicitar.hora') }}";
         let _token = $('#_token').val();

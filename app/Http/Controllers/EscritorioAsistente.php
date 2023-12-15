@@ -30,8 +30,11 @@ use App\Models\Region;
 use App\Models\RegistroConfirmacionHoraAgenda;
 use App\Models\SubTipoEspecialidad;
 use App\Models\TipoEspecialidad;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
 class EscritorioAsistente extends Controller
@@ -622,104 +625,195 @@ class EscritorioAsistente extends Controller
 
     public function agendar_hora_nuevo_paciente(Request $request)
     {
-        $user = Auth::user()->id;
-        $paciente = new Paciente();
-        $direccion = new Direccion();
-        $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
-        $profesional = Profesional::where('id',$request->id_profesional)->first();
+        $datos = array();
+        $error = array();
+        $valido = 1;
 
-        $direccion->direccion = $request->reserva_hora_direccion;
-        $direccion->numero_dir = $request->reserva_hora_numero_dir;
-        $direccion->id_ciudad = $request->reserva_hora_comuna;
-        $direccion->save();
-        $paciente->rut = $request->rut_paciente_reserva;
-        $paciente->nombres = $request->reserva_hora_nombre;
-        $paciente->apellido_uno = $request->reserva_hora_primer_apellido;
-        $paciente->apellido_dos = $request->reserva_hora_segundo_apellido;
-        $paciente->sexo = $request->reserva_hora_sexo;
-        $paciente->profesion = $request->reserva_hora_profesion;
-        $paciente->fecha_nac = $request->reserva_hora_fecha_nac;
-        $paciente->id_prevision = $request->reserva_hora_convenio;
-        $paciente->email = $request->reserva_hora_email;
-        $paciente->telefono_uno = $request->reserva_hora_telefono;
-        $paciente->id_direccion = $direccion->id;
+        /** validacion de correo en paciente */
+        $temp_valid_email = Paciente::where(DB::raw('UPPER(email)'), mb_strtoupper($request->reserva_hora_email))->count();
 
-        if ($paciente->save()) {
+        if($temp_valid_email == 0)
+        {
+            $user = Auth::user()->id;
+            $paciente = new Paciente();
+            $direccion = new Direccion();
+            $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
+            $profesional = Profesional::where('id',$request->id_profesional)->first();
 
-            /** buscar tiempo de la consult */
-            $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
-            $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
-                                                    ->where('id_profesional', $profesional->id)
-                                                    ->where('id_lugar_atencion',$request->id_lugar_atencion)
-                                                    ->where('dia','like','%'.$dia_de_semana.'%')
-                                                    ->first();
+            $direccion->direccion = $request->reserva_hora_direccion;
+            $direccion->numero_dir = $request->reserva_hora_numero_dir;
+            $direccion->id_ciudad = $request->reserva_hora_comuna;
+            $direccion->save();
+            $paciente->rut = $request->rut_paciente_reserva;
+            $paciente->nombres = $request->reserva_hora_nombre;
+            $paciente->apellido_uno = $request->reserva_hora_primer_apellido;
+            $paciente->apellido_dos = $request->reserva_hora_segundo_apellido;
+            $paciente->sexo = $request->reserva_hora_sexo;
+            $paciente->profesion = $request->reserva_hora_profesion;
+            $paciente->fecha_nac = $request->reserva_hora_fecha_nac;
+            $paciente->id_prevision = $request->reserva_hora_convenio;
+            $paciente->email = $request->reserva_hora_email;
+            $paciente->telefono_uno = $request->reserva_hora_telefono;
+            $paciente->id_direccion = $direccion->id;
 
-            // $profesional_horarios = '00:30:00';
-            // $tiempo_consulta = 30;
-            $horas = date('H',strtotime($profesional_horarios->duracion_consulta));
-            $minutos = date('i',strtotime($profesional_horarios->duracion_consulta));
-            $totales = ($horas*60) + $minutos;
-            $tiempo_consulta = $totales;
-
-            $hora_medica = new HoraMedica();
-
-            $hora_medica->id_paciente = $paciente->id;
-            $hora_medica->id_profesional = $profesional->id;
-            $hora_medica->id_asistente = $asistente->id;
-            $hora_medica->id_estado = 1;
-            $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
-            $hora_medica->fecha_consulta = \Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d');
-
-            $hora_medica->hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
-            $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->format('H:i:s');
-            $hora_medica->descripcion = $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
-
-            if (!$hora_medica->save()) {
-                return 'error';
-            }
-
-            $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
-
-            /** envio de correo de confirmacion INSTITUCION */
-            $blade = 'hora_agendada';
-            $to = array(
-                    array('email' => $paciente->email,'name' =>  $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
-                );
-            $cc = array();
-            $bcc = array();
-            $asunto = 'MED-SDI - Nueva Hora Agendada';
-            $body = array(
-                'nombre_paciente'=> $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
-                'fecha'=> $hora_medica->fecha_consulta,
-                'hora'=> $hora_medica->hora_inicio,
-                'profesional_nombre'=> $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
-                'profesional_especialidad'=> $profesional->Especialidad()->first()->nombre,
-                'profesional_tipo_especialidad'=> $profesional->TipoEspecialidad()->first()->nombre,
-                'profesional_sub_tipo_especialidad'=> $profesional->SubTipoEspecialidad()->first()->nombre,
-                // 'institucion'=> $nombre_institucion,
-                'lugar_atencion'=> $lugar_atencion->nombre,
-                'direccion'=> $lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre,
-            );
-            $archivo = '';/** pendiente */
-            $id_institucion = '';
-
-            $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
-
-            if($result_mail['estado'])
+            if ($paciente->save())
             {
-                $datos['mail']['institucion']['estado'] = 1;
-                $datos['mail']['institucion']['msj'] = 'Notificacion de bienvenida enviado';
+                $datos['paciente']['estado'] = 1;
+                $datos['paciente']['msj'] = 'Paciente registrado';
+
+                /** CREACION DE USUARIO  */
+                // $user = User::where('email', $paciente->email)->first();
+                $user = User::where(DB::raw('UPPER(email)'), mb_strtoupper($paciente->email))->first();
+                if($user == NULL)
+                {
+                    $user = new User();
+                    $user->name = $paciente->nombres . ' ' .$paciente->apellido_uno . ' ' .$paciente->apellido_dos;
+                    $user->email = $paciente->email;
+                    $pass_temp = random_int(1111,9999);
+                    $user->password = Hash::make($pass_temp);
+
+                    if($user->save())
+                    {
+                        $user->assignRole('Paciente');
+                        $paciente->id_usuario = $user->id;
+                        if($paciente->save())
+                        {
+                            $datos['paciente']['user']['update_paciente'] = 'Paciente actualizado con Usuario.';
+
+                            /** envio de correo de confirmacion  */
+                            $blade = 'bienvenida_paciente_usuario';
+                            $to = array(
+                                    array('email' => $paciente->email,'name' => $paciente->nombres . ' ' .$paciente->apellido_uno . ' ' .$paciente->apellido_dos),
+                                );
+                            $cc = array();
+                            $bcc = array();
+                            $asunto = 'MED-SDI - Bienvenido!';
+                            $body = array(
+                                        'nombre'=>$paciente->nombres . ' ' .$paciente->apellido_uno . ' ' .$paciente->apellido_dos,
+                                        'user' => $paciente->email,
+                                        'pass' => $pass_temp
+                                        );
+                            $archivo = '';/** pendiente */
+                            $id_institucion = '';
+
+                            $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                            if($result_mail['estado'])
+                            {
+                                $datos['paciente']['user']['mail']['estado'] = 1;
+                                $datos['paciente']['user']['mail']['msj'] = 'Notificacion de bienvenida enviado';
+                            }
+                            else
+                            {
+                                $datos['paciente']['user']['mail']['estado'] = 0;
+                                $datos['paciente']['user']['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                            }
+                            /** cerrar envio de correo de confirmacion  */
+                        }
+                    }
+                }
+                else
+                {
+                    $user->assignRole('Paciente');
+                    $paciente->id_usuario = $user->id;
+                    if($paciente->save())
+                    {
+                        $datos['paciente']['user']['update_paciente'] = 'Paciente actualizado con Usuario.';
+                    }
+                }
+                /** CIERRE CREACION DE USUARIO  */
+
+                /** buscar tiempo de la consult */
+                $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
+                $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
+                                                        ->where('id_profesional', $profesional->id)
+                                                        ->where('id_lugar_atencion',$request->id_lugar_atencion)
+                                                        ->where('dia','like','%'.$dia_de_semana.'%')
+                                                        ->first();
+
+                // $profesional_horarios = '00:30:00';
+                // $tiempo_consulta = 30;
+                $horas = date('H',strtotime($profesional_horarios->duracion_consulta));
+                $minutos = date('i',strtotime($profesional_horarios->duracion_consulta));
+                $totales = ($horas*60) + $minutos;
+                $tiempo_consulta = $totales;
+
+                $hora_medica = new HoraMedica();
+
+                $hora_medica->id_paciente = $paciente->id;
+                $hora_medica->id_profesional = $profesional->id;
+                $hora_medica->id_asistente = $asistente->id;
+                $hora_medica->id_estado = 1;
+                $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
+                $hora_medica->fecha_consulta = \Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d');
+
+                $hora_medica->hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
+                $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->format('H:i:s');
+                $hora_medica->descripcion = $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
+
+                if ($hora_medica->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Hora Medica creada';
+                    $datos['hora_medica'] = $hora_medica;
+
+                    $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
+
+                    /** envio de correo de confirmacion INSTITUCION */
+                    $blade = 'hora_agendada';
+                    $to = array(
+                            array('email' => $paciente->email,'name' =>  $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+                        );
+                    $cc = array();
+                    $bcc = array();
+                    $asunto = 'MED-SDI - Nueva Hora Agendada';
+                    $body = array(
+                        'nombre_paciente'=> $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
+                        'fecha'=> $hora_medica->fecha_consulta,
+                        'hora'=> $hora_medica->hora_inicio,
+                        'profesional_nombre'=> $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
+                        'profesional_especialidad'=> $profesional->Especialidad()->first()->nombre,
+                        'profesional_tipo_especialidad'=> $profesional->TipoEspecialidad()->first()->nombre,
+                        'profesional_sub_tipo_especialidad'=> $profesional->SubTipoEspecialidad()->first()->nombre,
+                        // 'institucion'=> $nombre_institucion,
+                        'lugar_atencion'=> $lugar_atencion->nombre,
+                        'direccion'=> $lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre,
+                    );
+                    $archivo = '';/** pendiente */
+                    $id_institucion = '';
+
+                    $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                    if($result_mail['estado'])
+                    {
+                        $datos['mail']['institucion']['estado'] = 1;
+                        $datos['mail']['institucion']['msj'] = 'Notificacion de bienvenida enviado';
+                    }
+                    else
+                    {
+                        $datos['mail']['institucion']['estado'] = 0;
+                        $datos['mail']['institucion']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                    }
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Problema al crear Hora Medica';
+                }
             }
             else
             {
-                $datos['mail']['institucion']['estado'] = 0;
-                $datos['mail']['institucion']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Problema al crear Paciente';
             }
-
-            return json_encode($hora_medica);
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'el correo ya esta siendo utilizado por otro paciente.';
         }
 
-        return 'algo';
+        return $datos;
     }
 
     public function agendar_horas(Request $request)

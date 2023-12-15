@@ -9,6 +9,12 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
+                        <input type="hidden" name="m_agendar_hora_examen_lista_examenes" id="m_agendar_hora_examen_lista_examenes" value="">
+                        <label class="mt-4">Examen: <span id="m_agendar_hora_examen_text_lista_examenes" class="hljs-strong"></span></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
                         <input type="hidden" name="m_agendar_hora_examen_agendar_id_paciente" id="m_agendar_hora_examen_agendar_id_paciente" value="">
                         <div class="col-md-6">
                             <label class="mt-4">El Profesional atiende los dias <span id="m_agendar_hora_examen_dias_atencion" class="hljs-strong"></span></label>
@@ -18,7 +24,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-12 mb-2 mt-0">
                                     <label class="floating-label-active-sm mb-0">Seleccione una fecha</label>
-                                    <input class="form-control form-control-sm" type="date" name="m_agendar_hora_examen_fecha" onchange="carga_horas_profesional_horas_examens(this.value);" id="m_agendar_hora_examen_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  />
+                                    <input class="form-control form-control-sm" type="date" name="m_agendar_hora_examen_fecha" onchange="carga_horas_profesional_horas_examens(this.value);" id="m_agendar_hora_examen_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?> />
                                 </div>
                             </div>
                         </div>
@@ -39,7 +45,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger align-middle" onclick="agendar_hora_examen()"; data-dismiss="modal">Eliminar</button>
+                {{-- <button type="button" class="btn btn-danger align-middle" onclick="agendar_hora_examen()"; data-dismiss="modal">Eliminar</button> --}}
                 <button type="button" class="btn btn-info align-middle" onclick="cerrar_modal_hex_agenda()"; data-dismiss="modal">Cerrar</button>
             </div>
         </div>
@@ -72,6 +78,15 @@
                     <div id="hex_reserva_datos_paciente" class="row mx-3">
                         <table class="table table-borderless table-xs">
                             <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Examen</strong>
+                                    </th>
+                                    <td>
+                                        <input type="hidden" name="hex_reserva_examen" value="hex_reserva_examen">
+                                        <span id="hex_reserva_text_examen"></span>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <th scope="row">
                                         <strong>Rut</strong>
@@ -162,6 +177,10 @@
     /** CARGA DIA DE TRABAJO DE PROFESIONAL */
     function carga_calendario_profesional()
     {
+        $('#m_agendar_hora_examen_fecha').val('');
+        // $('#m_agendar_hora_examen_fecha').attr('disabled',true);
+        $('#m_agendar_hora_examen_lista_horas').html('');
+
         let id_profesional = $('#agenda_profesional_asistente').val();
         let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
         console.log('cargando calendario');
@@ -200,10 +219,37 @@
 
                     $('#m_agendar_hora_examen_dias_atencion').html(dias_texto);
 
+                    /** calendario */
+                    // $('#m_agendar_hora_examen_fecha').attr('disabled',false);
+
+                    $("#m_agendar_hora_examen_fecha").flatpickr({
+                        "disable": [
+                            function(date) {
+                                return !dias_activos.includes(String(date.getDay()));
+                            }
+                        ],
+                        minDate: "today",
+                        maxDate: new Date().fp_incr(60), // 14 days from now
+                        locale: {
+                            firstDayOfWeek: 1,
+                            weekdays: {
+                            shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                            longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                            },
+                            months: {
+                            shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Оct', 'Nov', 'Dic'],
+                            longhand: ['Enero', 'Febrero', 'Мarzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                            },
+                        },
+                    });
+                    /** fin calendario */
+
                 }
                 else
                 {
                     $('#m_agendar_hora_examen_dias_atencion').html('NO INFORMADOS');
+                    // $('#m_agendar_hora_examen_fecha').attr('disabled',true);
+                    $('#m_agendar_hora_examen_fecha_seleccionada').html('');
                 }
 
             } else {
@@ -310,6 +356,8 @@
             if (data.estado == 1)
             {
 
+                $('#hex_reserva_examen').val($('#m_agendar_hora_examen_lista_examenes').val());
+                $('#hex_reserva_text_examen').html($('#m_agendar_hora_examen_text_lista_examenes').html());
 
                 $('#hex_form_reseva_de_horas').show();
                 $('#hex_reserva_datos_paciente').show();
@@ -368,7 +416,8 @@
         let id_lugar_atencion = $('#hex_reserva_hora_id_lugar_atencion').val();
         let id_asistente = $('#hex_reserva_hora_id_asistente').val();
         let origen = $('#hex_reserva_hora_origen').val();
-
+        let examen = $('#hex_reserva_examen').val();
+        let text_examen = $('#hex_reserva_text_examen').html();
 
         $.ajax({
                 url: url,
@@ -381,7 +430,8 @@
                     id_profesional: id_profesional,
                     id_asistente: id_asistente,
                     origen: origen,
-                    tipo_hora_medica: 'E'
+                    tipo_hora_medica: 'E',
+                    examen: text_examen
                 }
             })
             .done(function(data) {

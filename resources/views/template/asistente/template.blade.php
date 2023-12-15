@@ -38,6 +38,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @yield('page-styles')
+
+    <!-- flatpickr -->
+    <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
+
     <style>
         #loading {
             display: none;
@@ -148,6 +152,9 @@
 
     <!-- rut -->
     <script src="{{ asset('js/rut.js') }}"></script>
+
+    <!-- flatpickr -->
+    <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -276,6 +283,15 @@
                     {
                         if(data.estado == 1 && data.horario.length!=0)
                         {
+                            // carga de examenes posibles por el profesional
+                            $('#m_hora_examen_lista_examenes').html('<option value="">Seleccione</option>');
+                            if(data.examen_tipo != null)
+                            {
+                                data.examen_tipo.forEach(element => {
+                                    $('#m_hora_examen_lista_examenes').append('<option value="'+element.id+'">'+element.nombre+'</option>');
+                                });
+                            }
+
                             info_profesional_seleccionado['profesional'] = data.profesional;
                             info_profesional_seleccionado['horario'] = data.horario;
                             info_profesional_seleccionado['horario_data'] = data.horario_data;
@@ -1358,28 +1374,40 @@
                 })
                 .done(function(data) {
                     if (data != null) {
-                        data = JSON.parse(data);
-
-                        swal({
-                            title: "Exito!",
-                            text: "Hora medica agendada correctamente",
-                            type: "success",
-                            confirmButtonText: "Cool"
-                        });
-                        $('#reservar_hora').modal('hide');
-                        $('#agenda_agregar_paciente').modal('hide');
-                        cargarAgendaProfesional($('#agenda_lugar_atencion_asistente').val(), $('#agenda_profesional_asistente').val(),fecha_consulta);
-
-                    } else {
+                        // data = JSON.parse(data);
+                        // console.log(data);
+                        if(data.estado == 1)
+                        {
+                            swal({
+                                title: "Exito!",
+                                text: "Hora medica agendada correctamente",
+                                type: "success",
+                                confirmButtonText: "Cool"
+                            });
+                            $('#reservar_hora').modal('hide');
+                            $('#agenda_agregar_paciente').modal('hide');
+                            cargarAgendaProfesional($('#agenda_lugar_atencion_asistente').val(), $('#agenda_profesional_asistente').val(),fecha_consulta);
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Hora medica",
+                                text: data.msj,
+                                type: "error",
+                                confirmButtonText: "Cool"
+                            });
+                        }
+                    }
+                    else
+                    {
                         swal({
                             title: "Error!",
                             text: "Paciente no encontrado en el sistema",
                             type: "error",
                             confirmButtonText: "Cool"
                         });
-
+                        // alert('Paciente no encontrado en el sistema');
                     }
-
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     console.log(jqXHR, ajaxOptions, thrownError)

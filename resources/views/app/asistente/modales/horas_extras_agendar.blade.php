@@ -18,7 +18,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-12 mb-2 mt-0">
                                     <label class="floating-label-active-sm mb-0">Seleccione una fecha</label>
-                                    <input class="form-control form-control-sm" type="date" name="m_agendar_hora_extra_fecha" onchange="carga_horas_profesional_horas_extras(this.value);" id="m_agendar_hora_extra_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  />
+                                    <input class="form-control form-control-sm" type="date" name="m_agendar_hora_extra_fecha" onchange="carga_horas_profesional_horas_extras(this.value);" id="m_agendar_hora_extra_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?> />
                                 </div>
                             </div>
                         </div>
@@ -151,17 +151,14 @@
         $('#m_agendar_hora_extra_agendar_id_paciente').val('');
     }
 
-    /** ABRIR MODAL */
-    function abrir_agendar_lista_epera(id, id_paciente)
-    {
-        $('#m_agendar_hora_extra').modal('show');
-        $('#m_agendar_hora_extra_agendar_id_paciente').val(id_paciente);
-        carga_calendario_profesional();
-    }
-
     /** CARGA DIA DE TRABAJO DE PROFESIONAL */
-    function carga_calendario_profesional()
+    function carga_calendario_profesional_he()
     {
+        console.log('resources\views\app\asistente\modales\horas_extras_agendar.blade.php');
+        $('#m_agendar_hora_extra_fecha').val('');
+        // $('#m_agendar_hora_extra_fecha').attr('disabled',true);
+        $('#m_agendar_hora_extra_lista_horas').html('');
+
         let id_profesional = $('#agenda_profesional_asistente').val();
         let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
         console.log('cargando calendario');
@@ -200,10 +197,36 @@
 
                     $('#m_agendar_hora_extra_dias_atencion').html(dias_texto);
 
+                    /** calendario */
+                    // $('#m_agendar_hora_extra_fecha').attr('disabled',false);
+
+                    $("#m_agendar_hora_extra_fecha").flatpickr({
+                        "disable": [
+                            function(date) {
+                                return !dias_activos.includes(String(date.getDay()));
+                            }
+                        ],
+                        minDate: "today",
+                        maxDate: new Date().fp_incr(60), // 14 days from now
+                        locale: {
+                            firstDayOfWeek: 1,
+                            weekdays: {
+                            shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                            longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                            },
+                            months: {
+                            shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Оct', 'Nov', 'Dic'],
+                            longhand: ['Enero', 'Febrero', 'Мarzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                            },
+                        },
+                    });
+                    /** fin calendario */
                 }
                 else
                 {
                     $('#m_agendar_hora_extra_dias_atencion').html('NO INFORMADOS');
+                    // $('#m_agendar_hora_extra_fecha').attr('disabled',true);
+                    $('#m_agendar_hora_extra_fecha_seleccionada').html('');
                 }
 
             } else {

@@ -443,7 +443,7 @@
     function agendar_he_ex()
     {
         $('#m_agendar_hora_extra_agendar_id_paciente').val($('#m_hora_extras_ex_id_paciente').val());
-        carga_calendario_profesional();
+        carga_calendario_profesional_he();
         $('#m_agendar_hora_extra').modal('show');
         $('#m_hora_extras').modal('hide');
         cancelar_busqueda_horas_extras();
@@ -665,7 +665,7 @@
                         });
 
                         $('#m_agendar_hora_extra_agendar_id_paciente').val(data.paciente_final);
-                        carga_calendario_profesional();
+                        carga_calendario_profesional_he();
                         $('#m_agendar_hora_extra').modal('show');
                         $('#m_hora_extras').modal('hide');
                         cancelar_busqueda_horas_extras();

@@ -236,7 +236,9 @@
     <!--Cierre: Container Completo-->
 
     @include('app.asistente_cm_manejo_agenda.modales.modal_profesional_informacion')
+
     @include('general.asistentes.modal_consulta_agenda')
+
     @include('app.asistente_cm_manejo_agenda.modales.lista_espera')
 
     {{-- horas extras --}}
@@ -244,29 +246,12 @@
     @include('app.asistente_cm_manejo_agenda.modales.horas_extras_agendar')
 
     {{-- hora examen --}}
-    @include('app.asistente_cm_manejo_agenda.modales.horas_examen')
-    @include('app.asistente_cm_manejo_agenda.modales.horas_examen_agendar')
+    @include('app.general.asistente.reserva_hora_examen.horas_examen')
+    @include('app.general.asistente.reserva_hora_examen.horas_examen_agendar')
 
     {{-- transcribir examen por asistente --}}
     @include('app.asistente_cm_manejo_agenda.modales.transcribir_examen');
 
-@endsection
-
-@section('modales')
-    {{-- @include('app.asistente_cm_manejo_agenda.modales.modal_profesional_informacion') --}}
-    {{-- @include('app.asistente.modales.modal_consulta_agenda') --}}
-    {{-- @include('app.asistente_cm_manejo_agenda.modales.lista_espera') --}}
-
-    {{-- horas extras --}}
-    {{-- @include('app.asistente_cm_manejo_agenda.modales.horas_extras') --}}
-    {{-- @include('app.asistente_cm_manejo_agenda.modales.horas_extras_agendar') --}}
-
-    {{-- hora examen --}}
-    {{-- @include('app.asistente_cm_manejo_agenda.modales.horas_examen') --}}
-    {{-- @include('app.asistente_cm_manejo_agenda.modales.horas_examen_agendar') --}}
-
-    {{-- transcribir examen por asistente --}}
-    {{-- @include('app.asistente_cm_manejo_agenda.modales.transcribir_examen'); --}}
 @endsection
 
 @section('page-script')
@@ -1582,21 +1567,32 @@
                 })
                 .done(function(data) {
                     if (data != null) {
-                        data = JSON.parse(data);
+                        // data = JSON.parse(data);
                         // console.log(data);
-
-                        swal({
-                            title: "Exito!",
-                            text: "Hora medica agendada correctamente",
-                            type: "success",
-                            confirmButtonText: "Cool"
-                        });
-                        $('#reservar_hora').modal('hide');
-                        $('#agenda_agregar_paciente').modal('hide');
-                        cargarAgendaProfesional(fecha_consulta);
-                        // location.reload();
-
-                    } else {
+                        if(data.estado == 1)
+                        {
+                            swal({
+                                title: "Exito!",
+                                text: "Hora medica agendada correctamente",
+                                type: "success",
+                                confirmButtonText: "Cool"
+                            });
+                            $('#reservar_hora').modal('hide');
+                            $('#agenda_agregar_paciente').modal('hide');
+                            cargarAgendaProfesional(fecha_consulta);
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Hora medica",
+                                text: data.msj,
+                                type: "error",
+                                confirmButtonText: "Cool"
+                            });
+                        }
+                    }
+                    else
+                    {
                         swal({
                             title: "Error!",
                             text: "Paciente no encontrado en el sistema",
