@@ -233,7 +233,7 @@
                                                                     <i class="feather icon-calendar"></i>
                                                                     <strong> F. Nacimiento - Edad</strong><br>
                                                                     <span>Edad: <strong>{{ $paciente->edad }}</strong><span><br>
-                                                                    <span>FN: <strong>{{$paciente->fecha_nac}}</strong><span>
+                                                                    <span>FN: <strong>{{ date('d-m-Y', strtotime($paciente->fecha_nac)) }}</strong><span>
                                                                 </p>
                                                             </div>
                                                             <div class="col-sm-6  col-md-2">

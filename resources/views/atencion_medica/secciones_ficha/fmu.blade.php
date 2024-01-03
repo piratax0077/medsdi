@@ -99,7 +99,7 @@
                                                         @endphp
                                                     @endif
                                                 @endforeach
-                                                {{$paciente->nombres}} {{$paciente->apellido_uno}} {{$paciente->apellido_dos}}; <span style="font-weight: bold;">{{ $paciente->edad }} Años</span>; Grupo sanguíneo: <span style="color: #ff0000;font-weight: bold;">{{$grupo_sanguineo->nombre_gs}}</span> Paciente Crónico: {!! ($antecedentes_paciente->transfusion == '1'?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}; Transfuciones: {!! ($cantidad_ante_cronicos > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}; Alergias:{!! ($cantidad_ante_alergias > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}
+                                                {{$paciente->nombres}} {{$paciente->apellido_uno}} {{$paciente->apellido_dos}}; <span style="font-weight: bold;">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }} Años</span>; Grupo sanguíneo: <span style="color: #ff0000;font-weight: bold;">{{$grupo_sanguineo->nombre_gs}}</span> Paciente Crónico: {!! ($antecedentes_paciente->transfusion == '1'?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}; Transfuciones: {!! ($cantidad_ante_cronicos > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}; Alergias:{!! ($cantidad_ante_alergias > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}
                                             </button>
                                         </div>
 
@@ -147,8 +147,8 @@
                                                                         <p>
                                                                             <i class="feather icon-calendar"></i>
                                                                             <strong> F. Nacimiento - Edad</strong><br>
-                                                                            <span>Edad: <strong>{{ $paciente->edad }}</strong><span><br>
-                                                                            <span>FN: <strong>{{$paciente->fecha_nac}}</strong><span>
+                                                                            <span>Edad: <strong>{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</strong><span><br>
+                                                                            <span>FN: <strong>{{ date('d-m-Y', strtotime($paciente->fecha_nac)) }}</strong><span>
                                                                         </p>
                                                                     </div>
                                                                     <div class="col-sm-6  col-md-2">
