@@ -16,7 +16,7 @@
                     {{--<button type="button" class="btn btn-xs btn-danger d-inline float-right ml-2 mb-2"><i class="feather icon-x"></i> Cerrar</button> --}}
                     {{--<button type="button" class="btn btn-xs btn-primary d-inline float-right ml-2 mb-2"><i class="feather icon-printer"></i> Imprimir</button>--}}
                 </div>
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12  mb-4">
+                {{-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12  mb-4">
                     <div class="card">
                         <div class="card-body pt-2 pb-2">
                             <div class="row align-middle">
@@ -46,10 +46,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
             <div class="row mx-1">
-                <!--INFORMACIÓN PACIENTE-->
+                <!--INFORMACIÓN PACIENTE - IZQUIERDO-->
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-4">
                     <div class="card">
                         <div class="card-body">
@@ -164,12 +164,211 @@
                 <!--LADO DERECHO-->
                 <div class="col-sm-12 col-md-9 col-lg-9 col-xl-9">
                     <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="card-a">
+                                <div class="card-header-a" id="enf-cron">
+                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#cabecera_info" aria-expanded="false" aria-controls="cabecera_info">
+                                        @php
+                                            $cantidad_ante_cronicos = 0;
+                                            $cantidad_ante_alergias = 0;
+                                        @endphp
+                                        @foreach ($antecedentes as $data)
+                                            @if($data->id_tipo_antecedente==2)
+                                                @php
+                                                    $cantidad_ante_cronicos++;
+                                                @endphp
+                                            @endif
+                                            @if($data->id_tipo_antecedente==6)
+                                                @php
+                                                    $cantidad_ante_alergias++;
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                        {{$paciente->nombres}} {{$paciente->apellido_uno}} {{$paciente->apellido_dos}}; <span style="font-weight: bold;">{{ $paciente->edad }} Años</span>; Grupo sanguíneo: <span style="color: #ff0000;font-weight: bold;">{{$grupo_sanguineo->nombre_gs}}</span> Paciente Crónico: {!! ($antecedentes_paciente->transfusion == '1'?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}; Transfuciones: {!! ($cantidad_ante_cronicos > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}; Alergias:{!! ($cantidad_ante_alergias > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}
+                                    </button>
+                                </div>
+
+                                <div id="cabecera_info" class="collapse" aria-labelledby="enf-cron" data-parent="#cabecera_info">
+                                    <div class="card-body-aten-a">
+                                        <div class="row mt-3">
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 pb-4">
+                                                <ul class="nav nav-tabs profile-tabs nav-fill mt-2" id="myTab" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-reset active" id="seccion_ident_contacto-tab" data-toggle="tab" href="#seccion_ident_contacto" role="tab" aria-controls="seccion_ident_contacto" aria-selected="true">Identificacion y Contacto</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-reset" id="seccion_enfer_cronicas-tab" data-toggle="tab" href="#seccion_enfer_cronicas" role="tab" aria-controls="seccion_enfer_cronicas" aria-selected="false">Enfermedades Cronicas</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-reset" id="seccion_alergias-tab" data-toggle="tab" href="#seccion_alergias" role="tab" aria-controls="seccion_alergias" aria-selected="false">Alergias</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-reset" id="seccion_ultimas_cirugia-tab" data-toggle="tab" href="#seccion_ultimas_cirugia" role="tab" aria-controls="seccion_ultimas_cirugia" aria-selected="false">Ultimas Cirugias</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-reset" id="seccion_ultimo_tratamiento-tab" data-toggle="tab" href="#seccion_ultimo_tratamiento" role="tab" aria-controls="seccion_ultimo_tratamiento" aria-selected="false">Ultimos Tratamientos</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="tab-content" id="at-oftalmo">
+                                                    {{-- INFORMACION DE CONTACTO --}}
+                                                    <div class="tab-pane fade show active" id="seccion_ident_contacto" role="tabpanel" aria-labelledby="seccion_ident_contacto-tab">
+                                                        <div class="row align-middle">
+                                                            <div class="col-sm-6 col-md-3">
+                                                                <p>
+                                                                    <i class="feather icon-user"></i>
+                                                                    <strong> Paciente</strong><br>
+                                                                    <label for="inputEmail4">
+                                                                        <span id="nombre">Nombre: <strong>{{$paciente->nombres}}</strong><br> Apellidos: <strong>{{$paciente->apellido_uno}} {{$paciente->apellido_dos}}</strong></span><br>
+                                                                        <span>RUT: <strong>{{$paciente->rut}}</strong></span>
+                                                                    </label>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-sm-6  col-md-3">
+                                                                <p>
+                                                                    <i class="feather icon-calendar"></i>
+                                                                    <strong> F. Nacimiento - Edad</strong><br>
+                                                                    <span>Edad: <strong>{{ $paciente->edad }}</strong><span><br>
+                                                                    <span>FN: <strong>{{$paciente->fecha_nac}}</strong><span>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-sm-6  col-md-2">
+                                                                @php
+                                                                    $sexos = array(
+                                                                        'M' => 'Masculino',
+                                                                        'F' => 'Femenino'
+                                                                    );
+                                                                @endphp
+                                                                <p><i class="feather icon-user"></i><strong> Sexo</strong> <br>{{$sexos[$paciente->sexo]}}</p>
+                                                            </div>
+                                                            <div class="col-sm-6  col-md-4">
+                                                                <p><i class="feather icon-home"></i><strong> Dirección</strong> <br>{{$direccion->direccion}} {{$direccion->numero}}, {{$direccion->ciudad}},{{$direccion->region}} <br>{{$paciente->telefono_uno}} / {{$paciente->telefono_dos}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {{-- informacion de enfermedades cronicas  --}}
+                                                    <div class="tab-pane fade" id="seccion_enfer_cronicas" role="tabpanel" aria-labelledby="seccion_enfer_cronicas-tab">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <table id="table_enfermedades_cronicas" class="display table table-striped table-xs dt-responsive nowrap pb-4" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>NOMBRE</th>
+                                                                            <th>COMENTARIO</th>
+                                                                            <th>PROFESIONAL</th>
+                                                                            <th>FECHA</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach ($antecedentes as $data)
+                                                                            @if($data->id_tipo_antecedente==2)
+                                                                                <tr>
+                                                                                    <td>{{ $data->antecedente_data->nombre }} </td>
+                                                                                    <td>{{ $data->comentario }} </td>
+                                                                                    <td>{{ $data->antecedente_data->profesional }}  <br/>{{ $data->antecedente_data->rut_responsable }}</td>
+                                                                                    <td>{{ date('d-m-Y', strtotime($data->antecedente_data->fecha_regitro)) }} </td>
+                                                                                </tr>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {{-- informacion de alergias --}}
+                                                    <div class="tab-pane fade" id="seccion_alergias" role="tabpanel" aria-labelledby="seccion_alergias-tab">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <table id="table_alergias" class="display table table-striped table-xs dt-responsive nowrap pb-4" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>NOMBRE</th>
+                                                                            <th>COMENTARIO</th>
+                                                                            <th>FECHA</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach ($antecedentes as $data)
+                                                                            @if($data->id_tipo_antecedente==6)
+                                                                                <tr>
+                                                                                    <td>{{ $data->antecedente_data->nombre }}</td>
+                                                                                    <td>{{ $data->antecedente_data->comentario }}</td>
+                                                                                    <td>{{ date('d-m-Y', strtotime($data->antecedente_data->fecha_regitro)) }}</td>
+                                                                                </tr>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {{-- informacion de cirugias --}}
+                                                    <div class="tab-pane fade" id="seccion_ultimas_cirugia" role="tabpanel" aria-labelledby="seccion_ultimas_cirugia-tab">
+
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <table id="table_alergias" class="display table table-striped table-xs dt-responsive nowrap pb-4" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>FECHA CIRUGIA</th>
+                                                                            <th>PROCEDIMIENTO</th>
+                                                                            <th>COMENTARIO</th>
+                                                                            <th>PROFESIONAL</th>
+                                                                            <th>FECHA REGISTRO</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach ($antecedentes as $data)
+                                                                            @if($data->id_tipo_antecedente==3)
+                                                                                <tr>
+                                                                                    <td>{{ date('d-m-Y', strtotime($data->antecedente_data->fecha)) }}</td>
+                                                                                    <td>{{ $data->antecedente_data->procedimiento }}</td>
+                                                                                    <td>{{ $data->antecedente_data->comentario }}</td>
+                                                                                    <td>{{ $data->antecedente_data->profesional }} <br/>{{ $data->antecedente_data->rut_responsable }}</td>
+                                                                                    <td>{{ date('d-m-Y', strtotime($data->antecedente_data->fecha_regitro)) }}</td>
+                                                                                </tr>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="tab-pane fade" id="seccion_ultimo_tratamiento" role="tabpanel" aria-labelledby="seccion_ultimo_tratamiento-tab">
+
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                {!! $datos->tratamientos_activos !!}
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-                            <button type="button" class="btn btn-xs btn-primary mb-1" onclick="cirugias_fmu();">Cirugías</button>
-                            <button type="button" class="btn btn-xs btn-primary mb-1" onclick="alergias_fmu();">Alergias</button>
+                            {{-- <button type="button" class="btn btn-xs btn-primary mb-1" onclick="cirugias_fmu();">Cirugías</button> --}}
+                            {{-- <button type="button" class="btn btn-xs btn-primary mb-1" onclick="alergias_fmu();">Alergias</button> --}}
                             <button type="button" class="btn btn-xs btn-primary mb-1" onclick="responsables_fmu();"><i class="feather icon-users"></i> Responsables</button>
                             <button type="button" class="btn btn-xs btn-primary mb-1" onclick="confidencial_fmu();"><i class="feather icon-lock"></i> Confidencial</button>
-                            <button type="button" class="btn btn-xs btn-primary mb-1" onclick="trat_act_fmu();"><i class="feather icon-file-plus"></i> Tratamientos activos</button>
+                            {{-- <button type="button" class="btn btn-xs btn-primary mb-1" onclick="trat_act_fmu();"><i class="feather icon-file-plus"></i> Tratamientos activos</button> --}}
                             <button type="button" class="btn btn-xs btn-danger mb-1" onclick="c_sos_fmu();"><i class="feather icon-phone"></i> Contacto de emergencia</button>
                         </div>
                     </div>
