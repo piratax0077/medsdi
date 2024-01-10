@@ -38,7 +38,6 @@
     {{-- estilos de atencion medica --}}
     <link rel="stylesheet" href="{{ asset('css/estilos_atencion_medica.css') }}"/>
 
-
    {{-- autocomplete
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
@@ -234,5 +233,6 @@
         }
     </script>
     @yield('page-script')
+    @yield('btn-script-agenda')
 </body>
 </html>

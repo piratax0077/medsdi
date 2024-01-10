@@ -319,6 +319,7 @@
         {
             cargarListaEsperaPorProfesional();
             $('#m_lista_espera_rut').val('');
+            $('.div_rut_buscar').show();
             $('.m_lista_espera_busqueda').show();
             $('.m_lista_espera_paciente_existente').hide();
             $('.m_lista_espera_paciente_nuevo').hide();

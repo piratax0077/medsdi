@@ -478,6 +478,7 @@ class EscritorioProfesional extends Controller
     public function index()
     {
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $tipo_agendas = ProfesionalHorario::select('tipo_agenda')->where('id_profesional', $profesional->id)->groupBy('tipo_agenda')->pluck('tipo_agenda')->toArray();
         $region = Region::all();
         $especialidad = Especialidad::all();
 
@@ -488,15 +489,24 @@ class EscritorioProfesional extends Controller
             }
 
             $lugar_atencion_prof = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->count();
-            $horario_prof = ProfesionalHorario::where('id_profesional', $profesional->id)->count();
 
             //if($profesional->bienvenida == 0)
             if( $lugar_atencion_prof == 0 )
             {
-                return view('bienvenida.inicio_profesionales')->with(['region' => $region, 'profesional' => $profesional]);
+                return view('bienvenida.inicio_profesionales')->with([
+                    'region' => $region,
+                    'profesional' => $profesional,
+                ]);
             }
             else
-                return view('app.profesional.escritorio_profesional')->with(['region' => $region, 'profesional' => $profesional, 'hora_dia' => $horas_dia]);
+            {
+                return view('app.profesional.escritorio_profesional')->with([
+                    'region' => $region,
+                    'profesional' => $profesional,
+                    'hora_dia' => $horas_dia,
+                    'tipo_agendas' => $tipo_agendas,
+                ]);
+            }
         }
 
 
@@ -518,7 +528,8 @@ class EscritorioProfesional extends Controller
             'especialidad' => $especialidad,
             'tipo_especialidad' => $tipo_especialidad,
             'sub_tipo_especialidad' => $sub_tipo_especialidad,
-            'invitacion' => $invitacion]);
+            'invitacion' => $invitacion,
+        ]);
     }
 
 
@@ -1518,7 +1529,7 @@ class EscritorioProfesional extends Controller
     {
 
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-        $horario = ProfesionalHorario::where('id_profesional', $profesional->id)->where('id_lugar_atencion', $request->lugares_atencion)->get();
+        $horario = ProfesionalHorario::where('id_profesional', $profesional->id)->where('id_lugar_atencion', $request->lugares_atencion)->where('tipo_agenda', 1)->get();
         $horas_medicas = HoraMedica::where('id_profesional', $profesional->id)
                                     ->whereIn('id_estado',[1,2,4,5,6,7,8])
                                     ->with(['Paciente'=> function($query){
@@ -1579,6 +1590,7 @@ class EscritorioProfesional extends Controller
         if (!isset($horario)) {
             return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region, 'mensaje' => 'Para abrir Agenda debe ingresar horario de atención en el botón correspondiente']);
         }
+        $tipo_agendas = ProfesionalHorario::select('tipo_agenda')->where('id_profesional', $profesional->id)->groupBy('tipo_agenda')->pluck('tipo_agenda')->toArray();
 
         return view('app.profesional.agenda')->with(
             [
@@ -1593,7 +1605,8 @@ class EscritorioProfesional extends Controller
                 'lugar_atencion' => $request->lugares_atencion,
                 'lugar_atencion_nombre' => $lugarAtencion->nombre,
                 'reg_confirmacion_hora' => $reg_confirmacion_hora,
-                'profesional' => $profesional
+                'profesional' => $profesional,
+                'tipo_agendas' => $tipo_agendas,
             ]
         );
     }
@@ -1863,11 +1876,97 @@ class EscritorioProfesional extends Controller
         return json_encode($paciente);
     }
 
+    /** METODO PARA VALIDAR EL TIPO AGENDA POR HORA SELECCIONADA Y RPOFESIONAL */
+    public function tipoHorario_r(Request $request)
+    {
+        return static::tipoHorario($request->id_profesional, $request->fecha_consulta);
+    }
+
+    static public function tipoHorario($id_profesional, $fecha_consulta)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($id_profesional))
+        {
+            $error['id_profesional'] = 'Campos requeridos';
+            $valido = 0;
+        }
+        if(empty($fecha_consulta))
+        {
+            $error['fecha_consulta'] = 'Campos requeridos';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $fecha_consulta = \Carbon\Carbon::parse($fecha_consulta); //2024-01-05T08:00:01-03:00
+            // var_dump($fecha_consulta);
+            $dia_semana = $fecha_consulta->dayOfWeek;
+            // var_dump($dia_semana);
+            $hora_inicio = $fecha_consulta->format('H:i:s');
+            // var_dump($hora_inicio);
+            $horario = ProfesionalHorario::where('dia','like','%'.$dia_semana.'%')
+                                        ->where('id_profesional', $id_profesional)
+                                        // ->whereBetween($hora_inicio, ['hora_inicio' , 'hora_termino'])
+                                        ->whereRaw("'".$hora_inicio."' BETWEEN hora_inicio and hora_termino")
+                                        ->first();
+            // echo json_encode($horario);
+            // die();
+            if($horario)
+            {
+                $datos['estado'] = 1;
+                $datos['tipo_agenda'] = $horario->tipo_agenda;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['tipo_agenda'] = 1;
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['tipo_agenda'] = 1;
+        }
+
+        return $datos;
+    }
+    /** FIN METODO PARA VALIDAR EL TIPO AGENDA POR HORA SELECCIONADA Y RPOFESIONAL */
+
     public function agendar_horas(Request $request)
     {
 
+
         $paciente = paciente::where('id', $request->reserva_hora_id)->first();
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        // var_dump( static::tipoHorario($profesional->id, $request->fecha_consulta) );
+        // die();
+
+        $filtro_tipo_hora_medica = array(1);
+        $texto_alias_examen = '';
+        # TIPO HORA MEDICA
+        switch ($request->tipo_hora_medica) {
+            case 'C': // 1
+                $filtro_tipo_hora_medica = array(1);
+                $texto_alias_examen = 'Consulta';
+                break;
+            case 'D': // 2
+                $filtro_tipo_hora_medica = array(2);
+                $texto_alias_examen = 'Consulta Dental';
+                break;
+            case 'T': // 3
+                $filtro_tipo_hora_medica = array(3);
+                $texto_alias_examen = 'Consulta Telemedicina';
+                break;
+            case 'E': // 4
+                $filtro_tipo_hora_medica = array(4);
+                $texto_alias_examen = 'Consulta Examen';
+                break;
+        }
+
 
         # ESTADOS DE HORA DE ATENCION
         // 1.  Reservada -> celeste
@@ -1882,6 +1981,7 @@ class EscritorioProfesional extends Controller
         $validar = HoraMedica::where('id_paciente', $paciente->id)
                                 ->whereIn('id_estado',[1,2,4,5,6,8])
                                 ->where('id_profesional',$profesional->id)
+                                ->whereIn('tipo_hora_medica',$filtro_tipo_hora_medica)
                                 ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
                                 ->first();
         if($validar)
@@ -1917,6 +2017,10 @@ class EscritorioProfesional extends Controller
 
         $hora_medica->hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
         $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->format('H:i:s');
+
+        $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
+        $hora_medica->alias_examen = $texto_alias_examen;
+
         $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
         $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
 
@@ -2073,6 +2177,23 @@ class EscritorioProfesional extends Controller
                 $totales = ($horas*60) + $minutos;
                 $tiempo_consulta = $totales;
 
+                $texto_alias_examen = '';
+                # TIPO HORA MEDICA
+                switch ($request->tipo_hora_medica) {
+                    case 'C': // 1
+                        $texto_alias_examen = 'Consulta';
+                        break;
+                    case 'D': // 2
+                        $texto_alias_examen = 'Consulta Dental';
+                        break;
+                    case 'T': // 3
+                        $texto_alias_examen = 'Consulta Telemedicina';
+                        break;
+                    case 'E': // 4
+                        $texto_alias_examen = 'Consulta Examen';
+                        break;
+                }
+
                 $hora_medica = new HoraMedica();
 
                 $hora_medica->id_paciente = $paciente->id;
@@ -2083,6 +2204,10 @@ class EscritorioProfesional extends Controller
 
                 $hora_medica->hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
                 $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->format('H:i:s');
+
+                $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
+                $hora_medica->alias_examen = $texto_alias_examen;
+
                 $hora_medica->descripcion = $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
 
                 if ($hora_medica->save())

@@ -1,10 +1,10 @@
-{{-- modal horas extras --}}
-<div class="modal fade" id="m_hora_extras" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="m_hora_extras" aria-hidden="true">
+{{-- modal horas examen --}}
+<div class="modal fade" id="m_hora_examen" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="m_hora_examen" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1">Agregar Horas Extras</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_m_hora_extras();"><span aria-hidden="true">×</span></button>
+                <h5 class="modal-title text-white mt-1">Agregar Horas Examen</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_m_hora_examen();"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -12,8 +12,20 @@
 
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="form-group">
+                                    <h6 class="text-c-blue ml-2 mb-3">Seleccione Examen a realizar</h6>
+                                    <select class="form-control" name="m_hora_examen_lista_examenes" id="m_hora_examen_lista_examenes">
+                                        <option value="">Seleccione</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row mt-2">
-                            <div class="m_hora_extras_busqueda">
+                            <div class="m_hora_examen_busqueda">
+
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="form-group">
@@ -24,78 +36,78 @@
                                 <div class="row div_rut_buscar">
                                     <div class="col-sm-8 col-md-8 mb-3">
                                         <div class="form-group">
-                                            <input type="text" id="m_hora_extras_rut" name="m_hora_extras_rut" class="form-control" placeholder="Rut del paciente" aria-label="Rut del paciente" aria-describedby="button-addon2" required oninput="formatoRut(this)">
+                                            <input type="text" id="m_hora_examen_rut" name="m_hora_examen_rut" class="form-control" placeholder="Rut del paciente" aria-label="Rut del paciente" aria-describedby="button-addon2" required oninput="formatoRut(this)">
                                         </div>
                                     </div>
                                     <div class="col-sm-4 col-md-4 mb-3">
-                                        <button class="btn btn-info" onclick="buscar_paciente_hora_extra();" type="button"id="button-addon2">Buscar</button>
+                                        <button class="btn btn-info" onclick="buscar_paciente_hora_examen();" type="button"id="button-addon2">Buscar</button>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="m_hora_extras_paciente_existente" style="display: none">
+                            <div class="m_hora_examen_paciente_existente" style="display: none">
                                 <div class="row mx-3">
-                                    <input type="hidden" name="m_hora_extras_ex_id_paciente" id="m_hora_extras_ex_id_paciente" value="">
+                                    <input type="hidden" name="m_hora_examen_ex_id_paciente" id="m_hora_examen_ex_id_paciente" value="">
                                     <table class="table table-borderless table-xs">
                                         <tbody>
                                             <tr>
                                                 <th scope="row">
                                                     <strong>Rut</strong>
-                                                    <td><span id="m_hora_extras_ex_rut_paciente"></span></td>
+                                                    <td><span id="m_hora_examen_ex_rut_paciente"></span></td>
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <th scope="row">
                                                     <strong>Nombre</strong>
-                                                    <td><span id="m_hora_extras_ex_nombre"></span></td>
+                                                    <td><span id="m_hora_examen_ex_nombre"></span></td>
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <th scope="row">
                                                     <strong>Fecha Nacimiento</strong>
-                                                    <td><span id="m_hora_extras_ex_fecha_nacimiento"></span></td>
+                                                    <td><span id="m_hora_examen_ex_fecha_nacimiento"></span></td>
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <th scope="row">
                                                     <strong>Sexo</strong>
-                                                    <td><span id="m_hora_extras_ex_sexo"></span></td>
+                                                    <td><span id="m_hora_examen_ex_sexo"></span></td>
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <th scope="row">
                                                     <strong>Convenio</strong>
-                                                    <td><span id="m_hora_extras_ex_convenio"></span></td>
+                                                    <td><span id="m_hora_examen_ex_convenio"></span></td>
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <th scope="row">
                                                     <strong>Dirección</strong>
-                                                    <td><span id="m_hora_extras_ex_direccion"></span></td>
+                                                    <td><span id="m_hora_examen_ex_direccion"></span></td>
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <th scope="row">
                                                     <strong>Correo Electrónico</strong>
-                                                    <td id="m_hora_extras_ex_email"></td>
+                                                    <td id="m_hora_examen_ex_email"></td>
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <th scope="row">
                                                     <strong>Teléfono</strong>
-                                                    <td><span id="m_hora_extras_ex_telefono"></span></td>
+                                                    <td><span id="m_hora_examen_ex_telefono"></span></td>
                                                 </th>
                                             </tr>
                                         </tbody>
                                     </table>
                                     <div class="modal-footer">
-                                        <button type="button" onclick="cancelar_busqueda_horas_extras();"class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                        <button type="button" onclick="agendar_he_ex();" class="btn btn-info">Agendar Hora Extra</button>
+                                        <button type="button" onclick="cancelar_busqueda_horas_examen();"class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                        <button type="button" onclick="agendar_hex_ex();" class="btn btn-info">Agendar Hora examen</button>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="m_hora_extras_paciente_nuevo" style="display: none">
+                            <div class="m_hora_examen_paciente_nuevo" style="display: none">
                                 <div>
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12">
@@ -108,37 +120,37 @@
                                         <div class="col-sm-12 col-md-12">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">RUT</label>
-                                                <input type="text" required class="form-control form-control-sm" name="m_hora_extras_nv_rut_paciente" id="m_hora_extras_nv_rut_paciente" readonly>
+                                                <input type="text" required class="form-control form-control-sm" name="m_hora_examen_nv_rut_paciente" id="m_hora_examen_nv_rut_paciente" readonly>
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-md-12">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Nombres</label>
-                                                <input type="text" required class="form-control form-control-sm" name="m_hora_extras_nv_nombres_paciente" id="m_hora_extras_nv_nombres_paciente">
+                                                <input type="text" required class="form-control form-control-sm" name="m_hora_examen_nv_nombres_paciente" id="m_hora_examen_nv_nombres_paciente">
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-md-12">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Primer Apellido</label>
-                                                <input type="text" class="form-control form-control-sm" name="m_hora_extras_nv_apellido_uno" id="m_hora_extras_nv_apellido_uno">
+                                                <input type="text" class="form-control form-control-sm" name="m_hora_examen_nv_apellido_uno" id="m_hora_examen_nv_apellido_uno">
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-md-12">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Segundo Apellido</label>
-                                                <input type="text" class="form-control form-control-sm" name="m_hora_extras_nv_apellido_dos" id="m_hora_extras_nv_apellido_dos">
+                                                <input type="text" class="form-control form-control-sm" name="m_hora_examen_nv_apellido_dos" id="m_hora_examen_nv_apellido_dos">
                                             </div>
                                         </div>
                                         <div class="col-sm-6 col-md-6">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">F. Nacimiento</label>
-                                                <input type="date" class="form-control form-control-sm" name="m_hora_extras_nv_fecha_nac" id="m_hora_extras_nv_fecha_nac">
+                                                <input type="date" class="form-control form-control-sm" name="m_hora_examen_nv_fecha_nac" id="m_hora_examen_nv_fecha_nac">
                                             </div>
                                         </div>
                                         <div class="col-sm-6 col-md-6">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Sexo</label>
-                                                <select id="m_hora_extras_nv_sexo" name="m_hora_extras_nv_sexo" class="form-control form-control-sm">
+                                                <select id="m_hora_examen_nv_sexo" name="m_hora_examen_nv_sexo" class="form-control form-control-sm">
                                                     <option value="0">Selecione una opci&oacute;n</option>
                                                     <option value="F">Femenino</option>
                                                     <option value="M">Masculino</option>
@@ -148,7 +160,7 @@
                                         <div class="col-sm-12 col-md-12">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Previsi&oacute;n</label>
-                                                <select id="m_hora_extras_nv_convenio" name="m_hora_extras_nv_convenio" class="form-control form-control-sm">
+                                                <select id="m_hora_examen_nv_convenio" name="m_hora_examen_nv_convenio" class="form-control form-control-sm">
                                                     <option value="0">Selecione una opci&oacute;n</option>
                                                     @if (isset($prevision))
                                                         @foreach ($prevision as $p)
@@ -161,14 +173,14 @@
                                         <div class="col-sm-8 col-md-8">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Direcci&oacute;n</label>
-                                                <input type="address" class="form-control form-control-sm" name="m_hora_extras_nv_direccion" id="m_hora_extras_nv_direccion">
+                                                <input type="address" class="form-control form-control-sm" name="m_hora_examen_nv_direccion" id="m_hora_examen_nv_direccion">
                                             </div>
                                         </div>
 
                                         <div class="col-sm-4 col-md-4">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Depto. | Ofic.</label>
-                                                <input type="address" class="form-control form-control-sm" name="m_hora_extras_nv_numero_dir" id="m_hora_extras_nv_numero_dir">
+                                                <input type="address" class="form-control form-control-sm" name="m_hora_examen_nv_numero_dir" id="m_hora_examen_nv_numero_dir">
                                             </div>
                                         </div>
 
@@ -176,7 +188,7 @@
                                         <div class="col-sm-12 col-md-12">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Region</label>
-                                                <select class="form-control" name="m_hora_extras_nv_region" id="m_hora_extras_nv_region" onchange="buscar_ciudad_le('m_hora_extras_nv_region', 'm_hora_extras_nv_ciudad', '0');" required>
+                                                <select class="form-control" name="m_hora_examen_nv_region" id="m_hora_examen_nv_region" onchange="buscar_ciudad_le('m_hora_examen_nv_region', 'm_hora_examen_nv_ciudad', '0');" required>
                                                     <option value="0">Seleccione Regio&oacute;n</option>
                                                     @if (isset($region))
                                                         @foreach ($region as $reg)
@@ -190,7 +202,7 @@
                                         <div class="col-sm-12 col-md-12">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Ciudad</label>
-                                                <select class="form-control" id="m_hora_extras_nv_ciudad" name="m_hora_extras_nv_ciudad" required>
+                                                <select class="form-control" id="m_hora_examen_nv_ciudad" name="m_hora_examen_nv_ciudad" required>
                                                     <option value="0">Seleccione Ciudad</option>
                                                 </select>
                                             </div>
@@ -198,21 +210,21 @@
                                         <div class="col-sm-12 col-md-12">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
-                                                <input type="text" class="form-control form-control-sm" name="m_hora_extras_nv_correo" id="m_hora_extras_nv_correo">
+                                                <input type="text" class="form-control form-control-sm" name="m_hora_examen_nv_correo" id="m_hora_examen_nv_correo">
                                                 <span id="mensaje_email_reserva" style="display:none"></span>
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-md-12">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Tel&eacute;fono</label>
-                                                <input type="tel" class="form-control form-control-sm" name="m_hora_extras_nv_telefono_uno" id="m_hora_extras_nv_telefono_uno">
+                                                <input type="tel" class="form-control form-control-sm" name="m_hora_examen_nv_telefono_uno" id="m_hora_examen_nv_telefono_uno">
                                             </div>
                                         </div>
 
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" onclick="cancelar_busqueda_horas_extras();"class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                        <button type="button" onclick="agendar_he_np();" class="btn btn-info">Registrar Paciente</button>
+                                        <button type="button" onclick="cancelar_busqueda_horas_examen();"class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                        <button type="button" onclick="agendar_hex_np();" class="btn btn-info">Registrar Paciente</button>
                                     </div>
                                 </div>
                             </div>
@@ -222,8 +234,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger align-middle" onclick="cerrar_m_hora_extras()"; data-dismiss="modal">Cerrar</button>
-                {{-- <button type="button" class="btn btn-success align-middle" onclick="registrar_horas_extras()"; data-dismiss="modal">Registras</button> --}}
+                <button type="button" class="btn btn-danger align-middle" onclick="cerrar_m_hora_examen()"; data-dismiss="modal">Cerrar</button>
+                {{-- <button type="button" class="btn btn-success align-middle" onclick="registrar_horas_examen()"; data-dismiss="modal">Registras</button> --}}
             </div>
         </div>
     </div>
@@ -232,66 +244,68 @@
 <script>
 
     /** CERRAR MODAL */
-    function cerrar_m_hora_extras() {
-        $('#m_hora_extras').modal('hide');
-        $('#m_hora_extras_id_lista_espera').val('');
-        $('#m_hora_extras_id_paciente').val('');
+    function cerrar_m_hora_examen() {
+        $('#m_hora_examen').modal('hide');
+        $('#m_hora_examen_id_lista_espera').val('');
+        $('#m_hora_examen_id_paciente').val('');
     }
 
     // CANCELAR BBUSQUEDA
-    function cancelar_busqueda_horas_extras()
+    function cancelar_busqueda_horas_examen()
     {
+        /** limpiar examen seleccionado */
+        $('#m_hora_examen_lista_examenes').val('');
+
         /** LIMPIEZA BUSQEUDA */
-        $('#m_hora_extras_rut').val('');
+        $('#m_hora_examen_rut').val('');
 
         /** LIMPIEZA DE EXISTENTES */
-        $('#m_hora_extras_ex_id_paciente').val('');
-        $('#m_hora_extras_ex_rut_paciente').text('');
-        $('#m_hora_extras_ex_nombre').text('');
-        $('#m_hora_extras_ex_fecha_nacimiento').text('');
-        $('#m_hora_extras_ex_sexo').text('');
-        $('#m_hora_extras_ex_sexo').text('');
-        $('#m_hora_extras_ex_convenio').text('');
-        $('#m_hora_extras_ex_direccion').text('');
-        $('#m_hora_extras_ex_email').text('');
-        $('#m_hora_extras_ex_telefono').text('');
-        $('#m_hora_extras_ex_observacion').text('');
+        $('#m_hora_examen_ex_id_paciente').val('');
+        $('#m_hora_examen_ex_rut_paciente').text('');
+        $('#m_hora_examen_ex_nombre').text('');
+        $('#m_hora_examen_ex_fecha_nacimiento').text('');
+        $('#m_hora_examen_ex_sexo').text('');
+        $('#m_hora_examen_ex_sexo').text('');
+        $('#m_hora_examen_ex_convenio').text('');
+        $('#m_hora_examen_ex_direccion').text('');
+        $('#m_hora_examen_ex_email').text('');
+        $('#m_hora_examen_ex_telefono').text('');
+        $('#m_hora_examen_ex_observacion').text('');
 
         /** LIMPIAR FORMULARIO */
-        $('#m_hora_extras_nv_rut_paciente').val('');
-        $('#m_hora_extras_nv_nombres_paciente').val('');
-        $('#m_hora_extras_nv_apellido_uno').val('');
-        $('#m_hora_extras_nv_apellido_dos').val('');
-        $('#m_hora_extras_nv_fecha_nac').val('');
-        $('#m_hora_extras_nv_sexo').val(0);
-        $('#m_hora_extras_nv_convenio').val(0);
-        $('#m_hora_extras_nv_direccion').val('');
-        $('#m_hora_extras_nv_numero_dir').val('');
-        $('#m_hora_extras_nv_region').val('');
-        // $('#m_hora_extras_nv_ciudad').val('');
-        buscar_ciudad_le('m_hora_extras_nv_region', 'm_hora_extras_nv_ciudad', '0');
-        $('#m_hora_extras_nv_correo').val('');
-        $('#m_hora_extras_nv_telefono_uno').val('');
-        $('#m_hora_extras_nv_observacion').val('');
+        $('#m_hora_examen_nv_rut_paciente').val('');
+        $('#m_hora_examen_nv_nombres_paciente').val('');
+        $('#m_hora_examen_nv_apellido_uno').val('');
+        $('#m_hora_examen_nv_apellido_dos').val('');
+        $('#m_hora_examen_nv_fecha_nac').val('');
+        $('#m_hora_examen_nv_sexo').val(0);
+        $('#m_hora_examen_nv_convenio').val(0);
+        $('#m_hora_examen_nv_direccion').val('');
+        $('#m_hora_examen_nv_numero_dir').val('');
+        $('#m_hora_examen_nv_region').val('');
+        // $('#m_hora_examen_nv_ciudad').val('');
+        buscar_ciudad_le('m_hora_examen_nv_region', 'm_hora_examen_nv_ciudad', '0');
+        $('#m_hora_examen_nv_correo').val('');
+        $('#m_hora_examen_nv_telefono_uno').val('');
+        $('#m_hora_examen_nv_observacion').val('');
 
         /** VISUALIZACION DE  DIV */
-        $('.m_hora_extras_busqueda').show();
-        $('.m_hora_extras_paciente_existente').hide();
-        $('.m_hora_extras_paciente_nuevo').hide();
+        $('.m_hora_examen_busqueda').show();
+        $('.m_hora_examen_paciente_existente').hide();
+        $('.m_hora_examen_paciente_nuevo').hide();
     }
 
     /** ABRIR MODAL */
-    function abrir_horas_extras(id, id_paciente)
+    function abrir_horas_examen(id, id_paciente)
     {
         if($('#agenda_profesional_asistente').val()!=='')
         {
-            cancelar_busqueda_horas_extras();
-            $('#m_hora_extras').modal('show');
-            $('.div_rut_buscar').show();
-            $('#m_hora_extras_rut').val('');
-            $('.m_hora_extras').show();
-            $('.m_hora_extras_paciente_existente').hide();
-            $('.m_hora_extras_paciente_nuevo').hide();
+            cancelar_busqueda_horas_examen();
+            $('#m_hora_examen').modal('show');
+            $('#m_hora_examen_rut').val('');
+            $('.m_hora_examen').show();
+            $('.m_hora_examen_paciente_existente').hide();
+            $('.m_hora_examen_paciente_nuevo').hide();
         }
         else
         {
@@ -336,12 +350,12 @@
     }
 
     // BUSCAR PACIENTE
-    function buscar_paciente_hora_extra()
+    function buscar_paciente_hora_examen()
     {
-        let rut = $('#m_hora_extras_rut').val();
-        // $('.m_hora_extras_busqueda').hide();
-        $('.m_hora_extras_paciente_existente').hide();
-        $('.m_hora_extras_paciente_nuevo').hide();
+        let rut = $('#m_hora_examen_rut').val();
+        // $('.m_hora_examen_busqueda').hide();
+        $('.m_hora_examen_paciente_existente').hide();
+        $('.m_hora_examen_paciente_nuevo').hide();
 
         let url = "{{ route('agenda.buscar_rut_paciente') }}";
         console.log(rut);
@@ -360,80 +374,80 @@
                 if(data.tipo_paciente == 'SI')
                 {
                     //  console.log(data);
-                    $('.m_hora_extras_paciente_existente').show();
+                    $('.m_hora_examen_paciente_existente').show();
 
-                    $('#m_hora_extras_ex_id_paciente').val(data.id);
-                    $('#m_hora_extras_ex_rut_paciente').text(data.rut);
-                    $('#m_hora_extras_ex_nombre').text(data.nombres + ' ' + data.apellido_uno + ' ' + data.apellido_dos);
-                    $('#m_hora_extras_ex_fecha_nacimiento').text(data.fecha_nac);
+                    $('#m_hora_examen_ex_id_paciente').val(data.id);
+                    $('#m_hora_examen_ex_rut_paciente').text(data.rut);
+                    $('#m_hora_examen_ex_nombre').text(data.nombres + ' ' + data.apellido_uno + ' ' + data.apellido_dos);
+                    $('#m_hora_examen_ex_fecha_nacimiento').text(data.fecha_nac);
                     if (data.sexo == 'M') {
-                        $('#m_hora_extras_ex_sexo').text('Masculino');
+                        $('#m_hora_examen_ex_sexo').text('Masculino');
                     } else {
-                        $('#m_hora_extras_ex_sexo').text('Femenino');
+                        $('#m_hora_examen_ex_sexo').text('Femenino');
                     }
-                    $('#m_hora_extras_ex_convenio').text(data.prevision.nombre);
-                    $('#m_hora_extras_ex_direccion').text(data.direccion.direccion+' '+data.direccion.numero_dir+', '+data.direccion.ciudad.nombre);
-                    $('#m_hora_extras_ex_email').text(data.email);
-                    $('#m_hora_extras_ex_telefono').text(data.telefono_uno);
+                    $('#m_hora_examen_ex_convenio').text(data.prevision.nombre);
+                    $('#m_hora_examen_ex_direccion').text(data.direccion.direccion+' '+data.direccion.numero_dir+', '+data.direccion.ciudad.nombre);
+                    $('#m_hora_examen_ex_email').text(data.email);
+                    $('#m_hora_examen_ex_telefono').text(data.telefono_uno);
 
 
-                    $('#m_hora_extras_rut').val('');
-                    $('.m_hora_extras_busqueda').hide();
+                    $('#m_hora_examen_rut').val('');
+                    $('.m_hora_examen_busqueda').hide();
                 }
                 else
                 {
-                    $('.m_hora_extras_busqueda').hide();
-                    $('.m_hora_extras_paciente_existente').hide();
-                    $('.m_hora_extras_paciente_nuevo').show();
+                    $('.m_hora_examen_busqueda').hide();
+                    $('.m_hora_examen_paciente_existente').hide();
+                    $('.m_hora_examen_paciente_nuevo').show();
 
-                    $('#m_hora_extras_nv_rut_paciente').val(rut);
+                    $('#m_hora_examen_nv_rut_paciente').val(rut);
 
                     console.log(data.nombres);
 
                     if(data.nombres != null)
                     {
-                        $('#m_hora_extras_nv_nombres_paciente').val(data.nombres);
-                        $('#m_hora_extras_nv_apellido_uno').val(data.apellido_uno);
-                        $('#m_hora_extras_nv_apellido_dos').val(data.apellido_dos);
-                        $('#m_hora_extras_nv_fecha_nac').val(data.fecha_nac);
+                        $('#m_hora_examen_nv_nombres_paciente').val(data.nombres);
+                        $('#m_hora_examen_nv_apellido_uno').val(data.apellido_uno);
+                        $('#m_hora_examen_nv_apellido_dos').val(data.apellido_dos);
+                        $('#m_hora_examen_nv_fecha_nac').val(data.fecha_nac);
                         if(data.sexo != null)
-                            $('#m_hora_extras_nv_sexo').val(data.sexo);
+                            $('#m_hora_examen_nv_sexo').val(data.sexo);
                         else
-                            $('#m_hora_extras_nv_sexo').val(0);
+                            $('#m_hora_examen_nv_sexo').val(0);
 
-                        $('#m_hora_extras_nv_convenio').val();
-                        $('#m_hora_extras_nv_direccion').val(data.direccion.direccion);
-                        $('#m_hora_extras_nv_numero_dir').val(data.direccion.numero_dir);
-                        $('#m_hora_extras_nv_region').val(data.direccion.ciudad.id_region);
-                        // $('#m_hora_extras_nv_ciudad').val();
-                        buscar_ciudad_le('m_hora_extras_nv_region', 'm_hora_extras_nv_ciudad', data.direccion.id_ciudad);
-                        $('#m_hora_extras_nv_correo').val(data.email);
-                        $('#m_hora_extras_nv_telefono_uno').val(data.telefono_uno);
+                        $('#m_hora_examen_nv_convenio').val();
+                        $('#m_hora_examen_nv_direccion').val(data.direccion.direccion);
+                        $('#m_hora_examen_nv_numero_dir').val(data.direccion.numero_dir);
+                        $('#m_hora_examen_nv_region').val(data.direccion.ciudad.id_region);
+                        // $('#m_hora_examen_nv_ciudad').val();
+                        buscar_ciudad_le('m_hora_examen_nv_region', 'm_hora_examen_nv_ciudad', data.direccion.id_ciudad);
+                        $('#m_hora_examen_nv_correo').val(data.email);
+                        $('#m_hora_examen_nv_telefono_uno').val(data.telefono_uno);
                     }
                     else
                     {
-                        $('#m_hora_extras_nv_nombres_paciente').val('');
-                        $('#m_hora_extras_nv_apellido_uno').val('');
-                        $('#m_hora_extras_nv_apellido_dos').val('');
-                        $('#m_hora_extras_nv_fecha_nac').val('');
-                        $('#m_hora_extras_nv_sexo').val(0);
+                        $('#m_hora_examen_nv_nombres_paciente').val('');
+                        $('#m_hora_examen_nv_apellido_uno').val('');
+                        $('#m_hora_examen_nv_apellido_dos').val('');
+                        $('#m_hora_examen_nv_fecha_nac').val('');
+                        $('#m_hora_examen_nv_sexo').val(0);
 
-                        $('#m_hora_extras_nv_convenio').val();
-                        $('#m_hora_extras_nv_direccion').val('');
-                        $('#m_hora_extras_nv_numero_dir').val('');
-                        $('#m_hora_extras_nv_region').val('');
-                        // $('#m_hora_extras_nv_ciudad').val();
-                        buscar_ciudad_le('m_hora_extras_nv_region', 'm_hora_extras_nv_ciudad', 0);
-                        $('#m_hora_extras_nv_correo').val('');
-                        $('#m_hora_extras_nv_telefono_uno').val('');
+                        $('#m_hora_examen_nv_convenio').val();
+                        $('#m_hora_examen_nv_direccion').val('');
+                        $('#m_hora_examen_nv_numero_dir').val('');
+                        $('#m_hora_examen_nv_region').val('');
+                        // $('#m_hora_examen_nv_ciudad').val();
+                        buscar_ciudad_le('m_hora_examen_nv_region', 'm_hora_examen_nv_ciudad', 0);
+                        $('#m_hora_examen_nv_correo').val('');
+                        $('#m_hora_examen_nv_telefono_uno').val('');
                     }
                 }
             }
             else
             {
-                $('.m_hora_extras_busqueda').show();
-                $('.m_hora_extras_paciente_existente').hide();
-                $('.m_hora_extras_paciente_nuevo').hide();
+                $('.m_hora_examen_busqueda').show();
+                $('.m_hora_examen_paciente_existente').hide();
+                $('.m_hora_examen_paciente_nuevo').hide();
             }
         })
         .fail(function(jqXHR, ajaxOptions, thrownError) {
@@ -441,23 +455,51 @@
         });
     };
 
-    function agendar_he_ex()
+    function agendar_hex_ex()
     {
-        $('#m_agendar_hora_extra_agendar_id_paciente').val($('#m_hora_extras_ex_id_paciente').val());
-        carga_calendario_profesional_he();
-        $('#m_agendar_hora_extra').modal('show');
-        $('#m_hora_extras').modal('hide');
-        cancelar_busqueda_horas_extras();
+        let examen = $('#m_hora_examen_lista_examenes').val();
+        if (examen == '')
+        {
+            swal({
+                title: "Error!",
+                text: "Debe seleccionar examen",
+                icon: "error",
+                type: "danger",
+                DangerMode: true,
+            });
+            return false;
+        }
+
+        $('#m_agendar_hora_examen_agendar_id_paciente').val($('#m_hora_examen_ex_id_paciente').val());
+        $('#m_agendar_hora_examen_lista_examenes').val($('#m_hora_examen_lista_examenes').val());
+        $('#m_agendar_hora_examen_text_lista_examenes').html($('#m_hora_examen_lista_examenes option:selected').text());
+        carga_calendario_profesional();
+        $('#m_agendar_hora_examen').modal('show');
+        $('#m_hora_examen').modal('hide');
+        cancelar_busqueda_horas_examen();
     }
 
     {{--  REGISTRO NUEVO PACIENTE GENERACION DE HORA  --}}
-    function agendar_he_np()
+    function agendar_hex_np()
     {
         // $('#he_agenda_agregar_paciente').modal('show');
         let url = "{{ route('agenda.paciente.nuevo') }}";
         let _token = $('#_token').val();
 
-        let rut_paciente_reserva = $('#m_hora_extras_nv_rut_paciente').val();
+        let examen = $('#m_hora_examen_lista_examenes').val();
+        if (examen == '')
+        {
+            swal({
+                title: "Error!",
+                text: "Debe seleccionar examen",
+                icon: "error",
+                type: "danger",
+                DangerMode: true,
+            });
+            return false;
+        }
+
+        let rut_paciente_reserva = $('#m_hora_examen_nv_rut_paciente').val();
         if (rut_paciente_reserva == '')
         {
             swal({
@@ -469,7 +511,7 @@
             });
             return false;
         }
-        let reserva_hora_nombre = $('#m_hora_extras_nv_nombres_paciente').val();
+        let reserva_hora_nombre = $('#m_hora_examen_nv_nombres_paciente').val();
         if (reserva_hora_nombre == '')
         {
 
@@ -483,7 +525,7 @@
             });
             return;
         }
-        let reserva_hora_primer_apellido = $('#m_hora_extras_nv_apellido_uno').val();
+        let reserva_hora_primer_apellido = $('#m_hora_examen_nv_apellido_uno').val();
         if (reserva_hora_primer_apellido == '')
         {
             swal({
@@ -496,7 +538,7 @@
             });
             return false;
         }
-        let reserva_hora_segundo_apellido = $('#m_hora_extras_nv_apellido_dos').val();
+        let reserva_hora_segundo_apellido = $('#m_hora_examen_nv_apellido_dos').val();
         if (reserva_hora_segundo_apellido == '')
         {
             swal({
@@ -509,7 +551,7 @@
             return false;
 
         }
-        let reserva_hora_fecha_nac = $('#m_hora_extras_nv_fecha_nac').val();
+        let reserva_hora_fecha_nac = $('#m_hora_examen_nv_fecha_nac').val();
         if (reserva_hora_fecha_nac == '')
         {
 
@@ -524,7 +566,7 @@
             return;
 
         }
-        let reserva_hora_sexo = $('#m_hora_extras_nv_sexo').val();
+        let reserva_hora_sexo = $('#m_hora_examen_nv_sexo').val();
         if (reserva_hora_sexo == '0')
         {
 
@@ -539,7 +581,7 @@
 
             return;
         }
-        let reserva_hora_convenio = $('#m_hora_extras_nv_convenio').val();
+        let reserva_hora_convenio = $('#m_hora_examen_nv_convenio').val();
         if (reserva_hora_convenio == '0')
         {
 
@@ -554,7 +596,7 @@
             return;
 
         }
-        let reserva_hora_direccion = $('#m_hora_extras_nv_direccion').val();
+        let reserva_hora_direccion = $('#m_hora_examen_nv_direccion').val();
         if (reserva_hora_direccion == '')
         {
 
@@ -569,7 +611,7 @@
             return;
 
         }
-        let reserva_hora_numero_dir = $('#m_hora_extras_nv_numero_dir').val();
+        let reserva_hora_numero_dir = $('#m_hora_examen_nv_numero_dir').val();
         if (reserva_hora_numero_dir == '')
         {
 
@@ -584,7 +626,7 @@
             return;
 
         }
-        let reserva_hora_comuna = $('#m_hora_extras_nv_ciudad').val();
+        let reserva_hora_comuna = $('#m_hora_examen_nv_ciudad').val();
         if (reserva_hora_comuna == '')
         {
 
@@ -599,7 +641,7 @@
             return;
 
         }
-        let reserva_hora_email = $('#m_hora_extras_nv_correo').val();
+        let reserva_hora_email = $('#m_hora_examen_nv_correo').val();
         if (reserva_hora_email == '')
         {
 
@@ -614,7 +656,7 @@
             return;
 
         }
-        let reserva_hora_telefono = $('#m_hora_extras_nv_telefono_uno').val();
+        let reserva_hora_telefono = $('#m_hora_examen_nv_telefono_uno').val();
         if (reserva_hora_telefono == '')
         {
 
@@ -665,11 +707,13 @@
                             buttons: "Aceptar",
                         });
 
-                        $('#m_agendar_hora_extra_agendar_id_paciente').val(data.paciente_final);
-                        carga_calendario_profesional_he();
-                        $('#m_agendar_hora_extra').modal('show');
-                        $('#m_hora_extras').modal('hide');
-                        cancelar_busqueda_horas_extras();
+                        $('#m_agendar_hora_examen_agendar_id_paciente').val(data.paciente_final);
+                        $('#m_agendar_hora_examen_lista_examenes').val($('#m_hora_examen_lista_examenes').val());
+                        $('#m_agendar_hora_examen_text_lista_examenes').html($('#m_hora_examen_lista_examenes option:selected').text());
+                        carga_calendario_profesional();
+                        $('#m_agendar_hora_examen').modal('show');
+                        $('#m_hora_examen').modal('hide');
+                        cancelar_busqueda_horas_examen();
                     }
                     else
                     {

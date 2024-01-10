@@ -302,6 +302,7 @@
         {
             cancelar_busqueda_horas_examen();
             $('#m_hora_examen').modal('show');
+            $('.div_rut_buscar').show();
             $('#m_hora_examen_rut').val('');
             $('.m_hora_examen').show();
             $('.m_hora_examen_paciente_existente').hide();

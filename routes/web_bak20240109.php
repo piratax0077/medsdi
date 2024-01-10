@@ -6,7 +6,6 @@ use App\Http\Controllers\CirugiaController;
 use App\Http\Controllers\ContactoEmergenciaController;
 use App\Http\Controllers\DetalleRecetaController;
 use App\Http\Controllers\EscritorioPaciente;
-use App\Http\Controllers\EscritorioProfesional;
 use App\Http\Controllers\ExamenesPPFController;
 use App\Http\Controllers\ficha_atencionController;
 use App\Http\Controllers\HoraMedicaController;
@@ -479,7 +478,6 @@ Route::group([
     Route::get('Mis_lugares_atencion', [App\Http\Controllers\EscritorioProfesional::class, 'mis_lugares'])->name('profesional.lugares_atencion');
     Route::post('agregar_centro', [App\Http\Controllers\EscritorioProfesional::class, 'agregar_lugar_atencion'])->name('profesional.agregar_centro');
     Route::get('mi_agenda', [App\Http\Controllers\EscritorioProfesional::class, 'mi_agenda'])->name('profesional.mi_agenda');
-    Route::get('mi_agenda/tipo', [App\Http\Controllers\EscritorioAsistente::class, 'buscarInfoProfesional'])->name('profesional.agenda.buscar_info_profesional');
     Route::get('atenciones_previas_paciente/{id}', [App\Http\Controllers\EscritorioProfesional::class, 'atenciones_previas_paciente'])->name('profesional.atenciones_previas_paciente');
     Route::get('mis_asistentes', [App\Http\Controllers\EscritorioProfesional::class, 'mis_asistentes'])->name('profesional.mis_asistentes');
 	Route::get('busq_asistentes', [App\Http\Controllers\EscritorioProfesional::class, 'busq_asistentes'])->name('profesional.busq_asistentes');
@@ -704,7 +702,7 @@ Route::group([
     Route::get('Venta_Productos', [App\Http\Controllers\EscritorioAsistente::class, 'index'])->name('asistente.venta_productos');
     Route::get('Registro_Paciente', [App\Http\Controllers\EscritorioAsistente::class, 'registroPaciente'])->name('asistente.registro_paciente');
     Route::get('AgendaPorProfesional', [App\Http\Controllers\EscritorioAsistente::class, 'agendaPorProfesional'])->name('asistente.agenda_por_profesional');
-	// Route::get('hora/por/confirmar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'cargarConfirmarHora'])->name('asistente.cargar_hora_por_confirmar');
+	Route::get('hora/por/confirmar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'cargarConfirmarHora'])->name('asistente.cargar_hora_por_confirmar');
     /** perfil  */
     Route::post('editar_datos_personales_perfil', [App\Http\Controllers\EscritorioAsistente::class, 'editar_datos_personales_perfil'])->name('asistente.editar_datos_personales_perfil');
     Route::post('editar_datos_contacto_perfil', [App\Http\Controllers\EscritorioAsistente::class, 'editar_datos_contacto_perfil'])->name('asistente.editar_datos_contacto_perfil');
@@ -1002,10 +1000,6 @@ Route::group([
     Route::get('autorizacion/solicitud/representante', [App\Http\Controllers\EscritorioAsistente::class, 'envioSolicitudAtencionMenor'])->name('asistente.solicitar_aprobacion.atencion_menor');
     Route::get('autorizacion/solicitud/validar/representante', [App\Http\Controllers\EscritorioAsistente::class, 'validarSolicitudAtencionMenor'])->name('asistente.aprobacion.validar.atencion_menor');
     Route::get('autorizacion/solicitud/cancelar/representante', [App\Http\Controllers\EscritorioAsistente::class, 'cancelarSolicitudAtencionMenor'])->name('asistente.aprobacion.cancelar.atencion_menor');
-
-    /** VALIDAR TIPO DE AGENDA POR HORA Y PROFESIONAL  */
-    Route::get('autorizacion/solicitud/cancelar/representante', [EscritorioProfesional::class, 'tipoHorario_r'])->name('asistente.aprobacion.cancelar.atencion_menor');
-
 });
 
  /** ENFERMERIA  */

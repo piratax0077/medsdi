@@ -543,6 +543,8 @@
                                         <option value="0">Seleccione Tipo Agenda</option>
                                         <option value="1">Atención General</option>
                                         <option value="2">Atención Dental</option>
+                                        <option value="3">Atención Telemedicina</option>
+                                        <option value="4">Examene</option>
                                     </select>
                                 </div>
                             </div>

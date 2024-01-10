@@ -1,4 +1,9 @@
 @extends('template.asistente_cm_manejo_agenda.template')
+
+@section('page-styles')
+    <link href='{{ asset('css/estilos_boton_agen_examenes.css') }}' rel='stylesheet' />
+@endsection
+
 @section('content')
     <!--Container Completo-->
     <div class="pcoded-main-container">
@@ -157,7 +162,7 @@
                                 <div class="col-sm-3 d-inline text-center">
                                     <div class="card">
                                         <label class="floating-label-activo-sm">Agendas del Centro</label>
-                                        <select class="form-control form-control-sm" id="agenda_profesional_asistente" name="agenda_profesional_asistente" onchange="cargarAgendaProfesional('')">
+                                        <select class="form-control form-control-sm" id="agenda_profesional_asistente" name="agenda_profesional_asistente" onchange="cargarAgendaProfesional(1,'')">
                                             <option value="">Selecione</option>
                                             @if($profesionales)
                                             @foreach($profesionales as $key_pro => $value_pro)
@@ -286,10 +291,6 @@
                 $('#rut_paciente_reserva').val('');
             });
 
-            function cerrar_modal_infoProf() {
-                $('#info_prof').modal('hide');
-            }
-
             {{-- ****** VALIDACIONDEFORMULARIOS ****** --}}
             {{--  VALIDACION RUT BUSQUEDA - AGENDA  --}}
             $('#validacion_rut_form').validate({
@@ -308,7 +309,256 @@
                 },
             });
 
+            $('#acompanante_representante').change(function(elm)
+            {
+                if(this.checked)
+                {
+                    $('#div_info_representante').show();
+                }
+                else
+                {
+                    $('#div_info_representante').hide();
+                }
+            });
+
+            $('#acompanante_acompanante').change(function(elm)
+            {
+                if(this.checked)
+                {
+                    $('#div_info_acompanante').show();
+                }
+                else
+                {
+                    $('#div_info_acompanante').hide();
+                    $('#reserva_hora_id_acompanante').val('').select2();
+                }
+            });
+
+            $('#autorizacion_atencion').change(function()
+            {
+                if(this.checked)
+                {
+                    $('#agenda_validar_auto_menor_edad').modal({backdrop: 'static', keyboard: false});
+                    $('#agenda_validar_auto_menor_edad').modal('show');
+                    solicitarAutorizacionMenorEdad();
+                }
+                else
+                {
+                    // $('#agenda_validar_auto_menor_edad').modal('hide');
+                }
+            });
+
         });
+
+        function cerrar_modal_infoProf() {
+            $('#info_prof').modal('hide');
+        }
+
+        function cerrarModalAutorizacionMenorEdad()
+        {
+            swal({
+                title: "Autorización Para Atención de Menor de Edad.",
+                text: 'Al "Aceptar" cierra la ventana sin esperar Autorización del Responsable.\n Debe Realizar la Solicitud Nuevamente.',
+                icon: "warning",
+                buttons: ["Aceptar", 'Cancelar'],
+            }).then((result) => {
+                if (result == true)
+                {
+                    console.log('regresar');
+                } else {
+
+                    $('#agenda_validar_auto_menor_edad').modal('hide');
+                    cancelarautorizacionMenorEdad();
+
+                }
+            })
+        };
+
+        function solicitarAutorizacionMenorEdad()
+        {
+            estado_cancelado = 0;
+            var id_lugar_atencion = $('#id_lugar_atencion').val();
+            var id_profesional = $('#agenda_profesional_asistente').val();
+            var id_paciente = $('#reserva_hora_id_paciente').val();
+            var edad = $('#reserva_hora_edad').val();
+            var id_responsable = $('#reserva_hora_id_responsable').val();
+            var nombre_representante = $('#div_info_representante').html();
+
+            let url = "{{ route('asistente.solicitar_aprobacion.atencion_menor') }}";
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    id_lugar_atencion : id_lugar_atencion,
+                    id_profesional : id_profesional,
+                    id_paciente : id_paciente,
+                    edad : edad,
+                    id_responsable : id_responsable,
+                    nombre_representante : nombre_representante,
+                },
+                success:function(data){
+                    if (data !== 'null')
+                    {
+                        console.log(data);
+                        if(data.estado == 1)
+                        {
+                            $('#imagen_carga').hide();
+                            $('#imagen_resultado').html('<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">');
+                            $('#text_resultado').html('<h3>En espera de Aprobación</h3>');
+
+                            var token_temp = '';
+                            $.each(data.registros, function (key, value) {
+
+                                if(value.estado == 1)
+                                {
+                                    if(token_temp == '')
+                                    {
+                                        if(data.registros.length>1)
+                                            token_temp = value.log_users_devices.token+'-';
+                                        else
+                                            token_temp = value.log_users_devices.token;
+                                    }
+                                    else
+                                        token_temp = value.log_users_devices.token;
+
+                                    validar_autorizacion_menor_edad(value.log_users_devices.token);
+                                }
+                            });
+
+                            $('#agenda_validar_auto_menor_token').val(token_temp);
+                        }
+                        else
+                        {
+                            $('#imagen_carga').hide();
+                            $('#imagen_resultado').html('<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">');
+                            $('#text_resultado').html('<h3>Problema al solicitar Aprobación.</h3>');
+                        }
+                    }
+                    else
+                    {
+                        console.log('error');
+                        console.log(data);
+                    }
+                }
+            });
+        }
+
+        function validar_autorizacion_menor_edad(token)
+        {
+            if(estado_cancelado == 0)
+            {
+                let url = "{{ route('asistente.aprobacion.validar.atencion_menor') }}";
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    data: {
+                        token : token,
+                    },
+                    success:function(data){
+                        console.log(data);
+                        if(data.estado == 1)
+                        {
+                            if(data.registro.estado == 1)
+                            {
+                                $('#imagen_carga').hide();
+                                $('#imagen_resultado').html('<img src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Cargando">');
+                                $('#text_resultado').html('<h3>Aprobado</h3>');
+
+                                $('#autorizacion_atencion_token').val(token);
+
+                                setTimeout(function(){
+                                    $('#agenda_validar_auto_menor_edad').modal('hide');
+                                }, 3000);
+                            }
+                            else if(data.registro.estado == 2)
+                            {
+                                $('#imagen_carga').hide();
+                                $('#imagen_resultado').html('<img src="{{ asset('images/iconos/error.svg') }}" alt="Cargando">');
+                                $('#text_resultado').html('<h3>Rechazado</h3>');
+                                $('#autorizacion_atencion').prop('checked', false);
+                            }
+                            else
+                            {
+                                setTimeout(function(){
+                                    validar_autorizacion_menor_edad(token);
+                                }, 2000);
+
+                            }
+                        }
+                        else if(data.estado == 2)
+                        {
+                            $('#imagen_carga').hide();
+                            $('#imagen_resultado').html('<img src="{{ asset('images/iconos/error.svg') }}" alt="Cargando">');
+                            $('#text_resultado').html('<h3>Rechazado</h3><br/><p>Debe Intentar nuevamente.</p>');
+                            setTimeout(function(){
+                                $('#agenda_validar_auto_menor_edad').modal('hide');
+                            }, 2000);
+                        }
+                        else
+                        {
+                            setTimeout(function(){
+                                validar_autorizacion_menor_edad(token);
+                            }, 2000);
+                        }
+                    }
+                });
+            }
+        }
+
+        var estado_cancelado = 0;
+        function cancelarautorizacionMenorEdad()
+        {
+            var token  = $('#agenda_validar_auto_menor_token').val();
+            let url = "{{ route('asistente.aprobacion.cancelar.atencion_menor') }}";
+
+
+            var temp_token = token.split('-');
+
+            $.each(temp_token, function (key, value)
+            {
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    data: {
+                        token : value,
+                    },
+                    success:function(data){
+                        console.log(data);
+                        if(data.estado == 1)
+                        {
+                            $('#imagen_carga').show();
+                            $('#imagen_resultado').html('');
+                            $('#text_resultado').html('');
+                            $('#autorizacion_atencion_token').val('');
+
+
+                            swal({
+                                title: "Solicitud de aprobacion.",
+                                text:"Cancelada",
+                                icon: "success",
+                            });
+
+                            setTimeout(function(){
+                                $('#agenda_validar_auto_menor_edad').modal('hide');
+                                $('#autorizacion_atencion').prop('checked', false);
+                            }, 1000);
+
+                            estado_cancelado = 1;
+                        }
+
+                        else
+                        {
+                            swal({
+                                title: "Solicitud de aprobacion.",
+                                text:"Falla en proceso de Cancelación",
+                                icon: "error",
+                            });
+                        }
+                    }
+                });
+            });
+
+        }
 
         {{--  ***** INICIO FUNCIONES ******  --}}
         /** METODOS DE AGENDA */
@@ -356,9 +606,10 @@
         }
 
         {{--  CARGA AGENDE DEL PROFESIONAL  --}}
-        function cargarAgendaProfesional(fecha)
+        function cargarAgendaProfesional(tipo_agenda,fecha)
         {
 
+            console.log('asistente_cm_manejo_agenda/escritorio_asistente_manejo_agenda');
             if(fecha != undefined && fecha != '')
             {
                 var res = fecha.split('T')[0];
@@ -380,16 +631,53 @@
                 data: {
                     id_profesional: id_profesional,
                     id_lugar_atencion: id_lugar_atencion,
+                    tipo_agenda: tipo_agenda,
                 },
                 success:function(data){
+                    $('.btn-agenda').hide();
                     if (data !== 'null')
                     {
-
-                        //data = JSON.parse(data);
-                        // console.log('-----------------------');
-                        // console.log(data);
-                        // console.log('-----------------------');
                         if(data.estado == 1)
+                        {
+                            $('.btn-agenda').css('background-color','#2b83cb');
+                            $('.btn-agenda-'+tipo_agenda).css('background-color','#1cbebe');
+                            $('#id_tipo_agenda').val(tipo_agenda);
+
+                            switch (parseInt(tipo_agenda)) {
+                                case 1://consulta
+                                    $('#titulo_tipo_agenda').html('AGENDA DE CONSULTA');
+                                    $('#btn_ver_agregar_hora_extra').attr('disabled', false);
+                                    $('#btn_ver_agregar_hora_examen').attr('disabled', false);
+                                    break;
+                                case 2://dental
+                                    $('#titulo_tipo_agenda').html('AGENDA DE DENTAL');
+                                    $('#btn_ver_agregar_hora_extra').attr('disabled', true);
+                                    $('#btn_ver_agregar_hora_examen').attr('disabled', true);
+                                    break;
+                                case 3://telemedicina
+                                    $('#titulo_tipo_agenda').html('AGENDA DE TELEMEDICINA');
+                                    $('#btn_ver_agregar_hora_extra').attr('disabled', true);
+                                    $('#btn_ver_agregar_hora_examen').attr('disabled', true);
+                                    break;
+                                case 4://examen
+                                    $('#titulo_tipo_agenda').html('AGENDA DE EXAMEN');
+                                    $('#btn_ver_agregar_hora_extra').attr('disabled', true);
+                                    $('#btn_ver_agregar_hora_examen').attr('disabled', true);
+                                    break;
+                            }
+
+                            /** activar tipos de agendas del profesional */
+                            var tipo_agendas_cant = data.tipo_agendas.length;
+                            if(tipo_agendas_cant > 0)
+                            {
+                                $.each(data.tipo_agendas, function (key, value)
+                                {
+                                    $('.btn-agenda-'+value).show();
+                                });
+                            }
+                        }
+
+                        if(data.estado == 1 && data.horario.length!=0)
                         {
                             $('#tabla_info_profesional tbody').show();
                             $('#nombre_profesional_agenda').html(data.profesional.nombre.toUpperCase()  + ' ' + data.profesional.apellido_uno.toUpperCase()  + ' ' + data.profesional.apellido_dos.toUpperCase() );
@@ -915,6 +1203,8 @@
                                     //SuccessMode: true,
                                 });
                                 evaluacion =  false;
+                                $('#agenda').html('');
+                                $('#titulo_tipo_agenda').html('');
                             }
 
                         }
@@ -928,6 +1218,8 @@
                                 //SuccessMode: true,
                             });
                             evaluacion =  false;
+                            $('#agenda').html('');
+                            $('#titulo_tipo_agenda').html('');
                         }
                     }
                 }
@@ -978,7 +1270,7 @@
                         confirmButtonText: "Cool"
                     });
 
-                    cargarAgendaProfesional('');
+                    cargarAgendaProfesional($('#id_tipo_agenda').val(),'');
 
 
                 } else {
@@ -1035,7 +1327,7 @@
                             // DangerMode: true,
                             confirmButtonText: "Cool"
                         });
-                        cargarAgendaProfesional(data.fecha_consulta);
+                        cargarAgendaProfesional($('#id_tipo_agenda').val(),data.fecha_consulta);
                         $('#consulta').modal('hide');
 
                     } else {
@@ -1158,7 +1450,7 @@
                                 // buttons: "Aceptar",
                                 //SuccessMode: true,
                             });
-                            cargarAgendaProfesional(data.hora_medica.fecha_consulta);
+                            cargarAgendaProfesional($('#id_tipo_agenda').val(),data.hora_medica.fecha_consulta);
                             $('#modal_recepcion_bonos_api').modal('hide');
                             $('#bono_paciente_rut').val('');
                             $('#bono_paciente_nombre').val('');
@@ -1298,6 +1590,47 @@
 
                             $('#rut_paciente_reserva').val('');
                             $('.div_rut_buscar').hide();
+
+                            $('#reserva_hora_edad').val(data.edad);
+
+                            $('#id_lugar_atencion').val($('#agenda_lugar_atencion_asistente').val());
+
+                            if(data.edad < 18)
+                            {
+                                $('#acompanante_representante').prop("checked", true);
+                                $('#acompanante_acompanante').prop("checked", false);
+                                $('#autorizacion_atencion').prop("checked", false);
+
+                                $('#div_info_representante').html(data.nombre_responsable);
+
+                                $('#reserva_hora_id_acompanante').html('');
+                                $.each(data.acompanante, function (indexInArray, valueOfElement)
+                                {
+                                    console.log(valueOfElement);
+                                    var html = '';
+                                    html = '<option value="'+valueOfElement.id_acompanante+'">'+valueOfElement.acompanante.nombre+' '+valueOfElement.acompanante.apellido_uno+' - '+valueOfElement.acompanante.rut+'</option>';
+                                    $('#reserva_hora_id_acompanante').append(html);
+                                });
+                                $('#reserva_hora_id_acompanante').select2();
+
+                                $('#reserva_hora_id_responsable').val(data.id_responsable);
+
+                                $('#seccion_acompanante').show();
+                                $('#seccion_autorizacion').show();
+                            }
+                            else
+                            {
+                                $('#acompanante_representante').prop("checked",false);
+                                $('#acompanante_acompanante').prop("checked",false);
+                                $('#autorizacion_atencion').prop("checked",false);
+                                $('#reserva_hora_id_acompanante').val('');
+
+
+                                $('#reserva_hora_id_responsable').val('');
+
+                                $('#seccion_acompanante').hide();
+                                $('#seccion_autorizacion').hide();
+                            }
                         }
                         else
                         {
@@ -1321,6 +1654,8 @@
                             $('#reserva_hora_numero_dir').val(data.direccion.numero_dir);
 
                             $('#reserva_hora_telefono_uno').val(data.telefono_uno);
+
+                            $('#reserva_hora_id_responsable').val('');
 
                             {{--
                             $('#reserva_hora_profesion').val();
@@ -1346,6 +1681,28 @@
             let url = "{{ route('agenda.agendar_hora_nuevo_paciente') }}";
             let _token = $('#_token').val();
             let fecha_consulta = $('#fecha_consulta').val();
+            let tipo_agenda = $('#id_tipo_agenda').val();
+            var tipo_agenda_text = 'C';
+
+            console.log(tipo_agenda);
+            console.log(tipo_agenda_text);
+
+            switch (tipo_agenda) {
+                case '1':
+                    tipo_agenda_text = 'C';//CONSULTA
+                    break;
+                case '2':
+                    tipo_agenda_text = 'D';//DENTAL
+                    break;
+                case '3':
+                    tipo_agenda_text = 'T';//TELEMEDICINA
+                    break;
+                case '4':
+                    tipo_agenda_text = 'E';//EXAMEN
+                    break;
+            }
+
+            console.log(tipo_agenda_text);
 
             let rut_paciente_reserva = $('#rut_paciente_reserva').val();
             if (rut_paciente_reserva == '')
@@ -1562,7 +1919,8 @@
                         reserva_hora_confirmacion: reserva_hora_confirmacion,
                         reserva_hora_sms: reserva_hora_sms,
                         id_profesional:id_profesional,
-                        id_lugar_atencion:id_lugar_atencion
+                        id_lugar_atencion:id_lugar_atencion,
+                        tipo_hora_medica: tipo_agenda_text,
                     },
                 })
                 .done(function(data) {
@@ -1579,7 +1937,7 @@
                             });
                             $('#reservar_hora').modal('hide');
                             $('#agenda_agregar_paciente').modal('hide');
-                            cargarAgendaProfesional(fecha_consulta);
+                            cargarAgendaProfesional($('#id_tipo_agenda').val(),fecha_consulta);
                         }
                         else
                         {
@@ -1617,7 +1975,51 @@
             let reserva_hora_id = $('#reserva_hora_id_paciente').val();
             let id_profesional = $('#agenda_profesional_asistente').val();
             let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
+            let tipo_agenda = $('#id_tipo_agenda').val();
+            var tipo_agenda_text = 'C';
 
+            console.log(tipo_agenda);
+            console.log(tipo_agenda_text);
+
+            switch (tipo_agenda) {
+                case '1':
+                    tipo_agenda_text = 'C';//CONSULTA
+                    break;
+                case '2':
+                    tipo_agenda_text = 'D';//DENTAL
+                    break;
+                case '3':
+                    tipo_agenda_text = 'T';//TELEMEDICINA
+                    break;
+                case '4':
+                    tipo_agenda_text = 'E';//EXAMEN
+                    break;
+            }
+
+            console.log(tipo_agenda_text);
+
+            let representante = 0;
+            let lista_Acompanante = $('#reserva_hora_id_acompanante').val();
+
+            if( $('#acompanante_representante').prop("checked") )
+                representante = 1;
+            else
+                representante = 0;
+
+            let acompanante = 0;
+            if( $('#acompanante_acompanante').prop("checked") )
+                acompanante = 1;
+            else
+            {
+                acompanante = 0;
+                lista_Acompanante = '';
+            }
+
+            let autorizacion_atencion = 0;
+            if( $('#autorizacion_atencion').prop("checked") )
+                autorizacion_atencion = 1;
+            else
+                autorizacion_atencion = 0;
 
             $.ajax({
 
@@ -1629,6 +2031,11 @@
                         reserva_hora_id: reserva_hora_id,
                         id_lugar_atencion: id_lugar_atencion,
                         id_profesional: id_profesional,
+                        tipo_hora_medica: tipo_agenda_text,
+                        representante: representante,
+                        acompanante: acompanante,
+                        lista_Acompanante: lista_Acompanante,
+                        autorizacion_atencion: autorizacion_atencion,
                     }
                 })
                 .done(function(data) {
@@ -1657,7 +2064,7 @@
                             $('#reservar_hora').modal('hide');
                             $('#agenda_agregar_paciente').modal('hide');
                         }
-                        cargarAgendaProfesional(fecha_consulta);
+                        cargarAgendaProfesional(tipo_agenda, fecha_consulta);
 
 
                     } else {
@@ -1755,3 +2162,5 @@
 
     </script>
 @endsection
+
+@include('app.general.asistente.agenda.boton_flotante_agenda_exa_ciru');

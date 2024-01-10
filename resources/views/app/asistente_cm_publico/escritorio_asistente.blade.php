@@ -1,177 +1,182 @@
 @extends('template.asistente_cm_publico.template')
+
+
+@section('page-styles')
+    <link href='{{ asset('css/estilos_boton_agen_examenes.css') }}' rel='stylesheet' />
+@endsection
+
 @section('content')
-<!--Container Completo-->
-<div class="pcoded-main-container">
-    <div class="pcoded-content">
-        <!--Header-->
-        <div class="page-header">
-            <div class="page-block">
-                <div class="row align-items-center">
-                    <div class="col-md-12">
-                        <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Escritorio Asistente Institución</h5>
+    <!--Container Completo-->
+    <div class="pcoded-main-container">
+        <div class="pcoded-content">
+            <!--Header-->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h5 class="m-b-10 font-weight-bold">Escritorio Asistente Institución</h5>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ route('asistentecm.home') }}">Mi Escritorio </a>
+                                </li>
+                            </ul>
                         </div>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('asistentecm.home') }}">Mi Escritorio </a>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--Cierre: Header-->
+            <!--Cierre: Header-->
 
-        <!--Tabla agenda del día y flujo de caja-->
-        <div class="row m-b-10" >
-            <div class="col-md-12">
-                <div class="card h-100 pb-1">
-                    <div class="card-header bg-c-info">
-                        <div class="row">
-                            <div class="col-sm-12 d-inline text-center">
-                                <h5 class="text-white my-1" style="font-size: 1.4rem;">Agendas Profesionales</h5>
+            <!--Tabla agenda del día y flujo de caja-->
+            <div class="row m-b-10" >
+                <div class="col-md-12">
+                    <div class="card h-100 pb-1">
+                        <div class="card-header bg-c-info">
+                            <div class="row">
+                                <div class="col-sm-12 d-inline text-center">
+                                    <h5 class="text-white my-1" style="font-size: 1.4rem;">Agendas Profesionales</h5>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <input type="hidden" name="agenda_lugar_atencion_asistente" id="agenda_lugar_atencion_asistente" value="{{ $lugares_atencion->id }}">
-                    <div class="card-body pt-4 pb-0">
-						<div class="form-row">
-							<div class="col-sm-3 d-inline text-center">
-								<div class="card">
-									<label class="floating-label-activo-sm">Agendas del Centro</label>
-									<select class="form-control form-control-sm" id="agenda_profesional_asistente" name="agenda_profesional_asistente" onchange="cargarAgendaProfesional('')">
-										<option value="">Selecione</option>
-                                        @if($profesionales)
-                                        @foreach($profesionales as $key_pro => $value_pro)
-                                            <option value="{{ $value_pro->id }}">{{ strtoupper($value_pro->nombre) }} {{ strtoupper($value_pro->apellido_uno) }} {{ strtoupper($value_pro->apellido_dos) }}</option>
-                                        @endforeach
-                                    @endif
-									</select>
-								</div>
-							</div>
-							<div class="col-sm-9 d-inline text-center">
-								<div class="dt-responsive table-responsive" >
-									<table class="table table-striped table-bordered nowrap table-xs" id="tabla_info_profesional">
-										<thead>
-											<tr >
-												<th colspan="2" class="text-center align-middle">Agenda Profesional:</th>
-											</tr>
-										</thead>
-										<tbody style="display: none;">
-                                            <tr>
-                                                <td class="text-center align-middle">
-                                                    <span><strong id="nombre_profesional_agenda"></strong></span><br>
-                                                    <span id="especialidad_porfesional_agenda">
-                                                    </span>
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                        {{--  <button type="button" class="btn btn-info btn-sm" id="btn_ver_info_profesional_seleccionado"  onclick="info_profesional({{ $profesional->id }});"><i class="fa fa-plus"></i> Ver Información</button>  --}}
-                                                        <button type="button" class="btn btn-info btn-sm" id="btn_ver_info_profesional_seleccionado"  onclick=""><i class="fa fa-plus"></i> Ver Información</button>
-                                                </td>
-                                            </tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-                        <div class="form-row">
-                            <div class="col-sm-12 d-inline text-center">
-								<div class="card">
-                                    <div class="row">
-                                        <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
-                                            <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado" onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
-                                        </div>
-                                        <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
-                                            <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_extra" onclick="abrir_horas_extras()"; ><i class="fas fa-save"></i>  Cargar Hora Extra del profesional</button>
-                                        </div>
-                                        <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
-                                            <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_examen" onclick="abrir_horas_examen()"; ><i class="fas fa-save"></i>  Cargar Hora Examen del profesional</button>
+                        <input type="hidden" name="agenda_lugar_atencion_asistente" id="agenda_lugar_atencion_asistente" value="{{ $lugares_atencion->id }}">
+                        <div class="card-body pt-4 pb-0">
+                            <div class="form-row">
+                                <div class="col-sm-3 d-inline text-center">
+                                    <div class="card">
+                                        <label class="floating-label-activo-sm">Agendas del Centro</label>
+                                        <select class="form-control form-control-sm" id="agenda_profesional_asistente" name="agenda_profesional_asistente" onchange="cargarAgendaProfesional(1, '')">
+                                            <option value="">Selecione</option>
+                                            @if($profesionales)
+                                            @foreach($profesionales as $key_pro => $value_pro)
+                                                <option value="{{ $value_pro->id }}">{{ strtoupper($value_pro->nombre) }} {{ strtoupper($value_pro->apellido_uno) }} {{ strtoupper($value_pro->apellido_dos) }}</option>
+                                            @endforeach
+                                        @endif
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9 d-inline text-center">
+                                    <div class="dt-responsive table-responsive" >
+                                        <table class="table table-striped table-bordered nowrap table-xs" id="tabla_info_profesional">
+                                            <thead>
+                                                <tr >
+                                                    <th colspan="2" class="text-center align-middle">Agenda Profesional:</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="display: none;">
+                                                <tr>
+                                                    <td class="text-center align-middle">
+                                                        <span><strong id="nombre_profesional_agenda"></strong></span><br>
+                                                        <span id="especialidad_porfesional_agenda">
+                                                        </span>
+                                                    </td>
+                                                    <td class="text-center align-middle">
+                                                            {{--  <button type="button" class="btn btn-info btn-sm" id="btn_ver_info_profesional_seleccionado"  onclick="info_profesional({{ $profesional->id }});"><i class="fa fa-plus"></i> Ver Información</button>  --}}
+                                                            <button type="button" class="btn btn-info btn-sm" id="btn_ver_info_profesional_seleccionado"  onclick=""><i class="fa fa-plus"></i> Ver Información</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-sm-12 d-inline text-center">
+                                    <div class="card">
+                                        <div class="row">
+                                            <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
+                                                <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado" onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
+                                            </div>
+                                            <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
+                                                <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_extra" onclick="abrir_horas_extras()"; ><i class="fas fa-save"></i>  Cargar Hora Extra del profesional</button>
+                                            </div>
+                                            <div class="col-sm-4 pt-1 pb-1 d-inline text-center" >
+                                                <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_examen" onclick="abrir_horas_examen()"; ><i class="fas fa-save"></i>  Cargar Hora Examen del profesional</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-						</div>
-                    </div>
-                    <div class="card-body bg-white">
-                        <div id='agenda'></div>
+                        </div>
+                        <div class="card-body bg-white">
+                            <div id='agenda'></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!--Row Botones-->
-        <div class="row m-b-5">
-            <div class="col-md-12">
-                <div class="card-deck">
-                    <!--Cierre de Card-->
-                    <div class="card  subir py-auto">
-                        <a href="{{ ROUTE('asistentecm.confirmar_hora') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
-                                <h5 class="mt-1 mb-0">Confirmar Hora</h5>
-                            </div>
-                        </a>
+            <!--Row Botones-->
+            <div class="row m-b-5">
+                <div class="col-md-12">
+                    <div class="card-deck">
+                        <!--Cierre de Card-->
+                        <div class="card  subir py-auto">
+                            <a href="{{ ROUTE('asistentecm.confirmar_hora') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                    <h5 class="mt-1 mb-0">Confirmar Hora</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card  subir py-auto">
+                            <a href="{{ ROUTE('asistentecm.buscar_paciente') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                    <h5 class="mt-1 mb-0">Buscar Pacientes</h5>
+                                </div>
+                            </a>
+                        </div>
+                        {{--  <div class="card  subir py-auto">
+                            <a href="{{ ROUTE('asistente.reservar_hora') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/profesional_2.svg') }}">
+                                    <h5 class="mt-1 mb-0">Reservar Hora Médica</h5>
+                                </div>
+                            </a>
+                        </div>  --}}
+                        <div class="card subir py-auto">
+                            <a href="{{ ROUTE('asistentecm.mis_profesionales') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-30 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
+                                    <h5 class="mt-1 mb-0">Profesionales</h5>
+                                </div>
+                            </a>
+                        </div>
+                        {{--  <div class="card subir py-auto">
+                            <a href="{{ ROUTE('asistente.administracion_asistente') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                                    <h5 class="mt-1 mb-0">Administración</h5>
+                                </div>
+                            </a>
+                        </div>  --}}
+                        <div class="card subir py-auto">
+                            <a href="{{ ROUTE('asistentecm.rendir') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                                    <h5 class="mt-1 mb-0">Entrega de Caja</h5>
+                                </div>
+                            </a>
+                        </div>
+                        {{--
+                        <div class="card py-auto subir">
+                            <a href="{{ ROUTE('asistente.venta_productos') }}">
+                            <a href="{{ ROUTE('asistente.registro_paciente') }}" class="btn" type="button">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/otros_servicios_1.svg') }}">
+                                    <h5 class="mt-1 mb-0"> Venta de Productos</h5>
+                                </div>
+                            </a>
+                        </div>
+                        --}}
                     </div>
-                    <div class="card  subir py-auto">
-                        <a href="{{ ROUTE('asistentecm.buscar_paciente') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
-                                <h5 class="mt-1 mb-0">Buscar Pacientes</h5>
-                            </div>
-                        </a>
-                    </div>
-					{{--  <div class="card  subir py-auto">
-                        <a href="{{ ROUTE('asistente.reservar_hora') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/profesional_2.svg') }}">
-                                <h5 class="mt-1 mb-0">Reservar Hora Médica</h5>
-                            </div>
-                        </a>
-                    </div>  --}}
-                    <div class="card subir py-auto">
-                        <a href="{{ ROUTE('asistentecm.mis_profesionales') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-30 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-                                <h5 class="mt-1 mb-0">Profesionales</h5>
-                            </div>
-                        </a>
-                    </div>
-                    {{--  <div class="card subir py-auto">
-                        <a href="{{ ROUTE('asistente.administracion_asistente') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                <h5 class="mt-1 mb-0">Administración</h5>
-                            </div>
-                        </a>
-                    </div>  --}}
-					<div class="card subir py-auto">
-                        <a href="{{ ROUTE('asistentecm.rendir') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                <h5 class="mt-1 mb-0">Entrega de Caja</h5>
-                            </div>
-                        </a>
-                    </div>
-                    {{--
-                    <div class="card py-auto subir">
-                        <a href="{{ ROUTE('asistente.venta_productos') }}">
-                        <a href="{{ ROUTE('asistente.registro_paciente') }}" class="btn" type="button">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/otros_servicios_1.svg') }}">
-                                <h5 class="mt-1 mb-0"> Venta de Productos</h5>
-                            </div>
-                        </a>
-                    </div>
-					--}}
                 </div>
             </div>
+            <!--CIERRE: Row Botones -->
         </div>
-        <!--CIERRE: Row Botones -->
     </div>
-</div>
-<!--Cierre: Container Completo-->
+    <!--Cierre: Container Completo-->
 
-@section('modales')
     @include('app.asistente_cm.modales.modal_profesional_informacion')
 
     @include('general.asistentes.modal_consulta_agenda')
@@ -185,8 +190,6 @@
     {{-- hora examen --}}
     @include('app.general.asistente.reserva_hora_examen.horas_examen')
     @include('app.general.asistente.reserva_hora_examen.horas_examen_agendar')
-
-@endsection
 
 @endsection
 
@@ -537,9 +540,9 @@
         }
 
         {{--  CARGA AGENDE DEL PROFESIONAL  --}}
-        function cargarAgendaProfesional(fecha)
+        function cargarAgendaProfesional(tipo_agenda, fecha)
         {
-            // console.log('asistente_cm_publico/escritorio_asistente');
+            console.log('asistente_cm_publico/escritorio_asistente');
             if(fecha != undefined && fecha != '')
             {
                 var res = fecha.split('T')[0];
@@ -561,15 +564,51 @@
                 data: {
                     id_profesional: id_profesional,
                     id_lugar_atencion: id_lugar_atencion,
+                    tipo_agenda: tipo_agenda,
                 },
                 success:function(data){
                     if (data !== 'null')
                     {
+                        if(data.estado == 1)
+                        {
+                            $('.btn-agenda').css('background-color','#2b83cb');
+                            $('.btn-agenda-'+tipo_agenda).css('background-color','#1cbebe');
+                            $('#id_tipo_agenda').val(tipo_agenda);
 
-                        //data = JSON.parse(data);
-                        // console.log('-----------------------');
-                        // console.log(data);
-                        // console.log('-----------------------');
+                            switch (parseInt(tipo_agenda)) {
+                                case 1://consulta
+                                    $('#titulo_tipo_agenda').html('AGENDA DE CONSULTA');
+                                    $('#btn_ver_agregar_hora_extra').attr('disabled', false);
+                                    $('#btn_ver_agregar_hora_examen').attr('disabled', false);
+                                    break;
+                                case 2://dental
+                                    $('#titulo_tipo_agenda').html('AGENDA DE DENTAL');
+                                    $('#btn_ver_agregar_hora_extra').attr('disabled', true);
+                                    $('#btn_ver_agregar_hora_examen').attr('disabled', true);
+                                    break;
+                                case 3://telemedicina
+                                    $('#titulo_tipo_agenda').html('AGENDA DE TELEMEDICINA');
+                                    $('#btn_ver_agregar_hora_extra').attr('disabled', true);
+                                    $('#btn_ver_agregar_hora_examen').attr('disabled', true);
+                                    break;
+                                case 4://examen
+                                    $('#titulo_tipo_agenda').html('AGENDA DE EXAMEN');
+                                    $('#btn_ver_agregar_hora_extra').attr('disabled', true);
+                                    $('#btn_ver_agregar_hora_examen').attr('disabled', true);
+                                    break;
+                            }
+
+                            /** activar tipos de agendas del profesional */
+                            var tipo_agendas_cant = data.tipo_agendas.length;
+                            if(tipo_agendas_cant > 0)
+                            {
+                                $.each(data.tipo_agendas, function (key, value)
+                                {
+                                    $('.btn-agenda-'+value).show();
+                                });
+                            }
+                        }
+
                         if(data.estado == 1 && data.horario.length!=0)
                         {
                             $('#tabla_info_profesional tbody').show();
@@ -942,13 +981,13 @@
                                             });
 
 
-                                        $('#datos_hora_medica').show();
-                                        $('#cancelacion_hora_medica').hide();
-                                        $('#confirmacion_hora_medica').hide();
-                                        /*$('#opcion_cancelar_hora_div').hide();*/
-                                        $('#id_hora_medica').val(info.event.id);
-                                        $('#id_hora_realizar').val(info.event.id);
-                                        info.el.style.borderColor = 'red';
+                                            $('#datos_hora_medica').show();
+                                            $('#cancelacion_hora_medica').hide();
+                                            $('#confirmacion_hora_medica').hide();
+                                            /*$('#opcion_cancelar_hora_div').hide();*/
+                                            $('#id_hora_medica').val(info.event.id);
+                                            $('#id_hora_realizar').val(info.event.id);
+                                            info.el.style.borderColor = 'red';
                                     },
 
                                     selectOverlap: function(event) {
@@ -1086,23 +1125,11 @@
                                 CalendarEl.setOption('businessHours', data_businessHours );
                                 CalendarEl.setOption('slotMinTime', info_profesional_seleccionado.horario_data.hora_inicio_agenda );
                                 CalendarEl.setOption('slotMaxTime', info_profesional_seleccionado.horario_data.hora_termino_agenda );
-                                {{--  console.log(CalendarEl.getOption('hiddenDays'));  --}}
-                                {{--  console.log(CalendarEl.getOption('businessHours'));  --}}
-                                {{--  console.log(CalendarEl.getOption('slotMinTime'));  --}}
-                                {{--  console.log(CalendarEl.getOption('slotMaxTime'));  --}}
 
                                 CalendarEl.render();
 
                                 if(fecha != '' && fecha != null)
                                     CalendarEl.gotoDate(fecha);
-
-
-                                {{--   console.log(calendarEl);  --}}
-
-                                // var event = calendarEl.getEventById('107');
-                                {{--   console.log(event);  --}}
-                                // var start = event.start;
-                                {{--   console.log(start.toISOString());  --}}
                             }
                             else
                             {
@@ -1115,6 +1142,7 @@
                                 });
                                 evaluacion =  false;
                                 $('#agenda').html('');
+                                $('#titulo_tipo_agenda').html('');
                             }
 
                         }
@@ -1128,6 +1156,8 @@
                                 //SuccessMode: true,
                             });
                             evaluacion =  false;
+                            $('#agenda').html('');
+                            $('#titulo_tipo_agenda').html('');
                         }
                     }
                 }
@@ -1178,7 +1208,7 @@
                         confirmButtonText: "Cool"
                     });
 
-                    cargarAgendaProfesional('');
+                    cargarAgendaProfesional($('#id_tipo_agenda').val(), '');
 
 
                 } else {
@@ -1235,7 +1265,7 @@
                             // DangerMode: true,
                             confirmButtonText: "Cool"
                         });
-                        cargarAgendaProfesional(data.fecha_consulta);
+                        cargarAgendaProfesional($('#id_tipo_agenda').val(), data.fecha_consulta);
                         $('#consulta').modal('hide');
 
                     } else {
@@ -1358,7 +1388,7 @@
                                 // buttons: "Aceptar",
                                 //SuccessMode: true,
                             });
-                            cargarAgendaProfesional(data.hora_medica.fecha_consulta);
+                            cargarAgendaProfesional($('#id_tipo_agenda').val(), data.hora_medica.fecha_consulta);
                             $('#modal_recepcion_bonos_api').modal('hide');
                             $('#bono_paciente_rut').val('');
                             $('#bono_paciente_nombre').val('');
@@ -1589,6 +1619,28 @@
             let url = "{{ route('agenda.agendar_hora_nuevo_paciente') }}";
             let _token = $('#_token').val();
             let fecha_consulta = $('#fecha_consulta').val();
+            let tipo_agenda = $('#id_tipo_agenda').val();
+            var tipo_agenda_text = 'C';
+
+            console.log(tipo_agenda);
+            console.log(tipo_agenda_text);
+
+            switch (tipo_agenda) {
+                case '1':
+                    tipo_agenda_text = 'C';//CONSULTA
+                    break;
+                case '2':
+                    tipo_agenda_text = 'D';//DENTAL
+                    break;
+                case '3':
+                    tipo_agenda_text = 'T';//TELEMEDICINA
+                    break;
+                case '4':
+                    tipo_agenda_text = 'E';//EXAMEN
+                    break;
+            }
+
+            console.log(tipo_agenda_text);
 
             let rut_paciente_reserva = $('#rut_paciente_reserva').val();
             if (rut_paciente_reserva == '')
@@ -1805,7 +1857,8 @@
                         reserva_hora_confirmacion: reserva_hora_confirmacion,
                         reserva_hora_sms: reserva_hora_sms,
                         id_profesional:id_profesional,
-                        id_lugar_atencion:id_lugar_atencion
+                        id_lugar_atencion:id_lugar_atencion,
+                        tipo_hora_medica: tipo_agenda_text,
                     },
                 })
                 .done(function(data) {
@@ -1822,7 +1875,7 @@
                             });
                             $('#reservar_hora').modal('hide');
                             $('#agenda_agregar_paciente').modal('hide');
-                            cargarAgendaProfesional(fecha_consulta);
+                            cargarAgendaProfesional($('#id_tipo_agenda').val(), fecha_consulta);
                         }
                         else
                         {
@@ -1860,6 +1913,28 @@
             let reserva_hora_id = $('#reserva_hora_id_paciente').val();
             let id_profesional = $('#agenda_profesional_asistente').val();
             let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
+            let tipo_agenda = $('#id_tipo_agenda').val();
+            var tipo_agenda_text = 'C';
+
+            console.log(tipo_agenda);
+            console.log(tipo_agenda_text);
+
+            switch (tipo_agenda) {
+                case '1':
+                    tipo_agenda_text = 'C';//CONSULTA
+                    break;
+                case '2':
+                    tipo_agenda_text = 'D';//DENTAL
+                    break;
+                case '3':
+                    tipo_agenda_text = 'T';//TELEMEDICINA
+                    break;
+                case '4':
+                    tipo_agenda_text = 'E';//EXAMEN
+                    break;
+            }
+
+            console.log(tipo_agenda_text);
 
             let representante = 0;
             let lista_Acompanante = $('#reserva_hora_id_acompanante').val();
@@ -1895,6 +1970,7 @@
                         reserva_hora_id: reserva_hora_id,
                         id_lugar_atencion: id_lugar_atencion,
                         id_profesional: id_profesional,
+                        tipo_hora_medica: tipo_agenda_text,
                         representante: representante,
                         acompanante: acompanante,
                         lista_Acompanante: lista_Acompanante,
@@ -1927,7 +2003,7 @@
                             $('#reservar_hora').modal('hide');
                             $('#agenda_agregar_paciente').modal('hide');
                         }
-                        cargarAgendaProfesional(fecha_consulta);
+                        cargarAgendaProfesional(tipo_agenda, fecha_consulta);
 
 
                     } else {
@@ -2025,3 +2101,5 @@
 
     </script>
 @endsection
+
+@include('app.general.asistente.agenda.boton_flotante_agenda_exa_ciru');

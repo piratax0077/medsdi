@@ -276,6 +276,10 @@ class EscritorioAsistente extends Controller
             $filtro[] = array('id_profesional',$request->id_profesional);
         if(!empty($request->id_lugar_atencion))
             $filtro[] = array('id_lugar_atencion',$request->id_lugar_atencion);
+        if(!empty($request->tipo_agenda))
+            $filtro[] = array('tipo_agenda',$request->tipo_agenda);
+        else
+            $filtro[] = array('tipo_agenda',1);
 
         $horario = ProfesionalHorario::where($filtro)->get();
 
@@ -337,6 +341,8 @@ class EscritorioAsistente extends Controller
                 if($profesional->id_sub_tipo_especialidad)
                     $examen_tipo = ExamenEspecialidadTipo::where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)->with('ExamenEspecialidadTemplate')->get();
 
+                $tipo_agendas = ProfesionalHorario::select('tipo_agenda')->where('id_profesional', $profesional->id)->groupBy('tipo_agenda')->pluck('tipo_agenda')->toArray();
+
                 $datos['estado'] = 1;
                 $datos['msj'] = 'registros';
                 $datos['profesional'] = $profesional;
@@ -346,6 +352,7 @@ class EscritorioAsistente extends Controller
                 $datos['tipo_especialidad'] = $tipo_especialidad;
                 $datos['sub_tipo_especialidad'] = $sub_tipo_especialidad;
                 $datos['examen_tipo'] = $examen_tipo;
+                $datos['tipo_agendas'] = $tipo_agendas;
                 $datos['request'] = $request->all();
             }
             else
@@ -738,6 +745,23 @@ class EscritorioAsistente extends Controller
                 $totales = ($horas*60) + $minutos;
                 $tiempo_consulta = $totales;
 
+                $texto_alias_examen = '';
+                # TIPO HORA MEDICA
+                switch ($request->tipo_hora_medica) {
+                    case 'C': // 1
+                        $texto_alias_examen = 'Consulta';
+                        break;
+                    case 'D': // 2
+                        $texto_alias_examen = 'Consulta Dental';
+                        break;
+                    case 'T': // 3
+                        $texto_alias_examen = 'Consulta Telemedicina';
+                        break;
+                    case 'E': // 4
+                        $texto_alias_examen = 'Consulta Examen';
+                        break;
+                }
+
                 $hora_medica = new HoraMedica();
 
                 $hora_medica->id_paciente = $paciente->id;
@@ -749,6 +773,10 @@ class EscritorioAsistente extends Controller
 
                 $hora_medica->hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
                 $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->format('H:i:s');
+
+                $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
+                $hora_medica->alias_examen = $texto_alias_examen;
+
                 $hora_medica->descripcion = $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
 
                 if ($hora_medica->save())
@@ -823,6 +851,28 @@ class EscritorioAsistente extends Controller
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
         $profesional = Profesional::where('id', $request->id_profesional)->first();
 
+        $filtro_tipo_hora_medica = array(1);
+        $texto_alias_examen = '';
+        # TIPO HORA MEDICA
+        switch ($request->tipo_hora_medica) {
+            case 'C': // 1
+                $filtro_tipo_hora_medica = array(1);
+                $texto_alias_examen = 'Consulta';
+                break;
+            case 'D': // 2
+                $filtro_tipo_hora_medica = array(2);
+                $texto_alias_examen = 'Consulta Dental';
+                break;
+            case 'T': // 3
+                $filtro_tipo_hora_medica = array(3);
+                $texto_alias_examen = 'Consulta Telemedicina';
+                break;
+            case 'E': // 4
+                $filtro_tipo_hora_medica = array(4);
+                $texto_alias_examen = 'Consulta Examen';
+                break;
+        }
+
         # ESTADOS DE HORA DE ATENCION
         // 1.  Reservada -> celeste
         // 2.  CONFIRMADO -> verde
@@ -837,6 +887,7 @@ class EscritorioAsistente extends Controller
                 ->whereIn('id_estado',[1,2,4,5,6,8])
                 ->where('id_profesional',$profesional->id)
                 ->where('id_lugar_atencion',$request->id_lugar_atencion)
+                ->whereIn('tipo_hora_medica',$filtro_tipo_hora_medica)
                 ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
                 ->first();
         if($validar)
@@ -874,6 +925,10 @@ class EscritorioAsistente extends Controller
 
         $hora_medica->hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
         $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->format('H:i:s');
+
+        $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
+        $hora_medica->alias_examen = $texto_alias_examen;
+
         $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
         $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
 

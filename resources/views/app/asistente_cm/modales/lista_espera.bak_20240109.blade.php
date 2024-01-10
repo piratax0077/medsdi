@@ -302,8 +302,8 @@
     </div>
 </div>
 
-@include('app.asistente_cm_manejo_agenda.modales.lista_espera_eliminar')
-@include('app.asistente_cm_manejo_agenda.modales.lista_espera_agendar')
+@include('app.asistente_cm.modales.lista_espera_eliminar')
+@include('app.asistente_cm.modales.lista_espera_agendar')
 
 <script>
 
@@ -319,7 +319,6 @@
         {
             cargarListaEsperaPorProfesional();
             $('#m_lista_espera_rut').val('');
-            $('.div_rut_buscar').show();
             $('.m_lista_espera_busqueda').show();
             $('.m_lista_espera_paciente_existente').hide();
             $('.m_lista_espera_paciente_nuevo').hide();

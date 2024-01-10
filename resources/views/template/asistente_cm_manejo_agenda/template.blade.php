@@ -237,5 +237,7 @@
         }
     </script>
     @yield('page-script')
+    @yield('btn-script-agenda')
+
 </body>
 </html>

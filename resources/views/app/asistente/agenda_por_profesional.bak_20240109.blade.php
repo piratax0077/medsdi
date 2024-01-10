@@ -1,8 +1,10 @@
 @extends('template.asistente.template')
 
+{{--
 @section('page-styles')
-    <link href='{{ asset('css/estilos_boton_agen_examenes.css') }}' rel='stylesheet' />
+    <link href='{{ asset("js/fullcalendar-5.10.1/lib/main.css") }}' rel='stylesheet' />
 @endsection
+--}}
 
 @section('content')
     <div class="pcoded-main-container">
@@ -49,7 +51,7 @@
                                                 </h4>
                                             </div>
                                             <div class="col-md-6">
-                                                <select name="agenda_lugar_atencion_asistente" id="agenda_lugar_atencion_asistente" class="form-control" onchange="cargarAgendaProfesional(1,'')">
+                                                <select name="agenda_lugar_atencion_asistente" id="agenda_lugar_atencion_asistente" class="form-control" onchange="cargarAgendaProfesional($('#id_lugar_atencion').val(), $('#id_profesional').val())">
                                                 @if($lugares_atencion)
                                                     @foreach($lugares_atencion as $key_lugar_aten => $value_lugar_aten)
                                                         <option value="{{ $value_lugar_aten->id }}">{{ $value_lugar_aten->nombre }}</option>
@@ -68,7 +70,7 @@
                                                 </h4>
                                             </div>
                                             <div class="col-md-6">
-                                                <select name="agenda_profesional_asistente" id="agenda_profesional_asistente" class="form-control" onchange="cargarAgendaProfesional(1,'')">
+                                                <select name="agenda_profesional_asistente" id="agenda_profesional_asistente" class="form-control" onchange="cargarAgendaProfesional($('#id_lugar_atencion').val(), $('#id_profesional').val())">
                                                 @if($profesional)
                                                     @foreach($profesional as $key_pro => $value_pro)
                                                         <option value="{{ $value_pro->id }}">{{ $value_pro->nombre }} {{ $value_pro->apellido_uno }} {{ $value_pro->apellido_dos }}</option>
@@ -113,8 +115,12 @@
         </div>
     </div>
 
-    @include('general.asistentes.modal_consulta_agenda')
+    <!-- Button trigger modal -->
+    {{-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#reservar_hora">
+        Launch
+    </button> --}}
 
+    @include('app.asistente.modales.modal_consulta_agenda')
     @include('app.asistente.modales.lista_espera')
 
     {{-- horas extras --}}
@@ -125,17 +131,14 @@
     @include('app.general.asistente.reserva_hora_examen.horas_examen')
     @include('app.general.asistente.reserva_hora_examen.horas_examen_agendar')
 
-
-
 @endsection
 
 @section('page-script')
-    <script>
+   <script>
         $(document).ready(function()
         {
-            cargarAgendaProfesional(1,'');
+            cargarAgendaProfesional($('#id_lugar_atencion').val(), $('#id_profesional').val());
         });
-    </script>
+   </script>
 @endsection
 
-@include('app.general.asistente.agenda.boton_flotante_agenda_exa_ciru');

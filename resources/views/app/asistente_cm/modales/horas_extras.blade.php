@@ -287,6 +287,7 @@
         {
             cancelar_busqueda_horas_extras();
             $('#m_hora_extras').modal('show');
+            $('.div_rut_buscar').show();
             $('#m_hora_extras_rut').val('');
             $('.m_hora_extras').show();
             $('.m_hora_extras_paciente_existente').hide();

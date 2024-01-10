@@ -70,6 +70,9 @@
 
 
             <div class="row user-profile user-card  p-3" style="background-color:#ecf0f5;">
+                <div class="col-md-12">
+                    <h5 class="text-primary my-1" style="font-size: 1.4rem;" id="titulo_tipo_agenda"></h5>
+                </div>
                 <div class="col-md-12 card">
                     <div id='agenda'></div>
                 </div>
