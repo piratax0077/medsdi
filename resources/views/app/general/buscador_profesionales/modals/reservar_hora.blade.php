@@ -10,6 +10,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" name="modal_reserva_hora_id_profesional" id="modal_reserva_hora_id_profesional" value="">
+                <input type="hidden" name="modal_reserva_hora_tipo_agenda" id="modal_reserva_hora_tipo_agenda" value="">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-row">

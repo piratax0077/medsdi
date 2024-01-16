@@ -246,7 +246,7 @@
         }
 
         /*-Agendar hora medica-*/
-        function hora_medica (id_profesional, id_lugar_atencion){
+        function hora_medica (id_profesional, id_lugar_atencion, tipo_agenda){
 
             $('#modal_reserva_hora_lugar_atencion').val('');
             $('#modal_reserva_dias_atencion').val('');
@@ -254,6 +254,7 @@
             $('#modal_reserva_hora_lista_horas').html('');
             // asigno id profesioanl
             $('#modal_reserva_hora_id_profesional').val(id_profesional);
+            $('#modal_reserva_hora_tipo_agenda').val(tipo_agenda);
 
             carga_calendario_profesional();
 
@@ -491,6 +492,12 @@
                             id_region : buscar_especialidad_region,
                             id_ciudad : buscar_especialidad_comuna,
                             buscar_especialidad_hora24 : buscar_especialidad_hora24,
+                            // 1 -> Atención General
+                            // 2 -> Atención Dental
+                            // 3 -> Atención Telemedicina
+                            // 4 -> Examene
+                            tipo_agenda : '1,2'
+
                         },
                     })
                     .done(function(data) {
@@ -527,7 +534,229 @@
                                     html += '                <p class="mb-3 text-muted"><i class="feather icon-calendar"></i>Próxima hora Sin Agenda</p>';
 
                                 html += '                <button type="button" class="btn btn-outline-info btn-sm" onclick="f_profesional('+value_registro.profesionales_id+');"><i class="feather icon-file-plus"></i> Ver ficha</button>';
-                                html += '                <button type="button" class="btn btn-info btn-sm" onclick="hora_medica('+value_registro.profesionales_id+','+value_registro.profesional_hora_mas_proxima.id_lugar_atencion+');"><i class="feather icon-calendar"></i> Reservar hora</button>';
+                                html += '                <button type="button" class="btn btn-info btn-sm" onclick="hora_medica('+value_registro.profesionales_id+','+value_registro.profesional_hora_mas_proxima.id_lugar_atencion+', \'1,2\');"><i class="feather icon-calendar"></i> Reservar hora</button>';
+                                html += '            </div>';
+                                html += '        </div>';
+                                html += '    </div>';
+                                html += '</div>';
+                                $('#div_resultado_busqueda').append(html);
+                            });
+
+                            {{--  console.log(data);  --}}
+                        } else {
+                            $('#div_resultado_busqueda').html('<h2>Sin registros</h2>');
+                            {{--  console.log(data);  --}}
+                        }
+
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        console.log(jqXHR, ajaxOptions, thrownError)
+                    });
+            }
+            else
+            {
+                swal({
+                    title: "Busqueda por especialidad, campos Minimos Requeridos",
+                    text: error,
+                    icon: "error",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+            }
+
+        }
+
+        function buscar_profesional_profesional()
+        {
+            var requerido = 0;
+            var error = '';
+
+            let buscar_profesional_profesional = $('#buscar_profesional_dato_profesional').val();
+            let buscar_especialidad_profesion = '';
+            let buscar_especialidad_especialidad = '';
+            let buscar_especialidad_subespec = '';
+            let buscar_profesional_region = $('#buscar_profesional_region').val();
+            let buscar_profesional_comuna = $('#buscar_profesional_comuna').val();
+            let buscar_especialidad_hora24 = 0;
+            if($('#buscar_profesional_hora24').prop('checked'))
+                buscar_especialidad_hora24 = 1;
+
+            if(buscar_profesional_profesional == '') {
+                requerido = 1;
+                error += 'Campo requerido Profesional\n';
+            }
+
+
+            if(requerido == 0)
+            {
+
+                let url = "{{ route('profesional.buscador') }}";
+                $.ajax({
+
+                        url: url,
+                        type: "get",
+                        data: {
+                            id_especialidad : buscar_especialidad_profesion,
+                            id_tipo_especialidad : buscar_especialidad_especialidad,
+                            id_sub_tipo_especialidad : buscar_especialidad_subespec,
+                            id_region : buscar_profesional_region,
+                            id_ciudad : buscar_profesional_comuna,
+                            buscar_especialidad_hora24 : buscar_especialidad_hora24,
+                            nombre_rut : buscar_profesional_profesional,
+                            // 1 -> Atención General
+                            // 2 -> Atención Dental
+                            // 3 -> Atención Telemedicina
+                            // 4 -> Examene
+                            tipo_agenda : '1,2'
+
+                        },
+                    })
+                    .done(function(data) {
+                        {{--  console.log(data);  --}}
+                        if (data.estado == 1)
+                        {
+                            $('#div_resultado_busqueda').html('');
+                            $(data.registros).each(function(key_registro, value_registro) {
+                                {{--  console.log(value_registro);  --}}
+                                var html = '';
+                                html += '<div class="col-sm-12 col-md-4">';
+                                html += '    <div class="card user-card user-card-1 mt-4">';
+                                html += '        <div class="card-body pt-0">';
+                                html += '            <div class="user-about-block text-center">';
+                                html += '                <div class="row align-items-end">';
+                                html += '                    <div class="col"><img class="img-radius img-fluid wid-70" src="'+value_registro.img_profesional+'" alt="'+value_registro.profesionales_nombre+' '+value_registro.profesionales_apellido_uno+' '+value_registro.profesionales_apellido_dos+'"></div>';
+                                html += '                </div>';
+                                html += '            </div>';
+                                html += '            <div class="text-center">';
+                                html += '                <a href="#!" data-toggle="modal" data-target="#modal-report">';
+                                html += '                    <span class="badge badge-primary mt-2">';
+                                {{--  html +=                         value_registro.especialidades_nombre;  --}}
+                                if(value_registro.tipos_especialidad_nombre != null)
+                                    html +=                         value_registro.tipos_especialidad_nombre+'<br>';
+                                if(value_registro.sub_tipo_especialidad_nombre != null)
+                                    html +=                         value_registro.sub_tipo_especialidad_nombre;
+                                html += '                    </span>';
+                                html += '                    <h6 class="mb-1 mt-2">'+value_registro.profesionales_nombre+' '+value_registro.profesionales_apellido_uno+' '+value_registro.profesionales_apellido_dos+'</h6>';
+                                html += '                </a>';
+
+                                if($(value_registro.profesional_hora_mas_proxima).length > 0)
+                                    html += '                <p class="mb-3 text-muted"><i class="feather icon-calendar"></i>Próxima hora '+value_registro.profesional_hora_mas_proxima['dia']+' '+value_registro.profesional_hora_mas_proxima['hora']+'</p>';
+                                else
+                                    html += '                <p class="mb-3 text-muted"><i class="feather icon-calendar"></i>Próxima hora Sin Agenda</p>';
+
+                                html += '                <button type="button" class="btn btn-outline-info btn-sm" onclick="f_profesional('+value_registro.profesionales_id+');"><i class="feather icon-file-plus"></i> Ver ficha</button>';
+                                html += '                <button type="button" class="btn btn-info btn-sm" onclick="hora_medica('+value_registro.profesionales_id+','+value_registro.profesional_hora_mas_proxima.id_lugar_atencion+', \'1,2\');"><i class="feather icon-calendar"></i> Reservar hora</button>';
+                                html += '            </div>';
+                                html += '        </div>';
+                                html += '    </div>';
+                                html += '</div>';
+                                $('#div_resultado_busqueda').append(html);
+                            });
+
+                            {{--  console.log(data);  --}}
+                        } else {
+                            $('#div_resultado_busqueda').html('<h2>Sin registros</h2>');
+                            {{--  console.log(data);  --}}
+                        }
+
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        console.log(jqXHR, ajaxOptions, thrownError)
+                    });
+            }
+            else
+            {
+                swal({
+                    title: "Busqueda por especialidad, campos Minimos Requeridos",
+                    text: error,
+                    icon: "error",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+            }
+
+        }
+
+        function buscar_profesional_especialidad_video_consulta()
+        {
+            var requerido = 0;
+            var error = '';
+
+            let buscar_videoconsulta_profesion = $('#buscar_videoconsulta_profesion').val();
+            let buscar_videoconsulta_especialidad = $('#buscar_videoconsulta_especialidad').val();
+            let buscar_videoconsulta_subespec = $('#buscar_videoconsulta_subespec').val();
+            let buscar_videoconsulta_region = '';
+            let buscar_videoconsulta_comuna = '';
+            let buscar_videoconsulta_hora24 = 0;
+            if($('#buscar_videoconsulta_hora24').prop('checked'))
+                buscar_videoconsulta_hora24 = 1;
+
+            if(buscar_videoconsulta_profesion == '') {
+                requerido = 1;
+                error += 'Campo requerido Profesión\n';
+            }
+            if(buscar_videoconsulta_especialidad == '') {
+                requerido = 1;
+                error += 'Campo requerido Especialidad\n';
+            }
+
+            if(requerido == 0)
+            {
+
+                let url = "{{ route('profesional.buscador') }}";
+                $.ajax({
+
+                        url: url,
+                        type: "get",
+                        data: {
+                            id_especialidad : buscar_videoconsulta_profesion,
+                            id_tipo_especialidad : buscar_videoconsulta_especialidad,
+                            id_sub_tipo_especialidad : buscar_videoconsulta_subespec,
+                            id_region : buscar_videoconsulta_region,
+                            id_ciudad : buscar_videoconsulta_comuna,
+                            buscar_especialidad_hora24 : buscar_videoconsulta_hora24,
+                            // 1 -> Atención General
+                            // 2 -> Atención Dental
+                            // 3 -> Atención Telemedicina
+                            // 4 -> Examene
+                            tipo_agenda : 3
+                        },
+                    })
+                    .done(function(data) {
+                        {{--  console.log(data);  --}}
+                        if (data.estado == 1)
+                        {
+                            $('#div_resultado_busqueda').html('');
+                            $(data.registros).each(function(key_registro, value_registro) {
+                                {{--  console.log(value_registro);  --}}
+                                var html = '';
+                                html += '<div class="col-sm-12 col-md-4">';
+                                html += '    <div class="card user-card user-card-1 mt-4">';
+                                html += '        <div class="card-body pt-0">';
+                                html += '            <div class="user-about-block text-center">';
+                                html += '                <div class="row align-items-end">';
+                                html += '                    <div class="col"><img class="img-radius img-fluid wid-70" src="'+value_registro.img_profesional+'" alt="'+value_registro.profesionales_nombre+' '+value_registro.profesionales_apellido_uno+' '+value_registro.profesionales_apellido_dos+'"></div>';
+                                html += '                </div>';
+                                html += '            </div>';
+                                html += '            <div class="text-center">';
+                                html += '                <a href="#!" data-toggle="modal" data-target="#modal-report">';
+                                html += '                    <span class="badge badge-primary mt-2">';
+                                {{--  html +=                         value_registro.especialidades_nombre;  --}}
+                                if(value_registro.tipos_especialidad_nombre != null)
+                                    html +=                         value_registro.tipos_especialidad_nombre+'<br>';
+                                if(value_registro.sub_tipo_especialidad_nombre != null)
+                                    html +=                         value_registro.sub_tipo_especialidad_nombre;
+                                html += '                    </span>';
+                                html += '                    <h6 class="mb-1 mt-2">'+value_registro.profesionales_nombre+' '+value_registro.profesionales_apellido_uno+' '+value_registro.profesionales_apellido_dos+'</h6>';
+                                html += '                </a>';
+
+                                if($(value_registro.profesional_hora_mas_proxima).length > 0)
+                                    html += '                <p class="mb-3 text-muted"><i class="feather icon-calendar"></i>Próxima hora '+value_registro.profesional_hora_mas_proxima['dia']+' '+value_registro.profesional_hora_mas_proxima['hora']+'</p>';
+                                else
+                                    html += '                <p class="mb-3 text-muted"><i class="feather icon-calendar"></i>Próxima hora Sin Agenda</p>';
+
+                                html += '                <button type="button" class="btn btn-outline-info btn-sm" onclick="f_profesional('+value_registro.profesionales_id+');"><i class="feather icon-file-plus"></i> Ver ficha</button>';
+                                html += '                <button type="button" class="btn btn-info btn-sm" onclick="hora_medica('+value_registro.profesionales_id+','+value_registro.profesional_hora_mas_proxima.id_lugar_atencion+', \'3\');"><i class="feather icon-calendar"></i> Reservar hora</button>';
                                 html += '            </div>';
                                 html += '        </div>';
                                 html += '    </div>';
@@ -606,6 +835,7 @@
             $('#modal_reserva_hora_lista_horas').html('');
 
             let id_profesional = $('#modal_reserva_hora_id_profesional').val();
+            let tipo_agenda = $('#modal_reserva_hora_tipo_agenda').val();
             let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
             let url = "{{ route('profesional.DiasLaboralesProfesionaLugarAtencionBuscador') }}";
 
@@ -616,6 +846,7 @@
                         //_token: _token,
                         id_profesional: id_profesional,
                         lugar_atencion: id_lugar_atencion,
+                        tipo_agenda: tipo_agenda,
                     },
                 })
                 .done(function(data) {
@@ -810,6 +1041,7 @@
 
             let id_profesional = $('#modal_reserva_hora_id_profesional').val();
             let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
+            let tipo_agenda = $('#modal_reserva_hora_tipo_agenda').val();
             console.log('cargar_horas_disponibles_calendario_profesion');
             console.log(dia);
 
@@ -822,6 +1054,7 @@
                     id_profesional: id_profesional,
                     id_lugar_atencion: id_lugar_atencion,
                     dia: dia,
+                    tipo_agenda: tipo_agenda,
                 },
             })
             .done(function(data) {
@@ -982,6 +1215,29 @@
             let id_asistente = $('#reserva_hora_id_asistente').val();
             let origen = $('#reserva_hora_origen').val();
 
+            let tipo_agenda = $('#select_tipo_agenda').val();
+            var tipo_agenda_text = 'C';
+
+            console.log(tipo_agenda);
+            console.log(tipo_agenda_text);
+
+            switch (tipo_agenda) {
+                case '1':
+                    tipo_agenda_text = 'C';//CONSULTA
+                    break;
+                case '2':
+                    tipo_agenda_text = 'D';//DENTAL
+                    break;
+                case '3':
+                    tipo_agenda_text = 'T';//TELEMEDICINA
+                    break;
+                case '4':
+                    tipo_agenda_text = 'E';//EXAMEN
+                    break;
+            }
+
+            console.log(tipo_agenda_text);
+
 
             let representante = 0;
             let lista_Acompanante = $('#reserva_hora_id_acompanante').val();
@@ -1021,6 +1277,7 @@
                         acompanante: acompanante,
                         lista_Acompanante: lista_Acompanante,
                         autorizacion_atencion: autorizacion_atencion,
+                        tipo_hora_medica: tipo_agenda_text,
                     }
                 })
                 .done(function(data) {
@@ -1048,23 +1305,24 @@
                         }
                         $('#agenda_agregar_paciente').modal('hide');
 
-                            $('#reserva_hora_id_profesional').val('');
-                            $('#reserva_hora_id_lugar_atencion').val('');
-                            $('#reserva_hora_fecha_consulta').val('');
-                            $('#reserva_hora_hora_consulta').val('');
-                            $('#reserva_hora_id_paciente').val('');
-                            $('#reserva_rut_paciente').html('');
-                            $('#reserva_hora_nombre').html('');
-                            $('#reserva_fecha_nacimiento').html('');
-                            $('#reserva_sexo').text('');
-                            $('#reserva_convenio').html('');
-                            $('#reserva_direccion').html('');
-                            $('#reserva_hora_email').html('');
-                            $('#reserva_hora_telefono').html('');
+                        $('#reserva_hora_id_profesional').val('');
+                        $('#reserva_hora_id_lugar_atencion').val('');
+                        $('#reserva_hora_fecha_consulta').val('');
+                        $('#reserva_hora_hora_consulta').val('');
+                        $('#reserva_hora_id_paciente').val('');
+                        $('#reserva_rut_paciente').html('');
+                        $('#reserva_hora_nombre').html('');
+                        $('#reserva_fecha_nacimiento').html('');
+                        $('#reserva_sexo').text('');
+                        $('#reserva_convenio').html('');
+                        $('#reserva_direccion').html('');
+                        $('#reserva_hora_email').html('');
+                        $('#reserva_hora_telefono').html('');
 
 
-                    } else {
-
+                    }
+                    else
+                    {
                         swal({
                             title: "Error!",
                             text: "Problema en la solicitud de la hora",
@@ -1111,6 +1369,9 @@
                 }
             });
         });
+
+
+
 
     </script>
 

@@ -34,36 +34,21 @@ class FlujoCajaController extends Controller
             $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
             $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
 
-            // $filtro[] = array('id_paciente',$paciente->id);
-            // $filtro[] = array('id_profesional',$profesional->id);
-            // $filtro[] = array('id_asistente',$asistente->id);
-            $bonos = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+
+            $bonos = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','=','0')
                         ->get();
-            $bonos_programa = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+
+            $bonos_programa = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','>','0')
                         ->get();
-            $bonos_rendidos = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+
+            $bonos_rendidos = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','=','0')
                         ->where('rendido','1')
                         ->get();
-            $bonos_rendidos_programa = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+
+            $bonos_rendidos_programa = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','>','0')
                         ->where('rendido','1')
                         ->get();
@@ -176,11 +161,31 @@ class FlujoCajaController extends Controller
             $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
             $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
 
-            $registro = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+            // $registro = Bono::where(function($query) use($profesional, $paciente, $asistente) {
+            //             $query->where('id_profesional',$profesional->id)
+            //                 ->orWhere('id_paciente',$paciente->id)
+            //                 ->orWhere('id_asistente',$asistente->id);
+            //             })
+            //             ->where('numero_sesiones','=','0')
+            //             ->where('rendido','0')
+            //             ->where($filtro)
+            //             ->with(['TipoBono' => function($query){
+            //                 $query->select('id','nombre');
+            //             }])
+            //             ->with(['Convenio' => function($query){
+            //                 $query->select('id','nombre');
+            //             }])
+            //             ->with(['Paciente' => function($query){
+            //                 $query->select('id','nombres', 'apellido_uno', 'apellido_dos', 'rut');
+            //             }])
+            //             ->with(['Parametro' => function($query){
+            //                 $query->select('id','valor');
+            //             }])
+            //             ->with(['Profesional' => function($query){
+            //                 $query->select('id','nombre', 'apellido_uno', 'apellido_dos');
+            //             }])
+            //             ->get();
+                $registro = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','=','0')
                         ->where('rendido','0')
                         ->where($filtro)
@@ -310,38 +315,22 @@ class FlujoCajaController extends Controller
             // $filtro[] = array('id_paciente',$paciente->id);
             // $filtro[] = array('id_profesional',$profesional->id);
             // $filtro[] = array('id_asistente',$asistente->id);
-            $bonos = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+            $bonos = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','=','0')
                         ->where('rendido','0')
                         ->where($filtro)
                         ->get();
-            $bonos_programa = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+            $bonos_programa = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','>','0')
                         ->where('rendido','0')
                         ->where($filtro)
                         ->get();
-            $bonos_rendidos = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+            $bonos_rendidos = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','=','0')
                         ->where('rendido','1')
                         ->where($filtro)
                         ->get();
-            $bonos_rendidos_programa = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+            $bonos_rendidos_programa = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','>','0')
                         ->where('rendido','1')
                         ->where($filtro)
@@ -445,41 +434,25 @@ class FlujoCajaController extends Controller
             // $filtro[] = array('id_paciente',$paciente->id);
             // $filtro[] = array('id_profesional',$profesional->id);
             // $filtro[] = array('id_asistente',$asistente->id);
-            $bonos = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+            $bonos = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','=','0')
                         ->where('rendido','0')
                         ->where($filtro)
                         ->get();
 
-            $bonos_programa = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+            $bonos_programa = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','>','0')
                         ->where('rendido','0')
                         ->where($filtro)
                         ->get();
 
-            $bonos_rendidos = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+            $bonos_rendidos = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','=','0')
                         ->where('rendido','1')
                         ->where($filtro)
                         ->get();
 
-            $bonos_rendidos_programa = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+            $bonos_rendidos_programa = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','>','0')
                         ->where('rendido','1')
                         ->where($filtro)
@@ -580,38 +553,22 @@ class FlujoCajaController extends Controller
             $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
             $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
 
-            $bonos = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+            $bonos = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','=','0')
                         ->where('rendido','0')
                         ->where($filtro)
                         ->get();
-            $bonos_programa = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+            $bonos_programa = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','>','0')
                         ->where('rendido','0')
                         ->where($filtro)
                         ->get();
-            $bonos_rendidos = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+            $bonos_rendidos = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','=','0')
                         ->where('rendido','1')
                         ->where($filtro)
                         ->get();
-            $bonos_rendidos_programa = Bono::where(function($query) use($profesional, $paciente, $asistente) {
-                        $query->where('id_profesional',$profesional->id)
-                            ->orWhere('id_paciente',$paciente->id)
-                            ->orWhere('id_asistente',$asistente->id);
-                        })
+            $bonos_rendidos_programa = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','>','0')
                         ->where('rendido','1')
                         ->where($filtro)

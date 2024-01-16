@@ -1610,25 +1610,29 @@ class EscritorioPaciente extends Controller
         $profesional = Profesional::where('id', $request->id_profesional)->first();
         $lugar_atencion = LugarAtencion::where('id', $request->id_lugar_atencion)->first();
 
-        /** HORA DE EXAMEN */
-        if($request->tipo_hora_medica == 'E')
-        {
-            // validar si paciente tiene otra consulta
-            $validar = HoraMedica::where('id_paciente', $paciente->id)
-                                ->where('id_profesional',$profesional->id)
-                                ->where('tipo_hora_medica','E')
-                                ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
-                                ->first();
+        $texto_alias_examen = '';
+        # TIPO HORA MEDICA
+        switch ($request->tipo_hora_medica) {
+            case 'C': // 1
+                $texto_alias_examen = 'Consulta';
+                break;
+            case 'D': // 2
+                $texto_alias_examen = 'Consulta Dental';
+                break;
+            case 'T': // 3
+                $texto_alias_examen = 'Consulta Telemedicina';
+                break;
+            case 'E': // 4
+                // $texto_alias_examen = 'Consulta Examen';
+                $texto_alias_examen = $request->examen;
+                break;
         }
-        else
-        {
-            // validar si paciente tiene otra consulta
-            $validar = HoraMedica::where('id_paciente', $paciente->id)
-                                ->where('id_profesional',$profesional->id)
-                                ->where('tipo_hora_medica','C')
-                                ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
-                                ->first();
-        }
+
+        $validar = HoraMedica::where('id_paciente', $paciente->id)
+                            ->where('id_profesional',$profesional->id)
+                            ->where('tipo_hora_medica',$request->tipo_hora_medica)
+                            ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
+                            ->first();
 
         if($validar)
         {
@@ -1669,6 +1673,10 @@ class EscritorioPaciente extends Controller
 
             $hora_medica->hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
             $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->format('H:i:s');
+
+            $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
+            $hora_medica->alias_examen = $texto_alias_examen;
+
             $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
             $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
 
@@ -1679,13 +1687,6 @@ class EscritorioPaciente extends Controller
 
             $hora_medica->autorizacion_atencion = $request->autorizacion_atencion;
             // $hora_medica->id_log_users_devices = '';
-
-
-            if(!empty($request->tipo_hora_medica))
-            {
-                $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
-                $hora_medica->alias_examen = $request->examen;
-            }
 
             // $hora_medica->origen = $request->origen;
 

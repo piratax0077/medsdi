@@ -129,7 +129,7 @@
                             // buttons: "Aceptar",
                             //SuccessMode: true,
                         });
-                        cargarAgendaProfesional(data.bono.hora_medica.fecha_consulta);
+                        cargarAgendaProfesional(1, data.bono.hora_medica.fecha_consulta);
                         $('#modal_recepcion_bonos_api').modal('hide');
 
                         $('#bono_paciente_nombre').val('');

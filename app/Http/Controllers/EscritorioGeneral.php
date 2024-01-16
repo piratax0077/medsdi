@@ -189,17 +189,34 @@ class EscritorioGeneral extends Controller
                 $sql .= " AND profesionales.apellido_dos LIKE '".$request->apellido_dos."%'";
             if(!empty($request->rut))
                 $sql .= " AND profesionales.rut = '".$request->rut."'";
+
+            if(!empty($request->nombre_rut))
+            {
+                $sql .= " AND (profesionales.nombre LIKE '".$request->nombre_rut."%'";
+                $sql .= " OR profesionales.apellido_uno LIKE '".$request->nombre_rut."%'";
+                $sql .= " OR profesionales.apellido_dos LIKE '".$request->nombre_rut."%'";
+                $sql .= " OR profesionales.rut = '".$request->nombre_rut."')";
+            }
+
             if(!empty($request->id_institucion))
                 $sql .= " AND profesionales.id in (SELECT id_profesional FROM profesionales_lugares_atencion WHERE id_lugar_atencion = (SELECT id_lugar_atencion FROM instituciones WHERE id = ".$request->id_institucion.") and estado=1 )";
 
-                // var_dump($sql);
+            // 1 -> Atención General
+            // 2 -> Atención Dental
+            // 3 -> Atención Telemedicina
+            // 4 -> Examene
+            if(!empty($request->tipo_agenda))
+                $sql .= " AND profesionales.id IN (SELECT id_profesional FROM `profesional_horarios` WHERE tipo_agenda in (".$request->tipo_agenda.") GROUP BY id_profesional)";
+
+
+            // var_dump($sql);
             $registros = DB::select($sql);
             $registros_validos = array();
             foreach ($registros as $key_r => $value_r)
             {
                 // $profesional_horarios = ProfesionalHorario::where('id_profesional',$value_r->profesionales_id)->get();
                 // $registros[$key_r]->profesional_horarios = $profesional_horarios;
-                $registros[$key_r]->profesional_hora_mas_proxima = $this->cargarFechaMasProxima($value_r->profesionales_id);
+                $registros[$key_r]->profesional_hora_mas_proxima = $this->cargarFechaMasProxima($value_r->profesionales_id, $request->tipo_agenda);
 
                 // busqueda de imagen
                 $array_rut = explode('-',$value_r->profesionales_rut);
@@ -266,17 +283,22 @@ class EscritorioGeneral extends Controller
         return $datos;
     }
 
-    public function cargarFechaMasProxima($id_profesional)
+    public function cargarFechaMasProxima($id_profesional, $tipo_agenda)
     {
         $datos = array();
 
         $lugar_atencion_activo = ProfesionalesLugaresAtencion::where('id_profesional',$id_profesional)->where('estado','1')->pluck('id_lugar_atencion')->toArray();
 
+        // var_dump($tipo_agenda);
         $profesional_horarios = ProfesionalHorario::where('id_profesional',$id_profesional)
                                                     ->whereIn('id_lugar_atencion',$lugar_atencion_activo)
                                                     ->orderBy('id_lugar_atencion', 'ASC')
                                                     ->orderBy('dia', 'ASC')
+                                                    ->tipoAgenda($tipo_agenda)
                                                     ->get();
+
+        // echo json_encode($profesional_horarios);
+
         $mes_inicio = date('m');
         $anio_inicio = date('Y');
         $dia_hoy = date('Y-m-d');
@@ -325,7 +347,38 @@ class EscritorioGeneral extends Controller
                         {
                             if($finalizar == 1) break;
 
-                            $hora_medica = HoraMedica::where('fecha_consulta',date('Y-m-d',$dia))->where('hora_inicio',date('H:i:s',$hora))->first();
+                            $filtro_tipo_hora = 'C';
+                            switch ($tipo_agenda) {
+                                // 1 -> Atención General
+                                case 'value':
+                                    $filtro_tipo_hora = 'C';
+                                    break;
+
+                                // 2 -> Atención Dental
+                                case 'value':
+                                    $filtro_tipo_hora = 'D';
+                                    break;
+
+                                // 3 -> Atención Telemedicina
+                                case 'value':
+                                    $filtro_tipo_hora = 'T';
+                                    break;
+
+                                // 4 -> Examene
+                                case 'value':
+                                    $filtro_tipo_hora = 'E';
+                                    break;
+
+                                default:
+                                    $filtro_tipo_hora = 'C';
+                                    break;
+                            }
+                            $hora_medica = HoraMedica::where('id_profesional', $id_profesional)->where('fecha_consulta',date('Y-m-d',$dia))->where('hora_inicio',date('H:i:s',$hora))->where('tipo_hora_medica', $filtro_tipo_hora)->first();
+
+                            // var_dump(date('Y-m-d', $dia));
+                            // var_dump(date('H:i:s',$hora));
+                            // echo json_encode($hora_medica);
+
                             if($hora_medica)
                             {
                                 $finalizar = 0;
@@ -555,7 +608,11 @@ class EscritorioGeneral extends Controller
     public function diasLaboralesProfesionaLugarAtencionBuscador(Request $request){
         $datos = array();
 
-        $horario = ProfesionalHorario::where('id_profesional', $request->id_profesional)->where('id_lugar_atencion', $request->lugar_atencion)->orderBy('dia', 'ASC')->get();
+        $horario = ProfesionalHorario::where('id_profesional', $request->id_profesional)
+                                        ->where('id_lugar_atencion', $request->lugar_atencion)
+                                        ->tipoAgenda($request->tipo_agenda)
+                                        ->orderBy('dia', 'ASC')
+                                        ->get();
 
         $horario_agenda_no_laboral = '1,2,3,4,5,6,7';
         $horario_agenda_laboral = '';
@@ -605,6 +662,7 @@ class EscritorioGeneral extends Controller
         $profesional_horarios = ProfesionalHorario::where('id_profesional',$request->id_profesional)
                                                 ->where('id_lugar_atencion',$request->id_lugar_atencion)
                                                 ->where('dia','like','%'.$dia_semana.'%')
+                                                ->tipoAgenda($request->tipo_agenda)
                                                 ->orderBy('dia', 'ASC')
                                                 ->first();
         if($profesional_horarios)

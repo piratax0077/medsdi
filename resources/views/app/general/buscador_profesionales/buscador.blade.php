@@ -40,22 +40,23 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header text-white bg-light">
-                            <h4 class="f-18 pt-1 text-c-blue text-center">
-                            Reserve su hora médica</h4>
+                            <h4 class="f-18 pt-1 text-c-blue text-center">Reserve su hora médica</h4>
+                            <input type="hidden" name="select_tipo_agenda" id="select_tipo_agenda" value="1,2">
                         </div>
                         <div class="card-body">
                             <ul class="nav nav-tabs mb-3 justify-content-center" id="Buscadores" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active text-uppercase" id="buscar_especialidad-tab" data-toggle="tab" href="#buscar_especialidad" role="tab" aria-controls="home" aria-selected="true">Especialidad</a>
+                                    <a class="nav-link active text-uppercase" onclick="$('#select_tipo_agenda').val(1);$('#div_resultado_busqueda').html('')" id="buscar_especialidad-tab" data-toggle="tab" href="#buscar_especialidad" role="tab" aria-controls="home" aria-selected="true">Especialidad</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-uppercase" id="buscar_profesional-tab" data-toggle="tab" href="#buscar_profesional" role="tab" aria-controls="buscar_profesional" aria-selected="false">Profesional</a>
+                                    <a class="nav-link text-uppercase" onclick="$('#select_tipo_agenda').val(1);$('#div_resultado_busqueda').html('')" id="buscar_profesional-tab" data-toggle="tab" href="#buscar_profesional" role="tab" aria-controls="buscar_profesional" aria-selected="false">Profesional</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-uppercase" id="buscar_videoconsulta-tab" data-toggle="tab" href="#buscar_videoconsulta" role="tab" aria-controls="buscar_videoconsulta" aria-selected="false">Videoconsulta</a>
+                                    <a class="nav-link text-uppercase" onclick="$('#select_tipo_agenda').val(3);$('#div_resultado_busqueda').html('')" id="buscar_videoconsulta-tab" data-toggle="tab" href="#buscar_videoconsulta" role="tab" aria-controls="buscar_videoconsulta" aria-selected="false">Videoconsulta</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="BuscadoresContent">
+
                                 <!--Hora por especialidad-->
                                 <div class="tab-pane fade show active" id="buscar_especialidad" role="tabpanel" aria-labelledby="buscar_especialidad-tab">
                                     {{--  <form>  --}}
@@ -212,30 +213,35 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md-12 text-center">
-                                                <button class="btn btn-info" type="submit">Buscar hora</button>
+                                                <button class="btn btn-info" type="button" onclick="buscar_profesional_profesional();">Buscar hora</button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
+
                                 <!--Hora por videoconsulta-->
                                 <div class="tab-pane fade" id="buscar_videoconsulta" role="tabpanel" aria-labelledby="buscar_videoconsulta-tab">
-                                    <form id="buscador_videoconsulta">
-                                        <div class="row">
+                                    {{--  <form>  --}}
+                                        <div class="form-row">
                                             <div class="col-sm-12 col-md-12 text-center">
-                                                <div class="form-group">
-                                                    <h6 class="mb-4 mt-2">Ingrese los datos solicitados para buscar hora por videoconsulta</h6>
-                                                </div>
+                                                <h6 class="mb-4 mt-2">Ingrese los datos solicitados para buscar hora por especialidad</h6>
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-4">
                                                 <div class="form-group">
                                                     <label class="floating-label-activo-sm">Profesión</label>
-                                                    <select class="form-control form-control-sm" name="profesion" id="buscar_videoconsulta_profesion" onchange="buscar_tipo_especialidad(this);">
+                                                    <select class="form-control form-control-sm" name="buscar_videoconsulta_profesion   " id="buscar_videoconsulta_profesion   " onchange="buscar_tipo_especialidad(this);">
                                                         <option value="">Seleccione</option>
+
                                                         @if(isset($profesiones))
                                                             @foreach($profesiones as $pro_key => $pro)
-                                                                <option value="{{ $pro->id }}">{{ $pro->nombre }}</option>
+                                                            @php
+                                                                $selected_id1 = '';
+                                                                if((int)$filtros['id_profesion']==$pro->id && (int)$filtros['id_profesion']>0)
+                                                                $selected_id1 = 'selected';
+                                                            @endphp
+                                                                <option value="{{ $pro->id }}" {{$selected_id1}}>{{ $pro->nombre }}</option>
                                                             @endforeach
                                                         @endif
                                                     </select>
@@ -244,11 +250,16 @@
                                             <div class="col-sm-12 col-md-4">
                                                 <div class="form-group">
                                                     <label class="floating-label-activo-sm">Especialidad</label>
-                                                    <select class="form-control form-control-sm" name="especialidad" id="buscar_videoconsulta_especialidad" onchange="buscar_sub_tipo_especialidad(this);">
+                                                    <select class="form-control form-control-sm" name="buscar_videoconsulta_especialidad" id="buscar_videoconsulta_especialidad" onchange="buscar_sub_tipo_especialidad(this);">
                                                         <option value="">Seleccione</option>
                                                         @if(isset($especialidades))
                                                             @foreach($especialidades as $esp_key => $esp)
-                                                                <option value="{{ $esp->id }}">{{ $esp->nombre }}</option>
+                                                            @php
+                                                                $selected_id2 = '';
+                                                                if($filtros['id_especialidad']==$esp->id && $filtros['id_especialidad']!=0)
+                                                                $selected_id2 = 'selected';
+                                                            @endphp
+                                                                <option value="{{ $esp->id }}" {{$selected_id2}}>{{ $esp->nombre }}</option>
                                                             @endforeach
                                                         @endif
                                                     </select>
@@ -257,37 +268,45 @@
                                             <div class="col-sm-12 col-md-4">
                                                 <div class="form-group">
                                                     <label class="floating-label-activo-sm">Sub-Especialidad</label>
-                                                    <select class="form-control form-control-sm" name="subespec" id="buscar_videoconsulta_subespec">
+                                                    <select class="form-control form-control-sm" name="buscar_videoconsulta_subespec" id="buscar_videoconsulta_subespec">
                                                         <option value="">Seleccione</option>
-                                                        {{--  @if(isset($sub_especialidades))
+                                                        @if(isset($sub_especialidades))
                                                             @foreach($sub_especialidades as $sub_key => $sub)
-                                                                <option value="{{ $sub->id }}">{{ $sub->nombre }}</option>
+                                                                @php
+                                                                    $selected_id3 = '';
+                                                                    if($filtros['id_subespecialidad']==$sub->id && $filtros['id_subespecialidad']!=0)
+                                                                    $selected_id3 = 'selected';
+                                                                @endphp
+                                                                <option value="{{ $sub->id }}" {{$selected_id3}}>{{ $sub->nombre }}</option>
                                                             @endforeach
-                                                        @endif  --}}
+                                                        @endif
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-12 col-md-4">
+
+                                            {{-- <div class="col-sm-12 col-md-4">
                                                 <div class="form-group">
                                                     <label class="floating-label-activo-sm">Previsión</label>
                                                     <select class="form-control form-control-sm" name="prevision" id="buscar_videoconsulta_prevision">
                                                         <option value="">Seleccione</option>
                                                     </select>
                                                 </div>
-                                            </div>
+                                            </div> --}}
+
                                             <div class="col-sm-12 col-md-4">
                                                 <div class="form-group">
-                                                    <div class="custom-control custom-switch">
-                                                        <input type="checkbox" class="custom-control-input" id="buscar_videoconsulta_hora24">
-                                                        <label class="custom-control-label" for="hora24">Buscar horas para las próx. 24 hrs</label>
+                                                    <div class="switch switch-success d-inline m-r-10">
+                                                        <input type="checkbox" id="buscar_videoconsulta_hora24" value="1">
+                                                        <label for="buscar_videoconsulta_hora24" class="cr"></label>
                                                     </div>
+                                                    <label><strong>Quiero hora para las próx. 24 hrs</strong></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md-12 text-center">
-                                                <button class="btn btn-info" type="submit">Buscar hora</button>
+                                                <button class="btn btn-info" type="bottom" id="btn_buscar_especialidad_video_consulta" onclick="buscar_profesional_especialidad_video_consulta();">Buscar hora</button>
                                             </div>
                                         </div>
-                                    </form>
+                                    {{--  </form>  --}}
                                 </div>
                             </div>
                         </div>

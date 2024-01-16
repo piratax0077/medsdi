@@ -32,34 +32,44 @@ class VentaBonoController extends Controller
         if($valido)
         {
             $paciente = Paciente::find($request->id_paciente);
-            $profesional = Profesional::find($request->id_profesional);
-            $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
-
-            $funciones = new Funciones();
-            $id_user_create = Auth::user()->id;
-            $id_user_recept = $paciente->id_usuario;
-            $evento = 'Permiso venta Bono';
-            $nombre = $paciente->nombres;
-            $apellido_p = $paciente->apellido_uno;
-            $apellido_m = $paciente->apellido_dos;
-            $lugar = $lugar_atencion->nombre;
-            $profesional = $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos;
-            $tipo = 'Check SDI';
-            $tipo_id = '13';
-
-            $result_solicitud = $funciones->generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo,$tipo_id);
-
-            if($result_solicitud['app']['estado'] == 1)
+            if(!empty($paciente->id_usuario))
             {
-                $datos['estado'] = 1;
-                $datos['msj'] = 'Solicitud enviada';
-                $datos['registro'] = $result_solicitud['app'];
+                $profesional = Profesional::find($request->id_profesional);
+                $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
+
+                $funciones = new Funciones();
+                $id_user_create = Auth::user()->id;
+                $id_user_recept = $paciente->id_usuario;
+                $evento = 'Permiso venta Bono';
+                $nombre = $paciente->nombres;
+                $apellido_p = $paciente->apellido_uno;
+                $apellido_m = $paciente->apellido_dos;
+                $lugar = $lugar_atencion->nombre;
+                $profesional = $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos;
+                $tipo = 'Check SDI';
+                $tipo_id = '13';
+
+                $result_solicitud = $funciones->generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo,$tipo_id);
+
+                if($result_solicitud['app']['estado'] == 1)
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Solicitud enviada';
+                    $datos['registro'] = $result_solicitud['app'];
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Solicitud no enviada';
+                }
             }
             else
             {
                 $datos['estado'] = 0;
-                $datos['msj'] = 'Solicitud no enviada';
+                $datos['msj'] = 'El paciente no posee usuario para notificar';
+                $datos['error'] = 'El paciente no posee usuario para notificar';
             }
+
         }
         else
         {
@@ -165,7 +175,7 @@ class VentaBonoController extends Controller
             $datos['estado'] = 1;
             $datos['msj'] = 'exito';
             $datos['registro'] = array(
-                'numero' => random_int(11111,99999),
+                'numero' => random_int(11111,999999),
                 'total' => 80000,
                 'bonificacion' => 60000,
                 'aporte_seguro' => 10000,

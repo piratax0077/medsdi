@@ -26,4 +26,16 @@ class ProfesionalHorario extends Model
             ->withPivot('estado');
     }
 
+    public function scopeTipoAgenda($query, $tipo_agenda)
+    {
+        // 1 -> Atención General
+        // 2 -> Atención Dental
+        // 3 -> Atención Telemedicina
+        // 4 -> Examene
+        if(!empty($tipo_agenda))
+        {
+            return $query->whereIn('tipo_agenda', explode(",", $tipo_agenda));
+        }
+    }
+
 }
