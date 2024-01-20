@@ -11,23 +11,167 @@
                 <div class="col-md-12">
                 </div>
             </div>
-            <div class="row mx-1  mt-3">
+            <div class="row mx-1  mt-4">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <h4 class="text-c-blue text-center f-20">Ficha Médica Única</h4>
+                    <h4 class="text-c-blue float-left d-inline f-20">Ficha Médica Única</h4>
                     {{--<button type="button" class="btn btn-xs btn-danger d-inline float-right ml-2 mb-2"><i class="feather icon-x"></i> Cerrar</button> --}}
+                    {{--<button type="button" class="btn btn-xs btn-primary d-inline float-right ml-2 mb-2"><i class="feather icon-printer"></i> Imprimir</button>--}}
                 </div>
+                {{-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12  mb-4">
+                    <div class="card">
+                        <div class="card-body pt-2 pb-2">
+                            <div class="row align-middle">
+                                <div class="col-sm-12 col-md-2">
+                                    <img class="img-fluid wid-70 rounded-circle" src="{{ asset('images/iconos/paciente-f.svg') }}">
+                                </div>
+                                <div class="col-sm-6 col-md-3">
+                                    <p><i class="feather icon-user"></i><strong> Paciente</strong> <br><label for="inputEmail4"><span id="nombre">Nombre: {{$paciente->nombres}} <br> Apellidos: {{$paciente->apellido_uno}} {{$paciente->apellido_dos}}</span><br><strong> Rut:</strong> {{$paciente->rut}}</label>
+                                    </p>
+                                    <p></p>
+                                </div>
+                                <div class="col-sm-6  col-md-2">
+                                    <p><i class="feather icon-calendar"></i><strong> Fecha Nacimiento - Edad</strong> <br>Edad: {{ $paciente->edad }} <br> FN: {{$paciente->fecha_nac}}</p>
+                                </div>
+                                <div class="col-sm-6  col-md-2">
+                                    @php
+                                        $sexos = array(
+                                            'M' => 'Masculino',
+                                            'F' => 'Femenino'
+                                        );
+                                    @endphp
+                                    <p><i class="feather icon-user"></i><strong> Sexo</strong> <br>{{$sexos[$paciente->sexo]}}</p>
+                                </div>
+                                <div class="col-sm-6  col-md-3">
+                                    <p><i class="feather icon-home"></i><strong> Dirección</strong> <br>{{$direccion->direccion}} {{$direccion->numero}}, {{$direccion->ciudad->nombre}},{{$direccion->region}} <br>{{$paciente->telefono_uno}} / {{$paciente->telefono_dos}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> --}}
             </div>
             <div class="row mx-1">
+                <!--INFORMACIÓN PACIENTE-->
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="text-c-blue" style="font-size: 0.9rem!important;">Información del paciente</h6>
+                            <hr>
+                            <ul>
+                                <li><i class="feather icon-droplet"></i><strong> Grupo sanguíneo</strong></li>
+                                <li class="text-danger">
+                                    <span id="grupo_sanguineo" >{{$grupo_sanguineo->nombre_gs}}</span>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li><strong>Donante Parcial</strong></li>
+                                <li>
+                                    @if($antecedentes_paciente->dona_organos_parcial == '1')
+                                        Sí
+                                    @elseif($antecedentes_paciente->dona_organos_parcial == '0')
+                                        No
+                                    @else
+                                        {{$antecedentes_paciente->dona_organos_parcial}}
+                                    @endif
+                                </li>
+                            </ul>
+
+                            <ul>
+                                <li><strong>Organos a Donar</strong></li>
+                                <li>
+                                    @if($antecedentes_paciente->dona_organos == '1')
+                                        Sí
+                                    @elseif($antecedentes_paciente->dona_organos == '0')
+                                        No
+                                    @else
+                                        {{$antecedentes_paciente->dona_organos}}
+                                    @endif
+                                </li>
+                            </ul>
+
+                            <ul>
+                                <li><strong>Donar Sangre</strong></li>
+                                <li>
+                                    @if($antecedentes_paciente->dona_sangre == '1')
+                                        Sí
+                                    @elseif($antecedentes_paciente->dona_sangre == '0')
+                                        No
+                                    @else
+                                        {{$antecedentes_paciente->dona_sangre}}
+                                    @endif
+                                </li>
+                            </ul>
+
+                            <ul>
+                                <li><strong>Aceptas Transfusiones</strong></li>
+                                <li>
+                                    @if($antecedentes_paciente->transfusion == '1')
+                                        Sí
+                                    @elseif($antecedentes_paciente->transfusion == '0')
+                                        No
+                                    @else
+                                        {{$antecedentes_paciente->transfusion}}
+                                    @endif
+                                </li>
+                            </ul>
+
+                            <ul>
+                                <li><strong>Impedimento Donar</strong></li>
+                                <li>
+                                    @if($antecedentes_paciente->impedimento_donar == '1')
+                                        Sí
+                                    @elseif($antecedentes_paciente->impedimento_donar == '0')
+                                        No
+                                    @else
+                                        {{$antecedentes_paciente->impedimento_donar}}
+                                    @endif
+                                </li>
+                            </ul>
+
+                            <ul>
+                                <li><i class="feather icon-heart "></i> <strong>Paciente crónico</strong></li>
+                                @foreach ($antecedentes as $data)
+                                    @if($data->id_tipo_antecedente==2)
+                                        <li>{!! $data->antecedente_data->nombre.'<br/>&nbsp;&nbsp;&nbsp;- '.$data->comentario !!}</li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                            <ul>
+                                <li><i class=""></i> <strong>Alergias</strong></li>
+                                @foreach ($antecedentes as $data)
+                                    @if($data->id_tipo_antecedente==6)
+                                        <li>{!! $data->antecedente_data->nombre.'<br/>&nbsp;&nbsp;&nbsp;- '.$data->comentario !!}</li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                            <ul>
+                                <li><i class=""></i> <strong>Cirugías</strong></li>
+                                @foreach ($antecedentes as $data)
+                                    @if($data->id_tipo_antecedente==3)
+                                        <li>{!! $data->antecedente_data->procedimiento.'<br/>&nbsp;&nbsp;&nbsp;- '.substr($data->comentario, 0, 30) !!}</li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                            <ul>
+                                <li><i class=""></i> <strong>Medicamentos de uso crónico</strong></li>
+                                @foreach ($antecedentes as $data)
+                                    @if($data->id_tipo_antecedente==7)
+                                        <li>{!! $data->antecedente_data->nombre_medicamento_cronico.'<br/>&nbsp;&nbsp;&nbsp;- '.$data->antecedente_data->dosis !!}</li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <!--LADO DERECHO-->
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="col-sm-12 col-md-9 col-lg-9 col-xl-9">
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div class="card-fmu">
-                                <div class="card-header-fmu" id="enf-cron">
+                            <div class="card-a">
+                                <div class="card-header-a" id="enf-cron">
+                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#cabecera_info" aria-expanded="false" aria-controls="cabecera_info">
                                         @php
                                             $cantidad_ante_cronicos = 0;
                                             $cantidad_ante_alergias = 0;
-                                            $cantidad_ante_discapacidad = 0;
                                         @endphp
                                         @foreach ($antecedentes as $data)
                                             @if($data->id_tipo_antecedente==2)
@@ -40,93 +184,70 @@
                                                     $cantidad_ante_alergias++;
                                                 @endphp
                                             @endif
-                                            @if($data->id_tipo_antecedente==8)
-                                                @php
-                                                    $cantidad_ante_discapacidad++;
-                                                @endphp
-                                            @endif
                                         @endforeach
-
-                                        <div class="row px-2 pt-2">
-                                        	<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
-                                        		<h6 class="f-16">{{$paciente->nombres}} {{$paciente->apellido_uno}} {{$paciente->apellido_dos}} <small>({{$paciente->rut}})</small><h6>
-                                        	</div>
-                                        	<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
-                                        		<h6 class="f-16">Grupo sanguíneo: <span style="color: #ff0000;font-weight: bold;">{{$grupo_sanguineo->nombre_gs}}</span></h6>
-                                        	</div>
-                                        	<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
-                                        		<h6 class="f-16">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }} Años <small>({{ date('d-m-Y', strtotime($paciente->fecha_nac)) }})</small></h6>
-                                        	</div>
-                                        	<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
-                                                @php
-                                                    $sexos = array(
-                                                        'M' => 'Masculino',
-                                                        'F' => 'Femenino'
-                                                    );
-                                                @endphp
-                                        		<h6 class="f-16">Sexo: {{$sexos[$paciente->sexo]}}</h6>
-                                        	</div>
-                                        	<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
-                                        		 <h6 class="f-16">Paciente Crónico: {!! ($antecedentes_paciente->transfusion == '1'?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}</h6>
-                                        	</div>
-                                        	<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
-                                        		<h6 class="f-16">Transfuciones: {!! ($cantidad_ante_cronicos > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}</h6>
-                                        	</div>
-                                        	<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
-                                        		<h6 class="f-16">Alergias:  {!! ($cantidad_ante_alergias > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}</h6>
-                                        	</div>
-                                        	<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
-                                        		<h6 class="f-16">Discapacidad: {!! ($cantidad_ante_discapacidad > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}</h6>
-                                        	</div>
-                                        	<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2 col align-self-end">
-                                        		<button class="fa-solid btn btn-xxs btn-info-light-c collapsed" type="button" data-toggle="collapse" data-target="#cabecera_info" aria-expanded="false" aria-controls="cabecera_info">
-				                   				    <i class="feather icon-plus"></i> Ver más información
-                                                </button>
-                                        	</div>
-                                        </div>
+                                        {{$paciente->nombres}} {{$paciente->apellido_uno}} {{$paciente->apellido_dos}}; <span style="font-weight: bold;">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }} Años</span>; Grupo sanguíneo: <span style="color: #ff0000;font-weight: bold;">{{$grupo_sanguineo->nombre_gs}}</span> Paciente Crónico: {!! ($antecedentes_paciente->transfusion == '1'?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}; Transfuciones: {!! ($cantidad_ante_cronicos > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}; Alergias:{!! ($cantidad_ante_alergias > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}
+                                    </button>
                                 </div>
 
                                 <div id="cabecera_info" class="collapse" aria-labelledby="enf-cron" data-parent="#cabecera_info">
-                                    <div class="card-body-aten-a" style="padding-top: 0px!important;">
-                                        <div class="row">
-											<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 pb-4">
-												<ul class="nav nav-tabs profile-tabs nav-fill mt-1" id="myTab" role="tablist">
-													<li class="nav-item">
-														<a class="nav-link-aten text-reset active" id="seccion_ident_contacto-tab" data-toggle="tab" href="#seccion_ident_contacto" role="tab" aria-controls="seccion_ident_contacto" aria-selected="true">Contacto</a>
-													</li>
-													<li class="nav-item">
-														<a class="nav-link-aten text-reset" id="seccion_enfer_cronicas-tab" data-toggle="tab" href="#seccion_enfer_cronicas" role="tab" aria-controls="seccion_enfer_cronicas" aria-selected="false">Enfermedades Crónicas</a>
-													</li>
-													<li class="nav-item">
-														<a class="nav-link-aten text-reset" id="seccion_alergias-tab" data-toggle="tab" href="#seccion_alergias" role="tab" aria-controls="seccion_alergias" aria-selected="false">Alergias</a>
-													</li>
-													<li class="nav-item">
-														<a class="nav-link-aten text-reset" id="seccion_ultimas_cirugia-tab" data-toggle="tab" href="#seccion_ultimas_cirugia" role="tab" aria-controls="seccion_ultimas_cirugia" aria-selected="false">Últimas Cirugias</a>
-													</li>
-													<li class="nav-item">
-														<a class="nav-link-aten text-reset" id="seccion_ultimo_tratamiento-tab" data-toggle="tab" href="#seccion_ultimo_tratamiento" role="tab" aria-controls="seccion_ultimo_tratamiento" aria-selected="false">Últimos Tratamientos</a>
-													</li>
-													<li class="nav-item">
-														<a class="nav-link-aten text-reset" id="discap-tab" data-toggle="tab" href="#discap" role="tab" aria-controls="discap" aria-selected="false">Discapacidad</a>
-													</li>
-												</ul>
-											</div>
-										</div>
+                                    <div class="card-body-aten-a">
+                                        <div class="row mt-3">
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 pb-4">
+                                                <ul class="nav nav-tabs profile-tabs nav-fill mt-2" id="myTab" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-reset active" id="seccion_ident_contacto-tab" data-toggle="tab" href="#seccion_ident_contacto" role="tab" aria-controls="seccion_ident_contacto" aria-selected="true">Identificacion y Contacto</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-reset" id="seccion_enfer_cronicas-tab" data-toggle="tab" href="#seccion_enfer_cronicas" role="tab" aria-controls="seccion_enfer_cronicas" aria-selected="false">Enfermedades Cronicas</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-reset" id="seccion_alergias-tab" data-toggle="tab" href="#seccion_alergias" role="tab" aria-controls="seccion_alergias" aria-selected="false">Alergias</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-reset" id="seccion_ultimas_cirugia-tab" data-toggle="tab" href="#seccion_ultimas_cirugia" role="tab" aria-controls="seccion_ultimas_cirugia" aria-selected="false">Ultimas Cirugias</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-reset" id="seccion_ultimo_tratamiento-tab" data-toggle="tab" href="#seccion_ultimo_tratamiento" role="tab" aria-controls="seccion_ultimo_tratamiento" aria-selected="false">Ultimos Tratamientos</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
 
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="tab-content" id="at-oftalmo">
                                                     {{-- INFORMACION DE CONTACTO --}}
                                                     <div class="tab-pane fade show active" id="seccion_ident_contacto" role="tabpanel" aria-labelledby="seccion_ident_contacto-tab">
-                                                        <div class="row">
-                                                            <div class="col-sm-6 col-md-4">
-                                                                <p><i class="feather icon-home"></i><strong> Dirección</strong> <br>{{$direccion->direccion}} {{$direccion->numero}}, {{$direccion->ciudad->nombre}}, {{$direccion->ciudad->region->nombre}}</p>
+                                                        <div class="row align-middle">
+                                                            <div class="col-sm-6 col-md-3">
+                                                                <p>
+                                                                    <i class="feather icon-user"></i>
+                                                                    <strong> Paciente</strong><br>
+                                                                    <label for="inputEmail4">
+                                                                        <span id="nombre">Nombre: <strong>{{$paciente->nombres}}</strong><br> Apellidos: <strong>{{$paciente->apellido_uno}} {{$paciente->apellido_dos}}</strong></span><br>
+                                                                        <span>RUT: <strong>{{$paciente->rut}}</strong></span>
+                                                                    </label>
+                                                                </p>
                                                             </div>
-                                                            <div class="col-sm-6 col-md-4">
-                                                                <p><i class="feather icon-phone"></i><strong> Telefono</strong> <br>{{$paciente->telefono_uno}} / {{$paciente->telefono_dos}}</p>
+                                                            <div class="col-sm-6  col-md-3">
+                                                                <p>
+                                                                    <i class="feather icon-calendar"></i>
+                                                                    <strong> F. Nacimiento - Edad</strong><br>
+                                                                    <span>Edad: <strong>{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</strong><span><br>
+                                                                    <span>FN: <strong>{{ date('d-m-Y', strtotime($paciente->fecha_nac)) }}</strong><span>
+                                                                </p>
                                                             </div>
-                                                            <div class="col-sm-6 col-md-4">
-                                                                <p><i class="feather icon-mail"></i><strong> Email</strong> <br>{{$paciente->email}}</p>
+                                                            <div class="col-sm-6  col-md-2">
+                                                                @php
+                                                                    $sexos = array(
+                                                                        'M' => 'Masculino',
+                                                                        'F' => 'Femenino'
+                                                                    );
+                                                                @endphp
+                                                                <p><i class="feather icon-user"></i><strong> Sexo</strong> <br>{{$sexos[$paciente->sexo]}}</p>
+                                                            </div>
+                                                            <div class="col-sm-6  col-md-4">
+                                                                <p><i class="feather icon-home"></i><strong> Dirección</strong> <br>{{$direccion->direccion}} {{$direccion->numero}}, {{$direccion->ciudad->nombre}}, {{$direccion->ciudad->region->nombre}} <br>{{$paciente->telefono_uno}} / {{$paciente->telefono_dos}}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -223,7 +344,6 @@
 
                                                     </div>
 
-                                                    {{-- ultimos tratamientos --}}
                                                     <div class="tab-pane fade" id="seccion_ultimo_tratamiento" role="tabpanel" aria-labelledby="seccion_ultimo_tratamiento-tab">
 
                                                         <div class="row">
@@ -231,39 +351,6 @@
                                                                 {!! $datos->tratamientos_activos !!}
                                                             </div>
                                                         </div>
-
-                                                    </div>
-
-                                                    {{-- discapacidad --}}
-                                                    <div class="tab-pane fade" id="discap" role="tabpanel" aria-labelledby="discap-tab">
-
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <table id="table_discapacidad" class="display table table-striped table-xs dt-responsive nowrap pb-4" style="width:100%">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Discapacidad</th>
-                                                                            <th>Grado</th>
-                                                                            <th>Reversibilidad</th>
-                                                                            <th>Fecha</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        @foreach ($antecedentes as $data)
-                                                                            @if($data->id_tipo_antecedente==8)
-                                                                                <tr>
-                                                                                    <td>{{ $data->antecedente_data->discapacidad_tipo }}</td>
-                                                                                    <td>{{ $data->antecedente_data->discapacidad_grado }}</td>
-                                                                                    <td>{{ $data->antecedente_data->discapacidad_permanente }}</td>
-                                                                                    <td>{{ date('d-m-Y', strtotime($data->antecedente_data->fecha_regitro)) }}</td>
-                                                                                </tr>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-
 
                                                     </div>
                                                 </div>
@@ -278,8 +365,8 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-                            {{-- <button type="button" class="btn btn-xs btn-primary mb-1" onclick="cirugias_fmu();">Cirugías</button> --}}
-                            {{-- <button type="button" class="btn btn-xs btn-primary mb-1" onclick="alergias_fmu();">Alergias</button> --}}
+                            {{-- <button type="button" class="btn btn-xs btn-primary mb-1" onclick="cirugias_fmu();">Cirugías</button>
+                            <button type="button" class="btn btn-xs btn-primary mb-1" onclick="alergias_fmu();">Alergias</button> --}}
                             <button type="button" class="btn btn-xs btn-primary mb-1" onclick="responsables_fmu();"><i class="feather icon-users"></i> Responsables</button>
                             <button type="button" class="btn btn-xs btn-primary mb-1" onclick="confidencial_fmu();"><i class="feather icon-lock"></i> Confidencial</button>
                             {{-- <button type="button" class="btn btn-xs btn-primary mb-1" onclick="trat_act_fmu();"><i class="feather icon-file-plus"></i> Tratamientos activos</button> --}}
@@ -289,9 +376,9 @@
 
                     <div class="row">
                         {{-- Tratamientos en curso --}}
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-3 mb-4">
                             <div class="card border-card-primary h-100">
-                                <div class="card-body-aten-a">
+                                <div class="card-body">
                                     <ul>
                                         <li><strong>Tratamientos en curso</strong></li>
                                         @if ($tratamiento_activo)
@@ -309,21 +396,10 @@
                             </div>
                         </div>
 
-                        {{-- Medicamentos crónicos --}}
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-                            <div class="card border-card-primary h-100">
-                                <div class="card-body-aten-a">
-                                    <ul>
-                                        <li><strong>Medicamentos crónicos</strong></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
                         {{-- Cirugías recientes --}}
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-3 mb-4">
                             <div class="card border-card-primary h-100">
-                                <div class="card-body-aten-a">
+                                <div class="card-body">
                                     <ul>
                                         <li><strong>Cirugías recientes</strong></li>
                                         @foreach ($antecedentes as $data)
@@ -340,7 +416,7 @@
                         </div>
 
                         {{-- Medicamentos recientes --}}
-                        {{-- <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3"> --}}
+                        {{-- <div class="col-sm-6 col-md-6 col-lg-3 col-xl-3 mb-4"> --}}
                             {{-- <div class="card border-card-primary h-100"> --}}
                                 {{-- <div class="card-body"> --}}
                                     {{-- <ul> --}}
@@ -352,9 +428,9 @@
                         {{-- </div> --}}
 
                         {{-- Prótesis y ortesis --}}
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-3 mb-4">
                             <div class="card border-card-primary h-100">
-                                <div class="card-body-aten-a">
+                                <div class="card-body">
                                     <ul>
                                         <li><strong>Prótesis y ortesis</strong></li>
                                         <li>No hay registros</li>
@@ -367,18 +443,18 @@
 
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-2">
-                            <h5 class="text-c-blue">Historial médico</h5>
+                            <h5 class="text-c-blue">Historia médica</h5>
                         </div>
                         <!--HISTORIAL - Últimos Examenes-->
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div class="card-fmu">
-                                <div class="card-header-fmu" id="ult_exam">
-                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed"  type="button" data-toggle="collapse" data-target="#ult_exam_c" aria-expanded="false" aria-controls="ult_exam_c">
+                            <div class="card-a">
+                                <div class="card-header-a" id="ult_exam">
+                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#ult_exam_c" aria-expanded="false" aria-controls="ult_exam_c">
                                     Últimos exámenes
                                     </button>
                                 </div>
                                 <div id="ult_exam_c" class="collapse" aria-labelledby="ult_exam" data-parent="#ult_exam">
-                                    <div class="card-body-aten-fmu">
+                                    <div class="card-body-aten-a">
                                         <div class="row mt-3">
                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 pb-4">
                                                 <div class="table-responsive">
@@ -454,7 +530,7 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="card-a">
                                 <div class="card-header-a" id="cont_enfer_cron">
-                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed"  type="button" data-toggle="collapse" data-target="#cont_enfer_cron_c" aria-expanded="false" aria-controls="cont_enfer_cron_c">
+                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#cont_enfer_cron_c" aria-expanded="false" aria-controls="cont_enfer_cron_c">
                                     Control de enfermedades crónicas
                                     </button>
                                 </div>
@@ -506,7 +582,7 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="card-a">
                                 <div class="card-header-a" id="odonto">
-                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed"  type="button" data-toggle="collapse" data-target="#odonto_c" aria-expanded="false" aria-controls="odonto_c">
+                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#odonto_c" aria-expanded="false" aria-controls="odonto_c">
                                     Historial odontológico
                                     </button>
                                 </div>
@@ -526,7 +602,7 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="card-a">
                                 <div class="card-header-a" id="nino_sano">
-                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed"  type="button" data-toggle="collapse" data-target="#nino_sano_c" aria-expanded="false" aria-controls="nino_sano_c">
+                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#nino_sano_c" aria-expanded="false" aria-controls="nino_sano_c">
                                     Historial de niño sano
                                     </button>
                                 </div>
@@ -546,7 +622,7 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="card-a">
                                 <div class="card-header-a" id="histo_medico">
-                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed"  type="button" data-toggle="collapse" data-target="#histo_medico_c" aria-expanded="false" aria-controls="histo_medico_c">
+                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#histo_medico_c" aria-expanded="false" aria-controls="histo_medico_c">
                                     Historial Médico
                                     </button>
                                 </div>
@@ -562,8 +638,8 @@
                                                             <th class="text-center align-middle">Diagnóstico</th>
                                                             <th class="text-center align-middle">Recetas</th>
                                                             <th class="text-center align-middle">Exámenes</th>
-                                                            {{-- <th class="text-center align-middle">Archivos </th> --}}
-                                                            {{-- <th class="text-center align-middle">Ficha</th> --}}
+                                                            <!--<th class="text-center align-middle">Archivos </th>
+                                                            <th class="text-center align-middle">Ficha</th>-->
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -577,9 +653,14 @@
                                                                     <td class="text-center align-middle">{{ $f->profesional->nombre }} {{ $f->profesional->apellido_uno }} {{ $f->profesional->apellido_dos }}<br>
                                                                         @foreach ($especialidad as $esp)
                                                                             @if($esp->id==$f->profesional->id_especialidad)
-                                                                                <b>{{ $esp->nombre }}<b><br>
+                                                                            <b>{{ $esp->nombre }}<b><br>
                                                                             @endif
                                                                         @endforeach
+                                                                        {{--@foreach ($sub_tipo_especialidad as $sub_esp)
+                                                                            @if($sub_esp->id==$f->profesional->id_sub_tipo_especialidad)
+                                                                        <b>{{ $sub_esp->nombre }}<b><br>
+                                                                            @endif
+                                                                        @endforeach --}}
                                                                     </td>
 
                                                                     <td class="text-center align-middle">{{ $f->hipotesis_diagnostico }}</td>
@@ -659,6 +740,9 @@
                         { "type": "date", "targets": 0 }
                     ]
             });
+
+
+
         });
 
         function formatDate(date)
@@ -771,17 +855,17 @@
     <script src="{{ asset('js/tablas_informacion_confidencial_fmu.js') }}"></script>
     <script src="{{ asset('/js/ficha_medica/main.js') }}"></script>
 
-    {{-- @endsection --}}
+{{-- @endsection --}}
 
-    <!--Modals-->
-    @include("general.secciones_ficha.modales_fmu.alergias_fmu")
-    @include("general.secciones_ficha.modales_fmu.responsables_fmu")
-    @include("general.secciones_ficha.modales_fmu.cirugias_fmu")
-    @include("general.secciones_ficha.modales_fmu.confidencial_fmu")
-    @include("general.secciones_ficha.modales_fmu.trat_act_fmu")
-    {{-- @include("general.secciones_ficha.modales_fmu.c_sos_fmu",['datos' => $datos]) --}}
-    @include("general.secciones_ficha.modales_fmu.c_sos_fmu")
+<!--Modals-->
+@include("general.secciones_ficha.modales_fmu.alergias_fmu")
+@include("general.secciones_ficha.modales_fmu.responsables_fmu")
+@include("general.secciones_ficha.modales_fmu.cirugias_fmu")
+@include("general.secciones_ficha.modales_fmu.confidencial_fmu")
+@include("general.secciones_ficha.modales_fmu.trat_act_fmu")
+{{-- @include("general.secciones_ficha.modales_fmu.c_sos_fmu",['datos' => $datos]) --}}
+@include("general.secciones_ficha.modales_fmu.c_sos_fmu")
 
 
-    @include("general.secciones_ficha.modales_fmu.hist_medico_recetas_fmu")
-    @include("general.secciones_ficha.modales_fmu.hist_medico_exa_fmu")
+@include("general.secciones_ficha.modales_fmu.hist_medico_recetas_fmu")
+@include("general.secciones_ficha.modales_fmu.hist_medico_exa_fmu")

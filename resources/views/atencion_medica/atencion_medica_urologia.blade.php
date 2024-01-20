@@ -89,7 +89,7 @@
                         <!--Ficha Médica Única-->
 
                         <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
-                            @include('atencion_medica.secciones_ficha.fmu')
+                            @include('general.secciones_ficha.fmu')
                         </div>
                         <!--Atenciones previas-->
                         <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
