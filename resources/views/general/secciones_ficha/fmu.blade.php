@@ -1,9 +1,4 @@
-<!-- BASE -->
-{{-- @extends('layouts.base') --}}
 
-{{-- @section('content') --}}
-
-{{-- <div class="container"> --}}
 <div class="">
     <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
         <div class="col-md-12 py-0 px-1 shadow-none">
@@ -613,10 +608,7 @@
         </div>
     </div>
 </div>
-{{-- @endsection --}}
 
-
-{{-- @section('page-styles') --}}
 <!-- data tables css -->
 <link rel="stylesheet" href="{{ asset('css/ficha_medica_unica.css') }}">
 <!-- Estilo cards -->
@@ -632,8 +624,6 @@
 
 
 <!-- SCRIPT -->
-{{-- @section('page-script') --}}
-
     <script>
         $(document).ready(function () {
 
@@ -770,8 +760,6 @@
     <script src="{{ asset('js/tablas_obstetricos_control_fmu.js') }}"></script>
     <script src="{{ asset('js/tablas_informacion_confidencial_fmu.js') }}"></script>
     <script src="{{ asset('/js/ficha_medica/main.js') }}"></script>
-
-    {{-- @endsection --}}
 
     <!--Modals-->
     @include("general.secciones_ficha.modales_fmu.alergias_fmu")
