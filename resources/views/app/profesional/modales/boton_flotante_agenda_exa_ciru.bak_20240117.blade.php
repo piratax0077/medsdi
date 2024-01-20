@@ -2,23 +2,23 @@
 <!-- BOTÓN FLOTANTE AGENDA (ESPACIO PARA INSERTAR LA NUEVA AGENDA) -->
 <div class="bs-offset-main bs-canvas-anim">
     @php
-        // var_dump($tipo_agendas);
+        var_dump($tipo_agendas);
     @endphp
     @foreach ($tipo_agendas as $ta )
         @switch($ta)
             @case(1)
-                <button class="btn btn-tipo-agenda btn-agenda-cons btn-agenda-1 shadow-sm"  type="button" onclick="cargarAgendaProfesional(1, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-12"></i> Agenda Consulta</button>
+                <button class="btn btn-agenda btn-agenda-1 shadow-sm" style="bottom: 63%;" type="button" onclick="cargarAgendaProfesional(1, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-22"></i> <br>Agenda <br> Consulta</button>
                 @break
 
             @case(2)
 
                 @break
             @case(3)
-                {{-- <button class="btn btn-tipo-agenda btn-agenda-tel btn-agenda-3 shadow-sm"  type="button" onclick="cargarAgendaProfesional(3, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-12"></i> <br>Agenda Telemedicina</button> --}}
-                <button class="btn btn-tipo-agenda btn-agenda-tel btn-agenda-3 shadow-sm"  type="button" onclick="cargarAgendaProfesional(3, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-12"></i> Agenda Telemedicina</button>
+                {{-- <button class="btn btn-agenda btn-agenda-3 shadow-sm" style="bottom: 37%;" type="button" onclick="cargarAgendaProfesional(3, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-22"></i> <br>Agenda <br> Telemedicina</button> --}}
+                <button class="btn btn-agenda btn-agenda-3 shadow-sm" style="bottom: 50%;" type="button" onclick="cargarAgendaProfesional(3, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-22"></i> <br>Agenda <br> Telemedicina</button>
                 @break
             @case(4)
-                <button class="btn btn-tipo-agenda btn-agenda-exa btn-agenda-4 shadow-sm"  type="button" onclick="cargarAgendaProfesional(4, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-12"></i> Agenda Examenes</button>
+                <button class="btn btn-agenda btn-agenda-4 shadow-sm" style="bottom: 37%;" type="button" onclick="cargarAgendaProfesional(4, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-22"></i> <br>Agenda <br> Examenes</button>
                 @break
             @default
 
@@ -42,7 +42,7 @@
 
         function cargarAgendaProfesional(tipo_agenda, id_lugar_atencion, id_profesional, fecha)
         {
-            $('.btn-tipo-agenda').css('background-color','#387fb6');
+            $('.btn-agenda').css('background-color','#2b83cb');
             $('.btn-agenda-'+tipo_agenda).css('background-color','#1cbebe');
 
             $('#id_tipo_agenda').val(tipo_agenda);

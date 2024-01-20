@@ -1115,8 +1115,8 @@
                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <form>
                                                     <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder ml-0">¿Autoriza
-                                                            romper clave?</label>
+                                                        <label class="col-sm-4 col-form-label font-weight-bolder ml-0">¿Autoriza a que servicio <br>de urgencia entre a su FMU?
+                                                           </label>
                                                         <div class="col-sm-7 my-auto ml-0"> Si</div>
                                                     </div>
                                                 </form>
@@ -1125,7 +1125,7 @@
                                                 <form>
                                                     <div class="form-group row">
                                                         <label class="col-sm-4 col-form-label font-weight-bolder ml-0">¿Autoriza
-                                                            acceso a datos confidenciales?</label>
+                                                            además <br> entrar a datos confidenciales?</label>
                                                         <div class="col-sm-7 my-auto ml-0"> Si </div>
                                                     </div>
                                                 </form>

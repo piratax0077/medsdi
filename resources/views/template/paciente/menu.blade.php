@@ -1,4 +1,4 @@
-<nav class="pcoded-navbar menu-light">
+<nav class="pcoded-navbar menu-light navbar-collapsed">
 	<div class="navbar-wrapper">
 		<div class="navbar-content scroll-div">
 			<div class="">
@@ -76,8 +76,8 @@
 						<span class="pcoded-mtext text-center">Configuraciones</span></a>
 					<ul class="pcoded-submenu">
 						<li><a href="{{ ROUTE('paciente.perfil') }}">Editar Perfil</a></li>
-						<li><a href="{{ ROUTE('paciente.rompeclave') }}">Rompeclave</a></li>
-						<li><a href="{{ ROUTE('paciente.subcripcion') }}">Pagos y Suscripción</a></li>
+						{{-- <li><a href="{{ ROUTE('paciente.rompeclave') }}">Rompeclave</a></li> --}}
+						{{-- <li><a href="{{ ROUTE('paciente.subcripcion') }}">Pagos y Suscripción</a></li> --}}
 					</ul>
 				</li>
 

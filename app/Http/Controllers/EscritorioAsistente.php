@@ -285,6 +285,16 @@ class EscritorioAsistente extends Controller
 
         if($profesional)
         {
+            // busqueda de imagen
+            $array_rut = explode('-',$profesional->rut);
+            $nombre_imagen = asset('images/iconos/usuario_profesional.svg');
+            if(file_exists(public_path('images/img_perfil/'.$array_rut[0].'.png')))
+            {
+                $nombre_imagen = asset('images/img_perfil/'.$array_rut[0].'.png');
+            }
+            $profesional->img_profesional = $nombre_imagen;
+
+
             $especialidad = Especialidad::find($profesional->id_especialidad);
             $tipo_especialidad = TipoEspecialidad::find($profesional->id_tipo_especialidad);
             $sub_tipo_especialidad = '';

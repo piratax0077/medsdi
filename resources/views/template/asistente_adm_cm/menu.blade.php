@@ -1,4 +1,4 @@
-<nav class="pcoded-navbar menu-light">
+<nav class="pcoded-navbar menu-light navbar-collapsed">
     <div class="navbar-wrapper">
         <div class="navbar-content scroll-div">
             <div class="">

@@ -8,7 +8,7 @@
     <div class="pcoded-main-container">
         <div class="pcoded-content">
             <!--Header-->
-            <div class="page-header">
+            <div class="page-header mb-2">
                 <div class="page-block">
                     <div class="row align-items-center">
                         <div class="col-md-12">
@@ -34,7 +34,83 @@
                 </div>
             </div>
             <!--Cierre: Header-->
-            <div class="card-body">
+
+            <!--agenda-->
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="card mb-3">
+                        <div class="card-body pb-1 mb-1">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 pb-1">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <h5 class="text-c-blue f-14">AGENDA DE</h5>
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Seleccione Profesional</label>
+                                                <select name="agenda_lugar_atencion_asistente" id="agenda_lugar_atencion_asistente" class="form-control form-control-sm" onchange="cargarAgendaProfesional(1,'')">
+                                                    @if($lugares_atencion)
+                                                        @foreach($lugares_atencion as $key_lugar_aten => $value_lugar_aten)
+                                                            <option value="{{ $value_lugar_aten->id }}">{{ $value_lugar_aten->nombre }}</option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <h5 class="text-c-blue f-14">AGENDA DE PROFESIONALES</h5>
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Seleccione Profesional</label>
+                                                <select name="agenda_profesional_asistente" id="agenda_profesional_asistente" class="form-control form-control-sm" onchange="cargarAgendaProfesional(1,'')">
+                                                    @if($profesional)
+                                                        @foreach($profesional as $key_pro => $value_pro)
+                                                            <option value="{{ $value_pro->id }}">{{ $value_pro->nombre }} {{ $value_pro->apellido_uno }} {{ $value_pro->apellido_dos }}</option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 f-12 pb-0" id="tabla_info_profesional" style="display: none;">
+                                     <div class="align-middle m-b-25">
+                                        <img src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="user image" class="img-radius align-top m-r-15 wid-60" id="img_profesional">
+                                        <div class="d-inline-block f-11">
+                                            <span>
+                                                <strong id="nombre_profesional_agenda"></strong>
+                                            </span><br>
+                                            <span id="especialidad_porfesional_agenda"></span>
+                                            <button type="button" class="btn btn-info-light-c btn-xxxs" id="btn_ver_info_profesional_seleccionado"  onclick=""><i class="feather icon-plus"></i> Más información</button>
+                                            <span class="status active"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 pb-0" id="seccion_agenda_botones" style="display: none;">
+                                    <button type="button" class="btn btn-success-light-c btn-block btn-xxxs" id="btn_ver_lista_espera_profesional_seleccionado" onclick="lista_espera();" ><i class="feather icon-external-link"></i> Ver lista de Espera</button>
+                                    <button type="button" class="btn btn-success-light-c btn-block btn-xxxs " id="btn_ver_agregar_hora_extra" onclick="abrir_horas_extras()"; ><i class="feather icon-external-link"></i> Ver Horas extras</button>
+                                    <button type="button" class="btn btn-success-light-c btn-block btn-xxxs " id="btn_ver_agregar_hora_examen" onclick="abrir_horas_examen()"; ><i class="feather icon-external-link"></i>  Ver horas examenes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" id="seccion_agenda_agendas" style="display: none;">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5 class="text-c-blue my-1" style="font-size: 1.1rem;" id="titulo_tipo_agenda"></h5>
+                                </div>
+                            </div>
+                            <div id='agenda'></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Cierre: agenda -->
+
+            {{-- <div class="card-body">
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header bg-info">
@@ -79,20 +155,20 @@
                                         </div>
                                     </div>
 
-                                    {{-- <div class="col-md-12 pt-2">
+                                    {{- - <div class="col-md-12 pt-2">
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado"onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
                                             </div>
                                         </div>
-                                    </div> --}}
+                                    </div> - -}}
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="card-body bg-white">
-                        {{-- BOTON DE LISTA DE ESPERA --}}
+                        <!-- BOTON DE LISTA DE ESPERA -->
                         <div class="row">
                             <div class="col-md-4">
                                 <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado"onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
@@ -105,14 +181,22 @@
                             </div>
                         </div>
 
-                        {{-- AGENDA --}}
+                        <!-- AGENDA -->
                         <div id='agenda'></div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 
+
+
+
+
+@endsection
+
+
+@section('modales')
     @include('general.asistentes.modal_consulta_agenda')
 
     @include('app.asistente.modales.lista_espera')
@@ -124,9 +208,6 @@
     {{-- hora examen --}}
     @include('app.general.asistente.reserva_hora_examen.horas_examen')
     @include('app.general.asistente.reserva_hora_examen.horas_examen_agendar')
-
-
-
 @endsection
 
 @section('page-script')
@@ -138,4 +219,4 @@
     </script>
 @endsection
 
-@include('app.general.asistente.agenda.boton_flotante_agenda_exa_ciru');
+@include('app.general.asistente.agenda.boton_flotante_agenda_exa_ciru')

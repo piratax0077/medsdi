@@ -11,11 +11,11 @@
                         <div class="page-header-title">
                             <h5 class="m-b-10 font-weight-bold">Escritorio Asistente</h5>
                         </div>
-                        <ul class="breadcrumb">
+                        {{-- <ul class="breadcrumb">
                             <li class="breadcrumb-item">
                                 <a href="{{ route('asistente.home') }}">Mi Escritorio </a>
                             </li>
-                        </ul>
+                        </ul> --}}
                     </div>
                 </div>
             </div>
