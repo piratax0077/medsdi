@@ -36,24 +36,17 @@
                                                     <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                                 </li>
                                                 <li class="nav-item" id="nav-licencia">
-                                                    @if (request('token') && request('lic') == 1)
-                                                    <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
+                                                    @if(!empty(session('lic_token')) && session('lic_estado') == 1)
+                                                        <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
                                                     @else
-                                                        @php
-                                                            $url_temp = 'Profesional/Paciente/Ficha_consulta?_token='.request('_token').'&id_hora_realizar='.request('id_hora_realizar').'&lugar_atencion_id='.request('lugar_atencion_id').'';
-                                                        @endphp
-                                                        <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $profesional->id_usuario,'urla'=> $url_temp.'&lic=0','urln' => $url_temp.'&lic=1&tab=licencia-tab', 'id_tipo' => 12]) }}">Licencia</a>
+                                                        <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>
                                                     @endif
-
                                                 </li>
-                                                <li class="nav-item">
-                                                    @if (request('token') && request('fmu') == 1)
+                                                <li class="nav-item" id="nav-fmu">
+                                                    @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
                                                         <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
                                                     @else
-                                                        @php
-                                                            $url_temp = 'Profesional/Paciente/Ficha_consulta?_token='.request('_token').'&id_hora_realizar='.request('id_hora_realizar').'&lugar_atencion_id='.request('lugar_atencion_id').'';
-                                                        @endphp
-                                                        <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $paciente->id_usuario,'urla'=> $url_temp.'&fmu=0','urln' => $url_temp.'&fmu=1', 'id_tipo' => 2]) }}">FMU</a>
+                                                        <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
                                                     @endif
                                                 </li>
                                                 <li class="nav-item">
