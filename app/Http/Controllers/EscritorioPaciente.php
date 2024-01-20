@@ -400,12 +400,12 @@ class EscritorioPaciente extends Controller
             $region_nombre = "";
         }
 
-        $direccion = (object)$direccion = array(
-            'direccion' => $direccion_nombre,
-            'numero' => $numero_dir,
-            'ciudad' => $ciudad_nombre,
-            'region' => $region_nombre,
-        );
+        // $direccion = (object)$direccion = array(
+        //     'direccion' => $direccion_nombre,
+        //     'numero' => $numero_dir,
+        //     'ciudad' => $ciudad_nombre,
+        //     'region' => $region_nombre,
+        // );
 
         /* CONTACTO EMERGENCIA */
         $pacientes_contacto_emergencia = PacienteContactoEmergencia::where('id_paciente',$paciente->id)->first();
