@@ -979,7 +979,7 @@ Route::group([
 
 
 Route::group([
-    'middleware' => ['role:AsistenteAdm|Adm_Comercial|AsistenteManejoAgenda|Adm_Comercial|Asistente|AsistenteCaja|AsistenteJefaCaja|AsistenteOnline|Admin'],
+    'middleware' => ['role:AsistenteAdm|Adm_Comercial|AsistenteManejoAgenda|Adm_Comercial|Asistente|AsistenteCaja|AsistenteJefaCaja|AsistenteOnline|Profesional|Admin'],
     'prefix' => 'Agenda/',
 ], function () {
     Route::get('BuscarInfoProfesional', [App\Http\Controllers\EscritorioAsistente::class, 'buscarInfoProfesional'])->name('agenda.buscar_info_profesional');
