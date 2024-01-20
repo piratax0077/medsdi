@@ -115,8 +115,11 @@
     <!--Botón cards-->
     <script src="{{ asset('js/btn-cards.js') }}"></script>
 
-    <!-- validacion rut -->
+    <!-- rut -->
     <script src="{{ asset('js/rut.js') }}"></script>
+
+    <!-- funciones generales -->
+    <script src="{{ asset('js/funciones.js') }}"></script>
 
     <!-- Scripts -->
     <!-- <script src="{{ asset('js/vendor-all.min.js') }}"></script> -->

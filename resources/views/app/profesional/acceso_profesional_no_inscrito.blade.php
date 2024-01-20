@@ -32,7 +32,7 @@
 </style>
 
 <body>
-    
+
     <div class="auth-wrapper">
         <div class="container-fluid">
             <div class="row">
@@ -54,7 +54,7 @@
                                     @csrf
                                 <input type="hidden" id="token_profesional_provisorio" name="token_profesional_provisorio" value="{{$token}}">
                                 <input type="hidden" id="id_registro" name="id_registro" value="{{$id_registro}}">
-    
+
                                 <div class="col-sm-12">
                                         <div class="form-row">
                                             <div class="form-group col-md-4">
@@ -92,7 +92,7 @@
                                                 <label class="floating-label">Profesi&oacute;n</label>
                                                 <select onchange="cargarListaEspecialidad()"  id="lista_profesion" name="lista_profesion" class="form-control form-control-sm">
                                                         <option value="0">Seleccione una profesión</option>
-                                                    @foreach ($profesion as $p)                                                        
+                                                    @foreach ($profesion as $p)
                                                         <option value="{{$p->id}}">{{$p->nombre}}</option>
                                                     @endforeach
                                                 </select>
@@ -161,7 +161,7 @@
                                                     seguridad?<br> podemos <a
                                                         href="envio_codigos_profesional_no_inscrito.php"
                                                         class="f-w-400"> volver a enviarlos</a></p>
-                                                -->        
+                                                -->
                                             </div>
                                         </div>
                                     </form>
@@ -190,42 +190,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/css/inputmask.min.css" rel="stylesheet"/>
     <script>
-        /*
-        $("#rut_profesional").inputmask({
-            mask: "9[9.999.999]-[9|K|k]",
-        });
-        */
 
-        function formatoRut(rut)
-        {
-        var valor = rut.value.replace('.','');
-        valor = valor.replace('-','');
-        cuerpo = valor.slice(0,-1);
-        dv = valor.slice(-1).toUpperCase();
-        rut.value = cuerpo + '-'+ dv
-
-        if(cuerpo.length < 7) { rut.setCustomValidity("RUT Incompleto"); return false;}
-
-        suma = 0;
-        multiplo = 2;
-
-        for(i=1;i<=cuerpo.length;i++)
-        {
-            index = multiplo * valor.charAt(cuerpo.length - i);
-            suma = suma + index;
-            if(multiplo < 7) { multiplo = multiplo + 1; } else { multiplo = 2; }
-        }
-
-        dvEsperado = 11 - (suma % 11);
-        dv = (dv == 'K')?10:dv;
-        dv = (dv == 0)?11:dv;
-
-        if(dvEsperado != dv) { rut.setCustomValidity("RUT Inválido"); return false; }
-
-        rut.setCustomValidity('');
-        }
-
-        
 
         var lista_profesion = [];
         @foreach ($profesion as $p)
@@ -294,7 +259,7 @@
         {
 
             $('#lista_profesion').val(id_profesion);
-            
+
             $('#lista_especialidad').html('');
 
             lista_especialidad.forEach(e=>{
@@ -313,7 +278,7 @@
 
             lista_subespecialidad.forEach(e=>{
                 if(e.id_tipo_especialidad==id_especialidad){
-                
+
                     if(e.id == id_subespecialidad)
                     {
                         $('#lista_sub_especialidad').append(`<option value="${e.id}" selected>${e.nombre}</option>`);
@@ -345,7 +310,7 @@
         }
 
         function actualizar(){
-            
+
             event.preventDefault()
 
             var datos = {};
@@ -465,8 +430,8 @@
                 $('#lista_ciudades').select().focus();
                 return false;
             }
-        
-            
+
+
             $('#form-agregar-profesional-provisorio').submit();
         }
 

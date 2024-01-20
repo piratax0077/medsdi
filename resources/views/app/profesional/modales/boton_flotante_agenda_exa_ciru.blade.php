@@ -78,13 +78,16 @@
                     tipo_agenda: tipo_agenda,
                 },
                 success: function(data){
+
+                    console.log(data);
+
                     if (data !== 'null')
                     {
                         if(data.estado == 1 && data.horario.length!=0)
                         {
                             // carga de examenes posibles por el profesional
                             $('#m_hora_examen_lista_examenes').html('<option value="">Seleccione</option>');
-                            if(data.examen_tipo != null)
+                            if(data.examen_tipo != null && data.examen_tipo != '')
                             {
                                 data.examen_tipo.forEach(element => {
                                     $('#m_hora_examen_lista_examenes').append('<option value="'+element.id+'">'+element.nombre+'</option>');

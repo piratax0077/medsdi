@@ -17,6 +17,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
         <!-- data tables css -->
         <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
@@ -53,21 +54,12 @@
 
         <!--Estilos escritorios-->
         <link rel="stylesheet"  href="{{ asset('css/escritorios.css') }}">
+		<!-- SERLECT2-->
+        <link rel="stylesheet"  href="{{ asset('css\plugins\select2.min.css') }}">
 
         <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
 
-
-
-
-
-
-
-
-
-
-
-
-
+        @yield('css-btn-autorizacion')
         {{--  /** agregar css */  --}}
         <style>
             .ui-front {
@@ -88,7 +80,7 @@
         @yield('Modals-med-exa')
         @yield('Modals-med-exa-esp')
         @yield('modal-ficha-general-espc')
-        @include('atencion_pediatrica.secciones_especialidad.ficha_pediatria_tipo')
+        {{--  @include('atencion_pediatrica.secciones_especialidad.ficha_pediatria_tipo')  --}}
         <!-- Modal de la vista fin -->
 
 
@@ -150,34 +142,18 @@
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
        {{-- autocomplete
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
-    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+        <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
         <!-- select2 Js -->
         <script src="{{ asset('js/plugins/select2.full.min.js') }}"></script>
         <!-- form-select-custom Js -->
         <script src="{{ asset('js/pages/form-select-custom.js') }}"></script>
         <!-- select2 css -->
-
-
-
         <!--Tablas y Toggle atención ginecobstetrica-->
         <script src="{{ asset('js/atencion_especialidades.js') }}"></script>
-
-
-
-        <!--Form wizard-->
-
-
-
-
-
-
         <!--Tooltips-->
         <script src="{{ asset('js/tooltip_atencion_medica.js') }}"></script>
-
-
-
         {{--  @include('template.templateAutorizacion')  --}}
 
 
@@ -196,11 +172,99 @@
 
         <script src="{{ asset('js/atencion_pediatria.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
+        <!-- rut -->
+        <script src="{{ asset('js/rut.js') }}"></script>
+
+        <!-- funciones generales -->
+        <script src="{{ asset('js/funciones.js') }}"></script>
+
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-        </script>
+            /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
+            function  envio_indicaciones_pdf(id_modal){
+                let url = "{{ route('indicacion.medica.registro.envio') }}";
+                var id_tipo_documento = 1;
+                var id_paciente = $('#id_paciente_fc').val();
+                var id_profesional = $('#id_profesional_fc').val();
+                var id_ficha_atencion = $('#id_fc').val();
+                var id_lugar_atencion = $('#id_lugar_atencion').val();
+                var observacion = '';
+                // var observacion = $('#observacion').val();
+                var documento = '';
+                var url_documento = '';
+                var cuerpo = '';
+                var otro = '';
+                var token = CSRF_TOKEN;
 
+                if(id_tipo_documento == 1)
+                {
+                    documento = $('#'+id_modal+' embed').attr('data-documento');
+                    url_documento = $('#'+id_modal+' embed').attr('data-url');
+                }
+                else
+                {
+                    // cuerpo = $('#cuerpo').val();
+                }
+                var datos = {};
+                datos._token = token;
+                datos.id_tipo_documento = id_tipo_documento;
+                datos.id_paciente = id_paciente;
+                datos.id_profesional = id_profesional;
+                datos.id_ficha_atencion = id_ficha_atencion;
+                datos.id_lugar_atencion = id_lugar_atencion;
+                datos.observacion = observacion;
+                datos.documento = documento;
+                datos.url = url_documento;
+                datos.cuerpo = cuerpo;
+                datos.otro = otro;
+
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: "json",
+                    data: datos,
+                    success: function(data) {
+                        // console.log(data);
+                        if(data.estado == 1)
+                        {
+                            var mensaje = '';
+                            mensaje = 'Documento asignado al Paciente para visualizar en su escritorio.\n';
+                            if(data.update_correo.estado == 1)
+                                mensaje = 'Documento enviado por correo al Paciente.\n';
+                            else
+                                mensaje = 'Problema al enviar Documento por correo al Paciente.\n';
+
+                            swal({
+                                title: "Indicación Enviada al Paciente",
+                                text: mensaje,
+                                icon: "success",
+                            });
+                        }
+                        else
+                        {
+                            var texto_error = '';
+
+                            if(data.estado ==  0)
+                            {
+                                if('error' in data)
+                                {
+                                    $.each(data.error, function (indexInArray, valueOfElement) {
+                                        texto_error += indexInArray+': '+valueOfElement+'\n';
+                                    });
+                                }
+                            }
+                            swal({
+                                title: "Indicación Enviada al Paciente",
+                                text: data.msj+'\n'+texto_error,
+                                icon: "warning",
+                            });
+                        }
+                    }
+                });
+            }
+            /** FIN METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
+        </script>
         @yield('js_inferior')
         @yield('page-script')
         @yield('page-script-ficha-atencion'){{-- ficha_orl.blade --}}
@@ -208,5 +272,6 @@
         @yield('page-script-med-exa') {{--  seccion receta y exmaenes --}}
         @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
         @yield('js-sidebar') {{-- seccion js side bar --}}
+		@yield('page-script-btn-autorizacion')								  
     </body>
 </html>

@@ -162,7 +162,7 @@
     {{--  <script src="{{ asset('js/pages/form-advance-custom.js') }}?upd={{ random_int(1111,9999) }}"></script>  --}}
 
     <!--Apgar-->
-    <script src="{{ asset('js//aicalc2.js') }}?upd={{ random_int(1111,9999) }}"></script>
+    <script src="{{ asset('js/aicalc2.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!--Botón cards-->
     <script src="{{ asset('js/btn-cards.js') }}?upd={{ random_int(1111,9999) }}"></script>
@@ -172,6 +172,12 @@
 
     <!--Tablas y Toggle atención ginecobstetrica-->
     <script src="{{ asset('js/atencion_especialidades.js') }}?upd={{ random_int(1111,9999) }}"></script>
+
+    <!-- rut -->
+    <script src="{{ asset('js/rut.js') }}"></script>
+
+    <!-- funciones generales -->
+    <script src="{{ asset('js/funciones.js') }}"></script>
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');

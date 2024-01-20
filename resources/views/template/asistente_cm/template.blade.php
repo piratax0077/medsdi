@@ -158,6 +158,9 @@
     <!-- rut -->
     <script src="{{ asset('js/rut.js') }}"></script>
 
+    <!-- funciones generales -->
+    <script src="{{ asset('js/funciones.js') }}"></script>
+
     <!-- flatpickr -->
     <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
 

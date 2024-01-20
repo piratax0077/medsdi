@@ -153,6 +153,9 @@
     <!-- rut -->
     <script src="{{ asset('js/rut.js') }}"></script>
 
+    <!-- funciones generales -->
+    <script src="{{ asset('js/funciones.js') }}"></script>
+
     <!-- flatpickr -->
     <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
 
@@ -608,7 +611,7 @@
 
                             // carga de examenes posibles por el profesional
                             $('#m_hora_examen_lista_examenes').html('<option value="">Seleccione</option>');
-                            if(data.examen_tipo != null)
+                            if(data.examen_tipo != null && data.examen_tipo != '')
                             {
                                 data.examen_tipo.forEach(element => {
                                     $('#m_hora_examen_lista_examenes').append('<option value="'+element.id+'">'+element.nombre+'</option>');
@@ -1375,36 +1378,6 @@
                 });
             }
 
-        }
-
-        {{--  FORMATEO DE RUT busqueda paciente  --}}
-        function formatoRut(rut)
-        {
-            var valor = rut.value.replace('.','');
-            valor = valor.replace('-','');
-            cuerpo = valor.slice(0,-1);
-            dv = valor.slice(-1).toUpperCase();
-            rut.value = cuerpo + '-'+ dv
-
-            if(cuerpo.length < 7) { rut.setCustomValidity("RUT Incompleto"); return false;}
-
-            suma = 0;
-            multiplo = 2;
-
-            for(i=1;i<=cuerpo.length;i++)
-            {
-                index = multiplo * valor.charAt(cuerpo.length - i);
-                suma = suma + index;
-                if(multiplo < 7) { multiplo = multiplo + 1; } else { multiplo = 2; }
-            }
-
-            dvEsperado = 11 - (suma % 11);
-            dv = (dv == 'K')?10:dv;
-            dv = (dv == 0)?11:dv;
-
-            if(dvEsperado != dv) { rut.setCustomValidity("RUT Inválido"); return false; }
-
-            rut.setCustomValidity('');
         }
 
         {{-- BUSCAR PACIENTE --}}

@@ -101,27 +101,23 @@
             .tcaj_nau {height: 34px;width: 137px;text-align: center;}
             .caja_resp {height: 26px;text-align: center;}
             .text_center {text-align: center;}
-        .ng_esp {
-            /* Common */
-	        font : 13px 'Wingdings 3';text-align: center;padding:1px; margin-left:5px;margin-right:5px;margin-top: 5px;
+            .ng_esp {
+                /* Common */
+                font : 13px 'Wingdings 3';text-align: center;padding:1px; margin-left:5px;margin-right:5px;margin-top: 5px;
 
 
-            width:85px; height:25px;    background-color: #CFD6D5; color: #FF0000; font-weight: bold; font-size: 1.2rem;
-        }
+                width:85px; height:25px;    background-color: #CFD6D5; color: #FF0000; font-weight: bold; font-size: 1.2rem;
+            }
 
-        .subtitOD{text-align:left; font-family: Arial, Helvetica, sans-serif; color: #FF0000;}
-        .subtitOD1{text-align:left; font-family: Arial, Helvetica, sans-serif; color: #FF0000;padding-left:10px}
-        .subtitOI{font-family: Arial, Helvetica, sans-serif; color: #007EFD}
-        .subtitOI1{font-family: Arial, Helvetica, sans-serif; color: #007EFD;padding-left:10px}
-        .tit{
-            text-align: center;
-            color: #666666;
-            height: 23px;
-        }
-
-
-
-
+            .subtitOD{text-align:left; font-family: Arial, Helvetica, sans-serif; color: #FF0000;}
+            .subtitOD1{text-align:left; font-family: Arial, Helvetica, sans-serif; color: #FF0000;padding-left:10px}
+            .subtitOI{font-family: Arial, Helvetica, sans-serif; color: #007EFD}
+            .subtitOI1{font-family: Arial, Helvetica, sans-serif; color: #007EFD;padding-left:10px}
+            .tit{
+                text-align: center;
+                color: #666666;
+                height: 23px;
+            }
 
             .impWidh{
                 width: 33px;color: #FF0000;text-align:center;margin-left:10px
@@ -233,28 +229,13 @@
              border: 1px solid #666666; width:80%;margin-left:20px;margin-top:20px;margin-right:15px;
             }
 
-            </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-        {{--  /** agregar css */  --}}
-        <style>
-            .ui-front {
+			{{--  /** agregar css */  --}}
+			.ui-front {
                 position: absolute;
                 z-index: 2006;
                 overflow: auto;
             }
-        </style>
+		</style>
     </head>
     <body>
         @include('template.pediatria.header')
@@ -334,9 +315,9 @@
         <!-- mensajes -->
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
-      {{-- autocomplete
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
-    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+        {{-- autocomplete
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+        <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
 
         <!-- select2 Js -->
@@ -345,11 +326,14 @@
         <script src="{{ asset('js/pages/form-select-custom.js') }}"></script>
         <!-- select2 css -->
 
-
-
         <!--Tablas y Toggle atención ginecobstetrica-->
         <script src="{{ asset('js/atencion_especialidades.js') }}"></script>
 
+        <!-- rut -->
+        <script src="{{ asset('js/rut.js') }}"></script>
+
+        <!-- funciones generales -->
+        <script src="{{ asset('js/funciones.js') }}"></script>
 
 
         <!--Form wizard-->
@@ -529,7 +513,91 @@
                                     myLineChart.parse(multiple_dataset, "json");
                                 }
         </script>
+		<script>
+            /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
+            function  envio_indicaciones_pdf(id_modal){
+                let url = "{{ route('indicacion.medica.registro.envio') }}";
+                var id_tipo_documento = 1;
+                var id_paciente = $('#id_paciente_fc').val();
+                var id_profesional = $('#id_profesional_fc').val();
+                var id_ficha_atencion = $('#id_fc').val();
+                var id_lugar_atencion = $('#id_lugar_atencion').val();
+                var observacion = '';
+                // var observacion = $('#observacion').val();
+                var documento = '';
+                var url_documento = '';
+                var cuerpo = '';
+                var otro = '';
+                var token = CSRF_TOKEN;
 
+                if(id_tipo_documento == 1)
+                {
+                    documento = $('#'+id_modal+' embed').attr('data-documento');
+                    url_documento = $('#'+id_modal+' embed').attr('data-url');
+                }
+                else
+                {
+                    // cuerpo = $('#cuerpo').val();
+                }
+                var datos = {};
+                datos._token = token;
+                datos.id_tipo_documento = id_tipo_documento;
+                datos.id_paciente = id_paciente;
+                datos.id_profesional = id_profesional;
+                datos.id_ficha_atencion = id_ficha_atencion;
+                datos.id_lugar_atencion = id_lugar_atencion;
+                datos.observacion = observacion;
+                datos.documento = documento;
+                datos.url = url_documento;
+                datos.cuerpo = cuerpo;
+                datos.otro = otro;
+
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: "json",
+                    data: datos,
+                    success: function(data) {
+                        // console.log(data);
+                        if(data.estado == 1)
+                        {
+                            var mensaje = '';
+                            mensaje = 'Documento asignado al Paciente para visualizar en su escritorio.\n';
+                            if(data.update_correo.estado == 1)
+                                mensaje = 'Documento enviado por correo al Paciente.\n';
+                            else
+                                mensaje = 'Problema al enviar Documento por correo al Paciente.\n';
+
+                            swal({
+                                title: "Indicación Enviada al Paciente",
+                                text: mensaje,
+                                icon: "success",
+                            });
+                        }
+                        else
+                        {
+                            var texto_error = '';
+
+                            if(data.estado ==  0)
+                            {
+                                if('error' in data)
+                                {
+                                    $.each(data.error, function (indexInArray, valueOfElement) {
+                                        texto_error += indexInArray+': '+valueOfElement+'\n';
+                                    });
+                                }
+                            }
+                            swal({
+                                title: "Indicación Enviada al Paciente",
+                                text: data.msj+'\n'+texto_error,
+                                icon: "warning",
+                            });
+                        }
+                    }
+                });
+            }
+            /** FIN METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
+        </script>
 
 
         <!--Tooltips-->

@@ -16,9 +16,6 @@
     <!-- data tables css -->
     <link rel="stylesheet" href="{{ asset('/css/plugins/dataTables.bootstrap4.min.css') }}?t={{ time() }}">
 
-
-
-
     <link rel="stylesheet" href="{{ asset('/css/style.css') }}?t={{ time() }}">
     <link rel="stylesheet" href="{{ asset('css/style_index.css') }}?t={{ time() }}">
     <link rel="stylesheet" href="{{ asset('css/escritorio_laboratorio.css') }}?t={{ time() }}">
@@ -124,7 +121,7 @@
     <script src="{{ asset('js/graficos/rech-horas-prof-admin-cm.js') }}"></script>  --}}
 
 
-{{-- autocomplete
+    {{-- autocomplete
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
@@ -138,6 +135,13 @@
     <script src="{{ asset('js/alerta_suscripcion.js') }}"></script>
      <!-- Tablas -->
     <script src="{{ asset('js/facturacion.js') }}"></script>
+
+    <!-- rut -->
+    <script src="{{ asset('js/rut.js') }}"></script>
+
+    <!-- funciones generales -->
+    <script src="{{ asset('js/funciones.js') }}"></script>
+
 	<script>
         function cuenta_corriente() {
             $('#dat_bancarios').modal('show');

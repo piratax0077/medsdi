@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        @include('atencion_otros_prof.include.head_nutricion')
+        @include('atencion_otros_prof.include.head_terapia')
 
         <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
         <link rel="stylesheet" href="{{ asset('css/style.css') }}?t={{ time() }}">
         <link rel="stylesheet" href="{{ asset('css/style_index.css') }}?t={{ time() }}">
+
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <!-- Links del REG-->
@@ -17,12 +18,17 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
+
         <!-- data tables css -->
         <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
+
         <!-- fileupload-custom css -->
-        <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}?t={{ time() }}">
+        <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
+        <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
+
+
 
         <!--Accordion-->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
@@ -43,33 +49,30 @@
 
         <!-- fancy box -->
         <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
-
+        <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
 
         <!--Estilo tab secciones -->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/tabs-secciones.css') }}">
-
-        <!--formulario sm-->
-        <link rel="stylesheet" href="{{ asset('css/formulario_sm.css') }}">
-
-
-        <!--Estilos escritorios-->
-        <link rel="stylesheet"  href="{{ asset('css/escritorios.css') }}">
         <!-- SERLECT2-->
         <link rel="stylesheet"  href="{{ asset('css\plugins\select2.min.css') }}">
 
         <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
+        <!--formulario sm-->
+        <link rel="stylesheet" href="{{ asset('css/formulario_sm.css') }}">
         {{--  /** agregar css */  --}}
+
         <style>
             .ui-front {
                 position: absolute;
                 z-index: 2006;
                 overflow: auto;
             }
-        </style>
+            </style>
+
     </head>
     <body>
-        @include('template.pediatria.header')
-        @include('template.profesional.menu')
+        @include('template.header')
+        @include('template.menuProfesional')
 
         @yield('Content')
 
@@ -139,9 +142,9 @@
         <!-- mensajes -->
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
-        {{-- autocomplete
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
-        <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+     {{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
 
         <!-- select2 Js -->
@@ -149,10 +152,26 @@
         <!-- form-select-custom Js -->
         <script src="{{ asset('js/pages/form-select-custom.js') }}"></script>
         <!-- select2 css -->
+
+
+
         <!--Tablas y Toggle atención ginecobstetrica-->
         <script src="{{ asset('js/atencion_especialidades.js') }}"></script>
+
+
+
+        <!--Form wizard-->
+
+
+
+
+
+
         <!--Tooltips-->
         <script src="{{ asset('js/tooltip_atencion_medica.js') }}"></script>
+
+
+
         {{--  @include('template.templateAutorizacion')  --}}
 
 
@@ -171,15 +190,11 @@
 
         <script src="{{ asset('js/atencion_pediatria.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
-        <!-- rut -->
-        <script src="{{ asset('js/rut.js') }}"></script>
-
-        <!-- funciones generales -->
-        <script src="{{ asset('js/funciones.js') }}"></script>
-
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
+        </script>
+        <script>
             /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
             function  envio_indicaciones_pdf(id_modal){
                 let url = "{{ route('indicacion.medica.registro.envio') }}";

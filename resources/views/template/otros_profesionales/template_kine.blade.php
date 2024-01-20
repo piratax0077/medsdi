@@ -58,19 +58,6 @@
         <link rel="stylesheet"  href="{{ asset('css\plugins\select2.min.css') }}">
 
         <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
-
-
-
-
-
-
-
-
-
-
-
-
-
         {{--  /** agregar css */  --}}
         <style>
             .ui-front {
@@ -152,9 +139,9 @@
         <!-- mensajes -->
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
-      {{-- autocomplete
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
-    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+        {{-- autocomplete
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+        <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
 
         <!-- select2 Js -->
@@ -162,26 +149,10 @@
         <!-- form-select-custom Js -->
         <script src="{{ asset('js/pages/form-select-custom.js') }}"></script>
         <!-- select2 css -->
-
-
-
         <!--Tablas y Toggle atención ginecobstetrica-->
         <script src="{{ asset('js/atencion_especialidades.js') }}"></script>
-
-
-
-        <!--Form wizard-->
-
-
-
-
-
-
         <!--Tooltips-->
         <script src="{{ asset('js/tooltip_atencion_medica.js') }}"></script>
-
-
-
         {{--  @include('template.templateAutorizacion')  --}}
 
 
@@ -199,6 +170,12 @@
         <!--Tablas y Toggle atención PEDIATRIA-->
 
         <script src="{{ asset('js/atencion_pediatria.js') }}?upd={{ random_int(1111,9999) }}"></script>
+
+        <!-- rut -->
+        <script src="{{ asset('js/rut.js') }}"></script>
+
+        <!-- funciones generales -->
+        <script src="{{ asset('js/funciones.js') }}"></script>
 
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');

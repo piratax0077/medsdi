@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        @include('atencion_otros_prof.include.head_nutricion')
-
+        @include('atencion_otros_prof.include.head_enfermeria')
         <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
         <link rel="stylesheet" href="{{ asset('css/style.css') }}?t={{ time() }}">
         <link rel="stylesheet" href="{{ asset('css/style_index.css') }}?t={{ time() }}">
@@ -23,6 +22,7 @@
         <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
         <!-- fileupload-custom css -->
         <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}?t={{ time() }}">
+        <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
 
         <!--Accordion-->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
@@ -43,21 +43,13 @@
 
         <!-- fancy box -->
         <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
-
+        <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
 
         <!--Estilo tab secciones -->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/tabs-secciones.css') }}">
 
         <!--formulario sm-->
         <link rel="stylesheet" href="{{ asset('css/formulario_sm.css') }}">
-
-
-        <!--Estilos escritorios-->
-        <link rel="stylesheet"  href="{{ asset('css/escritorios.css') }}">
-        <!-- SERLECT2-->
-        <link rel="stylesheet"  href="{{ asset('css\plugins\select2.min.css') }}">
-
-        <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
         {{--  /** agregar css */  --}}
         <style>
             .ui-front {
@@ -68,7 +60,7 @@
         </style>
     </head>
     <body>
-        @include('template.pediatria.header')
+        @include('template.pediatria.header_mat_cns')
         @include('template.profesional.menu')
 
         @yield('Content')
@@ -113,7 +105,7 @@
 
         <!--Sidebars-->
         <script src="{{ asset('js/bs_canvas.js') }}"></script>
-        <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
+
 
         <!--Formularios Modals-->
         <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
@@ -135,24 +127,18 @@
 
         <!-- file-upload Js -->
         <script src="{{ asset('js/plugins/dropzone-amd-module.min.js') }}"></script>
+        <!-- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script> -->
 
         <!-- mensajes -->
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
-        {{-- autocomplete
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
-        <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+     {{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
 
-        <!-- select2 Js -->
-        <script src="{{ asset('js/plugins/select2.full.min.js') }}"></script>
-        <!-- form-select-custom Js -->
-        <script src="{{ asset('js/pages/form-select-custom.js') }}"></script>
-        <!-- select2 css -->
-        <!--Tablas y Toggle atención ginecobstetrica-->
-        <script src="{{ asset('js/atencion_especialidades.js') }}"></script>
-        <!--Tooltips-->
-        <script src="{{ asset('js/tooltip_atencion_medica.js') }}"></script>
+
+
         {{--  @include('template.templateAutorizacion')  --}}
 
 
@@ -160,7 +146,7 @@
         {{--  <script src="{{ asset('js/pages/form-advance-custom.js') }}?upd={{ random_int(1111,9999) }}"></script>  --}}
 
         <!--Apgar-->
-        <script src="{{ asset('js/aicalc2.js') }}?upd={{ random_int(1111,9999) }}"></script>
+        <script src="{{ asset('js//aicalc2.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
         <!--Botón cards-->
         <script src="{{ asset('js/btn-cards.js') }}?upd={{ random_int(1111,9999) }}"></script>
@@ -171,15 +157,10 @@
 
         <script src="{{ asset('js/atencion_pediatria.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
-        <!-- rut -->
-        <script src="{{ asset('js/rut.js') }}"></script>
-
-        <!-- funciones generales -->
-        <script src="{{ asset('js/funciones.js') }}"></script>
-
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
+        </script>
+        <script>
             /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
             function  envio_indicaciones_pdf(id_modal){
                 let url = "{{ route('indicacion.medica.registro.envio') }}";

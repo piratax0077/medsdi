@@ -158,6 +158,9 @@
     <!-- rut -->
     <script src="{{ asset('js/rut.js') }}"></script>
 
+    <!-- funciones generales -->
+    <script src="{{ asset('js/funciones.js') }}"></script>
+
     <!-- number -->
     <script src="{{ asset('js/jquery.number.min.js') }}"></script>
 

@@ -130,11 +130,8 @@
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
        {{-- autocomplete
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
-    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
-
-
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+        <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
         {{--  @include('template.templateAutorizacion')  --}}
 
@@ -153,6 +150,12 @@
         <!--Tablas y Toggle atención PEDIATRIA-->
 
         <script src="{{ asset('js/atencion_pediatria.js') }}?upd={{ random_int(1111,9999) }}"></script>
+
+        <!-- rut -->
+        <script src="{{ asset('js/rut.js') }}"></script>
+
+        <!-- funciones generales -->
+        <script src="{{ asset('js/funciones.js') }}"></script>
 
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');

@@ -3,6 +3,9 @@ function formatoRut(rut)
 {
     var valor = rut.value.replace('.','');
     valor = valor.replace(/\-/g,'');
+    valor = valor.replace(/\ /g,'');
+    valor = valor.replace(/[qwertyuiopasdfghjlñzxcvbnmQWERTYUIOPASDFGHJLÑZXCVBNM]/g,'');
+    valor = valor.replace(/[/,´.*'+¿?^$!¡=&%"#¨_:;`~°{}()|[\]\\]/g,'');
 
     cuerpo = valor.slice(0,-1);
     dv = valor.slice(-1).toUpperCase();
