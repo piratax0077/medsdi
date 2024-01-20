@@ -37,7 +37,7 @@
                     <div class="card-body-sidebar">
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cons_tto_psi()";>+ Para tratamiento</button>
                     </div>
-                 @include("atencion_otros_prof.formularios.modal_atencion_especialidad.psicologia.m_aconsentcirm")
+
             </div>
 
             <div class="card-sidebar">

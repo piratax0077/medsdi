@@ -15,3 +15,8 @@
         </div>
     </div>
 </div>
+<script>
+    function voz_eje() {
+        $('#m_eje_voz').modal('show');
+    }
+</script>

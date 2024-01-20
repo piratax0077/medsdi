@@ -39,6 +39,9 @@
 								<li class="nav-item">
 					                <a class="nav-link-wizard" id="diez_tab" data-toggle="pill" href="#diez" role="tab" aria-controls="pills-home" aria-selected="true">LAM-10</a>
 					            </li>
+                                <li class="nav-item">
+					                <a class="nav-link-wizard" id="c_gen_tab" data-toggle="pill" href="#c_gen" role="tab" aria-controls="pills-home" aria-selected="true">COMENTARIOS</a>
+					            </li>
 					        </ul>
 					    </div>
 					</div>
@@ -54,6 +57,17 @@
 											</div>
 										</div>
 									</div>
+                                    <div class="form-row">
+                                        <div class="col-sm-3 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_uno_psi_resp_ro" id="lam_uno_psi_resp_ro">
+                                        </div>
+                                        <div class="col-sm-9 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_uno_psi_coment_ro" id="lam_uno_psi_coment_ro"></textarea>
+                                        </div>
+                                        <br>
+                                    </div>
 					            </div>
 					            <!--TAB 2-->
 					            <div class="tab-pane fade show" id="dos" role="tabpanel" aria-labelledby="dos_tab">
@@ -64,6 +78,17 @@
 											</div>
 										</div>
 									</div>
+                                    <div class="form-row">
+                                        <div class="col-sm-3 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_dos_psi_resp_ro" id="lam_dos_psi_resp_ro">
+                                        </div>
+                                        <div class="col-sm-9 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_dos_psi_coment_ro" id="lam_dos_psi_coment_ro"></textarea>
+                                        </div>
+                                        <br>
+                                    </div>
 					            </div>
 					            <!--TAB 3-->
 					            <div class="tab-pane fade show" id="tres" role="tabpanel" aria-labelledby="tres_tab">
@@ -74,6 +99,17 @@
 											</div>
 										</div>
 									</div>
+                                    <div class="form-row">
+                                        <div class="col-sm-3 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_tres_psi_resp_ro" id="lam_tres_psi_resp_ro">
+                                        </div>
+                                        <div class="col-sm-9 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_tres_psi_coment_ro" id="lam_tres_psi_coment_ro"></textarea>
+                                        </div>
+                                        <br>
+                                    </div>
 					            </div>
 								<!--TAB 4-->
 					            <div class="tab-pane fade show" id="cuatro" role="tabpanel" aria-labelledby="cuatro_tab">
@@ -84,6 +120,17 @@
 											</div>
 										</div>
 									</div>
+                                    <div class="form-row">
+                                        <div class="col-sm-3 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_cuatro_psi_resp_ro" id="lam_cuatro_psi_resp_ro">
+                                        </div>
+                                        <div class="col-sm-9 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_cuatro_psi_coment_ro" id="lam_cuatro_psi_coment_ro"></textarea>
+                                        </div>
+                                        <br>
+                                    </div>
 					            </div>
 								<!--TAB 5-->
 					            <div class="tab-pane fade show" id="cinco" role="tabpanel" aria-labelledby="cinco_tab">
@@ -94,6 +141,17 @@
 											</div>
 										</div>
 									</div>
+                                    <div class="form-row">
+                                        <div class="col-sm-3 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_cinco_psi_resp_ro" id="lam_cinco_psi_resp_ro">
+                                        </div>
+                                        <div class="col-sm-9 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_cinco_psi_coment_ro" id="lam_cinco_psi_coment_ro"></textarea>
+                                        </div>
+                                        <br>
+                                    </div>
 					            </div>
 								<!--TAB 6-->
 					            <div class="tab-pane fade show" id="seis" role="tabpanel" aria-labelledby="seis_tab">
@@ -104,6 +162,17 @@
 											</div>
 										</div>
 									</div>
+                                    <div class="form-row">
+                                        <div class="col-sm-3 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_seis_psi_resp_ro" id="lam_seis_psi_resp_ro">
+                                        </div>
+                                        <div class="col-sm-9 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_seis_psi_coment_ro" id="lam_seis_psi_coment_ro"></textarea>
+                                        </div>
+                                        <br>
+                                    </div>
 					            </div>
 								<!--TAB 7-->
 					            <div class="tab-pane fade show" id="siete" role="tabpanel" aria-labelledby="siete_tab">
@@ -114,6 +183,17 @@
 											</div>
 										</div>
 									</div>
+                                    <div class="form-row">
+                                        <div class="col-sm-3 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_siete_psi_resp_ro" id="lam_siete_psi_resp_ro">
+                                        </div>
+                                        <div class="col-sm-9 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_siete_psi_coment_ro" id="lam_siete_psi_coment_ro"></textarea>
+                                        </div>
+                                        <br>
+                                    </div>
 					            </div>
 								<!--TAB 8-->
 					            <div class="tab-pane fade show" id="ocho" role="tabpanel" aria-labelledby="ocho_tab">
@@ -124,6 +204,17 @@
 											</div>
 										</div>
 									</div>
+                                    <div class="form-row">
+                                        <div class="col-sm-3 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_ocho_psi_resp_ro" id="lam_ocho_psi_resp_ro">
+                                        </div>
+                                        <div class="col-sm-9 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_ocho_psi_coment_ro" id="lam_ocho_psi_coment_ro"></textarea>
+                                        </div>
+                                        <br>
+                                    </div>
 					            </div>
 								<!--TAB 9-->
 					            <div class="tab-pane fade show" id="nueve" role="tabpanel" aria-labelledby="nueve_tab">
@@ -134,6 +225,17 @@
 											</div>
 										</div>
 									</div>
+                                    <div class="form-row">
+                                        <div class="col-sm-3 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_nueve_psi_resp_ro" id="lam_nueve_psi_resp_ro">
+                                        </div>
+                                        <div class="col-sm-9 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_nueve_psi_coment_ro" id="lam_nueve_psi_coment_ro"></textarea>
+                                        </div>
+                                        <br>
+                                    </div>
 					            </div>
 								<!--TAB 10-->
 					            <div class="tab-pane fade show" id="diez" role="tabpanel" aria-labelledby="diez_tab">
@@ -144,22 +246,31 @@
 											</div>
 										</div>
 									</div>
+                                    <div class="form-row">
+                                        <div class="col-sm-3 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_diez_psi_resp_ro" id="lam_diez_psi_resp_ro">
+                                        </div>
+                                        <div class="col-sm-9 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_diez_psi_coment_ro" id="lam_diez_psi_coment_ro"></textarea>
+                                        </div>
+                                        <br>
+                                    </div>
+					            </div>
+                                <!--TAB 10-->
+					            <div class="tab-pane fade show" id="c_gen" role="tabpanel" aria-labelledby="c_gen_tab">
+									<div class="form-row">
+                                        <div class="col-sm-12 mt-2">
+                                            <label id="" name="" class="floating-label-activo-sm">Comentarios Generales del test</label>
+                                            <textarea class="form-control form-control-sm" rows="20" onfocus="this.rows=20" onblur="this.rows=20;" name="comentarios_gen_ro" id="comentarios_gen_ro"></textarea>
+                                        </div>
+                                        <br>
+                                    </div>
 					            </div>
 					        </div>
 					    </div>
 					</div>
-                    <hr>
-                    <div class="form-row">
-                        <div class="col-sm-3 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
-                            <input type="text" class="form-control form-control-sm" name="fonema_r_com" id="fonema_r_com">
-                        </div>
-                        <div class="col-sm-9 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Objetivos y Logros</label>
-                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="fon_r_obj y logros" id="fon_r_obj y logros"></textarea>
-                        </div>
-                        <br>
-                    </div>
 				</div>
 				<div class="modal-footer">
 

@@ -20,7 +20,9 @@
                                     @endphp
                                     {{ $fecha }}
                                 </p>
-
+                                <p class="font-italic mt-0 mb-0 text-white">
+                                    <span class="f-16 f-w-600">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</span>, RUT: <span class="f-16 f-w-600">{{ $paciente->rut}}</span> , Edad <span class="f-16 f-w-600">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -69,45 +71,30 @@
                         <!--Licencia-->
                         <!--Ficha Médica Única-->
                         <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
-                            @include('atencion_otros_prof.secciones_ficha.fmu')
+                            @include('general.secciones_ficha.fmu')
                         </div>
                         <!--Atenciones previas-->
                         <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
-                            {{--  @include('atencion_medica.secciones_ficha.atenciones_previas')  --}}
-                            @include('atencion_otros_prof.formularios.atenciones_previas_form')
+                           @include('general.secciones_ficha.atenciones_previas_form')
                         </div>
-                        <!--Exámenes-->{{--
+                        <!--Exámenes-->
                         <div class="tab-pane fade show" id="examenes" role="tabpanel" aria-labelledby="examenes-tab">
-                            @include('atencion_medica.secciones_ficha.examenes')
-                        </div>--}}
+                           @include('general.secciones_ficha.bandeja_examenes')
+                        </div>
                         <!--Hospitalización-->
                         <div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">
-                            @include('atencion_otros_prof.secciones_ficha.hospitalizacion')
+                            @include('general.hospitalizacion.hospitalizacion_op')
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- SIDE BAR ORL -->
-        @include("atencion_otros_prof.modales"){{-- base de botones de sidebar --}}
-        @include("atencion_otros_prof.include.sidebar_derecho_fono"){{-- modales y data de sidebar especialidad --}}
-
-
-        <!--Modals de especialidad -->
-        {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
-
-        <!--Modals formularios generales-->
-        {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
-
-
     </div>
+    <!-- SIDE BAR FONO -->
+    @include("atencion_otros_prof.modales"){{-- base de botones de sidebar --}}
+    @include("atencion_otros_prof.include.sidebar_derecho_fono"){{-- modales y data de sidebar especialidad --}}
 
-    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.informe_fono")
+ @endsection
 
-
-
-
-@endsection
+@include('app.profesional.modales.boton_flotante_agenda_autorizacion')

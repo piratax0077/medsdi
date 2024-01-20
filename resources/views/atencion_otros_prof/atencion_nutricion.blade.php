@@ -20,7 +20,9 @@
                                     @endphp
                                     {{ $fecha }}
                                 </p>
-
+                                <p class="font-italic mt-0 mb-0 text-white">
+                                    <span class="f-16 f-w-600">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</span>, RUT: <span class="f-16 f-w-600">{{ $paciente->rut}}</span> , Edad <span class="f-16 f-w-600">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -48,9 +50,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="Paciente hospitalizado" aria-selected="false">Hospitalización</a>
-                                    </li>
+                                   <li class="nav-item">
+                                        <a class="nav-link text-reset" id="hospitalizacion_op-tab" data-toggle="tab" href="#hospitalizacion_op" role="tab" aria-controls="hospitalizacion_op" aria-selected="false">Paciente Hospitalizado</a>
+                                   </li>
                                 </ul>
                             </div>
                         </div>
@@ -69,20 +71,19 @@
                         <!--Licencia-->
                         <!--Ficha Médica Única-->
                         <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
-                            @include('atencion_otros_prof.secciones_ficha.fmu')
+                            @include('general.secciones_ficha.fmu')
                         </div>
                         <!--Atenciones previas-->
                         <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
-                            {{--  @include('atencion_medica.secciones_ficha.atenciones_previas')  --}}
-                            @include('atencion_otros_prof.formularios.atenciones_previas_form')
+                            @include('general.secciones_ficha.atenciones_previas_form')
                         </div>
                         <!--Exámenes-->{{--
                         <div class="tab-pane fade show" id="examenes" role="tabpanel" aria-labelledby="examenes-tab">
                             @include('atencion_medica.secciones_ficha.examenes')
                         </div>--}}
                         <!--Hospitalización-->
-                        <div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">
-                            @include('atencion_otros_prof.secciones_ficha.hospitalizacion')
+                         <div class="tab-pane fade show" id="hospitalizacion_op" role="tabpanel" aria-labelledby="hospitalizacion_op-tab">
+                            @include('general.hospitalizacion.hospitalizacion_op')
                         </div>
                     </div>
                 </div>

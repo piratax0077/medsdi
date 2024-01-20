@@ -4039,3 +4039,8 @@
 		</div>
 	</div>
 </div>
+<script>
+    function tede_1() {
+        $('#tede_1').modal('show');
+    }
+</script>

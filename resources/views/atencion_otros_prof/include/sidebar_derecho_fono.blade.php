@@ -6,7 +6,7 @@
             <h5 class="d-inline-block text-light mb-0 float-right">Formularios Fonoaudiológicos</h5>
         </header>
         <div class="bs-canvas-content">
-            <div class="accordion" id="accordion_fono">
+            <div class="accordion" id="accordion_side_bar">
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_solicitud_examenes">
                         <h2 class="mb-0">
@@ -15,7 +15,7 @@
                             </button>
                         </h2>
                     </div>
-                    <div id="collapse_solicitud_examenes" class="collapse" aria-labelledby="heading_solicitud_examenes" data-parent="#accordion_fono">
+                    <div id="collapse_solicitud_examenes" class="collapse" aria-labelledby="heading_solicitud_examenes" data-parent="#accordion_side_bar">
                          <div class="card-body-sidebar">
 
 
@@ -32,7 +32,7 @@
                             </button>
                         </h2>
                     </div>
-                    <div id="collapse_evaluaciones" class="collapse" aria-labelledby="heading_evaluaciones" data-parent="#accordion_fono">
+                    <div id="collapse_evaluaciones" class="collapse" aria-labelledby="heading_evaluaciones" data-parent="#accordion_side_bar">
                          <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="est_ofa();"><i class="fa fa-plus"></i> OFA</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="est_hpa();"><i class="fa fa-plus"></i> Habilidades Prearticulatorias</button>
@@ -47,7 +47,7 @@
                          </div>
                     </div>
                 </div>
-                <div class="card-sidebar">
+                {{--  <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_consentimientos_informados">
                         <h2 class="mb-0">
                         <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_consentimientos_informados" aria-expanded="false" aria-controls="collapse_consentimientos_informados"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
@@ -62,7 +62,9 @@
                         </div>
                     </div>
                     @include("atencion_medica.sidebars.modals_generales.m_acprocedimientos")
-                </div>
+                </div>  --}}
+                <!-- SECCION CONSENTIMIENTOS -->
+                @include('general.sidebar.seccion_consentimientos')
 
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_utilidades">
@@ -72,7 +74,7 @@
                         </button>
                         </h2>
                     </div>
-                    <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_fono">
+                    <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_side_bar">
                     <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ufonasa()";>+ Buscador código FONASA</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ucalcimc()";>+ Calculadora de IMC</button>
@@ -81,7 +83,6 @@
                     @include("atencion_medica.sidebars.modals_generales.m_ucodigofonasa")
                     @include("atencion_medica.sidebars.modals_generales.m_uimc")
                 </div>
-
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_recom">
                         <h2 class="mb-0">
@@ -92,10 +93,12 @@
                     </div>
                     <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_formularios_atencion">
                         <div class="card-body-sidebar">
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="voz ()";>+ Indicaciones Cuidados de la Voz</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="voz_eje()";>+ Ejercicios  de Voz</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="voz_disf()";>+ Ejercicios Disfonía Disfuncional </button>
-
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="voz ();">+ Indicaciones Cuidados de la Voz</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="voz_eje();">+ Ejercicios  de Voz</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="voz_disf();">+ Ejercicios Disfonía Disfuncional </button>
+                            @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.recom_cuidados_voz")
+                            @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.recom_disf_disf")
+                            @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.recom_ejerc_vocales")
                         </div>
                     </div>
 
@@ -113,15 +116,30 @@
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.planificacion")
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.praxias")
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.praxias_lam")
-                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.recom_cuidados_voz")
-                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.recom_disf_disf")
-                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.recom_ejerc_vocales")
+
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.sopaletras")
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.tede_1")
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.tede")
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.test_ling")
-
-
+                </div>
+                <div class="card-sidebar">
+                    <div class="card-header-sidebar" id="heading_sugerencias">
+                        <h2 class="mb-0">
+                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_sugerencias" aria-expanded="false" aria-controls="collapse_sugerencias"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                            AYUDENOS A MEJORAR
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapse_sugerencias" class="collapse" aria-labelledby="heading_sugerencias" data-parent="#accordion_side_bar">
+                        <div class="card-body-sidebar">
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="c_faltante()";>+ Consentimiento  faltante</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="f_faltante()";>+ formulario faltante</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="sugerencias()";>+ Sugerencias</button>
+                        </div>
+                    </div>
+                    @include("general.modal.m_form_faltante")
+                    @include("general.modal.m_sugerencias")
+                    @include("general.modal.m_consent_faltante")
                 </div>
             </div>
         </div>

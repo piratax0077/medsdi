@@ -20,7 +20,9 @@
                                     @endphp
                                     {{ $fecha }}
                                 </p>
-
+                                <p class="font-italic mt-0 mb-0 text-white">
+                                    <span class="f-16 f-w-600">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</span>, RUT: <span class="f-16 f-w-600">{{ $paciente->rut}}</span> , Edad <span class="f-16 f-w-600">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -43,7 +45,14 @@
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
+                                        @if (request('token') && request('fmu') == 1)
+                                            <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
+                                        @else
+                                            @php
+                                                $url_temp = 'Profesional/Paciente/Ficha_consulta?_token='.request('_token').'&id_hora_realizar='.request('id_hora_realizar').'&lugar_atencion_id='.request('lugar_atencion_id').'';
+                                            @endphp
+                                            <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $paciente->id_usuario,'urla'=> $url_temp.'&fmu=0','urln' => $url_temp.'&fmu=1', 'id_tipo' => 2]) }}">FMU</a>
+                                        @endif
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
@@ -69,49 +78,36 @@
                         <!--Licencia-->
                         <!--Ficha Médica Única-->
                         <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
-                            @include('atencion_otros_prof.secciones_ficha.fmu')
+                            @include('general.secciones_ficha.fmu')
                         </div>
                         <!--Atenciones previas-->
                         <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
-                            {{--  @include('atencion_medica.secciones_ficha.atenciones_previas')  --}}
-                            @include('atencion_otros_prof.formularios.atenciones_previas_form')
-                        </div>
-                        <!--Exámenes-->{{--
-                        <div class="tab-pane fade show" id="examenes" role="tabpanel" aria-labelledby="examenes-tab">
-                            @include('atencion_medica.secciones_ficha.examenes')
-                        </div>--}}
+                            @include('general.secciones_ficha.atenciones_previas_form')
                         <!--Hospitalización-->
                         <div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">
-                            @include('atencion_otros_prof.secciones_ficha.hospitalizacion')
+                             @include('general.hospitalizacion.hospitalizacion')
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- SIDE BAR ORL -->
+        <!-- SIDE BAR KINE -->
         @include("atencion_otros_prof.modales"){{-- base de botones de sidebar --}}
         @include("atencion_otros_prof.include.sidebar_derecho_kine"){{-- modales y data de sidebar especialidad --}}
 
 
-        <!--Modals de especialidad -->
-        {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
-
-        <!--Modals formularios generales-->
-        {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
 
 
-    </div>
+
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.informe_kine")
-    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.planificacion")
+
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.interconsulta_kine")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.e_fuerza_superior")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.e_fuerza_inferior")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.e_func_global")
-    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.e_tono_inferior")
-    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.e_tono_superior")
+    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.e_tono")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.metria")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.pares_craneanos")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.postura")

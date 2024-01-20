@@ -240,3 +240,8 @@
         </div>
     </div>
 </div>
+<script>
+    function l_ling() {
+        $('#modal_lam_ling').modal('show');
+    }
+</script>

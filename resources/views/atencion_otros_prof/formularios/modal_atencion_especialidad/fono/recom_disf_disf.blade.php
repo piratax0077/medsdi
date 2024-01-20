@@ -16,3 +16,8 @@
         </div>
     </div>
 </div>
+<script>
+    function voz_disf() {
+        $('#m_eje_disf').modal('show');
+    }
+</script>

@@ -20,6 +20,9 @@
                                     @endphp
                                     {{ $fecha }}
                                 </p>
+                                <p class="font-italic mt-0 mb-0 text-white">
+                                    <span class="f-16 f-w-600">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</span>, RUT: <span class="f-16 f-w-600">{{ $paciente->rut}}</span> , Edad <span class="f-16 f-w-600">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="col-md-6">

@@ -2,34 +2,52 @@
     <div class="modal-dialog modal-xl" role="document">
 		<div class="modal-content" >
 			<div class="modal-header bg-info">
-				<h5 class="modal-title text-white mt-1">FRECUENCIA CONSUMO ALIMENTOS</h5>
+				<h5 class="modal-title text-white mt-1">FRECUENCIA CONSUMO ALIMENTOS dany trabajando</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
 			<div class="modal-body">
-				
+
 				<div class="row">
 					<div class="col-md-12">
-					    <ul class="nav nav-pills mb-3" id="tablas_calculo_nutri" role="tablist">
-					        <li class="nav-item">
-					            <a class="nav-link-wizard form_fono_tede active"id="nec_energ_tab" data-toggle="pill" href="#nec_energ" role="tab" aria-controls="pills-home" aria-selected="true">NECESIDADES ENERGETICA</a>
-					        </li>
-					        <li class="nav-item">
-					            <a class="nav-link-wizard form_fono_tede" id="analisis_tab" data-toggle="pill" href="#analisis" role="tab" aria-controls="pills-home" aria-selected="true">ANÁLISIS</a>
-					        </li>
-					        <li class="nav-item">
-					            <a class="nav-link-wizard form_fono_tede" id="cereales_tab" data-toggle="pill" href="#cereales" role="tab" aria-controls="pills-home" aria-selected="true"> CEREALES</a>
-					        </li>
-							<li class="nav-item">
-					            <a class="nav-link-wizard form_fono_tede" id="verduras_tab" data-toggle="pill" href="#verduras" role="tab" aria-controls="pills-home" aria-selected="true"> VERDURAS</a>
-					        </li>
-						</ul>
+                        <ul class="nav nav-pills mb-3" id="tablas_examenes" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link-wizard " id="uno_nutri_tab" data-toggle="pill" href="#uno_nutri" role="tab" aria-controls="pills-home" aria-selected="true">NEC. ENERGETICA</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-wizard" id="dos_nutri_tab" data-toggle="pill" href="#dos_nutri" role="tab" aria-controls="pills-home" aria-selected="true">ANÁLISIS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-wizard" id="tres_nutri_tab" data-toggle="pill" href="#tres_nutri" role="tab" aria-controls="pills-home" aria-selected="true">CEREALES</a>
+                            </li>
+
+                            <li class="nav-item">
+                               <a class="nav-link-wizard " id="cuatro_nutri_tab" data-toggle="pill" href="#cuatro_nutri" role="tab" aria-controls="pills-home" aria-selected="true">VERDURAS</a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link-wizard" id="cinco_nutri_tab" data-toggle="pill" href="#cinco_nutri" role="tab" aria-controls="pills-home" aria-selected="true">fRUTAS</a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link-wizard" id="seis_nutri_tab" data-toggle="pill" href="#seis_nutri" role="tab" aria-controls="pills-home" aria-selected="true">LEGUMINOSAS</a>
+                           </li>
+
+                           <li class="nav-item">
+                            <a class="nav-link-wizard " id="siete_nutri_tab" data-toggle="pill" href="#siete_nutri" role="tab" aria-controls="pills-home" aria-selected="true">LIPIDOS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-wizard" id="ocho_nutri_tab" data-toggle="pill" href="#ocho_nutri" role="tab" aria-controls="pills-home" aria-selected="true">AZUCARES</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-wizard" id="nueve_nutri_tab" data-toggle="pill" href="#nueve_nutri" role="tab" aria-controls="pills-home" aria-selected="true">SUSTITUTOS</a>
+                            </li>
+                        </ul>
+
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-12">
 					    <div class="tab-content" id="pills-tablas_calculo_nutri">
 							<!--TAB 1-->
-					        <div class="tab-pane fade show active" id="nec_energ" role="tabpanel" aria-labelledby="nec_energ_tab">
+					        <div class="tab-pane fade show active" id="uno_nutri" role="tabpanel" aria-labelledby="uno_nutri_tab">
 								<form>
 									<div class="form-row">
 										<div class="col-sm-4 mt-2">
@@ -42,7 +60,7 @@
 										<div class="col-sm-2 mt-2">
 											<div class="form-group fill">
 												<label id="" name="" class="floating-label-activo-sm">GET</label>
-								
+
 											</div>
 										</div>
 										<div class="col-sm-2 mt-2">
@@ -156,7 +174,7 @@
 										<div class="col-sm-2 mt-2">
 											<div class="form-group fill">
 												<label id="" name="" class="floating-label-activo-sm">GET</label>
-								
+
 											</div>
 										</div>
 										<div class="col-sm-2 mt-2">
@@ -259,15 +277,15 @@
 											</div>
 										</div>
 									</div>
-								</form>	
+								</form>
 					        </div>
 							<!--TAB 2-->
-					        <div id="analisis"class="tab-pane fade show"  role="tabpanel" aria-labelledby="analisis_tab">
+					        <div class="tab-pane fade show" id="dos_nutri" role="tabpanel" aria-labelledby="dos_nutri_tab">
 								<form>
 									<div class="form-row">
 										<div class="col-sm-12 mt-3">
 											<div class="form-group fill">
-												<H6 class="form_fono">Análisis de Recordatorio de 24 horas.</h6>
+												<H6 class="form_fono-center">Análisis de Recordatorio de 24 horas.</h6>
 											</div>
 										</div>
 									</div>
@@ -309,9 +327,9 @@
 											</div>
 										</div>
 									</div>
-									
+
 									<div class="form-row">
-										
+
 									</div>
 									<div class="form-row">
 										<div class="col-sm-3 mt-3">
@@ -395,32 +413,32 @@
 											</div>
 										</div>
 									</div>
-									
+
 									<div class="form-row">
 										<div class="col-sm-3 mt-3">
 											<div class="form-group fill">
 												<H6 class="form_fono">Consumo Recomendado 24 Hrs</h6>
 											</div>
 										</div>
-										<div class="col-sm-3 mt-3">
+										<div class="col-sm-2 mt-2">
 											<div class="form-group fill">
 												<label id="" name="" class="floating-label-activo-sm">Kilocalorías</label>
 												<input type="text" class="form-control form-control-sm" name="" id="" />
 											</div>
 										</div>
-										<div class="col-sm-32 mt-3">
+										<div class="col-sm-2 mt-2">
 											<div class="form-group fill">
 												<label id="" name="" class="floating-label-activo-sm">H de Carbono</label>
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-										<div class="col-sm-2 mt-3">
+										<div class="col-sm-2 mt-2">
 											<div class="form-group fill">
 												<label id="" name="" class="floating-label-activo-sm">Proteínas</label>
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-										<div class="col-sm-2 mt-3">
+										<div class="col-sm-3 mt-2">
 											<div class="form-group fill">
 												<label id="" name="" class="floating-label-activo-sm">Lípidos</label>
 												<input type="text" class="form-control form-control-sm" name="" id="">
@@ -433,25 +451,25 @@
 												<H6 class="form_fono">% A para peso Teórico</h6>
 											</div>
 										</div>
-										<div class="col-sm-3 mt-3">
+										<div class="col-sm-2 mt-2">
 											<div class="form-group fill">
 												<label id="" name="" class="floating-label-activo-sm">Kilocalorías</label>
 												<input type="text" class="form-control form-control-sm" name="" id="" />
 											</div>
 										</div>
-										<div class="col-sm-32 mt-3">
+										<div class="col-sm-2 mt-2">
 											<div class="form-group fill">
 												<label id="" name="" class="floating-label-activo-sm">H de Carbono</label>
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-										<div class="col-sm-2 mt-3">
+										<div class="col-sm-2 mt-2">
 											<div class="form-group fill">
 												<label id="" name="" class="floating-label-activo-sm">Proteínas</label>
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-										<div class="col-sm-2 mt-3">
+										<div class="col-sm-3 mt-2">
 											<div class="form-group fill">
 												<label id="" name="" class="floating-label-activo-sm">Lípidos</label>
 												<input type="text" class="form-control form-control-sm" name="" id="">
@@ -464,13 +482,13 @@
 												<H6 class="form_fono">% A para peso Actúal</h6>
 											</div>
 										</div>
-										<div class="col-sm-3 mt-3">
+										<div class="col-sm-2 mt-3">
 											<div class="form-group fill">
 												<label id="" name="" class="floating-label-activo-sm">Kilocalorías</label>
 												<input type="text" class="form-control form-control-sm" name="" id="" />
 											</div>
 										</div>
-										<div class="col-sm-32 mt-3">
+										<div class="col-sm-2 mt-3">
 											<div class="form-group fill">
 												<label id="" name="" class="floating-label-activo-sm">H de Carbono</label>
 												<input type="text" class="form-control form-control-sm" name="" id="">
@@ -482,17 +500,17 @@
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-										<div class="col-sm-2 mt-3">
+										<div class="col-sm-3 mt-3">
 											<div class="form-group fill">
 												<label id="" name="" class="floating-label-activo-sm">Lípidos</label>
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
 									</div>
-								</form>	
+								</form>
 					        </div>
 							<!--TAB 3-->
-					        <div id="cereales"class="tab-pane fade show"  role="tabpanel" aria-labelledby="cereales_tab">
+					        <div class="tab-pane fade show" id="tres_nutri" role="tabpanel" aria-labelledby="tres_nutri_tab">
 								<form>
 									<h6 class="form_fono_center">CEREALES SIN GRASAS</h6>
 									<hr />
@@ -682,7 +700,7 @@
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-                        
+
 									</div>
 									<div id="alimentacion_mensual" class="form-row">
 										<div class="col-sm-4 mt-2">
@@ -809,7 +827,7 @@
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-                        
+
 									</div>
 									<div id="alimentacion_mensual" class="form-row">
 										<div class="col-sm-4 mt-2">
@@ -938,7 +956,7 @@
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-                        
+
 									</div>
 									<div id="alimentacion_mensual" class="form-row">
 										<div class="col-sm-4 mt-2">
@@ -1002,12 +1020,12 @@
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-										
+
 									</div>
 									<div id="alimentacion_mensual" class="form-row">
 										<div class="col-sm-4 mt-2">
 											<div class="form-group fill">
-												<H6 class="form_fono">Frituras</h6> 
+												<H6 class="form_fono">Frituras</h6>
 
 											</div>
 										</div>
@@ -1040,7 +1058,7 @@
 									<div id="alimentacion_mensual" class="form-row">
 										<div class="col-sm-4 mt-2">
 											<div class="form-group fill">
-												<H6 class="form_fono">Empanadas Berlines etc</h6> 
+												<H6 class="form_fono">Empanadas Berlines etc</h6>
 
 											</div>
 										</div>
@@ -1075,10 +1093,10 @@
 											<textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_resp" id="obs_resp"></textarea>
 										</div>
 									</div>
-								</form>	
+								</form>
 					        </div>
 							<!--verduras-->
-					        <div class="tab-pane fade show" id="verduras" role="tabpanel" aria-labelledby="verduras_tab">
+					        <div class="tab-pane fade show" id="cuatro_nutri" role="tabpanel" aria-labelledby="cuatro_nutri_tab">
 								<form>
 									<h6 class="form_fono_center">VERDURAS</h6>
 									<hr />
@@ -1175,7 +1193,7 @@
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-                        
+
 									</div>
 									<div id="alimentacion_mensual" class="form-row">
 										<div class="col-sm-4 mt-2">
@@ -1239,13 +1257,13 @@
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-										
+
 									</div>
-									
+
 								</form>
 					        </div>
 							<!--frutas-->
-							<div class="tab-pane fade show" id="frutas" role="tabpanel" aria-labelledby="frutas_tab">
+							<div class="tab-pane fade show" id="cinco_nutri" role="tabpanel" aria-labelledby="cinco_nutri_tab">
 								<form>
 									<h6 class="form_fono_center">FRUTAS</h6>
 									<hr />
@@ -1345,8 +1363,8 @@
 									</div>
 								</form>
 					        </div>
-							<!--TAB 6-->  
-					        <div class="tab-pane fade show" id="leguminosas" role="tabpanel" aria-labelledby="leguminosas_tab">
+							<!--TAB 6-->
+					        <div class="tab-pane fade show" id="seis_nutri" role="tabpanel" aria-labelledby="seis_nutri_tab">
 								<form>
 									<h6 class="form_fono_center">LEGUMINOSAS</h6>
 									<hr />
@@ -1384,7 +1402,7 @@
 								</form>
 					        </div>
 							<!--TAB 7-->
-					        <div class="tab-pane fade show" id="lipidos" role="tabpanel" aria-labelledby="lipidos_tab">
+					        <div class="tab-pane fade show" id="siete_nutri" role="tabpanel" aria-labelledby="siete_nutri_tab">
 								<form>
 									<h6 class="form_fono_center">LIPIDOS</h6>
 									<hr />
@@ -1576,7 +1594,7 @@
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-                        
+
 									</div>
 									<div id="alimentacion_mensual" class="form-row">
 										<div class="col-sm-4 mt-2">
@@ -1767,7 +1785,7 @@
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-                        
+
 									</div>
 									<h6 class="form_fono_center">ÁCIDOS GRASOS MONOINSATURADOS</h6>
 									<hr />
@@ -1864,7 +1882,7 @@
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-                        
+
 									</div>
 									<div id="alimentacion_mensual" class="form-row">
 										<div class="col-sm-4 mt-2">
@@ -1936,10 +1954,10 @@
 											<textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_resp" id="obs_resp"></textarea>
 										</div>
 									</div>
-								</form>	
+								</form>
 					        </div>
 							<!--TAB 8-->
-					        <div id="azucares"class="tab-pane fade show"  role="tabpanel" aria-labelledby="azucares_tab">
+					        <div id="ocho_nutri"class="tab-pane fade show"  role="tabpanel" aria-labelledby="ocho_nutri_tab">
 								<form>
 									<div id="tit_o_anim" class="form-row">
 										<div class="col-sm-4 mt-2">
@@ -2127,7 +2145,7 @@
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-                        
+
 									</div>
 									<div id="alimentacion_mensual" class="form-row">
 										<div class="col-sm-4 mt-2">
@@ -2254,7 +2272,7 @@
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-                        
+
 									</div>
 									<div id="alimentacion_mensual" class="form-row">
 										<div class="col-sm-4 mt-2">
@@ -2381,7 +2399,7 @@
 												<input type="text" class="form-control form-control-sm" name="" id="">
 											</div>
 										</div>
-                        
+
 									</div>
 									<div class="col-sm-12 mt-2">
 										<div class="form-group fill">
@@ -2389,10 +2407,10 @@
 											<textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_resp" id="obs_resp"></textarea>
 										</div>
 									</div>
-								</form>	
+								</form>
 					        </div>
 							<!--TAB 9-->
-					        <div class="tab-pane fade show" id="sustitutos" role="tabpanel" aria-labelledby="sustitutos_tab">
+					        <div class="tab-pane fade show" id="nueve_nutri" role="tabpanel" aria-labelledby="nueve_nutri_tab">
 								<form>
 									<h6 class="form_fono_center">SUSTITUTO</h6>
 									<hr />
@@ -2492,8 +2510,7 @@
 									</div>
 								</form>
 					        </div>
-							<!--TAB 10-->
-					        
+
 
 					    </div>
 					</div>

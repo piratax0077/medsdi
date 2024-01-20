@@ -20,7 +20,9 @@
                                     @endphp
                                     {{ $fecha }}
                                 </p>
-
+                                <p class="font-italic mt-0 mb-0 text-white">
+                                    <span class="f-16 f-w-600">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</span>, RUT: <span class="f-16 f-w-600">{{ $paciente->rut}}</span> , Edad <span class="f-16 f-w-600">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -112,7 +114,7 @@
         <!-- SIDE BAR ORL -->
         @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
 		@include("atencion_medica.include.sidebar_derecho_cirugia_general")
-		
+
         <!--Modals de especialidad -->
         {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
 
@@ -124,6 +126,6 @@
     <!--Cierre: Container Completo-->
 	@include("general.modal.modal_no_disponible")
 	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
-    
+
 @endsection
 @include('app.profesional.modales.boton_flotante_agenda_autorizacion')

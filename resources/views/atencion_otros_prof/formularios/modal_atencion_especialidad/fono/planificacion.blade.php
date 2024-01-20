@@ -52,3 +52,8 @@
         </div>
     </div>
 </div>
+<script>
+    function e_plan() {
+        $('#plan').modal('show');
+    }
+</script>

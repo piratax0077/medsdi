@@ -1,5 +1,5 @@
 <div id="modal_lam_praxias" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_lam_praxias" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content" >
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">LAMINAS PRAXIAS</h5>
@@ -22,217 +22,162 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-row" >
-                        <div class="col-sm-3 mt-2" >
-                            <div class="form-group fill">
-                                <img src="{{ asset('images\fono\img\praxias1.png') }}" style="width:100%">
+                    <div class="form-row text-center">
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-2 mt-2">
+                            <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias1.png') }}">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Lengua a Izquierda</label>
+                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                    <option value="D">Deficiente</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-sm-3 mt-2">
-                           <div class="form-group fill">
-                            <img src="{{ asset('images\fono\img\praxias2.png') }}" style="width:100%">
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-2 mt-2">
+                            <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias2.png') }}">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Lengua a Dererecha</label>
+                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                     <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                    <option value="D">Deficiente</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-sm-3 mt-2">
-                            <div class="form-group fill">
-                                <img src="{{ asset('images\fono\img\praxias3.png') }}" style="width:100%">
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-2 mt-2">
+                            <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias3.png') }}">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Inflar Mejilla Izq</label>
+                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                    <option value="D">Deficiente</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-sm-3 mt-2">
-                            <div class="form-group fill">
-                                <img src="{{ asset('images\fono\img\praxias4.png') }}" style="width:100%">
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-2 mt-2">
+                            <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias4.png') }}">
+                            <div class="form-group">
+                                 <label class="floating-label-activo-sm">Inflar Mejilla Der</label>
+                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                     <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                    <option value="D">Deficiente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-2 mt-2">
+                            <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias5.png') }}">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Lengua a Arriba</label>
+                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                    <option value="D">Deficiente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-2 mt-2">
+                            <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias6.png') }}">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Lengua Abajo</label>
+                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                    <option value="D">Deficiente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-2 mt-2">
+                            <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias7.png') }}">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Inflar Ambas Mejillas</label>
+                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                    <option value="D">Deficiente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-2 mt-2">
+                            <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias8.png') }}">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Desinflar Ambas Mejillas</label>
+                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                    <option value="D">Deficiente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-2 mt-2">
+                            <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias9.png') }}">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Lengua Ancha</label>
+                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                    <option value="D">Deficiente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-2 mt-2">
+                            <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias10.png') }}">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Lengua Angosta</label>
+                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                    <option value="D">Deficiente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-2 mt-2">
+                            <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias11.png') }}">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Inflar Mejillas</label>
+                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                    <option value="D">Deficiente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-3 col-xl-2 mt-2">
+                            <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias12.png') }}">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Reventar con los Dedos</label>
+                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                    <option value="D">Deficiente</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Lengua a Izquierda</label>
-                            <div class="form-group fill">
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Lengua a Dererecha</label>
-                            <div class="form-group fill">
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Inflar Mejilla Izq</label>
-                            <div class="form-group fill">
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Inflar Mejilla Der</label>
-                            <div class="form-group fill">
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row" >
-                        <div class="col-sm-3 mt-2" >
-                            <div class="form-group fill">
-                                <img src="{{ asset('images\fono\img\praxias5.png') }}" style="width:100%">
-                            </div>
-                        </div>
                         <div class="col-sm-3 mt-2">
-                        <div class="form-group fill">
-                            <img src="{{ asset('images\fono\img\praxias6.png') }}" style="width:100%">
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mt-2">
-                            <div class="form-group fill">
-                                <img src="{{ asset('images\fono\img\praxias7.png') }}" style="width:100%">
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mt-2">
-                            <div class="form-group fill">
-                                <img src="{{ asset('images\fono\img\praxias8.png') }}" style="width:100%">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Lengua a Arriba</label>
-                            <div class="form-group fill">
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Lengua Abajo</label>
-                            <div class="form-group fill">
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Inflar Ambas Mejillas</label>
-                            <div class="form-group fill">
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Desinflar Ambas Mejillas</label>
-                            <div class="form-group fill">
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row" >
-                        <div class="col-sm-3 mt-2" >
-                            <div class="form-group fill">
-                                <img src="{{ asset('images\fono\img\praxias9.png') }}" style="width:100%">
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mt-2">
-                        <div class="form-group fill">
-                            <img src="{{ asset('images\fono\img\praxias10.png') }}" style="width:100%">
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mt-2">
-                            <div class="form-group fill">
-                                <img src="{{ asset('images\fono\img\praxias11.png') }}" style="width:100%">
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mt-2">
-                            <div class="form-group fill">
-                                <img src="{{ asset('images\fono\img\praxias12.png') }}" style="width:100%">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Lengua Ancha</label>
-                            <div class="form-group fill">
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Lengua Angosta</label>
-                            <div class="form-group fill">
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Inflar Mejillas</label>
-                            <div class="form-group fill">
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Reventar con los Dedos</label>
-                            <div class="form-group fill">
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                     <br>
-                        <hr>
-                    <div class="form-row">
-                        <div class="col-sm-3 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Número de Sesiones</label>
-                            <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                            <label class="floating-label-activo-sm">Nº de Sesiones</label>
+                            <input type="text" class="form-control form-control-sm" name="num_sesiones" id="num_sesiones">
                         </div>
                         <div class="col-sm-9 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Objetivos</label>
-                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="succion" id="succion"></textarea>
+                            <label class="floating-label-activo-sm">Objetivos</label>
+                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obj" id="obj"></textarea>
                         </div>
                         <br>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info">Guardar</button>
+                <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="submit" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function l_praxias() {
+        $('#modal_lam_praxias').modal('show');
+    }
+</script>

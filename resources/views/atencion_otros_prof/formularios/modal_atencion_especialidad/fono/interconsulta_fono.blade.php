@@ -116,4 +116,8 @@
 		</div>
 	</div>
 </div>
-	
+<script>
+    function interfono() {
+        $('#modal_interfono').modal('show');
+    }
+</script>

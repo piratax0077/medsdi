@@ -15,3 +15,8 @@
         </div>
     </div>
 </div>
+<script>
+    function voz() {
+        $('#m_cuid_voz').modal('show');
+    }
+</script>

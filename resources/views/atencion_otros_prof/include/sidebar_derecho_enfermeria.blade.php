@@ -1,29 +1,13 @@
-    <!--Sidebar 3 (pediatria)-->
+    <!--Sidebar 3 (formularios_enfermeria)-->
 <div class="position-fixed w-100 h-100"></div>
-<div id="formularios_pediatria" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="370px" data-offset="true">
+<div id="formularios_enfermeria" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="370px" data-offset="true">
     <header class="bs-canvas-header p-3 bg-info overflow-auto">
         <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true" class="text-white">&times;</span></button>
         <h5 class="d-inline-block text-light mb-0 float-right">Formularios Enfermería</h5>
     </header>
     <div class="bs-canvas-content">
         <div class="accordion" id="accordion_ped">
-             {{-- <div class="card-sidebar">
-                <div class="card-header-sidebar" id="heading_solicitud_examenes">
-                    <h2 class="mb-0">
-                        <button class="btn btn-light btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse_solicitud_examenes" aria-expanded="true" aria-controls="collapse_solicitud_examenes"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
-                        SOLICITAR EXÁMENES ESPECÍFICOS
-                        </button>
-                    </h2>
-                </div>
-                <div id="collapse_solicitud_examenes" class="collapse" aria-labelledby="heading_solicitud_examenes" data-parent="#accordion_ped">
-                    <div class="card-body-sidebar">
 
-
-                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="examenes_ped()";>+ Exámenes de Nutrición</button>
-                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="interped()";>+ Interconsultas</button>
-                    </div>
-                </div>
-            </div> --}}
             <div class="card-sidebar">
                 <div class="card-header-sidebar" id="heading_test">
                     <h2 class="mb-0">
@@ -98,21 +82,9 @@
                 </div>
 
             </div>
-            <div class="card-sidebar">
-                <div class="card-header-sidebar" id="heading_consentimientos_informados">
-                    <h2 class="mb-0">
-                    <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_consentimientos_informados" aria-expanded="false" aria-controls="collapse_consentimientos_informados"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
-                        CONSENTIMIENTOS INFORMADOS
-                    </button>
-                    </h2>
-                </div>
-                <div id="collapse_consentimientos_informados" class="collapse" aria-labelledby="heading_consentimientos_informados" data-parent="#accordion_ped">
-                    <div class="card-body-sidebar">
-                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cons_tto()";>+ Para tratamiento</button>
-                    </div>
-                </div>
-                {{--  @include(asset()"../modals_generales/m_tratamiento.php");  --}}
-            </div>
+            <!-- SECCION CONSENTIMIENTOS -->
+            @include('general.sidebar.seccion_consentimientos')
+
 
             <div class="card-sidebar">
                 <div class="card-header-sidebar" id="heading_utilidades">
@@ -130,8 +102,8 @@
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="guia_vac();"><i class="fa fa-plus"></i> GUIA VACUNAS MINSAL</button>
                     </div>
                 </div>
-                @include("atencion_pediatrica.sidebars.modals_generales.m_ucodigofonasa")
-                @include("atencion_pediatrica.sidebars.modals_generales.m_uimc")
+                @include("general.modal.m_ucodigofonasa")
+                @include("general.modal.m_uimc")
             </div>
 
             <div class="card-sidebar">
@@ -195,6 +167,6 @@
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.peso_talla_f024")
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.peso_talla_f25")
 @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.presion_f")
-@include("atencion_pediatrica.formularios.modal_atencion_especialidad.gineco_obst.vacunas")
+
 
 

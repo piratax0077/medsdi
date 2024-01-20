@@ -176,3 +176,8 @@
         </div>
     </div>
 </div>
+<script>
+    function est_hpa() {
+        $('#est_habpreart').modal('show');
+    }
+</script>

@@ -27,326 +27,6 @@
 <!--Modals Formularios de Consentimientos informados generales-->
 @include('general.sidebar.modal_form_generales.modal_ges')
 
-
-<!--Modals Formularios de Consentimientos informados generales-->
-
-<!---******* Modal Formulario Anestesia ********-->
-<div id="modal_anestesia" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_anestesia"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center">Consentimiento informado anestesia</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-row">
-                        <div class="form-group col-sm-6 col-md-6">
-                            <label class="floating-label-activo-sm">Nombre</label>
-                            <input type="text" class="form-control form-control-sm" name="nombre" id="nombre">
-                        </div>
-                        <div class="form-group col-sm-6 col-md-6">
-                            <label class="floating-label-activo-sm">Rut</label>
-                            <input type="person" class="form-control form-control-sm" name="rut" id="rut">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-sm-6 col-md-6">
-                            <label class="floating-label-activo-sm">Dirección</label>
-                            <input type="address" class="form-control form-control-sm" name="direccion" id="direccion">
-                        </div>
-                        <div class="form-group col-sm-6 col-md-6">
-                            <label class="floating-label-activo-sm">Región / Comuna</label>
-                            <select id="region_comuna" name="region_comuna" class="form-control form-control-sm">
-                                <option selected value="0">Seleccione una opción </option>
-                                <optgroup label="Región de Valparaíso">
-                                    <option>Viña del Mar</option>
-                                    <option>Valparaíso</option>
-                                    <option>San Felipe</option>
-                                    <option>etc...</option>
-                                </optgroup>
-                                <optgroup label="Región Metropolitana">
-                                    <option>Santiago</option>
-                                    <option>Maipú</option>
-                                    <option>etc...</option>
-                                </optgroup>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-sm-6 col-md-6">
-                            <label class="floating-label-activo-sm">Edad</label>
-                            <input type="text" class="form-control form-control-sm" name="edad" id="edad">
-                        </div>
-                        <div class="form-group col-sm-6 col-md-6">
-                            <label class="floating-label-activo-sm">Fecha</label>
-                            <input type="date" class="form-control form-control-sm" name="fecha_anestesi"
-                                id="fecha_anestesi">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-sm-12 col-md-12">
-                            <h6>En representeción de</h6>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-sm-12 col-md-12">
-                            <label class="floating-label-activo-sm">Nombre del paciente</label>
-                            <input type="person" class="form-control form-control-sm" type="nombre_paciente"
-                                name="nombre_paciente">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-sm-12 col-md-12">
-                            <label class="floating-label-activo-sm">Incapacitado en estos momentos por</label>
-                            <input type="text" class="form-control form-control-sm" type="incapacitacion"
-                                name="incapacitacion">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-sm-12 col-md-12">
-                            <h6>Certifico que el profesional</h6>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-sm-12 col-md-12">
-                            <label class="floating-label-activo-sm">Nombre del profesional</label>
-                            <input type="person" class="form-control form-control-sm" type="nombre_profesional"
-                                name="nombre_profesional">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-sm-12 col-md-12">
-                            <h6>Me ha informado acerca de los riesgos y el porqué considera necesario realizar el
-                                procedimiento</h6>
-                        </div>
-                        <div class="form-group col-sm-12 col-md-12">
-                            <label class="floating-label-activo-sm">Nombre y tipo de anestesia</label>
-                            <input type="person" class="form-control form-control-sm" type="nombre_profesional"
-                                name="nombre_profesional">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 text-center">
-                            <button type="button" class="btn btn-sm btn-primary mt-2 mb-4">Ver documento en
-                                PDF</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success">Autentificación</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info">Guardar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--Modals Consultas previas-->
-<!---******* Modal Ficha ********-->
-<div id="m_consultaant" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="m_consultaantLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h5 class="modal-title text-white" id="m_consultaantLabel">Consulta del..... </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <div class="form-group fill">
-                                <label class="floating-label" for="MotConsulta">Motivo de Consulta</label>
-                                <!--fin autollenado-->
-                                <input id="MotConsulta" type="text" class="form-control form-control-sm">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <form>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <div class="form-group fill">
-                                <label class="floating-label" for="AntConsulta">Antecedentes</label>
-                                <!--fin autollenado-->
-                                <input id="AntConsulta" type="text" class="form-control form-control-sm">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <form>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <div class="form-group fill">
-                                <label class="floating-label" for="ExFísico">Examen Físico</label>
-                                <!--fin autollenado-->
-                                <input id="ExFísico" type="text" class="form-control form-control-sm">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <form>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <div class="form-group fill">
-                                <label class="floating-label" for="Dignóstico">Dignóstico</label>
-                                <!--fin autollenado-->
-                                <input id="Dignóstico" type="text" class="form-control form-control-sm">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <form>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <div class="form-group fill">
-                                <label class="floating-label" for="Receta">Receta</label>
-                                <!--fin autollenado-->
-                                <input id="Receta" type="text" class="form-control form-control-sm">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <form>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <div class="form-group fill">
-                                <label class="floating-label" for="Examenes">Examenes</label>
-                                <!--fin autollenado-->
-                                <input id="Examenes" type="text" class="form-control form-control-sm">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <!--fin autollenado-->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!---******* Modal Exámenes ********-->
-<div id="m_cons_ex" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="m_cons_exLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h5 class="modal-title text-white" id="m_cons_exLabel">Exámenes solicitados el.... </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <table id="atenciones_previas_1"
-                        class="display table table-striped table-hover dt-responsive nowrap pb-4" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th class="text-center align-middle">Fecha</th>
-                                <th class="text-center align-middle">Tipo</th>
-                                <th class="text-center align-middle">Urgencia</th>
-                                <th class="text-center align-middle">Nombre</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-center align-middle">27/07/2021</td>
-                                <td class="text-center align-middle">Sangre</td>
-                                <td class="text-center align-middle">Normal</td>
-                                <td class="text-center align-middle">Hemograma y vhs</td>
-                            </tr>
-                            <tr>
-                                <td class="text-center align-middle">27/07/2021</td>
-                                <td class="text-center align-middle">Otorrinolaríngologico</td>
-                                <td class="text-center align-middle">Normal</td>
-                                <td class="text-center align-middle">Rinomanometría</td>
-                            </tr>
-                            <tr>
-                                <td class="text-center align-middle">27/07/2021</td>
-                                <td class="text-center align-middle">Sangre</td>
-                                <td class="text-center align-middle">Urgente</td>
-                                <td class="text-center align-middle">Grupo Sanguíneo</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
-                <!--fin autollenado-->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!---******* Modal Recetas ********-->
-<div id="m_cons_receta" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="m_cons_recetaLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h5 class="modal-title text-white" id="m_cons_recetaLabel">Receta del .... </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <table id="atenciones_previas_2"
-                        class="display table table-striped table-hover dt-responsive nowrap pb-4" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th class="text-center align-middle">Fecha</th>
-                                <th class="text-center align-middle">Medicamento</th>
-                                <th class="text-center align-middle">Dosis</th>
-                                <th class="text-center align-middle">Posología</th>
-                                <th class="text-center align-middle">Cantidad</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-center align-middle">27/07/2021</td>
-                                <td class="text-center align-middle">Rigotax_D</td>
-                                <td class="text-center align-middle">50mg</td>
-                                <td class="text-center align-middle">1 al día</td>
-                                <td class="text-center align-middle">30 Cáps</td>
-                            </tr>
-                            <tr>
-                                <td class="text-center align-middle">27/07/2021</td>
-                                <td class="text-center align-middle">Prednisona</td>
-                                <td class="text-center align-middle">5 mg</td>
-                                <td class="text-center align-middle">1 cada 12 horas</td>
-                                <td class="text-center align-middle">1 caja de 20 comp</td>
-                            </tr>
-                            <tr>
-                                <td class="text-center align-middle">27/07/2021</td>
-                                <td class="text-center align-middle">Levofloxacino</td>
-                                <td class="text-center align-middle">750 mg</td>
-                                <td class="text-center align-middle">1 al día</td>
-                                <td class="text-center align-middle">10 Comprimidos</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
-                <!--fin autollenado-->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 <!--Botón Flotante-->
 <div class="row">
     <div class="col-sm-12">
@@ -359,25 +39,32 @@
                     @if($profesional->Especialidad()->first()->nombre == 'MATRÓN/A')
                         <a id="boton_3" class="fas fa-child fa-2x" data-toggle="canvas" data-target="#formularios_matrona" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Matrón/a" data-placement="left"></a>
                     @endif
-                @elseif($profesional->TipoEspecialidad()->first())
+                    @if($profesional->Especialidad()->first()->nombre == 'SICOLOGÍA')
+                    <a id="boton_3" class="fas fa-fish fa-2x" data-toggle="canvas" data-target="#formularios_psicologia" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Psicología" data-placement="left"></a>
+                    @endif
+                    @if($profesional->Especialidad()->first()->nombre == 'KINESIOLOGIA' )
+                    <a id="boton_3" class="fas fa-walking fa-2x" data-toggle="canvas" data-target="#formularios_kine" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Kinesiología" data-placement="left"></a>
+                    @endif
+                    @if($profesional->Especialidad()->first()->nombre == 'TÉCNICO ENFERMERÍA (TENS)' )
+                    <a id="boton_3" class="fas fa-walking fa-2x" data-toggle="canvas" data-target="#formularios_tens" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Tens" data-placement="left"></a>
+                    @endif
+                    @if($profesional->Especialidad()->first()->nombre == 'NUTRICIÓN Y DIETÉTICA' )
+                    <a id="boton_3" class="fas fa-walking fa-2x" data-toggle="canvas" data-target="#formularios_nutrición" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Nutrición" data-placement="left"></a>
+                    @endif
+                    @if($profesional->Especialidad()->first()->nombre == 'FONOAUDIOLOGÍA' )
+                    <a id="boton_3" class="fas fa-american-sign-language-interpreting fa-2x" data-toggle="canvas" data-target="#formularios_fonoaudiologia" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios_Fonoaudiologia" data-placement="left"></a>
+                    @endif
+                    @elseif($profesional->TipoEspecialidad()->first())
                     @if($profesional->TipoEspecialidad()->first()->nombre == 'ENFERMERA UNIVERSITARIA')
                         <a id="boton_3" class="fas fa-bezier-curve fa-2x" data-toggle="canvas" data-target="#formularios_pediatria" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Enfermera Universitaria" data-placement="left"></a>
                     @endif
                     @if($profesional->TipoEspecialidad()->first()->nombre == 'NUTRICIONISTA GENERAL' )
                     <a id="boton_3" class="fas fa-code-branch fa-2x" data-toggle="canvas" data-target="#formularios_nutrición" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Nutrición" data-placement="left"></a>
                     @endif
-                    @if($profesional->TipoEspecialidad()->first()->nombre == 'FONOAUDIOLOGIA CLÍNICA ADULTOS Y NIÑOS' )
-                    <a id="boton_3" class="fas fa-american-sign-language-interpreting fa-2x" data-toggle="canvas" data-target="#formularios_fonoaudiologia" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Fonoaudiología" data-placement="left"></a>
-                    @endif
-                    @if($profesional->TipoEspecialidad()->first()->nombre == 'KINESIOLOGIA GENERAL' )
-                    <a id="boton_3" class="fas fa-walking fa-2x" data-toggle="canvas" data-target="#formularios_kine" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Kinesiología" data-placement="left"></a>
-                    @endif
-                    @if($profesional->TipoEspecialidad()->first()->nombre == 'SICOLOGÍA GENERAL ADULTOS' )
-                    <a id="boton_3" class="fas fa-fish fa-2x" data-toggle="canvas" data-target="#formularios_psicologia" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Psicología" data-placement="left"></a>
-                    @endif
+
 					@if($profesional->TipoEspecialidad()->first()->nombre == 'SICOLOGÍA GENERAL INFANTIL')
                     <a id="boton_3" class="fas fa-child fa-2x" data-toggle="canvas" data-target="#formularios_sicologia_inf" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Sicología Pediátrica" data-placement="left"></a>
-                    @endif	  
+                    @endif
                     @if($profesional->TipoEspecialidad()->first()->nombre == 'ENFERMERÍA CONTROL NIÑO SANO')
                         <a id="boton_3" class="fas fa-bezier-curve fa-2x" data-toggle="canvas" data-target="#formularios_pediatria" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Enfermera Universitaria" data-placement="left"></a>
                     @endif

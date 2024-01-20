@@ -6,7 +6,7 @@
         <h5 class="d-inline-block text-light mb-0 float-right">Formularios Nutrición</h5>
     </header>
     <div class="bs-canvas-content">
-        <div class="accordion" id="accordion_ped">
+        <div class="accordion" id="accordion_nutri">
             <div class="card-sidebar">
                 <div class="card-header-sidebar" id="heading_test">
                     <h2 class="mb-0">
@@ -15,7 +15,7 @@
                         </button>
                     </h2>
                 </div>
-                <div id="collapse_test" class="collapse" aria-labelledby="heading_test" data-parent="#accordion_ped">
+                <div id="collapse_test" class="collapse" aria-labelledby="heading_test" data-parent="#accordion_nutri">
                     <div class="card-body-sidebar">
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="inst_eval();"><i class="fa fa-plus"></i> Instrumentos Evaluación</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="eval_dent();"><i class="fa fa-plus"></i> Pautas de evaluación Dental</button>
@@ -32,7 +32,7 @@
                         </button>
                     </h2>
                 </div>
-                <div id="collapse_ref_varon" class="collapse" aria-labelledby="heading_ref_varon" data-parent="#accordion_ped">
+                <div id="collapse_ref_varon" class="collapse" aria-labelledby="heading_ref_varon" data-parent="#accordion_nutri">
                     <div class="card-body-sidebar">
 
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="imc519();"><i class="fa fa-plus"></i> IMC 5 a 19 años varones</button>
@@ -60,7 +60,7 @@
                         </button>
                     </h2>
                 </div>
-                <div id="collapse_ref_mujer" class="collapse" aria-labelledby="heading_ref_mujer" data-parent="#accordion_ped">
+                <div id="collapse_ref_mujer" class="collapse" aria-labelledby="heading_ref_mujer" data-parent="#accordion_nutri">
                     <div class="card-body-sidebar">
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="presion_f();"><i class="fa fa-plus"></i> Presión Arterial mujer</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="imc_519f();"><i class="fa fa-plus"></i> IMC 5 a 19 años mujer</button>
@@ -87,12 +87,12 @@
                     </button>
                     </h2>
                 </div>
-                <div id="collapse_consentimientos_informados" class="collapse" aria-labelledby="heading_consentimientos_informados" data-parent="#accordion_ped">
+                <div id="collapse_consentimientos_informados" class="collapse" aria-labelledby="heading_consentimientos_informados" data-parent="#accordion_nutri">
                     <div class="card-body-sidebar">
-                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cons_tto()";>+ Para tratamiento</button>
+                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cons_tto_nutri()";>+ Para tratamiento</button>
                     </div>
                 </div>
-                {{--  @include(asset()"../modals_generales/m_tratamiento.php");  --}}
+                @include("atencion_otros_prof.formularios.modal_atencion_especialidad.psicologia.m_aconsentcirm")
             </div>
 
             <div class="card-sidebar">
@@ -103,11 +103,11 @@
                     </button>
                     </h2>
                 </div>
-                <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_ped">
+                <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_nutri">
                     <div class="card-body-sidebar">
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ufonasa()";>+ Buscador código FONASA</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ucalcimc()";>+ Calculadora de IMC</button>
-                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="apgar();"><i class="fa fa-plus"></i> APGAR</button>
+
                     </div>
                 </div>
                 @include("atencion_pediatrica.sidebars.modals_generales.m_ucodigofonasa")
@@ -122,7 +122,7 @@
                     </button>
                     </h2>
                 </div>
-                <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_ped">
+                <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_nutri">
                     <div class="card-body-sidebar">
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="dieta_diab()";>+ Dieta tipo diabéticos</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="raciones()";>+ Tamaño Raciones</button>
@@ -139,6 +139,25 @@
 
                 </div>
 
+            </div>
+            <div class="card-sidebar">
+                <div class="card-header-sidebar" id="heading_sugerencias">
+                    <h2 class="mb-0">
+                    <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_sugerencias" aria-expanded="false" aria-controls="collapse_sugerencias"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                        AYUDENOS A MEJORAR
+                    </button>
+                    </h2>
+                </div>
+                <div id="collapse_sugerencias" class="collapse" aria-labelledby="heading_sugerencias" data-parent="#accordion_nutri">
+                    <div class="card-body-sidebar">
+                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="c_faltante()";>+ Consentimiento  faltante</button>
+                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="f_faltante()";>+ formulario faltante</button>
+                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="sugerencias()";>+ Sugerencias</button>
+                    </div>
+                </div>
+                @include("general.modal.m_form_faltante")
+                @include("general.modal.m_sugerencias")
+                @include("general.modal.m_consent_faltante")
             </div>
         </div>
     </div>

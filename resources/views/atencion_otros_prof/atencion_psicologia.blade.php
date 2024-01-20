@@ -20,7 +20,9 @@
                                     @endphp
                                     {{ $fecha }}
                                 </p>
-
+                                <p class="font-italic mt-0 mb-0 text-white">
+                                    <span class="f-16 f-w-600">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</span>, RUT: <span class="f-16 f-w-600">{{ $paciente->rut}}</span> , Edad <span class="f-16 f-w-600">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -43,13 +45,20 @@
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
+                                        @if (request('token') && request('fmu') == 1)
+                                            <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
+                                        @else
+                                            @php
+                                                $url_temp = 'Profesional/Paciente/Ficha_consulta?_token='.request('_token').'&id_hora_realizar='.request('id_hora_realizar').'&lugar_atencion_id='.request('lugar_atencion_id').'';
+                                            @endphp
+                                            <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $paciente->id_usuario,'urla'=> $url_temp.'&fmu=0','urln' => $url_temp.'&fmu=1', 'id_tipo' => 2]) }}">FMU</a>
+                                        @endif
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="Paciente hospitalizado" aria-selected="false">Hospitalización</a>
+                                        <a class="nav-link text-reset" id="hospitalizacion_op-tab" data-toggle="tab" href="#hospitalizacion_op" role="tab" aria-controls="hospitalizacion_op" aria-selected="false">Hospitalización</a>
                                     </li>
                                 </ul>
                             </div>
@@ -69,27 +78,23 @@
                         <!--Licencia-->
                         <!--Ficha Médica Única-->
                         <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
-                            @include('atencion_otros_prof.secciones_ficha.fmu')
+                            @include('general.secciones_ficha.fmu')
                         </div>
                         <!--Atenciones previas-->
                         <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
                             {{--  @include('atencion_medica.secciones_ficha.atenciones_previas')  --}}
-                            @include('atencion_otros_prof.formularios.atenciones_previas_form')
+                            @include('general.secciones_ficha.atenciones_previas_form')
                         </div>
-                        <!--Exámenes-->{{--
-                        <div class="tab-pane fade show" id="examenes" role="tabpanel" aria-labelledby="examenes-tab">
-                            @include('atencion_medica.secciones_ficha.examenes')
-                        </div>--}}
                         <!--Hospitalización-->
-                        <div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">
-                            @include('atencion_otros_prof.secciones_ficha.hospitalizacion')
+                        <div class="tab-pane fade show" id="hospitalizacion_op" role="tabpanel" aria-labelledby="hospitalizacion_op-tab">
+                            @include('general.hospitalizacion.hospitalizacion_op')
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- SIDE BAR ORL -->
+        <!-- SIDE BAR sico-->
         @include("atencion_otros_prof.modales"){{-- base de botones de sidebar --}}
         @include("atencion_otros_prof.include.sidebar_derecho_psicologia"){{-- modales y data de sidebar especialidad --}}
 
@@ -104,13 +109,13 @@
 
 
     </div>
-    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.informe_nutri")
+    {{--  @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.informe_nutri")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.modal_dieta_diaria")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.modal_dieta")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.modal_encuesta_aliment")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.modal_indicadores_nutri")
-    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.planificacion_nutri")
-
+    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.planificacion_nutri")  --}}
+    @include('general.hospitalizacion.seccion_ficha_hospitalizacion.sala_hospitalizacion_op')
 
 
 

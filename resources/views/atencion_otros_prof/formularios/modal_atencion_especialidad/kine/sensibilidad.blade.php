@@ -2,58 +2,46 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1" id="modal_eval_hab_preart">EXAMEN DE LA SENSIBILIDAD</h5>
+                <h5 class="modal-title text-white mt-1" id="modal_eval_hab_preart">Examen de la sensibilidad</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="form-row">
-                        <div class="col-sm-3 mt-2">
-                            <div class="form-group fill">
-                                <H6 class="form_fono">I.- Primaria</h6>
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <h6 class="t-aten-black-sm">I.- Primaria</h6>
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Examen</label>
+                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="kine_sens_prim" id="kine_sens_prim"></textarea>
                             </div>
                         </div>
-                        <div class="col-sm-9 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Examen</label>
-                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="succion" id="succion"></textarea>
-                        </div>
-                       
-                    </div>
-                    <br>
-                    <hr>
-                    <div class="form-row">
-                        <div class="col-sm-3 mt-2">
-                            <div class="form-group fill">
-                                <H6 class="form_fono">II.- Secundaria</h6>
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
+                            <h6 class="t-aten-black-sm">II.- Secundaria</h6>
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Examen</label>
+                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="kine_sens_sec" id="kine_sens_sec"></textarea>
                             </div>
                         </div>
-                        <div class="col-sm-9 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Examen</label>
-                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="succion" id="succion"></textarea>
-                        </div>
-                        <br>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-sm-12 mt-2">
-                            <div class="form-group fill">
-                                <H6 class="form_fono_center">Conclusiones</h6>
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <h6 class="t-aten-black-sm">Conclusiones</h6>
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Comentarios</label>
+                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="kine_sens_comentarios" id="kine_sens_comentarios"></textarea>
                             </div>
                         </div>
-                        <div class="col-sm-12 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Coclusiones</label>
-                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="succion" id="succion"></textarea>
-                        </div>
-                        <br>
                     </div>
-                    
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info">
-                Guardar</button>
+                <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
+                <button type="button" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function sensibilidad() {
+        $('#sensibilidad').modal('show');
+    }
+</script>
