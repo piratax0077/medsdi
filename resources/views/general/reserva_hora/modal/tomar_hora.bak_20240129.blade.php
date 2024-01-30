@@ -84,7 +84,6 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="modal_reserva_hora_id_profesional" id="modal_reserva_hora_id_profesional" value="">
-                    <input type="hidden" name="modal_reserva_hora_tipo_agenda" id="modal_reserva_hora_tipo_agenda" value="1">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-row">
@@ -108,9 +107,10 @@
                         <div class="col-md-12">
                             <div class="form-row">
                                 <div class="form-group col-md-12 mb-2 mt-0">
+                                    {{--  <input type="date" id="calendario" name="calendario">  --}}
+                                    {{--  <div id="calendario_reserva_buscador" name="calendario_reserva_buscador" class="calendar fc fc-unthemed fc-ltr"></div>  --}}
                                     <label class="floating-label-active-sm mb-0">Seleccione una fecha</label>
-                                    {{-- <input class="form-control form-control-sm" type="date" name="modal_reserva_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_reserva_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  disabled="disabled"/> --}}
-                                    <input class="form-control form-control-sm" type="date" name="modal_reserva_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_reserva_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  />
+                                    <input class="form-control form-control-sm" type="date" name="modal_reserva_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_reserva_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  disabled="disabled"/>
                                 </div>
                             </div>
                         </div>
@@ -1209,27 +1209,6 @@
         let id_asistente = $('#reserva_hora_id_asistente').val();
         let origen = $('#reserva_hora_origen').val();
 
-        let tipo_agenda = $('#modal_reserva_hora_tipo_agenda').val();
-        var tipo_agenda_text = 'C';
-
-        console.log(tipo_agenda);
-        console.log(tipo_agenda_text);
-
-        switch (tipo_agenda) {
-            case '1':
-                tipo_agenda_text = 'C';//CONSULTA
-                break;
-            case '2':
-                tipo_agenda_text = 'D';//DENTAL
-                break;
-            case '3':
-                tipo_agenda_text = 'T';//TELEMEDICINA
-                break;
-            case '4':
-                tipo_agenda_text = 'E';//EXAMEN
-                break;
-        }
-
 
         $.ajax({
                 url: url,
@@ -1242,7 +1221,6 @@
                     id_profesional: id_profesional,
                     id_asistente: id_asistente,
                     origen: origen,
-                    tipo_hora_medica: tipo_agenda_text,
                 }
             })
             .done(function(data) {
