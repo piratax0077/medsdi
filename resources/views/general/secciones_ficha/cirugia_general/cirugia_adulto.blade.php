@@ -135,14 +135,12 @@
                                                     <label class="cr" for="plan_cirugia"></label>
                                                 </div>
                                             </div>
-
-
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div id="contentCir_cg" style="display: none;">
                                                 <div class="form-row">
                                                     <div class="form-group col-md-12">
-                                                        <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingresohosp()";<i class="feather icon-save"></i> Orden de Hospitalización </button>
+                                                        <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingresohosp();"><i class="feather icon-save"></i> Orden de Hospitalización </button>
                                                     </div>
                                                 </div>
                                             </div>

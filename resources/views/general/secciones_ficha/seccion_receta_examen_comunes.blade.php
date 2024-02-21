@@ -352,221 +352,221 @@
         //     }
         // }
 
-        function indicar_medicamento_cirugia() {
+        // function indicar_medicamento_cirugia() {
 
-            let nombre_medicamento_ficha_dental = $('#nombre_medicamento_ficha_dental').val();
-            let id_medicamento = $('#id_medicamento_ficha_dental').val();
-            let dosis_medicamento_ficha_dental = $('#dosis_medicamento_ficha_dental option:selected').text();
-            let frecuencia_medicamento_ficha_dental = $('#frecuencia_medicamento_ficha_dental option:selected').text();
-            let dosis_medicamento_ficha_dental_2 = $('#dosis_medicamento_ficha_dental_2').val();
-            let frecuencia_medicamento_ficha_dental_2 = $('#frecuencia_medicamento_ficha_dental_2').val();
-            let via_administracion_ficha_dental = $('#via_administracion_ficha_dental option:selected').text();
-            let observaciones_medicamento_ficha_dental = $('#observaciones_medicamento_ficha_dental').val();
-            let periodo_ficha_dental = $('#periodo_ficha_dental option:selected').text();
-            let observaciones_periodo_ficha_dental = $('#observaciones_periodo_ficha_dental').val();
-            let cantidad_comprar = $('#cantidad_comprar option:selected').text();
-            let otra_cantidad_a_comprar = $('#otra_cantidad_a_comprar').val();
-
-
-            var lista_med = [];
-            $('#tabla_medicamento_cirugia tr').each(function(i, n) {
-                if (i > 0) {
-                    rol = {};
-                    var data = $(this).find("td");
-                    lista_med.push($.trim($(data[0]).text().split("\n").join("")));
-                }
-            });
-
-            if($.inArray(id_medicamento,lista_med) == -1)
-            {
-
-                var medicamento_uso_cronico = 0;
-                if($('#medicamento_uso_cronico').is(':checked'))
-                    medicamento_uso_cronico = 1;
-
-                var valido = 0;
-                var mensaje = '';
-
-                if($.trim(nombre_medicamento_ficha_dental) == '')
-                {
-                    valido = 1;
-                    mensaje += 'Debe completar el campo Medicamento.\n';
-                }
-
-                if($('#id_medicamento_ficha_dental').val() != '')
-                {
-                    if($.trim(dosis_medicamento_ficha_dental) == '' || dosis_medicamento_ficha_dental == 0 || dosis_medicamento_ficha_dental == 'Seleccione una opción' || dosis_medicamento_ficha_dental == 'Seleccione' || dosis_medicamento_ficha_dental == 'Seleccione')
-                    {
-                        valido = 1;
-                        mensaje += 'Debe completar el campo Presentación.\n';
-                    }
-                    if($.trim(frecuencia_medicamento_ficha_dental) == '' || frecuencia_medicamento_ficha_dental == 0 || frecuencia_medicamento_ficha_dental == 'Seleccione una opción' || frecuencia_medicamento_ficha_dental == 'Seleccione' || frecuencia_medicamento_ficha_dental == 'Seleccione')
-                    {
-                        valido = 1;
-                        mensaje += 'Debe completar el campo Posología.\n';
-                    }
-                }
-                else
-                {
-                    if( dosis_medicamento_ficha_dental_2 == '')
-                    {
-                        valido = 1;mensaje += 'Debe completar el campo Dosis\n';
-                    }
-                    else
-                    {
-                        dosis_medicamento_ficha_dental = dosis_medicamento_ficha_dental_2;
-                    }
-                    if( frecuencia_medicamento_ficha_dental_2 == '')
-                    {
-                        valido = 1;mensaje += 'Debe completar el campo Frecuencia\n';
-                    }
-                    else
-                    {
-                        frecuencia_medicamento_ficha_dental = frecuencia_medicamento_ficha_dental_2;
-                    }
-                }
-
-                if($.trim(via_administracion_ficha_dental) == '' || via_administracion_ficha_dental == 0 || $.trim(via_administracion_ficha_dental) == 'Seleccione')
-                {
-                    valido = 1;
-                    mensaje += 'Debe completar el campo Via de Administración.\n';
-                }
-                else if($('#via_administracion_ficha_dental').val() == 11)
-                {
-                    if( $.trim(observaciones_medicamento_ficha_dental) == '')
-                    {
-                        valido = 1;
-                        mensaje += 'Debe ingresar Otra Vía Administración\n';
-                    }
-                    else
-                    {
-                        via_administracion_ficha_dental = observaciones_medicamento_ficha_dental;
-                    }
-                }
-
-                if($.trim(periodo_ficha_dental) == '' || periodo_ficha_dental == 0 || $.trim(periodo_ficha_dental) == 'Seleccione')
-                {
-                    valido = 1;
-                    mensaje += 'Debe completar el campo Periodo.\n';
-                }
-                else if($('#periodo_ficha_dental').val() == 11)
-                {
-                    if( $.trim(observaciones_periodo_ficha_dental) == '')
-                    {
-                        valido = 1;
-                        mensaje += 'Debe ingresar Otro Periodo\n';
-                    }
-                    else
-                    {
-                        periodo_ficha_dental = observaciones_periodo_ficha_dental;
-                    }
-                }
-
-                if($.trim(cantidad_comprar) == '' || cantidad_comprar == 0 || $.trim(cantidad_comprar) == 'Seleccione')
-                {
-                    valido = 1;
-                    mensaje += 'Debe completar el campo Cantidad a Comprar.\n';
-                }
-                else if($('#cantidad_comprar').val() == '999')
-                {
-                    if( $.trim(otra_cantidad_a_comprar) == '')
-                    {
-                        valido = 1;
-                        mensaje += 'Debe ingresar Cantidad a Comprar\n';
-                    }
-                    else
-                    {
-                        cantidad_comprar = otra_cantidad_a_comprar;
-                    }
-                }
-
-                if(valido == 0)
-                {
-                    $('.medicamentos_sin_registros').remove()
-
-                    var i = $('#tabla_medicamento_cirugia tr').length; //contador para asignar id al boton que borrara la fila
-                    var fila = '<tr class="tabla_medicamento_cirugia" id="row' + i + '">' +
-                                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_medicamento + '</td>' +
-                                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + medicamento_uso_cronico + '</td>' +
-                                    '<td class="text-center align-middle text-wrap">' + nombre_medicamento_ficha_dental + '</td>' +
-                                    '<td class="text-center align-middle text-wrap">' + dosis_medicamento_ficha_dental + '</td>' +
-                                    '<td class="text-center align-middle text-wrap">' + frecuencia_medicamento_ficha_dental + '</td>' +
-                                    '<td class="text-center align-middle text-wrap">' + via_administracion_ficha_dental + '</td>' +
-                                    '<td class="text-center align-middle text-wrap">' + periodo_ficha_dental + '</td>' +
-                                    '<td class="text-center align-middle text-wrap">' + cantidad_comprar + '</td>' +
-                                    '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento(\'row' + i + '\');">Quitar</div></td>'+
-                                '</tr>'; //esto seria lo que contendria la fila
-
-                    i++;
-
-                    $('#tabla_medicamento_cirugia tr:first').after(fila);
-
-                    /** enviando a table de medicamento faltante */
-                    if($('#id_medicamento_ficha_dental').val() == '')
-                    {
-                        $('#med_faltante').val(nombre_medicamento_ficha_dental);
-                        enviar_medicamento_faltante();
-                    }
-
-                    //$("#adicionados").text(""); //esta instruccion limpia el div adicionados para que no se vayan acumulando
-                    {{--  var nFilas = $("#tabla_medicamento_cirugia tr").length;  --}}
-                    $('#nombre_medicamento_ficha_dental').val('');
-                    $('id_medicamento_ficha_dental').val('');
-
-                    $('#nombre_composicion_farmaco').html('');
-
-                    {{--  $('#dosis_medicamento_ficha_dental').html('<option value="0">Seleccione</option>');  --}}
-                    $('#dosis_medicamento_ficha_dental').val(0);
-
-                    {{--  $('#frecuencia_medicamento_ficha_dental').html('<option value="0">Seleccione</option>');  --}}
-                    $('#frecuencia_medicamento_ficha_dental').val(0);
-
-                    $('#dosis_medicamento_ficha_dental_2').val('');
-                    $('#frecuencia_medicamento_ficha_dental_2').val('');
-
-                    $('#via_administracion_ficha_dental').val(0);
-                    $('#observaciones_medicamento_ficha_dental').val('');
-                    $('#observaciones_medicamento_ficha_dental').attr('disabled','disabled');
-
-                    $('#periodo_ficha_dental').val(0);
-                    $('#observaciones_periodo_ficha_dental').val('');
-                    $('#observaciones_periodo_ficha_dental').attr('disabled','disabled');
+        //     let nombre_medicamento_ficha_dental = $('#nombre_medicamento_ficha_dental').val();
+        //     let id_medicamento = $('#id_medicamento_ficha_dental').val();
+        //     let dosis_medicamento_ficha_dental = $('#dosis_medicamento_ficha_dental option:selected').text();
+        //     let frecuencia_medicamento_ficha_dental = $('#frecuencia_medicamento_ficha_dental option:selected').text();
+        //     let dosis_medicamento_ficha_dental_2 = $('#dosis_medicamento_ficha_dental_2').val();
+        //     let frecuencia_medicamento_ficha_dental_2 = $('#frecuencia_medicamento_ficha_dental_2').val();
+        //     let via_administracion_ficha_dental = $('#via_administracion_ficha_dental option:selected').text();
+        //     let observaciones_medicamento_ficha_dental = $('#observaciones_medicamento_ficha_dental').val();
+        //     let periodo_ficha_dental = $('#periodo_ficha_dental option:selected').text();
+        //     let observaciones_periodo_ficha_dental = $('#observaciones_periodo_ficha_dental').val();
+        //     let cantidad_comprar = $('#cantidad_comprar option:selected').text();
+        //     let otra_cantidad_a_comprar = $('#otra_cantidad_a_comprar').val();
 
 
+        //     var lista_med = [];
+        //     $('#tabla_medicamento_cirugia tr').each(function(i, n) {
+        //         if (i > 0) {
+        //             rol = {};
+        //             var data = $(this).find("td");
+        //             lista_med.push($.trim($(data[0]).text().split("\n").join("")));
+        //         }
+        //     });
 
-                    $('#cantidad_comprar').val(0);
-                    $('#otra_cantidad_a_comprar').val('');
-                    $('#otra_cantidad_a_comprar').attr('disabled','disabled');
+        //     if($.inArray(id_medicamento,lista_med) == -1)
+        //     {
+
+        //         var medicamento_uso_cronico = 0;
+        //         if($('#medicamento_uso_cronico').is(':checked'))
+        //             medicamento_uso_cronico = 1;
+
+        //         var valido = 0;
+        //         var mensaje = '';
+
+        //         if($.trim(nombre_medicamento_ficha_dental) == '')
+        //         {
+        //             valido = 1;
+        //             mensaje += 'Debe completar el campo Medicamento.\n';
+        //         }
+
+        //         if($('#id_medicamento_ficha_dental').val() != '')
+        //         {
+        //             if($.trim(dosis_medicamento_ficha_dental) == '' || dosis_medicamento_ficha_dental == 0 || dosis_medicamento_ficha_dental == 'Seleccione una opción' || dosis_medicamento_ficha_dental == 'Seleccione' || dosis_medicamento_ficha_dental == 'Seleccione')
+        //             {
+        //                 valido = 1;
+        //                 mensaje += 'Debe completar el campo Presentación.\n';
+        //             }
+        //             if($.trim(frecuencia_medicamento_ficha_dental) == '' || frecuencia_medicamento_ficha_dental == 0 || frecuencia_medicamento_ficha_dental == 'Seleccione una opción' || frecuencia_medicamento_ficha_dental == 'Seleccione' || frecuencia_medicamento_ficha_dental == 'Seleccione')
+        //             {
+        //                 valido = 1;
+        //                 mensaje += 'Debe completar el campo Posología.\n';
+        //             }
+        //         }
+        //         else
+        //         {
+        //             if( dosis_medicamento_ficha_dental_2 == '')
+        //             {
+        //                 valido = 1;mensaje += 'Debe completar el campo Dosis\n';
+        //             }
+        //             else
+        //             {
+        //                 dosis_medicamento_ficha_dental = dosis_medicamento_ficha_dental_2;
+        //             }
+        //             if( frecuencia_medicamento_ficha_dental_2 == '')
+        //             {
+        //                 valido = 1;mensaje += 'Debe completar el campo Frecuencia\n';
+        //             }
+        //             else
+        //             {
+        //                 frecuencia_medicamento_ficha_dental = frecuencia_medicamento_ficha_dental_2;
+        //             }
+        //         }
+
+        //         if($.trim(via_administracion_ficha_dental) == '' || via_administracion_ficha_dental == 0 || $.trim(via_administracion_ficha_dental) == 'Seleccione')
+        //         {
+        //             valido = 1;
+        //             mensaje += 'Debe completar el campo Via de Administración.\n';
+        //         }
+        //         else if($('#via_administracion_ficha_dental').val() == 11)
+        //         {
+        //             if( $.trim(observaciones_medicamento_ficha_dental) == '')
+        //             {
+        //                 valido = 1;
+        //                 mensaje += 'Debe ingresar Otra Vía Administración\n';
+        //             }
+        //             else
+        //             {
+        //                 via_administracion_ficha_dental = observaciones_medicamento_ficha_dental;
+        //             }
+        //         }
+
+        //         if($.trim(periodo_ficha_dental) == '' || periodo_ficha_dental == 0 || $.trim(periodo_ficha_dental) == 'Seleccione')
+        //         {
+        //             valido = 1;
+        //             mensaje += 'Debe completar el campo Periodo.\n';
+        //         }
+        //         else if($('#periodo_ficha_dental').val() == 11)
+        //         {
+        //             if( $.trim(observaciones_periodo_ficha_dental) == '')
+        //             {
+        //                 valido = 1;
+        //                 mensaje += 'Debe ingresar Otro Periodo\n';
+        //             }
+        //             else
+        //             {
+        //                 periodo_ficha_dental = observaciones_periodo_ficha_dental;
+        //             }
+        //         }
+
+        //         if($.trim(cantidad_comprar) == '' || cantidad_comprar == 0 || $.trim(cantidad_comprar) == 'Seleccione')
+        //         {
+        //             valido = 1;
+        //             mensaje += 'Debe completar el campo Cantidad a Comprar.\n';
+        //         }
+        //         else if($('#cantidad_comprar').val() == '999')
+        //         {
+        //             if( $.trim(otra_cantidad_a_comprar) == '')
+        //             {
+        //                 valido = 1;
+        //                 mensaje += 'Debe ingresar Cantidad a Comprar\n';
+        //             }
+        //             else
+        //             {
+        //                 cantidad_comprar = otra_cantidad_a_comprar;
+        //             }
+        //         }
+
+        //         if(valido == 0)
+        //         {
+        //             $('.medicamentos_sin_registros').remove()
+
+        //             var i = $('#tabla_medicamento_cirugia tr').length; //contador para asignar id al boton que borrara la fila
+        //             var fila = '<tr class="tabla_medicamento_cirugia" id="row' + i + '">' +
+        //                             '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_medicamento + '</td>' +
+        //                             '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + medicamento_uso_cronico + '</td>' +
+        //                             '<td class="text-center align-middle text-wrap">' + nombre_medicamento_ficha_dental + '</td>' +
+        //                             '<td class="text-center align-middle text-wrap">' + dosis_medicamento_ficha_dental + '</td>' +
+        //                             '<td class="text-center align-middle text-wrap">' + frecuencia_medicamento_ficha_dental + '</td>' +
+        //                             '<td class="text-center align-middle text-wrap">' + via_administracion_ficha_dental + '</td>' +
+        //                             '<td class="text-center align-middle text-wrap">' + periodo_ficha_dental + '</td>' +
+        //                             '<td class="text-center align-middle text-wrap">' + cantidad_comprar + '</td>' +
+        //                             '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento(\'row' + i + '\');">Quitar</div></td>'+
+        //                         '</tr>'; //esto seria lo que contendria la fila
+
+        //             i++;
+
+        //             $('#tabla_medicamento_cirugia tr:first').after(fila);
+
+        //             /** enviando a table de medicamento faltante */
+        //             if($('#id_medicamento_ficha_dental').val() == '')
+        //             {
+        //                 $('#med_faltante').val(nombre_medicamento_ficha_dental);
+        //                 enviar_medicamento_faltante();
+        //             }
+
+        //             //$("#adicionados").text(""); //esta instruccion limpia el div adicionados para que no se vayan acumulando
+        //             {{--  var nFilas = $("#tabla_medicamento_cirugia tr").length;  --}}
+        //             $('#nombre_medicamento_ficha_dental').val('');
+        //             $('id_medicamento_ficha_dental').val('');
+
+        //             $('#nombre_composicion_farmaco').html('');
+
+        //             {{--  $('#dosis_medicamento_ficha_dental').html('<option value="0">Seleccione</option>');  --}}
+        //             $('#dosis_medicamento_ficha_dental').val(0);
+
+        //             {{--  $('#frecuencia_medicamento_ficha_dental').html('<option value="0">Seleccione</option>');  --}}
+        //             $('#frecuencia_medicamento_ficha_dental').val(0);
+
+        //             $('#dosis_medicamento_ficha_dental_2').val('');
+        //             $('#frecuencia_medicamento_ficha_dental_2').val('');
+
+        //             $('#via_administracion_ficha_dental').val(0);
+        //             $('#observaciones_medicamento_ficha_dental').val('');
+        //             $('#observaciones_medicamento_ficha_dental').attr('disabled','disabled');
+
+        //             $('#periodo_ficha_dental').val(0);
+        //             $('#observaciones_periodo_ficha_dental').val('');
+        //             $('#observaciones_periodo_ficha_dental').attr('disabled','disabled');
 
 
-                    $( "#medicamento_uso_cronico" ).prop( "checked", false ).change();
-                    //$("#adicionados").append(nFilas - 1);
-                    //$("#sub_tipo_examen").empty();
-                    //$("#nro_orden").disabled();
 
-                }
-                else
-                {
-                    swal({
-                        title: "Ingreso de medicamento(s).",
-                        text:mensaje,
-                        icon: "error",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    });
-                }
-            }
-            else
-            {
-                swal({
-                    title: "Ingreso de medicamento(s).",
-                    text:'El medicamento está Recetado',
-                    icon: "warning",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
-                });
-            }
-        }
+        //             $('#cantidad_comprar').val(0);
+        //             $('#otra_cantidad_a_comprar').val('');
+        //             $('#otra_cantidad_a_comprar').attr('disabled','disabled');
+
+
+        //             $( "#medicamento_uso_cronico" ).prop( "checked", false ).change();
+        //             //$("#adicionados").append(nFilas - 1);
+        //             //$("#sub_tipo_examen").empty();
+        //             //$("#nro_orden").disabled();
+
+        //         }
+        //         else
+        //         {
+        //             swal({
+        //                 title: "Ingreso de medicamento(s).",
+        //                 text:mensaje,
+        //                 icon: "error",
+        //                 // buttons: "Aceptar",
+        //                 //SuccessMode: true,
+        //             });
+        //         }
+        //     }
+        //     else
+        //     {
+        //         swal({
+        //             title: "Ingreso de medicamento(s).",
+        //             text:'El medicamento está Recetado',
+        //             icon: "warning",
+        //             // buttons: "Aceptar",
+        //             //SuccessMode: true,
+        //         });
+        //     }
+        // }
 
         // function eliminar_medicamento(id_row)
         // {
@@ -685,9 +685,9 @@
 
         }
 
-        function ver_examenes_ficha_medica_esp() {
+        // function ver_examenes_ficha_medica_esp() {
 
-        }
+        // }
 
         function cerrarModalExamenesFicha()
         {
@@ -1065,6 +1065,7 @@
 
             var _token = CSRF_TOKEN;
             var id_ficha = $('#id_fc').val();
+            var id_hora_medica = $('#hora_medica').val();
             $('#tabla_examen_cirugia').html('');
 
             $.ajax({
@@ -1073,7 +1074,8 @@
                 type: "GET",
                 data: {
                     _token: _token,
-                    id_ficha_atencion:id_ficha
+                    id_ficha_atencion:id_ficha,
+                    id_hora_medica:id_hora_medica
                 },
             })
             .done(function(data)
@@ -1167,116 +1169,116 @@
 
         }
 
-        function alerta_registro_medicamento() {
+        // function alerta_registro_medicamento() {
 
-            swal({
-                title: "Ingreso de medicamento(s) exitoso.",
-                text: "Recuerde 'Guardar Ficha Clínica' para finalizar el proceso.",
-                icon: "success",
-                // buttons: "Aceptar",
-                //SuccessMode: true,
-            });
-            //alert("ingreso de medicamento(s) exitoso, favor terminar el registro.");
-            $('#nombre_medicamento_ficha_dental').val('');
-            $('#dosis_medicamento_ficha_dental').val('');
-            $('#frecuencia_medicamento_ficha_dental').val('');
-            $('#via_administracion_ficha_dental').val('0');
-            $('#periodo_ficha_dental').val('0');
-        }
+        //     swal({
+        //         title: "Ingreso de medicamento(s) exitoso.",
+        //         text: "Recuerde 'Guardar Ficha Clínica' para finalizar el proceso.",
+        //         icon: "success",
+        //         // buttons: "Aceptar",
+        //         //SuccessMode: true,
+        //     });
+        //     //alert("ingreso de medicamento(s) exitoso, favor terminar el registro.");
+        //     $('#nombre_medicamento_ficha_dental').val('');
+        //     $('#dosis_medicamento_ficha_dental').val('');
+        //     $('#frecuencia_medicamento_ficha_dental').val('');
+        //     $('#via_administracion_ficha_dental').val('0');
+        //     $('#periodo_ficha_dental').val('0');
+        // }
 
-        function registrar_medicamentos_ficha()
-        {
-            var rows1 = [];
-            $('#tabla_medicamento_cirugia tr').each(function(i, n) {
-                if (i > 0) {
-                    rol = {};
-                    var data = $(this).find("td");
-                    rol["id_producto"] = $.trim($(data[0]).text().split("\n").join(""));
-                    rol["uso_cronico"] = $.trim($(data[1]).text().split("\n").join(""));
-                    rol["medicamento"] = $.trim($(data[2]).text().split("\n").join(""));
-                    rol["presentacion"] = $.trim($(data[3]).text().split("\n").join(""));
-                    rol["posologia"] = $.trim($(data[4]).text().split("\n").join(""));
-                    rol["via_administracion"] = $.trim($(data[5]).text().split("\n").join(""));
-                    rol["periodo"] = $.trim($(data[6]).text().split("\n").join(""));
-                    rol["compra"] = $.trim($(data[7]).text().split("\n").join(""));
-                    rows1.push(rol);
-                }
-            });
+        // function registrar_medicamentos_ficha()
+        // {
+        //     var rows1 = [];
+        //     $('#tabla_medicamento_cirugia tr').each(function(i, n) {
+        //         if (i > 0) {
+        //             rol = {};
+        //             var data = $(this).find("td");
+        //             rol["id_producto"] = $.trim($(data[0]).text().split("\n").join(""));
+        //             rol["uso_cronico"] = $.trim($(data[1]).text().split("\n").join(""));
+        //             rol["medicamento"] = $.trim($(data[2]).text().split("\n").join(""));
+        //             rol["presentacion"] = $.trim($(data[3]).text().split("\n").join(""));
+        //             rol["posologia"] = $.trim($(data[4]).text().split("\n").join(""));
+        //             rol["via_administracion"] = $.trim($(data[5]).text().split("\n").join(""));
+        //             rol["periodo"] = $.trim($(data[6]).text().split("\n").join(""));
+        //             rol["compra"] = $.trim($(data[7]).text().split("\n").join(""));
+        //             rows1.push(rol);
+        //         }
+        //     });
 
-            $('#medicamentos').val(JSON.stringify(rows1));
+        //     $('#medicamentos').val(JSON.stringify(rows1));
 
-            let id_profesional = $('#id_profesional_fc').val();
-            let id_lugar_atencion = $('#id_lugar_atencion').val();
-            let id_paciente = $('#id_paciente_fc').val();
-            let id_ficha_atencion = $('#id_fc').val();
-            var _token = CSRF_TOKEN;
-
-
-            let url = "{{ route('detalle_receta.registro_medicamentos') }}";
-            $.ajax({
-
-                    url: url,
-                    type: "post",
-                    data: {
-                        _token: _token,
-                        medicamentos: JSON.stringify(rows1),
-                        id_ficha: id_ficha_atencion,
-                        id_ingreso_paciente: '0',
-                        id_recuperacion: '0',
-                        id_sala: '0',
-                        id_profesional: id_profesional,
-                        id_paciente: id_paciente,
-                        id_lugar_atencion: id_lugar_atencion,
-                    },
-                })
-                .done(function(data) {
-                    console.log(data)
-
-                    if (data != null) {
-
-                        {{--  data = JSON.parse(data);  --}}
-                        console.log(data)
-
-                        if(data.falla == '0'){
-                            swal({
-                                title: "Ingreso de medicamento(s).",
-                                text: 'Medicamentos registrados con Exito.',
-                                icon: "success",
-                                // buttons: "Aceptar",
-                                //SuccessMode: true,
-                            });
-                        }
-                        else
-                        {
-                            swal({
-                                title: "Ingreso de medicamento(s).",
-                                text: 'Falla en el registro, Intente nuevamente.',
-                                icon: "warning",
-                                // buttons: "Aceptar",
-                                //SuccessMode: true,
-                            });
-                        }
+        //     let id_profesional = $('#id_profesional_fc').val();
+        //     let id_lugar_atencion = $('#id_lugar_atencion').val();
+        //     let id_paciente = $('#id_paciente_fc').val();
+        //     let id_ficha_atencion = $('#id_fc').val();
+        //     var _token = CSRF_TOKEN;
 
 
+        //     let url = "{{ route('detalle_receta.registro_medicamentos') }}";
+        //     $.ajax({
 
-                    } else {
+        //             url: url,
+        //             type: "post",
+        //             data: {
+        //                 _token: _token,
+        //                 medicamentos: JSON.stringify(rows1),
+        //                 id_ficha: id_ficha_atencion,
+        //                 id_ingreso_paciente: '0',
+        //                 id_recuperacion: '0',
+        //                 id_sala: '0',
+        //                 id_profesional: id_profesional,
+        //                 id_paciente: id_paciente,
+        //                 id_lugar_atencion: id_lugar_atencion,
+        //             },
+        //         })
+        //         .done(function(data) {
+        //             console.log(data)
 
-                        swal({
-                            title: "Ingreso de medicamento(s).",
-                            text: 'Sin Retorno de Registro, Intente nuevamente.',
-                            icon: "error",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        });
+        //             if (data != null) {
 
-                    }
+        //                 {{--  data = JSON.parse(data);  --}}
+        //                 console.log(data)
 
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+        //                 if(data.falla == '0'){
+        //                     swal({
+        //                         title: "Ingreso de medicamento(s).",
+        //                         text: 'Medicamentos registrados con Exito.',
+        //                         icon: "success",
+        //                         // buttons: "Aceptar",
+        //                         //SuccessMode: true,
+        //                     });
+        //                 }
+        //                 else
+        //                 {
+        //                     swal({
+        //                         title: "Ingreso de medicamento(s).",
+        //                         text: 'Falla en el registro, Intente nuevamente.',
+        //                         icon: "warning",
+        //                         // buttons: "Aceptar",
+        //                         //SuccessMode: true,
+        //                     });
+        //                 }
 
-        }
+
+
+        //             } else {
+
+        //                 swal({
+        //                     title: "Ingreso de medicamento(s).",
+        //                     text: 'Sin Retorno de Registro, Intente nuevamente.',
+        //                     icon: "error",
+        //                     // buttons: "Aceptar",
+        //                     //SuccessMode: true,
+        //                 });
+
+        //             }
+
+        //         })
+        //         .fail(function(jqXHR, ajaxOptions, thrownError) {
+        //             console.log(jqXHR, ajaxOptions, thrownError)
+        //         });
+
+        // }
 
     </script>
 @endsection

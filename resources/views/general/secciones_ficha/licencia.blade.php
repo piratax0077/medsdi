@@ -199,7 +199,7 @@
                                                         @if (isset($licencia->fecha_inicio))
                                                             <input type="date" name="fecha" id="fecha" class="form-control form-control-sm" onchange="sumaFecha($('#num_dias_reposo').val(),$('#fecha').val());" value="{{ $licencia->fecha_inicio }}"/>
                                                         @else
-                                                            <input type="date" name="fecha" id="fecha" class="form-control form-control-sm" onchange="sumaFecha($('#num_dias_reposo').val(),$('#fecha').val());" value="{{ date('d-m-Y') }}"/>
+                                                            <input type="date" name="fecha" id="fecha" class="form-control form-control-sm" onchange="sumaFecha($('#num_dias_reposo').val(),$('#fecha').val());" value="{{ date('Y-m-d') }}"/>
                                                         @endif
 
                                                     </div>

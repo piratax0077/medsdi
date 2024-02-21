@@ -8,225 +8,79 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                    </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <ul class="nav nav-tabs-aten nav-fill mb-3" id="liq_profes_inst" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link-aten text-reset active" id="sol_ecogine-tab" data-toggle="tab" href="#sol_ecogine" role="tab" aria-controls="sol_ecogine" aria-selected="true">Solicitar Examen</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="tomar_ecogine-tab" data-toggle="tab" href="#tomar_ecogine" role="tab" aria-controls="tomar_ecogine" aria-selected="false">Realizar Eco Ginecológica</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="tab-content" id="v-pills-tabContent">
-                        <div class="tab-pane fade show active" id="sol_ecogine" role="tabpanel" aria-labelledby="sol_ecogine-tab">
-                            <div class="col-sm-12 col-md-12">
-                                <div class="form-row">
-                                    <div class="col-sm-6 mt-2">
-                                        <div class="form-group">
-                                            <label class="floating-label" for="eco_sol">Solicitar</label>
-                                            <select class="form-control form-control-sm" name="eco_sol" id="eco_sol">
-                                                <option value="494">ECOGRAFÍA GINECOLÓGICA</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 mt-2">
-                                        <div class="form-group fill">
-                                            <label class="floating-label-activo-sm" for="sosp_dg">Sospecha Diagnóstica</label>
-                                            <input type="text" class="form-control form-control-sm"name="sosp_dg">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 mt-2">
-                                        <div class="form-group fill">
-                                            <label class="floating-label" for="prioridad">Prioridad</label>
-                                            <select class="form-control form-control-sm" id="prioridad" name="prioridad">
-                                                <option value="0">Seleccione</option>
-                                                <option value="1">Baja</option>
-                                                <option value="2" selected>Media</option>
-                                                <option value="3">Alta</option>
-                                                <option value="4">Urgente</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <button type="button" onclick="indicar_examen_cirugia();" id="agregar_examen_tabla" class="btn btn-success btn-sm float-right">
-                                            <i lass="fa fa-plus"></i> Agregar Examen
-                                        </button>
-                                    </div>
-                                    <div class="col-sm-12 mt-3">
-                                        <!--**** Al agregar un examen, se debe cargar la tabla *****-->
-                                        <!--Tabla-->
-                                        <div class="table-responsive">
-                                            <table id="tabla_examen_cirugia" class="table table-bordered table-sm tabla_examenes_ficha">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center align-middle" style="display:none">id</th>
-                                                        <th class="text-center align-middle" style="display:none">Nombre Examen</th>
-                                                        <th class="text-center align-middle">Nombre Examen</th>
-                                                        <th class="text-center align-middle">Prioridad</th>
-                                                        <th class="text-center align-middle">Acción</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <!--Cierre Tabla-->
-                                        <button type="button" onclick="registro_examen_ficha();" data-dismiss="modal" class="btn btn-info">Generar Orden de Examen</button>
-                                    </div>
+                        <div class="form-row">
+                            <div class="col-sm-12 mt-2">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm" for="ecogine_modal_eco_sol">Ecografía ginecológica</label>
+                                    <div class="form-control form-control-sm" id="ecogine_modal_nombre_real">ECOGRAFIA GINECOLOGICA, PELVIANA FEMENINA U OBSTETRICA CON ESTUDIO FETAL </div>
+                                    <input type="hidden" name="ecogine_modal_eco_sol" id="ecogine_modal_eco_sol" value="486">
                                 </div>
                             </div>
-                        </div>
-                        <div class="tab-pane fade " id="tomar_ecogine" role="tabpanel" aria-labelledby="tomar_ecogine-tab">
-                            <div class="col-sm-12 col-md-12">
-                                <form>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-2">
-                                            <script>
-                                                var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-
-                                                var f=new Date();
-                                                document.write( f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
-                                            </script>
-                                        </div>
-                                        <div class="form-group col-md-2" id="">
-                                            <label class="floating-label-activo-sm" for="tipo">Tipo de Eco</label>
-                                            <div class="form-group fill">
-                                                <select class="form-control form-control-sm" id="tipo" name="tipo">
-                                                    <option>Seleccione</option>
-                                                    <option>Trans-vaginal</option>
-                                                    <option>Abdominal</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm" for="sol_por">Derivada por:</label>
-                                                <select name="sol_por" id="sol_por" class="form-control form-control-sm"   onchange="evaluar_para_carga_detalle('sol_por','div_sol_por','sol_por_obs',2)">
-                                                    <option value="0">Seleccione</option>
-                                                    <option value="1">Propia</option>
-                                                    <option value="2">Dr/a</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group"  id="div_sol_por" style="display:none">
-                                                <label class="floating-label-activo-sm" for="sol_por_nom">Profesional solicitante <i>(Anote Nombre)</i> </label>
-                                                <textarea class="form-control caja-texto form-control-sm" rows="1"   onfocus="this.rows=3" onblur="this.rows=1;" name="sol_por_nom" id="sol_por_nom"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm" for="motivo">Motivo</label>
-                                                <select class="form-control form-control-sm" id="mot_examen" name="mot_examen" class="form-control form-control-sm"  onchange="evaluar_para_carga_detalle('mot_examen','div_mot_examen','mot_examen',4)">>
-                                                    <option value="0">Seleccione</option>
-                                                    <option value="1">Examen de Rutina</option>
-                                                    <option value="2">Control Embarazo Normal</option>
-                                                    <option value="3">Control Embarazo Patológico</option>
-                                                    <option value="4">Otro</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group"  id="div_mot_examen" style="display:none">
-                                                <label class="floating-label-activo-sm" for="mot_examen">Motivo Examen <i>(Anote Motivo)</i> </label>
-                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="mot_examen" id="mot_examen"></textarea>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-2">
-                                            <h6 class="float-left d-inline">UTERO</h6>
-                                        </div>
-                                        <div class="form-group col-md-5">
-                                            <label class="floating-label-activo-sm" for="ex_utero">En General</label>
-                                            <textarea class="form-control caja-texto form-control-sm mt-1" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_utero" id="ex_utero"></textarea>
-                                        </div>
-                                        <div class="form-group col-md-5">
-                                            <label class="floating-label-activo-sm" for="endometrio">Endometrio</label>
-                                            <textarea class="form-control caja-texto form-control-sm mt-1" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="endometrio" id="endometrio"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-2">
-                                            <h6 class="float-left d-inline">OVARIOS</h6>
-                                        </div>
-                                        <div class="form-group col-md-5">
-                                            <label class="floating-label-activo-sm" for="ovario_der">Ovario Derecho</label>
-                                            <textarea class="form-control caja-texto form-control-sm mt-1" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ovario_der" id="ovario_der"></textarea>
-                                        </div>
-                                        <div class="form-group col-md-5">
-                                            <label class="floating-label-activo-sm" for="ovario_izq">Ovario Izquierdo</label>
-                                            <textarea class="form-control caja-texto form-control-sm mt-1" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ovario_izq" id="ovario_izq"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-2">
-                                            <h6 class="float-left d-inline">TROMPAS</h6>
-                                        </div>
-                                        <div class="form-group col-md-5">
-                                            <label class="floating-label-activo-sm" for="trompa_der">Trompa Derecha</label>
-                                            <textarea class="form-control caja-texto form-control-sm mt-1" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="trompa_der" id="trompa_der"></textarea>
-                                        </div>
-                                        <div class="form-group col-md-5">
-                                            <label class="floating-label-activo-sm" for="trompa_izq">Trompa Izquierda</label>
-                                            <textarea class="form-control caja-texto form-control-sm mt-1" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="trompa_izq" id="trompa_izq"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-2">
-                                            <h6 class="float-left d-inline">FONDO DE SACO</h6>
-                                        </div>
-                                        <div class="form-group col-md-10">
-                                            <label class="floating-label-activo-sm" for="fondo_saco">Trompa Derecha</label>
-                                            <textarea class="form-control caja-texto form-control-sm mt-1" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="fondo_saco" id="fondo_saco"></textarea>
-                                        </div>
-                                        {{--  <div class="form-group col-md-5">
-                                            <label class="floating-label-activo-sm" for="desc_motivo">Trompa Izquierda</label>
-                                            <textarea class="form-control caja-texto form-control-sm mt-1" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_mamas" id="ex_mamas"></textarea>
-                                        </div>  --}}
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-2">
-                                            <h6 class="float-left d-inline">CONCLUSIÓN</h6>
-                                        </div>
-                                        <div class="form-group col-md-10">
-                                            <label class="floating-label-activo-sm" for="dg_ecografico">Diagnóstico Ecográfico</label>
-                                            <textarea class="form-control caja-texto form-control-sm mt-1" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="dg_ecografico" id="dg_ecografico"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <label class="floating-label-activo-sm" for="obs_eco">Observaciones</label>
-                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_eco" id="obs_eco"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <p class="f-12 mb-0 font-weight-bold text-center">Imagenes</p>
-                                            <div id="imagenes_eco_gine" class="collapse show" aria-labelledby="eco_gine" data-parent="#eco_gine">
-                                                <div class="dropzone" id="mis-imagenes-eco_gine" action="{{ route('profesional.imagen.carga') }}"></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                                <button type="button" class="btn btn-success has-ripple">Guardar<span class="ripple ripple-animate" style="height: 94.375px; width: 94.375px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -33.6875px; left: -14.3125px;"></span></button>
-                                                <button class="btn btn-primary" align:center>Ver formulario PDF</button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </form>
+                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm" for="ecogine_modal_sosp_clinica">Sospecha clínica</label>
+                                    <input type="text" class="form-control form-control-sm" name="ecogine_modal_sosp_clinica" id="ecogine_modal_sosp_clinica">
+                                </div>
                             </div>
+                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label" for="ecogine_modal_urgencia">Prioridad</label>
+                                    <select class="form-control form-control-sm" id="ecogine_modal_urgencia" name="ecogine_modal_urgencia">
+                                        <option value="1">Baja</option>
+                                        <option value="2" selected>Media</option>
+                                        <option value="3">Alta</option>
+                                        <option value="4">Urgente</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Observaciones</label>
+                                    <textarea class="form-control caja-texto form-control-sm mt-1" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ecogine_modal_obs_sol_eco" id="ecogine_modal_obs_sol_eco"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <button type="button" onclick="indicar_examen_sol_eco();" id="ecogine_modal_agregar_examen_tabla" class="btn btn-success btn-sm float-right">
+                                    <i lass="fa fa-plus"></i> Agregar Examen
+                                </button>
+                            </div>
+                            <div class="col-sm-12 mt-3">
+                                <!--**** Al agregar un examen, se debe cargar la tabla *****-->
+                                <!--Tabla-->
+                                <div class="table-responsive">
+                                    <table id="ecogine_modal_table" class="table table-bordered table-xs">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center align-middle" style="display:none;">id</th>
+                                                <th class="text-center align-middle" style="display:none;">Nombre Real</th>
+                                                <th class="text-center align-middle" style="display:none;">Nombre especialidad</th>
+                                                <th class="text-center align-middle">Nombre Examen</th>
+                                                <th class="text-center align-middle" style="display:none;">Lado</th>
+                                                <th class="text-center align-middle">Tipo</th>
+                                                <th class="text-center align-middle">Prioridad</th>
+                                                <th class="text-center align-middle" style="display:none;">Con Contraste</th>
+                                                <th class="text-center align-middle">Sospecha</th>
+                                                <th class="text-center align-middle">Observación</th>
+                                                <th class="text-center align-middle">Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="registro_examen_sol_eco();">Guardar</button>
+            </div>
+
         </div>
     </div>
 </div>
@@ -234,5 +88,281 @@
 <script>
     function eco_gine() {
         $('#ecogine_modal').modal('show');
+        ver_examenes_sol_eco();
     }
+
+    function indicar_examen_sol_eco()
+    {
+        var id_examenes = $('#ecogine_modal_eco_sol').val();
+        var real_examenes = $('#ecogine_modal_nombre_real').html();
+
+        var examen = $('#ecogine_modal_nombre_real').html();
+
+        var sospecha = $('#ecogine_modal_sosp_clinica').val();
+
+        var prioridad = $('#ecogine_modal_urgencia').val();
+        var txt_prioridad = $('#ecogine_modal_urgencia option:selected').text();
+
+        var observacion = $('#ecogine_modal_obs_sol_eco').val();
+
+        var valido = 1;
+        var mensaje = '';
+
+        if( id_examenes=='')
+        {
+            valido = 0;
+            mensaje += 'Debe seleccionar un examen\n';
+        }
+        else
+        {
+            var encontrado = 0;
+            $("#ecogine_modal_table .tr_examen_sol_eco").find('td:hidden:first').each(function (index, element) {
+                if(parseInt(id_examenes) == parseInt($(element).html()))
+                    encontrado = 1;
+            });
+
+            if(encontrado == 1)
+            {
+                valido = 0;
+                mensaje += 'El examen ya se encuentra agregado.\n';
+            }
+        }
+
+        if( sospecha=='' )
+        {
+            valido = 0;
+            mensaje += 'Debe seleccionar una sospecha\n';
+        }
+
+
+        if( prioridad=='' )
+        {
+            valido = 0;
+            mensaje += 'Debe seleccionar urgencia\n';
+        }
+
+
+        if(valido == 1)
+        {
+            $('.examenes_sin_registros').remove();
+            var i = $('#ecogine_modal_table tr').length; //contador para asignar id al boton que borrara la fila
+            var fila = '';
+
+            var id_reg = '';
+            id_reg = id_examenes;
+            fila += '<tr class="tr_examen_sol_eco" id="row' + i + '">';
+            fila += '    <td class="text-center align-middle" style="display:none;">'+id_reg+'</td>';
+            fila += '    <td class="text-center align-middle" style="display:none;">'+real_examenes+'</td>';
+            fila += '    <td class="text-center align-middle" style="display:none;">Ecografía ginecológica</td>';
+            fila += '    <td class="text-center align-middle" style="text-wrap: pretty;">'+real_examenes+'<br><span style="font-size:8px">Ecografía ginecológica</span></td>';
+            fila += '    <td class="text-center align-middle"style="display:none;">N/A</td>';
+            fila += '    <td class="text-center align-middle">Ginecobstetra</td>';
+            fila += '    <td class="text-center align-middle">'+txt_prioridad+'</td>';
+            fila += '    <td class="text-center align-middle" style="display:none;">N/A</td>';
+            fila += '    <td class="text-center align-middle">'+sospecha+'</td>';
+            fila += '    <td class="text-center align-middle">'+observacion+'</td>';
+            fila += '    <td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_sol_eco(\'row' + i + '\');">Quitar</div></td>';
+            fila += '</tr>';
+
+            $('#ecogine_modal_table tbody').append(fila);
+
+            $('#ecogine_modal_sosp_clinica').val('');
+            $('#ecogine_modal_urgencia').val('2');
+            $('#ecogine_modal_obs_sol_eco').val('');
+        }
+        else
+        {
+            swal({
+                title: "Ingreso de examen(es).",
+                text:mensaje,
+                icon: "error",
+            });
+        }
+    }
+
+    function eliminar_examen_sol_eco(id_row)
+    {
+        $('#ecogine_modal_table [id='+id_row+']').remove();
+    }
+
+
+    function registro_examen_sol_eco()
+    {
+        // id<0 -> 351
+        // Nombre Real<1 -> FLUJO VAGINAL O SECRECION URETRAL
+        // Nombre especialidad <2 ->Examen de flujo vaginal
+        // Nombre Examen<3 -> FLUJO VAGINAL O SECRECION URETRAL<br><span style="font-size:8px">Examen de flujo vaginal</span>
+        // Lado<4 -> N/A
+        // Tipo<5 -> Ginecobstetra
+        // Prioridad<6 -> Alta
+        // Con Contraste<7 -> N/A
+        // Sospecha<8 -> Infección Vaginal
+        // Observación<9 -> SDASDASD
+        var rows1 = [];
+        $('#ecogine_modal_table tr').each(function(i, n) {
+            if (i > 0) {
+                rol = {};
+                var data = $(this).find("td");
+                rol["id_examen"] = $.trim($(data[0]).text().split("\n").join(""));
+                rol["nombre_examen"] = $.trim($(data[1]).text().split("\n").join(""));
+                rol["lado"] = $.trim($(data[4]).text().split("\n").join(""));
+                rol["nombre_examen_especialidad"] = $.trim($(data[2]).text().split("\n").join(""));
+                rol["tipo"] = $.trim($(data[5]).text().split("\n").join(""));
+                rol["prioridad"] = $.trim($(data[6]).text().split("\n").join(""));
+                rol["con_contraste"] = $.trim($(data[7]).text().split("\n").join(""));
+                rol["sospecha"] = $.trim($(data[8]).text().split("\n").join(""));
+                rol["observacion"] = $.trim($(data[9]).text().split("\n").join(""));
+
+                rows1.push(rol);
+            }
+        });
+
+
+        // $('#examenes_esp').val(JSON.stringify(rows1));
+
+        let id_ficha_atencion = $('#id_fc').val();
+        let id_paciente = $('#id_paciente_fc').val();
+        let id_profesional = $('#id_profesional_fc').val();
+        let tipo_ficha = 1;
+        var _token = CSRF_TOKEN;
+
+        let url = "{{ route('examenes.registro_examenes') }}";
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                _token: _token,
+                examenes: JSON.stringify(rows1),
+                id_ficha_gineco_obstetrica: id_ficha_atencion,
+                id_profesional: id_profesional,
+                id_paciente: id_paciente,
+                tipo_ficha: tipo_ficha,
+            },
+        })
+        .done(function(data) {
+            console.log(data)
+            if (data != null)
+            {
+                console.log(data)
+                if(data.estado == '1'){
+                    swal({
+                        title: "Ingreso de examen(es).",
+                        text: 'Examenes registrados con Exito.',
+                        icon: "success",
+                    });
+                    ver_examenes_sol_eco();
+                }
+                else
+                {
+                    swal({
+                        title: "Ingreso de examen(es).",
+                        text: 'Falla en el registro, Intente nuevamente.',
+                        icon: "warning",
+                    });
+                    ver_examenes_sol_eco();
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Ingreso de examen(es).",
+                    text: 'Sin Retorno de Registro, Intente nuevamente.',
+                    icon: "error",
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function ver_examenes_sol_eco()
+    {
+
+        let url = "{{ route('examenes.ver_examenes') }}";
+        var _token = CSRF_TOKEN;
+        var id_ficha = $('#id_fc').val();
+        $('#ecogine_modal_table tbody').html('');
+
+        $.ajax({
+
+            url: url,
+            type: "GET",
+            data: {
+                _token: _token,
+                id_ficha_gineco_obstetrica:id_ficha
+            },
+        })
+        .done(function(data)
+        {
+
+            if (data !== 'null')
+            {
+                //data = JSON.parse(data);
+                console.log('----------ecogine_modal-------------');
+                console.log('----------ver_examenes_sol_eco-------------');
+                console.log(data);
+                console.log('-----------------------');
+                var html = '';
+
+                if(data.estado == 1)
+                {
+                    let prioridad = ['', 'Baja', 'Media','Alta','Urgente'];
+                    $.each(data.registros, function(index, value)
+                    {
+                        html += '<tr class="tr_examen_sol_eco" id="row' + index + '">';
+
+                        html += '    <td class="text-center align-middle" style="display:none">'+value.id_examen+'</td>';
+                        html += '    <td class="text-center align-middle" style="display:none">'+value.examen+'</td>';
+
+                        var nombre = '';
+                        if(value.examen_especialidad == '' || value.examen_especialidad == null)
+                        {
+                            nombre = '';
+                        }
+                        else
+                        {
+                            if(value.examen_especialidad == value.examen)
+                            {
+                                nombre = '';
+                            }
+                            else
+                            {
+                                nombre = value.examen_especialidad;
+                            }
+                        }
+
+                        html += '    <td class="text-center align-middle" style="display:none">'+nombre+'</td>';
+                        html += '    <td class="text-center align-middle" style="text-wrap: pretty;">'+value.examen+'<br><span style="font-size:8px">'+nombre+'</span></td>';
+
+                        html += '    <td class="text-center align-middle" style="display:none;">N/A</td>';
+                        html += '    <td class="text-center align-middle">'+value.tipo_examen+'</td>';
+                        html += '    <td class="text-center align-middle">'+prioridad[value.id_prioridad]+'</td>';
+                        html += '    <td class="text-center align-middle" style="display:none;">N/A</td>';
+                        html += '    <td class="text-center align-middle">'+value.sospecha+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.observacion+'</td>';
+                        html += '    <td class="text-center align-middle"><div name="remove" id="' + index +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_sol_eco(\'row' + index + '\');">Quitar</div></td>';
+                        html += '</tr>';
+                    });
+
+                }
+                else
+                {
+
+                    html += '<tr class="examenes_sin_registros">';
+                    html += '    <td class="text-center align-middle " colspan="11">'+data.msj+'</td>';
+                    html += '</tr>';
+
+                }
+
+                $('#ecogine_modal_table tbody').html(html);
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+
+    }
+
+
 </script>

@@ -478,11 +478,12 @@ class EscritorioProfesional extends Controller
     public function index()
     {
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-        $tipo_agendas = ProfesionalHorario::select('tipo_agenda')->where('id_profesional', $profesional->id)->groupBy('tipo_agenda')->pluck('tipo_agenda')->toArray();
+
         $region = Region::all();
         $especialidad = Especialidad::all();
 
         if (isset($profesional)) {
+            $tipo_agendas = ProfesionalHorario::select('tipo_agenda')->where('id_profesional', $profesional->id)->groupBy('tipo_agenda')->pluck('tipo_agenda')->toArray();
             $horas_dia = HoraMedica::where('id_profesional', $profesional->id)->whereDate('fecha_consulta', \Carbon\Carbon::now()->format('Y-m-d'))->get();
             foreach ($horas_dia as $h) {
                 $h->paciente = Paciente::where('id', $h->id_paciente)->first();

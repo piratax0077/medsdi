@@ -24,11 +24,11 @@ class GinemodalCicloMenstrual extends Migration
             $table->string('gr_tunner')->nullable();
             $table->date('fecha_comienzo')->nullable();
             $table->string('comentarios_menarquia')->nullable();
-            $table->string('fur')->nullable();
-            $table->integer('tipo_ciclo')->nullable();
-            $table->integer('frecuencia_ciclo')->nullable();
-            $table->integer('sintomas_ciclo')->nullable();
-            $table->integer('comentarios_ciclo')->nullable();
+            $table->date('fur')->nullable();
+            $table->string('tipo_ciclo')->nullable();
+            $table->string('frecuencia_ciclo')->nullable();
+            $table->string('sintomas_ciclo')->nullable();
+            $table->string('comentarios_ciclo')->nullable();
             $table->string('otro')->nullable();
             $table->string('otro1')->nullable();
             $table->integer('estado')->default(1);

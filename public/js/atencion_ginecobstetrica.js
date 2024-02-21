@@ -48,24 +48,19 @@ function anticoncep() {
 }
 
 /** Antecedentes embarazo **/
-function embarazos() {
-    $('#embarazos_modal').modal('show');
-}
+// function embarazos() {
+//     $('#embarazos_modal').modal('show');
+// }
 
 /** Antecedentes mamas **/
-function mamas_ant() {
-    $('#mamas_ant_modal').modal('show');
-}
-
-/** Exámenes hormonales **/
-function hormonas() {
-    $('#hormona_modal').modal('show');
-}
+// function mamas_ant() {
+//     $('#mamas_ant_modal').modal('show');
+// }
 
 /** Grado de tunner **/
-function tunner() {
-    $('#tunner_modal').modal('show');
-}
+// function tunner() {
+//     $('#tunner_modal').modal('show');
+// }
 
 /** PAP **/
 function ex_pap() {
@@ -73,9 +68,9 @@ function ex_pap() {
 }
 
 /** Examen clínico de mamas **/
-function ex_mamas() {
-    $('#modal_mamas').modal('show');
-}
+// function ex_mamas() {
+//     $('#modal_mamas').modal('show');
+// }
 
 /** Factores de riesgo (embarazo) **/
 function riesgo_emb() {

@@ -118,6 +118,7 @@
 <script>
     function tunner() {
         $('#tunner_modal').modal('show');
+        cargar_tunner('f');
     }
     function registrar_tunner(sexo)
     {
@@ -145,20 +146,26 @@
 
             if(data.estado == 1)
             {
+                if($('#id_tunner').length > 0)
+                    $('#id_tunner').val(data.last_id);
+                else
+                    $('#id_tunner').val('');
                 // $('#tunner_modal_'+sexo).modal('hide');
                 cargar_tunner(sexo);
                 $('#'+sexo+'_tanner').val('I');
                 $('#'+sexo+'_edad').val('');
                 $('#'+sexo+'_cometarios_tanner').val('');
             }
-            else{
-
+            else
+            {
                 swal({
                     title: "Problema al Cargar Tipo Ficha.",
                     icon: "warning",
                     // buttons: "Aceptar",
                     //SuccessMode: true,
-                })
+                });
+
+                $('#id_tunner').val('');
             }
 
         })
@@ -190,8 +197,12 @@
                 var html = '';
                 $.each(data.registros, function(index, value)
                 {
+                    var f_temp = (value.fecha).replace('T',' ').replace('Z','').replace('.000000','');
+                    var fecha = new Date(f_temp);
+                    fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear()+' '+fecha.getHours()+':'+fecha.getMinutes();
+
                     html += '<tr>';
-                    html += '    <td class="text-center align-middle">'+moment(value.fecha).format('DD-MM-YYYY, H:mm:ss')+'</td>';
+                    html += '    <td class="text-center align-middle">'+fecha+'</td>';
                     html += '    <td class="text-center align-middle">'+value.tanner+'</td>';
                     html += '    <td class="text-center align-middle">'+value.edad_cronologica+'</td>';
                     html += '    <td class="text-center align-middle">'+value.edad_biologica+'</td>';

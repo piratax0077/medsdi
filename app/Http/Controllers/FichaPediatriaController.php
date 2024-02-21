@@ -11,6 +11,7 @@ use App\Models\FichaPediatriaQuemado;
 use App\Models\FichaPediatriaTraumatologia;
 use App\Models\FichaPediatriaTraumatologiaOrtopedia;
 use App\Models\HoraMedica;
+use App\Models\Profesional;
 use Illuminate\Http\Request;
 
 class FichaPediatriaController extends Controller
@@ -72,11 +73,17 @@ class FichaPediatriaController extends Controller
 
         if($valido)
         {
+
+            $profesional = Profesional::find($request->id_profesional);
+
             $tunner = new FichaPadiatriaGeneralTunner();
 
             $tunner->id_ficha_atencion = $request->id_ficha_atencion;
             $tunner->id_paciente = $request->id_paciente;
             $tunner->id_profesional = $request->id_profesional;
+            $tunner->id_especialidad = $profesional->id_especialidad;
+            $tunner->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+            $tunner->id_sub_tipoespecialidad = $profesional->id_sub_tipoespecialidad;
             $tunner->sexo = $request->sexo;
             $tunner->tanner = $request->tanner;
             $tunner->edad_biologica = $request->edad_biologica;
@@ -90,6 +97,7 @@ class FichaPediatriaController extends Controller
             {
                 $datos['estado'] = 1;
                 $datos['msj'] = 'registro exitoso';
+                $datos['last_id'] = $tunner->id;
             }
             else
             {

@@ -55,6 +55,10 @@
 
         <!--formulario sm-->
         <link rel="stylesheet" href="{{ asset('css/formulario_sm.css') }}">
+
+        <!-- select2 -->
+        <link rel="stylesheet" type="text/css" href='{{ asset('css/plugins/select2.min.css') }}'/>
+
         {{--  /** agregar css */  --}}
 
         <style>
@@ -72,10 +76,20 @@
         @yield('Content')
 
         <!-- Modal de la vista -->
-        @yield('Modals')
-        @yield('Modals-med-exa')
-        @yield('Modals-med-exa-esp')
-        @yield('modal-ficha-general-espc')
+        @yield('modals-med-exa')
+        @yield('js_inferior')
+        @yield('page-script')
+        @yield('page-script-ficha-atencion'){{-- ficha_gine_obst_general.blade --}}
+        @yield('js-ficha-general-espc') {{-- seccion js fiche general especialidad --}}
+        @yield('page-script-med-exa') {{--  seccion receta y exmaenes --}}
+        @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
+        @yield('js-sidebar') {{-- seccion js side bar --}}
+        @yield('js-lic') {{-- seccion js side bar --}}
+        @yield('page-script-btn-autorizacion')
+
+        @yield('modals')
+        {{-- @yield('modals-med-exa-esp') --}}
+        {{-- @yield('modal-ficha-general-espc') --}}
         {{-- @include('atencion_medica.secciones_especialidad.ficha_orl_tipo') --}}
 
         <!-- Modal de la vista fin -->
@@ -168,8 +182,12 @@
         <!-- funciones generales -->
         <script src="{{ asset('js/funciones.js') }}"></script>
 
+        <!--select2 -->
+        <script src="{{ asset('js/plugins/select2.full.min.js')}}"></script>
+
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
             $(document).ready(function () {
                 {{--  mensaje de exito al registrar ficha clinica  --}}
                  @if(session('mensaje'))
@@ -213,9 +231,11 @@
                         //SuccessMode: true,
                     });
                 @endif
+
+
+                $(".js-example-basic-multiple").select2();
             });
-        </script>
-        <script>
+
             /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
             function  envio_indicaciones_pdf(id_modal){
                 let url = "{{ route('indicacion.medica.registro.envio') }}";

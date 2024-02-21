@@ -64,6 +64,7 @@ use Carbon\Carbon;
 use App\Models\FichaCirugiaDigestivaGeneralAdulto;
 use App\Models\FichaDermo;
 use App\Models\FichaDermoImg;
+use App\Models\FichaGinecoObstetrica;
 use App\Models\FichaOft;
 use App\Models\FichaOftalmologiaAdulto;
 use App\Models\FichaOftBiomicroscopia;
@@ -256,15 +257,6 @@ class ficha_atencionController extends Controller
         $user = Auth::user()->id;
         $profesional = Profesional::where('id_usuario', $user)->first();
 
-        // CONSULTAS PREVIAS
-        // $fichas = FichaAtencion::where('id_paciente', $hora->id_paciente)->where('confidencial', false)->where('finalizada', 1)->get();
-        $filtro_previas = array();
-        $filtro_previas[] = array('id_paciente', $hora->id_paciente);
-        $filtro_previas[] = array('confidencial', '0');
-        $filtro_previas[] = array('finalizada', 1);
-        $filtro_previas[] = array('id_profesional', $profesional->id);
-        $fichas = FichaAtencion::where($filtro_previas)->get();
-
         // LUGAR DE ATENCION
         $lugar_atencion = LugarAtencion::where('id',$request->lugar_atencion_id)->first();
         $lugares_atencion  = LugarAtencion::all();
@@ -277,7 +269,7 @@ class ficha_atencionController extends Controller
             $institucion = $temp_inst;
         }
 
-        // FICHA DE ATENCION ACTUAL
+		// FICHA DE ATENCION ACTUAL
         $filtro_fichaAtencion = array();
         $filtro_fichaAtencion[] = array('id_paciente', $hora->id_paciente);
 
@@ -308,35 +300,71 @@ class ficha_atencionController extends Controller
             $patoligias_cronicas = [];
         }
 
-        if( !empty($fichaAtencion) )
-            $id_ficha_atencion = $fichaAtencion->id;
+        // FICHAS PREVIAS Y FICHA ACTUAL(ACTIVA O NUEVA)
+        $fichas = '';
+        $id_ficha_atencion = '';
+        $fichaAtencion = '';
+        $result_fichas = static::cargarInfoFichaBase($hora);
 
+        // echo json_encode($hora);
+        // echo '*****************';
+        // echo json_encode($result_fichas);
 
-        // 5 realizando
-        // 6 realizada
-        if ($hora->id_estado != 5 && $hora->id_estado != 6)
+        if($result_fichas->estado == 1)
         {
-            $nueva_ficha_atencion = new FichaAtencion();
-            $nueva_ficha_atencion->id_paciente = $paciente->id;
-            $nueva_ficha_atencion->id_profesional = $profesional->id;
-            $nueva_ficha_atencion->id_lugar_atencion = $request->lugar_atencion_id;
-
-            if (!$nueva_ficha_atencion->save()) {
-                return back()->with('mensaje', 'error');
-            }
-            else
-            {
-                $id_ficha_atencion = $nueva_ficha_atencion->id;
-            }
-
-            $hora->id_estado = 5;
-            $hora->fecha_realizacion_consulta = now();
-            $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
-
-            if (!$hora->save()) {
-                return back()->with('mensaje', 'error');
-            }
+            // $fichas = (object)$result_fichas->ficha_previas;
+            $id_ficha_atencion = $result_fichas->id_ficha_actual_nueva;
+            $fichaAtencion = (object)$result_fichas->ficha_actual_nueva;
         }
+
+        // echo  json_encode($result_fichas);
+        // exit();
+
+        // CONSULTAS PREVIAS base fichas atencion
+        $filtro_previas = array();
+        $filtro_previas[] = array('id_paciente', $hora->id_paciente);
+        $filtro_previas[] = array('confidencial', '0');
+        $filtro_previas[] = array('finalizada', 1);
+        $filtro_previas[] = array('id_profesional', $profesional->id);
+        $fichas = FichaAtencion::where($filtro_previas)->get();
+
+
+        // // FICHA DE ATENCION ACTUAL
+        // $filtro_fichaAtencion = array();
+        // $filtro_fichaAtencion[] = array('id_paciente', $hora->id_paciente);
+
+        // if(!empty($hora->id_ficha_atencion))
+        //     $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
+        // $fichaAtencion = FichaAtencion::where($filtro_fichaAtencion)->first();
+
+        // if( !empty($fichaAtencion) )
+        //     $id_ficha_atencion = $fichaAtencion->id;
+
+        // // 5 realizando
+        // // 6 realizada
+        // if ($hora->id_estado != 5 && $hora->id_estado != 6)
+        // {
+        //     $nueva_ficha_atencion = new FichaAtencion();
+        //     $nueva_ficha_atencion->id_paciente = $paciente->id;
+        //     $nueva_ficha_atencion->id_profesional = $profesional->id;
+        //     $nueva_ficha_atencion->id_lugar_atencion = $request->lugar_atencion_id;
+
+        //     if (!$nueva_ficha_atencion->save()) {
+        //         return back()->with('mensaje', 'error');
+        //     }
+        //     else
+        //     {
+        //         $id_ficha_atencion = $nueva_ficha_atencion->id;
+        //     }
+
+        //     $hora->id_estado = 5;
+        //     $hora->fecha_realizacion_consulta = now();
+        //     $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
+
+        //     if (!$hora->save()) {
+        //         return back()->with('mensaje', 'error');
+        //     }
+        // }
 
         $prevision = Prevision::all();
         $medicamento = Producto::all();
@@ -363,6 +391,25 @@ class ficha_atencionController extends Controller
         $cns_tipo = '';
         $cns_tipo_template = '';
         $cns_registros = '';
+
+		$examen_tipo = '';
+
+		if($profesional->id_especialidad == 14)
+        {
+            //urgencia
+            $ruta_blade = 'atencion_urgencia.atencion_medica_cirugia_urgencia';
+            $fichaTipo = '';
+            $examen = '';
+            $lista_examen_especial = '';
+
+            /** examenes de la especialidad */
+            $examenes_especialidad = '';
+
+            /** examenes radiologicos */
+            $examenes_radiologicos = '';
+			/** examen_tipo */
+			$examen_tipo = '';
+        }else
 
         if($profesional->id_sub_tipo_especialidad == 20)
         {
@@ -497,15 +544,30 @@ class ficha_atencionController extends Controller
             //gineco obstetricia
             $ruta_blade = 'atencion_gine_obstetricia.atencion_gine_obst_general';
 
-            $fichaTipo = '';
-            $examen = '';
+			// $fichaTipo = '';
+            $examen = array();
             $lista_examen_especial = '';
+            $examen_tipo = ExamenEspecialidadTipo::where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)->with('ExamenEspecialidadTemplate')->get();
+            foreach ($examen_tipo as $key => $value)
+            {
+                $examen[$value->ExamenEspecialidadTemplate->alias] = $value->ExamenEspecialidadTemplate->cuerpo;
+                $lista_examen_especial .= $value->ExamenEspecialidadTemplate->alias.','.$value->id.','.$value->ExamenEspecialidadTemplate->id.'|';
+            }
+            $lista_examen_especial = substr($lista_examen_especial, 0, -1);
 
             /** examenes de la especialidad */
             $examenes_especialidad = '';
 
             /** examenes radiologicos */
             $examenes_radiologicos = '';
+
+            // CONSULTAS PREVIAS base fichas atencion
+            $filtro_previas = array();
+            $filtro_previas[] = array('id_paciente', $paciente->id);
+            // $filtro_previas[] = array('confidencial', '0');
+            // $filtro_previas[] = array('finalizada', 1);
+            $filtro_previas[] = array('id_profesional', $profesional->id);
+            $fichas = FichaGinecoObstetrica::where($filtro_previas)->get();
         }
         else if($profesional->id_sub_tipo_especialidad == 78)
         {
@@ -1157,9 +1219,9 @@ class ficha_atencionController extends Controller
 
         /** EXAMENES DE ESPECIALIDAD REALIZADOS */
         $examenes_especialidad_realizados = ExamenEspecialidad::select('id', 'id_tipo', 'id_template', 'id_examen_tipo', 'id_sub_tipo_especialidad', 'id_ficha_atencion', 'id_ficha_especialidad', 'id_paciente', 'id_profesional', 'id_asistente', 'nombre', 'revisado', 'estado')
-                                                            ->with(['HoraMedica' => function($query){
-                                                                $query->select('id', 'id_ficha_atencion', 'fecha_realizacion_consulta', 'id_estado');
-                                                            }])
+                                                            // ->with(['HoraMedica' => function($query){
+                                                            //     $query->select('id', 'id_ficha_atencion', 'fecha_realizacion_consulta', 'id_estado');
+                                                            // }])
                                                             ->with(['ExamenEspecialidadTemplate' => function($query){
                                                                 $query->select('id', 'nombre', 'alias');
                                                             }])
@@ -1171,7 +1233,35 @@ class ficha_atencionController extends Controller
                                                             }])
                                                             ->where('id_paciente', $paciente->id)
                                                             ->get();
-
+        foreach ($examenes_especialidad_realizados as $key_ex_esp_realizado => $value_ex_esp_realizado)
+        {
+            if($value_ex_esp_realizado->id_sub_tipo_especialidad == 27)
+            {
+                $filtro_h_ex_esp_ral = array();
+                $filtro_h_ex_esp_ral[] = array('id_ficha_otros_prof', $value_ex_esp_realizado->id_ficha_especialidad);
+                $filtro_h_ex_esp_ral[] = array('id_profesional', $value_ex_esp_realizado->id_profesional);
+                $hora_medica = HoraMedica::where($filtro_h_ex_esp_ral)->get()->first();
+                $examenes_especialidad_realizados[$key_ex_esp_realizado]->HoraMedica = $hora_medica;
+            }
+            else if($profesional->id_especialidad != 1)
+            {
+                $filtro_h_ex_esp_ral = array();
+                $filtro_h_ex_esp_ral[] = array('id_ficha_otros_prof', $value_ex_esp_realizado->id_ficha_especialidad);
+                $filtro_h_ex_esp_ral[] = array('id_profesional', $value_ex_esp_realizado->id_profesional);
+                $hora_medica = HoraMedica::where($filtro_h_ex_esp_ral)->get()->first();
+                $examenes_especialidad_realizados[$key_ex_esp_realizado]->HoraMedica = $hora_medica;
+            }
+            else
+            {
+                $filtro_h_ex_esp_ral = array();
+                $filtro_h_ex_esp_ral[] = array('id_ficha_atencion', $value_ex_esp_realizado->id_ficha_atencion);
+                $filtro_h_ex_esp_ral[] = array('id_profesional', $value_ex_esp_realizado->id_profesional);
+                $hora_medica = HoraMedica::where($filtro_h_ex_esp_ral)->get()->first();
+                $examenes_especialidad_realizados[$key_ex_esp_realizado]->HoraMedica = $hora_medica;
+            }
+        }
+        // echo json_encode($examenes_especialidad_realizados);
+        // die();
         /** resultado de examenes */
         // $resultado_examen = ResultadoExamen::where('id_paciente', $paciente->id)->get();
         $resultado_examen = ResultadoExamen::with('ResultadoExamenArchivo')->where('id_paciente', $paciente->id)->get();
@@ -1534,6 +1624,7 @@ class ficha_atencionController extends Controller
                 'especialidad' => $especialidad,
                 'interconsulta' => $interconsulta,
                 'fichaTipo' => $fichaTipo,
+				'examen_tipo' => $examen_tipo,
                 'examen' => $examen,
                 'lista_examen_especial' => $lista_examen_especial,
                 'examenes_especialidad' => $examenes_especialidad,
@@ -1599,7 +1690,10 @@ class ficha_atencionController extends Controller
 
     public function registrar_control_diabetes(Request $request)
     {
-        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        if(!empty($request->id_profesional))
+            $profesional = Profesional::where('id', $request->id_profesional)->first();
+        else
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
         $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
 
@@ -1607,13 +1701,28 @@ class ficha_atencionController extends Controller
         $diabetes->peso = $request->peso;
         $diabetes->pies = $request->pies;
         $diabetes->hgac1 = $request->hgac1;
-        $diabetes->colesterol = $request->colesterol;
-        $diabetes->creatina = $request->creatina;
-        $diabetes->glicosilada_postprandial = $request->glicosilada_postprandial;
-        $diabetes->glicosinada_ayuno = $request->glicosinada_ayuno;
-        $diabetes->id_profesional = $profesional->id;
+        $diabetes->colesterol = (empty($request->colesterol)?null:$request->colesterol);
+        $diabetes->creatina = (empty($request->creatina)?null:$request->creatina);
+        $diabetes->glucosuria = (empty($request->glucosuria)?null:$request->glucosuria);
+        $diabetes->glicosilada_postprandial = (empty($request->glicosilada_postprandial)?null:$request->glicosilada_postprandial);
+        $diabetes->glicosilada_ayuno = (empty($request->glicosilada_ayuno)?null:$request->glicosilada_ayuno);
+        $diabetes->tamano_fetal = (empty($request->tamano_fetal)?null:$request->tamano_fetal);
         $diabetes->id_paciente = $hora_medica->id_paciente;
-        $diabetes->id_ficha_atencion = $hora_medica->id_ficha_atencion;
+        $diabetes->id_profesional = $profesional->id;
+        $diabetes->id_ficha_atencion = (empty($hora_medica->id_ficha_atencion)?null:$hora_medica->id_ficha_atencion);
+
+        if($profesional->id_especialidad == 1 && $profesional->id_tipo_especialidad == 3)
+        {
+            $diabetes->id_ficha_otros_prof = null;
+            $diabetes->id_ficha_gineco_obstetrica = $hora_medica->id_ficha_otros_prof;
+        }
+        else
+        {
+            $diabetes->id_ficha_otros_prof = $request->id_ficha_otros_prof;
+            $diabetes->id_ficha_gineco_obstetrica = null;
+        }
+
+        $diabetes->id_lugar_atencion = $hora_medica->id_lugar_atencion;
 
         if (!$diabetes->save()) {
             return 'error';
@@ -1624,7 +1733,10 @@ class ficha_atencionController extends Controller
 
     public function registrar_control_hipertension(Request $request)
     {
-        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        if(!empty($request->id_profesional))
+            $profesional = Profesional::where('id', $request->id_profesional)->first();
+        else
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
         $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
 
@@ -1633,9 +1745,24 @@ class ficha_atencionController extends Controller
         $hipertension->sistolica = $request->sistolica;
         $hipertension->diastolica = $request->diastolica;
         $hipertension->ideal = $request->ideal;
-        $hipertension->id_profesional = $profesional->id;
+        $hipertension->pulso = (empty($request->pulso)?null:$request->pulso);
+        $hipertension->medicamento = (empty($request->medicamento)?null:$request->medicamento);
+        $hipertension->sintomas = (empty($request->sintomas)?null:$request->sintomas);
         $hipertension->id_paciente = $hora_medica->id_paciente;
-        $hipertension->id_ficha_atencion = $hora_medica->id_ficha_atencion;
+        $hipertension->id_profesional = $profesional->id;
+        $hipertension->id_ficha_atencion = (empty($hora_medica->id_ficha_atencion)?null:$hora_medica->id_ficha_atencion);
+
+        if($profesional->id_especialidad == 1 && $profesional->id_tipo_especialidad == 3)
+        {
+            $hipertension->id_ficha_otros_prof = null;
+            $hipertension->id_ficha_gineco_obstetrica = $hora_medica->id_ficha_otros_prof;
+        }
+        else
+        {
+            $hipertension->id_ficha_otros_prof = $request->id_ficha_otros_prof;
+            $hipertension->id_ficha_gineco_obstetrica = null;
+        }
+
         $hipertension->id_lugar_atencion = $hora_medica->id_lugar_atencion;
 
         //dd($hipertension);
@@ -8366,4 +8493,970 @@ class ficha_atencionController extends Controller
 
         return $datos;
     }
+
+
+    /**
+     * var (int) @id
+     * var (profesional) @profesional
+     * var (int) @id_paciente
+     * return objet
+     */
+    public function cargarInfoFichaBase_r(Request $request)
+    {
+        $profesional = Profesional::find($request->id_profesional);
+        return static::cargarInfoFichaBase($request->id, $profesional, $request->id_paciente, $request->id_ficha);
+    }
+
+    /**
+     * var (hora) @hora
+     * return object
+     */
+    static public function cargarInfoFichaBase($hora)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($hora))
+        {
+            $error['hora'] = 'cmapo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+
+            $profesional = Profesional::find($hora->id_profesional);
+            $paciente = Paciente::find($hora->id_paciente);
+
+            $ficha_previas = '';
+            $ficha_actual_nueva = '';
+            switch (intval($profesional->id_especialidad))
+            {
+                case 1: //MÉDICOS
+                    if(!empty($profesional->id_tipo_especialidad))
+                    {
+                        switch (intval($profesional->id_tipo_especialidad)) {
+                            case 1: //CIRUGIA
+                                /** FICHAS DE ATENCIONES PREVIAS */
+                                $filtro_previas = array();
+                                $filtro_previas[] = array('id_paciente', $paciente->id);
+                                $filtro_previas[] = array('confidencial', '0');
+                                $filtro_previas[] = array('finalizada', 1);
+                                $filtro_previas[] = array('id_profesional', $profesional->id);
+                                $ficha_previas = FichaAtencion::where($filtro_previas)->get();
+
+                                $datos['ficha_previas'] = $ficha_previas;
+
+
+                                /** FICHA ATENCION ACTUAL */
+                                if(empty($hora->id_ficha_atencion))
+                                {
+                                    $nueva_ficha_atencion = new FichaAtencion();
+                                    $nueva_ficha_atencion->id_paciente = $paciente->id;
+                                    $nueva_ficha_atencion->id_profesional = $profesional->id;
+                                    $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                                    if ($nueva_ficha_atencion->save())
+                                    {
+                                        $hora->id_estado = 5;
+                                        $hora->fecha_realizacion_consulta = now();
+                                        $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
+                                        $hora->save();
+                                        $ficha_actual_nueva = $nueva_ficha_atencion->id;
+                                    }
+                                    else
+                                    {
+                                        $nueva_ficha_atencion = '';
+                                    }
+                                }
+                                else
+                                {
+                                    $filtro_fichaAtencion = array();
+                                    $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                                    $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
+                                    $ficha_actual_nueva = FichaAtencion::where($filtro_fichaAtencion)->first();
+                                }
+
+                                $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                                $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
+
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                        case 1:// 1	Cirugía Abdominal General
+                                            break;
+                                        case 2:// 2	Cirugía Bariátrica
+                                            break;
+                                        case 3:// 3	Cirugia Broncopulmonar
+                                            break;
+                                        case 4:// 4	Cirugía Cardiovascular
+                                            break;
+                                        case 5:// 5	Cirugía Cardiovascular Adultos
+                                            break;
+                                        case 6:// 6	Cirugía Cardiovascular Niños
+                                            break;
+                                        case 7:// 7	Cirugía Coloproctológica
+                                            break;
+                                        case 8:// 8	Cirugía de Cabeza y Cuello
+                                            break;
+                                        case 9:// 9	Cirugía de la mama
+                                            break;
+                                        case 10:// 10	Cirugía del Tórax
+                                            break;
+                                        case 11:// 11	Cirugía digestiva
+                                            break;
+                                        case 12:// 12	Cirugía Gástrica
+                                            break;
+                                        case 13:// 13	Cirugía maxilofacial
+                                            break;
+                                        case 14:// 14	Cirugía Nefrourológica
+                                            break;
+                                        case 15:// 15	Cirugía Oncológica
+                                            break;
+                                        case 16:// 16	Cirugía Pancreas
+                                            break;
+                                        case 17:// 17	Cirugía Plástica y Reparadora
+                                            break;
+                                        case 18:// 18	Cirugía Vascular Periférica
+                                            break;
+                                        case 119:// 119	Cirugía General
+                                            break;
+                                        case 120:// 120	Cirugía y Traumatologia Pediatrica General
+                                            break;
+
+                                    }
+                                }
+                                break;
+                            case 2: //ESPECIALIDADES MÉDICAS
+                                /** FICHAS DE ATENCIONES PREVIAS */
+                                $filtro_previas = array();
+                                $filtro_previas[] = array('id_paciente', $paciente->id);
+                                $filtro_previas[] = array('confidencial', '0');
+                                $filtro_previas[] = array('finalizada', 1);
+                                $filtro_previas[] = array('id_profesional', $profesional->id);
+                                $ficha_previas = FichaAtencion::where($filtro_previas)->get();
+
+                                $datos['ficha_previas'] = $ficha_previas;
+
+
+                                /** FICHA ATENCION ACTUAL */
+                                if(empty($hora->id_ficha_atencion))
+                                {
+                                    $nueva_ficha_atencion = new FichaAtencion();
+                                    $nueva_ficha_atencion->id_paciente = $paciente->id;
+                                    $nueva_ficha_atencion->id_profesional = $profesional->id;
+                                    $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                                    if ($nueva_ficha_atencion->save())
+                                    {
+                                        $hora->id_estado = 5;
+                                        $hora->fecha_realizacion_consulta = now();
+                                        $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
+                                        $hora->save();
+                                        $ficha_actual_nueva = $nueva_ficha_atencion;
+                                    }
+                                    else
+                                    {
+                                        $nueva_ficha_atencion = '';
+                                    }
+                                }
+                                else
+                                {
+                                    $filtro_fichaAtencion = array();
+                                    $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                                    $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
+                                    $ficha_actual_nueva = FichaAtencion::where($filtro_fichaAtencion)->first();
+                                }
+
+                                $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                                $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
+
+
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                        case 19:// 19	Dermatología
+                                            break;
+                                        case 20:// 20	Oftalmología
+                                            break;
+                                        case 21:// 21	Otorrinolaringología
+                                            break;
+                                        case 22:// 22	Urología
+                                            break;
+                                    }
+                                }
+
+
+                                break;
+                            case 3: //GINECO-OBSTETRÍCIA
+
+                                /** FICHA ATENCION ACTUAL */
+                                if(empty($hora->id_ficha_otros_prof))
+                                {
+                                    $nueva_ficha_atencion = new FichaGinecoObstetrica();
+                                    $nueva_ficha_atencion->id_paciente = $paciente->id;
+                                    $nueva_ficha_atencion->id_profesional = $profesional->id;
+                                    $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                                    if ($nueva_ficha_atencion->save())
+                                    {
+                                        $hora->id_estado = 5;
+                                        $hora->fecha_realizacion_consulta = now();
+                                        $hora->id_ficha_otros_prof = $nueva_ficha_atencion->id;
+                                        $hora->save();
+                                        $ficha_actual_nueva = $nueva_ficha_atencion;
+                                    }
+                                    else
+                                    {
+                                        $nueva_ficha_atencion = '';
+                                    }
+                                }
+                                else
+                                {
+                                    $filtro_fichaAtencion = array();
+                                    $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                                    $filtro_fichaAtencion[] = array('id', $hora->id_ficha_otros_prof);
+                                    $ficha_actual_nueva = FichaGinecoObstetrica::where($filtro_fichaAtencion)->first();
+                                }
+
+                                $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                                $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
+
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                        case 23:// 23	Ginecología endocrinológica
+                                            break;
+                                        case 24:// 24	Ginecología  Infantil
+                                            break;
+                                        case 25:// 25	Ginecología Infertilidad
+                                            break;
+                                        case 26:// 26	Ginecología Oncológica
+                                            break;
+                                        case 27:// 27	Ginecologia y Obtetricia General
+                                            break;
+                                        case 28:// 28	Medicina Materno Fetal
+                                            break;
+
+                                    }
+                                }
+                                break;
+                            case 4: //MEDICINA DE ALTURA
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                        case 29:// 29	Medicina de Altura
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 5: //MEDICINA DEL TRABAJO
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                        case 30:// 30	Medicina del Trabajo
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 6: //MEDICINA DEPORTIVA
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                        case 31:// 31	Medicina deportiva General
+                                            break;
+                                        case 32:// 32	Medicina deportiva Alto Rendimiento
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 7: //MEDICINA FISICA Y REHABILITACIÓN
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                        case 33:// 33	Mdicina física y Rehabilitación General
+                                            break;
+                                        case 34:// 34	Mdicina física y Rehabilitación Neurológica
+                                            break;
+                                        case 35:// 35	Mdicina física y Rehabilitación Respiratoria
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 8: //MEDICINA GENERAL
+                                /** FICHAS DE ATENCIONES PREVIAS */
+                                $filtro_previas = array();
+                                $filtro_previas[] = array('id_paciente', $paciente->id);
+                                $filtro_previas[] = array('confidencial', '0');
+                                $filtro_previas[] = array('finalizada', 1);
+                                $filtro_previas[] = array('id_profesional', $profesional->id);
+                                $ficha_previas = FichaAtencion::where($filtro_previas)->get();
+
+                                $datos['ficha_previas'] = $ficha_previas;
+
+
+                                /** FICHA ATENCION ACTUAL */
+                                if(empty($hora->id_ficha_atencion))
+                                {
+                                    $nueva_ficha_atencion = new FichaAtencion();
+                                    $nueva_ficha_atencion->id_paciente = $paciente->id;
+                                    $nueva_ficha_atencion->id_profesional = $profesional->id;
+                                    $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                                    if ($nueva_ficha_atencion->save())
+                                    {
+                                        $hora->id_estado = 5;
+                                        $hora->fecha_realizacion_consulta = now();
+                                        $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
+                                        $hora->save();
+                                        $ficha_actual_nueva = $nueva_ficha_atencion;
+                                    }
+                                    else
+                                    {
+                                        $nueva_ficha_atencion = '';
+                                    }
+                                }
+                                else
+                                {
+                                    $filtro_fichaAtencion = array();
+                                    $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                                    $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
+                                    $ficha_actual_nueva = FichaAtencion::where($filtro_fichaAtencion)->first();
+                                }
+
+                                $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                                $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
+
+
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                        case 36:// 36	Medicina Familiar
+                                            break;
+                                        case 37:// 37	Medicina general adultos y niños
+                                            break;
+                                        case 38:// 38	Medicina general a Domicilio
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 9: //MEDICINA INTERNA
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                        case 39:// 39	Alimentación y Nutrición
+                                            break;
+                                        case 40:// 40	Broncopulmonar
+                                            break;
+                                        case 41:// 41	Diabetología
+                                            break;
+                                        case 42:// 42	Endocrinología
+                                            break;
+                                        case 43:// 43	Endoscopía Digestiva
+                                            break;
+                                        case 44:// 44	Gastroenterología
+                                            break;
+                                        case 45:// 45	Geriatría
+                                            break;
+                                        case 46:// 46	Hematología
+                                            break;
+                                        case 47:// 47	Hepatología
+                                            break;
+                                        case 48:// 48	Infectología
+                                            break;
+                                        case 49:// 49	Inmunología y Alérgias
+                                            break;
+                                        case 50:// 50	Medicina Nuclear
+                                            break;
+                                        case 51:// 51	Nefrología
+                                            break;
+                                        case 52:// 52	Nefrourología
+                                            break;
+                                        case 53:// 53	Oncología
+                                            break;
+                                        case 54:// 54	Parasitología
+                                            break;
+                                        case 55:// 55	Quimioterapia
+                                            break;
+                                        case 56:// 56	Radioterapia
+                                            break;
+                                        case 57:// 57	Reumatología
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 10: //NEUROLOGÍA Y NEUROCIRUGÍA
+
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                        case 58:// 58	Neurología
+                                            break;
+                                        case 59:// 59	Neurocirugía
+                                            break;
+                                        case 60:// 60	Neuropsiquiatría
+                                            break;
+                                        case 61:// 61	Neuroradiología
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 11: //PEDIATRÍA
+
+                                /** FICHAS DE ATENCIONES PREVIAS */
+                                $filtro_previas = array();
+                                $filtro_previas[] = array('id_paciente', $paciente->id);
+                                $filtro_previas[] = array('confidencial', '0');
+                                $filtro_previas[] = array('finalizada', 1);
+                                $filtro_previas[] = array('id_profesional', $profesional->id);
+                                $ficha_previas = FichaAtencion::where($filtro_previas)->get();
+
+                                $datos['ficha_previas'] = $ficha_previas;
+
+
+                                /** FICHA ATENCION ACTUAL */
+                                if(empty($hora->id_ficha_atencion))
+                                {
+                                    $nueva_ficha_atencion = new FichaAtencion();
+                                    $nueva_ficha_atencion->id_paciente = $paciente->id;
+                                    $nueva_ficha_atencion->id_profesional = $profesional->id;
+                                    $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                                    if ($nueva_ficha_atencion->save())
+                                    {
+                                        $hora->id_estado = 5;
+                                        $hora->fecha_realizacion_consulta = now();
+                                        $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
+                                        $hora->save();
+                                        $ficha_actual_nueva = $nueva_ficha_atencion;
+                                    }
+                                    else
+                                    {
+                                        $nueva_ficha_atencion = '';
+                                    }
+                                }
+                                else
+                                {
+                                    $filtro_fichaAtencion = array();
+                                    $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                                    $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
+                                    $ficha_actual_nueva = FichaAtencion::where($filtro_fichaAtencion)->first();
+                                }
+
+                                $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                                $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
+
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                        case 62:// 62	Alergología Pediátrica
+                                            break;
+                                        case 63:// 63	Alimentación y Nutrición  Infantil
+                                            break;
+                                        case 64:// 64	Broncopulmonar Infantil
+                                            break;
+                                        case 65:// 65	Cardiología Pediátrica
+                                            break;
+                                        case 66:// 66	Cirugía y Traumatología Pediatrica
+                                            break;
+                                        case 67:// 67	Dermatología Pediátrica
+                                            break;
+                                        case 68:// 68	Endocrinología Pediátrica
+                                            break;
+                                        case 69:// 69	Gastroenterología  Pediátrica
+                                            break;
+                                        case 70:// 70	Ginecología  Infantil
+                                            break;
+                                        case 71:// 71	Nefrología Pediátrica
+                                            break;
+                                        case 72:// 72	Neonatología
+                                            break;
+                                        case 73:// 73	Neurología Infantil
+                                            break;
+                                        case 74:// 74	Neurosiquiatría Infantil
+                                            break;
+                                        case 75:// 75	Oftalmología Pediátrica
+                                            break;
+                                        case 76:// 76	Oncología y Radioterapia  Infantil
+                                            break;
+                                        case 77:// 77	Otorrinolaringología Pediátrica
+                                            break;
+                                        case 78:// 78	Pediatría General
+                                            break;
+                                        case 79:// 79	Urología Pediátrica
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 12: //SIQUIATRÍA
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                        case 80:// 80	Psiquiatría General
+                                            break;
+                                        case 81:// 81	Adicciones
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 13: //TRAUMATOLOGIA Y ORTOPEDIA
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad)) {
+                                        case 82:// 82	Traumatología Cadera
+                                            break;
+                                        case 83:// 83	Traumatología Codo
+                                            break;
+                                        case 84:// 84	Traumatología Columna
+                                            break;
+                                        case 85:// 85	Traumatología General
+                                            break;
+                                        case 86:// 86	Traumatología Hombro
+                                            break;
+                                        case 87:// 87	Traumatología Rodilla
+                                            break;
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                    break;
+                case 2: //ODONTÓLOGOS
+                    if(!empty($profesional->id_tipo_especialidad))
+                    {
+                        /** FICHAS DE ATENCIONES PREVIAS */
+                        $filtro_previas = array();
+                        $filtro_previas[] = array('id_paciente', $paciente->id);
+                        $filtro_previas[] = array('confidencial', '0');
+                        $filtro_previas[] = array('finalizada', 1);
+                        $filtro_previas[] = array('id_profesional', $profesional->id);
+                        $ficha_previas = FichaAtencion::where($filtro_previas)->get();
+
+                        $datos['ficha_previas'] = $ficha_previas;
+
+
+                        /** FICHA ATENCION ACTUAL */
+                        if(!empty($hora->id_ficha_atencion))
+                        {
+                            $nueva_ficha_atencion = new FichaAtencion();
+                            $nueva_ficha_atencion->id_paciente = $paciente->id;
+                            $nueva_ficha_atencion->id_profesional = $profesional->id;
+                            $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                            if ($nueva_ficha_atencion->save())
+                            {
+                                $hora->id_estado = 5;
+                                $hora->fecha_realizacion_consulta = now();
+                                $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
+                                $hora->save();
+                                $ficha_actual_nueva = $nueva_ficha_atencion;
+                            }
+                            else
+                            {
+                                $nueva_ficha_atencion = '';
+                            }
+                        }
+                        else
+                        {
+                            $filtro_fichaAtencion = array();
+                            $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                            $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
+                            $ficha_actual_nueva = FichaAtencion::where($filtro_fichaAtencion)->first();
+                        }
+
+                        $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                        $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
+
+
+                        switch (intval($profesional->id_tipo_especialidad))
+                        {
+                            case 14:// 14	CIRUGÍA MAXILOFACIAL
+                                break;
+                            case 15:// 15	ENDODÓNCIA
+                                break;
+                            case 16:// 16	IMPLANTOLOGÍA
+                                break;
+                            case 17:// 17	ODONTOLOGÍA ESTETICA
+                                break;
+                            case 18:// 18	ODONTOLOGÍA GENERAL
+                                break;
+                            case 19:// 19	ODONTOPEDIATRÍA
+                                break;
+                            case 20:// 20	ORTODÓNCIA
+                                break;
+                            case 21:// 21	PERIODÓNCIA
+                                break;
+                            case 22:// 22	REHABILITACIÓN ORAL
+                                break;
+                            case 23:// 23	RADIOLOGÍA DENTAL
+                                break;
+                            case 24:// 24	REHABILITACIÓN ORAL
+                                break;
+                            case 56:// 56	ESPECIALISTA EN TRANSTORNOS TEMPOROMANDIBULARES
+                                break;
+                        }
+                    }
+
+
+                    break;
+                case 3: //KINESIOLOGIA
+                    /** FICHAS DE ATENCIONES PREVIAS */
+                    $filtro_previas = array();
+                    $filtro_previas[] = array('id_paciente', $paciente->id);
+                    $filtro_previas[] = array('confidencial', '0');
+                    $filtro_previas[] = array('finalizada', 1);
+                    $filtro_previas[] = array('id_profesional', $profesional->id);
+                    $ficha_previas = FichaAtencion::where($filtro_previas)->get();
+
+                    $datos['ficha_previas'] = $ficha_previas;
+
+
+                    /** FICHA ATENCION ACTUAL */
+                    if(empty($hora->id_ficha_atencion))
+                    {
+                        $nueva_ficha_atencion = new FichaAtencion();
+                        $nueva_ficha_atencion->id_paciente = $paciente->id;
+                        $nueva_ficha_atencion->id_profesional = $profesional->id;
+                        $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                        if ($nueva_ficha_atencion->save())
+                        {
+                            $hora->id_estado = 5;
+                            $hora->fecha_realizacion_consulta = now();
+                            $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
+                            $hora->save();
+                            $ficha_actual_nueva = $nueva_ficha_atencion;
+                        }
+                        else
+                        {
+                            $nueva_ficha_atencion = '';
+                        }
+                    }
+                    else
+                    {
+                        $filtro_fichaAtencion = array();
+                        $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                        $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
+                        $ficha_actual_nueva = FichaAtencion::where($filtro_fichaAtencion)->first();
+                    }
+
+                    $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                    $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
+
+
+                    if(!empty($profesional->id_tipo_especialidad))
+                    {
+                        switch (intval($profesional->id_tipo_especialidad))
+                        {
+                            case 25:// 25  KINESIOLOGIA GENERAL
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        case 88: // 88	Kinesiología Respiratoria
+                                            break;
+                                        case 89: // 89	Kinesiología Traumatológica
+                                            break;
+                                        case 90: // 90	Kinesiología Neurológica
+                                            break;
+                                        case 91: // 91	Kinesiología Tercera Edad
+                                            break;
+                                        case 92: // 92	Kinesiología Infantil
+                                            break;
+                                        case 93: // 93	Kinesiología Del Desarrollo
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 26:// 26  KINESIOLOGIA ESPECIALIZADA
+                                break;
+                            case 27:// 27  KINESIOLOGIA DOMICILIARIA
+                                break;
+                        }
+                    }
+                    break;
+                case 4: //FONOAUDIOLOGÍA
+
+                    if(!empty($profesional->id_tipo_especialidad))
+                    {
+                        switch (intval($profesional->id_tipo_especialidad))
+                        {
+                            case 28:// 28	FONOAUDIOLOGIA CLÍNICA ADULTOS Y NIÑOS
+                                break;
+                            case 29:// 29	FONOAUDIOLOGIA EDUCACIONAL
+                                break;
+                            case 30:// 30	FONOAUDIOLOGIA ESPECIALIZADA
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        case 94: // 94	Fonoaudiología Habla y Lenguaje
+                                            break;
+                                        case 95: // 95	Fonoaudiología Neurológica
+                                            break;
+                                        case 96: // 96	Fonoaudiología de la Audición
+                                            break;
+                                        case 97: // 97	Fonoaudiología del Canto
+                                            break;
+                                    }
+                                }
+
+                                break;
+                            case 55:// 55	EXMENES ORL
+                                break;
+                        }
+                    }
+
+                    break;
+                case 5: //NUTRICIÓN Y DIETÉTICA
+                    if(!empty($profesional->id_tipo_especialidad))
+                    {
+                        switch (intval($profesional->id_tipo_especialidad))
+                        {
+                            case 31:// 31	NUTRICIONISTA GENERAL
+                                break;
+                            case 32:// 32	NUTRICIONISTA PEDIÁTRICA
+                                break;
+                            case 33:// 33	NUTRICIONISTA ESPECIALIDAD
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        case 98: //98	Obesidad
+                                            break;
+                                        case 99: //99	Diabetes
+                                            break;
+                                        case 100: //100	Dietología
+                                            break;
+                                        case 101: //101	Transtornos Metabólicos
+                                            break;
+                                        case 102: //102	Tercera Edad
+                                            break;
+
+                                    }
+                                }
+                                break;
+                        }
+                    }
+
+                    break;
+                case 6: //SICOLOGÍA
+                    if(!empty($profesional->id_tipo_especialidad))
+                    {
+                        switch (intval($profesional->id_tipo_especialidad))
+                        {
+                            case 34:// 34	SICOLOGÍA GENERAL ADULTOS
+                                break;
+                            case 35:// 35	SICOLOGÍA GENERAL INFANTIL
+                                break;
+                            case 36:// 36	SICOLOGÍA LABORAL
+                                break;
+                            case 37:// 37	SICOLOGÍA ESPECIALIZADA
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        case 103: // 103	Sicología Adicciones
+                                            break;
+                                        case 104: // 104	Sicología de la Obesidad
+                                            break;
+                                        case 105: // 105	Sicología Oncológica
+                                            break;
+                                    }
+                                }
+                                break;
+                        }
+                    }
+
+                    break;
+                case 7: //MATRÓN/A
+                    if(!empty($profesional->id_tipo_especialidad))
+                    {
+                        switch (intval($profesional->id_tipo_especialidad))
+                        {
+                            case 38:// 38	ATENCIÓN EMBARAZO
+                                break;
+                            case 39:// 39	ANTICONCEPCIÓN
+                                break;
+                            case 40:// 40	ATENCIÓN PUERPERIO
+                                break;
+                            case 51:// 51	CONTROL NIÑO SANO
+                                break;
+                            case 52:// 52	MATRON/A ATENCIÓN GENERAL
+                                break;
+                        }
+                    }
+
+                    break;
+                case 8: //ENFERMERA UNIVERSITARIA
+                    if(!empty($profesional->id_tipo_especialidad))
+                    {
+                        switch (intval($profesional->id_tipo_especialidad))
+                        {
+                            case 41:// 41	ENFERMERÍA GENERAL
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        case 106: // 106	Cuidado de enfermos
+                                            break;
+                                        case 107: // 107	Curaciones tratamientos
+                                            break;
+                                        case 108: // 108	Control de niño sano
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 42:// 42	ENFERMERÍA ESPECIALIZADA
+                                break;
+                            case 53:// 53	ENFERMERÍA CONTROL NIÑO SANO
+                                break;
+                        }
+                    }
+
+                    break;
+                case 9: //TERÁPIA OCUPACIONAL
+                    if(!empty($profesional->id_tipo_especialidad))
+                    {
+                        switch (intval($profesional->id_tipo_especialidad))
+                        {
+                            case 43:// 43	TERÁPIA OCUPACIONAL ADULTOS
+                                break;
+                            case 44:// 44	TERÁPIA OCUPACIONAL NIÑOS
+                                break;
+                        }
+                    }
+
+                    break;
+                case 10: //TÉCNICO ENFERMERÍA
+                    if(!empty($profesional->id_tipo_especialidad))
+                    {
+                        switch (intval($profesional->id_tipo_especialidad))
+                        {
+                            case 45:// 45	ATENCIÓN TENS EN GENERAL
+                                break;
+                            case 46:// 46	ATENCIÓN TENS ESPECIALIZADA
+                                break;
+                        }
+                    }
+
+                    break;
+                case 11: //TECNÓLOGO MÉDICO
+                    if(!empty($profesional->id_tipo_especialidad))
+                    {
+                        switch (intval($profesional->id_tipo_especialidad))
+                        {
+                            case 47:// 47	TECNOLOGÍA MÉDICA GENERAL
+                                break;
+                            case 48:// 48	TECNOLOGÍA MÉDICA ESPECIALIZADA
+                                if(!empty($profesional->id_sub_tipo_especialidad))
+                                {
+                                    switch (intval($profesional->id_sub_tipo_especialidad))
+                                    {
+                                        case 109: // 109	Laboratorio Radiología
+                                            break;
+                                        case 110: // 110	Laboratorio clínico
+                                            break;
+                                        case 111: // 111	Laboratorio Anatomía Patológica
+                                            break;
+                                        case 112: // 112	Laboratorio Otorrinolaringología
+                                            break;
+                                        case 113: // 113	Laboratorio Oftalmología
+                                            break;
+                                        case 114: // 114	Laboratorio Cardiología
+                                            break;
+                                        case 115: // 115	Laboratorio Neurología
+                                            break;
+                                        case 116: // 116	Laboratorio Dental
+                                            break;
+                                        case 117: // 117	Laboratorio Citopatología
+                                            break;
+                                        case 118: // 118	Laboratorio Inmunología
+                                            break;
+
+                                    }
+                                }
+                                break;
+                            case 54:// 54	TECNOLOGO ORL
+                                break;
+                        }
+                    }
+
+                    break;
+                case 12: //ARSENALERÍA
+                    if(!empty($profesional->id_tipo_especialidad))
+                    {
+                        switch (intval($profesional->id_tipo_especialidad))
+                        {
+                            case 49:// 49	ARSENALERÍA QUIRÚRGICA
+                                break;
+                            case 50:// 50	ARSENALERÍA OBSTÉTRICA
+                                break;
+                        }
+                    }
+                    break;
+                default:
+                    /** FICHAS DE ATENCIONES PREVIAS */
+                    $filtro_previas = array();
+                    $filtro_previas[] = array('id_paciente', $paciente->id);
+                    $filtro_previas[] = array('confidencial', '0');
+                    $filtro_previas[] = array('finalizada', 1);
+                    $filtro_previas[] = array('id_profesional', $profesional->id);
+                    $ficha_previas = FichaAtencion::where($filtro_previas)->get();
+
+                    $datos['ficha_previas'] = $ficha_previas;
+
+
+                    /** FICHA ATENCION ACTUAL */
+                    if(empty($hora->id_ficha_atencion))
+                    {
+                        $nueva_ficha_atencion = new FichaAtencion();
+                        $nueva_ficha_atencion->id_paciente = $paciente->id;
+                        $nueva_ficha_atencion->id_profesional = $profesional->id;
+                        $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                        if ($nueva_ficha_atencion->save())
+                        {
+                            $hora->id_estado = 5;
+                            $hora->fecha_realizacion_consulta = now();
+                            $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
+                            $hora->save();
+                            $ficha_actual_nueva = $nueva_ficha_atencion;
+                        }
+                        else
+                        {
+                            $nueva_ficha_atencion = '';
+                        }
+                    }
+                    else
+                    {
+                        $filtro_fichaAtencion = array();
+                        $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                        $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
+                        $ficha_actual_nueva = FichaAtencion::where($filtro_fichaAtencion)->first();
+                    }
+
+                    $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                    $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
+
+
+                    break;
+            }
+
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+
+        return (object)$datos;
+    }
+
 }

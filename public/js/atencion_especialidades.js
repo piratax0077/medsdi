@@ -296,9 +296,9 @@ function func_global() {
 }
 
 /** Exámenes hormonales **/
-function hormonas() {
-    $('#hormona_modal').modal('show');
-}
+// function hormonas() {
+//     $('#hormona_modal').modal('show');
+// }
 
 
 

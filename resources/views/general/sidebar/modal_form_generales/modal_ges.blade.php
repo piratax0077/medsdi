@@ -136,10 +136,9 @@
                                                 Si desea adjuntar un documento arrastre el archivo en el recuadro.
                                               </div>
                                             <div class=" text-justify pt-3 pb-1" role="alert">
-                                                <input type="hidden" name="input_lista_archivo" id="input_lista_archivo" value="">
+                                                <input type="hidden" name="input_lista_archivo_ges" id="input_lista_archivo_ges" value="">
                                                 <!-- [ Main Content ] start -->
-                                                <div class="dropzone" id="mis-archivos" action="">
-                                                </div>
+                                                <div class="dropzone" id="mis-archivos-ges" action="{{ route('profesional.imagen.carga') }}"></div>
                                                 <!-- [ file-upload ] end -->
                                             </div>
                                         </div>
@@ -163,112 +162,116 @@
 </div>
 
 <script>
-    /** MANEJO DE ARCHIVO */
-    // var myDropzone_ges ;
-    // Dropzone.options.misArchivos = {
-    //     init:function()
-    //     {
-    //         myDropzone_ges = this;
-    //     },
-    //     url: "{{ route('profesional.archivo.carga') }}",
-    //     method: 'post',
-    //     createImageThumbnails: true,
-    //     addRemoveLinks: true,
-    //     headers:{
-    //         'X-CSRF-TOKEN' : CSRF_TOKEN,
-    //     },
 
-    //     acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv",
-    //     maxFilesize: 4,
-    //     maxFiles: 4,
-    //     /** El texto utilizado antes de que se eliminen los archivos. */
-    //     dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
+    /** MANEJO DE IMAGENES GES */
+    $(document).ready(function () {
+        var myDropzone_ges ;
+        Dropzone.options.misImagenesGes = {
+            init:function()
+            {
+                myDropzone_ges = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
 
-    //     /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
-    //     dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
 
-    //     /**
-    //      * El texto que se agregará antes del formulario alternativo.
-    //      * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
-    //      * ser ignorado.
-    //      */
-    //     dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
 
-    //     /**
-    //      * Si el tamaño del archivo es demasiado grande.
-    //      * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
-    //      */
-    //     dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
 
-    //     /** Si el archivo no coincide con el tipo de archivo. */
-    //     dictInvalidFileType: "No puedes subir archivos de este tipo.",
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+            dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
 
-    //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
-    //     dictCancelUpload: "Cancelar carga",
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
 
-    //     /** El texto que se muestra si una carga se canceló manualmente */
-    //     dictUploadCanceled: "Subida cancelada.",
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
 
-    //     /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
-    //     dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
 
-    //     /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
-    //     dictRemoveFile: "Eliminar archivo",
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
 
-    //     /**
-    //      * Se muestra si `maxFiles` es st y se excede.
-    //      */
-    //     dictMaxFilesExceeded: "No puede cargar más archivos.",
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
 
-    //     // accept(file, done) {
-    //     //     console.log('-------------accept-----------------------');
-    //     //     cargar_lista_archivo();
-    //     //     return done();
-    //     // },
-    //     success: function(file, response){
-    //         // console.log('-------------success-----------------------');
-    //         cargar_lista_archivo(myDropzone_ges,'ges');
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
 
-    //         if (file.previewElement) {
-    //             return file.previewElement.classList.add("dz-success");
-    //         }
-    //     },
-    //     error(file, message) {
-    //         // console.log('-------------error-----------------------');
-    //         if (file.previewElement) {
-    //             file.previewElement.classList.add("dz-error");
-    //             if (typeof message !== "string" && message.error)
-    //             {
-    //                 message = message.error;
-    //             }
-    //             else
-    //             {
-    //                 message = message.message;
-    //             }
-    //             for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
-    //                 node.textContent = message;
-    //             }
-    //         }
-    //     },
-    //     removedfile(file) {
-    //         // console.log('-------------removedfile-----------------------');
-    //         cargar_lista_archivo(myDropzone_ges,'ges');
-    //         if (file.previewElement != null && file.previewElement.parentNode != null) {
-    //             file.previewElement.parentNode.removeChild(file.previewElement);
-    //         }
-    //         return this._updateMaxFilesReachedClass();
-    //     },
-    //     canceled: function canceled(file) {
-    //         cargar_lista_archivo(myDropzone_ges,'ges');
-    //         return this.emit("error", file, this.options.dictUploadCanceled);
-    //     },
-    // };
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_archivo_ges();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_archivo_ges(myDropzone_ges,'ges');
 
-    var lista_archivo = {};
-    function cargar_lista_archivo(obj_dropzone, alias_examen)
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_archivo_ges(myDropzone_ges,'ges');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_archivo_ges(myDropzone_ges,'ges');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+    });
+
+    var lista_archivo_ges = {};
+    function cargar_lista_archivo_ges(obj_dropzone, alias_examen)
     {
-        // console.log('--------------cargar_lista_archivo----------------------');
-        lista_archivo[alias_examen] = [];
+        // console.log('--------------cargar_lista_archivo_ges----------------------');
+        lista_archivo_ges[alias_examen] = [];
         let temp  = obj_dropzone.getAcceptedFiles();
         $.each(temp, function( index, value )
         {
@@ -277,14 +280,14 @@
                 if(value.xhr !== undefined)
                 {
                     var archivo_temp = JSON.parse(value.xhr.response);
-                    lista_archivo[alias_examen][index] = [
+                    lista_archivo_ges[alias_examen][index] = [
                         url=archivo_temp.archivo.url,
                         nombre_origian= archivo_temp.archivo.original_file_name,
                         nombre_archivo = archivo_temp.archivo.nombre_archivo,
                         file_extension = archivo_temp.archivo.file_extension,
                     ];
-                    $('#input_lista_archivo').val('');
-                    $('#input_lista_archivo').val(JSON.stringify(lista_archivo));
+                    $('#input_lista_archivo_ges').val('');
+                    $('#input_lista_archivo_ges').val(JSON.stringify(lista_archivo_ges));
                 }
             }
         });
@@ -310,8 +313,8 @@
         let confirmacion_diagnostica_ficha_ges = $('#confirmacion_diagnostica_ficha_ges').val();
         let paciente_tratamiento_ficha_ges = $('#paciente_tratamiento_ficha_ges').val();
 
-        // lista_archivo
-        let lista_archivo = $('#input_lista_archivo').val();
+        // lista_archivo_ges
+        let lista_archivo_ges = $('#input_lista_archivo_ges').val();
 
         let id_ficha_atencion = $('#id_fc').val();
         let id_lugar_atencion = $('#id_lugar_atencion').val();
@@ -423,7 +426,7 @@
                     hora_medica : hora_medica,
                     // codigo_verificacion : codigo_validacion_informe_ges,
                     codigo_verificacion : '',
-                    lista_archivo : lista_archivo,
+                    lista_archivo_ges : lista_archivo_ges,
                 },
             })
             .done(function(resp) {
@@ -442,7 +445,7 @@
                         $('#rut_responsable_ficha_ges').val('');
                         $('#confirmacion_diagnostica_ficha_ges').val('');
                         $('#paciente_tratamiento_ficha_ges').val('');
-                        $('#input_lista_archivo').val('');
+                        $('#input_lista_archivo_ges').val('');
                         $('#codigo_validacion_informe_ges').val('');
 
                         $('#mensaje').text('Se ha creado Diagnostico GES de forma correcta');

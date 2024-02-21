@@ -44,24 +44,17 @@
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
                                     <li class="nav-item" id="nav-licencia">
-                                        @if (request('token') && request('lic') == 1)
-                                        <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
+                                        @if(!empty(session('lic_token')) && session('lic_estado') == 1)
+                                            <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
                                         @else
-                                            @php
-                                                $url_temp = 'Profesional/Paciente/Ficha_consulta?_token='.request('_token').'&id_hora_realizar='.request('id_hora_realizar').'&lugar_atencion_id='.request('lugar_atencion_id').'';
-                                            @endphp
-                                            <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $profesional->id_usuario,'urla'=> $url_temp.'&lic=0','urln' => $url_temp.'&lic=1&tab=licencia-tab', 'id_tipo' => 12]) }}">Licencia</a>
+                                            <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>
                                         @endif
-
                                     </li>
-                                    <li class="nav-item">
-                                        @if (request('token') && request('fmu') == 1)
+                                    <li class="nav-item" id="nav-fmu">
+                                        @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
                                         @else
-                                            @php
-                                                $url_temp = 'Profesional/Paciente/Ficha_consulta?_token='.request('_token').'&id_hora_realizar='.request('id_hora_realizar').'&lugar_atencion_id='.request('lugar_atencion_id').'';
-                                            @endphp
-                                            <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $paciente->id_usuario,'urla'=> $url_temp.'&fmu=0','urln' => $url_temp.'&fmu=1', 'id_tipo' => 2]) }}">FMU</a>
+                                            <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
                                         @endif
                                     </li>
                                     <li class="nav-item">
@@ -105,9 +98,9 @@
                         <div class="tab-pane fade show" id="band_exam" role="tabpanel" aria-labelledby="band_exam_tab">
                             @include('general.secciones_ficha.bandeja_examenes')
                         </div>
-                        <div class="tab-pane fade show" id="examenes_cons" role="tabpanel" aria-labelledby="examenes_cons-tab">
-                            @include('atencion_gine_obstetricia.secciones_especialidad.examenes_consulta')
-                        </div>
+                        {{-- <div class="tab-pane fade show" id="examenes_cons" role="tabpanel" aria-labelledby="examenes_cons-tab"> --}}
+                            {{-- @include('atencion_gine_obstetricia.secciones_especialidad.examenes_consulta') --}}
+                        {{-- </div> --}}
                          <!--Hospitalización-->
 						<div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">
                             @include('general.hospitalizacion.hospitalizacion')
@@ -129,40 +122,35 @@
         {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
-
-
-
+		
     </div>
     <script>
     </script>
+	
+    {{-- listo --}}
 	@include('atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_tunner_f')
-    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_mamas")
-    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_mamas_ant")
-    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.eco_ginecologica")
-    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.m_exesppap")
-
-    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.eco_obstetrica_sol")
-    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.sol_examenes_flujo")
-    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_abortos")
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_ciclo")
+    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.sol_examenes_flujo")
+    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.m_exesppap")
+    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.eco_ginecologica")
+    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_mamas_ant")
+    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_mamas")
+    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_abortos")
+    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_embarazos")
+    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_hormonas"){{-- se debe evaluar y realizar --}}
+    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.eco_obstetrica_sol")
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.aro_hipertension")
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.aro_diabetes")
 
+    {{-- en proceso --}}
+    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.m_toma_pap")
 
-
-
-    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_hormonas")
+    {{-- pendiente --}}
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_embriesgo")
-    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_embarazos")
-
-
-    @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.eco_obstetrica")
-
+    {{-- @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.eco_obstetrica") --}}
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.m_ucalculoedadgest")
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.carnet_alta_obstetrico")
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.protocolo_parto")
-
-
-
+	
 @endsection
 @include('app.profesional.modales.boton_flotante_agenda_autorizacion')

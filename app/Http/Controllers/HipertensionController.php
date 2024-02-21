@@ -26,7 +26,7 @@ class HipertensionController extends Controller
             $filtro[] = array('id_lugar_atencion',$request->id_lugar_atencion);
         }
 
-        $registros = Hipertension::where($filtro)->get();
+        $registros = Hipertension::where($filtro)->orderBy('id', 'ASC')->get();
         if(count($registros))
         {
             $datos['estado'] = 1;

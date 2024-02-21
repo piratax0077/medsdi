@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class FichaGinecoContObstetrico extends Model
 {
     use HasFactory;
-    protected $table = 'ficha_gineco_cont_obstetrico';
+    protected $table = 'ficha_gin_cont_obstetrico';
 }

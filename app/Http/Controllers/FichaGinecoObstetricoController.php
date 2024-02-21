@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ExamenEspecialidad;
+use App\Models\ExamenEspecialidadImg;
+use App\Models\ExamenEspecialidadTemplate;
 use App\Models\FichaGinecoContObstetrico;
 use App\Models\FichaGinecoContPuerpCir;
 use App\Models\FichaGinecologia;
@@ -9,8 +12,10 @@ use App\Models\FichaGinecoObstAntAro;
 use App\Models\FichaGinecoObstAntec;
 use App\Models\FichaGinecoObstAro;
 use App\Models\FichaGinecoObstetrica;
-use App\Models\GinemodalAntecedentesPartoPuerperio;
+use App\Models\GineModalAntecedentesPartoPuerperio;
 use App\Models\GinemodalAborto;
+use App\Models\GineModalAnteAnticonceptivo;
+use App\Models\GineModalAntHormonales;
 use App\Models\GinemodalAro;
 use App\Models\GineModalEcoObstetrica;
 use App\Models\GineModalEcoGinecologica;
@@ -21,6 +26,9 @@ use App\Models\GinemodalHipertension;
 use App\Models\GinemodalMamas;
 use App\Models\GinemodalMamasExamen;
 use App\Models\GinemodalOtrosProcedimientos;
+use App\Models\Hipertension;
+use App\Models\Paciente;
+use App\Models\Profesional;
 use Illuminate\Http\Request;
 
 class FichaGinecoObstetricoController extends Controller
@@ -35,7 +43,7 @@ class FichaGinecoObstetricoController extends Controller
 
             $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
 
-            $ficha = FichaGinecoObstetrica::where('id', $hora_medica->id_ficha_atencion)->first();
+            $ficha = FichaGinecoObstetrica::where('id', $hora_medica->id_ficha_otros_prof)->first();
 
             $ficha->m_cons = $request->m_cons;
             $ficha->obs_m_cons=$request->obs_m_cons;
@@ -160,7 +168,8 @@ class FichaGinecoObstetricoController extends Controller
             $ficha->confidencial = $confidencial;
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
-            $ficha->finalizada = 1;
+            // $ficha->finalizada = 1;
+            $ficha->estado = 6;
 
             if (!$ficha->save())
             {
@@ -173,7 +182,8 @@ class FichaGinecoObstetricoController extends Controller
 
                 /** GINECOLOGIA */
                 if(
-                    !empty($request->id_tunner)|| !empty($request->crecdes)|| !empty($request->examen_ext)||
+                    // !empty($request->id_tunner)||
+                    !empty($request->crecdes)|| !empty($request->examen_ext)||
                     !empty($request->tacto)|| !empty($request->obs_ex_gine)|| !empty($request->res_exam)||
                     !empty($request->desc_ex_mamas)|| !empty($request->obs_ex_mamas)|| !empty($request->res_ex_mamas) ||
                     !empty($request->mac)|| !empty($request->obs_t_mac)|| !empty($request->mac_n)||
@@ -183,7 +193,7 @@ class FichaGinecoObstetricoController extends Controller
                     )
                 {
                     $ficha_ginecologia = new FichaGinecologia();
-                    $ficha_ginecologia->ficha_gineco_obstetrica = $ficha->id;
+                    $ficha_ginecologia->id_ficha_gineco_obstetrica = $ficha->id;
                     $ficha_ginecologia->id_paciente = $id_paciente;
                     $ficha_ginecologia->id_profesional = $id_profesional;
                     $ficha_ginecologia->id_tunner = $request->id_tunner;
@@ -199,9 +209,10 @@ class FichaGinecoObstetricoController extends Controller
                     $ficha_ginecologia->obs_t_mac = $request->obs_t_mac;
                     $ficha_ginecologia->mac_n = $request->mac_n;
                     $ficha_ginecologia->mac_n_nom = $request->mac_n_nom;
-                    $ficha_ginecologia->mac_mec= $request->mac_mec;
+                    $ficha_ginecologia->mac_mec = $request->mac_mec;
                     $ficha_ginecologia->mac_mec_obs = $request->mac_mec_obs;
                     $ficha_ginecologia->mac_far = $request->mac_far;
+                    $ficha_ginecologia->obs_mac_far = $request->obs_mac_far;
                     $ficha_ginecologia->g_mac_obs = $request->g_mac_obs;
                     $ficha_ginecologia->res_ex_mac = $request->res_ex_mac;
                     $ficha_ginecologia->otro = '';
@@ -225,27 +236,25 @@ class FichaGinecoObstetricoController extends Controller
 
                 /** CONTROL OBSTETRICO */
                 if(
-                    !empty($request->ed_gest)|| !empty($request->fpp_fur)|| !empty($request->fpp_eco)||
-                    !empty($request->fpp_aut)|| !empty($request->sosp_pat_emb)|| !empty($request->sosp_pat_emb_obs)||
-                    !empty($request->control_emb )|| !empty($request->control_emb_obs)|| !empty($request->obs_grl_emb) ||
-                    !empty($request->riesg_pat_grl)|| !empty($request->riesg_pat_grl_obs)|| !empty($request->pat_prev_emb)||
-                    !empty($request->pat_prev_emb_obs)|| !empty($request->pat_prev_emb_obs_gl)|| !empty($request->mid_modal_fact_riesgo)||
-                    !empty($request->riesg_pat_actr)|| !empty($request->riesg_pat_act_obs)|| !empty($request->rieg_pat_emb)||
-                    !empty($request->rieg_pat_emb_obs)|| !empty($request->rieg_pat_emb_obs_grl)|| !empty($request->cont_emb_mamas)||
-                    !empty($request->cont_emb_mamas_obs)|| !empty($request->cont_emb_gine)|| !empty($request->cont_emb_gine_obs) ||
-                    !empty($request->cont_emb_au_gine)|| !empty($request->cont_emb_otros)|| !empty($request->cont_emb_otros_obs)||
-                    !empty($request->cont_emb_mat_obs_grl)|| !empty($request->feto_lcf)|| !empty($request->feto_resp_cont)||
-                    !empty($request->feto_tamr)|| !empty($request->feto_aut)|| !empty($request->feto_obs_grl)||
-                    !empty($request->cont_rutina)|| !empty($request->der_emb_aro)|| !empty($request->sol_hosp)
-
-
-                    )
+                    !empty($request->ed_gest) || !empty($request->fpp_fur) || !empty($request->fpp_eco) ||
+                    !empty($request->fpp_aut) || !empty($request->sosp_pat_emb) || !empty($request->sosp_pat_emb_obs) ||
+                    !empty($request->control_emb) || !empty($request->control_emb_obs) || !empty($request->obs_grl_emb) ||
+                    !empty($request->riesg_pat_grl) || !empty($request->riesg_pat_grl_obs) || !empty($request->pat_prev_emb) ||
+                    !empty($request->pat_prev_emb_obs) || !empty($request->pat_prev_emb_obs_gl) || !empty($request->riesg_pat_act) ||
+                    !empty($request->riesg_pat_act_obs) || !empty($request->rieg_pat_emb) || !empty($request->rieg_pat_emb_obs) ||
+                    !empty($request->rieg_pat_emb_obs_grl) || !empty($request->cont_emb_mamas) || !empty($request->cont_emb_mamas_obs) ||
+                    !empty($request->cont_emb_gine) || !empty($request->cont_emb_gine_obs) || !empty($request->cont_emb_au_gine) ||
+                    !empty($request->cont_emb_otros) || !empty($request->cont_emb_otros_obs) || !empty($request->cont_emb_mat_obs_grl) ||
+                    !empty($request->feto_lcf) || !empty($request->feto_resp_cont) || !empty($request->feto_tam) ||
+                    !empty($request->feto_aut) || !empty($request->feto_obs_grl) || !empty($request->cont_rutina) ||
+                    !empty($request->der_emb_aro) || !empty($request->sol_hosp)
+                )
                 {
                     $ficha_control_embarazo = new FichaGinecoContObstetrico();
-                    $ficha_control_embarazo->ficha_gineco_obstetrica = $ficha->id;
-                    $ficha_control_embarazo->id_lugar_atencion = $request->id_lugar_atencion;
                     $ficha_control_embarazo->id_paciente = $id_paciente;
                     $ficha_control_embarazo->id_profesional = $id_profesional;
+                    $ficha_control_embarazo->id_lugar_atencion = $request->id_lugar_atencion;
+                    $ficha_control_embarazo->id_ficha_gineco_obstetrica = $ficha->id;
                     $ficha_control_embarazo->ed_gest = $request->ed_gest;
                     $ficha_control_embarazo->fpp_fur = $request->fpp_fur;
                     $ficha_control_embarazo->fpp_eco = $request->fpp_eco;
@@ -256,18 +265,18 @@ class FichaGinecoObstetricoController extends Controller
                     $ficha_control_embarazo->control_emb_obs = $request->control_emb_obs;
                     $ficha_control_embarazo->obs_grl_emb = $request->obs_grl_emb;
                     $ficha_control_embarazo->riesg_pat_grl = $request->riesg_pat_grl;
-                    $ficha_control_embarazo->riesg_pat_grl_obs = $request->obs_t_riesg_pat_grl_obs;
+                    $ficha_control_embarazo->riesg_pat_grl_obs = $request->riesg_pat_grl_obs;
                     $ficha_control_embarazo->pat_prev_emb = $request->pat_prev_emb;
                     $ficha_control_embarazo->pat_prev_emb_obs = $request->pat_prev_emb_obs;
-                    $ficha_control_embarazo->pat_prev_emb_obs_gl= $request->pat_prev_emb_obs_gl;
-                    $ficha_control_embarazo->id_modal_fact_riesgo = $request->id_modal_fact_riesgo;
+                    $ficha_control_embarazo->pat_prev_emb_obs_gl = $request->pat_prev_emb_obs_gl;
+                    // $ficha_control_embarazo->id_modal_fact_riesgo = $request->id_modal_fact_riesgo; // modal
                     $ficha_control_embarazo->riesg_pat_act = $request->riesg_pat_act;
                     $ficha_control_embarazo->riesg_pat_act_obs = $request->riesg_pat_act_obs;
-                    $ficha_control_embarazo->rieg_pat_emb= $request->rieg_pat_emb;
+                    $ficha_control_embarazo->rieg_pat_emb = $request->rieg_pat_emb;
                     $ficha_control_embarazo->rieg_pat_emb_obs = $request->rieg_pat_emb_obs;
                     $ficha_control_embarazo->rieg_pat_emb_obs_grl = $request->rieg_pat_emb_obs_grl;
                     $ficha_control_embarazo->cont_emb_mamas = $request->cont_emb_mamas;
-                    $ficha_control_embarazo->cont_emb_mamas_obs= $request->cont_emb_mamas_obs;
+                    $ficha_control_embarazo->cont_emb_mamas_obs = $request->cont_emb_mamas_obs;
                     $ficha_control_embarazo->cont_emb_gine = $request->cont_emb_gine;
                     $ficha_control_embarazo->cont_emb_gine_obs = $request->cont_emb_gine_obs;
                     $ficha_control_embarazo->cont_emb_au_gine = $request->cont_emb_au_gine;
@@ -276,7 +285,7 @@ class FichaGinecoObstetricoController extends Controller
                     $ficha_control_embarazo->cont_emb_mat_obs_grl = $request->cont_emb_mat_obs_grl;
                     $ficha_control_embarazo->feto_lcf = $request->feto_lcf;
                     $ficha_control_embarazo->feto_resp_cont = $request->feto_resp_cont;
-                    $ficha_control_embarazo->feto_tam= $request->feto_tam;
+                    $ficha_control_embarazo->feto_tam = $request->feto_tam;
                     $ficha_control_embarazo->feto_aut = $request->feto_aut;
                     $ficha_control_embarazo->feto_obs_grl = $request->feto_obs_grl;
                     $ficha_control_embarazo->cont_rutina = $request->cont_rutina;
@@ -285,6 +294,7 @@ class FichaGinecoObstetricoController extends Controller
                     $ficha_control_embarazo->otro = '';
                     $ficha_control_embarazo->otro1 = '';
                     $ficha_control_embarazo->estado = 1;
+
 
                     if($ficha_control_embarazo->save())
                     {
@@ -304,27 +314,25 @@ class FichaGinecoObstetricoController extends Controller
 
                 /** ANTECEDENTES GINECO-OBSTETRICO  */
                 if(
-                    !empty($request->abort)|| !empty($request->abort_obs)|| !empty($request->ab_num)||
-                    !empty($request->ab_n_obs)|| !empty($request->abort_obs_gl)|| !empty($request->id_modal_abort)||
-                    !empty($request->emb_prev)|| !empty($request->emb_prev_obs)|| !empty($request->pat_emb_prev) ||
-                    !empty($request->pat_emb_prev_obs)|| !empty($request->emb_prev_obs_grl)|| !empty($request->emb_mult)||
-                    !empty($request->emb_mult_obs)|| !empty($request->nac_vivos)|| !empty($request->nac_vivos_obs)||
-                    !empty($request->nac_vivos_sal)|| !empty($request->nac_vivos_sal_obs)|| !empty($request->nac_vivos__obs_gls)||
-                    !empty($request->id_modal_emb)|| !empty($request->id_modal_mamass)|| !empty($request->id_ex_horm)
-
-                    )
+                    !empty($request->abort) || !empty($request->abort_obs) || !empty($request->ab_num) || !empty($request->ab_n_obs) || !empty($request->abort_obs_gl) ||
+                    !empty($request->emb_prev) || !empty($request->emb_prev_obs) || !empty($request->pat_emb_prev) || !empty($request->pat_emb_prev_obs) || !empty($request->emb_prev_obs_grl) ||
+                    !empty($request->emb_mult) || !empty($request->emb_mult_obs) || !empty($request->nac_vivos) || !empty($request->nac_vivos_obs) || !empty($request->nac_vivos_sal) ||
+                    !empty($request->nac_vivos_sal_obs) || !empty($request->nac_vivos_obs_gls)
+                )
                 {
 
                     $ficha_gine_obst_antecedentes = new FichaGinecoObstAntec();
-                    $ficha_gine_obst_antecedentes->ficha_gineco_obstetrica = $ficha->id;
+
                     $ficha_gine_obst_antecedentes->id_paciente = $id_paciente;
                     $ficha_gine_obst_antecedentes->id_profesional = $id_profesional;
+                    $ficha_gine_obst_antecedentes->id_lugar_atencion = $request->id_lugar_atencion;
+                    $ficha_gine_obst_antecedentes->id_ficha_gineco_obstetrica = $ficha->id;
                     $ficha_gine_obst_antecedentes->abort = $request->abort;
                     $ficha_gine_obst_antecedentes->abort_obs = $request->abort_obs;
                     $ficha_gine_obst_antecedentes->ab_num = $request->ab_num;
                     $ficha_gine_obst_antecedentes->ab_n_obs = $request->ab_n_obs;
                     $ficha_gine_obst_antecedentes->abort_obs_gl = $request->abort_obs_gl;
-                    $ficha_gine_obst_antecedentes->id_modal_abort = $request->id_modal_abort;
+                    // $ficha_gine_obst_antecedentes->id_modal_abort = //modal
                     $ficha_gine_obst_antecedentes->emb_prev = $request->emb_prev;
                     $ficha_gine_obst_antecedentes->emb_prev_obs = $request->emb_prev_obs;
                     $ficha_gine_obst_antecedentes->pat_emb_prev = $request->pat_emb_prev;
@@ -332,14 +340,14 @@ class FichaGinecoObstetricoController extends Controller
                     $ficha_gine_obst_antecedentes->emb_prev_obs_grl = $request->emb_prev_obs_grl;
                     $ficha_gine_obst_antecedentes->emb_mult = $request->emb_mult;
                     $ficha_gine_obst_antecedentes->emb_mult_obs = $request->emb_mult_obs;
-                    $ficha_gine_obst_antecedentes->nac_vivos= $request->nac_vivos;
+                    $ficha_gine_obst_antecedentes->nac_vivos = $request->nac_vivos;
                     $ficha_gine_obst_antecedentes->nac_vivos_obs = $request->nac_vivos_obs;
                     $ficha_gine_obst_antecedentes->nac_vivos_sal = $request->nac_vivos_sal;
                     $ficha_gine_obst_antecedentes->nac_vivos_sal_obs = $request->nac_vivos_sal_obs;
-                    $ficha_gine_obst_antecedentes->nac_vivos__obs_gls = $request->nac_vivos__obs_gls;
-                    $ficha_gine_obst_antecedentes->id_modal_emb = $request->id_modal_emb;
-                    $ficha_gine_obst_antecedentes->id_modal_mamas = $request->id_modal_mamas;
-                    $ficha_gine_obst_antecedentes->id_ex_horm = $request->id_ex_horm;
+                    $ficha_gine_obst_antecedentes->nac_vivos_obs_gls = $request->nac_vivos_obs_gls;
+                    // $ficha_gine_obst_antecedentes->id_modal_emb = //modal
+                    // $ficha_gine_obst_antecedentes->id_modal_mamas = //modal
+                    // $ficha_gine_obst_antecedentes->id_ex_horm = //modal
                     $ficha_gine_obst_antecedentes->otro = '';
                     $ficha_gine_obst_antecedentes->otro1 = '';
                     $ficha_gine_obst_antecedentes->estado = 1;
@@ -361,24 +369,22 @@ class FichaGinecoObstetricoController extends Controller
 
                 /** ANTECEDENTES-ARO  */
                 if(
-                    !empty($request->id_ant_go)|| !empty($request->aro_fact_mat)|| !empty($request->aro_fact_mat_obs)||
-                    !empty($request->aro_cp1)|| !empty($request->aro_cp1_obs)|| !empty($request->aro_cp)||
-                    !empty($request->aro_cp_obs )|| !empty($request->aro_m_puer)|| !empty($request->aro_m_puer_obs) ||
-                    !empty($request->aro_fact_fet)|| !empty($request->aro_fact_fet_obs)|| !empty($request->aro_otra_f)||
-                    !empty($request->aro_otra_f_obs)
-
-
-                    )
+                    !empty($request->aro_fact_mat) || !empty($request->aro_fact_mat_obs) || !empty($request->aro_cp1) ||
+                    !empty($request->aro_cp1_obs) || !empty($request->aro_cp) || !empty($request->aro_cp_obs) ||
+                    !empty($request->aro_m_puer) || !empty($request->aro_m_puer_obs) || !empty($request->aro_fact_fet) ||
+                    !empty($request->aro_fact_fet_obs) || !empty($request->aro_otra_f) || !empty($request->aro_otra_f_obs)
+                )
                 {
                     $ficha_antec_aro = new FichaGinecoObstAntAro();
-                    $ficha_antec_aro->ficha_gineco_obstetrica = $ficha->id;
-                    $ficha_antec_aro->id_lugar_atencion = $request->id_lugar_atencion;
+
                     $ficha_antec_aro->id_paciente = $id_paciente;
                     $ficha_antec_aro->id_profesional = $id_profesional;
-                    $ficha_antec_aro->id_ant_go = $request->id_ant_go;
+                    $ficha_antec_aro->id_lugar_atencion = $request->id_lugar_atencion;
+                    $ficha_antec_aro->id_ficha_gineco_obstetrica = $ficha->id;
+                    // $ficha_antec_aro->id_ant_go
                     $ficha_antec_aro->aro_fact_mat = $request->aro_fact_mat;
                     $ficha_antec_aro->aro_fact_mat_obs = $request->aro_fact_mat_obs;
-                    $ficha_antec_aro->aro_cp1= $request->aro_cp1;
+                    $ficha_antec_aro->aro_cp1 = $request->aro_cp1;
                     $ficha_antec_aro->aro_cp1_obs = $request->aro_cp1_obs;
                     $ficha_antec_aro->aro_cp = $request->aro_cp;
                     $ficha_antec_aro->aro_cp_obs = $request->aro_cp_obs;
@@ -409,31 +415,28 @@ class FichaGinecoObstetricoController extends Controller
 
                 /** CONTROL EMBARAZO ARO  */
                 if(
-                    !empty($request->id_ficha_ant_aro)|| !empty($request->aro_feto_eg)|| !empty($request->aro_feto_fpp_fur)||
-                    !empty($request->aro_feto_fpp_eco)|| !empty($request->aro_feto_fpp_au)|| !empty($request->aro_s_pat_ea)||
-                    !empty($request->aro_s_pat_ea_obs )|| !empty($request->aro_cont_ea)|| !empty($request->aro_cont_ea_obs) ||
-                    !empty($request->aro_cont_ea_obs_gl)|| !empty($request->aro_ea_mam)|| !empty($request->aro_ea_mam_obs)||
-                    !empty($request->aro_ea_gine)|| !empty($request->aro_ea_gine_obs)|| !empty($request->aro_ea_m_au)||
-                    !empty($request->aro_ea_m_o )|| !empty($request->aro_ea_m_ot_obs)|| !empty($request->aro_ea_m_exgin) ||
-                    !empty($request->aro_ea_m_exgin_obs)|| !empty($request->aro_ea_m_pe)|| !empty($request->aro_ea_m_ede)||
-                    !empty($request->aro_ea_m_pa)|| !empty($request->aro_ea_m_p)|| !empty($request->aro_ea_m_obs)||
-                    !empty($request->aro_fur_fpp_act )|| !empty($request->aro_resp_cont_act)|| !empty($request->aro_tam_fet_act) ||
-                    !empty($request->aro_alt_uter_act)|| !empty($request->aro_ex_fetal_act_obs)|| !empty($request->aro_obs_eco_fetal_act)||
-                    !empty($request->fp_normal)|| !empty($request->adel_fp)|| !empty($request->hosp_aro)||
-                    !empty($request->obs_plan_tto_em_aro)
-
-
-                    )
+                    !empty($request->aro_feto_eg) || !empty($request->aro_feto_fpp_fur) || !empty($request->aro_feto_fpp_eco) ||
+                    !empty($request->aro_feto_fpp_au) || !empty($request->aro_s_pat_ea) || !empty($request->aro_s_pat_ea_obs) ||
+                    !empty($request->aro_cont_ea) || !empty($request->aro_cont_ea_obs) || !empty($request->aro_cont_ea_obs_gl) ||
+                    !empty($request->aro_ea_mam) || !empty($request->aro_ea_mam_obs) || !empty($request->aro_ea_gine) ||
+                    !empty($request->aro_ea_gine_obs) || !empty($request->aro_ea_m_au) || !empty($request->aro_ea_m_ot) ||
+                    !empty($request->aro_ea_m_ot_obs) || !empty($request->aro_ea_m_exgin) || !empty($request->aro_ea_m_exgin_obs) ||
+                    !empty($request->aro_ea_m_pe) || !empty($request->aro_ea_m_ede) || !empty($request->aro_ea_m_pa) ||
+                    !empty($request->aro_ea_m_p) || !empty($request->aro_ea_m_obs) || !empty($request->aro_fur_fpp_act) ||
+                    !empty($request->aro_resp_cont_act) || !empty($request->aro_tam_fet_act) || !empty($request->aro_alt_uter_act) ||
+                    !empty($request->aro_ex_fetal_act_obs) || !empty($request->aro_obs_eco_fetal_act) || !empty($request->fp_normal) ||
+                    !empty($request->adel_fp) || !empty($request->hosp_aro) || !empty($request->obs_plan_tto_em_aro)
+                )
                 {
                     $ficha_aro = new FichaGinecoObstAro ();
-                    $ficha_aro->ficha_gineco_obstetrica = $ficha->id;
-                    $ficha_aro->id_lugar_atencion = $request->id_lugar_atencion;
                     $ficha_aro->id_paciente = $id_paciente;
                     $ficha_aro->id_profesional = $id_profesional;
-                    $ficha_aro->id_ficha_ant_aro = $request->id_ficha_ant_aro;
-                    $ficha_aro->aro_feto_eg = $request->aro_feto_egt;
+                    $ficha_aro->id_lugar_atencion = $request->id_lugar_atencion;
+                    $ficha_aro->id_ficha_gineco_obstetrica = $ficha->id;
+                    $ficha_aro->id_ficha_ant_aro = empty($ficha_antec_aro)?'':$ficha_antec_aro->id;
+                    $ficha_aro->aro_feto_eg = $request->aro_feto_eg;
                     $ficha_aro->aro_feto_fpp_fur = $request->aro_feto_fpp_fur;
-                    $ficha_aro->aro_feto_fpp_eco= $request->aro_feto_fpp_eco;
+                    $ficha_aro->aro_feto_fpp_eco = $request->aro_feto_fpp_eco;
                     $ficha_aro->aro_feto_fpp_au = $request->aro_feto_fpp_au;
                     $ficha_aro->aro_s_pat_ea = $request->aro_s_pat_ea;
                     $ficha_aro->aro_s_pat_ea_obs = $request->aro_s_pat_ea_obs;
@@ -443,15 +446,15 @@ class FichaGinecoObstetricoController extends Controller
                     $ficha_aro->aro_ea_mam = $request->aro_ea_mam;
                     $ficha_aro->aro_ea_mam_obs = $request->aro_ea_mam_obs;
                     $ficha_aro->aro_ea_gine = $request->aro_ea_gine;
-                    $ficha_aro->aro_ea_m_exgin_obs = $request->aro_ea_m_exgin_obs;
+                    $ficha_aro->aro_ea_gine_obs = $request->aro_ea_gine_obs;
                     $ficha_aro->aro_ea_m_au = $request->aro_ea_m_au;
-                    $ficha_aro->aro_ea_m_o = $request->aro_ea_m_o;
+                    $ficha_aro->aro_ea_m_ot = $request->aro_ea_m_ot;
                     $ficha_aro->aro_ea_m_ot_obs = $request->aro_ea_m_ot_obs;
                     $ficha_aro->aro_ea_m_exgin = $request->aro_ea_m_exgin;
                     $ficha_aro->aro_ea_m_exgin_obs = $request->aro_ea_m_exgin_obs;
                     $ficha_aro->aro_ea_m_pe = $request->aro_ea_m_pe;
                     $ficha_aro->aro_ea_m_ede = $request->aro_ea_m_ede;
-                    $ficha_aro->aro_ea_m_pa= $request->aro_ea_m_pa;
+                    $ficha_aro->aro_ea_m_pa = $request->aro_ea_m_pa;
                     $ficha_aro->aro_ea_m_p = $request->aro_ea_m_p;
                     $ficha_aro->aro_ea_m_obs = $request->aro_ea_m_obs;
                     $ficha_aro->aro_fur_fpp_act = $request->aro_fur_fpp_act;
@@ -463,7 +466,7 @@ class FichaGinecoObstetricoController extends Controller
                     $ficha_aro->fp_normal = $request->fp_normal;
                     $ficha_aro->adel_fp = $request->adel_fp;
                     $ficha_aro->hosp_aro = $request->hosp_aro;
-                    $ficha_aro->obs_plan_tto_em_aro= $request->obs_plan_tto_em_aro;
+                    $ficha_aro->obs_plan_tto_em_aro = $request->obs_plan_tto_em_aro;
                     $ficha_aro->otro = '';
                     $ficha_aro->otro1 = '';
                     $ficha_aro->estado = 1;
@@ -481,29 +484,25 @@ class FichaGinecoObstetricoController extends Controller
                 {
                     // $mensaje .= 'no hace falta registrar';
                 }
+
                 /**FIN CONTROL EMBARAZO ARO   */
                 /** CONTROL CIRUGIA GINECO-OBSTETRICA */
                 if(
-                    !empty($request->id_ficha_cont_emb)|| !empty($request->id_ficha_gine)|| !empty($request->id_ant_go)||
-                    !empty($request->id_protocolo)|| !empty($request->id_carne_alta)|| !empty($request->e_general)||
-                    !empty($request->parto_cesarea)|| !empty($request->parto_normal)|| !empty($request->cirugia_gine_obst) ||
-                    !empty($request->hda_operatoria)|| !empty($request->retiro_ptos)|| !empty($request->insp_abd)||
-                    !empty($request->tacto)|| !empty($request->mamas)
-
-
-
-                    )
+                    !empty($request->e_general) || !empty($request->parto_cesarea) || !empty($request->parto_normal) ||
+                    !empty($request->cirugia_gine_obst) || !empty($request->hda_operatoria) || !empty($request->retiro_ptos) ||
+                    !empty($request->insp_abd) || !empty($request->tacto) || !empty($request->mamas)
+                )
                 {
-
                     $ficha_gine_obst_cirugia_control = new FichaGinecoContPuerpCir();
-                    $ficha_gine_obst_cirugia_control->ficha_gineco_obstetrica = $ficha->id;
                     $ficha_gine_obst_cirugia_control->id_paciente = $id_paciente;
                     $ficha_gine_obst_cirugia_control->id_profesional = $id_profesional;
-                    $ficha_gine_obst_cirugia_control->id_ficha_cont_emb = $request->id_ficha_cont_emb;
-                    $ficha_gine_obst_cirugia_control->id_ficha_gine = $request->id_ficha_gine;
-                    $ficha_gine_obst_cirugia_control->id_ant_go = $request->id_ant_go;
-                    $ficha_gine_obst_cirugia_control->id_protocolo = $request->id_protocolo;
-                    $ficha_gine_obst_cirugia_control->id_carne_alta = $request->id_carne_alta;
+                    $ficha_gine_obst_cirugia_control->id_lugar_atencion = $request->id_lugar_atencion;
+                    $ficha_gine_obst_cirugia_control->id_ficha_gineco_obstetrica = $ficha->id;
+                    $ficha_gine_obst_cirugia_control->id_ficha_cont_emb = empty($ficha_aro)?'':$ficha_aro->id;
+                    $ficha_gine_obst_cirugia_control->id_ficha_gine = $ficha_ginecologia->id;
+                    $ficha_gine_obst_cirugia_control->id_ant_go = empty($ficha_antec_aro)?'':$ficha_antec_aro->id;
+                    // $ficha_gine_obst_cirugia_control->id_protocolo = // modal protocolo
+                    // $ficha_gine_obst_cirugia_control->id_carne_alta = // modal carnet de alta
                     $ficha_gine_obst_cirugia_control->e_general = $request->e_general;
                     $ficha_gine_obst_cirugia_control->parto_cesarea = $request->parto_cesarea;
                     $ficha_gine_obst_cirugia_control->parto_normal = $request->parto_normal;
@@ -512,7 +511,7 @@ class FichaGinecoObstetricoController extends Controller
                     $ficha_gine_obst_cirugia_control->retiro_ptos = $request->retiro_ptos;
                     $ficha_gine_obst_cirugia_control->insp_abd = $request->insp_abd;
                     $ficha_gine_obst_cirugia_control->tacto = $request->tacto;
-                    $ficha_gine_obst_cirugia_control->mamas= $request->mamas;
+                    $ficha_gine_obst_cirugia_control->mamas = $request->mamas;
                     $ficha_gine_obst_cirugia_control->otro = '';
                     $ficha_gine_obst_cirugia_control->otro1 = '';
                     $ficha_gine_obst_cirugia_control->estado = 1;
@@ -533,6 +532,128 @@ class FichaGinecoObstetricoController extends Controller
 
 
                 /** FIN CONTROL CIRUGIA GINECO-OBSTETRICA  */
+
+                /** INICIO REGISTRO DE EXAMENES ESPECIALES */
+                /** REGISTRO DE EXAMEN */
+                $lista_examen_especialidad = explode('|',$request->tipo_examen_especial);
+
+                foreach ($lista_examen_especialidad as $key_examen_tipo => $value_examen_tipo)
+                {
+                    $parametro = $request->all();
+
+                    $temp_value_examen_tipo = explode(',',$value_examen_tipo);
+                    // $temp_value_examen_tipo[0] = alias template
+                    // $temp_value_examen_tipo[1] = id_tipo
+                    // $temp_value_examen_tipo[2] = id_template
+
+                    if( !empty( $request['diag_endos_'.$temp_value_examen_tipo[0]] ) || ( !isset($request['diag_endos_'.$temp_value_examen_tipo[0]]) && !empty($request['tipo_proced']) ) )
+                    {
+
+                        /** limpiar parametos */
+                        foreach( $parametro as $key => $value )
+                        {
+                            if(!strpos($key, '_'.$temp_value_examen_tipo[0]) && !strpos($key, 'id_fc') && !strpos($key, '_fc') )
+                            unset($parametro[$key]);
+                        }
+
+                        $parametro['id_ficha_ginecologico'] = $ficha->id;
+                        $examen_json = ExamenEspecialidadController::estructuraJson($temp_value_examen_tipo[2],$parametro);
+                        if($examen_json['estado'] == 1)
+                        {
+                            $examen = '';
+                            /** VALIDAR INFORMACION */
+                            if($examen_json['cant_datos'] > 0)
+                            {
+                                $profesional = Profesional::find($id_profesional);
+                                $template = ExamenEspecialidadTemplate::find($temp_value_examen_tipo[2]);
+
+                                $examen = new ExamenEspecialidad();
+                                $examen->id_tipo = '1';
+                                $examen->id_template = $temp_value_examen_tipo[2];
+                                $examen->id_examen_tipo = $temp_value_examen_tipo[1];
+                                $examen->id_sub_tipo_especialidad = $profesional->id_sub_tipo_especialidad;
+                                // $examen->id_ficha_atencion = $ficha->id;
+                                $examen->id_ficha_especialidad = $ficha->id;
+                                $examen->id_paciente = $id_paciente;
+                                $examen->id_profesional = $id_profesional;
+                                $examen->nombre = $template->nombre;
+                                $examen->cuerpo = $examen_json['json'];
+                                $examen->estado = '1';
+                                if($examen->save())
+                                {
+                                    $datos['examen'][$temp_value_examen_tipo[0]]['estado'] = 1;
+                                    $datos['examen'][$temp_value_examen_tipo[0]]['msj'] = 'registro exitoso';
+                                    $mensaje .= 'Examen '.$template->nombre.' registrado de forma exitosa\n';
+
+                                    /** carga imagen */
+                                    if(!empty($request->input_lista_imagenes))
+                                    {
+
+                                        $array_imagenes = (array)json_decode($request->input_lista_imagenes);
+
+                                        // var_dump($array_imagenes);
+                                        // var_dump($temp_value_examen_tipo[0]);
+                                        // var_dump($array_imagenes[$temp_value_examen_tipo[0]]);
+
+                                        if(!empty($array_imagenes[$temp_value_examen_tipo[0]]))
+                                        {
+                                            $resulto_img = array();
+                                            foreach ($array_imagenes[$temp_value_examen_tipo[0]] as $key => $value)
+                                            {
+                                                $paciente = Paciente::find($id_paciente);
+                                                // echo json_encode($value);
+                                                $ruta_temp = $value[0];
+                                                $nombre_real = $value[1];
+                                                $nombre_temp = $value[2];
+                                                $file_extension = $value[3];
+                                                if(isset($value[4])) $descripcion = $value[4];
+                                                else $descripcion = '';
+                                                $nombre_final = $paciente->rut.'_'.$examen->id.'_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+
+                                                $resulto_img[$key] = CargaImagenController::moverImagen($nombre_temp, 'img_examen', $nombre_final);
+                                                $registro_img = new ExamenEspecialidadImg();
+                                                $registro_img->id_examen = $examen->id;
+                                                $registro_img->url = $resulto_img[$key]['proceso']['url'];
+                                                $registro_img->nombre = $nombre_final;
+                                                $registro_img->otro = $descripcion;
+                                                $registro_img->estado = 1;
+
+                                                if($registro_img->save())
+                                                {
+                                                    $resulto_img[$key]['estado'] = 1;
+                                                    $resulto_img[$key]['msj'] = 'imagen registrada';
+                                                }
+                                                else
+                                                {
+                                                    $resulto_img[$key]['estado'] = 0;
+                                                    $resulto_img[$key]['msj'] = 'falla en registro de imagen';
+                                                }
+
+                                            }
+                                            $datos['examen'][$temp_value_examen_tipo[0]]['resulto_img'] = $resulto_img;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    $datos['examen'][$temp_value_examen_tipo[0]]['estado'] = 0;
+                                    $datos['examen'][$temp_value_examen_tipo[0]]['msj'] = 'Registro NO exitoso';
+                                    $mensaje .= 'Examen '.$template->nombre.' No guardada \n';
+                                }
+                            }
+                        }
+                        else
+                        {
+                            $mensaje .= 'Problema al general Estructura de examen '.$temp_value_examen_tipo[0].'\n';
+                        }
+
+                    }
+                    // else
+                    // {
+                    //     $mensaje .= 'No tiene diag_endos_'.$temp_value_examen_tipo[0].'\n';
+                    // }
+                }
+                /** FIN REGISTRO DE EXAMENES ESPECIALES */
 
 
 
@@ -575,6 +696,1240 @@ class FichaGinecoObstetricoController extends Controller
         }
     }
 
+    public function GineModalCicloMenstrual(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        /** menarquia */
+        if(!empty($request->fecha_comienzo))
+        {
+            // !empty($request->fecha_actual)
+            if(empty($request->edad_menarquia))
+            {
+                $error['Edad - Menarquia'] = 'campo requerido';
+                $valido = 0;
+            }
+            if(empty($request->gr_tunner))
+            {
+                $error['Grado Tunner - Menarquia'] = 'campo requerido';
+                $valido = 0;
+            }
+            if(empty($request->fecha_comienzo))
+            {
+                $error['Fecha Comienzo - Menarquia'] = 'campo requerido';
+                $valido = 0;
+            }
+            if(empty($request->comentarios_menarquia))
+            {
+                $error['Comentarios - Menarquia'] = 'campo requerido';
+                $valido = 0;
+            }
+        }
+
+        /** ciclo menstrual */
+        if(!empty($request->fur))
+        {
+            if(empty($request->fur))
+            {
+                $error['FUR - Ciclo Menstrual'] = '';
+                $valido = 0;
+            }
+            if(empty($request->tipo_ciclo))
+            {
+                $error['Tipo Ciclo - Ciclo Menstrual'] = '';
+                $valido = 0;
+            }
+            if(empty($request->frecuencia_ciclo))
+            {
+                $error['Frecuencia Ciclo - Ciclo Menstrual'] = '';
+                $valido = 0;
+            }
+            if(empty($request->sintomas_ciclo))
+            {
+                $error['Sintomas Ciclo - Ciclo Menstrual'] = '';
+                $valido = 0;
+            }
+            if(empty($request->comentarios_ciclo))
+            {
+                $error['Comentarios - Ciclo Menstrual'] = '';
+                $valido = 0;
+            }
+        }
+
+        if($valido)
+        {
+
+            $modal_ciclo_menst = new GinemodalCicloMenstrual();
+            $modal_ciclo_menst->id_ficha_gineco_obstetrica = $request->id_ficha_gineco_obstetrica;
+            // $modal_ciclo_menst->id_ficha_gine = $request->id_ficha_gine;
+            $modal_ciclo_menst->id_paciente = $request->id_paciente;
+            $modal_ciclo_menst->id_profesional = $request->id_profesional;
+            $modal_ciclo_menst->fecha_actual = date('Y-m-d');
+            if(!empty($request->fecha_comienzo))
+            {
+                $modal_ciclo_menst->edad_menarquia = $request->edad_menarquia;
+                $modal_ciclo_menst->gr_tunner = $request->gr_tunner;
+                $modal_ciclo_menst->fecha_comienzo= $request->fecha_comienzo;
+                $modal_ciclo_menst->comentarios_menarquia = $request->comentarios_menarquia;
+            }
+
+            if(!empty($request->fur))
+            {
+                $modal_ciclo_menst->fur = $request->fur;
+                $modal_ciclo_menst->tipo_ciclo = $request->tipo_ciclo;
+                $modal_ciclo_menst->frecuencia_ciclo = $request->frecuencia_ciclo;
+                $modal_ciclo_menst->sintomas_ciclo = $request->sintomas_ciclo;
+                $modal_ciclo_menst->comentarios_ciclo= $request->comentarios_ciclo;
+            }
+            $modal_ciclo_menst->otro = '';
+            $modal_ciclo_menst->otro1 = '';
+            $modal_ciclo_menst->estado = 1;
+
+            if($modal_ciclo_menst->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'falla en el registro';
+                $datos['request'] = $request->all();
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function VerGineModalCicloMenstrual(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_ficha_gineco_obstetrica))
+        {
+            $error['Id Ficha'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->id_paciente))
+        {
+            $error['Id Paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+
+
+        if($valido)
+        {
+            $filtros = array();
+            $filtros[] = array('id_ficha_gineco_obstetrica', $request->id_ficha_gineco_obstetrica);
+            $filtros[] = array('id_paciente', $request->id_paciente);
+            $registros = GinemodalCicloMenstrual::where($filtros)->get();
+
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+
+        return $datos;
+    }
+
+    /** MODA ANTECEDENTES DE MAMAS */
+    public function AgregarAntesedenteMamas(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido=1;
+
+        if(empty($request->id_ficha_gineco_obstetrica))
+        {
+            $error['ID FICHA'] = 'campo requerido';
+            $valido = 0;
+        }
+        // if(empty($request->id_lugar_atencion))
+        // {
+        //     $error['LIGAR ATENCION'] = 'campo requerido';
+        //     $valido = 0;
+        // }
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['PROFESIONAL'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->fecha))
+        {
+            $error['FECHA'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->tipo_examen))
+        {
+            $error['TIPO DE EXAMEN'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->resultado))
+        {
+            $error['RESULTADO'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->indic))
+        {
+            $error['INDICACIONES'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->tto_complicaciones))
+        {
+            $error['TRATAMIENTO O COMPLICACIONES'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $gine_modal_mamas_antec = new GinemodalMamas();
+            $gine_modal_mamas_antec->id_ficha_gineco_obstetrica = $request->id_ficha_gineco_obstetrica;
+            // $gine_modal_mamas_antec->id_lugar_atencion = $request->id_lugar_atencion;
+            $gine_modal_mamas_antec->id_paciente = $request->id_paciente;
+            $gine_modal_mamas_antec->id_profesional = $request->id_profesional;
+            $gine_modal_mamas_antec->fecha = $request->fecha;
+            $gine_modal_mamas_antec->tipo_examen = $request->tipo_examen;
+            $gine_modal_mamas_antec->resultado = $request->resultado;
+            $gine_modal_mamas_antec->indic= $request->indic;
+            $gine_modal_mamas_antec->tto_complicaciones = $request->tto_complicaciones;
+            $gine_modal_mamas_antec->otro = '';
+            $gine_modal_mamas_antec->otro1 = '';
+            $gine_modal_mamas_antec->estado = 1;
+
+            if($gine_modal_mamas_antec->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'falla en registro';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function VerAntesedenteMamas(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $filtros = array();
+            $filtros[] = array('id_paciente', $request->id_paciente);
+            $registros = GinemodalMamas::where($filtros)->get();
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+    /** FIN MODA ANTECEDENTES DE MAMAS */
+
+    /** MODAL Examen clínico de mamas Solicitud Examen */
+    public function AgregarExamenCliniMamas(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_ficha_gineco_obstetrica))
+        {
+            $error['ID FICHA'] = "Campo requerido";
+            $valido = 0;
+        }
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = "Campo requerido";
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['PROFESIONAL'] = "Campo requerido";
+            $valido = 0;
+        }
+        // if(empty($request->fecha))
+        // {
+        //     $error['FECHA'] = 'Campo requerido';
+        //     $valido = 0;
+        // }
+        if(empty($request->lado_1))
+        {
+            $error['LADO'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->des_ex_mamas_1))
+        {
+            $error['DESCRIPCION EXAMEN'] = 'Campo requerido';
+            $valido = 0;
+        }
+
+        if(!empty($request->lado_2))
+        {
+            if(empty($request->des_ex_mamas_2))
+            {
+                $error['DESCRIPCION EXAMEN'] = 'Campo requerido';
+                $valido = 0;
+            }
+        }
+
+        if($valido)
+        {
+            $filtros = array();
+            $filtros[] = array('id_ficha_gineco_obstetrica',$request->id_ficha_gineco_obstetrica);
+            $filtros[] = array('id_paciente',$request->id_paciente);
+            $filtros[] = array('id_profesional',$request->id_profesional);
+            $buscar_registro = GinemodalMamasExamen::where($filtros)->first();
+            if($buscar_registro)
+            {
+                $gine_modal_mamas_examen = GinemodalMamasExamen::find($buscar_registro->id);
+                $gine_modal_mamas_examen->id_ficha_gineco_obstetrica = $request->id_ficha_gineco_obstetrica;
+                $gine_modal_mamas_examen->id_paciente = $request->id_paciente;
+                $gine_modal_mamas_examen->id_profesional = $request->id_profesional;
+                // $gine_modal_mamas_examen->id_ficha_gine = $request->id_ficha_gine;
+                $gine_modal_mamas_examen->fecha = date('Y-m-d');
+                $gine_modal_mamas_examen->lado_1 = $request->lado_1;
+                $gine_modal_mamas_examen->des_ex_mamas_1 = $request->des_ex_mamas_1;
+                $gine_modal_mamas_examen->lado_2 = $request->lado_2;
+                $gine_modal_mamas_examen->des_ex_mamas_2 = $request->des_ex_mamas_2;
+                $gine_modal_mamas_examen->des_ex_mamasgen = $request->des_ex_mamasgen;
+                // $gine_modal_mamas_examen->sol_ex_lado = $request->sol_ex_lado;
+                // $gine_modal_mamas_examen->sol_ex_tipo = $request->sol_ex_tipo;
+                // $gine_modal_mamas_examen->enf_cuadrante = $request->enf_cuadrante;
+                // $gine_modal_mamas_examen->sosp_dg = $request->sosp_dg;
+                // $gine_modal_mamas_examen->sol_ex_mamas_esp = $request->sol_ex_mamas_esp;
+
+            }
+            else
+            {
+                $gine_modal_mamas_examen = new GinemodalMamasExamen();
+                $gine_modal_mamas_examen->id_ficha_gineco_obstetrica = $request->id_ficha_gineco_obstetrica;
+                $gine_modal_mamas_examen->id_paciente = $request->id_paciente;
+                $gine_modal_mamas_examen->id_profesional = $request->id_profesional;
+                // $gine_modal_mamas_examen->id_ficha_gine = $request->id_ficha_gine;
+                $gine_modal_mamas_examen->fecha = date('Y-m-d');
+                $gine_modal_mamas_examen->lado_1 = $request->lado_1;
+                $gine_modal_mamas_examen->des_ex_mamas_1 = $request->des_ex_mamas_1;
+                $gine_modal_mamas_examen->lado_2 = $request->lado_2;
+                $gine_modal_mamas_examen->des_ex_mamas_2 = $request->des_ex_mamas_2;
+                $gine_modal_mamas_examen->des_ex_mamasgen = $request->des_ex_mamasgen;
+                // $gine_modal_mamas_examen->sol_ex_lado = $request->sol_ex_lado;
+                // $gine_modal_mamas_examen->sol_ex_tipo = $request->sol_ex_tipo;
+                // $gine_modal_mamas_examen->enf_cuadrante = $request->enf_cuadrante;
+                // $gine_modal_mamas_examen->sosp_dg = $request->sosp_dg;
+                // $gine_modal_mamas_examen->sol_ex_mamas_esp = $request->sol_ex_mamas_esp;
+                $gine_modal_mamas_examen->otro = '';
+                $gine_modal_mamas_examen->otro1 = '';
+                $gine_modal_mamas_examen->estado = 1;
+            }
+
+            if($gine_modal_mamas_examen->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'falla';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
+    public function VerExamenCliniMamas(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_ficha_gineco_obstetrica))
+        {
+            $error['ID FICHA'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['PROFESIONAL'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $filtros = array();
+            $filtros[] = array('id_ficha_gineco_obstetrica',$request->id_ficha_gineco_obstetrica);
+            $filtros[] = array('id_paciente',$request->id_paciente);
+            $filtros[] = array('id_profesional',$request->id_profesional);
+            $registro = GinemodalMamasExamen::where($filtros)->first();
+            if($registro)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registro';
+                $datos['registro'] = $registro;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+    /** FIN MODAL Examen clínico de mamas Solicitud Examen */
+
+    /**  INICIO MODAL Antecedentes Abortos */
+    public function AgregarAntAborto(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_ficha_gineco_obstetrica))
+        {
+            $error['ID FICHA'] = "Campo requerido";
+            $valido = 0;
+        }
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = "Campo requerido";
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['PROFESIONAL'] = "Campo requerido";
+            $valido = 0;
+        }
+        if(empty($request->fecha_abort))
+        {
+            $error['FECHA ABORTO'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->num_emb))
+        {
+            $error['N° EMBARAZO'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->causa))
+        {
+            $error['CAUSA'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->tipo_aborto))
+        {
+            $error['TIPO ABORTO'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->obs_tto_complic))
+        {
+            $error['TRATAMIENTO'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $modal_ant_abortos = new GinemodalAborto();
+            $modal_ant_abortos->id_ficha_gineco_obstetrica = $request->id_ficha_gineco_obstetrica;
+            $modal_ant_abortos->id_paciente = $request->id_paciente;
+            $modal_ant_abortos->id_profesional = $request->id_profesional;
+            // $modal_ant_abortos->id_ficha_gine = $id_profesional;
+            $modal_ant_abortos->fecha_abort = $request->fecha_abort;
+            $modal_ant_abortos->num_emb = $request->num_emb;
+            $modal_ant_abortos->causa = $request->causa;
+            $modal_ant_abortos->tipo_aborto= $request->tipo_aborto;
+            $modal_ant_abortos->obs_tto_complic = $request->obs_tto_complic;
+            $modal_ant_abortos->otro = '';
+            $modal_ant_abortos->otro1 = '';
+            $modal_ant_abortos->estado = 1;
+
+            if($modal_ant_abortos->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'falla';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
+    public function VerAntAborto(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = "Campo requerido";
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $filtros = array();
+            $filtros[] = array('id_paciente', $request->id_paciente);
+            $filtros[] = array('estado', 1);
+            $registros = GinemodalAborto::where($filtros)->get();
+
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+
+    }
+    /** FIN  MODAL Antecedentes Abortos */
+
+    /** MODAL ANTECEDENTE PARTO PUERPERIO */
+    public function AgregarAntePartoPuerperio(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_ficha_gineco_obstetrica))
+        {
+            $error['ID FICHA'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['PROFESIONAL'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $modal_ant_parto_puerperio = new GineModalAntecedentesPartoPuerperio();
+            $modal_ant_parto_puerperio->id_ficha_gineco_obstetrica = $request->id_ficha_gineco_obstetrica;
+            $modal_ant_parto_puerperio->id_paciente = $request->id_paciente;
+            $modal_ant_parto_puerperio->id_profesional = $request->id_profesional;
+            // $modal_ant_parto_puerperio->id_ficha_gine = $request->id_ficha_gine;
+            $modal_ant_parto_puerperio->fecha = $request->fecha;
+            $modal_ant_parto_puerperio->num_emb = $request->num_emb;
+            $modal_ant_parto_puerperio->control_emb = $request->control_emb;
+            $modal_ant_parto_puerperio->tipo_parto= $request->tipo_parto;
+            $modal_ant_parto_puerperio->puerperio = $request->puerperio;
+            $modal_ant_parto_puerperio->recien_nacido= $request->recien_nacido;
+            $modal_ant_parto_puerperio->tto_complicaciones = $request->tto_complicaciones;
+            $modal_ant_parto_puerperio->otro = '';
+            $modal_ant_parto_puerperio->otro1 = '';
+            $modal_ant_parto_puerperio->estado = 1;
+            if($modal_ant_parto_puerperio->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'falla';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
+    public function VerAntePartoPuerperio(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = "Campo requerido";
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $filtros = array();
+            $filtros[] = array('id_paciente', $request->id_paciente);
+            $filtros[] = array('estado', 1);
+            $registros = GineModalAntecedentesPartoPuerperio::where($filtros)->get();
+
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+
+    }
+    /** FIN MODAL ANTECEDENTE PARTO PUERPERIO */
+
+    /** INICIO DE MODAL ANTECEDENTES HORMONALES  **/
+    public function AgregarAntExHormonales(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_ficha_gineco_obstetrica))
+        {
+            $error['ID FICHA'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['PROFESIONAL'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = new GineModalAntHormonales();
+            $registro->id_ficha_gineco_obstetrica = $request->id_ficha_gineco_obstetrica;
+            $registro->id_paciente = $request->id_paciente;
+            $registro->id_profesional = $request->id_profesional;
+            $registro->fecha = $request->fecha;
+            $registro->motivo = $request->motivo;
+            $registro->tipo_examen = $request->tipo_examen;
+            $registro->resultado = $request->resultado;
+            $registro->otros_ant = $request->otros_ant;
+            $registro->otro = '';
+            $registro->otro1 = '';
+            $registro->estado = 1;
+            if($registro->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'falla';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
+    public function VerAntExHormonales(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = "Campo requerido";
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $filtros = array();
+            $filtros[] = array('id_paciente', $request->id_paciente);
+            $filtros[] = array('estado', 1);
+            $registros = GineModalAntHormonales::where($filtros)->get();
+
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+
+    }
+    /** FIN DE MODAL ANTECEDENTES HORMONALES  **/
+
+    /** INICIO MODAL HIPERTENSION */
+    public function AgregarModalHipertension(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_ficha_gineco_obstetrica))
+        {
+            $error['ID FICHA'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['PROFESIONAL'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_lugar_atencion))
+        {
+            $error['LUGAR ATENCION'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->sistolica))
+        {
+            $error['SISTOLICA'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->diastolica))
+        {
+            $error['DIASTOLICA'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->ideal))
+        {
+            $error['IDEAL'] = 'campo requerido';
+            $valido = 0;
+        }
+        // if(empty($request->pulso))
+        // {
+        //     $error['PULSO'] = 'campo requerido';
+        //     $valido = 0;
+        // }
+
+        if($valido)
+        {
+            $registro = new Hipertension();
+
+            $registro->sistolica = $request->sistolica;
+            $registro->diastolica = $request->diastolica;
+            $registro->ideal = $request->ideal;
+            $registro->pulso = (empty($request->pulso)?null:$request->pulso);
+            $registro->medicamento = (empty($request->medicamento)?null:$request->medicamento);
+            $registro->sintomas = (empty($request->sintomas)?null:$request->sintomas);
+            $registro->id_paciente = $request->id_paciente;
+            $registro->id_profesional = $request->id_profesional;
+            $registro->id_ficha_atencion = (empty($request->id_ficha_atencion)?null:$request->id_ficha_atencion);
+            $registro->id_ficha_otros_prof = (empty($request->id_ficha_otros_prof)?null:$request->id_ficha_otros_prof);
+            $registro->id_ficha_gineco_obstetrica = (empty($request->id_ficha_gineco_obstetrica)?null:$request->id_ficha_gineco_obstetrica);
+            $registro->id_lugar_atencion = $request->id_lugar_atencion;
+
+            if($registro->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'falla';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
+    public function VerModalHipertension(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = "Campo requerido";
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $filtros = array();
+            $filtros[] = array('id_paciente', $request->id_paciente);
+            $filtros[] = array('estado', 1);
+            $registros = Hipertension::where($filtros)->get();
+
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+
+    }
+    /** FIN MODAL HIPERTENSION */
+
+    /** INICIO MODAL OTRO PROCEDIMIENTO */
+    public function AgregarModalOtrosProcedimientos(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_ficha_gineco_obstetrica))
+        {
+            $error['ID FICHA'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['PROFESIONAL'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->procedimiento))
+        {
+            $error['NOMBRE PROCEDIMIENTO'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->desc_procedimiento))
+        {
+            $error['DESCRIPCIÓN PROCEDIMIENTO'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $modal_otros_procedimientos = new GinemodalOtrosProcedimientos();
+            $modal_otros_procedimientos->id_ficha_gineco_obstetrica = $request->id_ficha_gineco_obstetrica;
+            $modal_otros_procedimientos->id_paciente = $request->id_paciente;
+            $modal_otros_procedimientos->id_profesional = $request->id_profesional;
+            $modal_otros_procedimientos->fecha = date('Y-m-d');
+            $modal_otros_procedimientos->procedimiento = $request->procedimiento;
+            $modal_otros_procedimientos->desc_procedimiento = $request->desc_procedimiento;
+            $modal_otros_procedimientos->otro = '';
+            $modal_otros_procedimientos->otro1 = '';
+            $modal_otros_procedimientos->estado = 1;
+            if($modal_otros_procedimientos->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'falla';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+
+    }
+
+    public function VerModalOtrosProcedimientos(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = "Campo requerido";
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $filtros = array();
+            $filtros[] = array('id_paciente', $request->id_paciente);
+            $filtros[] = array('estado', 1);
+            $registros = GinemodalOtrosProcedimientos::where($filtros)->get();
+
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
+    public function EliminarModalOtrosProcedimientos(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+
+
+        if(empty($request->id))
+        {
+            $error['ID'] = "Campo requerido";
+            $valido = 0;
+        }
+        // if(empty($request->id_ficha_gineco_obstetrica))
+        // {
+        //     $error['ID FICHA'] = "Campo requerido";
+        //     $valido = 0;
+        // }
+        // if(empty($request->id_paciente))
+        // {
+        //     $error['PACIENTE'] = "Campo requerido";
+        //     $valido = 0;
+        // }
+
+        if($valido)
+        {
+            $filtro = array();
+            $filtro[] = array('id', $request->id);
+            if(!empty($request->id_ficha_gineco_obstetrica))
+                $filtro[] = array('id_ficha_gineco_obstetrica', $request->id_ficha_gineco_obstetrica);
+            if(!empty($request->id_paciente))
+                $filtro[] = array('id_paciente', $request->id_paciente);
+
+            $registros = GinemodalOtrosProcedimientos::where($filtro)->delete();
+
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'eliminado';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'falla al eliminar';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+    /** FIN MODAL OTRO PROCEDIMIENTO */
+
+    /** INICIO MODAL ANTECEDENTE ANTICONCEPTIVO */
+    public function AgregarModalAntAnticonceptivo(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['PROFESIONAL'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if( empty($request->id_ficha_atencion) && empty($request->id_ficha_otros_prof) && empty($request->id_ficha_gineco_obstetrica) )
+        {
+            $error['FICHA ATENCION'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->tipo))
+        {
+            $error['TIPO ANTECEDENTE'] = 'campo requerido';
+            $valido = 0;
+        }
+        else
+        {
+            if($request->tipo == 'HORMONAL')
+            {
+                if(empty($request->farmaco))
+                {
+                    $error['FARMACO'] = 'campo requerido';
+                    $valido = 0;
+                }
+                if(empty($request->tiempo))
+                {
+                    $error['TIEMPO'] = 'campo requerido';
+                    $valido = 0;
+                }
+            }
+            else if($request->tipo == 'MECANICA')
+            {
+                if(empty($request->elemento))
+                {
+                    $error['TIPO'] = 'campo requerido';
+                    $valido = 0;
+                }
+                if(empty($request->fecha_instalacion))
+                {
+                    $error['FECHA INSTALACION'] = 'campo requerido';
+                    $valido = 0;
+                }
+            }
+        }
+        if(empty($request->fecha))
+        {
+            $error['FECHA'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = new GineModalAnteAnticonceptivo();
+            $registro->id_paciente = $request->id_paciente;
+            $registro->id_profesional = $request->id_profesional;
+            if(!empty($request->id_ficha_atencion))
+                $registro->id_ficha_atencion = $request->id_ficha_atencion;
+            if(!empty($request->id_ficha_otros_prof))
+                $registro->id_ficha_otros_prof = $request->id_ficha_otros_prof;
+            if(!empty($request->id_ficha_gineco_obstetrica))
+                $registro->id_ficha_gineco_obstetrica = $request->id_ficha_gineco_obstetrica;
+            $registro->tipo = $request->tipo;
+            $registro->fecha = $request->fecha;
+            if(!empty($request->elemento))
+                $registro->elemento = $request->elemento;
+            if(!empty($request->farmaco))
+                $registro->farmaco = $request->farmaco;
+            if(!empty($request->tiempo))
+                $registro->tiempo = $request->tiempo;
+            if(!empty($request->fecha_instalacion))
+                $registro->fecha_instalacion = $request->fecha_instalacion;
+            if(!empty($request->comentarios))
+                $registro->comentarios = $request->comentarios;
+            if(!empty($request->otro))
+                $registro->otro = $request->otro;
+            $registro->estado = 1;
+
+            if($registro->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'exito';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Falla en el registro';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function VerModalAntAnticonceptivo(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['PROFESIONAL'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if( empty($request->id_ficha_atencion) && empty($request->id_ficha_otros_prof) && empty($request->id_ficha_gineco_obstetrica) )
+        {
+            $error['FICHA ATENCION'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $filtro = array();
+            $filtro[] = array('id_paciente', $request->id_paciente);
+            $filtro[] = array('id_profesional', $request->id_profesional);
+            if(!empty($request->id_ficha_atencion))
+                $filtro[] = array('id_ficha_atencion', $request->id_ficha_atencion);
+            if(!empty($request->id_ficha_otros_prof))
+                $filtro[] = array('id_ficha_otros_prof', $request->id_ficha_otros_prof);
+            if(!empty($request->id_ficha_gineco_obstetrica))
+                $filtro[] = array('id_ficha_gineco_obstetrica', $request->id_ficha_gineco_obstetrica);
+
+            $registro = GineModalAnteAnticonceptivo::where($filtro)->get();
+            if($registro)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = "Registros encontrados.";
+                $datos['registros'] = $registro;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = "sin Registros.";
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+    /** FIN MODAL ANTECEDENTE ANTICONCEPTIVO */
+
+    /****************************************************** */
+
+
     public function modalEcoObstetrica(Request $request)
     {
         $datos = array();
@@ -605,7 +1960,7 @@ class FichaGinecoObstetricoController extends Controller
         if($valido)
         {
             if(
-                !empty($request->eco_sol)|| !empty($request->sosp_dg)|| !empty($request->Prioridad)||
+                !empty($request->eco_sol)&& !empty($request->sosp_dg)|| !empty($request->Prioridad)||
                 !empty($request->fecha)|| !empty($request->tipo)|| !empty($request->sol_por)||
                 !empty($request->sol_por_nom )|| !empty($request->motivo)|| !empty($request->mot_examen) ||
                 !empty($request->fur)|| !empty($request->fpp)|| !empty($request->e_gest)||
@@ -667,6 +2022,7 @@ class FichaGinecoObstetricoController extends Controller
         }
         return $datos;
     }
+
     public function modalEcoGinecologica(Request $request)
     {
         $datos = array();
@@ -760,46 +2116,7 @@ class FichaGinecoObstetricoController extends Controller
         }
         return $datos;
     }
-    public function GinemodalCicloMenstrual(Request $request)
-    {
-        if(
-            !empty($request->fecha_actual)|| !empty($request->edad_menarquia)|| !empty($request->gr_tunner)||
-            !empty($request->fecha_comienzo)|| !empty($request->comentarios_menarquia)|| !empty($request->fur)||
-            !empty($request->tipo_ciclo )|| !empty($request->frecuencia_ciclo)|| !empty($request->sintomas_ciclo) ||
-            !empty($request->comentarios_ciclo)
 
-
-
-            )
-        {
-            $modal_ciclo_menst = new GinemodalCicloMenstrual();
-            $modal_ciclo_menst->ficha_gineco_obstetrica = $ficha->id;
-            $modal_ciclo_menst->id_lugar_atencion = $request->id_lugar_atencion;
-            $modal_ciclo_menst->id_paciente = $id_paciente;
-            $modal_ciclo_menst->id_profesional = $id_profesional;
-            $modal_ciclo_menst->fecha_actual = $request->fecha_actual;
-            $modal_ciclo_menst->edad_menarquia = $request->edad_menarquia;
-            $modal_ciclo_menst->gr_tunner = $request->gr_tunner;
-            $modal_ciclo_menst->fecha_comienzo= $request->fecha_comienzo;
-            $modal_ciclo_menst->comentarios_menarquia = $request->comentarios_menarquia;
-            $modal_ciclo_menst->fur = $request->fur;
-            $modal_ciclo_menst->tipo_ciclo = $request->tipo_ciclo;
-            $modal_ciclo_menst->frecuencia_ciclo = $request->frecuencia_ciclo;
-            $modal_ciclo_menst->sintomas_ciclo = $request->sintomas_ciclo;
-            $modal_ciclo_menst->comentarios_ciclo= $request->comentarios_ciclo;
-            $modal_ciclo_menst->otro = '';
-            $modal_ciclo_menst->otro1 = '';
-            $modal_ciclo_menst->estado = 1;
-            if($modal_ciclo_menst->save())
-            {
-                $mensaje .='modal_ciclo_menst registrado con exito.\n';
-            }
-            else
-            {
-                $mensaje .= 'Falla en el registro de modal_ciclo_menst .\n';
-            }
-        }
-    }
     public function GinemodalGlicemia(Request $request)
     {
         if(
@@ -831,37 +2148,7 @@ class FichaGinecoObstetricoController extends Controller
             }
         }
     }
-    public function GinemodalHipertension(Request $request)
-    {
-        if(
-            !empty($request->fecha)|| !empty($request->ht_pulso)|| !empty($request->ht_pa)||
-            !empty($request->ht_medic)|| !empty($request->ht_sintomas)
 
-            )
-        {
-            $modal_hipertension_emb = new GinemodalHipertension();
-            $modal_hipertension_emb->ficha_gineco_obstetrica = $ficha->id;
-            $modal_hipertension_emb->id_lugar_atencion = $request->id_lugar_atencion;
-            $modal_hipertension_emb->id_paciente = $id_paciente;
-            $modal_hipertension_emb->id_profesional = $id_profesional;
-            $modal_hipertension_emb->fecha = $request->fecha;
-            $modal_hipertension_emb->ht_pulso = $request->ht_pulso;
-            $modal_hipertension_emb->ht_pa = $request->ht_pa;
-            $modal_hipertension_emb->ht_medic= $request->ht_medic;
-            $modal_hipertension_emb->ht_sintomas = $request->ht_sintomas;
-            $modal_hipertension_emb->otro = '';
-            $modal_hipertension_emb->otro1 = '';
-            $modal_hipertension_emb->estado = 1;
-            if($modal_hipertension_emb->save())
-            {
-                $mensaje .='modal hipertensión embarazo registrado con exito.\n';
-            }
-            else
-            {
-                $mensaje .= 'Falla en el registro de modal hipertensión embarazo .\n';
-            }
-        }
-    }
     public function GinemodalAro(Request $request)
     {
         if(
@@ -924,168 +2211,6 @@ class FichaGinecoObstetricoController extends Controller
             }
         }
     }
-    public function GinemodalAborto(Request $request)
-    {
-        if(
-            !empty($request->fecha_abort)|| !empty($request->num_emb)|| !empty($request->causa)||
-            !empty($request->tipo_aborto)|| !empty($request->obs_tto_complic)
 
-            )
-        {
-            $modal_ant_abortos = new GinemodalAborto();
-            $modal_ant_abortos->ficha_gineco_obstetrica = $ficha->id;
-            $modal_ant_abortos->id_lugar_atencion = $request->id_lugar_atencion;
-            $modal_ant_abortos->id_paciente = $id_paciente;
-            $modal_ant_abortos->id_profesional = $id_profesional;
-            $modal_ant_abortos->fecha_abort = $request->fecha_abort;
-            $modal_ant_abortos->num_emb = $request->num_emb;
-            $modal_ant_abortos->causa = $request->causa;
-            $modal_ant_abortos->tipo_aborto= $request->tipo_aborto;
-            $modal_ant_abortos->obs_tto_complic = $request->obs_tto_complic;
-            $modal_ant_abortos->otro = '';
-            $modal_ant_abortos->otro1 = '';
-            $modal_ant_abortos->estado = 1;
-            if($modal_ant_abortos->save())
-            {
-                $mensaje .='modal Antecedentes de Aborto registrado con exito.\n';
-            }
-            else
-            {
-                $mensaje .= 'Falla en el registro de modal Antecedentes de Aborto .\n';
-            }
-        }
-    }
-    public function GinemodalAntecedentesPartoPuerperio(Request $request)
-    {
-        if(
-            !empty($request->fecha)|| !empty($request->num_emb)|| !empty($request->control_emb)||
-            !empty($request->tipo_parto)|| !empty($request->puerperio)|| !empty($request->recien_nacido)||
-            !empty($request->tto_complicaciones)
-
-            )
-        {
-            $modal_ant_parto_puerperio = new GinemodalAntecedentesPartoPuerperio();
-            $modal_ant_parto_puerperio->ficha_gineco_obstetrica = $ficha->id;
-            $modal_ant_parto_puerperio->id_lugar_atencion = $request->id_lugar_atencion;
-            $modal_ant_parto_puerperio->id_paciente = $id_paciente;
-            $modal_ant_parto_puerperio->id_profesional = $id_profesional;
-            $modal_ant_parto_puerperio->fecha = $request->fecha;
-            $modal_ant_parto_puerperio->num_emb = $request->num_emb;
-            $modal_ant_parto_puerperio->control_emb = $request->control_emb;
-            $modal_ant_parto_puerperio->tipo_parto= $request->tipo_parto;
-            $modal_ant_parto_puerperio->puerperio = $request->puerperio;
-            $modal_ant_parto_puerperio->recien_nacido= $request->recien_nacido;
-            $modal_ant_parto_puerperio->tto_complicaciones = $request->tto_complicaciones;
-            $modal_ant_parto_puerperio->otro = '';
-            $modal_ant_parto_puerperio->otro1 = '';
-            $modal_ant_parto_puerperio->estado = 1;
-            if($modal_ant_parto_puerperio->save())
-            {
-                $mensaje .='modal Antecedentes de Parto y Puerperio registrado con exito.\n';
-            }
-            else
-            {
-                $mensaje .= 'Falla en el registro de modal Antecedentes de Parto y Puerperio .\n';
-            }
-        }
-    }
-    public function GinemodalMamas(Request $request)
-    {
-        if(
-            !empty($request->fecha)|| !empty($request->tipo_examen)|| !empty($request->resultado)||
-            !empty($request->indic)|| !empty($request->tto_complicaciones)
-
-            )
-        {
-            $gine_modal_mamas_antec = new GinemodalMamas();
-            $gine_modal_mamas_antec->ficha_gineco_obstetrica = $ficha->id;
-            $gine_modal_mamas_antec->id_lugar_atencion = $request->id_lugar_atencion;
-            $gine_modal_mamas_antec->id_paciente = $id_paciente;
-            $gine_modal_mamas_antec->id_profesional = $id_profesional;
-            $gine_modal_mamas_antec->fecha = $request->fecha;
-            $gine_modal_mamas_antec->tipo_examen = $request->tipo_examen;
-            $gine_modal_mamas_antec->resultado = $request->resultado;
-            $gine_modal_mamas_antec->indic= $request->indic;
-            $gine_modal_mamas_antec->tto_complicaciones = $request->tto_complicaciones;
-            $gine_modal_mamas_antec->otro = '';
-            $gine_modal_mamas_antec->otro1 = '';
-            $gine_modal_mamas_antec->estado = 1;
-            if($gine_modal_mamas_antec->save())
-            {
-                $mensaje .='modal Antecedentes de Aborto registrado con exito.\n';
-            }
-            else
-            {
-                $mensaje .= 'Falla en el registro de modal Antecedentes de Aborto .\n';
-            }
-        }
-    }
-    public function GinemodalMamasExamen(Request $request)
-    {
-        if(
-            !empty($request->fecha)|| !empty($request->lado_1)|| !empty($request->des_ex_mamas_1)||
-            !empty($request->lado_2)|| !empty($request->des_ex_mamas_2)|| !empty($request->des_ex_mamasgen)||
-            !empty($request->sol_ex_lado)|| !empty($request->sol_ex_tipo)|| !empty($request->enf_cuadrante)||
-            !empty($request->sosp_dg)|| !empty($request->sol_ex_mamas_esp)
-
-            )
-        {
-            $gine_modal_mamas_examen = new GinemodalMamasExamen();
-            $gine_modal_mamas_examen->ficha_gineco_obstetrica = $ficha->id;
-            $gine_modal_mamas_examen->id_lugar_atencion = $request->id_lugar_atencion;
-            $gine_modal_mamas_examen->id_paciente = $id_paciente;
-            $gine_modal_mamas_examen->id_profesional = $id_profesional;
-            $gine_modal_mamas_examen->fecha = $request->fecha;
-            $gine_modal_mamas_examen->lado_1 = $request->lado_1;
-            $gine_modal_mamas_examen->des_ex_mamas_1 = $request->des_ex_mamas_1;
-            $gine_modal_mamas_examen->lado_2= $request->lado_2;
-            $gine_modal_mamas_examen->des_ex_mamas_2 = $request->des_ex_mamas_2;
-            $gine_modal_mamas_examen->des_ex_mamasgen = $request->des_ex_mamasgen;
-            $gine_modal_mamas_examen->sol_ex_lado = $request->sol_ex_lado;
-            $gine_modal_mamas_examen->sol_ex_tipo= $request->sol_ex_tipo;
-            $gine_modal_mamas_examen->enf_cuadrante = $request->enf_cuadrante;
-            $gine_modal_mamas_examen->sosp_dg= $request->sosp_dg;
-            $gine_modal_mamas_examen->sol_ex_mamas_esp = $request->sol_ex_mamas_esp;
-            $gine_modal_mamas_examen->otro = '';
-            $gine_modal_mamas_examen->otro1 = '';
-            $gine_modal_mamas_examen->estado = 1;
-            if($gine_modal_mamas_examen->save())
-            {
-                $mensaje .='modal examen de mamas registrado con exito.\n';
-            }
-            else
-            {
-                $mensaje .= 'Falla en el registro de modal examen de mamas .\n';
-            }
-        }
-    }
-    public function GinemodalOtrosProcedimientos(Request $request)
-    {
-        if(
-            !empty($request->fecha)|| !empty($request->procedimiento)|| !empty($request->desc_procedimiento)
-
-            )
-        {
-            $modal_otros_procedimientos = new GinemodalOtrosProcedimientos();
-            $modal_otros_procedimientos->ficha_gineco_obstetrica = $ficha->id;
-            $modal_otros_procedimientos->id_lugar_atencion = $request->id_lugar_atencion;
-            $modal_otros_procedimientos->id_paciente = $id_paciente;
-            $modal_otros_procedimientos->id_profesional = $id_profesional;
-            $modal_otros_procedimientos->fecha = $request->fecha;
-            $modal_otros_procedimientos->procedimiento = $request->procedimiento;
-            $modal_otros_procedimientos->desc_procedimiento = $request->desc_procedimiento;
-            $modal_otros_procedimientos->otro = '';
-            $modal_otros_procedimientos->otro1 = '';
-            $modal_otros_procedimientos->estado = 1;
-            if($modal_otros_procedimientos->save())
-            {
-                $mensaje .='modal otros Procedimientos registrado con exito.\n';
-            }
-            else
-            {
-                $mensaje .= 'Falla en el registro de modal otros Procedimientos .\n';
-            }
-        }
-    }
 }
 

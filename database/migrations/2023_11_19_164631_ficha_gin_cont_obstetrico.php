@@ -19,7 +19,7 @@ class FichaGinContObstetrico extends Migration
             $table->bigInteger('id_profesional');
             $table->bigInteger('id_lugar_atencion');
             $table->bigInteger('id_ficha_gineco_obstetrica');
-            $table->date('ed_gest')->nullable();
+            $table->string('ed_gest')->nullable();
             $table->date('fpp_fur')->nullable();
             $table->date('fpp_eco')->nullable();
             $table->date('fpp_aut')->nullable();

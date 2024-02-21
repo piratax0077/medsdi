@@ -109,7 +109,7 @@ class ResponsableNivelController extends Controller
 
         if(!empty($request->id))
         {
-            $registros = ResponsableNivel::find($$request->id);
+            $registros = ResponsableNivel::find($request->id);
 
             if($registros)
             {

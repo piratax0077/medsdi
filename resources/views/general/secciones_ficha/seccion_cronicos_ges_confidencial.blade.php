@@ -704,14 +704,14 @@
                                                         id="hga1c_diabetes">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-3">
-                                                    <label class="floating-label-activo-sm">Colesterol</label>
-                                                    <input type="text" class="form-control form-control-sm"
-                                                        name="colesterol_diabetes" id="colesterol_diabetes">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-3">
                                                     <label class="floating-label-activo-sm">Creatina</label>
                                                     <input type="text" class="form-control form-control-sm"
                                                         name="creatina_diabetes" id="creatina_diabetes">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-3">
+                                                    <label class="floating-label-activo-sm">Glucosuria</label>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        name="glucosuria_diabetes" id="glucosuria_diabetes">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-3">
                                                     <label class="floating-label-activo-sm">Glicosilada postprandial</label>
@@ -751,11 +751,11 @@
                                                                     <th>Peso</th>
                                                                     <th>Piés</th>
                                                                     <th>Hg A1c</th>
-                                                                    <th>Colesterol</th>
                                                                     <th>Creatina</th>
+                                                                    <th>Glucosuria</th>
                                                                     <th>Glicosilada ayuno</th>
                                                                     <th>Glicosilada postprandial</th>
-                                                                    <th>Acción</th>
+                                                                    {{-- <th>Acción</th> --}}
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -764,24 +764,20 @@
                                                                     @foreach ($diabetes as $d)
                                                                         <tr>
                                                                             <td class="text-center align-middle">{{ $d->id }}</td>
-                                                                            <td class="text-center align-middle">
-                                                                                {{ \Carbon\Carbon::parse($d->created_at)->format('d-m-Y') }}
-                                                                            </td>
+                                                                            <td class="text-center align-middle">{{ \Carbon\Carbon::parse($d->created_at)->format('d-m-Y') }}</td>
                                                                             <td class="text-center align-middle">{{ $d->peso }}</td>
                                                                             <td class="text-center align-middle">{{ $d->pies }}</td>
                                                                             <td class="text-center align-middle">{{ $d->hgac1 }}</td>
-                                                                            <td class="text-center align-middle">{{ $d->colesterol }}</td>
                                                                             <td class="text-center align-middle">{{ $d->creatina }}</td>
-                                                                            <td class="text-center align-middle">
-                                                                                {{ $d->glicosilada_postprandial }}</td>
-                                                                            <td class="text-center align-middle">{{ $d->glicosinada_ayuno }}
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
+                                                                            <td class="text-center align-middle">{{ $d->glucosuria }}</td>
+                                                                            <td class="text-center align-middle">{{ $d->glicosilada_ayuno }}</td>
+                                                                            <td class="text-center align-middle">{{ $d->glicosilada_postprandial }}</td>
+                                                                            {{-- <td class="text-center align-middle">
                                                                                 <button href="#!" class="btn btn-danger btn-sm">
                                                                                     <i class="feather icon-x"></i>
                                                                                     Eliminar
                                                                                 </button>
-                                                                            </td>
+                                                                            </td> --}}
                                                                         </tr>
                                                                     @endforeach
                                                                 @else
@@ -1598,7 +1594,7 @@
                     $('#cmtumorales_div').hide();
                     $('#creumato_div').hide();
                     $('#clitemia_div').hide();
-                    // ver_control_hipertension();
+                    ver_control_hipertension();
 
                 break;
                 case 'cdiabet':
@@ -1609,6 +1605,7 @@
                     $('#cmtumorales_div').hide();
                     $('#creumato_div').hide();
                     $('#clitemia_div').hide();
+                    ver_control_diabetes();
                 break;
 
                 case 'cinsufren':
@@ -1831,7 +1828,8 @@
         let peso = $('#peso_diabetes').val();
         let pies = $('#pies_diabetes').val();
         let hgac1 = $('#hga1c_diabetes').val();
-        let colesterol = $('#colesterol_diabetes').val();
+        // let colesterol = $('#colesterol_diabetes').val();
+        let glucosuria = $('#glucosuria_diabetes').val();
         let creatina = $('#creatina_diabetes').val();
         let glicosilada_postprandial = $('#glicosilada_postprandial_diabetes').val();
         let glicosinada_ayuno = $('#glicosilada_ayuno_diabetes').val();
@@ -1845,8 +1843,8 @@
                     peso: peso,
                     pies: pies,
                     hgac1: hgac1,
-                    colesterol: colesterol,
                     creatina: creatina,
+                    glucosuria: glucosuria,
                     glicosilada_postprandial: glicosilada_postprandial,
                     glicosinada_ayuno: glicosinada_ayuno,
                     hora_medica: hora_medica
@@ -1860,7 +1858,8 @@
                     $('#mensaje').text('Se ha agregago control de diabetes correctamente');
                     $('#mensaje').show();
                     $('#form_enfermedad_cronica').modal('hide');
-                    location.reload();
+                    // location.reload();
+                    ver_control_diabetes();
                 }
             })
             .fail(function(e) {
@@ -2513,14 +2512,14 @@
         })
         .done(function(data)
         {
-
+            var html = '';
             if (data !== 'null')
             {
                 //data = JSON.parse(data);
                 console.log('----------ver_control_hipertension-------------');
                 console.log(data);
                 console.log('-----------------------');
-                var html = '';
+
                 html += '<thead>';
                 html += '    <tr>';
                 html += '    <th class="text-center align-middle">Nº Control</th>';
@@ -2563,6 +2562,81 @@
                 }
                 html += '</tbody>';
                 $('#control_obesidad').html(html);
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+
+    }
+
+    {{--  CRONICO VER CONTROL DE DIABETES  --}}
+    function ver_control_diabetes()
+    {
+        let url = "{{ route('ficha_medica.diabetes.getDiabete') }}";
+        var id_paciente = $('#id_paciente_fc').val();
+        $('#control_diabetes tbody').html('');
+
+        $.ajax({
+
+            url: url,
+            type: "GET",
+            data: {
+                id_paciente:id_paciente
+            },
+        })
+        .done(function(data)
+        {
+
+            if (data !== 'null')
+            {
+                //data = JSON.parse(data);
+                console.log('----------ver_control_diabetes-------------');
+                console.log('general.secciones_ficha.seccion_cronicos_ges_confidencial');
+                console.log(data);
+                console.log('-----------------------');
+                var html = '';
+                if(data.estado == 1)
+                {
+
+                    $.each(data.registros, function(index, value)
+                    {
+                        var f_temp = (value.created_at).replace('T',' ').replace('Z','').replace('.000000','');
+                        var fecha = new Date(f_temp);
+                        fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear();
+
+                        // <th>Nº Control</th>
+                        // <th>Fecha</th>
+                        // <th>Peso</th>
+                        // <th>Piés</th>
+                        // <th>Hg A1c</th>
+                        // <th>Creatina</th>
+                        // <th>Glucosuria</th>
+                        // <th>Glicosilada ayuno</th>
+                        // <th>Glicosilada postprandial</th>
+                        html += '<tr>';
+                        html += '   <td class="text-center align-middle">'+(index+1)+'</td>';//Nº_Control
+                        html += '   <td class="text-center align-middle">'+fecha+'</td>'; //Peso
+                        html += '   <td class="text-center align-middle">'+((value.peso!=null)?value.peso:'')+'</td>'; //Peso
+                        html += '   <td class="text-center align-middle">'+((value.pies!=null)?value.pies:'')+'</td>'; //Piés
+                        html += '   <td class="text-center align-middle">'+((value.hga1c!=null)?value.hga1c:'')+'</td>'; //Hg A1c
+                        html += '   <td class="text-center align-middle">'+((value.creatina!=null)?value.creatina:'')+'</td>'; //Creatina
+                        html += '   <td class="text-center align-middle">'+((value.glucosuria!=null)?value.glucosuria:'')+'</td>'; //Glucosuria
+                        html += '   <td class="text-center align-middle">'+((value.glicosilada_ayuno!=null)?value.glicosilada_ayuno:'')+'</td>'; //Glicosilada ayuno
+                        html += '   <td class="text-center align-middle">'+((value.glicosilada_postprandial!=null)?value.glicosilada_postprandial:'')+'</td>'; //Glicosilada postprandial
+                        html += '</tr>';
+                    });
+
+                }
+                else
+                {
+
+                    html += '<tr>';
+                    html += '    <td class="text-center align-middle" colspan="8">SIN REGISTROS</td>';
+                    html += '</tr>';
+
+                }
+                $('#control_diabetes tbody').html(html);
             }
         })
         .fail(function(jqXHR, ajaxOptions, thrownError) {

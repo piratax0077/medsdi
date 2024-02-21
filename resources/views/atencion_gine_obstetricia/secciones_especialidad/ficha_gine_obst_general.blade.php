@@ -29,6 +29,7 @@
                     <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
                     <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
                     <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
+                    <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
                     @csrf
                     <div class="tab-content" id="gine-obst-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
@@ -88,7 +89,7 @@
                                                     </div>
                                                     <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                         <label class="floating-label-activo-sm" for="fur">FUR</label>
-                                                        <input type="text" class="form-control form-control-sm" name="fur" id="fur">
+                                                        <input type="date" max="{{ date('Y-m-d') }}" class="form-control form-control-sm" name="fur" id="fur">
                                                     </div>
                                                     <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                         <div class="form-group">
@@ -176,7 +177,8 @@
                                                                                     <div class="form-row">
                                                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                             <div class="form-group">
-                                                                                            <button type="button" class="btn btn-primary-light-c btn-block btn-sm mb-2"  onclick="tunner();">G. de Tunner Femenino</button>
+                                                                                                <button type="button" class="btn btn-primary-light-c btn-block btn-sm mb-2"  onclick="tunner();">G. de Tunner Femenino</button>
+                                                                                                <input type="hidden" name="id_tunner" id="id_tunner" value="">
                                                                                             </div>
 
                                                                                         </div>
@@ -208,17 +210,17 @@
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                             <div class="form-group">
-                                                                                            <button type="button" class="btn btn-primary-light-c btn-block btn-sm mb-2"  onclick="gine_sol_examenes_flujo();">Solicitar Examenes</button>
+                                                                                            <button type="button" class="btn_agregar_examen btn btn-primary-light-c btn-block btn-sm mb-2" disabled="disabled" onclick="gine_sol_examenes_flujo();">Solicitar Examenes</button>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                             <div class="form-group ">
-                                                                                                <button type="button" class="btn btn-primary-light-c btn-block btn-sm mb-2"  onclick="sol_pap();">Tomar PAP</button>
+                                                                                                <button type="button" class="btn_agregar_examen btn btn-primary-light-c btn-block btn-sm mb-2" disabled="disabled" onclick="sol_pap();">Solicitar PAP</button>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                             <div class="form-group">
-                                                                                            <button type="button" class="btn btn-primary-light-c btn-block btn-sm mb-2"  onclick="eco_gine();">Ecografía Ginecológica</button>
+                                                                                            <button type="button" class="btn_agregar_examen btn btn-primary-light-c btn-block btn-sm mb-2" disabled="disabled" onclick="eco_gine();">Ecografía Ginecológica</button>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -453,7 +455,7 @@
                                                                                             </div>
                                                                                             <div class="form-group" id="div_detalle_ab_num" style="display:none">
                                                                                                 <label class="floating-label-activo-sm" for="ab_n_obs">Detalle abortos múltiples</label>
-                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs.Abortos Múltiples" data-seccion="Abortos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ab_obs" id="ab_n_obs"></textarea>
+                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs.Abortos Múltiples" data-seccion="Abortos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ab_n_obs" id="ab_n_obs"></textarea>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -571,7 +573,7 @@
                                                                                     <div class="form-row">
                                                                                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                             <label class="floating-label-activo-sm" for="nac_vivos__obs_gl">Observaciones Antecedentes de parto</label>
-                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Antecedentes de parto" data-seccion="Embarazos previos" data-tipo="general" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="nac_vivos_obs_gl" id="nac_vivos__obs_gl"></textarea>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Antecedentes de parto" data-seccion="Embarazos previos" data-tipo="general" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="nac_vivos_obs_gls" id="nac_vivos_obs_gls"></textarea>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="form-row mb-2">
@@ -579,7 +581,7 @@
                                                                                             <button type="button" class="btn btn-primary-light-c btn-xxs btn-block mb-2" onclick="embarazos();"><i class="feather icon-info"></i> Embarazos Anteriores</button>
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                            <button type="button" class="btn btn-primary-light-c btn-xxs btn-block mb-2" onclick="mamas_ant();"><i class="feather icon-info"></i> Antecedentes Mamas</button>
+                                                                                            <button type="button" class="btn btn-primary-light-c btn-xxs btn-block mb-2" onclick="mamas_antecedentes();"><i class="feather icon-info"></i> Antecedentes Mamas</button>
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                             <button type="button" class="btn btn-primary-light-c btn-xxs btn-block mb-2" onclick="hormonas();"><i class="feather icon-info"></i> Ex. Hormonales</button>
@@ -611,20 +613,20 @@
                                                                                     <div class="form-row">
                                                                                         <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                             <label class="floating-label-activo-sm"for="ed_gest" >Edad gestacional</label>
-                                                                                            <input type="text" class="form-control form-control-sm" name="ed_gest" id="ed_gest" >
+                                                                                            <input type="number" class="form-control form-control-sm" name="ed_gest" id="ed_gest" >
                                                                                         </div>
                                                                                         <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                             <label class="floating-label-activo-sm" for="fpp_fur">FPP por FUR</label>
-                                                                                            <input type="text" class="form-control form-control-sm"  name="fpp_fur" id="fpp_fur" >
+                                                                                            <input type="date" max="{{ date('Y-m-d') }}" class="form-control form-control-sm"  name="fpp_fur" id="fpp_fur" >
                                                                                         </div>
                                                                                         <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                             <label class="floating-label-activo-sm" for="fpp_eco">FPP por Eco</label>
-                                                                                            <input type="text" class="form-control form-control-sm"  name="fpp_eco" id="fpp_eco" >
+                                                                                            <input type="date" max="{{ date('Y-m-d') }}" class="form-control form-control-sm"  name="fpp_eco" id="fpp_eco" >
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                             <div class="form-group">
                                                                                                 <label class="floating-label-activo-sm" for="fpp_aut">FPP por Alt uterina</label>
-                                                                                                <input type="text" class="form-control form-control-sm" name="fpp_aut" id="fpp_aut">
+                                                                                                <input type="date" max="{{ date('Y-m-d') }}" class="form-control form-control-sm" name="fpp_aut" id="fpp_aut">
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -821,7 +823,7 @@
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                             <div class="form-group">
-                                                                                                <button type="button" class="btn btn-primary-light-c btn-block btn-sm"onclick="ind_eco_control();"><i class="feather icon-plus"></i> Ecografìa</button>
+                                                                                                <button type="button" class="btn_agregar_examen btn btn-primary-light-c btn-block btn-sm" onclick="ind_eco_control();" disabled="true"><i class="feather icon-plus"></i> Ecografìa</button>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -835,7 +837,7 @@
                                                                                 <div class="tab-pane fade " id="emb_feto" role="tabpanel" aria-labelledby="emb_feto-tab">
                                                                                     <div class="form-row">
                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                            <h6 class="t-aten">Examen de la Gestación)</h6>
+                                                                                            <h6 class="t-aten">Examen de la Gestación</h6>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="form-row">
@@ -885,20 +887,28 @@
                                                                         <div class="form-row">
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                                                                 <div class="custom-control custom-switch">
-                                                                                    <input type="checkbox" class="custom-control-input" id="cont_rutina_check" name="cont_rutina_check" value="" />
-                                                                                    <label class="custom-control-label pt-1" for="cont_rutina_check">Solo Control rutinario</label>
+                                                                                    <input type="checkbox" class="custom-control-input" id="cont_rutina" name="cont_rutina" value="" />
+                                                                                    <label class="custom-control-label pt-1" for="cont_rutina">Solo Control rutinario</label>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                                                                 <div class="custom-control custom-switch">
-                                                                                    <input type="checkbox" class="custom-control-input" id="der_emb_aro_check" name="der_emb_aro_check" value="" />
-                                                                                    <label class="custom-control-label pt-1" for="der_emb_aro_check">Envia a embarazo alto riesgo</label>
+                                                                                    <input type="checkbox" class="custom-control-input" id="der_emb_aro" name="der_emb_aro" value="" />
+                                                                                    <label class="custom-control-label pt-1" for="der_emb_aro">Envia a embarazo alto riesgo</label>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                                                                 <div class="custom-control custom-switch">
-                                                                                    <input type="checkbox" class="custom-control-input" id="sol_hosp_check" name="sol_hosp_check" value="" />
-                                                                                    <label class="custom-control-label pt-1" for="sol_hosp_check">Solicitar Hospitalización</label>
+                                                                                    <input type="checkbox" class="custom-control-input" id="sol_hosp" name="sol_hosp" value="" onclick="showContentCir_plan_ex_obst();" />
+                                                                                    <label class="custom-control-label pt-1" for="sol_hosp">Solicitar Hospitalización</label>
+                                                                                </div>
+
+                                                                                <div id="contentCir_cg" style="display: none;">
+                                                                                    <div class="form-row">
+                                                                                        <div class="form-group col-md-12">
+                                                                                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingresohosp();"><i class="feather icon-save"></i> Orden de Hospitalización </button>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -909,8 +919,8 @@
                                                                                         <div class="form-group">
                                                                                             <input type="hidden" name="cont_rutina" id="cont_rutina" value="">
                                                                                             <div class="switch switch-success d-inline m-r-10">
-                                                                                                <input type="checkbox" id="cont_rutina_check" name="cont_rutina_check" value="" />
-                                                                                                <label for="cont_rutina_check" class="cr" for="res_ex_mac"></label>
+                                                                                                <input type="checkbox" id="cont_rutina" name="cont_rutina" value="" />
+                                                                                                <label for="cont_rutina" class="cr" for="res_ex_mac"></label>
                                                                                             </div>
                                                                                             <label>Solo Control rutinario</label>
                                                                                         </div>
@@ -923,8 +933,8 @@
                                                                                         <div class="form-group">
                                                                                             <input type="hidden" name="der_emb_aro" id="der_emb_aro" value="">
                                                                                             <div class="switch switch-success d-inline m-r-10">
-                                                                                                <input type="checkbox" id="der_emb_aro_check" name="der_emb_aro_check" value="" />
-                                                                                                <label for="der_emb_aro_check" class="cr" for="res_ex_mac"></label>
+                                                                                                <input type="checkbox" id="der_emb_aro" name="der_emb_aro" value="" />
+                                                                                                <label for="der_emb_aro" class="cr" for="res_ex_mac"></label>
                                                                                             </div>
                                                                                             <label>Envia a embarazo alto riesgo</label>
                                                                                         </div>
@@ -938,8 +948,8 @@
                                                                                         <div class="form-group">
                                                                                             <input type="hidden" name="sol_hosp" id="sol_hosp" value="">
                                                                                             <div class="switch switch-success d-inline m-r-10">
-                                                                                                <input type="checkbox" id="sol_hosp_check" name="sol_hosp_check" value="" />
-                                                                                                <label for="sol_hosp_check" class="cr"></label>
+                                                                                                <input type="checkbox" id="sol_hosp" name="sol_hosp" value="" />
+                                                                                                <label for="sol_hosp" class="cr"></label>
                                                                                             </div>
                                                                                             <label>Solicitar Hospitalización</label>
                                                                                         </div>
@@ -957,10 +967,19 @@
                                                                         </div>
                                                                         <div class="form-row">
                                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                <button type="button" class="btn btn-primary-light-c btn-block btn-xxs mt-1" onclick=";"><i class="feather icon-plus"></i> Indicar Interconsulta</button>
+                                                                                @php
+                                                                                    if(session('lic_estado') == 1)
+                                                                                    {
+                                                                                        echo '<button type="button" class="btn btn-primary-light-c btn-block btn-xxs mt-1 accion_modal_interconsulta" ><i class="feather icon-plus"></i> Indicar Interconsulta</button>';
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        echo '<button type="button" class="btn btn-primary-light-c btn-block btn-xxs mt-1 accion_modal_interconsulta" disabled="true"><i class="feather icon-plus"></i> Indicar Interconsulta</button>';
+                                                                                    }
+                                                                                @endphp
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                <button type="button" class="btn btn-primary-light-c btn-block btn-xxs mt-1" onclick=";"><i class="feather icon-file"></i> Solicitar Examen</button>
+                                                                                <button type="button" class="btn_agregar_examen btn btn-primary-light-c btn-block btn-xxs mt-1" disabled="true" onclick="mostrar_modal_examen_cirguria();"><i class="feather icon-file"></i> Solicitar Examen</button>
                                                                             </div>
                                                                         </div>
                                                                     </form>
@@ -1167,16 +1186,16 @@
                                                                                         </div>
                                                                                         <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                             <label class="floating-label-activo-sm" for="aro_feto_fpp_fur">FPP por FUR</label>
-                                                                                            <input type="text" class="form-control form-control-sm"  name="aro_feto_fpp_fur" id="aro_feto_fpp_fur">
+                                                                                            <input type="date" max="{{ date('Y-m-d') }}" class="form-control form-control-sm"  name="aro_feto_fpp_fur" id="aro_feto_fpp_fur">
                                                                                         </div>
                                                                                         <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                             <label class="floating-label-activo-sm" for="aro_feto_fpp_eco">FPP por Eco</label>
-                                                                                            <input type="text" class="form-control form-control-sm"  name="aro_feto_fpp_eco" id="aro_feto_fpp_eco">
+                                                                                            <input type="date" max="{{ date('Y-m-d') }}" class="form-control form-control-sm"  name="aro_feto_fpp_eco" id="aro_feto_fpp_eco">
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                             <div class="form-group">
                                                                                                 <label class="floating-label-activo-sm" for="aro_feto_fpp_au">FPP por Alt uterina</label>
-                                                                                                <input type="text" class="form-control form-control-sm" name="aro_feto_fpp_au" id="aro_feto_fpp_au">
+                                                                                                <input type="date" max="{{ date('Y-m-d') }}" class="form-control form-control-sm" name="aro_feto_fpp_au" id="aro_feto_fpp_au">
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -1285,7 +1304,7 @@
                                                                                         <div class="col-sm-12 col-md-6 col-lg-2 col-x-2">
                                                                                             <div class="form-group">
                                                                                                 <label class="floating-label-activo-sm" for="aro_ea_m_pe">Peso</label>
-                                                                                                <input type="text" class="form-control form-control-sm" name="aro_ea_m_pe" id="aro_ea_m_pe">
+                                                                                                <input type="number" class="form-control form-control-sm" name="aro_ea_m_pe" id="aro_ea_m_pe">
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-6 col-lg-3 col-x-3">
@@ -1317,7 +1336,7 @@
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                             <div class="form-group">
-                                                                                                <button type="button" class="btn btn-primary-light-c btn-block btn-sm"onclick="ind_eco_control();"><i class="feather icon-plus"></i> Ecografìa</button>
+                                                                                                <button type="button" class="btn_agregar_examen btn btn-primary-light-c btn-block btn-sm" disabled="true" onclick="ind_eco_control();"><i class="feather icon-plus"></i> Ecografìa</button>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -1380,7 +1399,7 @@
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                             <div class="form-group">
-                                                                                                <button type="button" class="btn btn-primary-light-c btn-block btn-sm"onclick="ind_eco_control();"><i class="feather icon-plus"></i> Ecografìa</button>
+                                                                                                <button type="button" class="btn_agregar_examen btn btn-primary-light-c btn-block btn-sm" disabled="true" onclick="ind_eco_control();"><i class="feather icon-plus"></i> Ecografìa</button>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -1419,8 +1438,16 @@
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                                                                 <div class="custom-control custom-switch">
-                                                                                    <input type="checkbox" class="custom-control-input" id="hosp_aro" name="hosp_aro" value="" />
+                                                                                    <input type="checkbox" class="custom-control-input" id="hosp_aro" name="hosp_aro" value="" onclick="showContentCir_plan_ex_obst_alto_riesgo();"/>
                                                                                     <label class="custom-control-label pt-1" for="hosp_aro">Solicitar Hospitalización</label>
+                                                                                </div>
+
+                                                                                <div id="contentCir_cg_alto_riesgo" style="display: none;">
+                                                                                    <div class="form-row">
+                                                                                        <div class="form-group col-md-12">
+                                                                                            <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingresohosp();"><i class="feather icon-save"></i> Orden de Hospitalización </button>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -1434,10 +1461,19 @@
                                                                         </div>
                                                                         <div class="form-row">
                                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                <button type="button" class="btn btn-primary-light-c btn-block btn-xxs" onclick=";"><i class="feather icon-plus"></i> Indicar Interconsulta</button>
+                                                                                @php
+                                                                                    if(session('lic_estado') == 1)
+                                                                                    {
+                                                                                        echo '<button type="button" class="btn btn-primary-light-c btn-block btn-xxs mt-1 accion_modal_interconsulta" ><i class="feather icon-plus"></i> Indicar Interconsulta</button>';
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        echo '<button type="button" class="btn btn-primary-light-c btn-block btn-xxs mt-1 accion_modal_interconsulta" disabled="true"><i class="feather icon-plus"></i> Indicar Interconsulta</button>';
+                                                                                    }
+                                                                                @endphp
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                <button type="button" class="btn btn-primary-light-c btn-block btn-xxs" onclick=";"><i class="feather icon-file"></i> Solicitar Examenes</button>
+                                                                                <button type="button" class="btn_agregar_examen btn btn-primary-light-c btn-block btn-xxs" disabled="true" onclick="mostrar_modal_examen_cirguria();"><i class="feather icon-file"></i> Solicitar Examenes</button>
                                                                             </div>
                                                                         </div>
                                                                     </form>
@@ -1470,19 +1506,19 @@
                                                 <div class="form-row mb-3 mt-1">
                                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                         <div class="custom-control custom-switch">
-                                                            <input type="checkbox" class="custom-control-input" id="tipo_de_parto_cesarea">
+                                                            <input type="checkbox" class="custom-control-input" name="parto_cesarea" id="parto_cesarea">
                                                             <label class="custom-control-label text-primary pt-1" for="parto_cesarea">Parto Vía Cesárea</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                         <div class="custom-control custom-switch">
-                                                            <input type="checkbox" class="custom-control-input" id="tipo_de_parto_normal">
+                                                            <input type="checkbox" class="custom-control-input" name="parto_normal" id="parto_normal">
                                                             <label class="custom-control-label text-primary pt-1" for="parto_normal">Parto Vaginal</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                         <div class="custom-control custom-switch">
-                                                            <input type="checkbox" class="custom-control-input" id="tipo_cirugia_gine_obst">
+                                                            <input type="checkbox" class="custom-control-input" name="cirugia_gine_obst" id="cirugia_gine_obst">
                                                             <label class="custom-control-label text-primary pt-1" for="cirugia_gine_obst">Cirugía Gineco-Obstétrica</label>
                                                         </div>
                                                     </div>
@@ -1498,7 +1534,7 @@
                                                     </div>
                                                     <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                         <label class="floating-label-activo-sm" for="insp_abd">Inspección abdominal</label>
-                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;"  name="_insp_abd" id="insp_abd"></textarea>
+                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;"  name="insp_abd" id="insp_abd"></textarea>
                                                     </div>
                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                         <label class="floating-label-activo-sm" for="tacto">Tacto vaginal</label>
@@ -1551,7 +1587,7 @@
                         {{--  div de botones  --}}
                         <div class="bg-white shadow-none rounded mx-1 p-15">
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-							@include('general.secciones_ficha.seccion_receta_examen_comunes')
+                            @include('general.secciones_ficha.seccion_receta_examen_comunes')
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
                             <!--GUARDAR O IMPRIMIR FICHA-->
                             <div class="row mb-3 m-t-10">
@@ -1569,471 +1605,720 @@
 </div>
 
 @section('page-script-ficha-atencion')
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
+            /* formatear rut */
+            // $("#solicitado_rut_eco_gine").rut({
+            //     formatOn: 'keyup',
+            //     minimumLength: 2,
+            //     validateOn: 'change',
+            //     useThousandsSeparator : false
+            // });
 
-        /* formatear rut */
-        {{--  $("#solicitado_por_rut_rfl").rut({
-            formatOn: 'keyup',
-            minimumLength: 2,
-            validateOn: 'change',
-            useThousandsSeparator : false
-        });  --}}
+            // $("#solicitado_rut_eco_obst").rut({
+            //     formatOn: 'keyup',
+            //     minimumLength: 2,
+            //     validateOn: 'change',
+            //     useThousandsSeparator : false
+            // });
 
-        $('#descripcion_hipotesis').keyup(function(){
-            if($.trim(this.value) != ''){
-                $('.btn_agregar_medicamento').removeAttr("disabled");
-                $('.btn_medicamento_pdf').removeAttr("disabled");
-                $('.btn_agregar_examen').removeAttr("disabled");
-                $('.btn_examenes_pdf').removeAttr("disabled");
-            }
-            else
-            {
-                $('.btn_agregar_medicamento').attr('disabled','disabled');
-                $('.btn_medicamento_pdf').attr('disabled','disabled');
-                $('.btn_agregar_examen').attr('disabled','disabled');
-                $('.btn_examenes_pdf').attr('disabled','disabled');
-            }
-        });
+            // $("#solicitado_rut_proced").rut({
+            //     formatOn: 'keyup',
+            //     minimumLength: 2,
+            //     validateOn: 'change',
+            //     useThousandsSeparator : false
+            // });
 
-        $("#descripcion_cie").autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getCie10') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                // Set selection
-                $('#descripcion_cie').val(ui.item.label); // display the selected text
-                $('#id_descripcion_cie').val(ui.item.value); // save selected id to input
-                return false;
-            }
-        });
-
-        $("#lic_descripcion_cie").autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getCie10') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                // Set selection
-                $('#lic_descripcion_cie').val(ui.item.label); // display the selected text
-                $('#id_lic_descripcion_cie').val(ui.item.value); // save selected id to input
-                return false;
-            }
-        });
-        /** CARGAR mensaje */
-        $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
-        $('#mensaje_ficha').show();
-        setTimeout(function(){
-            $('#mensaje_ficha').hide();
-        }, 5000);
-        /** cronico */
-        /** autocomplete de medicamentos generales */
-        $("#nombre_medicamentocron").autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getArticulo') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        console.log(data.length);
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                $('#nombre_medicamentocron').val(ui.item.label);
-                $('#id_medicamento_cronico').val(ui.item.value);
-                getDosis_cronico(ui.item.value, 'dosis_cronicomes');
-                return false;
-            }
-        });
-
-        /** autocomplete de medicamentos patologia */
-        $("#nombre_medicamentocron_patologia").autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getArticulo') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        console.log(data.length);
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                $('#nombre_medicamentocron_patologia').val(ui.item.label);
-                $('#id_medicamentocron_patologia').val(ui.item.value);
-                getDosis_cronico(ui.item.value, 'dosis_medicamentocron_patologia');
-                return false;
-            }
-        });
-
-        /** accion check confidencial */
-        $('#confidencial').change(function() {
-            if ($('#confidencial').is(':checked')) {
-                $('#confidencial_descripcion').show();
-            } else {
-                $('#confidencial_descripcion').hide();
-            }
-        });
-
-        /** accion check ges */
-        $('#modal_ges').change(function() {
-            if ($('#modal_ges').is(':checked')) {
-                $('#form_ges').modal('show');
-            } else {
-                $('#form_ges').modal('hide');
-            }
-        });
-
-        /** busqueda de diagnostico GES */
-        $("#nombre_ges").autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('ges.ver') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                // Set selection
-                $('#nombre_ges').val(ui.item.label); // display the selected text
-                $('#id_ges').val(ui.item.value); // save selected id to input
-                return false;
-            }
-        });
-
-
-    })
-
-    /** MANEJO DE IMAGENES */
-    var myDropzone ;
-    Dropzone.options.misImagenes = {
-        init:function()
-        {
-            myDropzone = this;
-        },
-        url: "{{ route('profesional.imagen.carga') }}",
-        method: 'post',
-        createImageThumbnails: true,
-        addRemoveLinks: true,
-        headers:{
-            'X-CSRF-TOKEN' : CSRF_TOKEN,
-            // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
-        },
-
-        acceptedFiles: "image/*",
-        maxFilesize: 4,
-        maxFiles: 12,
-        /** El texto utilizado antes de que se eliminen los archivos. */
-        dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
-
-        /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
-        dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
-
-        /**
-         * El texto que se agregará antes del formulario alternativo.
-         * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
-         * ser ignorado.
-         */
-        dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
-
-        /**
-         * Si el tamaño del archivo es demasiado grande.
-         * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
-         */
-         dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
-
-        /** Si el archivo no coincide con el tipo de archivo. */
-        dictInvalidFileType: "No puedes subir archivos de este tipo.",
-
-        /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
-        dictCancelUpload: "Cancelar carga",
-
-        /** El texto que se muestra si una carga se canceló manualmente */
-        dictUploadCanceled: "Subida cancelada.",
-
-        /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
-        dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
-
-        /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
-        dictRemoveFile: "Eliminar archivo",
-
-        /**
-         * Se muestra si `maxFiles` es st y se excede.
-         */
-        dictMaxFilesExceeded: "No puede cargar más archivos.",
-
-        // accept(file, done) {
-        //     console.log('-------------accept-----------------------');
-        //     cargar_lista_imagenes();
-        //     return done();
-        // },
-        success: function(file, response){
-            // console.log('-------------success-----------------------');
-            cargar_lista_imagenes();
-
-            if (file.previewElement) {
-                return file.previewElement.classList.add("dz-success");
-            }
-        },
-        error(file, message) {
-            // console.log('-------------error-----------------------');
-            if (file.previewElement) {
-                file.previewElement.classList.add("dz-error");
-                if (typeof message !== "string" && message.error)
+            $('#descripcion_hipotesis').keyup(function(){
+                if($.trim(this.value) != '')
                 {
-                    message = message.error;
+                   if( lic_token != '' && lic_estado == 1)
+                    {
+                        $('.btn_agregar_medicamento').removeAttr("disabled");
+                        $('.btn_medicamento_pdf').removeAttr("disabled");
+                        $('.btn_agregar_examen').removeAttr("disabled");
+                        $('.btn_examenes_pdf').removeAttr("disabled");
+                    }
+                    else
+                    {
+                        $('.btn_agregar_medicamento').attr('disabled','disabled');
+                        $('.btn_medicamento_pdf').attr('disabled','disabled');
+                        $('.btn_agregar_examen').attr('disabled','disabled');
+                        $('.btn_examenes_pdf').attr('disabled','disabled');
+                    }
                 }
                 else
                 {
-                    message = message.message;
+                    $('.btn_agregar_medicamento').attr('disabled','disabled');
+                    $('.btn_medicamento_pdf').attr('disabled','disabled');
+                    $('.btn_agregar_examen').attr('disabled','disabled');
+                    $('.btn_examenes_pdf').attr('disabled','disabled');
                 }
-                for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
-                    node.textContent = message;
-                }
-            }
-        },
-        removedfile(file) {
-            // console.log('-------------removedfile-----------------------');
-            cargar_lista_imagenes();
-            if (file.previewElement != null && file.previewElement.parentNode != null) {
-                file.previewElement.parentNode.removeChild(file.previewElement);
-            }
-            return this._updateMaxFilesReachedClass();
-        },
-        canceled: function canceled(file) {
-            cargar_lista_imagenes();
-            return this.emit("error", file, this.options.dictUploadCanceled);
-        },
-    };
-
-
-
-    var lista_imagenes = [];
-    function cargar_lista_imagenes()
-    {
-        // console.log('--------------cargar_lista_imagenes----------------------');
-        lista_imagenes = [];
-        let temp  = myDropzone.getAcceptedFiles();
-        $.each(temp, function( index, value )
-        {
-            if(value.status == "success")
-            {
-                if(value.xhr !== undefined)
-                {
-                    var img_temp = JSON.parse(value.xhr.response);
-                    lista_imagenes[index] = [
-                        url=img_temp.img.url,
-                        nombre_origian= img_temp.img.original_file_name,
-                        nombre_img = img_temp.img.nombre_img,
-                        file_extension = img_temp.img.file_extension,
-                    ];
-                    $('#input_lista_imagenes').val('');
-                    $('#input_lista_imagenes').val(JSON.stringify(lista_imagenes));
-                }
-            }
-        });
-
-
-    }
-
-
-
-    function cargarIgual(input)
-    {
-
-        let actual = $('#'+input);
-        let equivalentes = $('#'+input).attr('data-input_igual').split(',');
-        $.each(equivalentes, function( index, value ) {
-            var equivalente = $('#'+value);
-            equivalente.val(actual.val());
-        });
-
-        // let actual = $('#'+input);
-        // let equivalente = $('#'+$('#'+input).attr('data-input_igual'));
-
-        // equivalente.val(actual.val());
-
-    }
-
-    function evaluar_para_carga_detalle(select, div, input, valor)
-    {
-        var valor_select = $('#'+select+'').val();
-        if(valor_select == valor) $('#'+div+'').show();
-        else {
-            $('#'+div+'').hide();
-            $('#'+input+'').val('');
-        }
-    }
-
-    function abrir_modal_guardar_tipo()
-    {
-        $('#modal_registrar_ficha_tipo_orl').modal('show');
-        cargarSeccion('registro_f_t_orl_detalle');
-    }
-
-    function cargarSeccion(div_destino)
-    {
-        // var tipo = $('#'+select+'').val();
-        $('#'+div_destino).html('');
-        var seccion_actual = '';
-        var seccion_previa = '';
-        $('#form-otorrino').find('select,textarea').each(function(key, elemento){
-
-
-            html ='';
-
-            // if(seccion_previa == '' && seccion_actual == '')
-            if(key == 0)
-            {
-                seccion_actual = $(elemento).data('seccion').trim();
-                seccion_previa = $(elemento).data('seccion').trim();
-
-                html +='<hr>';
-                html +='<div class="row"><div class="col-md-12 text-center"><h6 style="color: #3e55c3;">'+seccion_actual+'</h6></div></div>';
-                html +='<hr>';
-            }
-            else
-            {
-                if($(elemento).data('seccion'))
-                seccion_actual = $(elemento).data('seccion').trim();
-            }
-
-            if(seccion_actual == seccion_previa)
-            {
-                html +='<hr>';
-                html +='<div class="row"><div class="col-md-12 text-center"><h6 style="color: #3e55c3;">'+seccion_actual+'</h6></div></div>';
-                html +='<hr>';
-            }
-
-            html +='<div class="row" style="margin-top:10px;">';
-            if($(elemento).prop('nodeName') == 'SELECT')
-            {
-                if($(elemento).val() == 0)
-                    $(elemento).val(1)
-
-                html +='<div class="col-md-5">'+$(elemento).data('titulo')+'</div>';
-                html +='<div class="col-md-5">';
-                html +='    '+$('#'+$(elemento).attr('id')+' option:selected').text()+'';
-                html +='    <input type="hidden" name="modal_agregar_tipo_'+$(elemento).attr('id')+'" id="modal_agregar_tipo_'+$(elemento).attr('id')+'" value="'+$(elemento).val()+'">';
-                html +='</div>';
-                html +='<div class="col-md-2"></div>';
-            }
-            else if($(elemento).prop('nodeName') == 'TEXTAREA')
-            {
-                if($(elemento).data('tipo'))
-                    html +='<div class="col-md-5">'+$(elemento).data('titulo')+'</div>';
-                else
-                    html +='<div class="col-md-5">Detalle</div>';
-                html +='<div class="col-md-5">';
-                html +='    <textarea class="form-control caja-texto form-control-sm '+$(elemento).attr('id')+'_editar" style="display:none;" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_'+$(elemento).attr('id')+'" id="observaciones_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</textarea>';
-                html +='    <label class="'+$(elemento).attr('id')+'_mostrar" id="label_observacion_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</label>';
-                html +='</div>';
-                html +='<div class="col-md-2">';
-                html +='    <button class="btn btn-sm btn-success '+$(elemento).attr('id')+'_mostrar"  onclick="cambiar_div(\''+$(elemento).attr('id')+'_editar'+'\',\''+$(elemento).attr('id')+'_mostrar'+'\',\'label_observacion_'+$(elemento).attr('id')+'\',\'observaciones_'+$(elemento).attr('id')+'\')">Editar</button>';
-                html +='    <button class="btn btn-sm btn-success '+$(elemento).attr('id')+'_editar" style="display:none;" onclick="cambiar_div(\''+$(elemento).attr('id')+'_mostrar'+'\',\''+$(elemento).attr('id')+'_editar'+'\',\'label_observacion_'+$(elemento).attr('id')+'\',\'observaciones_'+$(elemento).attr('id')+'\')">Guardar</button>';
-                html +='</div>';
-
-            }
-            html +='</div>';
-            $('#'+div_destino).append(html);
-            seccion_previa = $(elemento).data('seccion');
-        });
-    }
-
-    function cambiar_div(mostrar, ocultar, label, textarea)
-    {
-        $('.'+mostrar).show();
-        $('.'+ocultar).hide();
-        $('#'+label).html( $('#'+textarea).val() );
-    }
-
-
-    /** PERVISUALIZACION DE EXAMEN */
-    function visualizar_pdf_examen(tipo_examen)
-    {
-        if(tipo_examen!='')
-        {
-            var array_datos = {};
-            $('.div_form_examen_'+tipo_examen).find('input,textarea,select').each(function (key, element){
-                array_datos[element.id] = element.value;
             });
 
-            var imagenes = $('#input_lista_imagenes').val();
-            if(imagenes != '')
-            {
-                imagenes = JSON.stringify(imagenes);
-            }
+            $("#descripcion_cie").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getCie10') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    // Set selection
+                    $('#descripcion_cie').val(ui.item.label); // display the selected text
+                    $('#id_descripcion_cie').val(ui.item.value); // save selected id to input
+                    return false;
+                }
+            });
 
-            var data ='id_ficha='+$('#id_fc').val()+'&contenido='+JSON.stringify(array_datos)+'&imagenes='+imagenes;
-            Fancybox.show(
-                [
-                    {
-                    src: '{{ route("pdf.visualizar.examen") }}?'+data,
-                    type: "iframe",
-                    preload: false,
-                    },
-                ]
-            );
-        }
-        else
-        {
-            console.log('tipo examen no especificado');
-        }
-    }
+            $("#lic_descripcion_cie").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getCie10') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    // Set selection
+                    $('#lic_descripcion_cie').val(ui.item.label); // display the selected text
+                    $('#id_lic_descripcion_cie').val(ui.item.value); // save selected id to input
+                    return false;
+                }
+            });
 
-</script>
- <!--ALERTA DE ATENCION-->
-   <script>
-    window.setTimeout(function() {
-        $(".alert-atencion").fadeTo(500, 0).slideUp(600, function(){
-            $(this).remove();
+            /** CARGAR mensaje */
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
+            $('#mensaje_ficha').show();
+            setTimeout(function(){
+                $('#mensaje_ficha').hide();
+            }, 5000);
+            /** cronico */
+
+            /** autocomplete de medicamentos generales */
+            $("#nombre_medicamentocron").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getArticulo') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            console.log(data.length);
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    $('#nombre_medicamentocron').val(ui.item.label);
+                    $('#id_medicamento_cronico').val(ui.item.value);
+                    getDosis_cronico(ui.item.value, 'dosis_cronicomes');
+                    return false;
+                }
+            });
+
+            /** autocomplete de medicamentos patologia */
+            $("#nombre_medicamentocron_patologia").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getArticulo') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            console.log(data.length);
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    $('#nombre_medicamentocron_patologia').val(ui.item.label);
+                    $('#id_medicamentocron_patologia').val(ui.item.value);
+                    getDosis_cronico(ui.item.value, 'dosis_medicamentocron_patologia');
+                    return false;
+                }
+            });
+
+            /** accion check confidencial */
+            $('#confidencial').change(function() {
+                if ($('#confidencial').is(':checked')) {
+                    $('#confidencial_descripcion').show();
+                } else {
+                    $('#confidencial_descripcion').hide();
+                }
+            });
+
+            /** accion check ges */
+            $('#modal_ges').change(function() {
+                if ($('#modal_ges').is(':checked')) {
+                    $('#form_ges').modal('show');
+                } else {
+                    $('#form_ges').modal('hide');
+                }
+            });
+
+            /** busqueda de diagnostico GES */
+            $("#nombre_ges").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('ges.ver') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    // Set selection
+                    $('#nombre_ges').val(ui.item.label); // display the selected text
+                    $('#id_ges').val(ui.item.value); // save selected id to input
+                    return false;
+                }
+            });
+
+            window.setTimeout(function() {
+                $(".alert-atencion").fadeTo(500, 0).slideUp(600, function(){
+                    $(this).remove();
+                });
+            }, 5000);
+
         });
-    }, 5000);
- </script>
+
+
+        function cargarIgual(input)
+        {
+
+            let actual = $('#'+input);
+            let equivalentes = $('#'+input).attr('data-input_igual').split(',');
+            $.each(equivalentes, function( index, value ) {
+                var equivalente = $('#'+value);
+                equivalente.val(actual.val());
+            });
+
+            // let actual = $('#'+input);
+            // let equivalente = $('#'+$('#'+input).attr('data-input_igual'));
+
+            // equivalente.val(actual.val());
+
+        }
+
+        function evaluar_para_carga_detalle(select, div, input, valor)
+        {
+            var valor_select = $('#'+select+'').val();
+            if(valor_select == valor) $('#'+div+'').show();
+            else {
+                $('#'+div+'').hide();
+                $('#'+input+'').val('');
+            }
+        }
+
+        function abrir_modal_guardar_tipo()
+        {
+            $('#modal_registrar_ficha_tipo_orl').modal('show');
+            cargarSeccion('registro_f_t_orl_detalle');
+        }
+
+        function cargarSeccion(div_destino)
+        {
+            // var tipo = $('#'+select+'').val();
+            $('#'+div_destino).html('');
+            var seccion_actual = '';
+            var seccion_previa = '';
+            $('#form-otorrino').find('select,textarea').each(function(key, elemento){
+
+
+                html ='';
+
+                // if(seccion_previa == '' && seccion_actual == '')
+                if(key == 0)
+                {
+                    seccion_actual = $(elemento).data('seccion').trim();
+                    seccion_previa = $(elemento).data('seccion').trim();
+
+                    html +='<hr>';
+                    html +='<div class="row"><div class="col-md-12 text-center"><h6 style="color: #3e55c3;">'+seccion_actual+'</h6></div></div>';
+                    html +='<hr>';
+                }
+                else
+                {
+                    if($(elemento).data('seccion'))
+                    seccion_actual = $(elemento).data('seccion').trim();
+                }
+
+                if(seccion_actual == seccion_previa)
+                {
+                    html +='<hr>';
+                    html +='<div class="row"><div class="col-md-12 text-center"><h6 style="color: #3e55c3;">'+seccion_actual+'</h6></div></div>';
+                    html +='<hr>';
+                }
+
+                html +='<div class="row" style="margin-top:10px;">';
+                if($(elemento).prop('nodeName') == 'SELECT')
+                {
+                    if($(elemento).val() == 0)
+                        $(elemento).val(1)
+
+                    html +='<div class="col-md-5">'+$(elemento).data('titulo')+'</div>';
+                    html +='<div class="col-md-5">';
+                    html +='    '+$('#'+$(elemento).attr('id')+' option:selected').text()+'';
+                    html +='    <input type="hidden" name="modal_agregar_tipo_'+$(elemento).attr('id')+'" id="modal_agregar_tipo_'+$(elemento).attr('id')+'" value="'+$(elemento).val()+'">';
+                    html +='</div>';
+                    html +='<div class="col-md-2"></div>';
+                }
+                else if($(elemento).prop('nodeName') == 'TEXTAREA')
+                {
+                    if($(elemento).data('tipo'))
+                        html +='<div class="col-md-5">'+$(elemento).data('titulo')+'</div>';
+                    else
+                        html +='<div class="col-md-5">Detalle</div>';
+                    html +='<div class="col-md-5">';
+                    html +='    <textarea class="form-control caja-texto form-control-sm '+$(elemento).attr('id')+'_editar" style="display:none;" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_'+$(elemento).attr('id')+'" id="observaciones_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</textarea>';
+                    html +='    <label class="'+$(elemento).attr('id')+'_mostrar" id="label_observacion_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</label>';
+                    html +='</div>';
+                    html +='<div class="col-md-2">';
+                    html +='    <button class="btn btn-sm btn-success '+$(elemento).attr('id')+'_mostrar"  onclick="cambiar_div(\''+$(elemento).attr('id')+'_editar'+'\',\''+$(elemento).attr('id')+'_mostrar'+'\',\'label_observacion_'+$(elemento).attr('id')+'\',\'observaciones_'+$(elemento).attr('id')+'\')">Editar</button>';
+                    html +='    <button class="btn btn-sm btn-success '+$(elemento).attr('id')+'_editar" style="display:none;" onclick="cambiar_div(\''+$(elemento).attr('id')+'_mostrar'+'\',\''+$(elemento).attr('id')+'_editar'+'\',\'label_observacion_'+$(elemento).attr('id')+'\',\'observaciones_'+$(elemento).attr('id')+'\')">Guardar</button>';
+                    html +='</div>';
+
+                }
+                html +='</div>';
+                $('#'+div_destino).append(html);
+                seccion_previa = $(elemento).data('seccion');
+            });
+        }
+
+        function cambiar_div(mostrar, ocultar, label, textarea)
+        {
+            $('.'+mostrar).show();
+            $('.'+ocultar).hide();
+            $('#'+label).html( $('#'+textarea).val() );
+        }
+
+        /** PERVISUALIZACION DE EXAMEN */
+        function visualizar_pdf_examen(tipo_examen)
+        {
+            if(tipo_examen!='')
+            {
+                var array_datos = {};
+                $('.div_form_examen_'+tipo_examen).find('input,textarea,select').each(function (key, element){
+                    array_datos[element.id] = element.value;
+                });
+
+                var imagenes = $('#input_lista_imagenes').val();
+                if(imagenes != '')
+                {
+                    imagenes = JSON.stringify(imagenes);
+                }
+
+                var data ='id_ficha='+$('#id_fc').val()+'&contenido='+JSON.stringify(array_datos)+'&imagenes='+imagenes;
+                Fancybox.show(
+                    [
+                        {
+                        src: '{{ route("pdf.visualizar.examen") }}?'+data,
+                        type: "iframe",
+                        preload: false,
+                        },
+                    ]
+                );
+            }
+            else
+            {
+                console.log('tipo examen no especificado');
+            }
+        }
+
+        function showContentCir_plan_ex_obst() {
+            element = document.getElementById("contentCir_cg");
+            check = document.getElementById("sol_hosp");
+            if (check.checked) {
+                element.style.display='block';
+            }
+            else {
+                element.style.display='none';
+            }
+        }
+
+        function showContentCir_plan_ex_obst_alto_riesgo() {
+            element = document.getElementById("contentCir_cg_alto_riesgo");
+            check = document.getElementById("hosp_aro");
+            if (check.checked) {
+                element.style.display='block';
+            }
+            else {
+                element.style.display='none';
+            }
+        }
+
+        /** CARGA DE PROFESIONAL */
+        function cargar_profesional(rut, input_nombre_completo, input_id, div_solicitar,
+                                    input_nombre, input_apellido,
+                                    input_tel, input_email,
+                                    div_mensaje, text_mensaje)
+        {
+            // console.log(rut);
+            // console.log($(rut).val());
+
+            rut = $(rut).val();
+
+            if(rut.length>5)
+            {
+                url = "{{ route('profesional.buscar') }}";
+                $.ajax({
+
+                    url: url,
+                    type: "GET",
+                    data: {
+                        rut : rut,
+                    },
+                })
+                .done(function(data)
+                {
+                    if(data.estado == 1)
+                    {
+
+                        if(data.registros.length>0)
+                        {
+                            var nombre = data.registros[0].nombre+' '+data.registros[0].apellido_uno;
+                            var id = data.registros[0].id;
+                            // $('#'+input_nombre_completo).attr('readonly', true);
+                            $('#'+input_nombre_completo).val(nombre);
+                            $('#'+input_id).val(id);
+                            $('#'+div_solicitar).hide();
+                            mensaje = '';
+                            $('#'+div_mensaje).hide();
+                            $('#'+text_mensaje).html(mensaje);
+                            $('#'+input_nombre).val('');
+                            $('#'+input_apellido).val('');
+                            $('#'+input_tel).val('');
+                            $('#'+input_email).val('');
+                        }
+                        else
+                        {
+                            mensaje = 'Profesional no encontrato, debe ingresar datos.';
+                            $('#'+input_nombre_completo).val('');
+                            $('#'+input_id).val('');
+                            $('#'+div_solicitar).show();
+                            $('#'+div_mensaje).show();
+                            $('#'+text_mensaje).html(mensaje);
+                            $('#'+input_nombre).val('');
+                            $('#'+input_apellido).val('');
+                            $('#'+input_tel).val('');
+                            $('#'+input_email).val('');
+                            // $('#'+input_nombre_completo).attr('readonly', true);
+                        }
+                    }
+                    else
+                    {
+                        mensaje = 'Se presento un problema en la busqueda intente nuevamente';
+                        $('#'+div_mensaje).show();
+                        $('#'+text_mensaje).html(mensaje);
+                        // $('#'+input_nombre_completo).attr('readonly', false);
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
+            else if(rut.length==0)
+            {
+                $('#'+input_nombre_completo).val('');
+                // $('#'+input_nombre_completo).attr('readonly', true);
+                $('#'+input_id).val('');
+                $('#'+div_solicitar).hide();
+                $('#'+div_mensaje).hide();
+                $('#'+text_mensaje).html('');
+            }
+        }
+        /** CIERRE RFL */
+
+        /** MANEJO DE IMAGENES ECOGRAFIA GINECOLOGIA*/
+        var myDropzone_eco_gine;
+        Dropzone.options.misArchivosEcoGine = {
+            init:function()
+            {
+                myDropzone_eco_gine = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+            dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzone_eco_gine,'eco_gine');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzone_eco_gine,'eco_gine');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzone_eco_gine,'eco_gine');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var myDropzone_eco_obst;
+        Dropzone.options.misArchivosEcoObst = {
+            init:function()
+            {
+                myDropzone_eco_obst = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+            dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes(myDropzone_eco_obst,'eco_obst');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes(myDropzone_eco_obst,'eco_obst');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes(myDropzone_eco_obst,'eco_obst');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var lista_imagenes = {};
+        function cargar_lista_imagenes(obj_dropzone, alias_examen)
+        {
+            console.log('--------------cargar_lista_imagenes----------------------');
+            if(obj_dropzone == undefined)
+            {
+                if(alias_examen == 'eco_gine')
+                    obj_dropzone = myDropzone_eco_gine;
+                else
+                    obj_dropzone = myDropzone_eda;
+            }
+            lista_imagenes[alias_examen] = [];
+            let temp  = obj_dropzone.getAcceptedFiles();
+            console.log('----------------temp--------------------');
+            console.log(temp);
+            if(temp.length == 0)
+            {
+                $('#input_lista_imagenes').val('');
+                $('#input_lista_imagenes').val(JSON.stringify(lista_imagenes));
+            }
+            else
+            {
+                $.each(temp, function( index, value )
+                {
+                    console.log('------------------------------------');
+                    console.log(index);
+                    console.log(value);
+                    // var str = value.previewElement.querySelector("#description_img").value;
+                    // console.log(str);
+                    console.log('------------------------------------');
+                    if(value.status == "success")
+                    {
+                        if(value.xhr !== undefined)
+                        {
+                            var str = '';
+                            if(value.previewElement.querySelector("#description_img"))
+                                str = value.previewElement.querySelector("#description_img").value;
+                            var img_temp = JSON.parse(value.xhr.response);
+                            lista_imagenes[alias_examen][index] = [
+                                url=img_temp.img.url,
+                                nombre_origian= img_temp.img.original_file_name,
+                                nombre_img = img_temp.img.nombre_img,
+                                file_extension = img_temp.img.file_extension,
+                                descripcion = str,
+                            ];
+                            $('#input_lista_imagenes').val('');
+                            $('#input_lista_imagenes').val(JSON.stringify(lista_imagenes));
+                        }
+                    }
+                });
+            }
+        }
+        /** CIERRE MANEJO DE IMAGENES */
+    </script>
 @endsection
 
 

@@ -569,7 +569,8 @@
                                                                         {{ \Carbon\Carbon::parse($f->created_at)->format('d-m-Y') }}
                                                                     </td>
 
-                                                                    <td class="text-center align-middle">{{ $f->profesional->nombre }} {{ $f->profesional->apellido_uno }} {{ $f->profesional->apellido_dos }}<br>
+                                                                    <td class="text-center align-middle">
+                                                                        {{ $f->profesional->nombre }} {{ $f->profesional->apellido_uno }} {{ $f->profesional->apellido_dos }}<br>
                                                                         @foreach ($especialidad as $esp)
                                                                             @if($esp->id==$f->profesional->id_especialidad)
                                                                                 <b>{{ $esp->nombre }}<b><br>
@@ -612,7 +613,7 @@
 <!-- data tables css -->
 <link rel="stylesheet" href="{{ asset('css/ficha_medica_unica.css') }}">
 <!-- Estilo cards -->
-<link rel="stylesheet" href="{{ asset('css/iconos-sdi.css') }}">
+{{-- <link rel="stylesheet" href="{{ asset('css/iconos-sdi.css') }}"> --}}
 
 <style type="text/css">
     .auth-wrapper

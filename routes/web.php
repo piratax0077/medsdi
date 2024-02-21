@@ -656,11 +656,31 @@ Route::group([
     // Route::get('/receta/pdf', [App\Http\Controllers\RecomendacionController::class, 'verPDF'])->name('profesional.receta.pdf');
 
 	/** GINECO OBSTETRICO */
-
     Route::post('/ficha/ginecologia/obstetricia/registrar', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'store'])->name('fichaAtencion.registrar_ficha_gine_obst');
+    Route::post('/gine/obst/ciclo/menstrual/registro', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'GineModalCicloMenstrual'])->name('gine.obste.examen.ciclo.menstrual.registrar');
+    Route::get('/gine/obst/ciclo/menstrual/ver', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'VerGineModalCicloMenstrual'])->name('gine.obste.examen.ciclo.menstrual.ver');
+    Route::post('/gine/obst/antecedente/mamas/agregar', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'AgregarAntesedenteMamas'])->name('gine.obste.antesedente.mamas.agregar');
+    Route::get('/gine/obst/antecedente/mamas/ver', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'VerAntesedenteMamas'])->name('gine.obste.antesedente.mamas.ver');
+    Route::post('/gine/obst/mamas/examen/clinico/agregar', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'AgregarExamenCliniMamas'])->name('gine.obste.mamas.exam.clini.agregar');
+    Route::get('/gine/obst/mamas/examen/clinico/ver', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'VerExamenCliniMamas'])->name('gine.obste.mamas.exam.clini.ver');
+    Route::post('/gine/obst/antecedente/aborto/agregar', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'AgregarAntAborto'])->name('gine.obste.ant.aborto.agregar');
+    Route::get('/gine/obst/antecedente/aborto/ver', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'VerAntAborto'])->name('gine.obste.ant.aborto.ver');
+    Route::post('/gine/obst/antecedente/parto/puerperio/agregar', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'AgregarAntePartoPuerperio'])->name('gine.obste.ant.parto.puerperio.agregar');
+    Route::get('/gine/obst/antecedente/parto/puerperio/ver', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'VerAntePartoPuerperio'])->name('gine.obste.ant.parto.puerperio.ver');
+    Route::post('/gine/obst/antecedente/ex/hormonas/agregar', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'AgregarAntExHormonales'])->name('gine.obste.ant.ex.hormonas.agregar');
+    Route::get('/gine/obst/antecedente/ex/hormonas/ver', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'VerAntExHormonales'])->name('gine.obste.ant.ex.hormonas.ver');
+    Route::post('/gine/hipertension/agregar', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'AgregarModalHipertension'])->name('gine.obste.hipertension.agregar');
+    Route::get('/gine/hipertension/ver', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'VerModalHipertension'])->name('gine.obste.hipertension.ver');
+    Route::post('/gine/otros/procedimiento/registrar', [App\Http\Controllers\FichaGinecoObstetricoController::class, 'AgregarModalOtrosProcedimientos'])->name('gine.otros.procedimiento.registrar');
+    Route::get('/gine/otros/procedimiento/ver',[App\Http\Controllers\FichaGinecoObstetricoController::class, 'VerModalOtrosProcedimientos'])->name('gine.otros.procedimiento.ver');
+    Route::post('/gine/otros/procedimiento/eliminar',[App\Http\Controllers\FichaGinecoObstetricoController::class, 'EliminarModalOtrosProcedimientos'])->name('gine.otros.procedimiento.eliminar');
+    Route::post('/gine/antecedentes/anticonceptivo/registrar',[App\Http\Controllers\FichaGinecoObstetricoController::class, 'AgregarModalAntAnticonceptivo'])->name('gine.ante.anticonceptivo.registrar');
+    Route::get('/gine/antecedentes/anticonceptivo/ver',[App\Http\Controllers\FichaGinecoObstetricoController::class, 'VerModalAntAnticonceptivo'])->name('gine.ante.anticonceptivo.ver');
+
     /** RECETA DE LENTES */
     Route::post('/receta/lente/registro', [App\Http\Controllers\OftarmoRecetaLenteController::class, 'registrar'])->name('receta.oftalmo.lente.registrar');
     Route::get('/receta/lente/ver', [App\Http\Controllers\OftarmoRecetaLenteController::class, 'verRegistros'])->name('receta.oftalmo.lente.ver');
+	
 });
 
 Route::group([
@@ -1111,8 +1131,13 @@ Route::group([
     Route::get('/Ficha_medica/registro_obesidad', [App\Http\Controllers\ficha_atencionController::class, 'registrar_control_obesidad'])->name('ficha_medica.registrar_control_obesidad');
     Route::get('/Ficha_medica/registro_hipertension', [App\Http\Controllers\ficha_atencionController::class, 'registrar_control_hipertension'])->name('ficha_medica.registrar_hipertension');
     Route::get('/Ficha_medica/registro_diabetes', [App\Http\Controllers\ficha_atencionController::class, 'registrar_control_diabetes'])->name('ficha_medica.registrar_diabetes');
+	Route::get('/Ficha_medica/diabetes/get',[App\Http\Controllers\DiabetesController::class, 'getDiabetes'])->name('ficha_medica.diabetes.getDiabete');
     Route::post('/Ficha_medica/finalizar_atencion', [App\Http\Controllers\ficha_atencionController::class, 'finalizar_atencion'])->name('ficha_atencion.finalizar_atencion');
 
+	/** toma de muestras */
+    Route::post('/Ficha_medica/toma/muestra/registrar', [App\Http\Controllers\TomaMuestraController::class, 'registrarMuestra'])->name('ficha_atencion.toma.muestra.registrar');
+    Route::get('/Ficha_medica/toma/muestra/ver',[App\Http\Controllers\TomaMuestraController::class, 'verRegistros_r'])->name('ficha_atencion.toma.muestra.ver');
+    Route::post('/Ficha_medica/toma/muestra/eliminar',[App\Http\Controllers\TomaMuestraController::class, 'eliminarRegistros_r'])->name('ficha_atencion.toma.muestra.eliminar');
 
     /** REGISTRO DE DIAGNOSTICO GES */
     Route::get('/Ficha_medica/registrar_ges_ficha', [App\Http\Controllers\ficha_atencionController::class, 'registrar_ges_ficha'])->name('ficha_atencion.registrar_diagnostico_ges');
@@ -1410,7 +1435,6 @@ Route::group([
 ], function () {
     Route::get('/getHipertension',[App\Http\Controllers\HipertensionController::class, 'getHipertension'])->name('hipertension.getHipertension');
 });
-
 
 /** REGISTROS CONTROL OBESIDAD - CRONICO */
 Route::group([

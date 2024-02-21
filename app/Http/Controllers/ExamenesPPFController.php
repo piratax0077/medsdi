@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\ExamenMedico;
 use App\Models\ExamenPPF;
 use App\Models\FichaAtencion;
+use App\Models\FichaGinecoObstetrica;
+use App\Models\HoraMedica;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\Profesional;
+use FichaGinObstetrica;
 use Illuminate\Http\Request;
 
 class ExamenesPPFController extends Controller
@@ -60,7 +63,9 @@ class ExamenesPPFController extends Controller
             $datos['msj'] =  'No se han agregado Examenes a Ficha Clínica.';
 
             $request_eliminar = new  Request(array(
-                'id_ficha_atencion' => $request->id_ficha_atencion
+                'id_ficha_atencion' => $request->id_ficha_atencion,
+                'id_ficha_otros_prof' => $request->id_ficha_otros_prof,
+                'id_ficha_gineco_obstetrica' => $request->id_ficha_gineco_obstetrica
             ));
             $result_eliminar = $this->eliminarExamenesFicha($request_eliminar);
 
@@ -70,7 +75,9 @@ class ExamenesPPFController extends Controller
         {
 
             $request_eliminar = new  Request(array(
-                'id_ficha_atencion' => $request->id_ficha_atencion
+                'id_ficha_atencion' => $request->id_ficha_atencion,
+                'id_ficha_otros_prof' => $request->id_ficha_otros_prof,
+                'id_ficha_gineco_obstetrica' => $request->id_ficha_gineco_obstetrica
             ));
             $result_eliminar = $this->eliminarExamenesFicha($request_eliminar);
 
@@ -101,19 +108,25 @@ class ExamenesPPFController extends Controller
                     $con_contraste = 1;
 
                 $retorno =  $this->registroExamen(
-                                $prioridad,
-                                $request->id_paciente,
-                                $request->id_profesional,
-                                $request->id_ficha_atencion,
-                                $examenes[$i]->id_examen,
-                                $examenes[$i]->nombre_examen,
-                                $examenes[$i]->nombre_examen_especialidad,
-                                $examenes[$i]->tipo,
-                                $request->tipo_ficha,
-                                $con_contraste,
-                                isset($examenes[$i]->archivo)?$examenes[$i]->archivo:'',
-                                $examenes[$i]->lado,
-                        );
+                    $prioridad,
+                    $request->id_paciente,
+                    $request->id_profesional,
+                    $request->id_ficha_atencion,
+                    $request->id_ficha_otros_prof,
+                    $request->id_ficha_gineco_obstetrica,
+                    $examenes[$i]->id_examen,
+                    $examenes[$i]->nombre_examen,
+                    $examenes[$i]->nombre_examen_especialidad,
+                    $examenes[$i]->tipo,
+                    $request->tipo_ficha,
+                    $con_contraste,
+                    isset($examenes[$i]->archivo)?$examenes[$i]->archivo:'',
+                    isset($examenes[$i]->sospecha)?$examenes[$i]->sospecha:'',
+                    isset($examenes[$i]->observacion)?$examenes[$i]->observacion:'',
+                    isset($examenes[$i]->enfasis)?$examenes[$i]->enfasis:'',
+                    isset($examenes[$i]->lado)?$examenes[$i]->lado:''
+                );
+
                 if($retorno['estado'] == 1)
                     $exito++;
                 else
@@ -139,17 +152,41 @@ class ExamenesPPFController extends Controller
      * @param [type] $id_paciente
      * @param [type] $id_profesional
      * @param [type] $id_ficha_atencion
+     * @param [type] $id_ficha_otros_prof
+     * @param [type] $id_ficha_gineco_obstetrica
      * @param [type] $id_examen
-     * @param [type] $examen_especialidad
      * @param [type] $examen
+     * @param [type] $examen_especialidad
      * @param [type] $tipo_examen
      * @param [type] $tipo_ficha
      * @param [type] $con_contraste
      * @param [type] $archivo
+     * @param [type] $sospecha
+     * @param [type] $observacion
+     * @param [type] $otro
      * @return array()
      */
-    public function registroExamen($id_prioridad, $id_paciente, $id_profesional, $id_ficha_atencion, $id_examen, $examen, $examen_especialidad, $tipo_examen, $tipo_ficha, $con_contraste, $archivo, $otro)
+    public function registroExamen($id_prioridad, $id_paciente, $id_profesional, $id_ficha_atencion, $id_ficha_otros_prof, $id_ficha_gineco_obstetrica, $id_examen, $examen, $examen_especialidad, $tipo_examen, $tipo_ficha, $con_contraste, $archivo, $sospecha, $observacion, $prioridad, $otro)
     {
+        // var_dump($id_prioridad); //int(2)
+        // var_dump($id_paciente); //string(1) "7"
+        // var_dump($id_profesional); //string(4) "2743"
+        // var_dump($id_ficha_atencion); //NULL
+        // var_dump($id_ficha_otros_prof); //NULL
+        // var_dump($id_ficha_gineco_obstetrica); //string(1) "2"
+        // var_dump($id_examen); //string(3) "486"
+        // var_dump($examen); //string(72) "ECOGRAFIA GINECOLOGICA, PELVIANA FEMENINA U OBSTETRICA CON ESTUDIO FETAL"
+        // var_dump($examen_especialidad); //string(24) "Ecografía ginecológica"
+        // var_dump($tipo_examen); //string(13) "Ginecobstetra"
+        // var_dump($tipo_ficha); //string(1) "1"
+        // var_dump($con_contraste); //int(1)
+        // var_dump($archivo); //string(0) ""
+        // var_dump($sospecha); //string(10) "dsf asdfas"
+        // var_dump($observacion); //string(0) ""
+        // var_dump($prioridad); //string(0) ""
+        // var_dump($otro); //string(19) "7567 56456 456 4567"
+        // die();
+
         $datos = array();
         $error = array();
         $validos = 0;
@@ -170,11 +207,24 @@ class ExamenesPPFController extends Controller
             $error['id_profesional'] = 'Campo requerido id_profesional';
         }
 
-        if(empty($id_ficha_atencion))
+        /** validacion de id de ficha */
+        if( empty($id_ficha_atencion) && empty($id_ficha_otros_prof) && empty($id_ficha_gineco_obstetrica) )
         {
             $validos = 1;
-            $error['id_ficha_atencion'] = 'Campo requerido id_ficha_atencion';
+            $error['id_ficha'] = 'Campo requerido id_ficha';
         }
+        else
+        {
+            $variablesConValor = count(array_filter([$id_ficha_atencion, $id_ficha_otros_prof, $id_ficha_gineco_obstetrica]));
+            if ($variablesConValor !== 1)
+            {
+                $validos = 1;
+                $error['id_ficha'] = 'Esta enviando mas de una id_ficha';
+                $error['id_ficha_2'] = $variablesConValor;
+            }
+        }
+
+
         if(empty($id_examen))
         {
             $validos = 1;
@@ -229,6 +279,8 @@ class ExamenesPPFController extends Controller
             $examen_ppf->id_paciente = $id_paciente;
             $examen_ppf->id_profesional = $id_profesional;
             $examen_ppf->id_ficha_atencion = $id_ficha_atencion;
+            $examen_ppf->id_ficha_otros_prof = $id_ficha_otros_prof;
+            $examen_ppf->id_ficha_gineco_obstetrica = $id_ficha_gineco_obstetrica;
             $examen_ppf->id_examen = $id_examen;
             $examen_ppf->examen = $examen;
             $examen_ppf->examen_especialidad = $examen_especialidad;
@@ -237,6 +289,9 @@ class ExamenesPPFController extends Controller
             $examen_ppf->con_contraste = $con_contraste;
             $examen_ppf->codigo_fonasa = $codigo;
             $examen_ppf->archivo = $archivo;
+            $examen_ppf->sospecha = $sospecha;
+            $examen_ppf->observacion = $observacion;
+            $examen_ppf->prioridad = $prioridad;
             $examen_ppf->otro = $otro;
             //$examen_ppf->estado = 1;
 
@@ -274,6 +329,10 @@ class ExamenesPPFController extends Controller
             $filtros[] = array('id_profesional', $request->id_profesional);
         if(!empty($request->id_ficha_atencion))
             $filtros[] = array('id_ficha_atencion', $request->id_ficha_atencion);
+        if(!empty($request->id_ficha_otros_prof))
+            $filtros[] = array('id_ficha_otros_prof', $request->id_ficha_otros_prof);
+        if(!empty($request->id_ficha_gineco_obstetrica))
+            $filtros[] = array('id_ficha_gineco_obstetrica', $request->id_ficha_gineco_obstetrica);
         if(!empty($request->id_examen))
             $filtros[] = array('id_examen', 'like', $request->id_examen.'%');
         if(!empty($request->examen))
@@ -292,12 +351,52 @@ class ExamenesPPFController extends Controller
         $nombre_paciente = '';
         $id_paciente = '';
 
-        if(isset($request->id_ficha_atencion))
+        if(isset($request->id_hora_medica))
+        {
+            $registro_ficha = HoraMedica::with(['Paciente' => function($query){
+                            $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos')->get();
+                        }])
+                        ->where('id',$request->id_hora_medica)->first();
+
+            $nombre_paciente = $registro_ficha->Paciente->nombres.' '.$registro_ficha->Paciente->apellido_uno . ' '. $registro_ficha->Paciente->apellido_dos;
+            $id_paciente = $registro_ficha->Paciente->id;
+
+            // if( !empty($registro_ficha->id_ficha_atencion) )
+            // {
+
+            // }
+            // if( !empty($registro_ficha->id_ficha_otros_prof) )
+            // {
+
+            // }
+        }
+
+        else if(isset($request->id_ficha_atencion))
         {
             $registro_ficha = FichaAtencion::with(['Paciente' => function($query){
                                                     $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos')->get();
                                                 }])
                                                 ->where('id',$request->id_ficha_atencion)->first();
+
+            $nombre_paciente = $registro_ficha->Paciente->nombres.' '.$registro_ficha->Paciente->apellido_uno . ' '. $registro_ficha->Paciente->apellido_dos;
+            $id_paciente = $registro_ficha->Paciente->id;
+        }
+        else if(isset($request->id_ficha_otros_prof))
+        {
+            // $registro_ficha = FichaOtrosProfesionales::with(['Paciente' => function($query){
+            //                                         $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos')->get();
+            //                                     }])
+            //                                     ->where('id',$request->id_ficha_atencion)->first();
+
+            // $nombre_paciente = $registro_ficha->Paciente->nombres.' '.$registro_ficha->Paciente->apellido_uno . ' '. $registro_ficha->Paciente->apellido_dos;
+            // $id_paciente = $registro_ficha->Paciente->id;
+        }
+        else if(isset($request->id_ficha_gineco_obstetrica))
+        {
+            $registro_ficha = FichaGinecoObstetrica::with(['Paciente' => function($query){
+                                                    $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos')->get();
+                                                }])
+                                                ->where('id',$request->id_ficha_gineco_obstetrica)->first();
 
             $nombre_paciente = $registro_ficha->Paciente->nombres.' '.$registro_ficha->Paciente->apellido_uno . ' '. $registro_ficha->Paciente->apellido_dos;
             $id_paciente = $registro_ficha->Paciente->id;
@@ -335,14 +434,37 @@ class ExamenesPPFController extends Controller
         $error = array();
         $valido = 0;
 
-        if(empty($request->id_ficha_atencion))
+        /** validacion de id de ficha */
+        if( empty($request->id_ficha_atencion) && empty($request->id_ficha_otros_prof) && empty($request->id_ficha_gineco_obstetrica) )
         {
-            $error['id_ficha_atencion'] = 'campo requerido';
+            $error['id_ficha'] = 'Campo requerido id_ficha';
             $valido = 1;
         }
+        else
+        {
+            $variablesConValor = count(array_filter([$request->id_ficha_atencion, $request->id_ficha_otros_prof, $request->id_ficha_gineco_obstetrica]));
+            if ($variablesConValor !== 1)
+            {
+                $error['id_ficha'] = 'Esta enviando mas de una id_ficha';
+                $error['id_ficha'] = $variablesConValor;
+                $valido = 1;
+            }
+        }
+
+        // if(empty($request->id_ficha_atencion))
+        // {
+        //     $error['id_ficha_atencion'] = 'campo requerido';
+        //     $valido = 1;
+        // }
+
         if($valido == 0)
         {
-            $result = ExamenPPF::where('id_ficha_atencion',$request->id_ficha_atencion)->delete();
+            if(!empty($request->id_ficha_atencion))
+                $result = ExamenPPF::where('id_ficha_atencion',$request->id_ficha_atencion)->delete();
+            if(!empty($request->id_ficha_otros_prof))
+                $result = ExamenPPF::where('id_ficha_otros_prof',$request->id_ficha_otros_prof)->delete();
+            if(!empty($request->id_ficha_gineco_obstetrica))
+                $result = ExamenPPF::where('id_ficha_gineco_obstetrica',$request->id_ficha_gineco_obstetrica)->delete();
 
             $datos['estado'] = 1;
             $datos['msj'] = 'eliminacion de medicamentos de ficha exitosa';

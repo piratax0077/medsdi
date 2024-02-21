@@ -1,0 +1,148 @@
+<!--PROCEDIMIENTOS-->
+<div class="row bg-white shadow-sm rounded mx-1">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12 mt-3 mb-0">
+                <h6 class="f-16 text-c-blue">Procedimientos</h6>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <!--Motivo examen-->
+                <div class="form-row">
+                    <div class="form-group col-md-2" >
+                        <input type="hidden" name="solicitado_id_profesional_proced" id="solicitado_id_profesional_proced" value="">
+                        <label class="floating-label-activo-sm" for="solicitado_rut_proced">RUT</label>
+                        <input type="text" class="form-control form-control-sm" name="solicitado_rut_proced" id="solicitado_rut_proced"
+                            oninput="formatoRut(this)"
+                            onblur="cargar_profesional(this, 'solicitado_por_proced', 'solicitado_id_profesional_proced', 'div_profesional_no_inscrito_proced', 'solicitado_nombre_proced', 'solicitado_apellido_proced', 'solicitado_telefono_proced', 'solicitado_email_proced', 'div_mensaje_proced', 'mensaje_solicitado_por_proced');"
+                            onchange="cargar_profesional(rut, 'solicitado_por_proced', 'solicitado_id_profesional_proced', 'div_profesional_no_inscrito_proced', 'solicitado_nombre_proced', 'solicitado_apellido_proced', 'solicitado_telefono_proced', 'solicitado_email_proced', 'div_mensaje_proced', 'mensaje_solicitado_por_proced');"
+                            onkeyup="cargar_profesional(rut, 'solicitado_por_proced', 'solicitado_id_profesional_proced', 'div_profesional_no_inscrito_proced', 'solicitado_nombre_proced', 'solicitado_apellido_proced', 'solicitado_telefono_proced', 'solicitado_email_proced', 'div_mensaje_proced', 'mensaje_solicitado_por_proced');">
+                    </div>
+                    <div class="form-group col-md-2" >
+                        <label class="floating-label-activo-sm" for="solicitado_por_proced">Solicitado por</label>
+                        <input type="text" class="form-control form-control-sm" name="solicitado_por_proced" id="solicitado_por_proced" readonly="readonly">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <div class="form-group">
+                            <label class="floating-label-activo-sm" for="mot_examen_proced">Motivo del Examen</label>
+                            <select class="form-control form-control-sm" id="mot_examen_proced" name="mot_examen_proced" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mot_examen_proced','div_mot_examen_proced','descripcion_motivo_proced',3)">
+                                <option value="0">Seleccione</option>
+                                <option value="1">Control Rutinario</option>
+                                <option value="2">Sospecha de Patología</option>
+                                <option value="3">Otro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="div_mot_examen_proced" style="display:none">
+                            <label class="floating-label-activo-sm" for="descripcion_motivo_proced">Motivo Examen <i>(Anote Motivo)</i> </label>
+                            <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="descripcion_motivo_proced" id="descripcion_motivo_proced"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label class="floating-label-activo-sm" for="antec_especialidad_proced">Antecedentes Especialidad</label>
+                        <input type="text" class="form-control form-control-sm" data-input_igual="antec_especialidad"  name="antec_especialidad_proced" id="antec_especialidad_proced" onchange="cargarIgual('antec_especialidad_proced');">
+                    </div>
+
+                    <div class="form-group col-md-12" id="div_mensaje_proced"  style="display: none;">
+                        <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por_proced"></span>
+                    </div>
+                </div>
+                <div class="form-row" id="div_profesional_no_inscrito_proced" style="display: none;">
+                    <div class="form-group col-md-3">
+                        <label class="floating-label-activo-sm" for="solicitado_nombre_proced">Nombre</label>
+                        <input type="text" class="form-control form-control-sm"  name="solicitado_nombre_proced" id="solicitado_nombre_proced" onchange="actualizar_solicitado_por('solicitado_por_proced', 'solicitado_nombre_proced', 'solicitado_apellido_proced');">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="floating-label-activo-sm" for="solicitado_apellido_proced">Apellido</label>
+                        <input type="text" class="form-control form-control-sm"  name="solicitado_apellido_proced" id="solicitado_apellido_proced" onchange="actualizar_solicitado_por('solicitado_por_proced', 'solicitado_nombre_proced', 'solicitado_apellido_proced');">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="floating-label-activo-sm" for="solicitado_telefono_proced">Telefono</label>
+                        <input type="text" class="form-control form-control-sm"  name="solicitado_telefono_proced" id="solicitado_telefono_proced" >
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="floating-label-activo-sm" for="solicitado_email_proced">Email</label>
+                        <input type="text" class="form-control form-control-sm"  name="solicitado_email_proced" id="solicitado_email_proced" >
+                    </div>
+                </div>
+                <!-- cierre Motivo examen -->
+
+                <div class="form-row">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label class="floating-label-activo-sm">Tipo de Procedimiento</label>
+                            <select class="form-control form-control-sm js-example-basic-multiple" id="tipo_proced" name="tipo_proced" class="form-control form-control-sm" onchange="ver_seccion_otros_proc();evaluar_para_carga_detalle('tipo_proced','div_detalle_tipo_proced','otro_tipo_proced',6);" multiple="multiple">
+                                <!-- <option value="0" disabled selected>Seleccione</option> -->
+                                <option value="1">Toma Biopsia</option>
+                                <option value="2">Instalación DIU</option>
+                                <option value="3">Cambio DIU</option>
+                                <option value="4">Toma de Muestra PAP</option>
+                                <option value="5">Electro-Cauterio o Radiofrecuencia</option>
+                                <option value="6">Otro</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="div_detalle_tipo_proced" style="display:none">
+                            <label class="floating-label-activo-sm">Otro Procedimiento <i>Describa</i> </label>
+                            <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="otro_tipo_proced" id="otro_tipo_proced"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+
+                <div class="form-row" style="display:none;" id="div_seccion_biopsia">
+                    <div class="form-group col-md-2">
+                        <h6 class="float-left d-inline mt-2">BIÓPSIA</h6>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <button type="button" class="btn btn-outline-primary btn-block btn-sm mb-2" onclick="sol_biopsia_go();">Tomar Biópsia</button>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label class="floating-label">Observaciones Procedimiento</label>
+                        <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="biopsia_obs_proced" id="biopsia_obs_proced"></textarea>
+                    </div>
+                </div>
+                <div class="form-row" style="display:none;" id="div_seccion_pap">
+                    <div class="form-group col-md-2">
+                        <h6 class="float-left d-inline mt-2">PAP</h6>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <button type="button" class="btn btn-outline-primary btn-block btn-sm mb-2" onclick="toma_pap();">Tomar PAP</button>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label class="floating-label">Observaciones Procedimiento</label>
+                        <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="ex_pap_obs_proced" id="ex_pap_obs_proced"></textarea>
+                    </div>
+                </div>
+                <div class="form-row" style="display:none;" id="div_seccion_diu">
+                    <div class="form-group col-md-2">
+                        <h6 class="float-left d-inline mt-2">DIU</h6>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <button type="button" class="btn btn-outline-primary btn-block btn-sm mb-2" onclick="anticonc();">Antec diu</button>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label class="floating-label">Observaciones Procedimiento</label>
+                        <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="ex_diu_proced" id="ex_diu_proced"></textarea>
+                    </div>
+                </div>
+                <div class="form-row" style="display:none;" id="div_seccion_otro_procedimiento">
+                    <div class="form-group col-md-2">
+                        <h6 class="float-left d-inline mt-2">Otro Procedimiento</h6>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <button type="button" class="btn btn-outline-primary btn-block btn-sm mb-2" onclick="otros_proc();">Antec Otros Procedimientos</button>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label class="floating-label">Describa Procedimiento y Observaciones</label>
+                        <textarea class="form-control caja-texto form-control-sm" rows="3" onfocus="this.rows=5" onblur="this.rows=3;" name="ant_obs_proced" id="ant_obs_proced"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

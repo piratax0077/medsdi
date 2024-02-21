@@ -110,7 +110,7 @@ class TipoDependenciaController extends Controller
 
         if(!empty($request->id))
         {
-            $registros = TipoDependencia::find($$request->id);
+            $registros = TipoDependencia::find($request->id);
 
             if($registros)
             {

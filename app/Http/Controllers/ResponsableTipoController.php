@@ -110,7 +110,7 @@ class ResponsableTipoController extends Controller
 
         if(!empty($request->id))
         {
-            $registros = ResponsableTipo::find($$request->id);
+            $registros = ResponsableTipo::find($request->id);
 
             if($registros)
             {
