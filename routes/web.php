@@ -680,7 +680,7 @@ Route::group([
     /** RECETA DE LENTES */
     Route::post('/receta/lente/registro', [App\Http\Controllers\OftarmoRecetaLenteController::class, 'registrar'])->name('receta.oftalmo.lente.registrar');
     Route::get('/receta/lente/ver', [App\Http\Controllers\OftarmoRecetaLenteController::class, 'verRegistros'])->name('receta.oftalmo.lente.ver');
-	
+
 });
 
 Route::group([
@@ -1600,8 +1600,13 @@ Route::group([
     'prefix' => 'direccion/salud',
 ], function () {
     Route::get('/index', [App\Http\Controllers\DireccionSaludController::class, 'index'])->name('ministerio.home');
+
     Route::get('/ges', [App\Http\Controllers\DireccionSaludController::class, 'cargarGes'])->name('ministerio.ges');
+    Route::get('/ges/buscar', [App\Http\Controllers\DireccionSaludController::class, 'buscarGes'])->name('ministerio.ges.buscar');
+
     Route::get('/enfermedades/notificacion/obligatoria', [App\Http\Controllers\DireccionSaludController::class, 'cargarEnfNotiOblig'])->name('ministerio.enfer_noti_obliga');
+    Route::get('/enfermedades/notificacion/obligatoria/buscar', [App\Http\Controllers\DireccionSaludController::class, 'buscarEnfNotiOblig'])->name('ministerio.enfer_noti_obliga.buscar');
+
     Route::get('/control/medicamento', [App\Http\Controllers\DireccionSaludController::class, 'CargarControlMedicamento'])->name('ministerio.control_medicamento');
     Route::get('/control/farmacia', [App\Http\Controllers\DireccionSaludController::class, 'CargarControlFarmacia'])->name('ministerio.control_farmacia');
 });
