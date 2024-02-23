@@ -114,9 +114,16 @@ class MedicamentoUsoCronicoGeneralController extends Controller
                 $datos['msj'] = 'Registro Exitoso';
                 $datos['request'] = $request->all();
 
-                /** REGISTRO DE MEDICAMENTO EN RECETA */
-                $datos['registro_receta'] = static::ingresarMdicamentoNuevoAReceta($request);
-
+                if(!empty(session('lic_token')) && session('lic_token') == 1)
+                {
+                    /** REGISTRO DE MEDICAMENTO EN RECETA */
+                    $datos['registro_receta'] = static::ingresarMdicamentoNuevoAReceta($request);
+                }
+                else
+                {
+                    $datos['registro_receta']['estado'] = 0;
+                    $datos['registro_receta']['msj'] = 'no se puede agregar el medicamento a receta por no tener activo la AUTORIZACIOM de papeleria';
+                }
             }
             else
             {

@@ -415,11 +415,7 @@
                                             <div id="cpeso-med">
                                             </div>
                                             <div>
-                                                @if (!empty(session('lic_token')) && session('lic_token') == 1)
-                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento  btn-block btn-sm" onclick="agregar_a_receta('cpeso')">Agregar Medicamento a Receta</button>
-                                                @else
-                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento  btn-block btn-sm" onclick="agregar_a_receta('cpeso')" disabled="disabled">Agregar Medicamento a Receta</button>
-                                                @endif
+                                                <button type="button" class="btn btn-success-light-c btn-block btn-sm" onclick="agregar_a_receta('cpeso')">Agregar Medicamento a Receta</button>
                                             </div>
                                         </div>
                                     </div>
@@ -652,11 +648,7 @@
                                             <div id="chipertension-med">
                                             </div>
                                             <div>
-                                                @if (!empty(session('lic_token')) && session('lic_token') == 1)
-                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento  btn-block btn-sm" onclick="agregar_a_receta('chipertension')">Agregar Medicamento a Receta</button>
-                                                @else
-                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento  btn-block btn-sm" onclick="agregar_a_receta('chipertension')" disabled="disabled">Agregar Medicamento a Receta</button>
-                                                @endif
+                                                <button type="button" class="btn btn-success-light-c btn-block btn-sm" onclick="agregar_a_receta('chipertension')">Agregar Medicamento a Receta</button>
                                             </div>
                                         </div>
                                     </div>
@@ -918,11 +910,7 @@
                                             <div id="cdiabet-med">
                                             </div>
                                             <div>
-                                                @if (!empty(session('lic_token')) && session('lic_token') == 1)
-                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento  btn-block btn-sm" onclick="agregar_a_receta('cdiabet')">Agregar Medicamento a Receta</button>
-                                                @else
-                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento  btn-block btn-sm" onclick="agregar_a_receta('cdiabet')" disabled="disabled">Agregar Medicamento a Receta</button>
-                                                @endif
+                                                <button type="button" class="btn btn-success-light-c btn-block btn-sm" onclick="agregar_a_receta('cdiabet')">Agregar Medicamento a Receta</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1055,11 +1043,7 @@
                                             <div id="cinsufren-med">
                                             </div>
                                             <div>
-                                                @if (!empty(session('lic_token')) && session('lic_token') == 1)
-                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento  btn-block btn-sm" onclick="agregar_a_receta('cinsufren')">Agregar Medicamento a Receta</button>
-                                                @else
-                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento  btn-block btn-sm" onclick="agregar_a_receta('cinsufren')" disabled="disabled">Agregar Medicamento a Receta</button>
-                                                @endif
+                                                <button type="button" class="btn btn-success-light-c btn-block btn-sm" onclick="agregar_a_receta('cinsufren')">Agregar Medicamento a Receta</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1943,15 +1927,7 @@
                         html += '        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_med_cronico_patologia(\''+value.id+'\');"><i class="feather icon-x"></i></button>';
                         html += '    </td>';
                         html += '    <td class="text-center align-middle">';
-
-                        if( lic_token != '' && lic_estado == 1 && $('#descripcion_hipotesis').val() != '')
-                        {
-                            html += '        <input type="checkbox" data-id="'+value.id+'" class="btn_agregar_medicamento" name="medicamento_cronico_'+tipo_enfermedad+'[]" id="medicamento_cronico_'+tipo_enfermedad+'_'+value.id+'">';
-                        }
-                        else
-                        {
-                            html += '        <input type="checkbox" data-id="'+value.id+'" class="btn_agregar_medicamento" name="medicamento_cronico_'+tipo_enfermedad+'[]" id="medicamento_cronico_'+tipo_enfermedad+'_'+value.id+'" disabled>';
-                        }
+                        html += '        <input type="checkbox" data-id="'+value.id+'" name="medicamento_cronico_'+tipo_enfermedad+'[]" id="medicamento_cronico_'+tipo_enfermedad+'_'+value.id+'">';
                         html += '    </td>';
                         html += '</tr>';
                     });
@@ -1967,7 +1943,6 @@
                 html += '</tbody>';
                 html += '</table>';
                 $('#'+tipo_enfermedad+'-med').html(html);
-                $('#descripcion_hipotesis').trigger('keyup');
             }
         })
         .fail(function(jqXHR, ajaxOptions, thrownError) {
@@ -2238,27 +2213,13 @@
                     console.log('-----------------------');
                     if(data.estado == 1)
                     {
-                        if(data.registro_receta.estado == 0)
-                        {
-                            swal({
-                                title: "Medicamento Cronico.",
-                                text: "Medicamento Registrado con exito.\nMedicamento no agregado a receta por no tener activo Autorización de papeleria.",
-                                icon: "success",
-                                // buttons: "Aceptar",
-                                //SuccessMode: true,
-                            });
-                        }
-                        else
-                        {
-                            swal({
-                                title: "Medicamento Cronico.",
-                                text: "Medicamento Registrado con exito.",
-                                icon: "success",
-                                // buttons: "Aceptar",
-                                //SuccessMode: true,
-                            });
-                        }
-
+                        swal({
+                            title: "Medicamento Cronico.",
+                            text: "Medicamento Registrado con exito.",
+                            icon: "success",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        });
                         $('#nombre_medicamentocron_'+tipo+'').val('');
                         $('#id_medicamentocron_'+tipo+'').val('');
 
@@ -2683,51 +2644,6 @@
         });
 
     }
-
-    function getCantCompCronica(div_dosis, div_comp)
-    {
-        var cant_comp = $('#'+div_dosis+' option:selected').attr('data-cant_comp');
-        console.log(cant_comp);
-
-        let url = "{{ route('presentacion.getCantComp') }}";
-        $.ajax({
-
-                url: url,
-                type: "get",
-                data: {
-
-                    cant_comp: cant_comp,
-
-                },
-            })
-            .done(function(data) {
-                console.log(data)
-
-                if (data != null) {
-
-                    data = JSON.parse(data);
-                    console.log(data)
-                    let select_cant_comp = $('#'+div_comp);
-
-                    select_cant_comp.find('option').remove();
-                    select_cant_comp.append('<option value="0">Seleccione</option>');
-                    $(data).each(function(i, v) { // indice, valor
-                        select_cant_comp.append('<option value="' + v.id + '">' + v.cant +'</option>');
-                    })
-                    select_cant_comp.append('<option value="999">Otra Cantidad</option>');
-
-                } else {
-
-
-
-                }
-
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-    };
     /** FIN CRONICO */
 
     /** MEDICAMENTOS */
