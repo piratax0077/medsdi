@@ -114,7 +114,7 @@ class MedicamentoUsoCronicoGeneralController extends Controller
                 $datos['msj'] = 'Registro Exitoso';
                 $datos['request'] = $request->all();
 
-                if(!empty(session('lic_token')) && session('lic_token') == 1)
+                if(!empty(session('lic_token')) && session('lic_estado') == 1)
                 {
                     /** REGISTRO DE MEDICAMENTO EN RECETA */
                     $datos['registro_receta'] = static::ingresarMdicamentoNuevoAReceta($request);
