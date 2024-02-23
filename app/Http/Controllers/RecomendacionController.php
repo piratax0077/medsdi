@@ -560,14 +560,18 @@ class RecomendacionController extends Controller
             $filtros[] = array('activo', $request->id_paciente);
         if(!empty($request->id_profesional))
             $filtros[] = array('aficionado', $request->id_profesional);
-        if(!empty($request->id_tipo_control))
-            $filtros[] = array('control', $request->id_tipo_control);
+        // if(!empty($request->id_tipo_control))
+        //     $filtros[] = array('control', $request->id_tipo_control);
         if(!empty($request->token_doc))
             $filtros[] = array('cod_doc', $request->token_doc);
         if(!empty($request->token_auto))
             $filtros[] = array('cod_auto', $request->token_auto);
 
-        $registros = Recomendacion::where($filtros)->get();
+        $registros = Recomendacion::where($filtros)
+                                    ->tipoControl($request->id_tipo_control)
+                                    ->anio($request->anio)
+                                    ->mes($request->mes)
+                                    ->get();
 
         if($registros)
         {

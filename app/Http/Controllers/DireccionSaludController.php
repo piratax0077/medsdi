@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\DeclaracionEno;
 use App\Models\GesRegistros;
+use App\Models\Paciente;
+use App\Models\Profesional;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -243,10 +245,91 @@ class DireccionSaludController extends Controller
     }
     /** FIN ENO */
 
+    /** INICIO MEDICAMENTOS CONTROLADOS */
     public function CargarControlMedicamento()
     {
-        return view('direccion_salud.escritorio_control_medicamento')->with([]);
+        $anio = date('Y');
+        $mes = date('m');
+
+        $consulta_req = new Request( array(
+                                        'id_tipo_control' => '1,2,3,4,5',
+                                        'anio' => $anio,
+                                        'mes' => $mes,
+                                    ));
+        $registros = (object)RecomendacionController::verRecomendaciones($consulta_req);
+        if($registros->estado == 1)
+        {
+            foreach ($registros->registros as $key => $value)
+            {
+                $value = (object)$value;
+                $registros->registros[$key]['paciente'] = Paciente::select('id', 'nombres', 'apellido_uno', 'apellido_dos', 'rut')->find($value->id_paciente);
+                $registros->registros[$key]['profesional'] = Profesional::select('id', 'nombre', 'apellido_uno', 'apellido_dos', 'rut')->find($value->id_profesional);
+            }
+        }
+
+        return view('direccion_salud.escritorio_control_medicamento')->with([
+            'registros' => $registros->registros,
+            'anio' => $anio,
+            'mes' => $mes,
+        ]);
     }
+    public function buscarControlMedicamento(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->anio))
+        {
+            $error['anio'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->mes))
+        {
+            $error['mes'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $consulta_req = new Request( array(
+                'id_tipo_control' => '1,2,3,4,5',
+                'anio' => $request->anio,
+                'mes' => $request->mes,
+            ));
+            $registros = (object)RecomendacionController::verRecomendaciones($consulta_req);
+
+            if($registros->estado == 1)
+            {
+                if($registros->estado == 1)
+                {
+                    foreach ($registros->registros as $key => $value)
+                    {
+                        $value = (object)$value;
+                        $registros->registros[$key]['paciente'] = Paciente::select('id', 'nombres', 'apellido_uno', 'apellido_dos', 'rut')->find($value->id_paciente);
+                        $registros->registros[$key]['profesional'] = Profesional::select('id', 'nombre', 'apellido_uno', 'apellido_dos', 'rut')->find($value->id_profesional);
+                    }
+                }
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros->registros;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+    /** FIN MEDICAMENTOS CONTROLADOS */
+
     public function CargarControlFarmacia()
     {
         return view('direccion_salud.escritorio_control_farmacia')->with([]);

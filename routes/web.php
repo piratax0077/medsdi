@@ -1608,6 +1608,8 @@ Route::group([
     Route::get('/enfermedades/notificacion/obligatoria/buscar', [App\Http\Controllers\DireccionSaludController::class, 'buscarEnfNotiOblig'])->name('ministerio.enfer_noti_obliga.buscar');
 
     Route::get('/control/medicamento', [App\Http\Controllers\DireccionSaludController::class, 'CargarControlMedicamento'])->name('ministerio.control_medicamento');
+    Route::get('/control/medicamento/buscar', [App\Http\Controllers\DireccionSaludController::class, 'buscarControlMedicamento'])->name('ministerio.control_medicamento.buscar');
+
     Route::get('/control/farmacia', [App\Http\Controllers\DireccionSaludController::class, 'CargarControlFarmacia'])->name('ministerio.control_farmacia');
 });
 
