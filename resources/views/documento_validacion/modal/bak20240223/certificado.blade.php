@@ -1,19 +1,19 @@
 <div class="modal fade" id="modal_validar_certificado">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-c-blue" id="modal_validar_certificadoLabel">Validar Certificado de Documento</h5>
+                <h5 class="modal-title" id="modal_validar_certificadoLabel">Validar Certificado de Documento</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div id="cuerpo_modal_validar_certificado">
+                <div class="" id="cuerpo_modal_validar_certificado">
 
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal" aria-label="Close"> Cerrar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cerrar</button>
             </div>
         </div>
     </div>
@@ -51,17 +51,17 @@
                     var html = '';
                     /** DOCUMENTO */
                     html += '<div class="row">';
-                    html += '   <div class="col-12 font-weight-bold">Tipo de Documento </div><div class="col-12 mb-2">'+data.documento.tipo_control+'</div>';
-                    html += '   <div class="col-12 font-weight-bold">Cantidad de Item</div><div class="col-12 mb-2">'+data.documento.cantidad_item+'</div>';
-                    html += '   <div class="col-12 font-weight-bold">Fecha de Elaboración </div><div class="col-12 mb-2">'+data.documento.fecha_elaboracion+'</div>';
+                    html += '   <div class="col-6">Tipo de Documento: </div><div class="col-6">'+data.documento.tipo_control+'</div>';
+                    html += '   <div class="col-6">Cantidad de Item: </div><div class="col-6">'+data.documento.cantidad_item+'</div>';
+                    html += '   <div class="col-6">Fecha de Elaboración: </div><div class="col-6">'+data.documento.fecha_elaboracion+'</div>';
                     html += '</div>';
                     /** PROFESIONAL */
-                    html += '<div class="row">';
-                    html += '   <div class="col-12 font-weight-bold"> Profesional Responsable </div><div class="col-12 mb-1">'+data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos+'<br>'+data.profesional.rut+'</span></div>';
+                    html += '<div class="row mt-2">';
+                    html += '   <div class="col-6">Profesional Responsable: </div><div class="col-6" style="line-height: 0.8rem;">'+data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos+'<br><span style="font-size:9px;">'+data.profesional.rut+'</span></div>';
                     html += '</div>';
                     /** PACIENTE */
                     html += '<div class="row mt-2">';
-                    html += '   <div class="col-12 font-weight-bold mb-1">Paciente Receptor </div><div class="col-12">'+data.paciente.nombre+' '+data.paciente.apellido_uno+' '+data.paciente.apellido_dos+'<br><span class="mt-2">'+data.paciente.rut+'</span></div>';
+                    html += '   <div class="col-6">Paciente Receptor: </div><div class="col-6" style="line-height: 0.8rem;">'+data.paciente.nombre+' '+data.paciente.apellido_uno+' '+data.paciente.apellido_dos+'<br><span style="font-size:9px;">'+data.paciente.rut+'</span></div>';
                     html += '</div>';
 
                     $('#cuerpo_modal_validar_certificado').html(html);

@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal" aria-label="Close"> Cerrar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cerrar</button>
             </div>
         </div>
     </div>
@@ -52,23 +52,23 @@
                     {
                         var html = '';
                         /** FIRMA DE DOCUMENTO */
-                        html += '<div class="row px-3">';
-                        html += '   <div class="col-12 alert alert-success" role="alert"">'+data.profesional_firma.msj+'</div>';
-                        html += '</div>';
                         html += '<div class="row">';
-                        html += '   <div class="col-12 font-weight-bold">Fecha Autorizacion de Firma </div><div class="col-12 mb-2"><span>'+data.profesional_firma.fecha_autorizacion+'</span></div>';
+                        html += '   <div class="col-12"><span style="color:green;">'+data.profesional_firma.msj+'</span></div>';
+                        html += '</div>';
+                        html += '<div class="row mt-2">';
+                        html += '   <div class="col-6">Fecha Autorizacion de Firma: </div><div class="col-6"><span style="font-weight: bold;">'+data.profesional_firma.fecha_autorizacion+'</span></div>';
                         html += '</div>';
 
                         /** PROFESIONAL */
-                        html += '<div class="row">';
-                        html += '   <div class="col-12 font-weight-bold">Profesional Responsable </div><div class="col-12 mb-2"><span>'+data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos+'<br><span">'+data.profesional.rut+'</span></span></div>';
+                        html += '<div class="row mt-2">';
+                        html += '   <div class="col-6">Profesional Responsable: </div><div class="col-6" style="line-height: 0.8rem;"><span style="font-weight: bold;">'+data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos+'<br><span style="font-size:9px;">'+data.profesional.rut+'</span></span></div>';
                         html += '</div>';
 
                         /** DOCUMENTO */
                         html += '<div class="row">';
-                        html += '   <div class="col-12 font-weight-bold">Tipo de Documento </div><div class="col-12 mb-2">'+data.documento.tipo_control+'</div>';
-                        html += '   <div class="col-12 font-weight-bold">Cantidad de Item</div><div class="col-12 mb-2">'+data.documento.cantidad_item+'</div>';
-                        html += '   <div class="col-12 font-weight-bold">Fecha de Elaboración </div><div class="col-12 mb-2">'+data.documento.fecha_elaboracion+'</div>';
+                        html += '   <div class="col-6">Tipo de Documento: </div><div class="col-6">'+data.documento.tipo_control+'</div>';
+                        html += '   <div class="col-6">Cantidad de Item: </div><div class="col-6">'+data.documento.cantidad_item+'</div>';
+                        html += '   <div class="col-6">Fecha de Elaboración: </div><div class="col-6">'+data.documento.fecha_elaboracion+'</div>';
                         html += '</div>';
 
                         // /** PACIENTE */

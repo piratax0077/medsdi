@@ -8,12 +8,12 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div  id="cuerpo_modal_validar_profesional_documento">
+                <div class="" id="cuerpo_modal_validar_profesional_documento">
 
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal" aria-label="Close"> Cerrar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cerrar</button>
             </div>
         </div>
     </div>
@@ -53,24 +53,24 @@
                         var html = '';
 
                         /** PROFESIONAL */
-                        html += '<div class="row">';
-                        html += '   <div class="col-12 font-weight-bold">Nombre </div><div class="col-12 mb-2"><span>'+data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos+'<br><span>'+data.profesional.rut+'</span></span></div>';
-                        html += '   <div class="col-12 font-weight-bold">Email </div><div class="col-12 mb-2">'+data.profesional.email+'</div>';
+                        html += '<div class="row mt-2">';
+                        html += '   <div class="col-6">Nombre: </div><div class="col-6" style="line-height: 0.8rem;"><span style="font-weight: bold;">'+data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos+'<br><span style="font-size:9px;">'+data.profesional.rut+'</span></span></div>';
+                        html += '   <div class="col-6">Email: </div><div class="col-6" style="">'+data.profesional.email+'</div>';
                         // html += '   <div class="col-6">Especialidad: </div><div class="col-6" style="">'+data.profesional.especialidad+'</div>';
                         if(data.profesional.tipo_especialidad != null)
-                        html += '   <div class="col-12 font-weight-bold">Especialidad </div><div class="col-12 mb-2">'+data.profesional.tipo_especialidad+'</div>';
+                        html += '   <div class="col-6">Especialidad: </div><div class="col-6" style="">'+data.profesional.tipo_especialidad+'</div>';
                         if(data.profesional.sub_tipo_especialidad != null)
-                        html += '   <div class="col-12 font-weight-bold">Tipo Especialidad </div><div class="col-12 mb-2">'+data.profesional.sub_tipo_especialidad+'</div>';
+                        html += '   <div class="col-6">Tipo Especialidad: </div><div class="col-6" style="">'+data.profesional.sub_tipo_especialidad+'</div>';
                         if(data.profesional.certificado != null)
-                        html += '   <div class="col-12 font-weight-bold">Certificado </div><div class="col-12 mb-2">'+data.profesional.certificado+'</div>';
+                        html += '   <div class="col-6">Certificado: </div><div class="col-6" style="">'+data.profesional.certificado+'</div>';
                         if(data.profesional.numero_certificado != null)
-                        html += '   <div class="col-12 font-weight-bold">Numero Certificado </div><div class="col-12 mb-2">'+data.profesional.numero_certificado+'</div>';
+                        html += '   <div class="col-6">Numero Certificado: </div><div class="col-6" style="">'+data.profesional.numero_certificado+'</div>';
                         html += '</div>';
 
                         /** DOCUMENTO */
                         html += '<div class="row">';
-                        html += '   <div class="col-12 font-weight-bold">Tipo de Documento </div><div class="col-12 mb-2">'+data.documento.tipo_control+'</div>';
-                        html += '   <div class="col-12 font-weight-bold">Fecha de Elaboración: </div><div class="col-12 mb-2">'+data.documento.fecha_elaboracion+'</div>';
+                        html += '   <div class="col-6">Tipo de Documento: </div><div class="col-6">'+data.documento.tipo_control+'</div>';
+                        html += '   <div class="col-6">Fecha de Elaboración: </div><div class="col-6">'+data.documento.fecha_elaboracion+'</div>';
                         // html += '   <div class="col-6">Cantidad de Item: </div><div class="col-6">'+data.documento.cantidad_item+'</div>';
                         html += '</div>';
 

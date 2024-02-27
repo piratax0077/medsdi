@@ -8,12 +8,12 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div id="cuerpo_modal_validar_fecha_documento">
+                <div class="" id="cuerpo_modal_validar_fecha_documento">
 
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal" aria-label="Close"> Cerrar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cerrar</button>
             </div>
         </div>
     </div>
@@ -53,23 +53,23 @@
                         var html = '';
                         /** DOCUMENTO */
                         html += '<div class="row">';
-                        html += '   <div class="col-12 font-weight-bold">Fecha de Elaboración </div><div class="col-12 mb-2"><span>'+data.documento.fecha_elaboracion+'</div>';
+                        html += '   <div class="col-6">Fecha de Elaboración: </div><div class="col-6"><span style="font-weight: bold;">'+data.documento.fecha_elaboracion+'</div>';
                         if(data.documento.dias_elaborado < 30)
-                            html += '   <div class="col-12 font-weight-bold">Dias desde elaboración </div><div class="col-12 mb-2"><span>'+data.documento.dias_elaborado+' Día(s)</div>';
+                            html += '   <div class="col-6">Dias desde elaboracion: </div><div class="col-6"><span style="font-weight: bold;color:green;">'+data.documento.dias_elaborado+' Día(s)</div>';
                         else
-                            html += '   <div class="col-12 font-weight-bold">Dias desde elaboración </div><div class="col-12 font-weight-bold text-danger mb-2"><span>'+data.documento.dias_elaborado+' Día(s)</div>';
-                        html += '   <div class="col-12 font-weight-bold">Tipo de Documento </div><div class="col-12 mb-2">'+data.documento.tipo_control+'</div>';
+                            html += '   <div class="col-6">Dias desde elaboracion: </div><div class="col-6"><span style="font-weight: bold;color:red;">'+data.documento.dias_elaborado+' Día(s)</div>';
+                        html += '   <div class="col-6">Tipo de Documento: </div><div class="col-6">'+data.documento.tipo_control+'</div>';
                         // html += '   <div class="col-6">Cantidad de Item: </div><div class="col-6">'+data.documento.cantidad_item+'</div>';
                         html += '</div>';
 
                         /** PROFESIONAL */
-                        html += '<div class="row mb-2">';
-                        html += '   <div class="col-12 font-weight-bold">Profesional Responsable </div><div class="col-12">'+data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos+'<br><span>'+data.profesional.rut+'</span></div>';
+                        html += '<div class="row mt-2">';
+                        html += '   <div class="col-6">Profesional Responsable: </div><div class="col-6" style="line-height: 0.8rem;">'+data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos+'<br><span style="font-size:9px;">'+data.profesional.rut+'</span></div>';
                         html += '</div>';
 
                         /** PACIENTE */
-                        html += '<div class="row mb-2">';
-                        html += '   <div class="col-12 font-weight-bold">Paciente Receptor</div><div class="col-12">'+data.paciente.nombre+' '+data.paciente.apellido_uno+' '+data.paciente.apellido_dos+'<br><span>'+data.paciente.rut+'</span></div>';
+                        html += '<div class="row mt-2">';
+                        html += '   <div class="col-6">Paciente Receptor: </div><div class="col-6" style="line-height: 0.8rem;">'+data.paciente.nombre+' '+data.paciente.apellido_uno+' '+data.paciente.apellido_dos+'<br><span style="font-size:9px;">'+data.paciente.rut+'</span></div>';
                         html += '</div>';
 
                         $('#cuerpo_modal_validar_fecha_documento').html(html);

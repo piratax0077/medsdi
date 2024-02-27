@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal" aria-label="Close"> Cerrar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cerrar</button>
             </div>
         </div>
     </div>
@@ -52,15 +52,15 @@
 
                         var html = '';
                         /** PACIENTE */
-                        html += '<div class="row">';
-                        html += '   <div class="col-6 font-weight-bold">Nombre </div><div class="col-12 mb-2"><span>'+data.paciente.nombre+' '+data.paciente.apellido_uno+' '+data.paciente.apellido_dos+'<br><span class="mb-2">'+data.paciente.rut+'</span></span></div>';
-                        html += '   <div class="col-12 font-weight-bold">Email </div><div class="col-12 mb-2">'+data.paciente.email+'</div>';
+                        html += '<div class="row mt-2">';
+                        html += '   <div class="col-6">Nombre: </div><div class="col-6" style="line-height: 0.8rem;"><span style="font-weight: bold;">'+data.paciente.nombre+' '+data.paciente.apellido_uno+' '+data.paciente.apellido_dos+'<br><span style="font-size:9px;">'+data.paciente.rut+'</span></span></div>';
+                        html += '   <div class="col-6">Email: </div><div class="col-6" style="">'+data.paciente.email+'</div>';
                         html += '</div>';
 
                         /** DOCUMENTO */
                         html += '<div class="row">';
-                        html += '   <div class="col-12 font-weight-bold">Tipo de Documento</div><div class="col-12 mb-2">'+data.documento.tipo_control+'</div>';
-                        html += '   <div class="col-12 font-weight-bold">Fecha de Elaboración</div><div class="col-12 mb-2">'+data.documento.fecha_elaboracion+'</div>';
+                        html += '   <div class="col-6">Tipo de Documento: </div><div class="col-6">'+data.documento.tipo_control+'</div>';
+                        html += '   <div class="col-6">Fecha de Elaboración: </div><div class="col-6">'+data.documento.fecha_elaboracion+'</div>';
                         // html += '   <div class="col-6">Cantidad de Item: </div><div class="col-6">'+data.documento.cantidad_item+'</div>';
                         html += '</div>';
 
