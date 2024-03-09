@@ -60,7 +60,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info pt-3 pb-2">
-                <h5 class="modal-title text-white text-center">Tomar hora2</h5>
+                <h5 class="modal-title text-white text-center">Tomar hora</h5>
                 <button id="le_cerrar_tomar_hora" type="button" class="close text-white close_le_agenda_agregar_paciente" onclick="$('#le_agenda_agregar_paciente').modal('hide');" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -399,7 +399,23 @@
         let id_lugar_atencion = $('#le_reserva_hora_id_lugar_atencion').val();
         let id_asistente = $('#le_reserva_hora_id_asistente').val();
         let origen = $('#le_reserva_hora_origen').val();
+        let tipo_agenda = $('#id_tipo_agenda').val();
+        var tipo_agenda_text = 'C';
 
+        switch (tipo_agenda) {
+            case '1':
+                tipo_agenda_text = 'C';//CONSULTA
+                break;
+            case '2':
+                tipo_agenda_text = 'D';//DENTAL
+                break;
+            case '3':
+                tipo_agenda_text = 'T';//TELEMEDICINA
+                break;
+            case '4':
+                tipo_agenda_text = 'E';//EXAMEN
+                break;
+        }
 
         $.ajax({
                 url: url,
@@ -412,6 +428,7 @@
                     id_profesional: id_profesional,
                     id_asistente: id_asistente,
                     origen: origen,
+                    tipo_hora_medica: tipo_agenda_text,
                 }
             })
             .done(function(data) {

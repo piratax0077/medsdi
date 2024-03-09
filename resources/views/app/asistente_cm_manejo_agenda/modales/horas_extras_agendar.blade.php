@@ -391,7 +391,23 @@
         let id_lugar_atencion = $('#he_reserva_hora_id_lugar_atencion').val();
         let id_asistente = $('#he_reserva_hora_id_asistente').val();
         let origen = $('#he_reserva_hora_origen').val();
+        let tipo_agenda = $('#id_tipo_agenda').val();
+        var tipo_agenda_text = 'C';
 
+        switch (tipo_agenda) {
+            case '1':
+                tipo_agenda_text = 'C';//CONSULTA
+                break;
+            case '2':
+                tipo_agenda_text = 'D';//DENTAL
+                break;
+            case '3':
+                tipo_agenda_text = 'T';//TELEMEDICINA
+                break;
+            case '4':
+                tipo_agenda_text = 'E';//EXAMEN
+                break;
+        }
 
         $.ajax({
                 url: url,
@@ -404,6 +420,7 @@
                     id_profesional: id_profesional,
                     id_asistente: id_asistente,
                     origen: origen,
+                    tipo_hora_medica: tipo_agenda_text,
                 }
             })
             .done(function(data) {

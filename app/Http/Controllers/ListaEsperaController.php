@@ -164,7 +164,10 @@ class ListaEsperaController extends Controller
             $asistente = Asistente::where('id_usuario', Auth::user()->id )->first();
 
             $registro = new ListaEspera();
-            $registro->id_institucion = $institucion->id;
+
+            if($institucion)
+                $registro->id_institucion = $institucion->id;
+
             $registro->id_lugar_atencion = $request->id_lugar_atencion;
             if($asistente)
                 $registro->id_asistente = $asistente->id;

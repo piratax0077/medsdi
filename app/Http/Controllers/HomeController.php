@@ -31,13 +31,16 @@ class HomeController extends Controller
             return view('auth.Registros.ingreso_registro');
         }
         $usuario = User::where('id', Auth::user()->id)->first();
-        $roles = $usuario->roles()->get();
+        $roles = $usuario->roles()->orderBy('id', 'DESC')->get();
+        $roles_principal = $usuario->roles()->orderBy('id', 'DESC')->first();
 
-        if (count($roles) > 1) {
-            return redirect('/Acceso');
-        }
-		
-        switch ($usuario->roles()->first()->name) {
+        // if (count($roles) > 1) {
+        //     return redirect('/Acceso');
+
+        // }
+
+        // switch ($usuario->roles()->first()->name) {
+        switch ($roles_principal->name) {
             case 'Admin':
                 return redirect('/Acceso');
                 break;
@@ -56,7 +59,7 @@ class HomeController extends Controller
             case 'AsistenteCaja': // asistente de caja (institucion)
                 return redirect()->route('asistentecm.home');
                 break;
-			case 'AsistenteDentalTecn':// asistente tecnico dental
+            case 'AsistenteDentalTecn':// asistente tecnico dental
                 return redirect()->route('asistentedentaltecn.home');
                 break;
             case 'AsistenteDental':// asistente dental

@@ -196,7 +196,7 @@
 @endsection
 
 
-@section('modales')
+@section('modals')
     @include('general.asistentes.modal_consulta_agenda')
 
     @include('app.asistente.modales.lista_espera')
