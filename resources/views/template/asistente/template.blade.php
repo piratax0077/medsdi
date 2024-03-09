@@ -639,7 +639,7 @@
                                         // right: 'timeGridWeek,listWeek'
                                         right: 'timeGridWeek,listWeek'
                                     },
-                                    weekends: false,
+                                    weekends: true,
                                     nowIndicator: true,
                                     selectable: true,
                                     //dayMaxEvents: true,
@@ -1041,10 +1041,18 @@
                                 var tem_hiddenDays = info_profesional_seleccionado.horario_data.horario_agenda.split(",");
                                 var tem_hiddenDays2 =[];
 
+                                console.log('*******tem_hiddenDays*******')
+                                console.log(tem_hiddenDays)
+                                console.log('*******fin tem_hiddenDays*******')
+
                                 $.each(tem_hiddenDays, function(key, value){
-                                    {{--  console.log(value);  --}}
+                                    console.log(value);
                                     tem_hiddenDays2.push(parseInt(value));
                                 });
+
+                                console.log('*************tem_hiddenDays2*************');
+                                console.log(tem_hiddenDays2);
+                                console.log('*************fin tem_hiddenDays2*************');
 
                                 CalendarEl.setOption('hiddenDays',tem_hiddenDays2  );
                                 CalendarEl.setOption('businessHours', data_businessHours );

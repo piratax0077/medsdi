@@ -697,7 +697,7 @@
                                         },
                                         // timeGrid: 60,
                                         //navLinks: true,
-                                        weekends: false,
+                                        weekends: true,
                                         nowIndicator: true,
                                         selectable: true,
                                         //dayMaxEvents: true,

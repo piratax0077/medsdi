@@ -1038,7 +1038,7 @@ class DentalController extends Controller
 
 
 
-            $horario_agenda = '1,2,3,4,5,6,7';
+            $horario_agenda = '0,1,2,3,4,5,6';
 
             foreach ($horario as $hor) {
 
@@ -1136,7 +1136,7 @@ class DentalController extends Controller
 
 
 
-            $horario_agenda = '1,2,3,4,5,6,7';
+            $horario_agenda = '0,1,2,3,4,5,6';
 
             foreach ($horario as $hor) {
 
@@ -1232,7 +1232,7 @@ class DentalController extends Controller
 
 
 
-            $horario_agenda = '1,2,3,4,5,6,7';
+            $horario_agenda = '0,1,2,3,4,5,6';
 
             foreach ($horario as $hor) {
 

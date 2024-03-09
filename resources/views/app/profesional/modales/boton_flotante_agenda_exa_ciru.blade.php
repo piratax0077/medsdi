@@ -120,7 +120,7 @@
                                         // right: 'timeGridWeek,listWeek'
                                         right: 'timeGridWeek,listWeek'
                                     },
-                                    weekends: false,
+                                    weekends: true,
                                     nowIndicator: true,
                                     selectable: true,
                                     //dayMaxEvents: true,

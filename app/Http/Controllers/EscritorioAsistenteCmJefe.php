@@ -237,7 +237,7 @@ class EscritorioAsistenteCmJefe extends Controller
             {
 
                 $horario_data = array();
-                $horario_agenda = '1,2,3,4,5,6,7';
+                $horario_agenda = '0,1,2,3,4,5,6';
                 $periodo_agenda = '';
                 $periodo_agenda_temp = '01:00';
                 $hora_inicio_agenda = '';

@@ -544,7 +544,7 @@
                                         <option value="1">Atención General</option>
                                         <option value="2">Atención Dental</option>
                                         <option value="3">Atención Telemedicina</option>
-                                        <option value="4">Examene</option>
+                                        <option value="4">Exámenes</option>
                                     </select>
                                 </div>
                             </div>
@@ -552,14 +552,14 @@
                                 <div class="form-group fill">
                                     <label class="floating-label">Día </label>
                                     <select name="dia_horario" id="dia_horario" class=" form-control">
-                                        <option value="0">Seleccione d&iacute;a de atenci&oacute;n</option>
+                                        <option value="">Seleccione d&iacute;a de atenci&oacute;n</option>
                                         <option value="1">Lunes</option>
                                         <option value="2">Martes</option>
                                         <option value="3">Mi&eacute;rcoles</option>
                                         <option value="4">Jueves</option>
                                         <option value="5">Viernes</option>
                                         <option value="6">S&aacute;bado</option>
-                                        <option value="7">Domingo</option>
+                                        <option value="0">Domingo</option>
                                     </select>
                                 </div>
                             </div>

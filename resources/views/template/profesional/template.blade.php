@@ -3821,7 +3821,7 @@
 
 
             let dia = $('#dia_horario').val();
-            if (dia == 0) {
+            if (dia == '') {
                 swal({
                     title: "Error",
                     text: "Debe ingresar un dia",
