@@ -17,35 +17,34 @@
                                     <tr>
                                         <th scope="row">
                                             <strong>Rut</strong>
+                                        </th>
                                         <td>
                                             <span id="datos_consulta_rut"></span>
                                         </td>
-
-                                        </th>
                                     </tr>
                                     <tr>
                                         <th scope="row">
                                             <strong>Nombre</strong>
+                                        </th>
                                         <td>
                                             <span id="datos_consulta_nombre"></span>
                                         </td>
-                                        </th>
                                     </tr>
                                     <tr>
                                         <th scope="row">
                                             <strong>Fecha Nacimiento</strong>
+                                        </th>
                                         <td>
                                             <span id="datos_consulta_edad"></span>
                                         </td>
-                                        </th>
                                     </tr>
                                     <tr>
                                         <th scope="row">
                                             <strong>Sexo</strong>
+                                        </th>
                                         <td>
                                             <span id="datos_consulta_sexo"></span>
                                         </td>
-                                        </th>
                                     </tr>
                                 </tbody>
                             </table>

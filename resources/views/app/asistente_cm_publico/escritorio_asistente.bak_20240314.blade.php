@@ -1,27 +1,28 @@
-@extends('template.asistente_cm.template')
+@extends('template.asistente_cm_publico.template')
+
 
 @section('page-styles')
     <link href='{{ asset('css/estilos_boton_agen_examenes.css') }}' rel='stylesheet' />
 @endsection
 
 @section('content')
-
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
+
             <!--Header-->
-            <div class="page-header mb-2">
+            <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio Asistente Jefa de Caja</h5>
+                                <h5 class="m-b-10 font-weight-bold">Escritorio Asistente Institución</h5>
                             </div>
-                            <!--<ul class="breadcrumb">
+                            {{-- <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('asistentejcm.home') }}">Mi Escritorio </a>
+                                    <a href="{{ route('asistentecm.home') }}">Mi Escritorio </a>
                                 </li>
-                            </ul>-->
+                            </ul> --}}
                         </div>
                     </div>
                 </div>
@@ -34,13 +35,26 @@
                     <div class="card-deck">
 
                         <div class="card subir px-4 py-2">
-                            <a href="{{ ROUTE('asistentejcm.buscar_paciente') }}">
+                            <a href="{{ ROUTE('asistentecm.confirmar_hora') }}">
                                 <div class="row my-auto">
                                     <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-40 mt-0 " src="{{ asset('images/iconos/pacientes.svg') }}">
+                                        <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
                                     </div>
                                     <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="text-left d-inline">Buscar Pacientes</h5>
+                                        <h5 class="mt-1 mb-0">Confirmar Hora</h5>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="card subir px-4 py-2">
+                            <a href="{{ ROUTE('asistentecm.buscar_paciente') }}">
+                                <div class="row my-auto">
+                                    <div class="col-md-4 col-xs-12 d-inline">
+                                        <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                    </div>
+                                    <div class="col-md-8 col-xs-12 d-inline">
+                                        <h5 class="mt-1 mb-0">Buscar Pacientes</h5>
                                     </div>
                                 </div>
                             </a>
@@ -51,10 +65,10 @@
                             <a href="{{ ROUTE('asistente.reservar_hora') }}">
                                 <div class="row my-auto">
                                     <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-40 mt-0 " src="{{ asset('images/iconos/profesional_2.svg') }}">
+                                        <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/profesional_2.svg') }}">
                                     </div>
                                     <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="text-left">Reservar Hora Médica</h5>
+                                        <h5 class="mt-1 mb-0">Reservar Hora Médica</h5>
                                     </div>
                                 </div>
                             </a>
@@ -62,43 +76,57 @@
                         --}}
 
                         <div class="card subir px-4 py-2">
-                            <a href="{{ ROUTE('asistentejcm.mis_profesionales') }}">
+                            <a href="{{ ROUTE('asistentecm.mis_profesionales') }}">
                                 <div class="row my-auto">
                                     <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-40 mt-0 " src="{{ asset('images/iconos/agenda.svg') }}">
+                                        <img class="wid-30 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
                                     </div>
                                     <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="text-left">Profesionales</h5>
+                                        <h5 class="mt-1 mb-0">Profesionales</h5>
                                     </div>
                                 </div>
                             </a>
                         </div>
 
+                        {{--
                         <div class="card subir px-4 py-2">
-                            <a href="{{ ROUTE('asistentejcm.administracion_asistente') }}">
+                            <a href="{{ ROUTE('asistente.administracion_asistente') }}">
                                 <div class="row my-auto">
                                     <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-40 mt-0 " src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                                        <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
                                     </div>
                                     <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="text-left">Administración</h5>
+                                        <h5 class="mt-1 mb-0">Administración</h5>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        --}}
+
+                        <div class="card subir px-4 py-2">
+                            <a href="{{ ROUTE('asistentecm.rendir') }}">
+                                <div class="row my-auto">
+                                    <div class="col-md-4 col-xs-12 d-inline">
+                                        <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                                    </div>
+                                    <div class="col-md-8 col-xs-12 d-inline">
+                                        <h5 class="mt-1 mb-0">Entrega de Caja</h5>
                                     </div>
                                 </div>
                             </a>
                         </div>
 
-                        <div class="card subir px-4 py-2">
-                            <a href="{{ ROUTE('asistentejcm.rendir') }}">
-                                <div class="row my-auto">
-                                    <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-40 mt-0 " src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                    </div>
-                                    <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="text-left">Manejo de Caja</h5>
-                                    </div>
+                        {{--
+                        <div class="card py-auto subir">
+                            <a href="{{ ROUTE('asistente.venta_productos') }}">
+                            <a href="{{ ROUTE('asistente.registro_paciente') }}" class="btn" type="button">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/otros_servicios_1.svg') }}">
+                                    <h5 class="mt-1 mb-0"> Venta de Productos</h5>
                                 </div>
                             </a>
                         </div>
+                        --}}
 
                     </div>
                 </div>
@@ -175,17 +203,17 @@
 
     @include('general.asistentes.modal_consulta_agenda')
 
-    @include('app.asistente_cm.modales.lista_espera')
+    @include('app.asistente_cm_publico.modales.lista_espera')
 
     {{-- horas extras --}}
-    @include('app.asistente_cm.modales.horas_extras')
-    @include('app.asistente_cm.modales.horas_extras_agendar')
+    @include('app.asistente_cm_publico.modales.horas_extras')
+    @include('app.asistente_cm_publico.modales.horas_extras_agendar')
 
     {{-- hora examen --}}
     @include('app.general.asistente.reserva_hora_examen.horas_examen')
     @include('app.general.asistente.reserva_hora_examen.horas_examen_agendar')
-
 @endsection
+
 
 @section('page-script')
     <script>
@@ -218,10 +246,6 @@
                 $("#agenda_agregar_paciente").modal('hide');
                 $('#rut_paciente_reserva').val('');
             });
-
-            function cerrar_modal_infoProf() {
-                $('#info_prof').modal('hide');
-            }
 
             {{-- ****** VALIDACIONDEFORMULARIOS ****** --}}
             {{--  VALIDACION RUT BUSQUEDA - AGENDA  --}}
@@ -282,6 +306,10 @@
 
         });
 
+        function cerrar_modal_infoProf() {
+            $('#info_prof').modal('hide');
+        }
+
         function cerrarModalAutorizacionMenorEdad()
         {
             swal({
@@ -300,7 +328,7 @@
 
                 }
             })
-        }
+        };
 
         function solicitarAutorizacionMenorEdad()
         {
@@ -536,7 +564,7 @@
         {{--  CARGA AGENDE DEL PROFESIONAL  --}}
         function cargarAgendaProfesional(tipo_agenda, fecha)
         {
-            console.log('asistente_cm/escritorio_asistente');
+            console.log('asistente_cm_publico/escritorio_asistente');
             if(fecha != undefined && fecha != '')
             {
                 var res = fecha.split('T')[0];
@@ -555,7 +583,6 @@
 
             if(id_profesional != '')
             {
-
                 $.ajax({
                     url: url1,
                     type: "GET",
@@ -691,6 +718,7 @@
                                             meridiem: 'medium'
                                         },
                                         eventDidMount: function(info) {
+                                            {{--   console.log(info.el);  --}}
                                             $(info.el).tooltip({
                                                 title: info.event.extendedProps.description,
                                                 placement: "top",
@@ -713,7 +741,7 @@
                                                             if (data !== 'null')
                                                             {
                                                                 //data = JSON.parse(data);
-                                                                console.log('-----------------------');
+                                                                console.log('---------evento--------------');
                                                                 console.log(data);
                                                                 console.log('-----------------------');
                                                                 if(data.estado == 1)
@@ -758,7 +786,7 @@
 
                                         eventClick: function(info) {
                                             let id_hora_medica = info.event.id;
-                                            let url = "{{ route('agenda.buscar_hora_medica') }}"
+                                            let url = "{{ route('agenda.buscar_hora_medica') }}";
 
                                             $.ajax({
 
@@ -767,12 +795,12 @@
                                                     data: {
                                                         //_token: _token,
                                                         id_hora_medica: id_hora_medica,
-                                                    },
+                                                    }
                                                 })
                                                 .done(function(data) {
                                                     if (data != null) {
 
-                                                        // {{--  // console.log(info.event);  --}}
+                                                        //{{-- console.log(info.event);  --}}
                                                         // console.log(data);
                                                         // data = JSON.parse(data);
                                                         $('#datos_consulta_rut').text(data.paciente.rut);
@@ -938,6 +966,7 @@
                                                         //Inasistida
                                                         else if (data.estado_hora == 7)//else if (info.event.backgroundColor == '#F9A825')
                                                         {
+
                                                             //'Inasistida')
                                                             $('#hm_anular_hora').hide();
                                                             $('#hm_atender_hora').hide();
@@ -982,13 +1011,13 @@
                                                 });
 
 
-                                            $('#datos_hora_medica').show();
-                                            $('#cancelacion_hora_medica').hide();
-                                            $('#confirmacion_hora_medica').hide();
-                                            /*$('#opcion_cancelar_hora_div').hide();*/
-                                            $('#id_hora_medica').val(info.event.id);
-                                            $('#id_hora_realizar').val(info.event.id);
-                                            info.el.style.borderColor = 'red';
+                                                $('#datos_hora_medica').show();
+                                                $('#cancelacion_hora_medica').hide();
+                                                $('#confirmacion_hora_medica').hide();
+                                                /*$('#opcion_cancelar_hora_div').hide();*/
+                                                $('#id_hora_medica').val(info.event.id);
+                                                $('#id_hora_realizar').val(info.event.id);
+                                                info.el.style.borderColor = 'red';
                                         },
 
                                         selectOverlap: function(event) {
@@ -1126,23 +1155,11 @@
                                     CalendarEl.setOption('businessHours', data_businessHours );
                                     CalendarEl.setOption('slotMinTime', info_profesional_seleccionado.horario_data.hora_inicio_agenda );
                                     CalendarEl.setOption('slotMaxTime', info_profesional_seleccionado.horario_data.hora_termino_agenda );
-                                    {{--  console.log(CalendarEl.getOption('hiddenDays'));  --}}
-                                    {{--  console.log(CalendarEl.getOption('businessHours'));  --}}
-                                    {{--  console.log(CalendarEl.getOption('slotMinTime'));  --}}
-                                    {{--  console.log(CalendarEl.getOption('slotMaxTime'));  --}}
 
                                     CalendarEl.render();
 
                                     if(fecha != '' && fecha != null)
                                         CalendarEl.gotoDate(fecha);
-
-
-                                    {{--   console.log(calendarEl);  --}}
-
-                                    // var event = calendarEl.getEventById('107');
-                                    {{--   console.log(event);  --}}
-                                    // var start = event.start;
-                                    {{--   console.log(start.toISOString());  --}}
                                 }
                                 else
                                 {
@@ -1160,6 +1177,7 @@
                                     $('#seccion_agenda_botones').hide();
                                     $('#seccion_agenda_agendas').hide();
                                 }
+
                             }
                             else
                             {
@@ -1197,6 +1215,9 @@
                 $('#seccion_agenda_botones').hide();
                 $('#seccion_agenda_agendas').hide();
             }
+
+
+
         }
 
         {{--  CANCELAR HORA CARGA DE MENSAJE --}}
@@ -1210,7 +1231,7 @@
             $('#hm_confirmar_hora').hide();
             $('#hm_ver_hora').hide();
             $('#confirmar_anulacion_hora').show();
-        }
+        };
 
         {{--  CANCELAR HORA  --}}
         function cancelar_hora() {
@@ -1241,7 +1262,7 @@
                         confirmButtonText: "Cool"
                     });
 
-                    cargarAgendaProfesional($('#id_tipo_agenda').val(),'');
+                    cargarAgendaProfesional($('#id_tipo_agenda').val(), '');
 
 
                 } else {
@@ -1298,7 +1319,7 @@
                             // DangerMode: true,
                             confirmButtonText: "Cool"
                         });
-                        cargarAgendaProfesional($('#id_tipo_agenda').val(),data.fecha_consulta);
+                        cargarAgendaProfesional($('#id_tipo_agenda').val(), data.fecha_consulta);
                         $('#consulta').modal('hide');
 
                     } else {
@@ -1421,7 +1442,7 @@
                                 // buttons: "Aceptar",
                                 //SuccessMode: true,
                             });
-                            cargarAgendaProfesional($('#id_tipo_agenda').val(),data.hora_medica.fecha_consulta);
+                            cargarAgendaProfesional($('#id_tipo_agenda').val(), data.hora_medica.fecha_consulta);
                             $('#modal_recepcion_bonos_api').modal('hide');
                             $('#bono_paciente_rut').val('');
                             $('#bono_paciente_nombre').val('');
@@ -1492,42 +1513,6 @@
             $('#form_reseva_de_horas').submit(function(e) {
                 e.preventDefault();
             });
-
-
-            $('#reserva_hora_nombres_paciente').val('');
-            $('#reserva_hora_apellido_uno').val('');
-            $('#reserva_hora_apellido_dos').val('');
-            $('#reserva_hora_fecha_nac').val('');
-            $('#reserva_hora_sexo').val('');
-            $('#reserva_hora_convenio').val('');
-            $('#reserva_hora_direccion').val('');
-            $('#reserva_hora_numero_dir').val('');
-            $('#ciudad_agregar').val('');
-            $('#reserva_hora_correo').val('');
-            $('#reserva_hora_telefono_uno').val('');
-            $('#reserva_hora_confirmacion').val('');
-            $('#reserva_representante_nuevo_exitente').val('');
-            $('#reserva_representante_id').val('');
-            $('#reserva_representante_id_usuario').val('');
-            $('#reserva_hora_representante_rut').val('');
-            $('#reserva_hora_representante_nombres_paciente').val('');
-            $('#reserva_hora_representante_apellido_uno').val('');
-            $('#reserva_hora_representante_apellido_dos').val('');
-            $('#reserva_hora_representante_fecha_nac').val('');
-            $('#reserva_hora_representante_sexo').val('');
-            $('#reserva_hora_representante_convenio').val('');
-            $('#reserva_hora_representante_direccion').val('');
-            $('#reserva_hora_representante_numero_dir').val('');
-            $('#reserva_hora_representante_region_agregar').val('');
-            $('#reserva_hora_representante_ciudad_agregar').val('');
-            $('#reserva_hora_representante_correo').val('');
-            $('#reserva_hora_representante_telefono_uno').val('');
-            $('#reserva_hora_representante_agregar_relacion').val('');
-            evaluar_edad();
-            $('.div_representante_nuevo').hide();
-            $('.div_representante_existente').hide();
-
-
             let rut = $('#rut_paciente_reserva').val();
             $('#reserva_agregar_paciente_hora').hide();
             $('#reserva_datos_paciente').hide();
@@ -1751,151 +1736,6 @@
                 return;
 
             }
-            else
-            {
-                let fechaNacimiento = new Date(reserva_hora_fecha_nac);
-                let hoy = new Date();
-                let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
-
-                // Comprobamos si el mes y el día de la fecha de nacimiento ya pasaron en el año actual
-                if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
-                    edad--;
-                }
-
-                if( edad < 18 )
-                {
-                    if($('#reserva_representante_nuevo_exitente').val() == '1')
-                    {
-                        /** existente */
-                        if($('#reserva_representante_id').val() == '')
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Información del Representante con problemas",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                        // if($('#reserva_representante_id_usuario').val() == '')
-                        // {
-                        //     swal({
-                        //         title: "Error!",
-                        //         text: "Información del Representante con problemas",
-                        //         icon: "error",
-                        //         type: "danger",
-                        //         DangerMode: true,
-
-                        //     });
-                        //     return;
-                        // }
-                    }
-                    else
-                    {
-                        /** nuevo */
-                        if( $('#reserva_hora_representante_nombres_paciente').val() == '' )
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Nombre del Representante requerido",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                        if( $('#reserva_hora_representante_apellido_uno').val() == '' )
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Apellido Paterno del Representante requerido",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                        if( $('#reserva_hora_representante_apellido_dos').val() == '' )
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Apellido Materno del Representante requerido",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                        if( $('#reserva_hora_representante_fecha_nac').val() == '' )
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Fecha Nacimiento del Representante requerido",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                        if( $('#reserva_hora_representante_sexo').val() == '' )
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Sexo del Representante requerido",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                        if( $('#reserva_hora_representante_direccion').val() == '' )
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Direccion del Representante requerido",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                        // if( $('#reserva_hora_representante_numero_dir').val() == '' )
-                        // {
-                        //     swal({
-                        //         title: "Error!",
-                        //         text: "Numero del Representante requerido",
-                        //         icon: "error",
-                        //         type: "danger",
-                        //         DangerMode: true,
-
-                        //     });
-                        //     return;
-                        // }
-                        if( $('#reserva_hora_representante_region_agregar').val() == '' )
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Region del Representante requerido",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                    }
-
-
-                }
-            }
 
             let reserva_hora_sexo = $('#reserva_hora_sexo').val();
             if (reserva_hora_sexo == '0') {
@@ -1912,21 +1752,21 @@
                 return;
             }
 
-            // let reserva_hora_profesion = $('#reserva_hora_profesion').val();
-            // let reserva_hora_profesion_texto = $('#reserva_hora_profesion option:selected').text();
-            // if (reserva_hora_profesion == '0') {
+            let reserva_hora_profesion = $('#reserva_hora_profesion').val();
+            let reserva_hora_profesion_texto = $('#reserva_hora_profesion option:selected').text();
+            if (reserva_hora_profesion == '0') {
 
-            //     swal({
-            //         title: "Error!",
-            //         text: "Debe seleccionar profesión u oficio del paciente",
-            //         icon: "error",
-            //         type: "danger",
-            //         DangerMode: true,
+                swal({
+                    title: "Error!",
+                    text: "Debe seleccionar profesión u oficio del paciente",
+                    icon: "error",
+                    type: "danger",
+                    DangerMode: true,
 
-            //     });
+                });
 
-            //     return;
-            // }
+                return;
+            }
 
             let reserva_hora_convenio = $('#reserva_hora_convenio').val();
             if (reserva_hora_convenio == '0') {
@@ -1985,65 +1825,33 @@
 
             }
             let reserva_hora_email = $('#reserva_hora_correo').val();
-            let reserva_hora_telefono_uno = $('#reserva_hora_telefono_uno').val();
+            if (reserva_hora_email == '') {
 
-            let fechaNacimiento = new Date(reserva_hora_fecha_nac);
-            let hoy = new Date();
-            let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+                swal({
+                    title: "Error!",
+                    text: "Debe ingresar el email",
+                    icon: "error",
+                    type: "danger",
+                    DangerMode: true,
 
-            // Comprobamos si el mes y el día de la fecha de nacimiento ya pasaron en el año actual
-            if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
-                edad--;
+                });
+                return;
+
             }
+            let reserva_hora_telefono = $('#reserva_hora_telefono_uno').val();
+            if (reserva_hora_telefono == '') {
 
-            if( edad > 18 )
-            {
-                if (reserva_hora_email == '') {
+                swal({
+                    title: "Error!",
+                    text: "Debe ingresar el teléfono",
+                    icon: "error",
+                    type: "danger",
+                    DangerMode: true,
 
-                    swal({
-                        title: "Error!",
-                        text: "Debe ingresar el email",
-                        icon: "error",
-                        type: "danger",
-                        DangerMode: true,
+                });
+                return;
 
-                    });
-                    return;
-
-                }
-
-                if (reserva_hora_telefono_uno == '') {
-
-                    swal({
-                        title: "Error!",
-                        text: "Debe ingresar el teléfono",
-                        icon: "error",
-                        type: "danger",
-                        DangerMode: true,
-
-                    });
-                    return;
-
-                }
             }
-
-            var reserva_representante_nuevo_exitente = $('#reserva_representante_nuevo_exitente').val();
-            var reserva_representante_id = $('#reserva_representante_id').val();
-            var reserva_representante_id_usuario = $('#reserva_representante_id_usuario').val();
-            var reserva_hora_representante_rut = $('#reserva_hora_representante_rut').val();
-            var reserva_hora_representante_nombres_paciente = $('#reserva_hora_representante_nombres_paciente').val();
-            var reserva_hora_representante_apellido_uno = $('#reserva_hora_representante_apellido_uno').val();
-            var reserva_hora_representante_apellido_dos = $('#reserva_hora_representante_apellido_dos').val();
-            var reserva_hora_representante_fecha_nac = $('#reserva_hora_representante_fecha_nac').val();
-            var reserva_hora_representante_sexo = $('#reserva_hora_representante_sexo').val();
-            var reserva_hora_representante_convenio = $('#reserva_hora_representante_convenio').val();
-            var reserva_hora_representante_direccion = $('#reserva_hora_representante_direccion').val();
-            var reserva_hora_representante_numero_dir = $('#reserva_hora_representante_numero_dir').val();
-            var reserva_hora_representante_region_agregar = $('#reserva_hora_representante_region_agregar').val();
-            var reserva_hora_representante_ciudad_agregar = $('#reserva_hora_representante_ciudad_agregar').val();
-            var reserva_hora_representante_correo = $('#reserva_hora_representante_correo').val();
-            var reserva_hora_representante_telefono_uno = $('#reserva_hora_representante_telefono_uno').val();
-            var reserva_hora_representante_agregar_relacion = $('#reserva_hora_representante_agregar_relacion').val();
 
             let reserva_hora_confirmacion = $('#reserva_hora_confirmacion').val();
             let reserva_hora_sms = $('#reserva_hora_sms').val();
@@ -2069,30 +1877,12 @@
                         reserva_hora_numero_dir: reserva_hora_numero_dir,
                         reserva_hora_comuna: reserva_hora_comuna,
                         reserva_hora_email: reserva_hora_email,
-                        reserva_hora_telefono: reserva_hora_telefono_uno,
+                        reserva_hora_telefono: reserva_hora_telefono,
                         reserva_hora_confirmacion: reserva_hora_confirmacion,
                         reserva_hora_sms: reserva_hora_sms,
                         id_profesional:id_profesional,
                         id_lugar_atencion:id_lugar_atencion,
                         tipo_hora_medica: tipo_agenda_text,
-                        /** representante */
-                        reserva_representante_nuevo_exitente: reserva_representante_nuevo_exitente,
-                        reserva_representante_id: reserva_representante_id,
-                        reserva_representante_id_usuario: reserva_representante_id_usuario,
-                        reserva_hora_representante_rut: reserva_hora_representante_rut,
-                        reserva_hora_representante_nombres_paciente: reserva_hora_representante_nombres_paciente,
-                        reserva_hora_representante_apellido_uno: reserva_hora_representante_apellido_uno,
-                        reserva_hora_representante_apellido_dos: reserva_hora_representante_apellido_dos,
-                        reserva_hora_representante_fecha_nac: reserva_hora_representante_fecha_nac,
-                        reserva_hora_representante_sexo: reserva_hora_representante_sexo,
-                        reserva_hora_representante_convenio: reserva_hora_representante_convenio,
-                        reserva_hora_representante_direccion: reserva_hora_representante_direccion,
-                        reserva_hora_representante_numero_dir: reserva_hora_representante_numero_dir,
-                        reserva_hora_representante_region_agregar: reserva_hora_representante_region_agregar,
-                        reserva_hora_representante_ciudad_agregar: reserva_hora_representante_ciudad_agregar,
-                        reserva_hora_representante_correo: reserva_hora_representante_correo,
-                        reserva_hora_representante_telefono_uno: reserva_hora_representante_telefono_uno,
-                        reserva_hora_representante_agregar_relacion: reserva_hora_representante_agregar_relacion
                     },
                 })
                 .done(function(data) {
@@ -2109,7 +1899,7 @@
                             });
                             $('#reservar_hora').modal('hide');
                             $('#agenda_agregar_paciente').modal('hide');
-                            cargarAgendaProfesional($('#id_tipo_agenda').val(),fecha_consulta);
+                            cargarAgendaProfesional($('#id_tipo_agenda').val(), fecha_consulta);
                         }
                         else
                         {
@@ -2170,6 +1960,30 @@
 
             console.log(tipo_agenda_text);
 
+            let representante = 0;
+            let lista_Acompanante = $('#reserva_hora_id_acompanante').val();
+
+            if( $('#acompanante_representante').prop("checked") )
+                representante = 1;
+            else
+                representante = 0;
+
+            let acompanante = 0;
+            if( $('#acompanante_acompanante').prop("checked") )
+                acompanante = 1;
+            else
+            {
+                acompanante = 0;
+                lista_Acompanante = '';
+            }
+
+            let autorizacion_atencion = 0;
+            if( $('#autorizacion_atencion').prop("checked") )
+                autorizacion_atencion = 1;
+            else
+                autorizacion_atencion = 0;
+
+
             $.ajax({
 
                     url: url,
@@ -2181,6 +1995,10 @@
                         id_lugar_atencion: id_lugar_atencion,
                         id_profesional: id_profesional,
                         tipo_hora_medica: tipo_agenda_text,
+                        representante: representante,
+                        acompanante: acompanante,
+                        lista_Acompanante: lista_Acompanante,
+                        autorizacion_atencion: autorizacion_atencion,
                     }
                 })
                 .done(function(data) {

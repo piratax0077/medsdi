@@ -1675,7 +1675,151 @@
 
                 });
                 return;
+            }
+            else
+            {
+                let fechaNacimiento = new Date(reserva_hora_fecha_nac);
+                let hoy = new Date();
+                let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
 
+                // Comprobamos si el mes y el día de la fecha de nacimiento ya pasaron en el año actual
+                if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
+                    edad--;
+                }
+
+                if( edad < 18 )
+                {
+                    if($('#reserva_representante_nuevo_exitente').val() == '1')
+                    {
+                        /** existente */
+                        if($('#reserva_representante_id').val() == '')
+                        {
+                            swal({
+                                title: "Error!",
+                                text: "Información del Representante con problemas",
+                                icon: "error",
+                                type: "danger",
+                                DangerMode: true,
+
+                            });
+                            return;
+                        }
+                        // if($('#reserva_representante_id_usuario').val() == '')
+                        // {
+                        //     swal({
+                        //         title: "Error!",
+                        //         text: "Información del Representante con problemas",
+                        //         icon: "error",
+                        //         type: "danger",
+                        //         DangerMode: true,
+
+                        //     });
+                        //     return;
+                        // }
+                    }
+                    else
+                    {
+                        /** nuevo */
+                        if( $('#reserva_hora_representante_nombres_paciente').val() == '' )
+                        {
+                            swal({
+                                title: "Error!",
+                                text: "Nombre del Representante requerido",
+                                icon: "error",
+                                type: "danger",
+                                DangerMode: true,
+
+                            });
+                            return;
+                        }
+                        if( $('#reserva_hora_representante_apellido_uno').val() == '' )
+                        {
+                            swal({
+                                title: "Error!",
+                                text: "Apellido Paterno del Representante requerido",
+                                icon: "error",
+                                type: "danger",
+                                DangerMode: true,
+
+                            });
+                            return;
+                        }
+                        if( $('#reserva_hora_representante_apellido_dos').val() == '' )
+                        {
+                            swal({
+                                title: "Error!",
+                                text: "Apellido Materno del Representante requerido",
+                                icon: "error",
+                                type: "danger",
+                                DangerMode: true,
+
+                            });
+                            return;
+                        }
+                        if( $('#reserva_hora_representante_fecha_nac').val() == '' )
+                        {
+                            swal({
+                                title: "Error!",
+                                text: "Fecha Nacimiento del Representante requerido",
+                                icon: "error",
+                                type: "danger",
+                                DangerMode: true,
+
+                            });
+                            return;
+                        }
+                        if( $('#reserva_hora_representante_sexo').val() == '' )
+                        {
+                            swal({
+                                title: "Error!",
+                                text: "Sexo del Representante requerido",
+                                icon: "error",
+                                type: "danger",
+                                DangerMode: true,
+
+                            });
+                            return;
+                        }
+                        if( $('#reserva_hora_representante_direccion').val() == '' )
+                        {
+                            swal({
+                                title: "Error!",
+                                text: "Direccion del Representante requerido",
+                                icon: "error",
+                                type: "danger",
+                                DangerMode: true,
+
+                            });
+                            return;
+                        }
+                        // if( $('#reserva_hora_representante_numero_dir').val() == '' )
+                        // {
+                        //     swal({
+                        //         title: "Error!",
+                        //         text: "Numero del Representante requerido",
+                        //         icon: "error",
+                        //         type: "danger",
+                        //         DangerMode: true,
+
+                        //     });
+                        //     return;
+                        // }
+                        if( $('#reserva_hora_representante_region_agregar').val() == '' )
+                        {
+                            swal({
+                                title: "Error!",
+                                text: "Region del Representante requerido",
+                                icon: "error",
+                                type: "danger",
+                                DangerMode: true,
+
+                            });
+                            return;
+                        }
+                    }
+
+
+                }
             }
 
             let reserva_hora_sexo = $('#reserva_hora_sexo').val();
@@ -1693,21 +1837,21 @@
                 return;
             }
 
-            let reserva_hora_profesion = $('#reserva_hora_profesion').val();
-            let reserva_hora_profesion_texto = $('#reserva_hora_profesion option:selected').text();
-            if (reserva_hora_profesion == '0') {
+            // let reserva_hora_profesion = $('#reserva_hora_profesion').val();
+            // let reserva_hora_profesion_texto = $('#reserva_hora_profesion option:selected').text();
+            // if (reserva_hora_profesion == '0') {
 
-                swal({
-                    title: "Error!",
-                    text: "Debe seleccionar profesión u oficio del paciente",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
+            //     swal({
+            //         title: "Error!",
+            //         text: "Debe seleccionar profesión u oficio del paciente",
+            //         icon: "error",
+            //         type: "danger",
+            //         DangerMode: true,
 
-                });
+            //     });
 
-                return;
-            }
+            //     return;
+            // }
 
             let reserva_hora_convenio = $('#reserva_hora_convenio').val();
             if (reserva_hora_convenio == '0') {
@@ -1766,38 +1910,72 @@
 
             }
             let reserva_hora_email = $('#reserva_hora_correo').val();
-            if (reserva_hora_email == '') {
+            let reserva_hora_telefono_uno = $('#reserva_hora_telefono_uno').val();
 
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar el email",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
+            let fechaNacimiento = new Date(reserva_hora_fecha_nac);
+            let hoy = new Date();
+            let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
 
-                });
-                return;
-
+            // Comprobamos si el mes y el día de la fecha de nacimiento ya pasaron en el año actual
+            if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
+                edad--;
             }
-            let reserva_hora_telefono = $('#reserva_hora_telefono_uno').val();
-            if (reserva_hora_telefono == '') {
 
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar el teléfono",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
+            if( edad > 18 )
+            {
+                if (reserva_hora_email == '') {
 
-                });
-                return;
+                    swal({
+                        title: "Error!",
+                        text: "Debe ingresar el email paciente",
+                        icon: "error",
+                        type: "danger",
+                        DangerMode: true,
 
+                    });
+                    return;
+
+                }
+
+                if (reserva_hora_telefono_uno == '') {
+
+                    swal({
+                        title: "Error!",
+                        text: "Debe ingresar el teléfono",
+                        icon: "error",
+                        type: "danger",
+                        DangerMode: true,
+
+                    });
+                    return;
+
+                }
             }
+
 
             let reserva_hora_confirmacion = $('#reserva_hora_confirmacion').val();
             let reserva_hora_sms = $('#reserva_hora_sms').val();
             let id_profesional = $('#agenda_profesional_asistente').val();
             let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
+
+            /** representante */
+            var reserva_representante_nuevo_exitente = $('#reserva_representante_nuevo_exitente').val();
+            var reserva_representante_id = $('#reserva_representante_id').val();
+            var reserva_representante_id_usuario = $('#reserva_representante_id_usuario').val();
+            var reserva_hora_representante_rut = $('#reserva_hora_representante_rut').val();
+            var reserva_hora_representante_nombres_paciente = $('#reserva_hora_representante_nombres_paciente').val();
+            var reserva_hora_representante_apellido_uno = $('#reserva_hora_representante_apellido_uno').val();
+            var reserva_hora_representante_apellido_dos = $('#reserva_hora_representante_apellido_dos').val();
+            var reserva_hora_representante_fecha_nac = $('#reserva_hora_representante_fecha_nac').val();
+            var reserva_hora_representante_sexo = $('#reserva_hora_representante_sexo').val();
+            var reserva_hora_representante_convenio = $('#reserva_hora_representante_convenio').val();
+            var reserva_hora_representante_direccion = $('#reserva_hora_representante_direccion').val();
+            var reserva_hora_representante_numero_dir = $('#reserva_hora_representante_numero_dir').val();
+            var reserva_hora_representante_region_agregar = $('#reserva_hora_representante_region_agregar').val();
+            var reserva_hora_representante_ciudad_agregar = $('#reserva_hora_representante_ciudad_agregar').val();
+            var reserva_hora_representante_correo = $('#reserva_hora_representante_correo').val();
+            var reserva_hora_representante_telefono_uno = $('#reserva_hora_representante_telefono_uno').val();
+            var reserva_hora_representante_agregar_relacion = $('#reserva_hora_representante_agregar_relacion').val();
 
             $.ajax({
 
@@ -1812,18 +1990,36 @@
                         reserva_hora_segundo_apellido: reserva_hora_segundo_apellido,
                         reserva_hora_fecha_nac: reserva_hora_fecha_nac,
                         reserva_hora_sexo: reserva_hora_sexo,
-                        reserva_hora_profesion: reserva_hora_profesion_texto,
+                        // reserva_hora_profesion: reserva_hora_profesion_texto,
                         reserva_hora_convenio: reserva_hora_convenio,
                         reserva_hora_direccion: reserva_hora_direccion,
                         reserva_hora_numero_dir: reserva_hora_numero_dir,
                         reserva_hora_comuna: reserva_hora_comuna,
                         reserva_hora_email: reserva_hora_email,
-                        reserva_hora_telefono: reserva_hora_telefono,
+                        reserva_hora_telefono_uno: reserva_hora_telefono_uno,
                         reserva_hora_confirmacion: reserva_hora_confirmacion,
                         reserva_hora_sms: reserva_hora_sms,
                         id_profesional:id_profesional,
                         id_lugar_atencion:id_lugar_atencion,
                         tipo_hora_medica: tipo_agenda_text,
+                        /** representante */
+                        reserva_representante_nuevo_exitente: reserva_representante_nuevo_exitente,
+                        reserva_representante_id: reserva_representante_id,
+                        reserva_representante_id_usuario: reserva_representante_id_usuario,
+                        reserva_hora_representante_rut: reserva_hora_representante_rut,
+                        reserva_hora_representante_nombres_paciente: reserva_hora_representante_nombres_paciente,
+                        reserva_hora_representante_apellido_uno: reserva_hora_representante_apellido_uno,
+                        reserva_hora_representante_apellido_dos: reserva_hora_representante_apellido_dos,
+                        reserva_hora_representante_fecha_nac: reserva_hora_representante_fecha_nac,
+                        reserva_hora_representante_sexo: reserva_hora_representante_sexo,
+                        reserva_hora_representante_convenio: reserva_hora_representante_convenio,
+                        reserva_hora_representante_direccion: reserva_hora_representante_direccion,
+                        reserva_hora_representante_numero_dir: reserva_hora_representante_numero_dir,
+                        reserva_hora_representante_region_agregar: reserva_hora_representante_region_agregar,
+                        reserva_hora_representante_ciudad_agregar: reserva_hora_representante_ciudad_agregar,
+                        reserva_hora_representante_correo: reserva_hora_representante_correo,
+                        reserva_hora_representante_telefono_uno: reserva_hora_representante_telefono_uno,
+                        reserva_hora_representante_agregar_relacion: reserva_hora_representante_agregar_relacion
                     },
                 })
                 .done(function(data) {

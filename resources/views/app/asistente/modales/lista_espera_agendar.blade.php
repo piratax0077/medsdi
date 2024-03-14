@@ -312,7 +312,7 @@
     {
         console.log('generar_reserva_cita');
 
-        $('#form_reseva_de_horas').hide();
+        // $('#form_reseva_de_horas').hide();
         $('#reserva_datos_paciente').hide();
 
         $('#reservar_hora').modal('hide');

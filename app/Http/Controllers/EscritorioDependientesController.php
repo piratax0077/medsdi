@@ -390,7 +390,7 @@ class EscritorioDependientesController extends Controller
                 {
                     $permitted_chars = '#\qwertyuiopasdfghjkklzxcvbnm123467890ABCDEFGHIJKLMNOPQRSTUVWXYZ&=';
                     $temp = substr(str_shuffle($permitted_chars), 0, 10);
-                    $paciente_dep->email = $temp.'@med-sdi.cl';
+                    $paciente->email = $temp.'@'.$temp.'.cl';
                 }
                 else
                     $paciente_dep->email = $request->correo;

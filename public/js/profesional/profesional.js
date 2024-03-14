@@ -399,64 +399,64 @@ function agendar_hora() {
 
 };
 
-function agendar_hora_paciente_nuevo() {
+// function agendar_hora_paciente_nuevo() {
 
-    let url = "{{ route('profesional.agendar_hora_nuevo_paciente') }}";
-    let _token = $('#_token').val();
-    let fecha_consulta = $('#fecha_consulta').val();
-    let id_lugar_atencion = $('#id_lugar_atencion').val();
-    let reserva_hora_primer_apellido = $('#reserva_hora_apellido_uno').val();
-    let reserva_hora_segundo_apellido = $('#reserva_hora_apellido_dos').val();
-    let rut_paciente_reserva = $('#rut_paciente_reserva').val();
-    let reserva_hora_nombre = $('#reserva_hora_nombres_paciente').val();
-    let reserva_hora_fecha_nac = $('#reserva_hora_fecha_nac').val();
-    let reserva_hora_sexo = $('#reserva_hora_sexo').val();
-    let reserva_hora_convenio = $('#reserva_hora_convenio').val();
-    let reserva_hora_direccion = $('#reserva_hora_direccion').val();
-    let reserva_hora_comuna = $('#ciudad_agregar').val();
-    let reserva_hora_email = $('#reserva_hora_correo').val();
-    let reserva_hora_telefono = $('#reserva_hora_telefono_uno').val();
-    let reserva_hora_confirmacion = $('#reserva_hora_confirmacion').val();
-    let reserva_hora_sms = $('#reserva_hora_sms').val();
+//     let url = "{{ route('profesional.agendar_hora_nuevo_paciente') }}";
+//     let _token = $('#_token').val();
+//     let fecha_consulta = $('#fecha_consulta').val();
+//     let id_lugar_atencion = $('#id_lugar_atencion').val();
+//     let reserva_hora_primer_apellido = $('#reserva_hora_apellido_uno').val();
+//     let reserva_hora_segundo_apellido = $('#reserva_hora_apellido_dos').val();
+//     let rut_paciente_reserva = $('#rut_paciente_reserva').val();
+//     let reserva_hora_nombre = $('#reserva_hora_nombres_paciente').val();
+//     let reserva_hora_fecha_nac = $('#reserva_hora_fecha_nac').val();
+//     let reserva_hora_sexo = $('#reserva_hora_sexo').val();
+//     let reserva_hora_convenio = $('#reserva_hora_convenio').val();
+//     let reserva_hora_direccion = $('#reserva_hora_direccion').val();
+//     let reserva_hora_comuna = $('#ciudad_agregar').val();
+//     let reserva_hora_email = $('#reserva_hora_correo').val();
+//     let reserva_hora_telefono = $('#reserva_hora_telefono_uno').val();
+//     let reserva_hora_confirmacion = $('#reserva_hora_confirmacion').val();
+//     let reserva_hora_sms = $('#reserva_hora_sms').val();
 
-    $.ajax({
+//     $.ajax({
 
-        url: url,
-        type: "get",
-        data: {
-            _token: _token,
-            fecha_consulta: fecha_consulta,
-            rut_paciente_reserva: rut_paciente_reserva,
-            reserva_hora_nombre: reserva_hora_nombre,
-            reserva_hora_primer_apellido: reserva_hora_primer_apellido,
-            reserva_hora_segundo_apellido: reserva_hora_segundo_apellido,
-            reserva_hora_fecha_nac: reserva_hora_fecha_nac,
-            reserva_hora_sexo: reserva_hora_sexo,
-            reserva_hora_convenio: reserva_hora_convenio,
-            reserva_hora_direccion: reserva_hora_direccion,
-            reserva_hora_comuna: reserva_hora_comuna,
-            reserva_hora_email: reserva_hora_email,
-            reserva_hora_telefono: reserva_hora_telefono,
-            reserva_hora_confirmacion: reserva_hora_confirmacion,
-            reserva_hora_sms: reserva_hora_sms
-        },
-    })
-        .done(function (data) {
-            if (data != null) {
-                data = JSON.parse(data);
-                console.log(data);
-                $('#reservar_hora').modal('hide');
-                location.reload();
+//         url: url,
+//         type: "get",
+//         data: {
+//             _token: _token,
+//             fecha_consulta: fecha_consulta,
+//             rut_paciente_reserva: rut_paciente_reserva,
+//             reserva_hora_nombre: reserva_hora_nombre,
+//             reserva_hora_primer_apellido: reserva_hora_primer_apellido,
+//             reserva_hora_segundo_apellido: reserva_hora_segundo_apellido,
+//             reserva_hora_fecha_nac: reserva_hora_fecha_nac,
+//             reserva_hora_sexo: reserva_hora_sexo,
+//             reserva_hora_convenio: reserva_hora_convenio,
+//             reserva_hora_direccion: reserva_hora_direccion,
+//             reserva_hora_comuna: reserva_hora_comuna,
+//             reserva_hora_email: reserva_hora_email,
+//             reserva_hora_telefono: reserva_hora_telefono,
+//             reserva_hora_confirmacion: reserva_hora_confirmacion,
+//             reserva_hora_sms: reserva_hora_sms
+//         },
+//     })
+//         .done(function (data) {
+//             if (data != null) {
+//                 data = JSON.parse(data);
+//                 console.log(data);
+//                 $('#reservar_hora').modal('hide');
+//                 location.reload();
 
-            } else {
-                alert('Paciente no encontrado en el sistema');
-            }
+//             } else {
+//                 alert('Paciente no encontrado en el sistema');
+//             }
 
-        })
-        .fail(function (jqXHR, ajaxOptions, thrownError) {
-            console.log(jqXHR, ajaxOptions, thrownError)
-        });
-};
+//         })
+//         .fail(function (jqXHR, ajaxOptions, thrownError) {
+//             console.log(jqXHR, ajaxOptions, thrownError)
+//         });
+// };
 
 function opcion_confirmar_hora() {
 
