@@ -1454,6 +1454,40 @@
             $('#form_reseva_de_horas').submit(function(e) {
                 e.preventDefault();
             });
+
+            $('#reserva_hora_nombres_paciente').val('');
+            $('#reserva_hora_apellido_uno').val('');
+            $('#reserva_hora_apellido_dos').val('');
+            $('#reserva_hora_fecha_nac').val('');
+            $('#reserva_hora_sexo').val('');
+            $('#reserva_hora_convenio').val('');
+            $('#reserva_hora_direccion').val('');
+            $('#reserva_hora_numero_dir').val('');
+            $('#ciudad_agregar').val('');
+            $('#reserva_hora_correo').val('');
+            $('#reserva_hora_telefono_uno').val('');
+            $('#reserva_hora_confirmacion').val('');
+            $('#reserva_representante_nuevo_exitente').val('');
+            $('#reserva_representante_id').val('');
+            $('#reserva_representante_id_usuario').val('');
+            $('#reserva_hora_representante_rut').val('');
+            $('#reserva_hora_representante_nombres_paciente').val('');
+            $('#reserva_hora_representante_apellido_uno').val('');
+            $('#reserva_hora_representante_apellido_dos').val('');
+            $('#reserva_hora_representante_fecha_nac').val('');
+            $('#reserva_hora_representante_sexo').val('');
+            $('#reserva_hora_representante_convenio').val('');
+            $('#reserva_hora_representante_direccion').val('');
+            $('#reserva_hora_representante_numero_dir').val('');
+            $('#reserva_hora_representante_region_agregar').val('');
+            $('#reserva_hora_representante_ciudad_agregar').val('');
+            $('#reserva_hora_representante_correo').val('');
+            $('#reserva_hora_representante_telefono_uno').val('');
+            $('#reserva_hora_representante_agregar_relacion').val('');
+            evaluar_edad();
+            $('.div_representante_nuevo').hide();
+            $('.div_representante_existente').hide();
+
             let rut = $('#rut_paciente_reserva').val();
             $('#reserva_agregar_paciente_hora').hide();
             $('#reserva_datos_paciente').hide();

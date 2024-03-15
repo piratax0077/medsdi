@@ -102,6 +102,8 @@
                             </div>
                         </div>
                     </div>
+
+                    {{--  BUSCADOR DE RUT  --}}
                     <div class="form-row div_rut_buscar">
                         <div class="col-sm-9 col-md-9">
                             <form id="validacion_rut_form">
@@ -120,6 +122,7 @@
                             </button>
                         </div>
                     </div>
+
                     <form id="form_reseva_de_horas">
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                         <input type="hidden" id="fecha_consulta" name="fecha_consulta" value="">
