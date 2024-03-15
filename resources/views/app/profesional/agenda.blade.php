@@ -83,7 +83,7 @@
     @include('app.profesional.modales.modal_consulta_agenda')
 
     <div id="agenda_agregar_paciente" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="agregar_paciente_asistente" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info pt-3 pb-2">
                     <h5 class="modal-title text-white text-center">Tomar hora</h5>
@@ -91,35 +91,33 @@
                         aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
+                    <div class="form-row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="form-group">
-                                <h6 class="text-c-blue ml-2 mb-3">Ingrese el rut del paciente</h6>
+                                <h6 class="text-c-blue f-14">Ingrese el RUT del paciente</h6>
                             </div>
                         </div>
                     </div>
-                    <div class="row div_rut_buscar">
-                        <div class="col-sm-8 col-md-8 mb-3">
+                    <div class="form-row div_rut_buscar">
+                        <div class="col-sm-9 col-md-9">
                             <form id="validacion_rut_form">
                                 <div class="form-group" id="validacion_rut_div">
-                                    <input type="text" id="rut_paciente_reserva" name="rut_paciente_reserva" class="form-control" placeholder="Rut del paciente" aria-label="Rut del paciente" aria-describedby="button-addon2" required oninput="formatoRut(this)">
+                                    <input type="text" id="rut_paciente_reserva" name="rut_paciente_reserva" class="form-control form-control-sm" placeholder="Rut del paciente" aria-label="Rut del paciente" aria-describedby="button-addon2" required oninput="formatoRut(this)">
                                 </div>
                             </form>
 
                             {{--  <form id="validacion_rut_form">
                                 <div id="validacion_rut_div" class="input-group input-group-sm mb-3">
-                                    <input type="text" id="rut_paciente_reserva" name="rut_paciente_reserva" class="form-control" placeholder="Rut del paciente" aria-label="Rut del paciente" aria-describedby="button-addon2" required oninput="formatoRut(this)">
+                                    <input type="text" id="rut_paciente_reserva" name="rut_paciente_reserva" class="form-control form-control-sm" placeholder="Rut del paciente" aria-label="Rut del paciente" aria-describedby="button-addon2" required oninput="formatoRut(this)">
                                 </div>
                             </form>  --}}
                         </div>
-                        <div class="col-sm-4 col-md-4 mb-3">
-                            <button class="btn btn-info" onclick="buscar_paciente();" type="button"id="button-addon2">
-                                Buscar
+                        <div class="col-sm-3 col-md-3 mb-3">
+                            <button class="btn btn-sm btn-info btn-block" onclick="buscar_paciente();" type="button"id="button-addon2">
+                                <i class="feather icon-search"></i> Buscar
                             </button>
                         </div>
                     </div>
-
-
                     <form id="form_reseva_de_horas">
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                         <input type="hidden" id="fecha_consulta" name="fecha_consulta" value="">
@@ -219,7 +217,7 @@
 
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
-                                    <label class="floating-label">Descripción Reserva</label>
+                                    <label class="floating-label">Descripción reserva</label>
                                     <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion" id="reserva_hora_descripcion">
                                 </div>
                             </div>
@@ -245,310 +243,150 @@
 
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="button" onclick="agendar_hora();" class="btn btn-info">Agendar Hora</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-x"></i> Cancelar</button>
+                                <button type="button" onclick="agendar_hora();" class="btn btn-info"><i class="icon-check"></i> Agendar hora</button>
                             </div>
                         </div>
 
                         <div id="reserva_agregar_paciente_hora">
-                            <div class="row">
+                            <div class="form-row">
                                 <div class="col-sm-12 col-md-12">
-                                    <div class="alert alert-danger" role="alert">
-                                        Paciente no registrado, complete los datos para registrar al pacientessssss
+                                    <div class="alert alert-danger py-1" role="alert">
+                                        Paciente no registrado, complete los datos para registrar al paciente.
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+             
                                 {{-- INFORMACION DEL PACIENTE --}}
-                                <div class="col-sm-12 seccion_reserva_paciente_nuevo">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Nombres</label>
-                                                <input type="text" required class="form-control form-control-sm" name="reserva_hora_nombres_paciente" id="reserva_hora_nombres_paciente">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Primer Apellido</label>
-                                                <input type="text" class="form-control form-control-sm" name="reserva_hora_apellido_uno" id="reserva_hora_apellido_uno">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Segundo Apellido</label>
-                                                <input type="text" class="form-control form-control-sm" name="reserva_hora_apellido_dos" id="reserva_hora_apellido_dos">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 col-md-6">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">F. Nacimiento</label>
-                                                <input type="date" class="form-control form-control-sm" name="reserva_hora_fecha_nac" id="reserva_hora_fecha_nac" onchange="evaluar_edad();">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 col-md-6">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Sexo</label>
-                                                <select id="reserva_hora_sexo" name="reserva_hora_sexo"
-                                                    class="form-control form-control-sm">
-                                                    <option value="0">Selecione una opci&oacute;n</option>
-                                                    <option value="F">Femenino</option>
-                                                    <option value="M">Masculino</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Previsi&oacute;n</label>
-                                                <select id="reserva_hora_convenio" name="reserva_hora_convenio"
-                                                    class="form-control form-control-sm">
-                                                    <option value="0">Selecione una opci&oacute;n</option>
-                                                    @if (isset($prevision))
-                                                        @foreach ($prevision as $p)
-                                                            <option value="{{ $p->id }}">{{ $p->nombre }}</option>
-                                                        @endforeach
-                                                    @endif
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-8 col-md-8">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Direcci&oacute;n</label>
-                                                <input type="address" class="form-control form-control-sm" name="reserva_hora_direccion" id="reserva_hora_direccion">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-4 col-md-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Depto. | Ofic.</label>
-                                                <input type="address" class="form-control form-control-sm" name="reserva_hora_numero_dir" id="reserva_hora_numero_dir">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Region</label>
-                                                <select id="region_agregar" onchange="buscar_ciudad();" name="region_agregar"
-                                                    class="form-control" required>
-                                                    <option value="0">Seleccione Regio&oacute;n</option>
-                                                    @if (isset($region))
-                                                        @foreach ($region as $reg)
-                                                            <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
-                                                        @endforeach
-                                                    @endif
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Ciudad</label>
-                                                <select id="ciudad_agregar" name="ciudad_agregar" class="form-control" required>
-                                                    <option value="0">Seleccione Ciudad</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
-                                                <input type="text" class="form-control form-control-sm"
-                                                    onblur="validar_email_agenda()" name="reserva_hora_correo"
-                                                    id="reserva_hora_correo">
-                                                <span id="mensaje_email_reserva" style="display:none"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Tel&eacute;fono</label>
-                                                <input type="tel" class="form-control form-control-sm"
-                                                    name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Descrici&oacute;n Reserva</label>
-                                                <input type="text" class="form-control form-control-sm"
-                                                    name="reserva_hora_descripcion" id="reserva_hora_descripcion">
-                                            </div>
-                                        </div>
+                        
+                            <div class="form-row seccion_reserva_paciente_nuevo">
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Nombres</label>
+                                        <input type="text" required class="form-control form-control-sm" name="reserva_hora_nombres_paciente" id="reserva_hora_nombres_paciente">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Primer Apellido</label>
+                                        <input type="text" class="form-control form-control-sm" name="reserva_hora_apellido_uno" id="reserva_hora_apellido_uno">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Segundo Apellido</label>
+                                        <input type="text" class="form-control form-control-sm" name="reserva_hora_apellido_dos" id="reserva_hora_apellido_dos">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">F. Nacimiento</label>
+                                        <input type="date" class="form-control form-control-sm" name="reserva_hora_fecha_nac" id="reserva_hora_fecha_nac" onchange="evaluar_edad();">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Sexo</label>
+                                        <select id="reserva_hora_sexo" name="reserva_hora_sexo"
+                                            class="form-control form-control-sm">
+                                            <option value="0">Selecione una opci&oacute;n</option>
+                                            <option value="F">Femenino</option>
+                                            <option value="M">Masculino</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Previsi&oacute;n</label>
+                                        <select id="reserva_hora_convenio" name="reserva_hora_convenio"
+                                            class="form-control form-control-sm">
+                                            <option value="0">Selecione una opci&oacute;n</option>
+                                            @if (isset($prevision))
+                                                @foreach ($prevision as $p)
+                                                    <option value="{{ $p->id }}">{{ $p->nombre }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Direcci&oacute;n</label>
+                                        <input type="address" class="form-control form-control-sm" name="reserva_hora_direccion" id="reserva_hora_direccion">
                                     </div>
                                 </div>
 
-                                {{-- INFORMACION DEL REPRESENTANTE --}}
-                                <div class="col-sm-12 seccion_reserva_paciente_nuevo_representante" style="display: none;">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 mb-3">
-                                            <span class="text-center" style="font-weight: bold">Información del Representante Legal o Encargado de la Reserva:</span>
-                                        </div>
+                                <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Depto. | Ofic.</label>
+                                        <input type="address" class="form-control form-control-sm" name="reserva_hora_numero_dir" id="reserva_hora_numero_dir">
+                                    </div>
+                                </div>
 
-                                        <div class="col-sm-10 col-md-10">
+                                <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Región</label>
+                                        <select id="region_agregar" onchange="buscar_ciudad();" name="region_agregar"
+                                            class="form-control form-control-sm" required>
+                                            <option value="0">Seleccione</option>
+                                            @if (isset($region))
+                                                @foreach ($region as $reg)
+                                                    <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Ciudad</label>
+                                        <select id="ciudad_agregar" name="ciudad_agregar" class="form-control form-control-sm" required>
+                                            <option value="0">Seleccione</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                            onblur="validar_email_agenda()" name="reserva_hora_correo"
+                                            id="reserva_hora_correo">
+                                        <span id="mensaje_email_reserva" style="display:none"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Tel&eacute;fono</label>
+                                        <input type="tel" class="form-control form-control-sm"
+                                            name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Descripción reserva</label>
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="reserva_hora_descripcion" id="reserva_hora_descripcion">
+                                    </div>
+                                </div>
+                            </div>
+
+                                {{-- INFORMACION DEL REPRESENTANTE --}}
+                                <div class="form-row seccion_reserva_paciente_nuevo_representante" style="display: none;">
+                                        <div class="col-sm-12 col-md-12 mb-3">
+                                            <h6 class="f-14 text-c-blue">Información del Representante Legal o encargado de la reserva:</h6>
+                                        </div>
+                                        <div class="col-sm-9 col-md-4">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">RUT</label>
                                                 <input type="text" required class="form-control form-control-sm" name="reserva_hora_representante_rut" id="reserva_hora_representante_rut" oninput="formatoRut(this);">
                                             </div>
                                         </div>
-                                        <div class="col-sm-2 col-md-2">
-                                            <button type="button" class="btn btn-success btn-sm" onclick="buscar_rut_representente();">Buscar</button>
+                                        <div class="col-sm-3 col-md-3">
+                                            <button type="button" class="btn btn-info btn-sm btn-block" onclick="buscar_rut_representente();"><i class="feather icon-search"></i> Buscar</button>
                                         </div>
-
-                                        <input type="hidden" name="reserva_representante_nuevo_exitente" id="reserva_representante_nuevo_exitente" value="0">
-
-                                        <div class="div_representante_nuevo" style="display:none;" style="margin: 0px; padding: 0px">
-                                            <div class="col-sm-12 col-md-12">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Nombres</label>
-                                                    <input type="text" required class="form-control form-control-sm" name="reserva_hora_representante_nombres_paciente" id="reserva_hora_representante_nombres_paciente">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-12">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Primer Apellido</label>
-                                                    <input type="text" class="form-control form-control-sm" name="reserva_hora_representante_apellido_uno" id="reserva_hora_representante_apellido_uno">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-12">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Segundo Apellido</label>
-                                                    <input type="text" class="form-control form-control-sm" name="reserva_hora_representante_apellido_dos" id="reserva_hora_representante_apellido_dos">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6 col-md-6">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">F. Nacimiento</label>
-                                                    <input type="date" class="form-control form-control-sm" name="reserva_hora_representante_fecha_nac" id="reserva_hora_representante_fecha_nac" onclick="evaluar_edad();">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6 col-md-6">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Sexo</label>
-                                                    <select id="reserva_hora_representante_sexo" name="reserva_hora_representante_sexo"
-                                                        class="form-control form-control-sm">
-                                                        <option value="0">Selecione una opci&oacute;n</option>
-                                                        <option value="F">Femenino</option>
-                                                        <option value="M">Masculino</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-12 col-md-12">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Previsi&oacute;n</label>
-                                                    <select id="reserva_hora_representante_convenio" name="reserva_hora_representante_convenio"
-                                                        class="form-control form-control-sm">
-                                                        <option value="0">Selecione una opci&oacute;n</option>
-                                                        @if (isset($prevision))
-                                                            @foreach ($prevision as $p)
-                                                                <option value="{{ $p->id }}">{{ $p->nombre }}</option>
-                                                            @endforeach
-                                                        @endif
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-8 col-md-8">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Direcci&oacute;n</label>
-                                                    <input type="address" class="form-control form-control-sm" name="reserva_hora_representante_direccion" id="reserva_hora_representante_direccion">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-4 col-md-4">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Depto. | Ofic.</label>
-                                                    <input type="address" class="form-control form-control-sm" name="reserva_hora_representante_numero_dir" id="reserva_hora_representante_numero_dir">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-12 col-md-12">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Region</label>
-                                                    <select  onchange="buscar_ciudad_repesentante();" name="reserva_hora_representante_region_agregar" id="reserva_hora_representante_region_agregar"
-                                                        class="form-control" required>
-                                                        <option value="0">Seleccione Regio&oacute;n</option>
-                                                        @if (isset($region))
-                                                            @foreach ($region as $reg)
-                                                                <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
-                                                            @endforeach
-                                                        @endif
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-12 col-md-12">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Ciudad</label>
-                                                    <select id="reserva_hora_representante_ciudad_agregar" name="reserva_hora_representante_ciudad_agregar" class="form-control" required>
-                                                        <option value="0">Seleccione Ciudad</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-12">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
-                                                    <input type="text" class="form-control form-control-sm"
-                                                        onblur="validar_email_agenda_representante()" name="reserva_hora_representante_correo"
-                                                        id="reserva_hora_representante_correo">
-                                                    <span id="mensaje_email_reserva_representante" style="display:none"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-12">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Tel&eacute;fono</label>
-                                                    <input type="tel" class="form-control form-control-sm"
-                                                        name="reserva_hora_representante_telefono_uno" id="reserva_hora_representante_telefono_uno">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="div_representante_existente" style="display:none;" style="margin: 0px; padding: 0px">
-                                            <input type="hidden" name="reserva_representante_id" id="reserva_representante_id" value=''>
-                                            <input type="hidden" name="reserva_representante_id_usuario" id="reserva_representante_id_usuario" value=''>
-                                            <table class="table table-borderless table-xs">
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            <strong>Nombre</strong>
-                                                        </th>
-                                                        <td><span id="reserva_representante_nombre"></span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            <strong>Fecha Nacimiento</strong>
-                                                        </th>
-                                                        <td><span id="reserva_representante_fecha_nacimiento"></span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            <strong>Sexo</strong>
-                                                        </th>
-                                                        <td><span id="reserva_representante_sexo"></span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            <strong>Dirección</strong>
-                                                        </th>
-                                                        <td><span id="reserva_representante_direccion"></span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            <strong>Correo Electrónico</strong>
-                                                        </th>
-                                                        <td><span id="reserva_representante_email"></span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            <strong>Teléfono</strong>
-                                                        </th>
-                                                        <td><span id="reserva_representante_telefono"></span></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-12 col-md-4 col-lg-5 col-xl-5">
                                             <div class="form-group">
-                                                <label class="floating-label-activo-sm"><span style="color: red;">*</span>Relación</label>
+                                                <label class="floating-label-activo-sm"><span class="text-danger">*</span>Relación</label>
                                                 <select class="form-control form-control-sm" name="reserva_hora_representante_agregar_relacion" id="reserva_hora_representante_agregar_relacion">
                                                     <option value="">Seleccione</option>
                                                     <option data-tipo="1" value="Hijo(a)" selected>Hijo(a)</option>
@@ -559,51 +397,192 @@
                                                 </select>
                                             </div>
                                         </div>
-
+                                        <input type="hidden" name="reserva_representante_nuevo_exitente" id="reserva_representante_nuevo_exitente" value="0">
+                                        <div class="div_representante_nuevo px-1" style="display:none;">
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Nombres</label>
+                                                        <input type="text" required class="form-control form-control-sm" name="reserva_hora_representante_nombres_paciente" id="reserva_hora_representante_nombres_paciente">
+                                                    </div>
+                                                </div>
+                                               <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Primer Apellido</label>
+                                                        <input type="text" class="form-control form-control-sm" name="reserva_hora_representante_apellido_uno" id="reserva_hora_representante_apellido_uno">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Segundo Apellido</label>
+                                                        <input type="text" class="form-control form-control-sm" name="reserva_hora_representante_apellido_dos" id="reserva_hora_representante_apellido_dos">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">F. Nacimiento</label>
+                                                        <input type="date" class="form-control form-control-sm" name="reserva_hora_representante_fecha_nac" id="reserva_hora_representante_fecha_nac" onclick="evaluar_edad();">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Sexo</label>
+                                                        <select id="reserva_hora_representante_sexo" name="reserva_hora_representante_sexo"
+                                                            class="form-control form-control-sm">
+                                                            <option value="0">Selecione una opci&oacute;n</option>
+                                                            <option value="F">Femenino</option>
+                                                            <option value="M">Masculino</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Previsi&oacute;n</label>
+                                                        <select id="reserva_hora_representante_convenio" name="reserva_hora_representante_convenio"
+                                                            class="form-control form-control-sm">
+                                                            <option value="0">Selecione una opci&oacute;n</option>
+                                                            @if (isset($prevision))
+                                                                @foreach ($prevision as $p)
+                                                                    <option value="{{ $p->id }}">{{ $p->nombre }}</option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-8 col-lg-8 col-xl-4">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Direcci&oacute;n</label>
+                                                        <input type="address" class="form-control form-control-sm" name="reserva_hora_representante_direccion" id="reserva_hora_representante_direccion">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Depto. | Ofic.</label>
+                                                        <input type="address" class="form-control form-control-sm" name="reserva_hora_representante_numero_dir" id="reserva_hora_representante_numero_dir">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Región</label>
+                                                        <select  onchange="buscar_ciudad_repesentante();" name="reserva_hora_representante_region_agregar" id="reserva_hora_representante_region_agregar"
+                                                            class="form-control form-control-sm" required>
+                                                            <option value="0">Seleccione</option>
+                                                            @if (isset($region))
+                                                                @foreach ($region as $reg)
+                                                                    <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Ciudad</label>
+                                                        <select id="reserva_hora_representante_ciudad_agregar" name="reserva_hora_representante_ciudad_agregar" class="form-control form-control-sm" required>
+                                                            <option value="0">Seleccione</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            onblur="validar_email_agenda_representante()" name="reserva_hora_representante_correo"
+                                                            id="reserva_hora_representante_correo">
+                                                        <span id="mensaje_email_reserva_representante" style="display:none"></span>
+                                                    </div>
+                                                </div>
+                                                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Tel&eacute;fono</label>
+                                                        <input type="tel" class="form-control form-control-sm"
+                                                            name="reserva_hora_representante_telefono_uno" id="reserva_hora_representante_telefono_uno">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="div_representante_existente" style="display:none;">
+                                                <input type="hidden" name="reserva_representante_id" id="reserva_representante_id" value=''>
+                                                <input type="hidden" name="reserva_representante_id_usuario" id="reserva_representante_id_usuario" value=''>
+                                                <table class="table table-borderless table-xs">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th scope="row">
+                                                                <strong>Nombre</strong>
+                                                            </th>
+                                                            <td><span id="reserva_representante_nombre"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">
+                                                                <strong>Fecha Nacimiento</strong>
+                                                            </th>
+                                                            <td><span id="reserva_representante_fecha_nacimiento"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">
+                                                                <strong>Sexo</strong>
+                                                            </th>
+                                                            <td><span id="reserva_representante_sexo"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">
+                                                                <strong>Dirección</strong>
+                                                            </th>
+                                                            <td><span id="reserva_representante_direccion"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">
+                                                                <strong>Correo Electrónico</strong>
+                                                            </th>
+                                                            <td><span id="reserva_representante_email"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">
+                                                                <strong>Teléfono</strong>
+                                                            </th>
+                                                            <td><span id="reserva_representante_telefono"></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12">
-                                    <div class="form-group">
-                                        <h6 class="text-c-blue ml-2 mb-3">Enviar confirmaci&oacute;n</h6>
+                                <div class="form-row">
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                            <h6 class="f-14 text-c-blue">Enviar confirmaci&oacute;n</h6>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6 col-md-6">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input"
-                                                id="reserva_hora_confirmacion" name="reserva_hora_confirmacion">
-                                            <label class="custom-control-label" for="reserva_hora_confirmacion">Correo
-                                                electr&oacute;nico</label>
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input"
+                                                    id="reserva_hora_confirmacion" name="reserva_hora_confirmacion">
+                                                <label class="custom-control-label" for="reserva_hora_confirmacion">Correo
+                                                    electr&oacute;nico</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="reserva_hora_sms"
+                                                    name="reserva_hora_sms">
+                                                <label class="custom-control-label" for="sms">SMS</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-6">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="reserva_hora_sms"
-                                                name="reserva_hora_sms">
-                                            <label class="custom-control-label" for="sms">SMS</label>
-                                        </div>
-                                    </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" id="cerrar_registro_paciente_hora"
+                                        data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                                    <button type="button" id="guardar_reserva_paciente" onclick="agendar_hora_paciente_nuevo();"
+                                        class="btn btn-info">
+                                        <i class="feather icon-check"></i> Tomar Hora
+                                    </button>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" id="cerrar_registro_paciente_hora"
-                                    data-dismiss="modal">Cancelar</button>
-                                <button type="button" id="guardar_reserva_paciente" onclick="agendar_hora_paciente_nuevo();"
-                                    class="btn btn-info">
-                                    Tomar Hora
-                                </button>
-                            </div>
-                        </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
@@ -722,15 +701,15 @@
 
             if( edad < 18 )
             {
-                $('.seccion_reserva_paciente_nuevo').removeClass('col-sm-12');
-                $('.seccion_reserva_paciente_nuevo_representante').removeClass('col-sm-12');
+                $('.seccion_reserva_paciente_nuevo').removeClass('');
+                $('.seccion_reserva_paciente_nuevo_representante').removeClass('');
 
-                $('.seccion_reserva_paciente_nuevo').addClass('col-sm-6');
-                $('.seccion_reserva_paciente_nuevo_representante').addClass('col-sm-6');
+                $('.seccion_reserva_paciente_nuevo').addClass('');
+                $('.seccion_reserva_paciente_nuevo_representante').addClass('');
                 $('.seccion_reserva_paciente_nuevo_representante').show();
 
                 $('#agenda_agregar_paciente').children(0).removeClass('modal-md');
-                $('#agenda_agregar_paciente').children(0).addClass('modal-xl');
+                $('#agenda_agregar_paciente').children(0).addClass('modal-md');
 
                 $('#reserva_hora_correo').attr('onblur', "");
             }
@@ -739,11 +718,11 @@
                 $('.seccion_reserva_paciente_nuevo').removeClass('col-sm-6');
                 $('.seccion_reserva_paciente_nuevo_representante').removeClass('col-sm-6');
 
-                $('.seccion_reserva_paciente_nuevo').addClass('col-sm-12');
-                $('.seccion_reserva_paciente_nuevo_representante').addClass('col-sm-12');
+                $('.seccion_reserva_paciente_nuevo').addClass('');
+                $('.seccion_reserva_paciente_nuevo_representante').addClass('');
                 $('.seccion_reserva_paciente_nuevo_representante').hide();
 
-                $('#agenda_agregar_paciente').children(0).removeClass('modal-xl');
+                $('#agenda_agregar_paciente').children(0).removeClass('modal-md');
                 $('#agenda_agregar_paciente').children(0).addClass('modal-md');
 
                 $('#reserva_hora_correo').attr('onblur', "validar_email_agenda();");
