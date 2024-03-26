@@ -60,7 +60,7 @@
                                     <div class="row">
 
                                         <!--Formulario / Menor de edad-->
-                                        @include('atencion_medica.generales.seccion_menor')
+                                        @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
                                         <!--Cierre: Formulario / Menor de edad-->
 
                                         <!--Motivo consulta-->
@@ -127,7 +127,7 @@
                                                                                 <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_pabellon();"><i class="feather icon-edit-1"></i> Solicitar Pabellón</button>
                                                                             </div>
                                                                         </div>
-                                                                        <hr class="mt-2">                            
+                                                                        <hr class="mt-2">
                                                                         <div class="row mb-2">
                                                                             <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                                                                 <div class="form-group">
@@ -176,7 +176,7 @@
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
-                                                                               
+
                                                                                     </div>
                                                                                     <div class="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-0 mt-0">
                                                                                         <div class="form-group">
@@ -186,7 +186,7 @@
                                                                                                 <label for="pr_cda" class="cr"></label>
                                                                                             </div>
                                                                                         </div>
-                                                                       
+
                                                                                             <div id="contentProc_cda" style="display: none;">
                                                                                                 <div class="form-row">
                                                                                                     <div class="form-group col-md-4">
@@ -199,7 +199,7 @@
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
-                                                                               
+
                                                                                     </div>
                                                                                     <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 mb-0 mt-0">
                                                                                         <div class="form-group">
@@ -216,13 +216,13 @@
                                                                         <div class="form-row mb-3">
                                                                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-1">
                                                                                 <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_endosc_eda()";><i class="feather icon-edit-1"></i> Solicitar Endoscopía Alta</button>
-                                                                            
+
                                                                             </div>
                                                                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-1">
                                                                                 <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_endosc_edb()";><i class="feather icon-edit-1"></i> Solicitar Endoscopía Baja</button>
                                                                             </div>
                                                                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-1">
-                                                                                <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="mostrar_modal_examen_cirguria()";><i class="feather icon-edit-1"></i> Examenes</button> 
+                                                                                <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="mostrar_modal_examen_cirguria()";><i class="feather icon-edit-1"></i> Examenes</button>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-row">

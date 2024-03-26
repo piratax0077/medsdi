@@ -41,9 +41,11 @@
                             </div>-->
                             <!--FORMULARIOS-->
                             <div class="row">
+
                                 <!--Formulario / Menor de edad-->
-                                @include('atencion_medica.generales.seccion_menor')
+                                @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "3"])
                                 <!--Cierre: Formulario / Menor de edad-->
+
                                 <!--Motivo consulta-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">

@@ -37,10 +37,11 @@
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
                         <div class="tab-pane fade show active" id="atencion_derma" role="tabpanel" aria-labelledby="atencion_derma-tab">
                             <div class="row">
+
                                 <!--Formulario / Menor de edad-->
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0">
-                                    @include('general.secciones_ficha.seccion_menor')
-                                </div>
+                                @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
+                                <!--Cierre: Formulario / Menor de edad-->
+
                                 <!--Motivo consulta-->
                                 @include('general.secciones_ficha.motivo')
                                 <!--Motivo consulta-->

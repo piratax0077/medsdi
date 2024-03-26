@@ -28,8 +28,9 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="row">
+
                                             <!--Formulario / Menor de edad-->
-                                            @include('general.secciones_ficha.seccion_menor')
+                                            @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
                                             <!--Cierre: Formulario / Menor de edad-->
 
                                             <!--Motivo consulta-->
