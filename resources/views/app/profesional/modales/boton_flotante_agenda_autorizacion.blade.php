@@ -16,18 +16,17 @@
     <style>
         .btn-agenda-autorizacion {
             display: block;
-            width: 135px;
-            font-weight: 600;
-            font-size: 0.77rem;
-            position: fixed;
-            right: -55px;
-            top: 190px;
-            text-align: center;
-            z-index: 1000000000;
-            transition: 0.3s;
-            cursor: pointer;
-            transform: rotate(90deg);
-
+			width: 182px;
+			font-weight: 600;
+			font-size: 0.77rem;
+			position: fixed;
+			right: -79px;
+			top: 213px;
+			text-align: center;
+			z-index: 1000000000;
+			transition: 0.3s;
+			cursor: pointer;
+			transform: rotate(90deg);
         }
 
 
@@ -61,9 +60,9 @@
 <!-- BOTÓN FLOTANTE AUTORIZACION (AUTORIZACION LICENCIA) -->
 
     @if(!empty(session('lic_token')) && session('lic_estado') == 1)
-        <button class="btn btn-agenda-autorizacion btn-info btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> AUTORIZACIÓN</button>
+        <button class="btn btn-agenda-autorizacion btn-info btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> ABRIR TALONARIOS</button>
     @else
-        <button class="btn btn-agenda-autorizacion btn-danger btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> AUTORIZACIÓN</button>
+        <button class="btn btn-agenda-autorizacion btn-danger btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> ABRIR TALONARIOS</button>
     @endif
 
 
@@ -104,7 +103,7 @@
                     @endif
                 </div>
                 <div class="row">
-                    <div class="col-md-6" id="modal_autorizacion_imagen">
+                    <div class="col-md-6 text-center" id="modal_autorizacion_imagen">
                         {{--  --}}
                     </div>
                     <div class="col-md-6" id="modal_autorizacion_mensaje">
@@ -175,6 +174,7 @@
             $('#modal_autorizacion').modal('show');
             $('#modal_autorizacion_imagen').html('');
             $('#modal_autorizacion_mensaje').html('');
+			$('#modal_autorizacion_btn_solicitar').attr('disabled', false);
         }
 
         function  cerrar_autorizacion()
@@ -263,7 +263,7 @@
                     }
                     else if(data.estado == 1)
                     {
-                        $('#modal_autorizacion_imagen').html('<img class="img-fluid" src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
+                        $('#modal_autorizacion_imagen').html('<img class="img-fluid w-50" src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
 
                         $('#modal_autorizacion_btn_solicitar').attr('disabled', true);
                         $('#modal_autorizacion_btn_cancelar').attr('disabled', false);
@@ -446,7 +446,7 @@
                         console.log(data);
                         if(data.estado == 1)
                         {
-                            $('#modal_autorizacion_imagen').html('<img src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
+                            $('#modal_autorizacion_imagen').html('<img class="img-fluid w-50" src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
                             $('#modal_autorizacion_mensaje').html('<h3>Autorización Finalizada</h3>');
                             $('#modal_autorizacion_btn_solicitar').attr('disabled', false);
                             $('#modal_autorizacion_btn_cancelar').attr('disabled', true);
@@ -612,7 +612,7 @@
                     }
                     else if(data.estado == 1)
                     {
-                        $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid" src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
+                        $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid w-50" src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
 
                         $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', true);
                         $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', false);
@@ -715,7 +715,7 @@
                         console.log(data);
                         if(data.estado == 1)
                         {
-                            $('#modal_autorizacion_fmu_imagen').html('<img src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
+                            $('#modal_autorizacion_fmu_imagen').html('<img class="img-fluid w-50" src="{{ asset('images/iconos/aprobacion.svg') }}" alt="Aprobado">');
                             $('#modal_autorizacion_fmu_mensaje').html('<h3>Autorización Finalizada</h3>');
                             $('#modal_autorizacion_fmu_btn_solicitar').attr('disabled', false);
                             $('#modal_autorizacion_fmu_btn_cancelar').attr('disabled', true);

@@ -161,42 +161,57 @@
                                                     id_lugar_atencion: id_lugar_atencion,
                                                 },
                                                 success:function(data){
-                                                            if (data !== 'null')
-                                                            {
-                                                                if(data.estado == 1)
-                                                                {
-                                                                    var arrayTemp = [];
-                                                                    data.registros.forEach(element => {
-                                                                        var rut = element.paciente.rut+' | '
-                                                                        var valor = element.estado.valor+' | '
-                                                                        var comentarios_confirmacion = '';
-                                                                        if(comentarios_confirmacion != 'null')
-                                                                            comentarios_confirmacion = element.comentarios_confirmacion+' | '
-                                                                        var nombre = element.paciente.prevision.nombre
-                                                                        var descripcion = '';
-                                                                        descripcion += rut;
-                                                                        descripcion += valor;
-                                                                        descripcion += comentarios_confirmacion;
-                                                                        descripcion += nombre;
+                                                    if (data !== 'null')
+                                                    {
+                                                        if(data.estado == 1)
+                                                        {
+                                                            var arrayTemp = [];
+                                                            data.registros.forEach(element => {
+                                                                var rut = element.paciente.rut+' | ';
+                                                                var valor = element.estado.valor+' | ';
+                                                                var comentarios_confirmacion = '';
+                                                                if(comentarios_confirmacion != 'null')
+                                                                    comentarios_confirmacion = element.comentarios_confirmacion+' | ';
+                                                                var nombre = element.paciente.prevision.nombre
+                                                                var descripcion = '';
 
-                                                                        arrayTemp.push({
-                                                                                        id: element.id,
-                                                                                        title: element.tipo_hora_medica+' - '+element.descripcion,
-                                                                                        description: descripcion ,
-                                                                                        start: element.fecha_consulta + 'T' + element.hora_inicio,
-                                                                                        end: element.fecha_consulta + 'T' + element.hora_termino,
-                                                                                        backgroundColor: element.estado.color
-                                                                        });
+                                                                if(element.tipo_hora_medica == 'B')
+                                                                {
+                                                                    descripcion += valor;
+                                                                    arrayTemp.push({
+                                                                                    id: element.id,
+                                                                                    title: element.descripcion,
+                                                                                    description: descripcion ,
+                                                                                    start: element.fecha_consulta + 'T' + element.hora_inicio,
+                                                                                    end: element.fecha_consulta + 'T' + element.hora_termino,
+                                                                                    backgroundColor: element.estado.color
                                                                     });
-                                                                    console.log(arrayTemp);
                                                                 }
                                                                 else
                                                                 {
-                                                                    console.log('falla en carga');
+                                                                    descripcion += rut;
+                                                                    descripcion += valor;
+                                                                    descripcion += comentarios_confirmacion;
+                                                                    descripcion += nombre;
+                                                                    arrayTemp.push({
+                                                                                    id: element.id,
+                                                                                    title: element.tipo_hora_medica+' - '+element.descripcion,
+                                                                                    description: descripcion ,
+                                                                                    start: element.fecha_consulta + 'T' + element.hora_inicio,
+                                                                                    end: element.fecha_consulta + 'T' + element.hora_termino,
+                                                                                    backgroundColor: element.estado.color
+                                                                    });
                                                                 }
-                                                            }
-                                                            end(arrayTemp);
+                                                            });
+                                                            // console.log(arrayTemp);
                                                         }
+                                                        else
+                                                        {
+                                                            console.log('falla en carga');
+                                                        }
+                                                    }
+                                                    end(arrayTemp);
+                                                }
                                             });
                                     },
 
@@ -403,11 +418,14 @@
                                     },
 
                                     dateClick: function(date, jsEvent, view) {
+										var valido = 1;
 
-                                        var valido = 1;
-                                        $.each(date.jsEvent.path, function(index, value)
+                                        /** VALIDACION DE FUERA DE HORARIO */
+                                        // $.each(date.jsEvent.path, function(index, value)
+                                        $.each(date.jsEvent.srcElement.classList, function(index, value)
                                         {
-                                            if(value.className == 'fc-non-business')
+                                            // console.log(value);
+                                            if(value == 'fc-non-business')
                                             {
                                                 swal({
                                                     title: "Toma de Hora",
@@ -423,8 +441,10 @@
 
                                         if(valido == 1)
                                         {
-                                            {{--   console.log(date.date);  --}}
-                                            {{--   console.log(date.dateStr);  --}}
+                                            // console.log(date.date);
+                                            // console.log(date.dateStr);
+
+                                            /** VALIDAR EVENTO */
                                             var date_str = date.dateStr.replace('T',' ');
                                             var date_DD = new Date(date_str);
                                             var curr_date = date_DD.getDate();
@@ -434,6 +454,8 @@
                                             var curr_mint = date_DD.getMinutes();
                                             var fecha_seleccionada = curr_year+"-"+curr_month+"-"+curr_date+" "+curr_hour+":"+curr_mint;
                                             $.each(CalendarEl.getEvents(), function( index, value ) {
+                                                // console.log(index);
+                                                // console.log(value);
                                                 var date_str2 = value.startStr.replace('T',' ');
                                                 var date_DD2 = new Date(date_str2);
                                                 var curr_date2 = date_DD2.getDate();
@@ -449,6 +471,28 @@
                                                 {
                                                     valido = 0;
                                                 }
+                                            });
+
+                                            /** VALIDAR BLOQUEO */
+                                            CalendarEl.getEvents().forEach(function(event) {
+                                                var eventEnd = typeof event.end === 'string' ? moment(event.end) : event.end;
+                                                if (date.date >= event.start && date.date <= eventEnd) {
+                                                    valido = 0;
+                                                    console.log('Existe un evento en esta fecha: ' + event.title);
+                                                    console.log(date.date);
+                                                    console.log(event.start);
+                                                    console.log(eventEnd);
+
+                                                    swal({
+                                                        title: "Toma de Hora",
+                                                        text: "El profesional no atiende en este periodo.",
+                                                        icon: "error",
+                                                        buttons: "Aceptar",
+                                                        DangerMode: true,
+                                                    });
+                                                    return false;
+                                                }
+
                                             });
 
                                             /** validar  dias pasados */
@@ -498,7 +542,7 @@
                                                     icon: "error",
                                                     buttons: "Aceptar",
                                                     DangerMode: true,
-                                                })
+                                                });
                                             }
                                         }
                                     },

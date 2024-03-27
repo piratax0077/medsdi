@@ -61,8 +61,7 @@
                 <div class="page-block">
                     <div class="row align-items-center text-center">
                         <div class="page-header-title">
-                            <h5 class="text-white f-22"><a href="#" data-toggle="tooltip" data-placement="top"
-                                    title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
+                            <h5 class="text-white f-22"><a href="#" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
                                 <strong>AGENDA</strong><br> {{ strtoupper($lugar_atencion_nombre) }}
                             </h5>
                         </div>
@@ -73,8 +72,11 @@
 
 
             <div class="row user-profile user-card  p-3" style="background-color:#ecf0f5;">
-                <div class="col-md-12">
+                <div class="col-md-11">
                     <h5 class="text-primary my-1" style="font-size: 1.4rem;" id="titulo_tipo_agenda"></h5>
+                </div>
+                <div class="col-md-1 text-center">
+                    @include('general.bloqueo_hora.bloque_hora')
                 </div>
                 <div class="col-md-12 card">
                     <div id='agenda'></div>
@@ -122,7 +124,7 @@
                             </button>
                         </div>
                     </div>
-
+					
                     <form id="form_reseva_de_horas">
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                         <input type="hidden" id="fecha_consulta" name="fecha_consulta" value="">
@@ -220,9 +222,9 @@
                                 </div>
                             </div> --}}
 
-                            <div class="col-sm-12 col-md-12">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="form-group">
-                                    <label class="floating-label">Descripción reserva</label>
+                                    <label class="floating-label-activo-sm">Descripción reserva</label>
                                     <input type="text" class="form-control form-control-sm"
                                         name="reserva_hora_descripcion" id="reserva_hora_descripcion">
                                 </div>
@@ -248,11 +250,11 @@
                             </div> --}}
 
 
-                            <div class="modal-footer">
+                            <div class="modal-footer mb-0 pt-1 pb-0">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal"><i
-                                        class="icon-x"></i> Cancelar</button>
+                                        class="feather icon-x"></i> Cancelar</button>
                                 <button type="button" onclick="agendar_hora();" class="btn btn-info"><i
-                                        class="icon-check"></i> Agendar hora</button>
+                                        class="feather icon-check"></i> Agendar hora</button>
                             </div>
                         </div>
 
@@ -641,15 +643,12 @@
 
     <!-- INICIO RECEPCION BONO  -->
     <!--Modal Recepción de Bonos y programas-->
-    <div id="modal_recepcion_bonos_api" class="modal fade" tabindex="-1" role="dialog"
-        aria-labelledby="Recepcion de bonos" aria-hidden="true">
+    <div id="modal_recepcion_bonos_api" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Recepcion de bonos" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
                     <h5 class="modal-title text-white" id="modal_pago_consulta_title">Recepción de Pago Atención</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                        onclick="$('#modal_recepcion_bonos_api').modal('hide');"><span
-                            aria-hidden="true">×</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#modal_recepcion_bonos_api').modal('hide');"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body pb-0">
                     <div class="form-row">
@@ -657,64 +656,68 @@
                         <input type="hidden" name="bono_id_profesional" id="bono_id_profesional">
                         <input type="hidden" name="bono_id_paciente" id="bono_id_paciente">
                         <input type="hidden" name="bono_id_tipo_bono" id="bono_id_tipo_bono" value="1">
-                        <div class="col-sm-12 mt-2">
-                            <div class="form-group">
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Rut del Paciente</label>
-                                <input type="person" class="form-control" name="bono_paciente_rut"
-                                    id="bono_paciente_rut">
+                                <input type="person" class="form-control form-control-sm" name="bono_paciente_rut" id="bono_paciente_rut">
                             </div>
-                            <div class="form-group">
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Nombre del Paciente</label>
-                                <input type="text" class="form-control" name="bono_paciente_nombre"
-                                    id="bono_paciente_nombre">
+                                <input type="text" class="form-control form-control-sm" name="bono_paciente_nombre" id="bono_paciente_nombre">
                             </div>
-                            <hr>
-                            <div class="form-group">
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
                                 <label class="floating-label-activo-sm"> Nombre Profesional</label>
-                                <input type="text" class="form-control" name="bono_profesional_nombre"
-                                    id="bono_profesional_nombre">
+                                <input type="text" class="form-control form-control-sm" name="bono_profesional_nombre" id="bono_profesional_nombre">
                             </div>
-                            <div class="form-group">
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
                                 <label class="floating-label-activo-sm"> Rut Profesional</label>
-                                <input type="text" class="form-control" name="bono_profesional_rut"
-                                    id="bono_profesional_rut">
+                                <input type="text" class="form-control form-control-sm" name="bono_profesional_rut" id="bono_profesional_rut">
                             </div>
-                            <hr>
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <label class="floating-label-activo-sm">Clase Pago</label>
-                                    <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control">
-                                        <option value="1">Bono Fisico</option>
-                                        <option value="2">Sencillito</option>
-                                        <option value="3">Caja Vecina</option>
-                                        <option value="4">Bono Web</option>
-                                        <option value="5">Bono Web Pre-Pago</option>
-                                        <option value="6">Particular</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="floating-label-activo-sm">Nº de bono o programa</label>
-                                    <input type="text" class="form-control" name="bono_numero" id="bono_numero">
-                                </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Clase Pago</label>
+                                <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm">
+                                    <option value="1">Bono Fisico</option>
+                                    <option value="2">Sencillito</option>
+                                    <option value="3">Caja Vecina</option>
+                                    <option value="4">Bono Web</option>
+                                    <option value="5">Bono Web Pre-Pago</option>
+                                    <option value="6">Particular</option>
+                                </select>
                             </div>
-                            {{--  <div class="form-group">
-                                    <label class="floating-label-activo-sm">Nº de bono o programa</label>
-                                    <input type="text" class="form-control" name="bono_numero" id="bono_numero" >
-                                </div>  --}}
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Valor total</label>
-                                <input name="bono_valor_consulta" id="bono_valor_consulta" type="number"
-                                    class="form-control">
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Nº de bono o programa</label>
+                                <input type="text" class="form-control form-control-sm" name="bono_numero" id="bono_numero" >
                             </div>
-                            <div class="form-group">
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Convenio</label>
-                                <select id="bono_prevision" name="bono_prevision" class="form-control">
+                                <select id="bono_prevision" name="bono_prevision" class="form-control form-control-sm">
                                     <option value="0">Selecione una opción</option>
                                     @foreach ($prevision as $prev)
                                         <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
                                     @endforeach
                                 </select>
                             </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Valor total</label>
+                                <input name="bono_valor_consulta" id="bono_valor_consulta" type="number" class="form-control form-control-sm">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
                             <div class="form-group mb-3">
                                 <div class="switch switch-success d-inline m-r-10">
                                     <input type="checkbox" id="recepcion_programa">
@@ -724,23 +727,21 @@
                             </div>
                             <div class="form-group" id="sesiones_programa" style="display:none">
                                 <label class="floating-label">Nº de Sesiones</label>
-                                <input name="bono_sn_sesiones" id="bono_sn_sesiones" type="number"
-                                    class="form-control">
+                                <input name="bono_sn_sesiones" id="bono_sn_sesiones" type="number" class="form-control form-control-sm">
                             </div>
-                            <hr>
+                        </div>
+                        <div class="col-sm-12">
                             <div class="form-group text-center my-2 pb-2">
                                 <div onclick="recepcion_pago();" class="btn btn-success">Recepcionar</div>
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
     </div>
     <!-- FIN RECEPCION BONO  -->
-
+	
     @include('app.profesional.modales.boton_flotante_agenda_exa_ciru')
 
 @endsection

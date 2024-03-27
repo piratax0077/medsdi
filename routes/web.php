@@ -681,6 +681,16 @@ Route::group([
     Route::post('/receta/lente/registro', [App\Http\Controllers\OftarmoRecetaLenteController::class, 'registrar'])->name('receta.oftalmo.lente.registrar');
     Route::get('/receta/lente/ver', [App\Http\Controllers\OftarmoRecetaLenteController::class, 'verRegistros'])->name('receta.oftalmo.lente.ver');
 
+    /** OTRO ACOMPAÑANTE */
+    Route::post('/otro/acompanante/registro', [App\Http\Controllers\OtroAcompananteAtencionController::class, 'registrar'])->name('otro.acompanante.registrar');
+
+    /** BLOQUEO DE HORAS */
+    Route::post('/horas/bloqueo/registro', [App\Http\Controllers\ProfesionalHorariosBloqueoController::class, 'registrar_r'])->name('bloqueo.horas.registrar');
+    Route::get('/horas/bloqueo/ver', [App\Http\Controllers\ProfesionalHorariosBloqueoController::class, 'verRegistros'])->name('bloqueo.horas.ver');
+    Route::post('/horas/bloqueo/estado', [App\Http\Controllers\ProfesionalHorariosBloqueoController::class, 'estado'])->name('bloqueo.horas.estado');
+
+
+
 });
 
 Route::group([
@@ -1014,7 +1024,7 @@ Route::group([
     Route::get('Hora-medica/hora/agendar/agendar', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_horas'])->name('agenda.agendar_hora');
     Route::get('Hora-medica/hora/agendar/paciente/nuevo', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_hora_nuevo_paciente'])->name('agenda.agendar_hora_nuevo_paciente');
     Route::post('Hora-medica/paciente/nuevo', [App\Http\Controllers\AsistenteController::class, 'AgregarNuevoPaciente'])->name('agenda.paciente.nuevo');
-
+    Route::get('Hora-medica/validar/email', [App\Http\Controllers\EscritorioProfesional::class, 'validar_rut'])->name('agenda.validar_email');
     /** motor de busqueda asistente online*/
     Route::get('perfil/configuracion/busqueda/editar', [App\Http\Controllers\EscritorioAsistente::class, 'editar_configuracion_busqueda'])->name('asistente.editar_configuracion_busqueda');
 
@@ -1519,7 +1529,7 @@ Route::group([
 });
 
 /**CAMBIO DE CONTRASEÑA PERFIL */
-Route::get('perfil.cambio_contrasena', [App\Http\Controllers\UtilsController::class, 'cambioContrasenaPerfil'])->name('perfil.cambio_contrasena');
+Route::get('perfil/cambio_contrasena', [App\Http\Controllers\UtilsController::class, 'cambioContrasenaPerfil'])->name('perfil.cambio_contrasena');
 
 
 /** FLUJO DE CAJA */
@@ -1696,6 +1706,13 @@ Route::get('/codigo/fonasa/buscar/por/codigo',[App\Http\Controllers\CodigoFonasa
 Route::get('/codigo/fonasa/buscar/por/nombre',[App\Http\Controllers\CodigoFonasaController::class, 'buscarPorNombre'])->name('fonasa.buscar.por.nombre');
 Route::get('/codigo/fonasa/buscar/por/nombre/Autocomplete',[App\Http\Controllers\CodigoFonasaController::class, 'buscarPorNombreAutocomplete'])->name('fonasa.buscar.por.nombre.autocomplete');
 
+
+/** ZOOM */
+Route::get('/zoom/create',[App\Http\Controllers\ZoomManagerController::class, 'crearMeeting'])->name('zoom.create');
+Route::get('meeting', function () {
+    // echo json_encode($_REQUEST);
+    return view('atencion_medica.secciones_especialidad.meeting');
+});
 
 
 

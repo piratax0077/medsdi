@@ -83,23 +83,23 @@
                             @include('atencion_medica.secciones_especialidad.ficha_orl')
                         </div>
                         <!--Licencia-->
-                        <div class="tab-pane fade show" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
+                        <div class="tab-pane fade" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
                             @include('general.secciones_ficha.licencia')
                         </div>
                         <!--Ficha Médica Única-->
-                        <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
+                        <div class="tab-pane fade" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
                             @include('general.secciones_ficha.fmu')
                         </div>
                         <!--Atenciones previas-->
-                        <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
+                        <div class="tab-pane fade" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
                             @include('general.secciones_ficha.atenciones_previas_form')
                         </div>
                          <!--Exámenes-->
-                        <div class="tab-pane fade show" id="band_exam" role="tabpanel" aria-labelledby="band_exam_tab">
+                        <div class="tab-pane fade" id="band_exam" role="tabpanel" aria-labelledby="band_exam_tab">
                             @include('general.secciones_ficha.bandeja_examenes')
                         </div>
                         <!--Hospitalización-->
-						<div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">
+						<div class="tab-pane fade" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">
                             @include('general.hospitalizacion.hospitalizacion')
                         </div>
                     </div>

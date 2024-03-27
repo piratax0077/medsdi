@@ -45,6 +45,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> --}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
+    <!--boton azul-->
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
+
+    <!--Estilo tab secciones -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/tabs-secciones.css') }}">
+
+    <!-- flatpickr -->
+    <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
 
     @yield('page-styles')
 
@@ -148,6 +156,9 @@
     <!-- funciones generales -->
     <script src="{{ asset('js/funciones.js') }}"></script>
 
+    <!-- flatpickr -->
+    <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
+	
     @include('template.templateAutorizacion')
 
     <!--PERFIL PROFESIONAL-->
@@ -3839,24 +3850,29 @@
 
                         $('#editar_asistentes').modal('show');
                         $('#mi_asistente_id_lugar_atencion').val(id);
-                        for (i = 0; i < data.length; i++) {
-
-
-                            let nombres = data[i].nombres + ' ' +
-                                data[i].apellido_uno + ' ' + data[i].apellido_dos;
+                        for (i = 0; i < data.length; i++)
+                        {
+                            var checked = 'checked';
+                            let nombres = data[i].nombres + ' ' + data[i].apellido_uno + ' ' + data[i].apellido_dos;
                             let rut = data[i].rut;
                             let id = data[i].id;
                             let j = 1; //contador para asignar id al boton que borrara la fila
-                            let fila = '<tr class="tr_asistente" id="row' + j + '"><td>' +
-                                '<div class="form-group"><div class="switch switch-success d-inline m-r-10">' +
-                                ' <input type = "checkbox" id="estado_asistente" onclick="cambio_estado_asistente(' +
-                                id + ');" checked = "" > ' +
-                                '<label for = "estado_asistente" class = "cr"> </label> </div> ' +
-                                '</div>' + '</td> <td> ' +
-                                rut + '</td><td>' +
-                                nombres + '</td>' +
-                                '</tr>'; //esto seria lo que contendria la fila
+                            var fila = '';
 
+                            fila += '<tr class="tr_asistente" id="row' + j + '">';
+                            fila += '    <td>';
+                            fila += '       <div class="form-group">';
+                            fila += '           <div class="switch switch-success d-inline m-r-10">';
+                            if(data[i].estado == 0) checked = '';
+                            else                    checked = 'checked';
+                            fila += '               <input type = "checkbox" id="estado_asistente" onclick="cambio_estado_asistente(' + id + ');" '+checked+'> ';
+                            fila += '               <label for = "estado_asistente" class = "cr"> </label>';
+                            fila += '           </div>' ;
+                            fila += '      </div>';
+                            fila += '   </td>';
+                            fila += '   <td>' + rut + '</td>';
+                            fila += '   <td>' + nombres + '</td>';
+                            fila += '</tr>';
                             j++;
 
                             $('#mi_asistente_table tbody').append(fila);
@@ -6437,11 +6453,11 @@
 			{
 				$('.div_edit_comentario').show();
 				$('.div_edit_comentario_impedimento').hide();
-				$('#comentarios_impedimento').val('');	 
+				$('#comentarios_impedimento').val('');
 			}
 			else
-			{	 
-				$('.div_edit_comentario').hide();	 
+			{
+				$('.div_edit_comentario').hide();
 				$('.div_edit_comentario_impedimento').show();
 				$('#comentarios_organo').val('');
 			}

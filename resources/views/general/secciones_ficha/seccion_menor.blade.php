@@ -74,27 +74,27 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Nombres</label>
-                            <input type="text" required class="form-control form-control-sm" name="otro_acompanante_nombre" id="otro_acompanante_nombre">
+                            <input type="text" class="form-control form-control-sm" name="otro_acompanante_nombre" id="otro_acompanante_nombre">
                         </div>
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Apellido Paterno</label>
-                            <input type="text" required class="form-control form-control-sm" name="otro_acompanante_apellido_uno" id="otro_acompanante_apellido_uno">
+                            <input type="text" class="form-control form-control-sm" name="otro_acompanante_apellido_uno" id="otro_acompanante_apellido_uno">
                         </div>
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Apellido Materno</label>
-                            <input type="text" required class="form-control form-control-sm" name="otro_acompanante_apellido_dos" id="otro_acompanante_apellido_dos">
+                            <input type="text" class="form-control form-control-sm" name="otro_acompanante_apellido_dos" id="otro_acompanante_apellido_dos">
                         </div>
                         <div class="form-group">
                             <label class="floating-label-activo-sm">RUT</label>
-                            <input type="text" required class="form-control form-control-sm" name="otro_acompanante_rut" id="otro_acompanante_rut">
+                            <input type="text" class="form-control form-control-sm" name="otro_acompanante_rut" id="otro_acompanante_rut">
                         </div>
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Teléfono</label>
-                            <input type="text" required class="form-control form-control-sm" name="otro_acompanante_telefono" id="otro_acompanante_telefono">
+                            <input type="text" class="form-control form-control-sm" name="otro_acompanante_telefono" id="otro_acompanante_telefono">
                         </div>
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Correo Electrónico</label>
-                            <input type="text" required class="form-control form-control-sm" name="otro_acompanante_email" id="otro_acompanante_email">
+                            <input type="text" class="form-control form-control-sm" name="otro_acompanante_email" id="otro_acompanante_email">
                         </div>
                         <div class="form-group">
                             <label class="floating-label-activo-sm"><span style="color: red;">*</span>Relación</label>

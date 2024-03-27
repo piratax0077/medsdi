@@ -682,9 +682,16 @@ class EscritorioGeneral extends Controller
             if((int)$array_duracion[1]>0)
                 $duracion_total += (int)$array_duracion[1];
 
-            for ($hora=strtotime($hora_inicio_turno); $hora <= strtotime( '+'. $duracion_total.' minute', strtotime($hora_termino_turno) ); $hora = strtotime('+'. $duracion_total.' minute',$hora))
+            for ($hora=strtotime($hora_inicio_turno); $hora <= strtotime( '+'. $duracion_total.' minute', strtotime($hora_termino_turno) ); $hora = strtotime('+'. $duracion_total.' minute',$hora) )
             {
-                $hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))->where('hora_inicio',date('H:i:s',$hora))->first();
+                // $hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))->where('hora_inicio',date('H:i:s',$hora))->first();
+                $hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))
+                                            ->whereRaw("'".date('H:i:s',strtotime( '+1 second', $hora))."' BETWEEN hora_inicio and hora_termino")
+                                            ->first();
+
+                $datos['hora'][strtotime( '+1 second', $hora)] = date('H:i:s',strtotime( '+1 second', $hora));
+                $datos['hora_medica'][strtotime( '+1 second', $hora)] = $hora_medica;
+
                 if($hora_medica)
                 {
                     // con reserva
@@ -704,7 +711,7 @@ class EscritorioGeneral extends Controller
             $datos['msj'] = 'registros';
             $datos['registros'] = $array_bloques;
             $datos['text_fecha'] = $texto_dia[(int)$dia_semana].' '. date('d',strtotime($request->dia)).' '.$texto_mes[(int)date('m',strtotime($request->dia))];
-
+			
         }
         else
         {
