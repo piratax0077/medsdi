@@ -31,6 +31,9 @@
 
     <link rel="stylesheet" href="{{ asset('css/pills_modals.css') }}"/>
 
+    <!--Estilo tab secciones -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/tabs-secciones.css') }}">
+
     {{-- estilos de atencion medica --}}
     <link rel="stylesheet" href="{{ asset('css/estilos_atencion_medica.css') }}"/>
 
@@ -570,9 +573,12 @@
                             }
 
                             /** activar tipos de agendas del profesional */
+                            console.log('data.tipo_agendas');
+                            console.log(data);
                             var tipo_agendas_cant = data.tipo_agendas.length;
                             if(tipo_agendas_cant > 0)
                             {
+                                carga_tipos_agendas(data.tipo_agendas);
                                 $.each(data.tipo_agendas, function (key, value)
                                 {
                                     $('.btn-agenda-'+value).show();
@@ -693,19 +699,34 @@
                                                                             comentarios_confirmacion = element.comentarios_confirmacion+' | '
                                                                         var nombre = element.paciente.prevision.nombre
                                                                         var descripcion = '';
-                                                                        descripcion += rut;
-                                                                        descripcion += valor;
-                                                                        descripcion += comentarios_confirmacion;
-                                                                        descripcion += nombre;
 
-                                                                        arrayTemp.push({
-                                                                                        id: element.id,
-                                                                                        title: element.tipo_hora_medica+' - '+element.descripcion,
-                                                                                        description: descripcion ,
-                                                                                        start: element.fecha_consulta + 'T' + element.hora_inicio,
-                                                                                        end: element.fecha_consulta + 'T' + element.hora_termino,
-                                                                                        backgroundColor: element.estado.color
-                                                                        });
+                                                                        if(element.tipo_hora_medica == 'B')
+                                                                        {
+                                                                            descripcion += valor;
+                                                                            arrayTemp.push({
+                                                                                            id: element.id,
+                                                                                            title: element.descripcion,
+                                                                                            description: descripcion ,
+                                                                                            start: element.fecha_consulta + 'T' + element.hora_inicio,
+                                                                                            end: element.fecha_consulta + 'T' + element.hora_termino,
+                                                                                            backgroundColor: element.estado.color
+                                                                            });
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            descripcion += rut;
+                                                                            descripcion += valor;
+                                                                            descripcion += comentarios_confirmacion;
+                                                                            descripcion += nombre;
+                                                                            arrayTemp.push({
+                                                                                            id: element.id,
+                                                                                            title: element.tipo_hora_medica+' - '+element.descripcion,
+                                                                                            description: descripcion ,
+                                                                                            start: element.fecha_consulta + 'T' + element.hora_inicio,
+                                                                                            end: element.fecha_consulta + 'T' + element.hora_termino,
+                                                                                            backgroundColor: element.estado.color
+                                                                            });
+                                                                        }
                                                                     });
                                                                     console.log(arrayTemp);
                                                                 }
@@ -925,9 +946,11 @@
 
                                         var valido = 1;
                                         var valido_fecha = 1;
-                                        $.each(date.jsEvent.path, function(index, value)
-                                        {
-                                            if(value.className == 'fc-non-business')
+										/** VALIDACION DE FUERA DE HORARIO */
+                                        // $.each(date.jsEvent.path, function(index, value)
+                                        $.each(date.jsEvent.srcElement.classList, function(index, value)
+                                        {nsole.log(value);
+                                            if(value == 'fc-non-business')
                                             {
                                                 swal({
                                                     title: "Toma de Hora",
@@ -969,6 +992,28 @@
                                                 {
                                                     valido = 0;
                                                 }
+                                            });
+
+                                            /** VALIDAR BLOQUEO */
+                                            CalendarEl.getEvents().forEach(function(event) {
+                                                var eventEnd = typeof event.end === 'string' ? moment(event.end) : event.end;
+                                                if (date.date >= event.start && date.date <= eventEnd) {
+                                                    valido = 0;
+                                                    console.log('Existe un evento en esta fecha: ' + event.title);
+                                                    console.log(date.date);
+                                                    console.log(event.start);
+                                                    console.log(eventEnd);
+
+                                                    swal({
+                                                        title: "Toma de Hora",
+                                                        text: "El profesional no atiende en este periodo.",
+                                                        icon: "error",
+                                                        buttons: "Aceptar",
+                                                        DangerMode: true,
+                                                    });
+                                                    return false;
+                                                }
+
                                             });
 
                                             /** validar  dias pasados */
@@ -1041,18 +1086,10 @@
                                 var tem_hiddenDays = info_profesional_seleccionado.horario_data.horario_agenda.split(",");
                                 var tem_hiddenDays2 =[];
 
-                                console.log('*******tem_hiddenDays*******')
-                                console.log(tem_hiddenDays)
-                                console.log('*******fin tem_hiddenDays*******')
-
                                 $.each(tem_hiddenDays, function(key, value){
-                                    console.log(value);
+                                    // console.log(value);
                                     tem_hiddenDays2.push(parseInt(value));
                                 });
-
-                                console.log('*************tem_hiddenDays2*************');
-                                console.log(tem_hiddenDays2);
-                                console.log('*************fin tem_hiddenDays2*************');
 
                                 CalendarEl.setOption('hiddenDays',tem_hiddenDays2  );
                                 CalendarEl.setOption('businessHours', data_businessHours );
@@ -1892,7 +1929,7 @@
             if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
                 edad--;
             }
-			
+
             if( edad > 18 )
             {
                 if (reserva_hora_email == '') {

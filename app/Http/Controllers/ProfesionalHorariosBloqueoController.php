@@ -9,6 +9,7 @@ use App\Models\Profesional;
 use App\Models\ProfesionalHorariosBloqueo;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProfesionalHorariosBloqueoController extends Controller
 {
@@ -77,6 +78,7 @@ class ProfesionalHorariosBloqueoController extends Controller
             $registro->fecha_termino = $fecha_termino;
             $registro->hora_termino = $hora_termino;
             $registro->todo_dia = $todo_dia;
+            $registro->id_user = Auth::user()->id;
             if($registro->save())
             {
                 $datos['estado'] = 1;
@@ -253,8 +255,11 @@ class ProfesionalHorariosBloqueoController extends Controller
             $filtros[] = array('id_profesional', $request->id_profesional);
             $filtros[] = array('id_lugar_atencion', $request->id_lugar_atencion);
             $filtros[] = array('estado','<>' , 2);
+            $filtros[] = array('fecha_termino','>=' , date('Y-m-d'));
 
-            $registros = ProfesionalHorariosBloqueo::where($filtros)->get();
+            $registros = ProfesionalHorariosBloqueo::where($filtros)
+                        ->orderBy('fecha_inicio','ASC')
+                        ->get();
             if($registros)
             {
                 $datos['estado'] = 1;

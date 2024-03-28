@@ -466,7 +466,6 @@
                                                 var curr_mint2 = date_DD2.getMinutes();
                                                 var fecha_evento = curr_year2+"-"+curr_month2+"-"+curr_date2+" "+curr_hour2+":"+curr_mint2;
 
-
                                                 if($.trim(fecha_seleccionada) == $.trim(fecha_evento))
                                                 {
                                                     valido = 0;
@@ -580,6 +579,9 @@
                                 {{--  console.log(CalendarEl.getOption('slotMaxTime'));  --}}
 
                                 CalendarEl.render();
+
+                                if(fecha != '' && fecha != null)
+                                    CalendarEl.gotoDate(fecha);
                             }
                         }
                         else

@@ -38,6 +38,8 @@
     {{-- estilos de atencion medica --}}
     <link rel="stylesheet" href="{{ asset('css/estilos_atencion_medica.css') }}"/>
 
+    <!--Estilo tab secciones -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/tabs-secciones.css') }}">
 
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" />
 

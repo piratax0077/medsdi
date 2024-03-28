@@ -34,9 +34,9 @@
                             <div class="form-group col-md-12">
                                 <label class="floating-label-activo-sm">Agenda</label>
                                 <select class="form-control form-control-sm" name="bloqueo_agenda" id="bloqueo_agenda" onchange="carga_calendario_bloqueo();">
-                                    @foreach ($listaTipoAgendaProf as $tipo_agenda)
-                                        <option value="{{ $tipo_agenda['id'] }}">{{ $tipo_agenda['texto'] }}</option>
-                                    @endforeach
+                                    {{-- @foreach ($listaTipoAgendaProf as $tipo_agenda) --}}
+                                        {{-- <option value="{{ $tipo_agenda['id'] }}">{{ $tipo_agenda['texto'] }}</option> --}}
+                                    {{-- @endforeach --}}
                                 </select>
                             </div>
                             <div class="form-group col-md-12">
@@ -76,30 +76,30 @@
 
                     <div class="tab-pane fade" id="bloqueos_lista" role="tabpanel" aria-labelledby="bloqueos_lista-tab">
 
-                        @if (!empty($bloque_horario))
-                            @foreach ($bloque_horario as $bloqueo)
-                                <div class="row" style="border: 2px solid #aba8a8; border-radius: 13px; margin: 1em;padding: 10px 0px;">
-                                    <div class="col-md-12 mb-2" style="text-align: left;"><span class="font-weight-bold">Motivo:</span> {{ empty($bloqueo->motivo)?'-':$bloqueo->motivo }}</div>
-                                    @php
-                                        $mes = array('', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE');
-                                        $fecha_inicio = date('d', strtotime($bloqueo->fecha_inicio)).' de '.$mes[intval(date('m', strtotime($bloqueo->fecha_inicio)))].' del '.date('Y', strtotime($bloqueo->fecha_inicio));
-                                        $fecha_termino = date('d', strtotime($bloqueo->fecha_termino)).' de '.$mes[intval(date('m', strtotime($bloqueo->fecha_termino)))].' del '.date('Y', strtotime($bloqueo->fecha_termino));
-                                    @endphp
-                                    <div class="col-md-12 mb-2" style="text-align: left;"><span class="font-weight-bold">Inicio:</span> {!! $fecha_inicio !!} {{ $bloqueo->hora_inicio }}</div>
-                                    <div class="col-md-12 mb-2" style="text-align: left;"><span class="font-weight-bold">Finalización:</span> {!! $fecha_termino !!} {{ $bloqueo->hora_termino }}</div>
-                                    <div class="col-md-6 mb-2" style="text-align: center;">
-                                        @if ($bloqueo->estado == 1)
-                                            <button class="btn btn-sm btn-success-light" onclick="desbloquear_bloqueo_hora('{{ $bloqueo->id }}');">Desbloquear</button>
-                                        @else
-                                            <button class="btn btn-sm btn-danger-light" onclick="bloquear_bloqueo_hora('{{ $bloqueo->id }}');">Bloquear</button>
-                                        @endif
-                                    </div>
-                                    <div class="col-md-6 mb-2" style="text-align: center;">
-                                        <button class="btn btn-sm btn-secondary-light" onclick="eliminar_bloqueo_hora('{{ $bloqueo->id }}');">Eliminar Bloqueo</button>
-                                    </div>
-                                </div>
-                            @endforeach
-                        @endif
+                        {{-- @if (!empty($bloque_horario)) --}}
+                            {{-- @foreach ($bloque_horario as $bloqueo) --}}
+                                {{-- <div class="row" style="border: 2px solid #aba8a8; border-radius: 13px; margin: 1em;padding: 10px 0px;"> --}}
+                                    {{-- <div class="col-md-12 mb-2" style="text-align: left;"><span class="font-weight-bold">Motivo:</span> {{ empty($bloqueo->motivo)?'-':$bloqueo->motivo }}</div> --}}
+                                    {{-- @php --}}
+                                        // $mes = array('', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE');
+                                        // $fecha_inicio = date('d', strtotime($bloqueo->fecha_inicio)).' de '.$mes[intval(date('m', strtotime($bloqueo->fecha_inicio)))].' del '.date('Y', strtotime($bloqueo->fecha_inicio));
+                                        // $fecha_termino = date('d', strtotime($bloqueo->fecha_termino)).' de '.$mes[intval(date('m', strtotime($bloqueo->fecha_termino)))].' del '.date('Y', strtotime($bloqueo->fecha_termino));
+                                    // @endphp
+                                    {{-- <div class="col-md-12 mb-2" style="text-align: left;"><span class="font-weight-bold">Inicio:</span> {!! $fecha_inicio !!} {{ $bloqueo->hora_inicio }}</div> --}}
+                                    {{-- <div class="col-md-12 mb-2" style="text-align: left;"><span class="font-weight-bold">Finalización:</span> {!! $fecha_termino !!} {{ $bloqueo->hora_termino }}</div> --}}
+                                    {{-- <div class="col-md-6 mb-2" style="text-align: center;"> --}}
+                                        {{-- @if ($bloqueo->estado == 1) --}}
+                                            {{-- <button class="btn btn-sm btn-success-light" onclick="desbloquear_bloqueo_hora('{{ $bloqueo->id }}');">Desbloquear</button> --}}
+                                        {{-- @else --}}
+                                            {{-- <button class="btn btn-sm btn-danger-light" onclick="bloquear_bloqueo_hora('{{ $bloqueo->id }}');">Bloquear</button> --}}
+                                        {{-- @endif --}}
+                                    {{-- </div> --}}
+                                    {{-- <div class="col-md-6 mb-2" style="text-align: center;"> --}}
+                                        {{-- <button class="btn btn-sm btn-secondary-light" onclick="eliminar_bloqueo_hora('{{ $bloqueo->id }}');">Eliminar Bloqueo</button> --}}
+                                    {{-- </div> --}}
+                                {{-- </div> --}}
+                            {{-- @endforeach --}}
+                        {{-- @endif --}}
                     </div>
                 </div>
             </div>
@@ -122,8 +122,8 @@
 <script>
     function abrir_bloqueo_hora_atencion()
     {
-        $('#bloqueo_id_profesional').val('{{ $profesional->id }}');
-        $('#bloqueo_id_lugar_atencion').val('{{ $lugar_atencion }}');
+        $('#bloqueo_id_profesional').val($('#agenda_profesional_asistente').val());
+        $('#bloqueo_id_lugar_atencion').val($('#agenda_lugar_atencion_asistente').val());
 
         cargar_bloqueo_horas();
 
@@ -214,7 +214,7 @@
                 $('#bloqueo_hora_termino').val('');
                 $('#bloqueo_todo_dia').prop('checked', false);
 
-                cargarAgendaProfesional(agenda, id_lugar_atencion, id_profesional);
+                cargarAgendaProfesional(agenda, '');
 
             }
             else
@@ -275,9 +275,7 @@
                     buttons: "Aceptar",
                 });
                 cargar_bloqueo_horas();
-
-                /** CARGA DE AGENDA DEL PROFESIONAL */
-                cargarAgendaProfesional($('#id_tipo_agenda').val(), id_lugar_atencion, id_profesional);
+                cargarAgendaProfesional($('#id_tipo_agenda').val(), '');
             }
             else
             {
@@ -337,9 +335,7 @@
                     buttons: "Aceptar",
                 });
                 cargar_bloqueo_horas();
-
-                /** CARGA DE AGENDA DEL PROFESIONAL */
-                cargarAgendaProfesional($('#id_tipo_agenda').val(), id_lugar_atencion, id_profesional);
+                cargarAgendaProfesional($('#id_tipo_agenda').val(), '');
             }
             else
             {
@@ -399,9 +395,7 @@
                     buttons: "Aceptar",
                 });
                 cargar_bloqueo_horas();
-
-                /** CARGA DE AGENDA DEL PROFESIONAL */
-                cargarAgendaProfesional($('#id_tipo_agenda').val(), id_lugar_atencion, id_profesional);
+                cargarAgendaProfesional($('#id_tipo_agenda').val(), '');
             }
             else
             {
@@ -622,6 +616,17 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
 
+    }
+
+    function carga_tipos_agendas(tipos_agendas)
+    {
+        console.log(tipos_agendas);
+        $("#bloqueo_agenda").html('');
+        arrayTipoAgenda = ['', 'Atención General', 'Atención Dental', 'Atención Telemedicina', 'Exámenes'];
+        $.each(tipos_agendas, function (key, value)
+        {
+            $("#bloqueo_agenda").append('<option value="'+value+'">'+arrayTipoAgenda[value]+'</option>');
+        });
     }
 
 </script>

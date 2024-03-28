@@ -162,6 +162,7 @@
                                             </span><br>
                                             <span id="especialidad_porfesional_agenda"></span>
                                             <button type="button" class="btn btn-info-light-c btn-xxxs" id="btn_ver_info_profesional_seleccionado"  onclick=""><i class="feather icon-plus"></i> Más información</button>
+                                            @include('general.bloqueo_hora.bloque_hora_asistente')
                                             <span class="status active"></span>
                                         </div>
                                     </div>
@@ -630,6 +631,7 @@
                                 {
                                     $.each(data.tipo_agendas, function (key, value)
                                     {
+                                        carga_tipos_agendas(data.tipo_agendas);
                                         $('.btn-agenda-'+value).show();
                                     });
                                 }
@@ -758,19 +760,34 @@
                                                                             comentarios_confirmacion = element.comentarios_confirmacion+' | '
                                                                         var nombre = element.paciente.prevision.nombre
                                                                         var descripcion = '';
-                                                                        descripcion += rut;
-                                                                        descripcion += valor;
-                                                                        descripcion += comentarios_confirmacion;
-                                                                        descripcion += nombre;
 
-                                                                        arrayTemp.push({
-                                                                                        id: element.id,
-                                                                                        title: element.tipo_hora_medica+' - '+element.descripcion,
-                                                                                        description: descripcion ,
-                                                                                        start: element.fecha_consulta + 'T' + element.hora_inicio,
-                                                                                        end: element.fecha_consulta + 'T' + element.hora_termino,
-                                                                                        backgroundColor: element.estado.color
-                                                                        });
+                                                                        if(element.tipo_hora_medica == 'B')
+                                                                        {
+                                                                            descripcion += valor;
+                                                                            arrayTemp.push({
+                                                                                            id: element.id,
+                                                                                            title: element.descripcion,
+                                                                                            description: descripcion ,
+                                                                                            start: element.fecha_consulta + 'T' + element.hora_inicio,
+                                                                                            end: element.fecha_consulta + 'T' + element.hora_termino,
+                                                                                            backgroundColor: element.estado.color
+                                                                            });
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            descripcion += rut;
+                                                                            descripcion += valor;
+                                                                            descripcion += comentarios_confirmacion;
+                                                                            descripcion += nombre;
+                                                                            arrayTemp.push({
+                                                                                            id: element.id,
+                                                                                            title: element.tipo_hora_medica+' - '+element.descripcion,
+                                                                                            description: descripcion ,
+                                                                                            start: element.fecha_consulta + 'T' + element.hora_inicio,
+                                                                                            end: element.fecha_consulta + 'T' + element.hora_termino,
+                                                                                            backgroundColor: element.estado.color
+                                                                            });
+                                                                        }
                                                                     });
                                                                     console.log(arrayTemp);
                                                                 }
@@ -1029,9 +1046,12 @@
 
                                             var valido = 1;
                                             var valido_fecha = 1;
-                                            $.each(date.jsEvent.path, function(index, value)
+                                            /** VALIDACION DE FUERA DE HORARIO */
+                                            // $.each(date.jsEvent.path, function(index, value)
+                                            $.each(date.jsEvent.srcElement.classList, function(index, value)
                                             {
-                                                if(value.className == 'fc-non-business')
+                                                // console.log(value);
+                                                if(value == 'fc-non-business')
                                                 {
                                                     swal({
                                                         title: "Toma de Hora",
@@ -1073,6 +1093,28 @@
                                                     {
                                                         valido = 0;
                                                     }
+                                                });
+
+                                                /** VALIDAR BLOQUEO */
+                                                CalendarEl.getEvents().forEach(function(event) {
+                                                    var eventEnd = typeof event.end === 'string' ? moment(event.end) : event.end;
+                                                    if (date.date >= event.start && date.date <= eventEnd) {
+                                                        valido = 0;
+                                                        console.log('Existe un evento en esta fecha: ' + event.title);
+                                                        console.log(date.date);
+                                                        console.log(event.start);
+                                                        console.log(eventEnd);
+
+                                                        swal({
+                                                            title: "Toma de Hora",
+                                                            text: "El profesional no atiende en este periodo.",
+                                                            icon: "error",
+                                                            buttons: "Aceptar",
+                                                            DangerMode: true,
+                                                        });
+                                                        return false;
+                                                    }
+
                                                 });
 
                                                 /** validar  dias pasados */
