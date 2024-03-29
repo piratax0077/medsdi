@@ -38,7 +38,7 @@ class GesRegistrosController extends Controller
 
 
             /** token receta */
-            $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 11);
+            $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 11, $id);
             if($temp_token['estado'] == 1)
             {
                 $token_receta = $temp_token['certificado'];
@@ -47,14 +47,15 @@ class GesRegistrosController extends Controller
             }
             else
             {
-                $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, rand(111,999), $paciente->id, 11);
+                $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, rand(111,999), $paciente->id, 11, $id);
                 $token_receta = $temp_token['certificado'];
                 $url_documento = CertificadoController::generarUrlDocumento($token_receta);
                 $qr_documento = GeneradorQrController::generar($url_documento);
             }
 
             /** token profesional */
-            $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+            // $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+            $temp_token = CertificadoController::certificadoProfesional($profesional->id, $id, 11, $id);
             if($temp_token['estado'] == 1)
             {
                 $token_profesional = $temp_token['certificado'];
@@ -63,7 +64,8 @@ class GesRegistrosController extends Controller
             }
             else
             {
-                $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                // $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                $temp_token = CertificadoController::certificadoProfesional(rand(1114,999), $id, 11, $id);
                 $token_profesional = $temp_token['certificado'];
                 $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
                 $qr_profesional = GeneradorQrController::generar($url_documento);
@@ -157,7 +159,7 @@ class GesRegistrosController extends Controller
         $qr_documento = '';
 
         /** token profesional */
-        $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+        $temp_token = CertificadoController::certificadoProfesional($profesional->id, date('YmdHis'), 11, date('YmdHis'));
         if($temp_token['estado'] == 1)
         {
             $token_profesional = $temp_token['certificado'];
@@ -166,7 +168,10 @@ class GesRegistrosController extends Controller
         }
         else
         {
-            $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+            $temp_token = CertificadoController::certificadoProfesional(rand(111111,999999), date('YmdHis'), 11, date('YmdHis'));
+
+            var_dump($temp_token);
+
             $token_profesional = $temp_token['certificado'];
             $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
             $qr_profesional = GeneradorQrController::generar($url_documento);

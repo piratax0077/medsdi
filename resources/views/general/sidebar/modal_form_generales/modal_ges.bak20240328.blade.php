@@ -164,6 +164,109 @@
 <script>
 
     /** MANEJO DE IMAGENES GES */
+    $(document).ready(function () {
+        var myDropzone_ges ;
+        Dropzone.options.misImagenesGes = {
+            init:function()
+            {
+                myDropzone_ges = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+            dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_archivo_ges();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_archivo_ges(myDropzone_ges,'ges');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_archivo_ges(myDropzone_ges,'ges');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_archivo_ges(myDropzone_ges,'ges');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+    });
+
     var lista_archivo_ges = {};
     function cargar_lista_archivo_ges(obj_dropzone, alias_examen)
     {
