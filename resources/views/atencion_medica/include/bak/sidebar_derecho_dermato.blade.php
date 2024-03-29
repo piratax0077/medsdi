@@ -17,8 +17,6 @@
                     </div>
                     <div id="collapse_solicitud_examenes" class="collapse" aria-labelledby="heading_solicitud_examenes" data-parent="#accordion_side_bar">
                          <div class="card-body-sidebar">
-
-
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ex_orina()";>+ Exámenes de orina</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="est_hormo()";>+ Exámenes hormonales</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="rx_uro ()";>+ Orden radiología</button>

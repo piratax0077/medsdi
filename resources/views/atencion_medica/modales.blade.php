@@ -36,6 +36,7 @@
             <div class="redes">
                 <a id="boton_1" class="fas fa-user fa-2x" data-toggle="canvas" data-target="#antecedentes_paciente" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left" style="cursor:pointer;"> </a>
                 <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left" style="cursor:pointer;"></a>
+                <a id="boton_4" class="fas fa-bed fa-2x" data-toggle="canvas" data-target="#formularios_signos_vitales" aria-expanded="false" aria-controls="bs-canvas-right" title="formularios Signos Vitales" data-placement="left" style="cursor:pointer;"></a>
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Otorrinolaringología' )
                     <a id="boton_3" class="fas fa-deaf fa-2x" data-toggle="canvas" data-target="#formularios_orl" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Otorrinolaringología" data-placement="left"></a>
@@ -68,11 +69,17 @@
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía General' )
                     <a id="boton_3" class="fas fa-user-md fa-2x" data-toggle="canvas" data-target="#formularios_cir_gen" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugía" data-placement="left"></a>
                 @endif
+
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Medicina general adultos y niños' )
-                    <a id="boton_3" class="fas fa-heart-broken fa-2x"" data-toggle="canvas" data-target="#formularios_medicina_gen" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Medicina General" data-placement="left"></a>
+                    <a id="boton_3" class="fas fa-heart-broken fa-2x" data-toggle="canvas" data-target="#formularios_medicina_gen" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Medicina General" data-placement="left"></a>
                 @endif
+
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Traumatología General' )
-                <a id="boton_3" class="fas fa-bone fa-2x"" data-toggle="canvas" data-target="#form_traumato_general" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Traumatología General" data-placement="left"></a>
+                <a id="boton_3" class="fas fa-bone fa-2x" data-toggle="canvas" data-target="#form_traumato_general" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Traumatología General" data-placement="left"></a>
+                @endif
+
+                @if($profesional->TipoEspecialidad()->first()->nombre == 'SIQUIATRÍA' )
+                <a id="boton_3" class="fas fa-bone fa-2x" data-toggle="canvas" data-target="#form_siquiatria" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Siquiatría" data-placement="left"></a>
                 @endif
             </div>
             <div class="btn-mas">
@@ -85,6 +92,7 @@
 
 @include('atencion_medica.sidebars.antecedentes_paciente')
 @include('atencion_medica.sidebars.formularios_atencion')
+@include('atencion_medica.sidebars.formularios_signos_vitales')
 
 @section('js-sidebar')
     <script>
@@ -831,12 +839,12 @@
 
             // accept(file, done) {
             //     console.log('-------------accept-----------------------');
-            //     cargar_lista_archivo();
+            //     cargar_lista_archivo_ges();
             //     return done();
             // },
             success: function(file, response){
                 // console.log('-------------success-----------------------');
-                cargar_lista_archivo(myDropzone_ges,'ges');
+                cargar_lista_archivo_ges(myDropzone_ges,'ges');
 
                 if (file.previewElement) {
                     return file.previewElement.classList.add("dz-success");
@@ -861,14 +869,14 @@
             },
             removedfile(file) {
                 // console.log('-------------removedfile-----------------------');
-                cargar_lista_archivo(myDropzone_ges,'ges');
+                cargar_lista_archivo_ges(myDropzone_ges,'ges');
                 if (file.previewElement != null && file.previewElement.parentNode != null) {
                     file.previewElement.parentNode.removeChild(file.previewElement);
                 }
                 return this._updateMaxFilesReachedClass();
             },
             canceled: function canceled(file) {
-                cargar_lista_archivo(myDropzone_ges,'ges');
+                cargar_lista_archivo_ges(myDropzone_ges,'ges');
                 return this.emit("error", file, this.options.dictUploadCanceled);
             },
         };

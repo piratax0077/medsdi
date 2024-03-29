@@ -1,35 +1,32 @@
-   <!--Sidebar 3 (DERMATOLOGIA)-->
+    <!--Sidebar 3 (siquiatria)-->
     <div class="position-fixed w-100 h-100"></div>
-    <div id="formularios_dermato" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="370px" data-offset="true">
+    <div id="form_siquiatria" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="370px" data-offset="true">
         <header class="bs-canvas-header p-3 bg-info overflow-auto">
             <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true" class="text-white">&times;</span></button>
-            <h5 class="d-inline-block text-light mb-0 float-right">Formularios Dermatología</h5>
+            <h5 class="d-inline-block text-light mb-0 float-right">Formularios Siquiatría</h5>
         </header>
         <div class="bs-canvas-content">
             <div class="accordion" id="accordion_side_bar">
                 <div class="card-sidebar">
-                    <div class="card-header-sidebar" id="heading_solicitud_examenes">
+                    <div class="card-header-sidebar" id="heading_test">
                         <h2 class="mb-0">
-                            <button class="btn btn-light btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse_solicitud_examenes" aria-expanded="true" aria-controls="collapse_solicitud_examenes"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
-                            SOLICITAR EXÁMENES ESPECÍFICOS
+                            <button class="btn btn-light btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse_test" aria-expanded="true" aria-controls="collapse_test"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                            TEST PSICOLÓGICOS
                             </button>
                         </h2>
                     </div>
-                    <div id="collapse_solicitud_examenes" class="collapse" aria-labelledby="heading_solicitud_examenes" data-parent="#accordion_side_bar">
-                         <div class="card-body-sidebar">
+                    <div id="collapse_test" class="collapse" aria-labelledby="heading_test" data-parent="#accordion_side_bar">
+                        <div class="card-body-sidebar">
+                            {{--  <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="inst_eval();"><i class="fa fa-plus"></i> Instrumentos Evaluación</button>  --}}
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="psi_rorsch();"><i class="fa fa-plus"></i> Test de Rorschach</button>
 
-
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ex_orina()";>+ Exámenes de orina</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="est_hormo()";>+ Exámenes hormonales</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="rx_uro ()";>+ Orden radiología</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="biop_piel()";>+ Biopsia Piel</button>
-                         </div>
+                            @include("atencion_otros_prof.formularios.modal_atencion_especialidad.psicologia.test_rorschach")
+                        </div>
                     </div>
                 </div>
 
-                <!-- SECCION CONSENTIMIENTOS -->
+               <!-- SECCION CONSENTIMIENTOS -->
                 @include('general.sidebar.seccion_consentimientos')
-
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_utilidades">
                         <h2 class="mb-0">
@@ -39,7 +36,7 @@
                         </h2>
                     </div>
                     <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_side_bar">
-                    <div class="card-body-sidebar">
+                        <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ufonasa()";>+ Buscador código FONASA</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="imc()";>+ Calculadora de IMC</button>
                         </div>
@@ -47,7 +44,31 @@
                     @include("general.modal.m_ucodigofonasa")
                     @include("general.modal.m_uimc")
                 </div>
+
                 <div class="card-sidebar">
+                    <div class="card-header-sidebar" id="heading_recom">
+                        <h2 class="mb-0">
+                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_recom" aria-expanded="false" aria-controls="collapse_recom"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                        INDICACIONES A PACIENTES
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_side_bar">
+                        <div class="card-body-sidebar">
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ind_amig()";>+ Indicaciones Cuidados Post Amigdalectomía</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ind_timp()";>+ Indicaciones Cuidados Post Timpanoplastias</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ind_rino()";>+ Indicaciones Cuidados Post Rinoseptoplastias</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="icirugia()";>+ Indicaciones post cirugía En General</button>
+                        </div>
+                    </div>
+
+                    @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.recom_amig")
+                    @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.recom_rino")
+                    @include("general.modal.m_cuidados_cirugia")
+                    @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.recom_timp")
+
+                </div>
+                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_hosp">
                         <h2 class="mb-0">
                         <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_hosp" aria-expanded="false" aria-controls="collapse_hosp"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
@@ -67,26 +88,6 @@
                     @include("general.modal.m_req_ingreso")
                 </div>
                 <div class="card-sidebar">
-                    <div class="card-header-sidebar" id="heading_recom">
-                        <h2 class="mb-0">
-                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_recom" aria-expanded="false" aria-controls="collapse_recom"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
-                        INDICACIONES A PACIENTES
-                        </button>
-                        </h2>
-                    </div>
-                    <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_side_bar">
-                        <div class="card-body-sidebar">
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cuid_piel()";>+ Indicaciones Cuidados de la piel</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="tipos() ";>+ Tipos de la piel</button>
-                        </div>
-                    </div>
-
-                    @include("atencion_medica.sidebars.modals_especialidad.dermatologia.m_dermo_cuidados")
-
-                    @include("atencion_medica.sidebars.modals_especialidad.dermatologia.m_tipos_piel")
-
-                </div>
-				 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_sugerencias">
                         <h2 class="mb-0">
                         <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_sugerencias" aria-expanded="false" aria-controls="collapse_sugerencias"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
@@ -108,6 +109,14 @@
             </div>
         </div>
     </div>
-    <!--FORMULARIOS GENERALES-->
+    <!--SIDEBAR 3 (Otorrino)-->
+
+    <!--MODALS SIDE BAR GENERALES-->
+    {{-- @include('atencion_medica.modales') --}}
+
+
+    @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_exbiopsia_orl")
+
+    @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_exradiologico_orl")
 
 
