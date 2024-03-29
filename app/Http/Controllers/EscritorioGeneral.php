@@ -156,17 +156,11 @@ class EscritorioGeneral extends Controller
             $sql .= "    regiones.nombre  regiones_nombre ";
             $sql .= " FROM profesionales ";
 
-            $sql .= " INNER JOIN direcciones ON (direcciones.id = profesionales.id_direccion ";
-            if(!empty($request->id_ciudad))
-                $sql .= " AND direcciones.id_ciudad = ".$request->id_ciudad."";
-            $sql .= ")";
+            $sql .= " INNER JOIN direcciones ON (direcciones.id = profesionales.id_direccion ) ";
 
             $sql .= " INNER JOIN ciudades ON (ciudades.id = direcciones.id_ciudad) ";
 
-            $sql .= " INNER JOIN regiones ON (regiones.id = ciudades.id_region ";
-            if(!empty($request->id_region))
-                $sql .= " AND regiones.id = ".$request->id_region." ";
-            $sql .= " ) ";
+            $sql .= " INNER JOIN regiones ON (regiones.id = ciudades.id_region ) ";
 
             $sql .= " INNER JOIN especialidades ON (profesionales.id_especialidad = especialidades.id) ";
 
@@ -208,6 +202,26 @@ class EscritorioGeneral extends Controller
             if(!empty($request->tipo_agenda))
                 $sql .= " AND profesionales.id IN (SELECT id_profesional FROM `profesional_horarios` WHERE tipo_agenda in (".$request->tipo_agenda.") GROUP BY id_profesional)";
 
+            $sql .= " AND profesionales.id IN (
+                            SELECT profesionales_lugares_atencion.id_profesional
+                            FROM `profesionales_lugares_atencion`
+                            WHERE profesionales_lugares_atencion.`estado` = 1
+                                and profesionales_lugares_atencion.id_lugar_atencion in (
+                                                                                SELECT
+                                                                                    lugares_atencion.id
+                                                                                FROM
+                                                                                    `lugares_atencion`
+                                                                                INNER JOIN direcciones ON direcciones.id = lugares_atencion.id_direccion
+                                                                                INNER JOIN ciudades ON ciudades.id = direcciones.id_ciudad
+                                                                                INNER JOIN regiones ON ciudades.id_region = regiones.id
+                                                                                WHERE  1=1 ";
+                                                                                    if(!empty($request->id_ciudad))
+                                                                                        $sql .= " AND direcciones.id_ciudad = ".$request->id_ciudad."";
+                                                                                    if(!empty($request->id_region))
+                                                                                        $sql .= " AND regiones.id = ".$request->id_region." ";
+                                                                    $sql .= " )
+                            )
+                    ";
 
             // var_dump($sql);
             $registros = DB::select($sql);
@@ -711,7 +725,7 @@ class EscritorioGeneral extends Controller
             $datos['msj'] = 'registros';
             $datos['registros'] = $array_bloques;
             $datos['text_fecha'] = $texto_dia[(int)$dia_semana].' '. date('d',strtotime($request->dia)).' '.$texto_mes[(int)date('m',strtotime($request->dia))];
-			
+
         }
         else
         {

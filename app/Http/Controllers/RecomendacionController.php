@@ -920,10 +920,12 @@ class RecomendacionController extends Controller
                 // echo json_encode($detalleLente);
                 // die();
 
+                $fecha_atencion = $ficha_atencion->created_at;
+
                 if($cantidad_recetas > 0)
-                    return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas', 'recetaAudifonos', 'recetaLentes'), 'Receta Medica '.$paciente->rut, 'pdf_receta_medica_2');
+                    return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas', 'recetaAudifonos', 'recetaLentes', 'fecha_atencion'), 'Receta Medica '.$paciente->rut, 'pdf_receta_medica_2');
                 else
-                    return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas', 'recetaAudifonos', 'recetaLentes'), 'Receta Medica ', 'pdf_receta_medica_2');
+                    return  PdfController::generarPDF('RECETA MEDICA', compact('recomendacion', 'cantidad_recetas', 'recetaAudifonos', 'recetaLentes', 'fecha_atencion'), 'Receta Medica ', 'pdf_receta_medica_2');
                 exit();
 
             }
