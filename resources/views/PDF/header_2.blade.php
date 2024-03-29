@@ -41,5 +41,5 @@
         </table>
     </div>
     <hr class="">
-    <div class="fecha"><strong>Fecha:</strong> {{ date('d-m-Y') }}</div>
+    <div class="fecha" style="padding-right: 20px;"><strong>Fecha:</strong> {{ date('d-m-Y') }}</div>
 </header>
