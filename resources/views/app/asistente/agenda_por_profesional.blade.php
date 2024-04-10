@@ -82,6 +82,7 @@
                                             <span id="especialidad_porfesional_agenda"></span>
                                             <button type="button" class="btn btn-info-light-c btn-xxxs" id="btn_ver_info_profesional_seleccionado"  onclick=""><i class="feather icon-plus"></i> Más información</button>
                                             @include('general.bloqueo_hora.bloque_hora_asistente')
+                                            @include('general.anular_hora.anular_hora_asistente')
                                             <span class="status active"></span>
                                         </div>
                                     </div>

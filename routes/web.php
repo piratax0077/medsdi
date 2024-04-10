@@ -684,13 +684,6 @@ Route::group([
     /** OTRO ACOMPAÑANTE */
     Route::post('/otro/acompanante/registro', [App\Http\Controllers\OtroAcompananteAtencionController::class, 'registrar'])->name('otro.acompanante.registrar');
 
-    /** BLOQUEO DE HORAS */
-    Route::post('/horas/bloqueo/registro', [App\Http\Controllers\ProfesionalHorariosBloqueoController::class, 'registrar_r'])->name('bloqueo.horas.registrar');
-    Route::get('/horas/bloqueo/ver', [App\Http\Controllers\ProfesionalHorariosBloqueoController::class, 'verRegistros'])->name('bloqueo.horas.ver');
-    Route::post('/horas/bloqueo/estado', [App\Http\Controllers\ProfesionalHorariosBloqueoController::class, 'estado'])->name('bloqueo.horas.estado');
-
-
-
 });
 
 Route::group([
@@ -1025,6 +1018,7 @@ Route::group([
     Route::get('Hora-medica/hora/agendar/paciente/nuevo', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_hora_nuevo_paciente'])->name('agenda.agendar_hora_nuevo_paciente');
     Route::post('Hora-medica/paciente/nuevo', [App\Http\Controllers\AsistenteController::class, 'AgregarNuevoPaciente'])->name('agenda.paciente.nuevo');
     Route::get('Hora-medica/validar/email', [App\Http\Controllers\EscritorioProfesional::class, 'validar_rut'])->name('agenda.validar_email');
+	
     /** motor de busqueda asistente online*/
     Route::get('perfil/configuracion/busqueda/editar', [App\Http\Controllers\EscritorioAsistente::class, 'editar_configuracion_busqueda'])->name('asistente.editar_configuracion_busqueda');
 
@@ -1035,6 +1029,14 @@ Route::group([
 
     /** VALIDAR TIPO DE AGENDA POR HORA Y PROFESIONAL  */
     Route::get('autorizacion/solicitud/cancelar/representante', [EscritorioProfesional::class, 'tipoHorario_r'])->name('asistente.aprobacion.cancelar.atencion_menor');
+
+    /** BLOQUEO DE HORAS */
+    Route::post('/horas/bloqueo/registro', [App\Http\Controllers\ProfesionalHorariosBloqueoController::class, 'registrar_r'])->name('bloqueo.horas.registrar');
+    Route::get('/horas/bloqueo/ver', [App\Http\Controllers\ProfesionalHorariosBloqueoController::class, 'verRegistros'])->name('bloqueo.horas.ver');
+    Route::post('/horas/bloqueo/estado', [App\Http\Controllers\ProfesionalHorariosBloqueoController::class, 'estado'])->name('bloqueo.horas.estado');
+
+    /** NULACION DE HORAS */
+    Route::get('/horas/ver', [App\Http\Controllers\HoraMedicaController::class, 'verRegistrosDia'])->name('agenda.dia.horas.ver');
 
 });
 

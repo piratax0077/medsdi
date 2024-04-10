@@ -19,5 +19,20 @@
 @section('btn-script-agenda')
     <script type="text/javascript">
 
+        function getInactiveDays(startDate, endDate, activeDays)
+        {
+            const diffInDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+
+            for (let i = 0; i <= diffInDays; i++)
+            {
+                const day = new Date(startDate.getTime() + i * 1000 * 60 * 60 * 24);
+                if (!activeDays[day.getDay()]) {
+                    activeDaysInRange.push(day);
+                }
+            }
+
+            return activeDaysInRange;
+        }
+
     </script>
 @endsection

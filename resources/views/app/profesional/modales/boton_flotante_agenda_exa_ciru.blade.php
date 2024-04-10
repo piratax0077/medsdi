@@ -30,7 +30,7 @@
 <!-- SCRIPT -->
 @section('btn-script-agenda')
     <script type="text/javascript">
-
+        var activeDaysInRange = [];
         var info_profesional_seleccionado = [];
         $(document).ready(function ()
         {
@@ -578,6 +578,16 @@
                                 {{--  console.log(CalendarEl.getOption('slotMinTime'));  --}}
                                 {{--  console.log(CalendarEl.getOption('slotMaxTime'));  --}}
 
+                                /** registra la fecha de la semana en la vista */
+                                CalendarEl.on('datesSet', function(info) {
+                                    activeDaysInRange = [];
+                                    var dia_inicio = CalendarEl.view.currentStart;
+                                    var dia_fin = CalendarEl.view.currentEnd;
+                                    var array_activos = CalendarEl.getCurrentData().dateProfileGenerator.isHiddenDayHash;
+                                    getInactiveDays(dia_inicio, dia_fin, array_activos);
+                                    console.log('activeDaysInRange2:', activeDaysInRange);
+                                })
+
                                 CalendarEl.render();
 
                                 if(fecha != '' && fecha != null)
@@ -597,9 +607,21 @@
                     }
                 }
             });
-
-
         }
 
+        function getInactiveDays(startDate, endDate, activeDays)
+        {
+            const diffInDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+
+            for (let i = 0; i <= diffInDays; i++)
+            {
+                const day = new Date(startDate.getTime() + i * 1000 * 60 * 60 * 24);
+                if (!activeDays[day.getDay()]) {
+                    activeDaysInRange.push(day);
+                }
+            }
+
+            return activeDaysInRange;
+        }
     </script>
 @endsection

@@ -61,8 +61,7 @@
                 <div class="page-block">
                     <div class="row align-items-center text-center">
                         <div class="page-header-title">
-                            <h5 class="text-white f-22"><a href="#" data-toggle="tooltip" data-placement="top"
-                                    title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
+                            <h5 class="text-white f-22"><a href="#" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
                                 <strong>AGENDA</strong><br> {{ strtoupper($lugar_atencion_nombre) }}
                             </h5>
                         </div>
@@ -73,14 +72,11 @@
 
 
             <div class="row user-profile user-card  p-3" style="background-color:#ecf0f5;">
-                <div class="col-md-10">
+                <div class="col-md-11">
                     <h5 class="text-primary my-1" style="font-size: 1.4rem;" id="titulo_tipo_agenda"></h5>
                 </div>
                 <div class="col-md-1 text-center">
                     @include('general.bloqueo_hora.bloque_hora')
-                </div>
-                <div class="col-md-1 text-center">
-                    @include('general.anular_hora.anular_hora')
                 </div>
                 <div class="col-md-12 card">
                     <div id='agenda'></div>
@@ -96,8 +92,9 @@
         <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info pt-3 pb-2">
-                    <h5 class="modal-title text-white text-center">Tomar horas</h5>
-                    <button id="cerrar_tomar_hora" type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h5 class="modal-title text-white text-center">Tomar hora</h5>
+                    <button id="cerrar_tomar_hora" type="button" class="close text-white" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-row">
@@ -127,14 +124,13 @@
                             </button>
                         </div>
                     </div>
-
+					
                     <form id="form_reseva_de_horas">
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                         <input type="hidden" id="fecha_consulta" name="fecha_consulta" value="">
                         <input type="hidden" id="reserva_hora_id_paciente" name="reserva_hora_id_paciente" value="">
                         <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $lugar_atencion }}">
                         <input type="hidden" name="fecha" id="fecha">
-
 
                         <div id="reserva_datos_paciente" class="row mx-3">
                             <table class="table table-borderless table-xs">
@@ -270,50 +266,29 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="form-group">
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="paciente_dependiente"
-                                                name="paciente_dependiente" onchange="activar_paciente_dependientes();">
-                                            <label class="custom-control-label" for="paciente_dependiente">Paciente Dependiente</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">             
                                     <ul class="nav nav-tabs-aten nav-fill mb-3" id="" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link-aten text-reset active" id="r-correo-tab"
-                                                data-toggle="tab" href="#r-correo" role="tab"
-                                                aria-controls="r-correo" aria-selected="true">Registro por correo electrónico</a>
+                                            <a class="nav-link-aten text-reset active" id="r-correo-tab" data-toggle="tab" href="#r-correo" role="tab" aria-controls="r-correo" aria-selected="true">Registro por correo electrónico</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link-aten text-reset " id="r-tel-tab" data-toggle="tab"
-                                                href="#r-tel" role="tab" aria-controls="r-tel"
-                                                aria-selected="false">Registro por teléfono</a>
+                                            <a class="nav-link-aten text-reset " id="r-tel-tab" data-toggle="tab" href="#r-tel" role="tab" aria-controls="r-tel" aria-selected="false">Registro por teléfono</a>
                                         </li>
                                     </ul>
                                 </div>
-                            </div> --}}
-                            {{-- <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12"> --}}
-                                    {{-- <div class="tab-content" id="r-usuarios"> --}}
-                                        {{-- <div class="tab-pane fade show active" id="r-correo" role="tabpanel" aria-labelledby="r-correo-tab"> --}}
-                                        {{-- </div> --}}
-                                        {{-- <div class="tab-pane fade" id="r-tel" role="tabpanel" aria-labelledby="r-tel-tab"> --}}
-                                            {{-- <div class="form-row ">
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="tab-content" id="r-usuarios">
+                                        <div class="tab-pane fade show active" id="r-correo" role="tabpanel" aria-labelledby="r-correo-tab">
+                                        </div>
+                                        <div class="tab-pane fade" id="r-tel" role="tabpanel" aria-labelledby="r-tel-tab">
+                                            <div class="form-row ">
                                                 <div class="col-sm-4 col-md-4">
                                                     <div class="form-group">
                                                         <label class="floating-label-activo-sm">Nº Celular</label>
-                                                        <input type="tel" id="" name=""
-                                                            class="form-control form-control-sm"
-                                                            placeholder="Ingresar Nº de Celular"
-                                                            aria-label="Rut del paciente" aria-describedby="button-addon2"
-                                                            required>
+                                                        <input type="tel" id="" name="" class="form-control form-control-sm" placeholder="Ingresar Nº de Celular" aria-label="Rut del paciente" aria-describedby="button-addon2" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-2 col-md-3 mb-2">
@@ -323,27 +298,24 @@
                                                     </button>
                                                 </div>
                                                 <div class="col-sm-3 col-md-5">
-                                                    <div class="form-group">
+                                                    <div class="form-group" >
                                                         <label class="floating-label-activo-sm">INGRESA EL CÓDIGO DE 4 DÍGITOS</label>
-                                                        <input type="tel" id="r" name=""
-                                                            class="form-control form-control-sm"
-                                                            aria-label="INGRESA EL CÓDIGO DE 4 DÍGITOS"
-                                                            aria-describedby="button-addon2" required>
+                                                        <input type="tel" id="r" name="" class="form-control form-control-sm" aria-label="INGRESA EL CÓDIGO DE 4 DÍGITOS" aria-describedby="button-addon2" required>
                                                     </div>
-                                                </div> --}}
-                                                {{-- <div class="col-sm-1 col-md-1 mb-3">
-                                                        <button class="btn btn-sm btn-success btn-block">
-                                                            <i class="feather icon-check"></i>
-                                                        </button>
-                                                        <button class="btn btn-sm btn-danger btn-block">
-                                                            <i class="feather icon-x"></i>
-                                                        </button>
-                                                </div> --}}
-                                            {{-- </div> --}}
-                                        {{-- </div> --}}
-                                    {{-- </div> --}}
-                                {{-- </div>
-                            </div> --}}
+                                                </div>
+                                                <!--<div class="col-sm-1 col-md-1 mb-3">
+                                                    <button class="btn btn-sm btn-success btn-block">
+                                                        <i class="feather icon-check"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-danger btn-block">
+                                                        <i class="feather icon-x"></i>
+                                                    </button>
+                                                </div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
 
@@ -446,7 +418,7 @@
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
                                         <input type="text" class="form-control form-control-sm"
-                                            onblur="validar_email_agenda();validar_campo_telefono();" onchange="validar_email_agenda();validar_campo_telefono();"name="reserva_hora_correo"
+                                            onblur="validar_email_agenda()" name="reserva_hora_correo"
                                             id="reserva_hora_correo">
                                         <span id="mensaje_email_reserva" style="display:none"></span>
                                     </div>
@@ -455,19 +427,8 @@
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Tel&eacute;fono</label>
                                         <input type="tel" class="form-control form-control-sm"
-                                            name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno" onblur="validar_campo_telefono();" onchange="validar_campo_telefono();">
+                                            name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno">
                                     </div>
-                                    <button class="btn btn-sm btn-info btn-block"
-                                        type="button" id="btn_reserva_hora_telefono_uno_validar" disabled="disabled" onclick="enviar_validacion_telefono();">
-                                        <i class="feather icon-check"></i> Validar
-                                    </button>
-                                    <div class="form-group" style="display:none" name="div_codigo_validador" id="div_codigo_validador">
-                                        <label class="floating-label-activo-sm">Codigo Validador</label>
-                                        <input type="tel" class="form-control form-control-sm"
-                                            name="reserva_hora_telefono_uno_codigo_validador" id="reserva_hora_telefono_uno_codigo_validador" onkeyup="validar_codigo_telefono();">
-                                    </div>
-                                    <input type="hidden" name="result_codigo_validacion" id="result_codigo_validacion" value="0">
-                                    <div id="div_codigo_validador_mensaje" style="display:none"></div>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group">
@@ -546,7 +507,7 @@
                                                 <label class="floating-label-activo-sm">F. Nacimiento</label>
                                                 <input type="date" class="form-control form-control-sm"
                                                     name="reserva_hora_representante_fecha_nac"
-                                                    id="reserva_hora_representante_fecha_nac">
+                                                    id="reserva_hora_representante_fecha_nac" onclick="evaluar_edad();">
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -624,7 +585,7 @@
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
                                                 <input type="text" class="form-control form-control-sm"
-                                                    onblur="validar_email_agenda_representante();validar_campo_telefono_representante();"
+                                                    onblur="validar_email_agenda_representante()"
                                                     name="reserva_hora_representante_correo"
                                                     id="reserva_hora_representante_correo">
                                                 <span id="mensaje_email_reserva_representante"
@@ -636,23 +597,8 @@
                                                 <label class="floating-label-activo-sm">Tel&eacute;fono</label>
                                                 <input type="tel" class="form-control form-control-sm"
                                                     name="reserva_hora_representante_telefono_uno"
-                                                    id="reserva_hora_representante_telefono_uno" onblur="validar_campo_telefono_representante();validar_email_agenda_representante();" onchange="validar_campo_telefono_representante();validar_email_agenda_representante();">
+                                                    id="reserva_hora_representante_telefono_uno">
                                             </div>
-
-                                            <button class="btn btn-sm btn-info btn-block"
-                                                type="button" id="btn_reserva_hora_representante_telefono_uno_validar" disabled="disabled" onclick="enviar_validacion_telefono_representante();">
-                                                <i class="feather icon-check"></i> Validar
-                                            </button>
-
-                                            <div class="form-group" style="display:none" name="div_representante_codigo_validador" id="div_representante_codigo_validador">
-                                                <label class="floating-label-activo-sm">Codigo Validador</label>
-                                                <input type="tel" class="form-control form-control-sm"
-                                                    name="reserva_hora_representante_telefono_uno_codigo_validador" id="reserva_hora_representante_telefono_uno_codigo_validador" onkeyup="validar_codigo_telefono_representante();">
-                                            </div>
-
-                                            <input type="hidden" name="result_representante_codigo_validacion" id="result_representante_codigo_validacion" value="0">
-                                            <div id="div_representante_codigo_validador_mensaje" style="display:none"></div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -734,7 +680,7 @@
                                 <button type="button" class="btn btn-danger" id="cerrar_registro_paciente_hora"
                                     data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
                                 <button type="button" id="guardar_reserva_paciente"
-                                    onclick="agendar_hora_paciente_nuevo();" class="btn btn-info" disabled="disabled">
+                                    onclick="agendar_hora_paciente_nuevo();" class="btn btn-info">
                                     <i class="feather icon-check"></i> Tomar Hora
                                 </button>
                             </div>
@@ -749,15 +695,12 @@
 
     <!-- INICIO RECEPCION BONO  -->
     <!--Modal Recepción de Bonos y programas-->
-    <div id="modal_recepcion_bonos_api" class="modal fade" tabindex="-1" role="dialog"
-        aria-labelledby="Recepcion de bonos" aria-hidden="true">
+    <div id="modal_recepcion_bonos_api" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Recepcion de bonos" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
                     <h5 class="modal-title text-white" id="modal_pago_consulta_title">Recepción de Pago Atención</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                        onclick="$('#modal_recepcion_bonos_api').modal('hide');"><span
-                            aria-hidden="true">×</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#modal_recepcion_bonos_api').modal('hide');"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body pb-0">
                     <div class="form-row">
@@ -768,36 +711,31 @@
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Rut del Paciente</label>
-                                <input type="person" class="form-control form-control-sm" name="bono_paciente_rut"
-                                    id="bono_paciente_rut">
+                                <input type="person" class="form-control form-control-sm" name="bono_paciente_rut" id="bono_paciente_rut">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Nombre del Paciente</label>
-                                <input type="text" class="form-control form-control-sm" name="bono_paciente_nombre"
-                                    id="bono_paciente_nombre">
+                                <input type="text" class="form-control form-control-sm" name="bono_paciente_nombre" id="bono_paciente_nombre">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm"> Nombre Profesional</label>
-                                <input type="text" class="form-control form-control-sm" name="bono_profesional_nombre"
-                                    id="bono_profesional_nombre">
+                                <input type="text" class="form-control form-control-sm" name="bono_profesional_nombre" id="bono_profesional_nombre">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm"> Rut Profesional</label>
-                                <input type="text" class="form-control form-control-sm" name="bono_profesional_rut"
-                                    id="bono_profesional_rut">
+                                <input type="text" class="form-control form-control-sm" name="bono_profesional_rut" id="bono_profesional_rut">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Clase Pago</label>
-                                <select id="bono_id_clase_bono" name="bono_id_clase_bono"
-                                    class="form-control form-control-sm">
+                                <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm">
                                     <option value="1">Bono Fisico</option>
                                     <option value="2">Sencillito</option>
                                     <option value="3">Caja Vecina</option>
@@ -810,8 +748,7 @@
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Nº de bono o programa</label>
-                                <input type="text" class="form-control form-control-sm" name="bono_numero"
-                                    id="bono_numero">
+                                <input type="text" class="form-control form-control-sm" name="bono_numero" id="bono_numero" >
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -828,8 +765,7 @@
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Valor total</label>
-                                <input name="bono_valor_consulta" id="bono_valor_consulta" type="number"
-                                    class="form-control form-control-sm">
+                                <input name="bono_valor_consulta" id="bono_valor_consulta" type="number" class="form-control form-control-sm">
                             </div>
                         </div>
 
@@ -843,8 +779,7 @@
                             </div>
                             <div class="form-group" id="sesiones_programa" style="display:none">
                                 <label class="floating-label">Nº de Sesiones</label>
-                                <input name="bono_sn_sesiones" id="bono_sn_sesiones" type="number"
-                                    class="form-control form-control-sm">
+                                <input name="bono_sn_sesiones" id="bono_sn_sesiones" type="number" class="form-control form-control-sm">
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -858,7 +793,7 @@
         </div>
     </div>
     <!-- FIN RECEPCION BONO  -->
-
+	
     @include('app.profesional.modales.boton_flotante_agenda_exa_ciru')
 
 @endsection
@@ -871,40 +806,17 @@
             let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
 
             // Comprobamos si el mes y el día de la fecha de nacimiento ya pasaron en el año actual
-            if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
+            if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy
+                    .getDate() < fechaNacimiento.getDate())) {
                 edad--;
             }
 
             if (edad < 18) {
-                $('#paciente_dependiente').prop('checked', 'checked');
-                // $('.seccion_reserva_paciente_nuevo_representante').show();
-                activar_paciente_dependientes();
+                $('.seccion_reserva_paciente_nuevo_representante').show();
                 $('#reserva_hora_correo').attr('onblur', "");
-                $('#reserva_hora_telefono_uno').attr('onchange', "");
-                $('#btn_reserva_hora_telefono_uno_validar').hide();
-
-                $('#reserva_hora_telefono_uno_codigo_validador').val('');
-                $('#div_codigo_validador_mensaje').html('');
-                $('#result_codigo_validacion').val('0');
-
-                $('#reserva_hora_representante_telefono_uno_codigo_validador').val('');
-                $('#div_representante_codigo_validador_mensaje').html('');
-                $('#result_representante_codigo_validacion').val('0');
             } else {
-                $('#paciente_dependiente').prop('checked', '')
-                // $('.seccion_reserva_paciente_nuevo_representante').hide();
-                activar_paciente_dependientes();
+                $('.seccion_reserva_paciente_nuevo_representante').hide();
                 $('#reserva_hora_correo').attr('onblur', "validar_email_agenda();");
-                $('#reserva_hora_telefono_uno').attr('onchange', "validar_campo_telefono();");
-                $('#btn_reserva_hora_telefono_uno_validar').show();
-
-                $('#reserva_hora_telefono_uno_codigo_validador').val('');
-                $('#div_codigo_validador_mensaje').html('');
-                $('#result_codigo_validacion').val('0');
-
-                $('#reserva_hora_representante_telefono_uno_codigo_validador').val('');
-                $('#div_representante_codigo_validador_mensaje').html('');
-                $('#result_representante_codigo_validacion').val('0');
             }
         }
 
@@ -940,15 +852,13 @@
                             } else {
                                 $('#reserva_representante_sexo').text('Femenino');
                             }
-                            $('#reserva_representante_direccion').text(data.direccion.direccion + ' ' + data.direccion
-                                .numero_dir + ', ' + data.direccion.ciudad.nombre);
+                            $('#reserva_representante_direccion').text(data.direccion.direccion + ' ' + data.direccion.numero_dir + ', ' + data.direccion.ciudad.nombre);
                             $('#reserva_representante_email').text(data.email);
                             $('#reserva_representante_telefono').text(data.telefono_uno);
 
                             $('#reserva_representante_id').val(data.id);
                             $('#reserva_representante_id_usuario').val(data.id_usuario);
 
-                            $("#guardar_reserva_paciente").prop('disabled', false);
 
                             $('.div_representante_nuevo').hide();
                             $('.div_representante_existente').show();
@@ -997,137 +907,5 @@
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
         }
-
-        function activar_paciente_dependientes()
-        {
-            if ($('#paciente_dependiente').prop('checked'))
-            {
-                $('.seccion_reserva_paciente_nuevo_representante').show();
-                $('#reserva_hora_correo').attr('onblur', "");
-                $('#reserva_hora_telefono_uno').attr('onchange', "");
-                $('#btn_reserva_hora_telefono_uno_validar').hide();
-            }
-            else
-            {
-                $('.seccion_reserva_paciente_nuevo_representante').hide();
-                $('#reserva_hora_correo').attr('onblur', "validar_email_agenda();");
-                $('#reserva_hora_telefono_uno').attr('onchange', "validar_campo_telefono();");
-                $('#btn_reserva_hora_telefono_uno_validar').show();
-                if($('#reserva_hora_fecha_nac').val() !=='')
-                    evaluar_edad();
-            }
-        }
-
-        function validar_campo_telefono()
-        {
-            var telefono = $('#reserva_hora_telefono_uno').val();
-            var email = $('#reserva_hora_correo').val();
-
-            console.log('telefono:*'+telefono+'*');
-            console.log('email:*'+email+'*');
-
-            if(email == '')
-            {
-                // if (telefono != '')
-                {
-                    var re = new RegExp(/^\x2b56[6-9][0-9]{8}$/i);//+56612341234
-                    if( re.test(telefono) )
-                        $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',false);
-                    else
-                        $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',true);
-                }
-            }
-        }
-
-        function enviar_validacion_telefono()
-        {
-            $('#btn_reserva_hora_telefono_uno_validar').hide();
-            $('#div_codigo_validador').show();
-            $('#reserva_hora_telefono_uno_codigo_validador').val('');
-            $('#div_codigo_validador_mensaje').html('');
-            $('#result_codigo_validacion').val('0');
-        }
-
-        function validar_codigo_telefono()
-        {
-            var codigo = $('#reserva_hora_telefono_uno_codigo_validador').val();
-            if(codigo.length >= 4)
-            {
-                console.log(codigo);
-                if(codigo == 1234)
-                {
-                    $('#div_codigo_validador').hide();
-                    $('#div_codigo_validador_mensaje').show();
-                    $('#div_codigo_validador_mensaje').html('<span style="color:green;">Valido</span>');
-                    $('#result_codigo_validacion').val('1');
-                    $("#guardar_reserva_paciente").prop('disabled', false);
-                }
-                else
-                {
-                    $('#div_codigo_validador').show();
-                    $('#div_codigo_validador_mensaje').show();
-                    $('#div_codigo_validador_mensaje').html('<span style="color:red;">No Valido</span>');
-                    $('#result_codigo_validacion').val('0');
-                    $("#guardar_reserva_paciente").prop('disabled', true);
-                }
-            }
-        }
-
-        function validar_campo_telefono_representante()
-        {
-            var telefono = $('#reserva_hora_representante_telefono_uno').val();
-            var email = $('#reserva_hora_representante_correo').val();
-
-            if(email === '')
-            {
-                // if (telefono != '')
-                {
-                    var re = new RegExp(/^\x2b56[6-9][0-9]{8}$/i);//+56612341234
-                    if( re.test(telefono) )
-                        $('#btn_reserva_hora_representante_telefono_uno_validar').attr('disabled',false);
-                    else
-                        $('#btn_reserva_hora_representante_telefono_uno_validar').attr('disabled',true);
-                }
-            }
-            $('#reserva_hora_representante_telefono_uno_codigo_validador').val('');
-            $('#div_representante_codigo_validador_mensaje').html('');
-            $('#result_representante_codigo_validacion').val('0');
-        }
-
-        function enviar_validacion_telefono_representante()
-        {
-            $('#btn_reserva_hora_representante_telefono_uno_validar').hide();
-            $('#div_representante_codigo_validador').show();
-            $('#reserva_hora_representante_telefono_uno_codigo_validador').val('');
-            $('#div_representante_codigo_validador_mensaje').html('');
-            $('#result_representante_codigo_validacion').val('0');
-        }
-
-        function validar_codigo_telefono_representante()
-        {
-            var codigo = $('#reserva_hora_representante_telefono_uno_codigo_validador').val();
-            if(codigo.length >= 4)
-            {
-                console.log(codigo);
-                if(codigo == 1234)
-                {
-                    $('#div_representante_codigo_validador').hide();
-                    $('#div_representante_codigo_validador_mensaje').show();
-                    $('#div_representante_codigo_validador_mensaje').html('<span style="color:green;">Valido</span>');
-                    $('#result_representante_codigo_validacion').val('1');
-                    $("#guardar_reserva_paciente").prop('disabled', false);
-                }
-                else
-                {
-                    $('#div_representante_codigo_validador').show();
-                    $('#div_representante_codigo_validador_mensaje').show();
-                    $('#div_representante_codigo_validador_mensaje').html('<span style="color:red;">No Valido</span>');
-                    $('#result_representante_codigo_validacion').val('0');
-                    $("#guardar_reserva_paciente").prop('disabled', true);
-                }
-            }
-        }
-
-
     </script>
 @endsection

@@ -135,6 +135,7 @@
                                             <span id="especialidad_porfesional_agenda"></span>
                                             <button type="button" class="btn btn-info-light-c btn-xxxs" id="btn_ver_info_profesional_seleccionado"  onclick=""><i class="feather icon-plus"></i> Más información</button>
                                             @include('general.bloqueo_hora.bloque_hora_asistente')
+                                            @include('general.anular_hora.anular_hora_asistente')
                                             <span class="status active"></span>
                                         </div>
                                     </div>
@@ -535,6 +536,7 @@
         }
 
         {{--  CARGA AGENDE DEL PROFESIONAL  --}}
+        var activeDaysInRange = [];
         function cargarAgendaProfesional(tipo_agenda, fecha)
         {
             console.log('asistente_cm/escritorio_asistente');
@@ -599,12 +601,14 @@
                                 }
 
                                 /** activar tipos de agendas del profesional */
+                                console.log('escritorio_asistente');
                                 console.log('data.tipo_agendas');
                                 console.log(data);
                                 var tipo_agendas_cant = data.tipo_agendas.length;
                                 if(tipo_agendas_cant > 0)
                                 {
                                     carga_tipos_agendas(data.tipo_agendas);
+                                    carga_tipos_agendas_anular(data.tipo_agendas);
                                     $.each(data.tipo_agendas, function (key, value)
                                     {
                                         $('.btn-agenda-'+value).show();
@@ -1177,6 +1181,16 @@
 
                                     CalendarEl.render();
 
+                                    /** registra la fecha de la semana en la vista */
+                                    CalendarEl.on('datesSet', function(info) {
+                                        activeDaysInRange = [];
+                                        var dia_inicio = CalendarEl.view.currentStart;
+                                        var dia_fin = CalendarEl.view.currentEnd;
+                                        var array_activos = CalendarEl.getCurrentData().dateProfileGenerator.isHiddenDayHash;
+                                        getInactiveDays(dia_inicio, dia_fin, array_activos);
+                                        console.log('activeDaysInRange2:', activeDaysInRange);
+                                    })
+
                                     if(fecha != '' && fecha != null)
                                         CalendarEl.gotoDate(fecha);
 
@@ -1697,8 +1711,8 @@
         };
 
         {{--  REGISTRO NUEVO PACIENTE GENERACION DE HORA  --}}
-        function agendar_hora_paciente_nuevo()
-        {
+        function agendar_hora_paciente_nuevo() {
+
             let url = "{{ route('agenda.agendar_hora_nuevo_paciente') }}";
             let _token = $('#_token').val();
             let fecha_consulta = $('#fecha_consulta').val();
@@ -1710,16 +1724,16 @@
 
             switch (tipo_agenda) {
                 case '1':
-                    tipo_agenda_text = 'C';//CONSULTA
+                    tipo_agenda_text = 'C'; //CONSULTA
                     break;
                 case '2':
-                    tipo_agenda_text = 'D';//DENTAL
+                    tipo_agenda_text = 'D'; //DENTAL
                     break;
                 case '3':
-                    tipo_agenda_text = 'T';//TELEMEDICINA
+                    tipo_agenda_text = 'T'; //TELEMEDICINA
                     break;
                 case '4':
-                    tipo_agenda_text = 'E';//EXAMEN
+                    tipo_agenda_text = 'E'; //EXAMEN
                     break;
             }
 
@@ -1754,8 +1768,8 @@
             }
 
             let reserva_hora_primer_apellido = $('#reserva_hora_apellido_uno').val();
-            if (reserva_hora_primer_apellido == '')
-            {
+            if (reserva_hora_primer_apellido == '') {
+
                 swal({
                     title: "Error!",
                     text: "Debe ingresar el primer apellido",
@@ -1764,23 +1778,25 @@
                     DangerMode: true,
 
                 });
-                return false;
+                return;
+
             }
 
             let reserva_hora_segundo_apellido = $('#reserva_hora_apellido_dos').val();
-            if (reserva_hora_segundo_apellido == '')
-            {
+            if (reserva_hora_segundo_apellido == '') {
+
                 swal({
                     title: "Error!",
                     text: "Debe ingresar el segundo apellido",
                     icon: "error",
                     type: "danger",
                     DangerMode: true,
+
                 });
-                return false;
+
+                return;
 
             }
-
             let reserva_hora_fecha_nac = $('#reserva_hora_fecha_nac').val();
             if (reserva_hora_fecha_nac == '') {
 
@@ -1793,152 +1809,6 @@
 
                 });
                 return;
-
-            }
-            else
-            {
-                let fechaNacimiento = new Date(reserva_hora_fecha_nac);
-                let hoy = new Date();
-                let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
-
-                // Comprobamos si el mes y el día de la fecha de nacimiento ya pasaron en el año actual
-                if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
-                    edad--;
-                }
-
-                if( edad < 18 )
-                {
-                    if($('#reserva_representante_nuevo_exitente').val() == '1')
-                    {
-                        /** existente */
-                        if($('#reserva_representante_id').val() == '')
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Información del Representante con problemas",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                        // if($('#reserva_representante_id_usuario').val() == '')
-                        // {
-                        //     swal({
-                        //         title: "Error!",
-                        //         text: "Información del Representante con problemas",
-                        //         icon: "error",
-                        //         type: "danger",
-                        //         DangerMode: true,
-
-                        //     });
-                        //     return;
-                        // }
-                    }
-                    else
-                    {
-                        /** nuevo */
-                        if( $('#reserva_hora_representante_nombres_paciente').val() == '' )
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Nombre del Representante requerido",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                        if( $('#reserva_hora_representante_apellido_uno').val() == '' )
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Apellido Paterno del Representante requerido",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                        if( $('#reserva_hora_representante_apellido_dos').val() == '' )
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Apellido Materno del Representante requerido",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                        if( $('#reserva_hora_representante_fecha_nac').val() == '' )
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Fecha Nacimiento del Representante requerido",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                        if( $('#reserva_hora_representante_sexo').val() == '' )
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Sexo del Representante requerido",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                        if( $('#reserva_hora_representante_direccion').val() == '' )
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Direccion del Representante requerido",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                        // if( $('#reserva_hora_representante_numero_dir').val() == '' )
-                        // {
-                        //     swal({
-                        //         title: "Error!",
-                        //         text: "Numero del Representante requerido",
-                        //         icon: "error",
-                        //         type: "danger",
-                        //         DangerMode: true,
-
-                        //     });
-                        //     return;
-                        // }
-                        if( $('#reserva_hora_representante_region_agregar').val() == '' )
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Region del Representante requerido",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-
-                            });
-                            return;
-                        }
-                    }
-
-
-                }
             }
 
             let reserva_hora_sexo = $('#reserva_hora_sexo').val();
@@ -1955,23 +1825,6 @@
 
                 return;
             }
-
-            // let reserva_hora_profesion = $('#reserva_hora_profesion').val();
-            // let reserva_hora_profesion_texto = $('#reserva_hora_profesion option:selected').text();
-            // if (reserva_hora_profesion == '0') {
-
-            //     swal({
-            //         title: "Error!",
-            //         text: "Debe seleccionar profesión u oficio del paciente",
-            //         icon: "error",
-            //         type: "danger",
-            //         DangerMode: true,
-
-            //     });
-
-            //     return;
-            // }
-
             let reserva_hora_convenio = $('#reserva_hora_convenio').val();
             if (reserva_hora_convenio == '0') {
 
@@ -2001,6 +1854,7 @@
 
             }
             let reserva_hora_numero_dir = $('#reserva_hora_numero_dir').val();
+            {{--
             if (reserva_hora_numero_dir == '') {
 
                 swal({
@@ -2014,8 +1868,9 @@
                 return;
 
             }
+            --}}
             let reserva_hora_comuna = $('#ciudad_agregar').val();
-            if (reserva_hora_comuna == '') {
+            if (reserva_hora_comuna == '' || reserva_hora_comuna == '0' || reserva_hora_comuna == 'null' || reserva_hora_comuna == null) {
 
                 swal({
                     title: "Error!",
@@ -2028,8 +1883,10 @@
                 return;
 
             }
+
             let reserva_hora_email = $('#reserva_hora_correo').val();
             let reserva_hora_telefono_uno = $('#reserva_hora_telefono_uno').val();
+            let reserva_result_codigo_validacion = $('#result_codigo_validacion').val();
 
             let fechaNacimiento = new Date(reserva_hora_fecha_nac);
             let hoy = new Date();
@@ -2040,34 +1897,65 @@
                 edad--;
             }
 
-            if( edad > 18 )
+            // if( edad > 18 )
+            if( $('#paciente_dependiente').prop('checked') == false )
             {
                 if (reserva_hora_email == '') {
 
-                    swal({
-                        title: "Error!",
-                        text: "Debe ingresar el email",
-                        icon: "error",
-                        type: "danger",
-                        DangerMode: true,
-
-                    });
-                    return;
-
+                    if(reserva_hora_telefono_uno == '' && (reserva_result_codigo_validacion =='' || reserva_result_codigo_validacion =='0') )
+                    {
+                        swal({
+                            title: "Error!",
+                            text: "Debe ingresar el email o teléfono",
+                            icon: "error",
+                            type: "danger",
+                            DangerMode: true,
+                        });
+                        return;
+                    }
+                    else
+                    {
+                        var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
+                        if (caract.test(reserva_hora_email) == false){
+                            swal({
+                                title: "Error!",
+                                text: "Debe ingresar el email o teléfono",
+                                icon: "error",
+                                type: "danger",
+                                DangerMode: true,
+                            });
+                            return;
+                        }
+                    }
                 }
+                else
+                {
 
-                if (reserva_hora_telefono_uno == '') {
-
-                    swal({
-                        title: "Error!",
-                        text: "Debe ingresar el teléfono",
-                        icon: "error",
-                        type: "danger",
-                        DangerMode: true,
-
-                    });
-                    return;
-
+                    if (reserva_hora_telefono_uno == '')
+                    {
+                        swal({
+                            title: "Error!",
+                            text: "Debe ingresar el teléfono",
+                            icon: "error",
+                            type: "danger",
+                            DangerMode: true,
+                        });
+                        return;
+                    }
+                    else
+                    {
+                        if(reserva_hora_email == '' && (reserva_result_codigo_validacion =='' || reserva_result_codigo_validacion =='0'))
+                        {
+                            swal({
+                                title: "Error!",
+                                text: "Debe validar el teléfono",
+                                icon: "error",
+                                type: "danger",
+                                DangerMode: true,
+                            });
+                            return;
+                        }
+                    }
                 }
             }
 
@@ -2087,19 +1975,246 @@
             var reserva_hora_representante_ciudad_agregar = $('#reserva_hora_representante_ciudad_agregar').val();
             var reserva_hora_representante_correo = $('#reserva_hora_representante_correo').val();
             var reserva_hora_representante_telefono_uno = $('#reserva_hora_representante_telefono_uno').val();
+            var reserva_hora_representante_result_codigo_validacion = $('#result_representante_codigo_validacion').val();
             var reserva_hora_representante_agregar_relacion = $('#reserva_hora_representante_agregar_relacion').val();
+
+
+            var dependiente = 0;
+            if($('#paciente_dependiente').prop('checked')  == true)
+                dependiente = 1;
+            else if($('#paciente_dependiente').prop('checked')  == false)
+                dependiente = 0;
+
+            if( edad < 18 || $('#paciente_dependiente').prop('checked')==true)
+            {
+                if(reserva_hora_representante_agregar_relacion == '')
+                {
+                    swal({
+                        title: "Error!",
+                        text: "Debe seleccionar Relación",
+                        icon: "error",
+                        type: "danger",
+                        DangerMode: true,
+                    });
+                    return;
+                }
+                if(reserva_representante_nuevo_exitente == '1')
+                {
+                    /** existente */
+                    if(reserva_representante_id == '')
+                    {
+                        swal({
+                            title: "Error!",
+                            text: "Información del Representante con problemas",
+                            icon: "error",
+                            type: "danger",
+                            DangerMode: true,
+
+                        });
+                        return;
+                    }
+                    // if($('#reserva_representante_id_usuario').val() == '')
+                    // {
+                    //     swal({
+                    //         title: "Error!",
+                    //         text: "Información del Representante con problemas",
+                    //         icon: "error",
+                    //         type: "danger",
+                    //         DangerMode: true,
+
+                    //     });
+                    //     return;
+                    // }
+                }
+                else
+                {
+                    /** nuevo */
+                    if( reserva_hora_representante_nombres_paciente == '' )
+                    {
+                        swal({
+                            title: "Error!",
+                            text: "Nombre del Representante requerido",
+                            icon: "error",
+                            type: "danger",
+                            DangerMode: true,
+
+                        });
+                        return;
+                    }
+                    if( reserva_hora_representante_apellido_uno == '' )
+                    {
+                        swal({
+                            title: "Error!",
+                            text: "Apellido Paterno del Representante requerido",
+                            icon: "error",
+                            type: "danger",
+                            DangerMode: true,
+
+                        });
+                        return;
+                    }
+                    if( reserva_hora_representante_apellido_dos == '' )
+                    {
+                        swal({
+                            title: "Error!",
+                            text: "Apellido Materno del Representante requerido",
+                            icon: "error",
+                            type: "danger",
+                            DangerMode: true,
+
+                        });
+                        return;
+                    }
+                    if( reserva_hora_representante_fecha_nac == '' )
+                    {
+                        swal({
+                            title: "Error!",
+                            text: "Fecha Nacimiento del Representante requerido",
+                            icon: "error",
+                            type: "danger",
+                            DangerMode: true,
+
+                        });
+                        return;
+                    }
+                    if( reserva_hora_representante_sexo == '' )
+                    {
+                        swal({
+                            title: "Error!",
+                            text: "Sexo del Representante requerido",
+                            icon: "error",
+                            type: "danger",
+                            DangerMode: true,
+
+                        });
+                        return;
+                    }
+                    if( reserva_hora_representante_direccion == '' )
+                    {
+                        swal({
+                            title: "Error!",
+                            text: "Direccion del Representante requerido",
+                            icon: "error",
+                            type: "danger",
+                            DangerMode: true,
+
+                        });
+                        return;
+                    }
+                    // if( reserva_hora_representante_numero_dir == '' )
+                    // {
+                    //     swal({
+                    //         title: "Error!",
+                    //         text: "Numero del Representante requerido",
+                    //         icon: "error",
+                    //         type: "danger",
+                    //         DangerMode: true,
+
+                    //     });
+                    //     return;
+                    // }
+                    // if( reserva_hora_representante_region_agregar == '' )
+                    // {
+                    //     swal({
+                    //         title: "Error!",
+                    //         text: "Region del Representante requerido",
+                    //         icon: "error",
+                    //         type: "danger",
+                    //         DangerMode: true,
+
+                    //     });
+                    //     return;
+                    // }
+                    if( reserva_hora_representante_ciudad_agregar == '' || reserva_hora_representante_ciudad_agregar == '0' || reserva_hora_representante_ciudad_agregar == 'null' || reserva_hora_representante_ciudad_agregar == null )
+                    {
+                        swal({
+                            title: "Error!",
+                            text: "Ciudad del Representante requerido",
+                            icon: "error",
+                            type: "danger",
+                            DangerMode: true,
+
+                        });
+                        return;
+                    }
+
+                    if( $('#paciente_dependiente').prop('checked') == true )
+                    {
+                        if (reserva_hora_representante_correo == '') {
+
+                            if(reserva_hora_representante_telefono_uno == '' && (reserva_hora_representante_result_codigo_validacion =='' || reserva_hora_representante_result_codigo_validacion =='0') )
+                            {
+                                swal({
+                                    title: "Error!",
+                                    text: "Debe ingresar el email o teléfono del representante",
+                                    icon: "error",
+                                    type: "danger",
+                                    DangerMode: true,
+                                });
+                                return;
+                            }
+                            else
+                            {
+                                var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
+                                if (caract.test(reserva_hora_representante_correo) == false){
+                                    swal({
+                                        title: "Error!",
+                                        text: "Debe ingresar el email o teléfono del representante",
+                                        icon: "error",
+                                        type: "danger",
+                                        DangerMode: true,
+                                    });
+                                    return;
+                                }
+                            }
+                        }
+                        else
+                        {
+
+                            if (reserva_hora_representante_telefono_uno == '')
+                            {
+                                swal({
+                                    title: "Error!",
+                                    text: "Debe ingresar el teléfono del representante",
+                                    icon: "error",
+                                    type: "danger",
+                                    DangerMode: true,
+                                });
+                                return;
+                            }
+                            else
+                            {
+                                if(reserva_hora_representante_correo == '' && (reserva_hora_representante_result_codigo_validacion =='' || reserva_hora_representante_result_codigo_validacion =='0'))
+                                {
+                                    swal({
+                                        title: "Error!",
+                                        text: "Debe validar el teléfono del representante",
+                                        icon: "error",
+                                        type: "danger",
+                                        DangerMode: true,
+                                    });
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
 
             let reserva_hora_confirmacion = $('#reserva_hora_confirmacion').val();
             let reserva_hora_sms = $('#reserva_hora_sms').val();
             let id_profesional = $('#agenda_profesional_asistente').val();
             let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
 
+            console.log('ajax');
             $.ajax({
 
                     url: url,
                     type: "get",
                     data: {
                         _token: _token,
+                        dependiente: dependiente,
                         fecha_consulta: fecha_consulta,
                         rut_paciente_reserva: rut_paciente_reserva,
                         reserva_hora_nombre: reserva_hora_nombre,
@@ -2107,17 +2222,17 @@
                         reserva_hora_segundo_apellido: reserva_hora_segundo_apellido,
                         reserva_hora_fecha_nac: reserva_hora_fecha_nac,
                         reserva_hora_sexo: reserva_hora_sexo,
-                        reserva_hora_profesion: reserva_hora_profesion_texto,
                         reserva_hora_convenio: reserva_hora_convenio,
                         reserva_hora_direccion: reserva_hora_direccion,
                         reserva_hora_numero_dir: reserva_hora_numero_dir,
                         reserva_hora_comuna: reserva_hora_comuna,
                         reserva_hora_email: reserva_hora_email,
                         reserva_hora_telefono: reserva_hora_telefono_uno,
+                        reserva_result_codigo_validacion: reserva_result_codigo_validacion,
                         reserva_hora_confirmacion: reserva_hora_confirmacion,
                         reserva_hora_sms: reserva_hora_sms,
                         id_profesional:id_profesional,
-                        id_lugar_atencion:id_lugar_atencion,
+                        id_lugar_atencion: id_lugar_atencion,
                         tipo_hora_medica: tipo_agenda_text,
                         /** representante */
                         reserva_representante_nuevo_exitente: reserva_representante_nuevo_exitente,
@@ -2136,6 +2251,7 @@
                         reserva_hora_representante_ciudad_agregar: reserva_hora_representante_ciudad_agregar,
                         reserva_hora_representante_correo: reserva_hora_representante_correo,
                         reserva_hora_representante_telefono_uno: reserva_hora_representante_telefono_uno,
+                        reserva_hora_representante_result_codigo_validacion: reserva_hora_representante_result_codigo_validacion,
                         reserva_hora_representante_agregar_relacion: reserva_hora_representante_agregar_relacion
                     },
                 })
@@ -2143,8 +2259,7 @@
                     if (data != null) {
                         // data = JSON.parse(data);
                         // console.log(data);
-                        if(data.estado == 1)
-                        {
+                        if (data.estado == 1) {
                             swal({
                                 title: "Exito!",
                                 text: "Hora medica agendada correctamente",
@@ -2154,9 +2269,7 @@
                             $('#reservar_hora').modal('hide');
                             $('#agenda_agregar_paciente').modal('hide');
                             cargarAgendaProfesional($('#id_tipo_agenda').val(),fecha_consulta);
-                        }
-                        else
-                        {
+                        } else {
                             swal({
                                 title: "Hora medica",
                                 text: data.msj,
@@ -2164,9 +2277,7 @@
                                 confirmButtonText: "Cool"
                             });
                         }
-                    }
-                    else
-                    {
+                    } else {
                         swal({
                             title: "Error!",
                             text: "Paciente no encontrado en el sistema",
@@ -2175,7 +2286,6 @@
                         });
                         // alert('Paciente no encontrado en el sistema');
                     }
-
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     console.log(jqXHR, ajaxOptions, thrownError)

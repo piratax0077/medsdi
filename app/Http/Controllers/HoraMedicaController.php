@@ -80,4 +80,57 @@ class HoraMedicaController extends Controller
         return $datos;
     }
 
+    function verRegistrosDia(Request $request)
+    {
+        $datos = array();
+        $filtro= array();
+
+        if(!empty($request->fecha_consulta))
+        {
+            $filtro[] = array('fecha_consulta',$request->fecha_consulta);
+        }
+        if(!empty($request->id_ficha_atencion))
+        {
+            $filtro[] = array('id_ficha_atencion',$request->id_ficha_atencion);
+        }
+        if(!empty($request->id_profesional))
+        {
+            $filtro[] = array('id_profesional',$request->id_profesional);
+        }
+        if(!empty($request->id_lugar_atencion))
+        {
+            $filtro[] = array('id_lugar_atencion',$request->id_lugar_atencion);
+        }
+
+        // # ESTADO HORA ATENCION
+        // 1. RESERVADA
+        // 2. CONFIRMADO
+        // 4. ESPERA
+        // 5. REALIZANDO
+        // 8. LLAMANDO
+
+        $registros = HoraMedica::where($filtro)
+                                ->whereIn('id_estado',[1,2,4,5,8])
+                                ->with('Estado')
+                                ->with(['Paciente'=> function($query){
+                                    $query->select('id','nombres', 'apellido_uno', 'apellido_dos', 'rut')
+                                            ->with(['Prevision'=>function($query2){
+                                                        $query2->select('id','nombre');
+                                    }]);
+                                }])
+                                ->get();
+        if(count($registros)>0)
+        {
+            $datos['estado'] = 1;
+            $datos['registros'] = $registros;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registros';
+        }
+
+        return $datos;
+    }
+
 }

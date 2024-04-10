@@ -403,15 +403,17 @@
 <!-- FIN RECEPCION BONO  -->
 
 <!-- MODAL AGREGAR HORA MEDICA -->
-<div id="agenda_agregar_paciente" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="agregar_paciente_asistente" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+<div id="agenda_agregar_paciente" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="agregar_paciente_asistente" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info pt-3 pb-2">
                 <h5 class="modal-title text-white text-center">Tomar hora</h5>
-                <button id="cerrar_tomar_hora" type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button id="cerrar_tomar_hora" type="button" class="close text-white close_agenda_agregar_paciente"
+                    data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <div class="form-row">
+                <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="form-group">
                             <h6 class="text-c-blue f-14">Ingrese el RUT del paciente</h6>
@@ -448,7 +450,7 @@
                     <input type="hidden" name="reserva_hora_edad" id="reserva_hora_edad" value="">
                     <input type="hidden" name="reserva_hora_id_responsable" id="reserva_hora_id_responsable" value="">
 
-
+                    {{--  VISUALIZACION DE DATOS DEL PACIENTE  --}}
                     <div id="reserva_datos_paciente" class="row mx-3">
                         <table class="table table-borderless table-xs">
                             <tbody>
@@ -492,7 +494,7 @@
                                     <th scope="row">
                                         <strong>Correo Electrónico</strong>
                                     </th>
-                                    <td><span id="reserva_hora_email"></span></td>
+                                    <td id="reserva_hora_email"></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">
@@ -502,39 +504,94 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                        <div class="col-sm-12 col-md-12" id="seccion_acompanante">
+                            <label class="label">Acompañado por </label>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="switch switch-success d-inline m-r-10">
+                                            <input type="checkbox" id="acompanante_representante" value="1"
+                                                checked>
+                                            <label for="acompanante_representante" class="cr"></label>
+                                        </div>
+                                        <label><strong>Representante</strong></label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div id="div_info_representante"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="switch switch-success d-inline m-r-10">
+                                            <input type="checkbox" id="acompanante_acompanante" value="1">
+                                            <label for="acompanante_acompanante" class="cr"></label>
+                                        </div>
+                                        <label><strong>Acompañante</strong></label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div id="div_info_acompanante" style="display: none">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Acompañante</label>
+                                            {{-- <input type="text" class="form-control form-control-sm" name="reserva_hora_id_acompanante" id="reserva_hora_id_acompanante"> --}}
+                                            <select class="form-control form-control-sm" multiple
+                                                name="reserva_hora_id_acompanante" id="reserva_hora_id_acompanante">
+                                                {{-- <option value="">Seleccione</option> --}}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
-                                <label class="floating-label-activo-sm">Descripción reserva</label>
+                                <label class="floating-label">Descripción Reserva</label>
                                 <input type="text" class="form-control form-control-sm"
                                     name="reserva_hora_descripcion" id="reserva_hora_descripcion">
                             </div>
                         </div>
 
-                        <div class="modal-footer mb-0 pt-1 pb-0">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i
-                                    class="feather icon-x"></i> Cancelar</button>
-                            <button type="button" onclick="agendar_hora();" class="btn btn-info"><i
-                                    class="feather icon-check"></i> Agendar hora</button>
+                        <div class="col-sm-12 col-md-12" id="seccion_autorizacion">
+                            <label class="label">Autorización Atención</label>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="switch switch-success d-inline m-r-10">
+                                            <input type="checkbox" id="autorizacion_atencion" value="1" checked>
+                                            <label for="autorizacion_atencion" class="cr"></label>
+                                        </div>
+                                        <label><strong>Autorizar Atención</strong></label>
+                                        <input type="hidden" name="autorizacion_atencion_token"
+                                            id="autorizacion_atencion_token" value="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <p style="font-size: 12px;font-weight: bold;color: #04048f;">Al Autorizar Atencion
+                                        usted es conciente que el Profesional atienda al Paciente.
+                                    <p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger close_agenda_agregar_paciente"
+                                data-dismiss="modal">Cancelar</button>
+                            <button type="button" onclick="agendar_hora();" class="btn btn-info">Agendar
+                                Hora</button>
+
                         </div>
                     </div>
 
+                    {{--  FORMULARIO DE PACIENTE NUEVO  --}}
                     <div id="reserva_agregar_paciente_hora">
                         <div class="form-row">
                             <div class="col-sm-12 col-md-12">
                                 <div class="alert alert-danger py-1" role="alert">
                                     Paciente no registrado, complete los datos para registrar al paciente.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="form-group">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="paciente_dependiente"
-                                            name="paciente_dependiente" onchange="activar_paciente_dependientes();">
-                                        <label class="custom-control-label" for="paciente_dependiente">Paciente Dependiente</label>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -647,19 +704,8 @@
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Tel&eacute;fono</label>
                                     <input type="tel" class="form-control form-control-sm"
-                                        name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno" onchange="validar_campo_telefono();">
+                                        name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno">
                                 </div>
-                                <button class="btn btn-sm btn-info btn-block"
-                                    type="button" id="btn_reserva_hora_telefono_uno_validar" disabled="disabled" onclick="enviar_validacion_telefono();">
-                                    <i class="feather icon-check"></i> Validar
-                                </button>
-                                <div class="form-group" style="display:none" name="div_codigo_validador" id="div_codigo_validador">
-                                    <label class="floating-label-activo-sm">Codigo Validador</label>
-                                    <input type="tel" class="form-control form-control-sm"
-                                        name="reserva_hora_telefono_uno_codigo_validador" id="reserva_hora_telefono_uno_codigo_validador" onkeyup="validar_codigo_telefono();">
-                                </div>
-                                <input type="hidden" name="result_codigo_validacion" id="result_codigo_validacion" value="0">
-                                <div id="div_codigo_validador_mensaje" style="display:none"></div>
                             </div>
                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                 <div class="form-group">
@@ -738,7 +784,7 @@
                                             <label class="floating-label-activo-sm">F. Nacimiento</label>
                                             <input type="date" class="form-control form-control-sm"
                                                 name="reserva_hora_representante_fecha_nac"
-                                                id="reserva_hora_representante_fecha_nac">
+                                                id="reserva_hora_representante_fecha_nac" onclick="evaluar_edad();">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -828,23 +874,8 @@
                                             <label class="floating-label-activo-sm">Tel&eacute;fono</label>
                                             <input type="tel" class="form-control form-control-sm"
                                                 name="reserva_hora_representante_telefono_uno"
-                                                id="reserva_hora_representante_telefono_uno" onchange="validar_campo_telefono_representante();">
+                                                id="reserva_hora_representante_telefono_uno">
                                         </div>
-
-                                        <button class="btn btn-sm btn-info btn-block"
-                                            type="button" id="btn_reserva_hora_representante_telefono_uno_validar" disabled="disabled" onclick="enviar_validacion_telefono_representante();">
-                                            <i class="feather icon-check"></i> Validar
-                                        </button>
-
-                                        <div class="form-group" style="display:none" name="div_representante_codigo_validador" id="div_representante_codigo_validador">
-                                            <label class="floating-label-activo-sm">Codigo Validador</label>
-                                            <input type="tel" class="form-control form-control-sm"
-                                                name="reserva_hora_representante_telefono_uno_codigo_validador" id="reserva_hora_representante_telefono_uno_codigo_validador" onkeyup="validar_codigo_telefono_representante();">
-                                        </div>
-
-                                        <input type="hidden" name="result_representante_codigo_validacion" id="result_representante_codigo_validacion" value="0">
-                                        <div id="div_representante_codigo_validador_mensaje" style="display:none"></div>
-
                                     </div>
                                 </div>
                             </div>
@@ -923,16 +954,17 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" id="cerrar_registro_paciente_hora"
-                                data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                            <button type="button" class="btn btn-danger close_agenda_agregar_paciente"
+                                data-dismiss="modal">Cancelar</button>
                             <button type="button" id="guardar_reserva_paciente"
                                 onclick="agendar_hora_paciente_nuevo();" class="btn btn-info">
-                                <i class="feather icon-check"></i> Tomar Hora
+                                Tomar Hora
                             </button>
                         </div>
                     </div>
                 </form>
             </div>
+
         </div>
     </div>
 </div>
@@ -989,46 +1021,24 @@
         let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
 
         // Comprobamos si el mes y el día de la fecha de nacimiento ya pasaron en el año actual
-        if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
+        if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy
+                .getDate() < fechaNacimiento.getDate())) {
             edad--;
         }
 
         if (edad < 18) {
-            $('#paciente_dependiente').prop('checked', 'checked');
-            // $('.seccion_reserva_paciente_nuevo_representante').show();
-            activar_paciente_dependientes();
+            $('.seccion_reserva_paciente_nuevo_representante').show();
             $('#reserva_hora_correo').attr('onblur', "");
-            $('#reserva_hora_telefono_uno').attr('onchange', "");
-            $('#btn_reserva_hora_telefono_uno_validar').hide();
-
-            $('#reserva_hora_telefono_uno_codigo_validador').val('');
-            $('#div_codigo_validador_mensaje').html('');
-            $('#result_codigo_validacion').val('0');
-
-            $('#reserva_hora_representante_telefono_uno_codigo_validador').val('');
-            $('#div_representante_codigo_validador_mensaje').html('');
-            $('#result_representante_codigo_validacion').val('0');
         } else {
-            $('#paciente_dependiente').prop('checked', '')
-            // $('.seccion_reserva_paciente_nuevo_representante').hide();
-            activar_paciente_dependientes();
+            $('.seccion_reserva_paciente_nuevo_representante').hide();
             $('#reserva_hora_correo').attr('onblur', "validar_email_agenda();");
-            $('#reserva_hora_telefono_uno').attr('onchange', "validar_campo_telefono();");
-            $('#btn_reserva_hora_telefono_uno_validar').show();
-
-            $('#reserva_hora_telefono_uno_codigo_validador').val('');
-            $('#div_codigo_validador_mensaje').html('');
-            $('#result_codigo_validacion').val('0');
-
-            $('#reserva_hora_representante_telefono_uno_codigo_validador').val('');
-            $('#div_representante_codigo_validador_mensaje').html('');
-            $('#result_representante_codigo_validacion').val('0');
         }
     }
 
     function buscar_rut_representente() {
 
         let rut = $('#reserva_hora_representante_rut').val();
+        // let url = "https://www.med-sdi.cl/Profesional/buscar_rut";
         let url = "{{ route('agenda.buscar_rut_paciente') }}";
 
         $('.div_representante_nuevo').hide();
@@ -1066,7 +1076,6 @@
                         $('#reserva_representante_id').val(data.id);
                         $('#reserva_representante_id_usuario').val(data.id_usuario);
 
-                        $("#guardar_reserva_paciente").prop('disabled', false);
 
                         $('.div_representante_nuevo').hide();
                         $('.div_representante_existente').show();
@@ -1116,6 +1125,7 @@
             });
     }
 
+
     function buscar_ciudad_repesentante(id_ciudad = 0) {
 
         let region = $('#reserva_hora_representante_region_agregar').val();
@@ -1163,7 +1173,8 @@
             });
 
 
-    }
+    };
+
 
     function validar_email_agenda() {
 
@@ -1219,7 +1230,10 @@
 
     function validar_email_agenda_representante() {
 
-        if ($("#reserva_hora_representante_correo").val().indexOf('@', 0) == -1 || $("#reserva_hora_representante_correo").val().indexOf('.', 0) == -1) {
+        if ($("#reserva_hora_representante_correo").val().indexOf('@', 0) == -1 || $(
+                "#reserva_hora_representante_correo")
+            .val().indexOf(
+                '.', 0) == -1) {
             swal({
                 title: "El correo electrónico introducido no es correcto.",
                 icon: "error",
@@ -1238,12 +1252,17 @@
                 url: url,
                 type: "get",
                 data: {
+
                     email: email,
+
                 }
+
             })
             .done(function(data) {
                 if (data == 'fail') {
+
                     // console.log(data);
+
                     $('#mensaje_email_reserva_representante').text('el email ya esta en nuestros registros');
                     $('#mensaje_email_reserva_representante').show();
                     $('#reserva_hora_representante_correo').focus();
@@ -1261,131 +1280,4 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
     }
-
-    function activar_paciente_dependientes()
-    {
-        if ($('#paciente_dependiente').prop('checked'))
-        {
-            $('.seccion_reserva_paciente_nuevo_representante').show();
-            $('#reserva_hora_correo').attr('onblur', "");
-            $('#reserva_hora_telefono_uno').attr('onchange', "");
-            $('#btn_reserva_hora_telefono_uno_validar').hide();
-        }
-        else
-        {
-            $('.seccion_reserva_paciente_nuevo_representante').hide();
-            $('#reserva_hora_correo').attr('onblur', "validar_email_agenda();");
-            $('#reserva_hora_telefono_uno').attr('onchange', "validar_campo_telefono();");
-            $('#btn_reserva_hora_telefono_uno_validar').show();
-            if($('#reserva_hora_fecha_nac').val() !=='')
-                evaluar_edad();
-        }
-    }
-
-    function validar_campo_telefono()
-    {
-        var telefono = $('#reserva_hora_telefono_uno').val();
-        var email = $('#reserva_hora_correo').val();
-        if(email == '')
-        {
-            // if (telefono != '')
-            {
-                var re = new RegExp(/^\x2b56[6-9][0-9]{8}$/i);//+56612341234
-                if( re.test(telefono) )
-                    $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',false);
-                else
-                    $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',true);
-            }
-        }
-    }
-
-    function enviar_validacion_telefono()
-    {
-        $('#btn_reserva_hora_telefono_uno_validar').hide();
-        $('#div_codigo_validador').show();
-        $('#reserva_hora_telefono_uno_codigo_validador').val('');
-        $('#div_codigo_validador_mensaje').html('');
-        $('#result_codigo_validacion').val('0');
-    }
-
-    function validar_codigo_telefono()
-    {
-        var codigo = $('#reserva_hora_telefono_uno_codigo_validador').val();
-        if(codigo.length >= 4)
-        {
-            console.log(codigo);
-            if(codigo == 1234)
-            {
-                $('#div_codigo_validador').hide();
-                $('#div_codigo_validador_mensaje').show();
-                $('#div_codigo_validador_mensaje').html('<span style="color:green;">Valido</span>');
-                $('#result_codigo_validacion').val('1');
-                $("#guardar_reserva_paciente").prop('disabled', false);
-            }
-            else
-            {
-                $('#div_codigo_validador').show();
-                $('#div_codigo_validador_mensaje').show();
-                $('#div_codigo_validador_mensaje').html('<span style="color:red;">No Valido</span>');
-                $('#result_codigo_validacion').val('0');
-                $("#guardar_reserva_paciente").prop('disabled', true);
-            }
-        }
-    }
-
-    function validar_campo_telefono_representante()
-    {
-        var telefono = $('#reserva_hora_representante_telefono_uno').val();
-        var email = $('#reserva_hora_representante_correo').val();
-
-        if(email === '')
-        {
-            // if (telefono != '')
-            {
-                var re = new RegExp(/^\x2b56[6-9][0-9]{8}$/i);//+56612341234
-                if( re.test(telefono) )
-                    $('#btn_reserva_hora_representante_telefono_uno_validar').attr('disabled',false);
-                else
-                    $('#btn_reserva_hora_representante_telefono_uno_validar').attr('disabled',true);
-            }
-        }
-        $('#reserva_hora_representante_telefono_uno_codigo_validador').val('');
-        $('#div_representante_codigo_validador_mensaje').html('');
-        $('#result_representante_codigo_validacion').val('0');
-    }
-
-    function enviar_validacion_telefono_representante()
-    {
-        $('#btn_reserva_hora_representante_telefono_uno_validar').hide();
-        $('#div_representante_codigo_validador').show();
-        $('#reserva_hora_representante_telefono_uno_codigo_validador').val('');
-        $('#div_representante_codigo_validador_mensaje').html('');
-        $('#result_representante_codigo_validacion').val('0');
-    }
-
-    function validar_codigo_telefono_representante()
-    {
-        var codigo = $('#reserva_hora_representante_telefono_uno_codigo_validador').val();
-        if(codigo.length >= 4)
-        {
-            console.log(codigo);
-            if(codigo == 1234)
-            {
-                $('#div_representante_codigo_validador').hide();
-                $('#div_representante_codigo_validador_mensaje').show();
-                $('#div_representante_codigo_validador_mensaje').html('<span style="color:green;">Valido</span>');
-                $('#result_representante_codigo_validacion').val('1');
-                $("#guardar_reserva_paciente").prop('disabled', false);
-            }
-            else
-            {
-                $('#div_representante_codigo_validador').show();
-                $('#div_representante_codigo_validador_mensaje').show();
-                $('#div_representante_codigo_validador_mensaje').html('<span style="color:red;">No Valido</span>');
-                $('#result_representante_codigo_validacion').val('0');
-                $("#guardar_reserva_paciente").prop('disabled', true);
-            }
-        }
-    }
-
 </script>
