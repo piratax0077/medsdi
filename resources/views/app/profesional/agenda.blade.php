@@ -48,7 +48,54 @@
             padding: 5px 5px;
             font-size: 0.8rem;
         }
+
+        .fc-today-button{
+            padding: 5px 5px;
+            font-size: 0.8rem;
+        }
+
+         .btn.btn-agenda {
+            width: 38px !important;
+            height: 38px !important;
+            font-size: 17px !important;
+            padding: 0px;
+            border-radius: 50%!important;
+        }
+
+        @media (max-width: 767.98px) { 
+
+            .t-lugar-aten{
+                font-size:0.9rem!important;
+            }
+
+            .t-tipo-agenda {
+                font-size:0.94rem!important;
+            }
+
+             .btn.btn-agenda {
+                width: 30px !important;
+                height: 30px !important;
+                font-size: 15px !important;
+                padding: 0px;
+                border-radius: 50%!important;
+            }
+
+            .fc .fc-toolbar-title {
+            font-size: 0.7rem!important;
+            margin: 0;
+            }
+
+             .btn-group>.btn,
+            .btn-group-vertical>.btn {
+                position: relative;
+                flex: 1 1 auto;
+                padding: 1px 5px;
+                font-size: 0.8rem;
+            }
+
+         }
     </style>
+    
     <link href='{{ asset('css/estilos_boton_agen_examenes.css') }}' rel='stylesheet' />
 @endsection
 
@@ -61,9 +108,9 @@
                 <div class="page-block">
                     <div class="row align-items-center text-center">
                         <div class="page-header-title">
-                            <h5 class="text-white f-22"><a href="#" data-toggle="tooltip" data-placement="top"
+                            <h5 class="text-white f-18 t-lugar-aten"><a href="#" data-toggle="tooltip" data-placement="top"
                                     title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
-                                <strong>AGENDA</strong><br> {{ strtoupper($lugar_atencion_nombre) }}
+                                <strong>AGENDA: </strong> {{ strtoupper($lugar_atencion_nombre) }}
                             </h5>
                         </div>
                     </div>
@@ -72,17 +119,15 @@
             <!--CIERRE: HEADER-->
 
 
-            <div class="row user-profile user-card  p-3" style="background-color:#ecf0f5;">
-                <div class="col-md-10">
-                    <h5 class="text-primary my-1" style="font-size: 1.4rem;" id="titulo_tipo_agenda"></h5>
-                </div>
-                <div class="col-md-1 text-center">
-                    @include('general.bloqueo_hora.bloque_hora')
-                </div>
-                <div class="col-md-1 text-center">
+            <div class="row user-profile user-card  align-items-center py-1 pb-3 px-4" style="background-color:#ecf0f5;">
+                <div class="col-md-12 d-inline pt-1">
+                    <h5 class="text-primary d-inline mt-2 t-tipo-agenda" style="font-size: 1.2rem;" id="titulo_tipo_agenda"></h5>
+              
                     @include('general.anular_hora.anular_hora')
+                    @include('general.bloqueo_hora.bloque_hora')
+                    
                 </div>
-                <div class="col-md-12 card">
+                <div class="col-md-12 mr-5 px-4 card">
                     <div id='agenda'></div>
                 </div>
             </div>

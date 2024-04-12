@@ -1,4 +1,6 @@
-<button type="button" class="btn btn-sm btn-danger" onclick="abrir_bloqueo_hora_atencion();"><i class="fas fa-cog"></i> </button>
+<button type="button" class="btn btn-agenda btn-info d-inline float-right ml-1" onclick="abrir_bloqueo_hora_atencion();" data-toggle="tooltip" data-placement="top" title="Bloqueos de fechas en la agenda"><i class="fas fa-lock"></i> </button>
+
+
 
 <div class="modal fade" id="modal_bloqueo_hora" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal_bloqueo_hora" aria-hidden="true">
   <div class="modal-dialog">

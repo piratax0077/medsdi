@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-sm btn-danger" onclick="abrir_anular_hora();" tooltip="Anular"><i class="fas fa-cog"></i> </button>
+<button type="button" class="btn btn-agenda btn-danger d-inline float-right mb-2 mt-0 ml-2 mr-3" onclick="abrir_anular_hora();" data-toggle="tooltip" data-placement="top" title="Anular horas"><i class="fas fa-calendar-times"></i> </button>
 
 <div class="modal fade" id="modal_anular_hora" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal_anular_hora" aria-hidden="true">
   <div class="modal-dialog">
