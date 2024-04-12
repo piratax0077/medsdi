@@ -1529,7 +1529,59 @@ Route::group([
     Route::get('Inicio', [App\Http\Controllers\EscritorioInstitucion::class, 'index'])->name('institucion.home');
 
 });
+/** URGENCIAS */
+// MEDICO URGENCIA
+Route::group([
+    'middleware' => ['role:MedicoUrgencia|admin'],
+    'prefix' => 'urgencia/profesional/',
+], function () {
+    Route::get('index', [App\Http\Controllers\UrgenciaController::class, 'IndexProfesional'])->name('urgencia.profesional.home');
+    Route::get('atencion', [App\Http\Controllers\UrgenciaController::class, 'AtencionProfesional'])->name('urgencia.profesional.atencion');
+    Route::get('triage', [App\Http\Controllers\UrgenciaController::class, 'TriageProfesional'])->name('urgencia.profesional.triage');
+    Route::get('box', [App\Http\Controllers\UrgenciaController::class, 'BoxProfesional'])->name('urgencia.profesional.box');
+    Route::get('ambulancia', [App\Http\Controllers\UrgenciaController::class, 'AmbulanciaProfesional'])->name('urgencia.profesional.ambulancia');
+    Route::get('camas', [App\Http\Controllers\UrgenciaController::class, 'CamasProfesional'])->name('urgencia.profesional.camas');
+    Route::get('paciente/buscar', [App\Http\Controllers\UrgenciaController::class, 'BuscarPacienteProfesional'])->name('urgencia.profesional.buscar.paciente');
+});
 
+// ENFERMERA URGENCIA
+Route::group([
+    'middleware' => ['role:EnfermeraUrgencia|admin'],
+    'prefix' => 'urgencia/enfermeria/',
+], function () {
+    Route::get('index', [App\Http\Controllers\UrgenciaController::class, 'IndexEnfermeria'])->name('urgencia.enfermera.home');
+    Route::get('atencion', [App\Http\Controllers\UrgenciaController::class, 'AtencionEnfermeria'])->name('urgencia.enfermera.atencion');
+    Route::get('triage', [App\Http\Controllers\UrgenciaController::class, 'TriageEnfermeria'])->name('urgencia.enfermera.triage');
+    Route::get('box', [App\Http\Controllers\UrgenciaController::class, 'BoxEnfermeria'])->name('urgencia.enfermera.box');
+    Route::get('ambulancia', [App\Http\Controllers\UrgenciaController::class, 'AmbulanciaEnfermeria'])->name('urgencia.enfermera.ambulancia');
+    Route::get('camas', [App\Http\Controllers\UrgenciaController::class, 'CamasEnfermeria'])->name('urgencia.enfermera.camas');
+    Route::get('paciente/buscar', [App\Http\Controllers\UrgenciaController::class, 'BuscarPacienteEnfermeria'])->name('urgencia.enfermera.buscar.paciente');
+});
+
+// ASISTENTE URGENCIA
+Route::group([
+    'middleware' => ['role:AdministrativoUrgencia|admin'],
+    'prefix' => 'urgencia/recepcion/',
+], function () {
+    Route::get('index', [App\Http\Controllers\UrgenciaController::class, 'IndexAdministrativo'])->name('urgencia.adminstrativo.home');
+    Route::get('recepcion', [App\Http\Controllers\UrgenciaController::class, 'RecepcionAdministrativo'])->name('urgencia.adminstrativo.recepcion');
+
+    Route::get('profesionales', [App\Http\Controllers\UrgenciaController::class, 'MisProfesionalesAdministrativo'])->name('urgencia.adminstrativo.mis.profesionales');
+    Route::get('enfermeras', [App\Http\Controllers\UrgenciaController::class, 'MisEnfermerasAdministrativo'])->name('urgencia.adminstrativo.mis.enfermeras');
+    Route::get('ambulancia', [App\Http\Controllers\UrgenciaController::class, 'AmbulanciaAdministrativo'])->name('urgencia.adminstrativo.ambulancia');
+    Route::get('camas', [App\Http\Controllers\UrgenciaController::class, 'CamasAdministrativo'])->name('urgencia.adminstrativo.cama');
+    Route::get('paciente/buscar', [App\Http\Controllers\UrgenciaController::class, 'BuscarPacienteAdministrativo'])->name('urgencia.adminstrativo.buscar.paciente');
+
+});
+
+// URGENCIA GENERICOS
+Route::group([
+    'middleware' => ['role:MedicoUrgencia|EnfermeraUrgencia|AdministrativoUrgencia|admin'],
+    'prefix' => 'urgencia/',
+], function () {
+    Route::get('cargar/paciente/', [App\Http\Controllers\UrgenciaController::class, 'buscar_rut_paciente'])->name('urgencia.buscar_rut_paciente');
+});
+/** CIERRRE URGENCIAS */
 /**CAMBIO DE CONTRASEÑA PERFIL */
 Route::get('perfil/cambio_contrasena', [App\Http\Controllers\UtilsController::class, 'cambioContrasenaPerfil'])->name('perfil.cambio_contrasena');
 

@@ -2,7 +2,7 @@
     <div class="col-md-12 py-0 px-2 shadow-none">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <h4 class="text-c-blue mt-4 f-20 mb-0">Exámenes</h4>
+                <h4 class="text-c-blue mt-3 f-18 mb-0">Exámenes</h4>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <ul class="nav nav-tabs-secciones mb-2" id="pediatria_general" role="tablist">
@@ -25,9 +25,9 @@
                     <!--BANDEJA DE ENTRADA-->
                     <div class="tab-pane fade show active" id="bandeja-entrada" role="tabpanel" aria-labelledby="bandeja-entrada-tab">
                         <div class="card">
-                            <div class="card-body">
+                            <div class="card-body pt-2">
                                 <h6 class="text-c-blue">Bandeja de entrada</h6>
-                                <hr>
+                                <hr class="mt-2">
                                 <div class="dt-responsive table-responsive">
                                     <table id="bandeja_entrada" class="display table dt-responsive nowrap table-xs align-middle" style="width:100%">
                                         <thead>
@@ -42,23 +42,25 @@
                                         <tbody>
                                             @if ($examenes_especialidad_realizados)
                                                 @foreach ($examenes_especialidad_realizados as $exam)
-                                                    @if ($exam->HoraMedica->id_estado == 6 && $exam->revisado == 0)
-                                                        <tr>
-                                                            <td>{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
-                                                            <td>{{ $exam->id }}</td>
-                                                            <td>{{ $exam->nombre }}</td>
-                                                            <td>
-                                                                @if ($exam->SubTipoEspecialidad)
-                                                                    {{ $exam->SubTipoEspecialidad->nombre }}
-                                                                @else
-                                                                    -
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad('{{ $exam->id }}',1);"><i class="feather icon-file-text"></i> Ver examen</button>
-                                                            </td>
-                                                        </tr>
-                                                    @endif
+													@if (!empty($exam->HoraMedica))
+														@if ($exam->HoraMedica->id_estado == 6 && $exam->revisado == 0)
+															<tr>
+																<td>{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
+																<td>{{ $exam->id }}</td>
+																<td>{{ $exam->nombre }}</td>
+																<td>
+																	@if ($exam->SubTipoEspecialidad)
+																		{{ $exam->SubTipoEspecialidad->nombre }}
+																	@else
+																		-
+																	@endif
+																</td>
+																<td>
+																	<button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad('{{ $exam->id }}',1);"><i class="feather icon-file-text"></i> Ver examen</button>
+																</td>
+															</tr>
+														@endif
+													@endif
                                                 @endforeach
                                             @endif
 
@@ -117,23 +119,25 @@
                                         <tbody>
                                             @if ($examenes_especialidad_realizados)
                                                 @foreach ($examenes_especialidad_realizados as $exam)
-                                                    @if ($exam->HoraMedica->id_estado == 6 && $exam->revisado == 1)
-                                                        <tr>
-                                                            <td>{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
-                                                            <td>{{ $exam->id }}</td>
-                                                            <td>{{ $exam->nombre }}</td>
-                                                            <td>
-                                                                @if ($exam->SubTipoEspecialidad)
-                                                                    {{ $exam->SubTipoEspecialidad->nombre }}
-                                                                @else
-                                                                    -
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad('{{ $exam->id }}',0);"><i class="feather icon-file-text"></i> Ver examen</button>
-                                                            </td>
-                                                        </tr>
-                                                    @endif
+													@if (!empty($exam->HoraMedica))
+														@if ($exam->HoraMedica->id_estado == 6 && $exam->revisado == 1)
+															<tr>
+																<td>{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
+																<td>{{ $exam->id }}</td>
+																<td>{{ $exam->nombre }}</td>
+																<td>
+																	@if ($exam->SubTipoEspecialidad)
+																		{{ $exam->SubTipoEspecialidad->nombre }}
+																	@else
+																		-
+																	@endif
+																</td>
+																<td>
+																	<button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad('{{ $exam->id }}',0);"><i class="feather icon-file-text"></i> Ver examen</button>
+																</td>
+															</tr>
+														@endif
+													@endif
                                                 @endforeach
                                             @endif
                                         </tbody>
