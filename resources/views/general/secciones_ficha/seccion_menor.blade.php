@@ -48,6 +48,12 @@
                                             @endforeach
                                         </div>
                                     @endif
+
+                                    <div class="col-md-6" id="otros_acompanantes" name="otros_acompanantes" style="display: none;">
+                                        <span style="font-weight: bold;">Otros Acompañantes:<br/></span>
+
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -237,6 +243,14 @@
                             text: "Registro Exitoso",
                             icon: "success",
                         });
+
+
+                        var html = '';
+                        html += '<span style="font-weight: bold;">Otros Acompañantes:<br/></span>';
+                        html += nombre+' '+apellido_uno+' '+rut+'';
+                        $('#otros_acompanantes').html(html);
+                        $('#otros_acompanantes').show();
+
                         $('#modal_registrar_otro_acompanante').modal('hide');
                     }
                     else
