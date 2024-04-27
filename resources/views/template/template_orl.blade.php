@@ -177,6 +177,18 @@
     <!-- funciones generales -->
     <script src="{{ asset('js/funciones.js') }}"></script>
 
+    {{-- zoom  --}}
+    <script src="{{ asset('js/app.js') }}" ></script>
+    {{-- <script src="{{ asset('js/react.production.min.js') }}" ></script> --}}
+    {{-- <script src="{{ asset('js/react-dom.production.min.js') }}" ></script> --}}
+    {{-- <script src="{{ asset('js/redux.min.js') }}" ></script> --}}
+    {{-- <script src="{{ asset('js/redux-thunk.min.js') }}" ></script> --}}
+    {{-- <script src="{{ asset('js/lodash.min.js') }}" ></script> --}}
+    {{-- en desarrollo --}}
+    {{-- <script src="{{ asset('zoom/tool.js') }}"></script> --}}
+    {{-- <script src="{{ asset('zoom/vconsole.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('zoom/index.js') }}"></script> --}}
+
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 

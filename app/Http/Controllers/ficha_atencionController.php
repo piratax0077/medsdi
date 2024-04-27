@@ -103,6 +103,7 @@ use App\Models\OftalmoExamenNeurologico;
 use App\Models\OftalmoExamenPresionOcular;
 use App\Models\OftalmoExamenVisionColores;
 use App\Models\RecomendacionDetalle;
+use App\Models\VideoConsultaInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -407,6 +408,7 @@ class ficha_atencionController extends Controller
 
             /** examenes radiologicos */
             $examenes_radiologicos = '';
+
 			/** examen_tipo */
 			$examen_tipo = '';
         }else
@@ -1340,6 +1342,7 @@ class ficha_atencionController extends Controller
         $responsables = '';
         /** validar si es dependiente */
         $array_id_responsable = PacientesDependientes::where('id_paciente', $paciente->id)->pluck('id_responsable')->toArray();
+
         if(count($array_id_responsable) > 0)
         {
             $responsables = Paciente::whereIn('id', $array_id_responsable)->get();
@@ -1590,8 +1593,45 @@ class ficha_atencionController extends Controller
 
         /* FIN --------------------------- HTML MODAL -------------------------- */
 
-
         $licencia = Licencia::where('id_ficha_atencion', $id_ficha_atencion)->first();
+
+        $info_video = '';
+        if($hora->tipo_hora_medica == 'T')
+        {
+            $filtro_v = array();
+            $filtro_v[] = array('id_hora_atencion', $hora->id);
+            $filtro_v[] = array('id_profesional', $hora->id_profesional);
+            $filtro_v[] = array('id_paciente', $hora->id_paciente);
+            $info_video = VideoConsultaInfo::where($filtro_v)->first();
+        }
+
+        /** INFO ACOMPAÑANTE */
+        $responsables = '';
+        $acompanantes = '';
+        if(\Carbon\Carbon::parse($paciente->fecha_nac)->age < 18)
+        {
+            if($hora->acomp_representante == 1)
+            {
+                $filtro_list_PD = array();
+                $filtro_list_PD[] = array('estado', 1);
+                $filtro_list_PD[] = array('id_paciente', $paciente->id);
+                $responsables_relacion = PacientesDependientes::where($filtro_list_PD)->pluck('id_responsable')->toArray();
+                if($responsables_relacion)
+                {
+                    $responsables = Paciente::whereIn('id', $responsables_relacion)->get();
+                }
+            }
+
+            if($hora->acomp_acompanante == 1)
+            {
+                if(!empty($hora->acomp_lista))
+                {
+                    $lista_acompanante = json_decode($hora->acomp_lista);
+                    $acompanantes = Paciente::whereIn('id', $lista_acompanante)->get();
+                }
+            }
+        }
+        /** CIERRE INFO ACOMPAÑANTE */
 
         return view($ruta_blade)->with(
             [
@@ -1662,6 +1702,13 @@ class ficha_atencionController extends Controller
                 'contacto_direccion'=> $contacto_direccion,
                 'contacto_ciudad' => $contacto_ciudad,*/
                 'licencia' => $licencia,
+
+                /** CONSULTA VIDEO LLAMADA */
+                'info_video' => $info_video,
+
+                /** RESPONSABLES */
+                'responsables'  => $responsables,
+                'acompanantes'  => $acompanantes,
 
             ]
         );
@@ -6452,12 +6499,12 @@ class ficha_atencionController extends Controller
         }
         if( empty($request->descripcion_cie))
         {
-            $error['Diagnostico CIE-10'] = 'campo requerido';
+            $error['Diagnostico CIE-10 DES'] = 'campo requerido';
             $valido = 0;
         }
         if( empty($request->id_descripcion_cie))
         {
-            $error['Diagnostico CIE-10'] = 'campo requerido';
+            $error['Diagnostico CIE-10 ID'] = 'campo requerido';
             $valido = 0;
         }
 

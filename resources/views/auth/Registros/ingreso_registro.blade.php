@@ -68,7 +68,7 @@
                                 @csrf
                                 <div class="form-group mb-3">
                                     <label class="floating-label-activo-sm">Ingrese su correo electrónico</label>
-                                    <input type="email" class="form-control" name="email" id="email" value="">
+                                    <input type="text" class="form-control" name="email" id="email" value="">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="floating-label-activo-sm">Ingrese su contraseña</label>

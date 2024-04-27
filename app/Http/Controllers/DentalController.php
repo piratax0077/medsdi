@@ -2174,21 +2174,7 @@ class DentalController extends Controller
 
 
 
-    public function autocomplete(Request $request)
 
-    {
-
-        $search = $request->get('term');
-
-
-
-        $result = Articulo::where('nombre', 'LIKE', '%' . $search . '%')->get();
-
-
-
-        return response()->json($result);
-
-    }
 
 
 

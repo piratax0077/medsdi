@@ -3169,7 +3169,7 @@
             }
             --}}
             let reserva_hora_comuna = $('#ciudad_agregar').val();
-            if (reserva_hora_comuna == '') {
+            if (reserva_hora_comuna == '' || reserva_hora_comuna == '0' || reserva_hora_comuna == 'null' || reserva_hora_comuna == null) {
 
                 swal({
                     title: "Error!",
@@ -3211,6 +3211,23 @@
                             DangerMode: true,
                         });
                         return;
+                    }
+                    else
+                    {
+                        if(reserva_result_codigo_validacion =='0')
+                        {
+                            var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
+                            if (caract.test(reserva_hora_email) == false){
+                                swal({
+                                    title: "Error!",
+                                    text: "Debe ingresar el email o teléfono",
+                                    icon: "error",
+                                    type: "danger",
+                                    DangerMode: true,
+                                });
+                                return;
+                            }
+                        }
                     }
                 }
                 else
@@ -3272,10 +3289,21 @@
 
             if( edad < 18 || $('#paciente_dependiente').prop('checked')==true)
             {
-                if($('#reserva_representante_nuevo_exitente').val() == '1')
+                if(reserva_hora_representante_agregar_relacion == '')
+                {
+                    swal({
+                        title: "Error!",
+                        text: "Debe seleccionar Relación",
+                        icon: "error",
+                        type: "danger",
+                        DangerMode: true,
+                    });
+                    return;
+                }
+                if(reserva_representante_nuevo_exitente == '1')
                 {
                     /** existente */
-                    if($('#reserva_representante_id').val() == '')
+                    if(reserva_representante_id == '')
                     {
                         swal({
                             title: "Error!",
@@ -3303,7 +3331,7 @@
                 else
                 {
                     /** nuevo */
-                    if( $('#reserva_hora_representante_nombres_paciente').val() == '' )
+                    if( reserva_hora_representante_nombres_paciente == '' )
                     {
                         swal({
                             title: "Error!",
@@ -3315,7 +3343,7 @@
                         });
                         return;
                     }
-                    if( $('#reserva_hora_representante_apellido_uno').val() == '' )
+                    if( reserva_hora_representante_apellido_uno == '' )
                     {
                         swal({
                             title: "Error!",
@@ -3327,7 +3355,7 @@
                         });
                         return;
                     }
-                    if( $('#reserva_hora_representante_apellido_dos').val() == '' )
+                    if( reserva_hora_representante_apellido_dos == '' )
                     {
                         swal({
                             title: "Error!",
@@ -3339,7 +3367,7 @@
                         });
                         return;
                     }
-                    if( $('#reserva_hora_representante_fecha_nac').val() == '' )
+                    if( reserva_hora_representante_fecha_nac == '' )
                     {
                         swal({
                             title: "Error!",
@@ -3351,7 +3379,7 @@
                         });
                         return;
                     }
-                    if( $('#reserva_hora_representante_sexo').val() == '' )
+                    if( reserva_hora_representante_sexo == '' )
                     {
                         swal({
                             title: "Error!",
@@ -3363,7 +3391,7 @@
                         });
                         return;
                     }
-                    if( $('#reserva_hora_representante_direccion').val() == '' )
+                    if( reserva_hora_representante_direccion == '' )
                     {
                         swal({
                             title: "Error!",
@@ -3375,7 +3403,7 @@
                         });
                         return;
                     }
-                    // if( $('#reserva_hora_representante_numero_dir').val() == '' )
+                    // if( reserva_hora_representante_numero_dir == '' )
                     // {
                     //     swal({
                     //         title: "Error!",
@@ -3387,11 +3415,23 @@
                     //     });
                     //     return;
                     // }
-                    if( $('#reserva_hora_representante_region_agregar').val() == '' )
+                    // if( reserva_hora_representante_region_agregar == '' )
+                    // {
+                    //     swal({
+                    //         title: "Error!",
+                    //         text: "Region del Representante requerido",
+                    //         icon: "error",
+                    //         type: "danger",
+                    //         DangerMode: true,
+
+                    //     });
+                    //     return;
+                    // }
+                    if( reserva_hora_representante_ciudad_agregar == '' || reserva_hora_representante_ciudad_agregar == '0' || reserva_hora_representante_ciudad_agregar == 'null' || reserva_hora_representante_ciudad_agregar == null )
                     {
                         swal({
                             title: "Error!",
-                            text: "Region del Representante requerido",
+                            text: "Ciudad del Representante requerido",
                             icon: "error",
                             type: "danger",
                             DangerMode: true,
@@ -3399,6 +3439,71 @@
                         });
                         return;
                     }
+
+                    if( $('#paciente_dependiente').prop('checked') == true )
+                    {
+                        if (reserva_hora_representante_correo == '') {
+
+                            if(reserva_hora_representante_telefono_uno == '' && (reserva_hora_representante_result_codigo_validacion =='' || reserva_hora_representante_result_codigo_validacion =='0') )
+                            {
+                                swal({
+                                    title: "Error!",
+                                    text: "Debe ingresar el email o teléfono del representante",
+                                    icon: "error",
+                                    type: "danger",
+                                    DangerMode: true,
+                                });
+                                return;
+                            }
+                            else
+                            {
+                                if(reserva_hora_representante_result_codigo_validacion =='0')
+                                {
+                                    var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
+                                    if (caract.test(reserva_hora_representante_correo) == false){
+                                        swal({
+                                            title: "Error!",
+                                            text: "Debe ingresar el email o teléfono del representante",
+                                            icon: "error",
+                                            type: "danger",
+                                            DangerMode: true,
+                                        });
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+
+                            if (reserva_hora_representante_telefono_uno == '')
+                            {
+                                swal({
+                                    title: "Error!",
+                                    text: "Debe ingresar el teléfono del representante",
+                                    icon: "error",
+                                    type: "danger",
+                                    DangerMode: true,
+                                });
+                                return;
+                            }
+                            else
+                            {
+                                if(reserva_hora_representante_correo == '' && (reserva_hora_representante_result_codigo_validacion =='' || reserva_hora_representante_result_codigo_validacion =='0'))
+                                {
+                                    swal({
+                                        title: "Error!",
+                                        text: "Debe validar el teléfono del representante",
+                                        icon: "error",
+                                        type: "danger",
+                                        DangerMode: true,
+                                    });
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
 

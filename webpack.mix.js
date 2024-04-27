@@ -15,6 +15,12 @@ mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/esc_asis_lab.js', 'public/js')
     .js('resources/js/esc_dentista.js', 'public/js')
     .js('resources/js/esc_paciente.js', 'public/js')
+    .js('node_modules/react/umd/react.production.min.js', 'public/js')
+    .js('node_modules/react-dom/umd/react-dom.production.min.js', 'public/js')
+    .js('node_modules/redux/dist/redux.min.js', 'public/js')
+    .js('node_modules/redux-thunk/dist/redux-thunk.min.js', 'public/js')
+    .js('node_modules/lodash/lodash.min.js', 'public/js')
+
     .vue()
     .postCss('resources/css/app.css', 'public/css', [
         require('postcss-import'),

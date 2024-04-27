@@ -1685,6 +1685,7 @@
                 return;
 
             }
+
             let reserva_hora_fecha_nac = $('#reserva_hora_fecha_nac').val();
             if (reserva_hora_fecha_nac == '') {
 
@@ -1794,7 +1795,7 @@
                     {
                         swal({
                             title: "Error!",
-                            text: "Debe ingresar el email o teléfono",
+                            text: "Debe ingresar el email o teléfono 1",
                             icon: "error",
                             type: "danger",
                             DangerMode: true,
@@ -1803,17 +1804,23 @@
                     }
                     else
                     {
-                        var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-                        if (caract.test(reserva_hora_email) == false){
-                            swal({
-                                title: "Error!",
-                                text: "Debe ingresar el email o teléfono",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-                            });
-                            return;
+                        if(reserva_result_codigo_validacion =='0')
+                        {
+                            console.log( 'reserva_hora_email' );
+                            console.log( reserva_hora_email );
+                            var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
+                            if (caract.test(reserva_hora_email) == false){
+                                swal({
+                                    title: "Error!",
+                                    text: "Debe ingresar el email o teléfono 2",
+                                    icon: "error",
+                                    type: "danger",
+                                    DangerMode: true,
+                                });
+                                return;
+                            }
                         }
+
                     }
                 }
                 else

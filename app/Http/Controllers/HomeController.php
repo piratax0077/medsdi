@@ -32,7 +32,12 @@ class HomeController extends Controller
         }
         $usuario = User::where('id', Auth::user()->id)->first();
         $roles = $usuario->roles()->orderBy('id', 'DESC')->get();
-        $roles_principal = $usuario->roles()->orderBy('id', 'DESC')->first();
+
+
+		if(Auth::user()->id == 3)
+			return redirect('/Acceso');
+		else
+			$roles_principal = $usuario->roles()->orderBy('id', 'DESC')->first();
 
         // if (count($roles) > 1) {
         //     return redirect('/Acceso');
@@ -272,6 +277,7 @@ class HomeController extends Controller
             $asistente->fecha_nac = $request->fecha_nacimiento_registro;
             $asistente->sexo = $request->sexo_registro;
             $asistente->id_usuario = @Auth::user()->id;
+            $asistente->bienvenido = 1;
             $asistente->email = @Auth::user()->email;
             $asistente->telefono_uno = $request->telefono_registro;
             $asistente->telefono_dos = $request->telefono_dos_registro;

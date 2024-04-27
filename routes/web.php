@@ -1018,7 +1018,7 @@ Route::group([
     Route::get('Hora-medica/hora/agendar/paciente/nuevo', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_hora_nuevo_paciente'])->name('agenda.agendar_hora_nuevo_paciente');
     Route::post('Hora-medica/paciente/nuevo', [App\Http\Controllers\AsistenteController::class, 'AgregarNuevoPaciente'])->name('agenda.paciente.nuevo');
     Route::get('Hora-medica/validar/email', [App\Http\Controllers\EscritorioProfesional::class, 'validar_rut'])->name('agenda.validar_email');
-	
+
     /** motor de busqueda asistente online*/
     Route::get('perfil/configuracion/busqueda/editar', [App\Http\Controllers\EscritorioAsistente::class, 'editar_configuracion_busqueda'])->name('asistente.editar_configuracion_busqueda');
 
@@ -1542,6 +1542,24 @@ Route::group([
     Route::get('ambulancia', [App\Http\Controllers\UrgenciaController::class, 'AmbulanciaProfesional'])->name('urgencia.profesional.ambulancia');
     Route::get('camas', [App\Http\Controllers\UrgenciaController::class, 'CamasProfesional'])->name('urgencia.profesional.camas');
     Route::get('paciente/buscar', [App\Http\Controllers\UrgenciaController::class, 'BuscarPacienteProfesional'])->name('urgencia.profesional.buscar.paciente');
+
+    // TIPO PROCEDIMIENTO
+    Route::get('tipo/procedimiento/ver', [App\Http\Controllers\TipoProcedimientoController::class, 'verRegistros_r'])->name('urgencia.tipo.procedimiento.ver');
+
+    // PROCEDIMIENTO
+    Route::get('procedimiento/ver', [App\Http\Controllers\ProcedimientoController::class, 'verRegistros_r'])->name('urgencia.procedimiento.ver');
+
+    // URGENCIA INDICACION
+    Route::get('indicacion/ver', [App\Http\Controllers\UrgenciaIndicacionController::class, 'verRegistros_r'])->name('urgencia.indicacion.ver');
+    Route::post('indicacion/registrar', [App\Http\Controllers\UrgenciaIndicacionController::class, 'registrar_r'])->name('urgencia.indicacion.registro');
+
+    // URGENCIA RECETA
+    Route::get('receta/ver', [App\Http\Controllers\UrgenciaRecetaController::class, 'verRegistros_r'])->name('urgencia.receta.ver');
+    Route::post('receta/registrar', [App\Http\Controllers\UrgenciaRecetaController::class, 'registrar_r'])->name('urgencia.receta.registro');
+
+    // URGENCIA PROCEDIMIENTO
+    Route::get('procedimiento/ver', [App\Http\Controllers\UrgenciaProcedimientoController::class, 'verRegistros_r'])->name('urgencia.procedimiento.ver');
+    Route::post('procedimiento/registrar', [App\Http\Controllers\UrgenciaProcedimientoController::class, 'registrar_r'])->name('urgencia.procedimiento.registro');
 });
 
 // ENFERMERA URGENCIA

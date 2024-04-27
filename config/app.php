@@ -68,7 +68,7 @@ return [
     */
 
     // 'timezone' => 'UTC',
-    'timezone' => 'America/Santiago',
+    'timezone' => env('APP_TIMEZONE', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -81,7 +81,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -94,7 +94,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -107,7 +107,7 @@ return [
     |
     */
 
-    'faker_locale' => 'en_US',
+    'faker_locale' => 'es_ES',
 
     /*
     |--------------------------------------------------------------------------
@@ -182,7 +182,10 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
 
         /** Simple QrCode */
-        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+
+        /** ZOOM */
+        Jubaer\Zoom\ZoomServiceProvider::class,
 
     ],
 
@@ -244,8 +247,10 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
 
         /** Simple QrCode */
-        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
 
+        /** ZOOM */
+        'Zoom' => Jubaer\Zoom\Facades\Zoom::class,
     ],
 
 ];

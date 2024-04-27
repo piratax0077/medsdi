@@ -1692,6 +1692,25 @@ class EscritorioPaciente extends Controller
 
             if ($hora_medica->save())
             {
+                if($request->tipo_hora_medica == 'T')
+                {
+                    $apertura = new DateTime($hora_medica->hora_inicio);
+                    $cierre = new DateTime($hora_medica->hora_termino);
+
+                    $tiempo = $apertura->diff($cierre);
+
+                    $request_meeting = new Request(array(
+                        'id_hora_atencion' => $hora_medica->id,
+                        'hora_atencion' => $hora_medica->fecha_consulta.'T'.$hora_medica->hora_inicio,
+                        'id_profesional' => $profesional->id,
+                        'profesional_correo' => $profesional->email,
+                        'id_paciente' => $paciente->id,
+                        'paciente_nombre' => $paciente->nombres . " " . $paciente->apellido_uno,
+                        'tiempo_consulta' =>$tiempo->format('%i')
+                    ));
+                    $meeting = ZoomManagerController::crearMeeting($request_meeting);
+                }
+
                 $datos['estado'] = 1;
                 $datos['msj'] = 'Hora Reservada';
                 $datos['registro'] = array(

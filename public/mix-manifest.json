@@ -3,5 +3,10 @@
     "/js/esc_asis_lab.js": "/js/esc_asis_lab.js",
     "/js/esc_dentista.js": "/js/esc_dentista.js",
     "/js/esc_paciente.js": "/js/esc_paciente.js",
+    "/js/react.production.min.js": "/js/react.production.min.js",
+    "/js/react-dom.production.min.js": "/js/react-dom.production.min.js",
+    "/js/redux.min.js": "/js/redux.min.js",
+    "/js/redux-thunk.min.js": "/js/redux-thunk.min.js",
+    "/js/lodash.min.js": "/js/lodash.min.js",
     "/css/app.css": "/css/app.css"
 }

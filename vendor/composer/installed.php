@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '53cffaec55ebf39029f23b3b3f68985956755ce1',
+    'reference' => '4728c1906bb8b62d593373357211b8e7e22d1dcf',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -503,6 +503,15 @@
       ),
       'reference' => 'daa11c43729510b3700bc34d414664966b03bffe',
     ),
+    'jubaer/zoom-laravel' => 
+    array (
+      'pretty_version' => '1.3.0',
+      'version' => '1.3.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'a407dcfc402de30bdf04bd8459013868b99ed6b0',
+    ),
     'kodova/hamcrest-php' => 
     array (
       'replaced' => 
@@ -544,7 +553,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '53cffaec55ebf39029f23b3b3f68985956755ce1',
+      'reference' => '4728c1906bb8b62d593373357211b8e7e22d1dcf',
     ),
     'laravel/sail' => 
     array (

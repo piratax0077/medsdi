@@ -1870,16 +1870,19 @@
                     }
                     else
                     {
-                        var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-                        if (caract.test(reserva_hora_email) == false){
-                            swal({
-                                title: "Error!",
-                                text: "Debe ingresar el email o teléfono",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-                            });
-                            return;
+                        if(reserva_result_codigo_validacion =='0')
+                        {
+                            var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
+                            if (caract.test(reserva_hora_email) == false){
+                                swal({
+                                    title: "Error!",
+                                    text: "Debe ingresar el email o teléfono",
+                                    icon: "error",
+                                    type: "danger",
+                                    DangerMode: true,
+                                });
+                                return;
+                            }
                         }
                     }
                 }
@@ -2110,16 +2113,19 @@
                             }
                             else
                             {
-                                var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-                                if (caract.test(reserva_hora_representante_correo) == false){
-                                    swal({
-                                        title: "Error!",
-                                        text: "Debe ingresar el email o teléfono del representante",
-                                        icon: "error",
-                                        type: "danger",
-                                        DangerMode: true,
-                                    });
-                                    return;
+                                if(reserva_hora_representante_result_codigo_validacion =='0')
+                                {
+                                    var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
+                                    if (caract.test(reserva_hora_representante_correo) == false){
+                                        swal({
+                                            title: "Error!",
+                                            text: "Debe ingresar el email o teléfono del representante",
+                                            icon: "error",
+                                            type: "danger",
+                                            DangerMode: true,
+                                        });
+                                        return;
+                                    }
                                 }
                             }
                         }
