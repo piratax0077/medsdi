@@ -10,18 +10,28 @@ class Bodega extends Model
     use HasFactory;
     protected $table = 'bodega';
 
+    protected $fillable = [
+        'id_institucion',
+        'nombre',
+        'descripcion',
+        'direccion',
+        'telefono',
+        'email',
+        'id_responsable'
+    ];
+
     public function Institucion()
     {
         return $this->hasOne(Instituciones::class, 'id', 'id_institucion');
     }
 
-    public function LugarAtencion()
-    {
-        return $this->hasOne(LugarAtencion::class, 'id', 'id_lugar_atencion');
-    }
+    // public function LugarAtencion()
+    // {
+    //     return $this->hasOne(LugarAtencion::class, 'id', 'id_lugar_atencion');
+    // }
 
-    public function Responsable()
-    {
-        return $this->hasOne(AdminInstServ::class, 'id', 'id_responsable');
-    }
+    // public function Responsable()
+    // {
+    //     return $this->hasOne(AdminInstServ::class, 'id', 'id_responsable');
+    // }
 }

@@ -36,3 +36,11 @@ function rectrtraslado() {
 function rectrmuletas() {
     $('#m_ind_traumato_usomuletas').modal('show');
 }
+
+function rx_pie() {
+    $('#m_rx_pie').modal('show');
+}
+
+function rx_cadera() {
+    $('#m_rx_cadera').modal('show');
+}

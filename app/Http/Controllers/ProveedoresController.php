@@ -14,20 +14,20 @@ class ProveedoresController extends Controller
         try {
             //code...
             $regiones = Region::orderBy('nombre')->get();
-        $proveedores = Proveedor::select('proveedores.*', 'tipo_producto.nombre as tipo_producto')
-        ->join('tipo_producto', 'proveedores.id_tipo_producto', '=', 'tipo_producto.id')
-        ->get();
-        $tipo_producto = TipoProducto::all();
-        return view('proveedores',[
-            'region' => $regiones, 
-            'proveedores' => $proveedores,
-            'tipo_producto' => $tipo_producto
-        ]);
+            $proveedores = Proveedor::select('proveedores.*', 'tipo_producto.nombre as tipo_producto')
+            ->join('tipo_producto', 'proveedores.id_tipo_producto', '=', 'tipo_producto.id')
+            ->get();
+            $tipo_producto = TipoProducto::all();
+            return view('app.bodega.proveedores',[
+                'region' => $regiones,
+                'proveedores' => $proveedores,
+                'tipo_producto' => $tipo_producto
+            ]);
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();
         }
-        
+
     }
 
     public function guardarProveedor(Request $req){
@@ -57,7 +57,7 @@ class ProveedoresController extends Controller
         ]);
 
 
-        
+
         $proveedor = new Proveedor();
         $proveedor->nombre = $req->nombre_prov;
         $proveedor->id_tipo_producto = $req->prov_prod;
@@ -97,7 +97,7 @@ class ProveedoresController extends Controller
             //throw $th;
             return $e->getMessage();
         }
-        
+
     }
 
     private function dameProveedores(){
@@ -113,11 +113,11 @@ class ProveedoresController extends Controller
     }
 
     public function editarProveedor(Request $req){
-        
+
         $proveedor = Proveedor::find($req->id_proveedor);
         $proveedor->nombre = $req->nombre;
         $proveedor->direccion = $req->direccion;
-        $proveedor->productos = $req->prov_prod_;
+        $proveedor->id_tipo_producto = $req->prov_prod_;
         $proveedor->rut = $req->rut;
         $proveedor->telefono = $req->telefono;
         $proveedor->email = $req->email;
