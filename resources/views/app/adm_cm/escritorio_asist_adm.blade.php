@@ -125,13 +125,23 @@
 					</div>
 				</div>
 				<div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion();">
-                        {{--   <a href="{{ ROUTE('asistente_adm.cargar_contrato') }}"></a>--}}
+                    <div class="card subir" >
+                          <a href="{{ route('proveedores') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/proveedores.png') }}">
                                 <h5 class="mt-1 mb-0"> Proveedores</h5>
                             </div>
-
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card subir" >
+                          <a href="{{ route('bodegas.index') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/proveedores.png') }}">
+                                <h5 class="mt-1 mb-0"> Bodega</h5>
+                            </div>
+                        </a>
                     </div>
                 </div>
                 <div class="col-md-4">

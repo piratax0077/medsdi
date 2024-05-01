@@ -12,7 +12,7 @@ class Bodega extends Model
 
     public function Institucion()
     {
-        return $this->hasOne(Institucion::class, 'id', 'id_institucion');
+        return $this->hasOne(Instituciones::class, 'id', 'id_institucion');
     }
 
     public function LugarAtencion()

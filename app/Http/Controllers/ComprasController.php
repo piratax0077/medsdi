@@ -1,0 +1,239 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Compras;
+use App\Models\Proveedor;
+use App\Models\TipoProducto;
+use App\Models\Region;
+use App\Models\Producto;
+use App\Models\Compras_detalle;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
+class ComprasController extends Controller
+{
+    //
+
+    public function index(){
+        $proveedores = Proveedor::select('proveedores.*', 'tipo_producto.nombre as tipo_producto')
+        ->join('tipo_producto', 'proveedores.id_tipo_producto', '=', 'tipo_producto.id')
+        ->get();
+        $tipos_producto = TipoProducto::all();
+        $regiones = Region::orderBy('nombre')->get();
+        $productos_controller = new ProductosController();
+        $marcas = $productos_controller->dameMarcas();
+        $unidades_medidas = $productos_controller->dameMedidas();
+
+        return view('app.bodega.compras', [
+            'proveedores' => $proveedores,
+            'tipos_producto' => $tipos_producto,
+            'region' => $regiones,
+            'marcas' => $marcas,
+            'unidades_medidas' => $unidades_medidas
+        ]);
+    }
+
+    public function guardarCompra(Request $req){
+        try {
+            //code...
+            // preguntar si existe la compra con el mismo número de factura y proveedor
+            $compra = Compras::where('numero_factura', $req->nro_factura)
+            ->where('id_proveedor', $req->proveedor)
+            ->first();
+            if($compra){
+                return ['mensaje' => 'existe', 'id_compra' => $compra->id];
+            }
+            $compra = new Compras();
+            $compra->id_proveedor = $req->proveedor;
+            //$compra->id_usuario = Auth::user()->id;
+            $compra->id_usuario = 1;
+            $compra->fecha_emision = $req->fecha;
+            $compra->numero_factura = $req->nro_factura;
+            $compra->estado = 1;
+            $compra->save();
+            return ['mensaje' => 'OK', 'id_compra' => $compra->id];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+    public function buscarProductosFactura(Request $req){
+        try {
+            //code...
+            $idfactura = $req->id_factura;
+            $productos = $this->dameProductosPorFactura($idfactura);
+            // sumar el total de todos los productos
+            $total = 0;
+            foreach ($productos as $producto) {
+                $total += $producto->cantidad * $producto->precio_unitario;
+            }
+            $factura = Compras::select('compras.*', 'proveedores.nombre as proveedor')
+            ->join('proveedores', 'compras.id_proveedor', '=', 'proveedores.id')
+            ->where('compras.id', $idfactura)
+            ->first();
+
+            $factura->total = $total;
+            $factura->iva = $total * 0.19;
+            $factura->total_final = $total + $factura->iva;
+            $factura->save();
+            return ['productos' => $productos, 'factura' => $factura];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+
+    public function guardarItemFactura(Request $req){
+        try {
+            // guardar el nuevo producto
+            $producto_controlador = new ProductosController();
+            if ($req->nuevo == "SI") {
+                $id_producto = $producto_controlador->guardarProducto($req);
+            }else{
+                $id_producto = $req->id_producto;
+            }
+
+            $producto = Producto::find($id_producto);
+
+            // if($producto != null){
+            if($producto){
+                $this->guardarDetalleFactura($req, $producto);
+
+                $productos = $this->dameProductosPorFactura($req->id_compra);
+                $compra = Compras::find($req->id_compra);
+                //return $productos;
+                return ['mensaje' => 'OK', 'productos' => $productos];
+            }else{
+                return ['mensaje' => $producto];
+            }
+
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+
+    public function eliminarItemFactura(Request $req){
+        try {
+
+            $id_compra = $req->id_compra;
+            $id_item = $req->id_item;
+            $detalle = Compras_detalle::where('id_compra', $id_compra)->where('id', $id_item)->first();
+            $detalle->delete();
+            $productos = $this->dameProductosPorFactura($id_compra);
+            // recalcular el total de la factura
+            $total = 0;
+            foreach ($productos as $producto) {
+                $total += $producto->cantidad * $producto->precio_unitario;
+            }
+            $factura = Compras::find($id_compra);
+            $factura->total = $total;
+            $factura->iva = $total * 0.19;
+            $factura->total_final = $total + $factura->iva;
+            $factura->save();
+            return 'OK';
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+    public function buscarFacturasPorProveedor(Request $req){
+
+        $compras = Compras::select('compras.*', 'proveedores.nombre as proveedor')
+        ->join('proveedores', 'compras.id_proveedor', '=', 'proveedores.id')
+        ->where('compras.id_proveedor', $req->id_proveedor)
+        ->get();
+        return ['compras'=>$compras];
+    }
+
+    private function guardarDetalleFactura($req, $producto){
+        $detalle = new Compras_detalle();
+        $detalle->id_compra = $req->id_compra;
+        $detalle->id_producto = $producto->id;
+        $detalle->fecha_compra = Carbon::now();
+        $detalle->precio_compra = $req->precio;
+        $detalle->cantidad = $req->cantidad;
+        $detalle->id_unidad_medida = $req->unidad_medida;
+        $detalle->lote = $req->lote;
+        $detalle->fecha_vencimiento = $req->fecha_vencimiento;
+        $detalle->observaciones = $req->observaciones;
+        $detalle->otros = $req->otros;
+        $detalle->save();
+    }
+
+    private function dameProductosPorFactura($idcompra){
+        try {
+            //code...
+            $productos = Compras_detalle::select('productos.*', 'compras_detalle.id as id_item','tipo_producto.nombre as tipo_producto','compras_detalle.cantidad','compras_detalle.precio_compra as precio_unitario','unidades_medidas.nombre as unidad_medida', 'marcas_productos.nombre as marca')
+            ->join('productos', 'compras_detalle.id_producto', 'productos.id')
+            ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
+            ->leftjoin('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+            ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+            ->where('compras_detalle.id_compra', $idcompra)
+            ->get();
+            return $productos;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+
+    public function detalleCompraProducto($idProducto){
+        $compras = Compras_detalle::select('compras_detalle.cantidad','compras.numero_factura as factura','compras_detalle.precio_compra', 'compras.fecha_emision as fecha_compra','proveedores.nombre as proveedor')
+        ->join('compras', 'compras_detalle.id_compra', 'compras.id')
+        ->join('proveedores', 'compras.id_proveedor', 'proveedores.id')
+        ->where('compras_detalle.id_producto', $idProducto)
+        ->get();
+        return $compras;
+    }
+
+    public function filtrarProductos(Request $req){
+        try {
+            //code...
+            $id_tipo_producto = $req->id_tipo_productos;
+            $mes = $req->mes;
+            $anio = $req->anio;
+            $codigo_tipo = $req->tipo;
+
+            if($codigo_tipo == 1){
+                $productos = Producto::select('productos.codigo_interno','productos.id', DB::raw('MAX(productos.nombre) as nombre_producto'), DB::raw('MAX(tipo_producto.nombre) as tipo_producto'), DB::raw('MAX(unidades_medidas.nombre) as unidad_medida'), DB::raw('MAX(marcas_productos.nombre) as marca'), DB::raw('SUM(compras_detalle.cantidad) as cantidad'),DB::raw('MAX(compras_detalle.precio_compra) as precio_unitario'))
+                ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+                ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
+                ->leftjoin('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+                ->join('compras_detalle', 'productos.id', 'compras_detalle.id_producto')
+                ->join('compras', 'compras_detalle.id_compra', 'compras.id')
+                ->join('proveedores', 'compras.id_proveedor', 'proveedores.id')
+                ->where('productos.id_tipo_producto', $id_tipo_producto)
+                ->whereMonth('compras_detalle.fecha_compra', $mes)
+                ->whereYear('compras_detalle.fecha_compra', $anio)
+                ->groupBy('productos.codigo_interno','productos.id')
+                ->get();
+            }else{
+                $productos = Producto::select('productos.codigo_interno','productos.id', DB::raw('MAX(productos.nombre) as nombre_producto'), DB::raw('MAX(tipo_producto.nombre) as tipo_producto'), DB::raw('MAX(unidades_medidas.nombre) as unidad_medida'), DB::raw('MAX(marcas_productos.nombre) as marca'), DB::raw('SUM(compras_detalle.cantidad) as cantidad'),DB::raw('MAX(productos.precio_unitario) as precio_unitario'), DB::raw('MAX(proveedores.nombre) as proveedor'))
+                ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+                ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
+                ->leftjoin('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+                ->join('compras_detalle', 'productos.id', 'compras_detalle.id_producto')
+                ->join('compras', 'compras_detalle.id_compra', 'compras.id')
+                ->join('proveedores', 'compras.id_proveedor', 'proveedores.id')
+                ->whereMonth('compras_detalle.fecha_compra', $mes)
+                ->whereYear('compras_detalle.fecha_compra', $anio)
+                ->groupBy('productos.codigo_interno','productos.id')
+                ->get();
+            }
+            return $productos;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+}

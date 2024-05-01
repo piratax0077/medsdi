@@ -895,6 +895,17 @@ class AdministradorCmController extends Controller
     public function estadisticas(){
         return view('app.adm_cm.estadisticas');
     }
+
+
+    // public function estadisticas(){
+    //     return view('estadisticas');
+    // }
+
+    // public function getEstadisticas(){
+    //     return view('estadisticas_');
+    // }
+
+
     public function perfil(){
         return view('app.adm_cm.perfil_cm');
     }

@@ -1778,6 +1778,54 @@ Route::get('/codigo/fonasa/buscar/por/codigo',[App\Http\Controllers\CodigoFonasa
 Route::get('/codigo/fonasa/buscar/por/nombre',[App\Http\Controllers\CodigoFonasaController::class, 'buscarPorNombre'])->name('fonasa.buscar.por.nombre');
 Route::get('/codigo/fonasa/buscar/por/nombre/Autocomplete',[App\Http\Controllers\CodigoFonasaController::class, 'buscarPorNombreAutocomplete'])->name('fonasa.buscar.por.nombre.autocomplete');
 
+/** INICIO BODEGAS */
+
+// Compras
+Route::get('/compras', [App\Http\Controllers\ComprasController::class,'index'])->name('compras');
+Route::post('/guardarCompra', [App\Http\Controllers\ComprasController::class, 'guardarCompra'])->name('guardarCompra');
+Route::post('/buscarFacturasPorProveedor', [App\Http\Controllers\ComprasController::class,'buscarFacturasPorProveedor'])->name('buscarFacturasPorProveedor');
+Route::post('/buscarProductosFactura', [App\Http\Controllers\ComprasController::class,'buscarProductosFactura'])->name('buscarProductosFactura');
+Route::post('/guardarItemFactura', [App\Http\Controllers\ComprasController::class,'guardarItemFactura'])->name('guardarItemFactura');
+Route::post('/eliminarItemFactura', [App\Http\Controllers\ComprasController::class,'eliminarItemFactura'])->name('eliminarItemFactura');
+Route::get('/detalleCompraProducto/{id}', [App\Http\Controllers\ComprasController::class,'detalleCompraProducto'])->name('detalleCompraProducto');
+Route::post('/filtrarProductos', [App\Http\Controllers\ComprasController::class,'filtrarProductos'])->name('filtrarProductos');
+Route::post('/filtrarProductosTotal', [App\Http\Controllers\ComprasController::class,'filtrarProductosTotal'])->name('filtrarProductosTotal');
+
+
+// Proveedores
+Route::get('/proveedores', [App\Http\Controllers\ProveedoresController::class,'index'])->name('proveedores');
+Route::get('/getProveedor/{id}', [App\Http\Controllers\ProveedoresController::class,'getProveedor'])->name('getProveedor');
+Route::post('/guardarProveedor', [App\Http\Controllers\ProveedoresController::class, 'guardarProveedor'])->name('guardarProveedor');
+Route::post('/guardarProveedorCompras', [App\Http\Controllers\ProveedoresController::class, 'guardarProveedorCompras'])->name('guardarProveedorCompras');
+Route::post('/editarProveedor', [App\Http\Controllers\ProveedoresController::class, 'editarProveedor'])->name('editarProveedor');
+
+// Productos
+Route::post('/guardarMarca', [App\Http\Controllers\ProductosController::class,'guardarMarca'])->name('guardarMarca');
+Route::post('/guardarMedida', [App\Http\Controllers\ProductosController::class,'guardarMedida'])->name('guardarMedida');
+Route::post('/buscarProductos', [App\Http\Controllers\ProductosController::class,'buscarProductos'])->name('buscarProductos');
+Route::get('/buscarProductosTipo/{id}', [App\Http\Controllers\ProductosController::class,'buscarProductosTipo'])->name('buscarProductosTipo');
+Route::get('/seleccionarProducto/{id}', [App\Http\Controllers\ProductosController::class,'seleccionarProducto'])->name('seleccionarProducto');
+
+
+// Bodegas con controlador del tipo resource
+Route::resource('bodegas', App\Http\Controllers\BodegasController::class);
+Route::post('/buscarProductosBodega', [App\Http\Controllers\BodegasController::class,'buscarProductosBodega'])->name('bodegas.buscarProductosBodega');
+Route::post('/guardarAsignacion', [App\Http\Controllers\BodegasController::class,'guardarAsignacion'])->name('bodegas.guardarAsignacion');
+
+// Convenios con controlador del tipo resource
+// Route::resource('convenios', App\Http\Controllers\ConveniosController::class);
+// Route::get('/dameInfoConvenio/{id}', [App\Http\Controllers\ConveniosController::class,'dameInfoConvenio'])->name('convenios.dameInfoConvenio');
+// Route::post('/guardarTipoConvenio', [App\Http\Controllers\ConveniosController::class,'guardarTipoConvenio'])->name('convenios.guardarTipoConvenio');
+// Route::get('/dameTiposConvenio', [App\Http\Controllers\ConveniosController::class,'dameTiposConvenio'])->name('convenios.dameTiposConvenio');
+// Route::post('/guardarNuevoConvenio', [App\Http\Controllers\ConveniosController::class,'guardarNuevoConvenio'])->name('convenios.guardarNuevoConvenio');
+
+// Anteriores
+Route::get('/comercial', [App\Http\Controllers\AdministradorCmController::class,'index'])->name('comercial');
+Route::get('/buscar_ciudad_region', [App\Http\Controllers\AdministradorCmController::class, 'buscar_ciudad_region'])->name('buscar_ciudad_region');
+Route::get('/estadisticas', [App\Http\Controllers\AdministradorCmController::class,'estadisticas'])->name('estadisticas');
+Route::get('/estadisticas_', [App\Http\Controllers\AdministradorCmController::class,'getEstadisticas'])->name('getEstadisticas');
+/** FIN BODEGAS */
+
 
 /** ZOOM */
 Route::get('/zoom/create',[App\Http\Controllers\ZoomManagerController::class, 'crearMeeting'])->name('zoom.create');

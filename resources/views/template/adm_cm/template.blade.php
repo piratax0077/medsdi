@@ -177,7 +177,104 @@
             $('#m_remuneraciones').modal('show');
         }
 
+        function buscar_ciudad(id_ciudad=0) {
+
+            let region = $('#region_agregar').val();
+            let url = "{{ route('buscar_ciudad_region') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    //_token: _token,
+                    region: region,
+                },
+            }).done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    data = JSON.parse(data);
+
+                    let ciudades = $('#comunas');
+
+                    ciudades.find('option').remove();
+                    ciudades.append('<option value="0">seleccione</option>');
+                    $(data).each(function(i, v) { // indice, valor
+                        ciudades.append('<option value="' + v.id + '">' + v.nombre +
+                            '</option>');
+                    })
+
+                    if(id_ciudad != 0)
+                        ciudades.val(id_ciudad);
+
+                } else {
+
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar las ciudades",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    })
+                    // alert('No se pudo Cargar las ciudades');
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+
+        };
+
+        function buscar_ciudad_editar(id_ciudad=0){
+            return new Promise((resolve, reject) => {
+                let region = $('#region_editar').val();
+                let url = "{{ route('buscar_ciudad_region') }}";
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    data: {
+                        region: region,
+                    },
+                }).done(function(data) {
+                    console.log(data);
+                    if (data != null) {
+                        data = JSON.parse(data);
+
+                        let ciudades = $('#comunas_editar');
+
+                        ciudades.find('option').remove();
+                        ciudades.append('<option value="0">seleccione</option>');
+                        $(data).each(function(i, v) { // indice, valor
+                            ciudades.append('<option value="' + v.id + '">' + v.nombre +
+                                '</option>');
+                        })
+
+                        if(id_ciudad != 0)
+                            ciudades.val(id_ciudad);
+
+                        resolve(); // Resuelve la promesa cuando se ha terminado de cargar las ciudades
+                    } else {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar las ciudades",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        })
+                        reject(); // Rechaza la promesa si hay un error
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                    reject(); // Rechaza la promesa si hay un error
+                });
+            });
+        }
+
         $(document).ready(function () {
+            $('.loader-bg').hide();
+
             $('#at_profesionales').DataTable({
                 responsive: true,
             });

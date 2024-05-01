@@ -90,6 +90,34 @@ function agregar_proveedor() {
     $('#agregar_proveedor_cm').modal('show');
 }
 
-function editar_proveedor() {
-    $('#editar_proveedor_cm').modal('show');
+function editar_proveedor(id) {
+    let url = "/getProveedor/" + id;
+    $.get(url, function (data) {
+        let proveedor = data;
+        // json_decode(data);
+        proveedor = JSON.parse(proveedor);
+        console.log(proveedor);
+        $('#id_proveedor').val(proveedor.id)
+        // agregar el atributo action al formulario de editar proveedor con la ruta post para editar proveedor
+        $('#editar_proveedor_cm form').attr('action', '/editarProveedor');
+        // agregar method post
+        $('#editar_proveedor_cm form').attr('method', 'post');
+        
+        $('#editar_proveedor_cm').modal('show');
+        $('#editar_proveedor_cm #nombre').val(proveedor.nombre);
+        $('#editar_proveedor_cm #prov_prod_').val(proveedor.id_tipo_producto);
+        $('#editar_proveedor_cm #rut').val(proveedor.rut);
+        $('#editar_proveedor_cm #rol_').val(proveedor.rol_tributario);
+        $('#editar_proveedor_cm #direccion').val(proveedor.direccion);
+        $('#editar_proveedor_cm #numero').val(proveedor.numero);
+        $('#editar_proveedor_cm #telefono').val(proveedor.telefono);
+        $('#editar_proveedor_cm #email').val(proveedor.email);
+        $('#editar_proveedor_cm #region_editar').val(proveedor.id_region);
+        // lo que se cumpla la funcion buscar_ciudad_editar asignar el valor de id_comuna a comunas_editar
+        buscar_ciudad_editar().then(()=>{
+            $('#comunas_editar').val(proveedor.id_comuna);
+        }).catch((error)=>{
+            console.error(error);
+        });
+    });
 }
