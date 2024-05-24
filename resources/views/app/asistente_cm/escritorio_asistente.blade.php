@@ -190,6 +190,7 @@
 @endsection
 
 @section('page-script')
+    <script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
     <script>
 
         var CalendarEl = null;

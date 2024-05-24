@@ -565,9 +565,17 @@
                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">F. Nacimiento</label>
-                                    <input type="date" class="form-control form-control-sm"
+                                    {{-- <input type="date" class="form-control form-control-sm"
                                         name="reserva_hora_fecha_nac" id="reserva_hora_fecha_nac"
-                                        onchange="evaluar_edad();">
+                                        onchange="evaluar_edad();"> --}}
+                                    <input type="text" class="mask_date form-control form-control-sm"
+                                        name="reserva_hora_fecha_nac" id="reserva_hora_fecha_nac"
+                                        onchange="evaluar_edad();"
+                                        maxlength="10" placeholder="dd/mm/aaaa"
+                                        autocomplete="off"
+                                        data-mask="00/00/0000"
+                                    />
+                                    <span id="mensaje_reserva_hora_fecha_nac" style="font-size: 10px; color: #f33; font-weight: bold; display:none"></span>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -636,11 +644,12 @@
                             </div>
                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                 <div class="form-group">
-                                    <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
+                                    <label class="floating-label-activo-sm">Correo Electr&oacute;nico Paciente</label>
                                     <input type="text" class="form-control form-control-sm"
                                         onblur="validar_email_agenda()" name="reserva_hora_correo"
                                         id="reserva_hora_correo">
-                                    <span id="mensaje_email_reserva" style="display:none"></span>
+                                    <span id="mensaje_email_reserva" style="width: 100%; font-size: 10px; color: #f00; font-weight: bold; display:none"></span>
+                                    <label class="" style="width: 100%; font-size: 10px; color: #f00; font-weight: bold;">En caso que sea menor de edad no es requerido</label>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -736,9 +745,15 @@
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm">F. Nacimiento</label>
-                                            <input type="date" class="form-control form-control-sm"
+                                            {{-- <input type="date" class="form-control form-control-sm"
                                                 name="reserva_hora_representante_fecha_nac"
-                                                id="reserva_hora_representante_fecha_nac">
+                                                id="reserva_hora_representante_fecha_nac"> --}}
+                                            <input type="text" class="mask_date form-control form-control-sm"
+                                                name="reserva_hora_representante_fecha_nac" id="reserva_hora_representante_fecha_nac"
+                                                maxlength="10" placeholder="dd/mm/aaaa"
+                                                autocomplete="off"
+                                                data-mask="00/00/0000"
+                                            />
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -982,7 +997,99 @@
 @include('general.asistentes.m_pago')
 <!-- FIN MODAL AGREGAR HORA MEDICA -->
 
+
 <script>
+    $(document).ready(function () {
+        $('.mask_date').mask("dd/mm/0000", {
+            'translation': {
+                0: {pattern: /[0-9]/},
+                d: {pattern: /[0-9]/},
+                m: {pattern: /[0-9]/},
+                Y: {
+                    pattern: function (value) {
+                        // Eliminar cualquier carácter que no sea un dígito
+                        value = value.replace(/\D/g, '');
+
+                        // Validar el año para que esté entre 1924 y 2024
+                        if (value.length === 4) {
+                            var year = parseInt(value, 10);
+                            return year >= {{ date('Y')-110 }} && year <= {{ date('Y') }};
+                        }
+                        return true; // Permitir cualquier valor mientras se está escribiendo
+                    }
+                }
+            },
+            onKeyPress: function(value, e, field, options) {
+                $('#mensaje_reserva_hora_fecha_nac').html('');
+                $('#mensaje_reserva_hora_fecha_nac').hide();
+                // Forzar la validación después de cada tecla presionada
+                var year = value.split('/')[2];
+                if (year)
+                {
+                    var year_txt = year.toString();
+                    if(year_txt.length >= 4)
+                    {
+                        $('#mensaje_reserva_hora_fecha_nac').html('');
+                        $('#mensaje_reserva_hora_fecha_nac').hide();
+                        if (year && (year < {{ date('Y')-110 }} || year > {{ date('Y') }} ))
+                        {
+
+                            $('#mensaje_reserva_hora_fecha_nac').html('');
+                            $('#mensaje_reserva_hora_fecha_nac').show();
+                            $('#mensaje_reserva_hora_fecha_nac').html('La fecha cargada no es valida');
+
+                            // field.val('');
+                            console.log('validacion:');
+                            console.log(year);
+                        }
+
+                        if (validarEdad(value)) {
+                            console.log("La edad es válida.");
+                            $('#mensaje_reserva_hora_fecha_nac').html('');
+                            $('#mensaje_reserva_hora_fecha_nac').hide();
+                        } else {
+                            console.log("La edad no es válida.");
+                            $("#guardar_reserva_paciente").prop('disabled', true);
+                            $('#mensaje_reserva_hora_fecha_nac').html('');
+                            $('#mensaje_reserva_hora_fecha_nac').show();
+                            $('#mensaje_reserva_hora_fecha_nac').html('La fecha cargada no es valida');
+                        }
+
+                        validar_email_agenda();
+                        validar_campo_telefono();
+                    }
+                }
+            }
+        });
+    });
+
+    function validarEdad(fechaNacimiento) {
+        // Dividir la fecha de nacimiento en día, mes y año
+        var partes = fechaNacimiento.split('/');
+        var dia = parseInt(partes[0], 10);
+        var mes = parseInt(partes[1], 10) - 1; // Los meses en JavaScript van de 0 a 11
+        var anio = parseInt(partes[2], 10);
+
+        // Crear un objeto Date con la fecha de nacimiento
+        var fechaNac = new Date(anio, mes, dia);
+
+        // Obtener la fecha actual
+        var hoy = new Date();
+
+        // Calcular la diferencia en años
+        var edad = hoy.getFullYear() - fechaNac.getFullYear();
+        var mes = hoy.getMonth() - fechaNac.getMonth();
+        var dia = hoy.getDate() - fechaNac.getDate();
+
+        // Ajustar la edad si el mes o día actual es antes del mes o día de nacimiento
+        if (mes < 0 || (mes === 0 && dia < 0)) {
+            edad--;
+        }
+
+        // Validar si la edad está en el rango de 0 a 120 años
+        return edad >= 0 && edad <= 120;
+    }
+
     function evaluar_edad() {
         let fechaNacimiento = new Date($('#reserva_hora_fecha_nac').val());
         let hoy = new Date();
@@ -1292,9 +1399,18 @@
             {
                 var re = new RegExp(/^\x2b56[6-9][0-9]{8}$/i);//+56612341234
                 if( re.test(telefono) )
-                    $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',false);
-                else
-                    $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',true);
+                {
+
+                    if (validarEdad($('#reserva_hora_fecha_nac').val())) {
+                        console.log("La edad es válida.");
+                        $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',false);
+                    } else {
+                        console.log("La edad no es válida.");
+                        $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',true);
+                        $("#guardar_reserva_paciente").prop('disabled', true);
+                    }
+
+                }
             }
         }
     }
