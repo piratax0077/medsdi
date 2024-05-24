@@ -996,7 +996,10 @@ class EscritorioProfesional extends Controller
         if($edad < 18)
         {
             $result_responsable = PacientesDependientes::where('id_paciente', $paciente->id)->first();
-            $responsable = Paciente::where('id', $result_responsable->id_responsable)->first();
+            if($result_responsable)
+                $responsable = Paciente::where('id', $result_responsable->id_responsable)->first();
+            else
+                $responsable = null;
         }
 
         // return json_encode($paciente);
@@ -2281,9 +2284,9 @@ class EscritorioProfesional extends Controller
                             if($paciente->save())
                             {
                                 $datos['paciente']['user']['update_paciente'] = 'Paciente actualizado con Usuario.';
-                                if( $request->reserva_result_codigo_validacion == 1 )					  
+                                if( $request->reserva_result_codigo_validacion == 1 )
                                 {
-                                    /** envio de sms */																				 
+                                    /** envio de sms */
                                 }
                                 else
                                 {

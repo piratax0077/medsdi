@@ -180,6 +180,25 @@
 
         };
 
+        function formatDateDB(dateStr) {
+            // Dividir la fecha en partes
+            let parts = dateStr.split('/');
+
+            // Verificar que la fecha tenga el formato correcto
+            if (parts.length !== 3) {
+                throw new Error('formato invalido');
+            }
+
+            let day = parts[0];
+            let month = parts[1];
+            let year = parts[2];
+
+            // Formatear la nueva fecha
+            let formattedDate = `${year}-${month}-${day}`;
+
+            return formattedDate;
+        }
+
         function agregar_alergia_paciente(id_paciente) {
 
             let alergia = $('#alergia_paciente').val();
@@ -2158,24 +2177,59 @@
                 responsive: true,
                 "bPaginate": false,
             });
-
-
-
         }
 
         function validar_email_agenda() {
 
-            if ($("#reserva_hora_correo").val().indexOf('@', 0) == -1 || $("#reserva_hora_correo")
-                .val().indexOf(
-                    '.', 0) == -1) {
-                swal({
-                    title: "El correo electrónico introducido no es correcto.",
-                    icon: "error",
-                    buttons: "Aceptar",
-                    DangerMode: true,
-                })
-                // alert('El correo electrónico introducido no es correcto.');
-                $("#guardar_reserva_paciente").prop('disabled', true);
+            if($("#reserva_hora_correo").val() != '')
+            {
+                if ($("#reserva_hora_correo").val().indexOf('@', 0) == -1 || $("#reserva_hora_correo").val().indexOf( '.', 0) == -1) {
+                    // swal({
+                    //     title: "El correo electrónico introducido no es correcto.",
+                    //     icon: "error",
+                    //     buttons: "Aceptar",
+                    //     DangerMode: true,
+                    // })
+                    // alert('El correo electrónico introducido no es correcto.');
+                    $('#mensaje_email_reserva').text('El correo electrónico introducido no es correcto.');
+                    $('#mensaje_email_reserva').show();
+                    // $('#reserva_hora_correo').focus();
+                    $("#guardar_reserva_paciente").prop('disabled', true);
+                    return false;
+                }
+            }
+            else
+            {
+                if (validarEdad($('#reserva_hora_fecha_nac').val())) {
+                    console.log("La edad es válida.");
+                    let fechaNacimiento = new Date($('#reserva_hora_fecha_nac').val());
+                    let hoy = new Date();
+                    let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+
+                    // Comprobamos si el mes y el día de la fecha de nacimiento ya pasaron en el año actual
+                    if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
+                        edad--;
+                    }
+
+                    if (edad > 17)
+                    {
+                        $('#mensaje_email_reserva').text('Debe Ingresar un email.');
+                        $('#mensaje_email_reserva').show();
+                        $("#guardar_reserva_paciente").prop('disabled', true);
+                        $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',false);
+                    }
+                    else
+                    {
+                        // $('#mensaje_email_reserva').text('');
+                        // $('#mensaje_email_reserva').hide();
+                    }
+                }
+                else
+                {
+                    console.log("La edad no es válida.");
+                    $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',true);
+                    $("#guardar_reserva_paciente").prop('disabled', true);
+                }
                 return false;
             }
 
@@ -2186,29 +2240,45 @@
                     url: url,
                     type: "get",
                     data: {
-
                         email: email,
-
                     }
-
                 })
                 .done(function(data) {
                     if (data == 'fail') {
 
                         // console.log(data);
 
-                        $('#mensaje_email_reserva').text('el email ya esta en nuestros registros');
+                        $('#mensaje_email_reserva').text('El email ya esta en nuestros registros');
                         $('#mensaje_email_reserva').show();
                         $('#reserva_hora_correo').focus();
 
                         $("#guardar_reserva_paciente").prop('disabled', true);
 
                     } else {
-                        $('#mensaje_email_reserva').text('');
-                        $('#mensaje_email_reserva').hide();
-                        $("#guardar_reserva_paciente").prop('disabled', false);
-                    }
 
+                        if ( validarEdad($('#reserva_hora_fecha_nac').val()) )
+                        {
+                            console.log("La edad es válida.");
+                            $('#mensaje_reserva_hora_fecha_nac').html('');
+                            $('#mensaje_reserva_hora_fecha_nac').hide();
+
+                            $('#mensaje_email_reserva').text('');
+                            $('#mensaje_email_reserva').hide();
+                            $("#guardar_reserva_paciente").prop('disabled', false);
+
+                        }
+                        else
+                        {
+                            console.log("La edad no es válida.");
+                            $("#guardar_reserva_paciente").prop('disabled', true);
+                            $('#mensaje_reserva_hora_fecha_nac').html('');
+                            $('#mensaje_reserva_hora_fecha_nac').show();
+                            $('#mensaje_reserva_hora_fecha_nac').html('La fecha cargada no es valida');
+
+                            $('#mensaje_email_reserva').text('');
+                            $('#mensaje_email_reserva').hide();
+                        }
+                    }
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     console.log(jqXHR, ajaxOptions, thrownError)
@@ -3109,6 +3179,10 @@
                 });
                 return;
             }
+            else
+            {
+                reserva_hora_fecha_nac = formatDateDB(reserva_hora_fecha_nac);
+            }
 
             let reserva_hora_sexo = $('#reserva_hora_sexo').val();
             if (reserva_hora_sexo == '0') {
@@ -3378,6 +3452,10 @@
 
                         });
                         return;
+                    }
+                    else
+                    {
+                        reserva_hora_representante_fecha_nac = formatDateDB(reserva_hora_representante_fecha_nac);
                     }
                     if( reserva_hora_representante_sexo == '' )
                     {
@@ -5581,7 +5659,6 @@
                     },
                     ciudad_agregar: {
                         required: "Debe Ingresar Una Ciudad",
-
                     },
                     reserva_hora_correo: {
                         required: "Debe Ingresar un email",

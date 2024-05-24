@@ -768,13 +768,13 @@
                                                                         }
                                                                     });
                                                                     console.log(arrayTemp);
+                                                                    end(arrayTemp);
                                                                 }
                                                                 else
                                                                 {
                                                                     console.log('falla en carga');
                                                                 }
                                                             }
-                                                            end(arrayTemp);
                                                         }
                                             });
                                         },

@@ -161,6 +161,7 @@
                                                     id_lugar_atencion: id_lugar_atencion,
                                                 },
                                                 success:function(data){
+                                                    console.log(data);
                                                     if (data !== 'null')
                                                     {
                                                         if(data.estado == 1)
@@ -204,13 +205,14 @@
                                                                 }
                                                             });
                                                             // console.log(arrayTemp);
+                                                            end(arrayTemp);
                                                         }
                                                         else
                                                         {
                                                             console.log('falla en carga');
                                                         }
                                                     }
-                                                    end(arrayTemp);
+
                                                 }
                                             });
                                     },
