@@ -1602,6 +1602,25 @@
                 });
         };
 
+        function formatDateDB(dateStr) {
+            // Dividir la fecha en partes
+            let parts = dateStr.split('/');
+
+            // Verificar que la fecha tenga el formato correcto
+            if (parts.length !== 3) {
+                throw new Error('formato invalido');
+            }
+
+            let day = parts[0];
+            let month = parts[1];
+            let year = parts[2];
+
+            // Formatear la nueva fecha
+            let formattedDate = `${year}-${month}-${day}`;
+
+            return formattedDate;
+        }
+
         function agendar_hora_paciente_nuevo() {
 
             let url = "{{ route('agenda.agendar_hora_nuevo_paciente') }}";
@@ -1701,6 +1720,10 @@
 
                 });
                 return;
+            }
+            else
+            {
+                reserva_hora_fecha_nac = formatDateDB(reserva_hora_fecha_nac);
             }
 
             let reserva_hora_sexo = $('#reserva_hora_sexo').val();
@@ -1974,6 +1997,10 @@
 
                         });
                         return;
+                    }
+                    else
+                    {
+                        reserva_hora_representante_fecha_nac = formatDateDB(reserva_hora_representante_fecha_nac);
                     }
                     if( reserva_hora_representante_sexo == '' )
                     {
