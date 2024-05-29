@@ -450,55 +450,169 @@
 
 
                     <div id="reserva_datos_paciente" class="row mx-3">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" onclick="editar_info_paciente();" class="btn btn-info">
+                                <i class="feather icon-check"></i> Editar
+                            </button>
+                            <input type="hidden" name="modificando_paciente" id="modificando_paciente" value="0">
+                        </div>
                         <table class="table table-borderless table-xs">
                             <tbody>
                                 <tr>
                                     <th scope="row">
                                         <strong>Rut</strong>
                                     </th>
-                                    <td><span id="reserva_rut_paciente"></span></td>
+                                    <td>
+                                        <div>
+                                            <span id="reserva_rut_paciente"></span>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">
                                         <strong>Nombre</strong>
                                     </th>
-                                    <td><span id="reserva_hora_nombre"></span></td>
+                                    <td>
+                                        <div class="paciente_view">
+                                            <span id="reserva_hora_nombre"></span>
+                                        </div>
+                                        <div class="paciente_edit" style="display:none">
+                                            <input type="text" id="input_reserva_hora_nombre" value="">
+                                            <input type="text" id="input_reserva_hora_apellido_uno" value="">
+                                            <input type="text" id="input_reserva_hora_apellido_dos" value="">
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">
                                         <strong>Fecha Nacimiento</strong>
                                     </th>
-                                    <td><span id="reserva_fecha_nacimiento"></span></td>
+                                    <td>
+                                        <div class="paciente_view">
+                                            <span id="reserva_fecha_nacimiento"></span>
+                                        </div>
+                                        <div class="paciente_edit" style="display:none">
+                                            <input type="text" class="mask_date form-control form-control-sm"
+                                                name="input_reserva_fecha_nacimiento" id="input_reserva_fecha_nacimiento"
+                                                onchange="evaluar_edad();"
+                                                maxlength="10" placeholder="dd/mm/aaaa"
+                                                autocomplete="off"
+                                                data-mask="00/00/0000"
+                                            />
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">
                                         <strong>Sexo</strong>
                                     </th>
-                                    <td><span id="reserva_sexo"></span></td>
+                                    <td>
+                                        <div class="paciente_view">
+                                            <span id="reserva_sexo"></span>
+                                        </div>
+                                        <div class="paciente_edit" style="display:none">
+                                            <select id="input_reserva_sexo" class="form-control">
+                                                <option value="M">Masculino</option>
+                                                <option value="F">Femenino</option>
+                                            </select>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">
                                         <strong>Convenio</strong>
                                     </th>
-                                    <td><span id="reserva_convenio"></span></td>
+                                    <td>
+                                        <div class="paciente_view">
+                                            <span id="reserva_convenio"></span>
+                                        </div>
+                                        <div class="paciente_edit" style="display:none">
+                                            <select id="input_reserva_convenio" name="input_reserva_convenio" class="form-control form-control-sm">
+                                                <option value="0">Selecione una opci&oacute;n</option>
+                                                @if (isset($prevision))
+                                                    @foreach ($prevision as $p)
+                                                        <option value="{{ $p->id }}">{{ $p->nombre }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">
                                         <strong>Dirección</strong>
                                     </th>
-                                    <td><span id="reserva_direccion"></span></td>
+                                    <td>
+                                        <div class="paciente_view">
+                                            <span id="reserva_direccion"></span>
+                                        </div>
+                                        <div class="paciente_edit" style="display:none">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Direcci&oacute;n</label>
+                                                <input type="address" class="form-control form-control-sm" name="input_reserva_direccion_direccion" id="input_reserva_direccion_direccion" value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Depto. | Ofic.</label>
+                                                <input type="address" class="form-control form-control-sm" name="input_reserva_direccion_numero_dir" id="input_reserva_direccion_numero_dir" value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Región</label>
+                                                <select id="input_reserva_direccion_region" onchange="buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', 0);" name="input_reserva_direccion_region" class="form-control form-control-sm">
+                                                    <option value="0">Seleccione</option>
+                                                    @if (isset($region))
+                                                        @foreach ($region as $reg)
+                                                            <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Ciudad</label>
+                                                <select id="input_reserva_direccion_ciudad" name="input_reserva_direccion_ciudad" class="form-control form-control-sm">
+                                                    <option value="0">Seleccione</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">
                                         <strong>Correo Electrónico</strong>
                                     </th>
-                                    <td><span id="reserva_hora_email"></span></td>
+                                    <td>
+                                        <div class="paciente_view">
+                                            <span id="reserva_hora_email"></span>
+                                        </div>
+                                        <div class="paciente_edit" style="display:none">
+                                            <input type="text" id="input_reserva_hora_email" value="">
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">
                                         <strong>Teléfono</strong>
                                     </th>
-                                    <td><span id="reserva_hora_telefono"></span></td>
+                                    <td>
+                                        <div class="paciente_view">
+                                            <span id="reserva_hora_telefono"></span>
+                                        </div>
+                                        <div class="paciente_edit" style="display:none">
+                                            <input type="text" id="input_reserva_hora_telefono" value="">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="paciente_edit" style="display: none;">
+                                    <td>
+                                        <button type="button" id="cancelar_modifcar_paciente" onclick="cancelar_modificacion_paciente();" class="btn btn-danger">
+                                            <i class="feather icon-check"></i> Cancelar Actualización
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" id="actualizar_modificar_paciente" onclick="actualizar_paciente();" class="btn btn-info">
+                                            <i class="feather icon-check"></i> Actualizar Paciente
+                                        </button>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -952,6 +1066,7 @@
     </div>
 </div>
 
+
 <div id="agenda_validar_auto_menor_edad" class="modal fade" tabindex="-1" role="dialog"
     aria-labelledby="agenda_validar_auto_menor_edad" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -990,7 +1105,6 @@
         </div>
     </div>
 </div>
-
 
 
 @include('general.asistentes.m_esperando_api')
@@ -1503,5 +1617,253 @@
             }
         }
     }
+
+    function editar_info_paciente()
+    {
+        $('.paciente_view').hide();
+        $('.paciente_edit').show();
+        $('#modificando_paciente').val(1);
+    }
+
+    function cancelar_modificacion_paciente()
+    {
+        $('.paciente_view').show();
+        $('.paciente_edit').hide();
+        $('#modificando_paciente').val(0);
+    }
+
+    function actualizar_paciente()
+    {
+        var modificando = $('#modificando_paciente').val();
+        var id_paciente = $('#reserva_hora_id_paciente').val();
+        var nombre_paciente = $('#input_reserva_hora_nombre').val();
+        var apellido_uno_paciente = $('#input_reserva_hora_apellido_uno').val();
+        var apellido_dos_paciente = $('#input_reserva_hora_apellido_dos').val();
+        var fecha_nacimiento = $('#input_reserva_fecha_nacimiento').val();
+        var sexo_paciente = $('#input_reserva_sexo').val();
+        var convenio_paciente = $('#input_reserva_convenio').val();
+        var convenio_txt_paciente = $('#input_reserva_convenio option:selected').text()
+        var direccion_paciente = $('#input_reserva_direccion_direccion').val();
+        var numero_direccion_paciente = $('#input_reserva_direccion_numero_dir').val();
+        var region_paciente = $('#input_reserva_direccion_region').val();
+        var ciudad_paciente = $('#input_reserva_direccion_ciudad').val();
+        var ciudad_txt_paciente = $('#input_reserva_direccion_ciudad option:selected').text();
+        var email_paciente = $('#input_reserva_hora_email').val();
+        var telefono_paciente = $('#input_reserva_hora_telefono').val();
+        var valido = 1;
+        var mensaje = '';
+
+        if( id_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Paciente Requerido\n';
+        }
+        if( nombre_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Nombre Paciente requerido\n';
+        }
+        if( apellido_uno_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Apellido Paterno de Pacientet requerido\n';
+        }
+        if( apellido_dos_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Apellido Materno de Pacientet requerido\n';
+        }
+        if( fecha_nacimiento == '' )
+        {
+            valido = 0;
+            mensaje += 'Fecha de Nacimiento del Pacientet requerido\n';
+        }
+        else
+        {
+            fecha_nacimiento = formatDateDB(fecha_nacimiento);
+        }
+        if( sexo_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Sexo del Pacientet requerido\n';
+        }
+        if( convenio_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Convenio del Pacientet requerido\n';
+        }
+        if( direccion_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Dirección del Pacientet requerido\n';
+        }
+        if( numero_direccion_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Número de Dirección del Pacientet requerido\n';
+        }
+        if( region_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Región de Dirección del Pacientet requerido\n';
+        }
+        if( ciudad_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Ciudad de Dirección del Pacientet requerido\n';
+        }
+        if( email_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Email del Pacientet requerido\n';
+        }
+        if( telefono_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Teléfono del Pacientet requerido\n';
+        }
+
+        if(valido == 1)
+        {
+            if(modificando == 1)
+            {
+                let url = "{{ route('asistente.paciente.modificar') }}";
+
+                $.ajax({
+
+                    url: url,
+                    type: "get",
+                    data: {
+                        id: id_paciente,
+                        nombre: nombre_paciente,
+                        apellido_uno: apellido_uno_paciente,
+                        apellido_dos: apellido_dos_paciente,
+                        fecha_nacimiento: fecha_nacimiento,
+                        sexo: sexo_paciente,
+                        convenio: convenio_paciente,
+                        direccion: direccion_paciente,
+                        numero_direccion: numero_direccion_paciente,
+                        region: region_paciente,
+                        ciudad: ciudad_paciente,
+                        email: email_paciente,
+                        telefono: telefono_paciente,
+                    },
+                })
+                .done(function(data) {
+                    if (data.estado == 1)
+                    {
+                        if (data.estado == 1)
+                        {
+                            $('#reserva_hora_nombre').text(nombre_paciente + ' ' + apellido_uno_paciente + ' ' + apellido_dos_paciente);
+                            $('#reserva_fecha_nacimiento').text(fecha_nacimiento);
+                            if (sexo_paciente == 'M') {
+                                $('#reserva_sexo').text('Masculino');
+                            } else {
+                                $('#reserva_sexo').text('Femenino');
+                            }
+                            $('#reserva_hora_email').text(email_paciente);
+                            $('#reserva_hora_telefono').text(telefono_paciente);
+                            $('#reserva_convenio').text(convenio_txt_paciente);
+                            $('#reserva_direccion').text(direccion_paciente+' '+numero_direccion_paciente+', '+ciudad_txt_paciente);
+
+                            $('.paciente_view').show();
+                            $('.paciente_edit').hide();
+                            $('#modificando_paciente').val(0);
+
+                            swal({
+                                title: "Actualización de Paciente",
+                                text: "Actualización Exitosa",
+                                icon: "success",
+                            });
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Actualización de Paciente",
+                                text: "Falla en Actualización.\nIntente de nuevo.",
+                                icon: "error",
+                            });
+                        }
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Actualización de Paciente",
+                            text: "Falla en Actualización.\nIntente de nuevo.",
+                            icon: "error",
+                        });
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
+            else
+            {
+                swal({
+                    title: "Actualización de Paciente",
+                    text: "Esta actualizando al paciente sin haber inicado proceso de edición",
+                    icon: "error",
+                });
+            }
+        }
+        else
+        {
+            swal({
+                title: "Actualización de Paciente",
+                text: "Campos requeridos.\n"+mensaje,
+                icon: "error",
+                buttons: "Aceptar"
+            });
+        }
+
+
+    }
+
+    function buscar_ciudad_general(input_region, input_ciudad, id_ciudad=0)
+    {
+        var region = $('#'+input_region).val();
+        console.log(region);
+        let url = "{{ route('home.buscar_ciudad_region') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                region: region,
+            },
+        })
+        .done(function(data) {
+            if (data != null) {
+                data = JSON.parse(data);
+
+                let ciudades = $('#'+input_ciudad);
+
+                ciudades.find('option').remove();
+                ciudades.append('<option value="0">seleccione</option>');
+                $(data).each(function(i, v) { // indice, valor
+                    ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                })
+
+                if(id_ciudad != 0)
+                {
+                    ciudades.val(id_ciudad);
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar las ciudades",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    };
+
 
 </script>

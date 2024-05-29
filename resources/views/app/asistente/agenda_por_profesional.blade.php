@@ -111,94 +111,15 @@
                 </div>
             </div>
             <!--Cierre: agenda -->
-
-            {{-- <div class="card-body">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header bg-info">
-                            <div class="col-md-12">
-                                <div class="row">
-
-                                    <div class="col-md-12 pt-2">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <h4 class="text-white f-20">
-                                                    Agenda de :
-                                                </h4>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <select name="agenda_lugar_atencion_asistente" id="agenda_lugar_atencion_asistente" class="form-control" onchange="cargarAgendaProfesional(1,'')">
-                                                @if($lugares_atencion)
-                                                    @foreach($lugares_atencion as $key_lugar_aten => $value_lugar_aten)
-                                                        <option value="{{ $value_lugar_aten->id }}">{{ $value_lugar_aten->nombre }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12 pt-2">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <h4 class="text-white f-20">
-                                                    Agenda del Profesional:
-                                                </h4>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <select name="agenda_profesional_asistente" id="agenda_profesional_asistente" class="form-control" onchange="cargarAgendaProfesional(1,'')">
-                                                @if($profesional)
-                                                    @foreach($profesional as $key_pro => $value_pro)
-                                                        <option value="{{ $value_pro->id }}">{{ $value_pro->nombre }} {{ $value_pro->apellido_uno }} {{ $value_pro->apellido_dos }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {{- - <div class="col-md-12 pt-2">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado"onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
-                                            </div>
-                                        </div>
-                                    </div> - -}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card-body bg-white">
-                        <!-- BOTON DE LISTA DE ESPERA -->
-                        <div class="row">
-                            <div class="col-md-4">
-                                <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_lista_espera_profesional_seleccionado"onclick="lista_espera()"; ><i class="fas fa-save"></i>  Cargar Lista de Espera del profesional</button>
-                            </div>
-                            <div class="col-md-4">
-                                <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_extra" onclick="abrir_horas_extras()"; ><i class="fas fa-save"></i>  Cargar Hora Extra del profesional</button>
-                            </div>
-                            <div class="col-md-4">
-                                <button type="button" class="btn btn-outline-success btn-sm" id="btn_ver_agregar_hora_examen" onclick="abrir_horas_examen()"; ><i class="fas fa-save"></i>  Cargar Hora Examen del profesional</button>
-                            </div>
-                        </div>
-
-                        <!-- AGENDA -->
-                        <div id='agenda'></div>
-                    </div>
-                </div>
-            </div> --}}
         </div>
     </div>
-
-
-
-
 
 @endsection
 
 
 @section('modals')
+
+    @include('app.asistente.modales.modal_profesional_informacion')
     @include('general.asistentes.modal_consulta_agenda')
 
     @include('app.asistente.modales.lista_espera')
@@ -214,8 +135,7 @@
 
 @section('page-script')
     <script>
-        $(document).ready(function()
-        {
+        $(document).ready(function(){
             cargarAgendaProfesional(1,'');
         });
     </script>

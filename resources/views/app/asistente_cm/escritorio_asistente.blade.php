@@ -1546,6 +1546,7 @@
 
         }
 
+
         {{-- BUSCAR PACIENTE --}}
         function buscar_paciente() {
             $('#form_reseva_de_horas').submit(function(e) {
@@ -1607,22 +1608,45 @@
                         data = JSON.parse(data);
                         if(data.tipo_paciente == 'SI')
                         {
+                            $('.paciente_view').show();
+                            $('.paciente_edit').hide();
+
                             {{--  console.log(data);  --}}
                             $('#reserva_datos_paciente').show();
                             $('#reserva_hora_id_paciente').val(data.id);
                             $('#reserva_rut_paciente').text(data.rut);
+
                             $('#reserva_hora_nombre').text(data.nombres + ' ' + data.apellido_uno + ' ' + data.apellido_dos);
+                            $('#input_reserva_hora_nombre').val(data.nombres);
+                            $('#input_reserva_hora_apellido_uno').val(data.apellido_uno);
+                            $('#input_reserva_hora_apellido_dos').val(data.apellido_dos);
+
                             $('#reserva_fecha_nacimiento').text(data.fecha_nac);
+                            $('#input_reserva_fecha_nacimiento').val(DateFormatVista(data.fecha_nac));
+
                             if (data.sexo == 'M') {
                                 $('#reserva_sexo').text('Masculino');
                             } else {
                                 $('#reserva_sexo').text('Femenino');
                             }
+                            $('#input_reserva_hora_sexo').val(data.sexo);
+
                             $('#reserva_hora_email').text(data.email);
+                            $('#input_reserva_hora_email').val(data.email);
+
                             $('#reserva_hora_telefono').text(data.telefono_uno);
+                            $('#input_reserva_hora_telefono').val(data.telefono_uno);
 
                             $('#reserva_convenio').text(data.prevision.nombre);
+                            $('#input_reserva_convenio').val(data.prevision.id);
+
                             $('#reserva_direccion').text(data.direccion.direccion+' '+data.direccion.numero_dir+', '+data.direccion.ciudad.nombre);
+                            $('#input_reserva_direccion_direccion').val(data.direccion.direccion);
+                            $('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir);
+
+                            $('#input_reserva_direccion_region').val(data.direccion.ciudad.id_region);
+                            // $('#input_reserva_direccion_ciudad_agregar').val(data.direccion.ciudad.id);
+                            buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', data.direccion.ciudad.id);
 
                             $('#rut_paciente_reserva').val('');
                             $('.div_rut_buscar').hide();
@@ -1810,6 +1834,10 @@
 
                 });
                 return;
+            }
+            else
+            {
+                reserva_hora_fecha_nac = formatDateDB(reserva_hora_fecha_nac);
             }
 
             let reserva_hora_sexo = $('#reserva_hora_sexo').val();
@@ -2080,6 +2108,10 @@
 
                         });
                         return;
+                    }
+                    else
+                    {
+                        reserva_hora_representante_fecha_nac = formatDateDB(reserva_hora_representante_fecha_nac);
                     }
                     if( reserva_hora_representante_sexo == '' )
                     {

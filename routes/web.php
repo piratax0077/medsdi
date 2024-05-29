@@ -684,6 +684,9 @@ Route::group([
     /** OTRO ACOMPAÑANTE */
     Route::post('/otro/acompanante/registro', [App\Http\Controllers\OtroAcompananteAtencionController::class, 'registrar'])->name('otro.acompanante.registrar');
 
+    /** modificar paciente */
+    Route::get('paciente/modificar', [App\Http\Controllers\EscritorioPaciente::class, 'modificarPaciente'])->name('profesional.paciente.modificar');
+
 });
 
 Route::group([
@@ -976,6 +979,9 @@ Route::group([
     Route::post('conectar/prevision', [App\Http\Controllers\VentaBonoController::class, 'conectarIsapreFonasa'])->name('asistente.conectar.prevision');
     Route::post('venta/bono/pago', [App\Http\Controllers\VentaBonoController::class, 'procesarPagoVenta'])->name('asistente.venta.bono.pago');
     Route::get('venta/bono/pdf', [App\Http\Controllers\VentaBonoController::class, 'generarPdf_r'])->name('asistente.venta.bono.pdf');
+
+    /** modificar paciente */
+    Route::get('paciente/modificar', [App\Http\Controllers\EscritorioPaciente::class, 'modificarPaciente'])->name('asistente.paciente.modificar');
 
 });
 

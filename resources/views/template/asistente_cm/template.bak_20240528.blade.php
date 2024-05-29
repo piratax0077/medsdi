@@ -37,7 +37,7 @@
 
     {{-- estilos de atencion medica --}}
     <link rel="stylesheet" href="{{ asset('css/estilos_atencion_medica.css') }}"/>
-
+	
     <!--Estilo tab secciones -->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/tabs-secciones.css') }}">
 
@@ -180,42 +180,6 @@
             });
 
         });
-
-        function DateFormatVista(dateStr) {
-            let parts = dateStr.split('-');
-
-            if (parts.length !== 3) {
-                console.log('Invalid date format');
-            }
-
-            let year = parts[0];
-            let month = parts[1];
-            let day = parts[2];
-
-            let formattedDate = `${day}/${month}/${year}`;
-
-            return formattedDate;
-        }
-
-        function formatDateDB(dateStr) {
-            // Dividir la fecha en partes
-            let parts = dateStr.split('/');
-
-            // Verificar que la fecha tenga el formato correcto
-            if (parts.length !== 3) {
-                throw new Error('formato invalido');
-            }
-
-            let day = parts[0];
-            let month = parts[1];
-            let year = parts[2];
-
-            // Formatear la nueva fecha
-            let formattedDate = `${year}-${month}-${day}`;
-
-            return formattedDate;
-        }
-
         {{--  VER DETALLE PROFESIONAL  --}}
         function info_profesional(id)
         {

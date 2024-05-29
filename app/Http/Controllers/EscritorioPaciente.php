@@ -2711,4 +2711,133 @@ class EscritorioPaciente extends Controller
         return $datos;
     }
 
+    public function modificarPaciente(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        $nombre = $request->nombre;
+        $apellido_uno = $request->apellido_uno;
+        $apellido_dos = $request->apellido_dos;
+        $fecha_nacimiento = $request->fecha_nacimiento;
+        $sexo = $request->sexo;
+        $convenio = $request->convenio;
+        $direccion = $request->direccion;
+        $numero_direccion = $request->numero_direccion;
+        $region = $request->region;
+        $ciudad = $request->ciudad;
+        $email = $request->email;
+        $telefono = $request->telefono;
+
+
+        $paciente = Paciente::where('id', $request->id)->first();
+        $email_origen = $paciente->email;
+        $email_nuevo = $email;
+
+        $paciente->nombres = $nombre;
+        $paciente->apellido_uno = $apellido_uno;
+        $paciente->apellido_dos = $apellido_dos;
+        $paciente->sexo = $sexo;
+        $paciente->fecha_nac = $fecha_nacimiento;
+        $paciente->id_prevision = $convenio;
+        $paciente->email = $email;
+        $paciente->telefono_uno = $telefono;
+        if( $paciente->save() )
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'exito';
+
+            /** modificar direccion */
+            $id_direccion = $paciente->id_direccion;
+            $carga_direccion = Direccion::find($id_direccion);
+            if($carga_direccion)
+            {
+                /** modificar direccion */
+
+                $carga_direccion->direccion = $direccion;
+                $carga_direccion->numero_dir = $numero_direccion;
+                $carga_direccion->id_ciudad = $ciudad;
+
+                if($carga_direccion->save())
+                {
+                    $datos['direccion']['estado'] = 1;
+                    $datos['direccion']['msj'] = 'exito';
+                }
+                else
+                {
+                    $datos['direccion']['estado'] = 0;
+                    $datos['direccion']['msj'] = 'falla';
+                }
+
+            }
+            else
+            {
+                /** crear direccion*/
+                $nueva_direccion = new Direccion();
+                $nueva_direccion->direccion = $direccion;
+                $nueva_direccion->numero_dir = $numero_direccion;
+                $nueva_direccion->id_ciudad = $ciudad;
+
+                if($nueva_direccion->save())
+                {
+                    $datos['direccion']['estado'] = 1;
+                    $datos['direccion']['msj'] = 'exito';
+
+                    $paciente->id_direccion = $nueva_direccion->id;
+                    if( $paciente->save() )
+                    {
+                        $datos['direccion']['update_paciente']['estado'] = 1;
+                        $datos['direccion']['update_paciente']['msj'] = 'exito';
+                    }
+                    else
+                    {
+                        $datos['direccion']['update_paciente']['estado'] = 0;
+                        $datos['direccion']['update_paciente']['msj'] = 'falla';
+                    }
+                }
+                else
+                {
+                    $datos['direccion']['estado'] = 0;
+                    $datos['direccion']['msj'] = 'falla';
+                }
+
+            }
+
+            /** modifica usuario */
+            if( $email_origen != $email_nuevo)
+            {
+                $usuario = User::find($paciente->id_usuario);
+                if($usuario)
+                {
+                    $usuario->email = $email_nuevo;
+                    if($usuario->save())
+                    {
+                        $datos['usuario']['estado'] = 1;
+                        $datos['usuario']['msj'] = 'exito';
+                        /** envo de correo al paciente para notificar cambio de correo */
+                    }
+                    else
+                    {
+                        $datos['usuario']['estado'] = 0;
+                        $datos['usuario']['msj'] = 'falla';
+                    }
+                }
+                else
+                {
+                    $datos['usuario']['estado'] = 0;
+                    $datos['usuario']['msj'] = 'no encontrado';
+                }
+            }
+        }
+        else
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'falla';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
 }
