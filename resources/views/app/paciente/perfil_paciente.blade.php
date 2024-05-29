@@ -287,17 +287,21 @@
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="font-weight-bolder ml-0 mb-0">Región</label>
-                                                    <div>{{ $paciente->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}</div>
+                                                    <div>{{ $direccion_txt_region_paciente }}</div>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="font-weight-bolder ml-0 mb-0">Comuna</label>
-                                                    <div>{{ $paciente->Direccion()->first()->Ciudad()->first()->nombre }}</div>
+                                                    <div>{{ $direccion_txt_ciudad_paciente }}</div>
                                                 </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                     <label class="font-weight-bolder ml-0 mb-0">Dirección</label>
-                                                    <div>{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}</div>
+                                                    <div>
+                                                        @if ($direccion_paciente)
+                                                            {{ $direccion_paciente->direccion }} {{ $direccion_paciente->numero_dir }}
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </form>
@@ -313,10 +317,16 @@
                                                         <option value="">Seleccione</option>
                                                         @if (isset($regiones))
                                                             @foreach ($regiones as $region)
-                                                            <option value="{{ $region->id }}" @if ($region->id ==
-                                                                $paciente->Direccion()->first()->Ciudad()->first()->Region()->first()->id) selected @endif>
-                                                                {{ $region->nombre }}
-                                                            </option>
+                                                                @if ( !empty($direccion_id_region_paciente) )
+                                                                    <option value="{{ $region->id }}" @if ($region->id == $direccion_id_region_paciente) selected @endif>
+                                                                        {{ $region->nombre }}
+                                                                    </option>
+                                                                @else
+                                                                    <option value="{{ $region->id }}" >
+                                                                        {{ $region->nombre }}
+                                                                    </option>
+                                                                @endif
+
                                                             @endforeach
                                                         @endif
                                                     </select>
@@ -327,9 +337,15 @@
                                                         <option value="">Seleccione su comuna</option>
                                                         @if (isset($ciudades))
                                                             @foreach ($ciudades as $ciudad)
-                                                            <option value="{{ $ciudad->id }}" @if ($paciente->Direccion()->first()->id_ciudad) selected @endif>
-                                                                {{ $ciudad->nombre }}
-                                                            </option>
+                                                                @if (!empty($direccion_id_ciudad_paciente))
+                                                                    <option value="{{ $ciudad->id }}" @if ($ciudad->id == $direccion_id_ciudad_paciente) selected @endif>
+                                                                        {{ $ciudad->nombre }}
+                                                                    </option>
+                                                                @else
+                                                                    <option value="{{ $ciudad->id }}">
+                                                                        {{ $ciudad->nombre }}
+                                                                    </option>
+                                                                @endif
                                                             @endforeach
                                                         @endif
                                                     </select>
@@ -1138,8 +1154,7 @@
                                         <div class="row">
                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">¿Autoriza
-                                                        romper clave?</label>
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">¿Autoriza a que servicio <br>de urgencia entre a su FMU? </label>
                                                     <div class="col-sm-7 my-auto">
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
@@ -1154,8 +1169,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">¿Autoriza
-                                                        acceso a datos confidenciales?</label>
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">¿Autoriza además <br> entrar a datos confidenciales?</label>
                                                     <!--hoy-->
                                                     <div class="col-sm-7 my-auto">
                                                         <div class="form-check form-check-inline">
@@ -1742,15 +1756,40 @@
         let perfil_ciudad = $('#perfil_ciudad').val();
         let perfil_numero_dir = $('#perfil_numero_dir').val();
 
-        let url = "{{ ROUTE('paciente.perfil.editdirec') }}";
+        var valido = 1;
+        var mensaje = '';
 
-        $.ajax({
+        if(perfil_dire=='')
+        {
+            valido = 0;
+            mensaje += 'Dirección, Campo requerido.\n';
+        }
+        if(perfil_region=='')
+        {
+            valido = 0;
+            mensaje += 'Región, Campo requerido.\n';
+        }
+        if(perfil_ciudad=='')
+        {
+            valido = 0;
+            mensaje += 'Ciudad, Campo requerido.\n';
+        }
+        if(perfil_numero_dir=='')
+        {
+            valido = 0;
+            mensaje += 'Numero, Campo requerido.\n';
+        }
+
+        if(valido == 1)
+        {
+            let url = "{{ ROUTE('paciente.perfil.editdirec') }}";
+
+            $.ajax({
                 url: url,
                 type: 'POST',
                 dataType: 'json',
                 data: {
                     _token: CSRF_TOKEN,
-                    // id_paciente: id_paciente,
                     perfil_dire: perfil_dire,
                     perfil_region: perfil_region,
                     perfil_ciudad: perfil_ciudad,
@@ -1760,37 +1799,43 @@
             })
             .done(function(response) {
 
-                if (response.success) {
+                if (response.estado == 1)
+                {
                     swal({
                         title: "Sus datos de residencia fueron editados de forma correcta",
                         icon: "success",
                         buttons: "Aceptar",
                         DangerMode: true,
-                    })
+                    });
                     setTimeout(function() {
                         location.reload()
                     }, 4000);
-
-
-                } else {
+                }
+                else
+                {
                     swal({
                         title: "Error al editar sus datos de residencia",
                         icon: "error",
                         buttons: "Aceptar",
                         DangerMode: true,
                     })
-                    setTimeout(function() {
-                        location.reload()
-                    }, 3000);
-
+                    // setTimeout(function() {
+                    //     location.reload()
+                    // }, 3000);
                 }
-
-
             })
             .fail(function() {
                 console.log("error");
-            })
-
+            });
+        }
+        else
+        {
+            swal({
+                title: "Sus datos de residencia fallaron al ser editados, intente de nuevo",
+                text: mensaje,
+                icon: "error",
+            });
+        }
     };
 
     function editar_paciente_datos_contacto() {
@@ -1931,7 +1976,7 @@
     function buscar_ciudad() {
 
         let region = $('#perfil_region').val();
-        let url = "{{ route('profesional.buscar_ciudad_region') }}";
+        let url = "{{ route('buscar_ciudad_region') }}";
         $.ajax({
 
                 url: url,

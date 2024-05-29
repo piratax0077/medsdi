@@ -985,9 +985,35 @@ class EscritorioPaciente extends Controller
     public function perfil()
     {
         $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
-        $previsiones = Prevision::all();
+        $direccion_paciente = Direccion::where('id',$paciente->id_direccion)->first();
+        $direccion_id_ciudad_paciente = '';
+        $direccion_txt_ciudad_paciente = '';
+        $direccion_region_paciente = '';
+        $direccion_id_region_paciente = '';
+        $direccion_txt_region_paciente = '';
+
         $regiones = Region::all();
-        $ciudades = Ciudad::where('id_region', $paciente->direccion()->first()->ciudad()->first()->Region()->first()->id)->get();
+        $ciudades = Ciudad::all();
+
+        if($direccion_paciente)
+        {
+            $direccion_id_ciudad_paciente = $direccion_paciente->id_ciudad;
+            $direccion_region_paciente = Ciudad::select('nombre','id_region')->where('id',$direccion_id_ciudad_paciente)->first();
+
+            if($direccion_region_paciente)
+            {
+                $direccion_txt_ciudad_paciente = $direccion_region_paciente->nombre;
+
+                $ciudades = Ciudad::where('id_region', $direccion_region_paciente->id_region)->get();
+                $direccion_id_region_paciente = $direccion_region_paciente->id_region;
+
+                $direccion_txt_region_paciente_temp = Region::find($direccion_id_region_paciente);
+                $direccion_txt_region_paciente = $direccion_txt_region_paciente_temp->nombre;
+            }
+        }
+
+        $previsiones = Prevision::all();
+
         $contacto = $paciente->ContactosEmergencia()->get();
 
         $antecedentes = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
@@ -1020,6 +1046,11 @@ class EscritorioPaciente extends Controller
             [
                 'userData' => $userData,
                 'paciente' => $paciente,
+                'direccion_paciente' => $direccion_paciente,
+                'direccion_id_ciudad_paciente' => $direccion_id_ciudad_paciente,
+                'direccion_txt_ciudad_paciente' => $direccion_txt_ciudad_paciente,
+                'direccion_id_region_paciente' => $direccion_id_region_paciente,
+                'direccion_txt_region_paciente' => $direccion_txt_region_paciente,
                 'previsiones' => $previsiones,
                 'regiones' => $regiones,
                 'ciudades' => $ciudades,
@@ -1486,26 +1517,96 @@ class EscritorioPaciente extends Controller
 
     public function editdirec(Request $request)
     {
-        // $this->validate($request, [
-        //     'perfil_dire' => 'required',
-        //     'perfil_comuna' => 'required|between:2,999',
-        // ]);
+        $datos = array();
+        $error = array();
+        $valido = 1;
 
-        $perfil_dire = (isset($request->perfil_dire)) ? $request->perfil_dire : null;
-        $ciudad = (isset($request->perfil_ciudad)) ? $request->perfil_ciudad : null;
-        $numero_dir = (isset($request->perfil_numero_dir)) ? $request->perfil_numero_dir : null;
-        $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
-        $direccion = Direccion::where('id', $paciente->id_direccion)->first();
+        if(empty($request->perfil_dire))
+        {
+            $valido=0;
+            $error['Direccion'] = "Campo requerido.";
+        }
+        if(empty($request->perfil_region))
+        {
+            $valido=0;
+            $error['Region'] = "Campo requerido.";
+        }
+        if(empty($request->perfil_ciudad))
+        {
+            $valido=0;
+            $error['Ciudad'] = "Campo requerido.";
+        }
+        if(empty($request->perfil_numero_dir))
+        {
+            $valido=0;
+            $error['Numero'] = "Campo requerido.";
+        }
 
-        $direccion->direccion = $perfil_dire;
-        $direccion->numero_dir = $numero_dir;
-        $direccion->id_ciudad = $ciudad;
+        if($valido)
+        {
+            $perfil_dire = $request->perfil_dire;
+            $ciudad = $request->perfil_ciudad;
+            $numero_dir = $request->perfil_numero_dir;
+            $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
+            $direccion = Direccion::where('id', $paciente->id_direccion)->first();
 
+            if($direccion)
+            {
+                $direccion->direccion = $perfil_dire;
+                $direccion->numero_dir = $numero_dir;
+                $direccion->id_ciudad = $ciudad;
 
-        $direccion->save();
+                if($direccion->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Exito';
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Falla';
+                }
+            }
+            else
+            {
+                /** crear direccion*/
+                $nueva_direccion = new Direccion();
+                $nueva_direccion->direccion = $perfil_dire;
+                $nueva_direccion->numero_dir = $numero_dir;
+                $nueva_direccion->id_ciudad = $ciudad;
 
-        return json_encode(['success' => true]);
-        // return redirect()->route('paciente.perfil');
+                if($nueva_direccion->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'exito';
+
+                    $paciente->id_direccion = $nueva_direccion->id;
+                    if( $paciente->save() )
+                    {
+                        $datos['update_paciente']['estado'] = 1;
+                        $datos['update_paciente']['msj'] = 'exito';
+                    }
+                    else
+                    {
+                        $datos['update_paciente']['estado'] = 0;
+                        $datos['update_paciente']['msj'] = 'falla';
+                    }
+                }
+                else
+                {
+                    $datos['direccion']['estado'] = 0;
+                    $datos['direccion']['msj'] = 'falla';
+                }
+            }
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
     }
 
     //Falta revisar el modelo y valdiaciones
