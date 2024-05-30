@@ -251,8 +251,31 @@ class ficha_atencionController extends Controller
             $responsable = Paciente::find($pacienteDpendiente->id_responsable);
         }
 
-        $ciudades = Ciudad::where('id_region', $paciente->Direccion()->first()->Ciudad()->first()->id_region)->get();
+        $direccion_paciente = Direccion::where('id',$paciente->id_direccion)->first();
+        $direccion_id_ciudad_paciente = '';
+        $direccion_txt_ciudad_paciente = '';
+        $direccion_region_paciente = '';
+        $direccion_id_region_paciente = '';
+        $direccion_txt_region_paciente = '';
         $regiones = Region::all();
+        $ciudades = Ciudad::all();
+
+        if($direccion_paciente)
+        {
+            $direccion_id_ciudad_paciente = $direccion_paciente->id_ciudad;
+            $direccion_region_paciente = Ciudad::select('nombre','id_region')->where('id',$direccion_id_ciudad_paciente)->first();
+            if($direccion_region_paciente)
+            {
+                $direccion_txt_ciudad_paciente = $direccion_region_paciente->nombre;
+
+                $ciudades = Ciudad::where('id_region', $direccion_region_paciente->id_region)->get();
+                $direccion_id_region_paciente = $direccion_region_paciente->id_region;
+
+                $direccion_txt_region_paciente_temp = Region::find($direccion_id_region_paciente);
+                $direccion_txt_region_paciente = $direccion_txt_region_paciente_temp->nombre;
+            }
+        }
+
 		// $examenMedico = ExamenMedico::where('cod_parent', 0)->whereBetween('id',[1,362])->orderby('nombre_examen', 'ASC')->get();
         $examenMedico = ExamenMedico::where('cod_parent', 0)->where('habilitado', 1)->orderby('nombre_examen', 'ASC')->get();
         $user = Auth::user()->id;
@@ -1636,6 +1659,11 @@ class ficha_atencionController extends Controller
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
+                'direccion_paciente' => $direccion_paciente,
+                'direccion_id_ciudad_paciente' => $direccion_id_ciudad_paciente,
+                'direccion_txt_ciudad_paciente' => $direccion_txt_ciudad_paciente,
+                'direccion_id_region_paciente' => $direccion_id_region_paciente,
+                'direccion_txt_region_paciente' => $direccion_txt_region_paciente,
                 'responsable' => $responsable,
 				'pacientes_contacto_emergencia' => $pacientes_contacto_emergencia,
                 'paciente_alergias' => $paciente_alergias,

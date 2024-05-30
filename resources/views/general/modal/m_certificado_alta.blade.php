@@ -31,7 +31,7 @@
                         <select id="modal_cert_alta_region_paciente" name="modal_cert_alta_region_paciente" class="form-control form-control-sm" readonly>
                             <option value="0">Seleccione</option>
                             @foreach ($regiones as $r)
-                                @if ($r->id == $paciente->Direccion()->first()->Ciudad()->first()->id_region)
+                                @if ($r->id == $direccion_id_region_paciente)
                                     <option id="{{ $r->id }}" selected> {{ $r->nombre }} </option>
                                 @endif
                                 <option id="{{ $r->id }}"> {{ $r->nombre }} </option>
@@ -43,7 +43,7 @@
                         <select id="modal_cert_alta_region_paciente" name="modal_cert_alta_region_paciente" class="form-control form-control-sm" readonly>
                             <option value="0">Seleccione</option>
                             @foreach ($ciudades as $c)
-                                @if ($c->id == $paciente->Direccion()->first()->Ciudad()->first()->id)
+                                @if ($c->id == $direccion_id_ciudad_paciente)
                                     <option id="{{ $c->id }}" selected> {{ $c->nombre }} </option>
                                 @endif
                                 <option id="{{ $c->id }}"> {{ $c->nombre }} </option>

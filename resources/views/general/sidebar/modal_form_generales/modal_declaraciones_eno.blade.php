@@ -79,7 +79,8 @@
                             <div class="form-row">
                                 <div class="form-group col-sm-6 col-md-6">
                                     <label class="floating-label-activo-sm">Dirección</label>
-                                    <input type="address" class="form-control form-control-sm" name="eno_direccion_paciente" id="eno_direccion_paciente" value="{{ $paciente->Direccion()->first()->direccion .' ' .$paciente->Direccion()->first()->numero_dir .', ' .$paciente->Direccion()->first()->Ciudad()->first()->nombre .', Región de ' .$paciente->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}">
+
+                                    <input type="address" class="form-control form-control-sm" name="eno_direccion_paciente" id="eno_direccion_paciente" value="{{(isset($direccion_paciente)?$direccion_paciente->direccion.' '.$direccion_paciente->numero_dir:'Sin registros Cargados').', ' .$direccion_txt_ciudad_paciente .', Región de ' .$direccion_id_region_paciente }}">
                                 </div>
 
                             </div>

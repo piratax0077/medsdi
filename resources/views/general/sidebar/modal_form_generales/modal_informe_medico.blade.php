@@ -40,7 +40,7 @@
                                 class="form-control form-control-sm">
                                 <option value="0">Seleccione</option>
                                 @foreach ($regiones as $r)
-                                    @if ($r->id == $paciente->Direccion()->first()->Ciudad()->first()->id_region)
+                                    @if ($r->id == $direccion_id_region_paciente)
                                         <option id="{{ $r->id }}" selected> {{ $r->nombre }} </option>
                                     @endif
                                     <option id="{{ $r->id }}"> {{ $r->nombre }} </option>
@@ -53,7 +53,7 @@
                                 class="form-control form-control-sm">
                                 <option value="0">Seleccione</option>
                                 @foreach ($ciudades as $c)
-                                    @if ($c->id == $paciente->Direccion()->first()->Ciudad()->first()->id)
+                                    @if ($c->id == $direccion_id_ciudad_paciente)
                                         <option id="{{ $c->id }}" selected> {{ $c->nombre }} </option>
                                     @endif
                                     <option id="{{ $c->id }}"> {{ $c->nombre }} </option>
