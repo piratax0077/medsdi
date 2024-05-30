@@ -1219,19 +1219,23 @@ class EscritorioAsistente extends Controller
         # TIPO HORA MEDICA
         switch ($request->tipo_hora_medica) {
             case 'C': // 1
-                $filtro_tipo_hora_medica = array(1);
+                // $filtro_tipo_hora_medica = array(1);
+                $filtro_tipo_hora_medica = array('C');
                 $texto_alias_examen = 'Consulta';
                 break;
             case 'D': // 2
-                $filtro_tipo_hora_medica = array(2);
+                // $filtro_tipo_hora_medica = array(2);
+                $filtro_tipo_hora_medica = array('D');
                 $texto_alias_examen = 'Consulta Dental';
                 break;
             case 'T': // 3
-                $filtro_tipo_hora_medica = array(3);
+                // $filtro_tipo_hora_medica = array(3);
+                $filtro_tipo_hora_medica = array('T');
                 $texto_alias_examen = 'Consulta Telemedicina';
                 break;
             case 'E': // 4
-                $filtro_tipo_hora_medica = array(4);
+                // $filtro_tipo_hora_medica = array(4);
+                $filtro_tipo_hora_medica = array('E');
                 $texto_alias_examen = 'Consulta Examen';
                 break;
         }

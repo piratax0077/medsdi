@@ -2998,6 +2998,7 @@
 
         function agendar_hora() {
 
+
             let url = "{{ route('profesional.agendar_hora') }}";
             let _token = $('#_token').val();
             let fecha_consulta = $('#fecha_consulta').val();

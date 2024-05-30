@@ -1962,7 +1962,6 @@ class EscritorioProfesional extends Controller
     public function agendar_horas(Request $request)
     {
 
-
         $paciente = paciente::where('id', $request->reserva_hora_id)->first();
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
@@ -1974,19 +1973,23 @@ class EscritorioProfesional extends Controller
         # TIPO HORA MEDICA
         switch ($request->tipo_hora_medica) {
             case 'C': // 1
-                $filtro_tipo_hora_medica = array(1);
+                // $filtro_tipo_hora_medica = array(1);
+                $filtro_tipo_hora_medica = array('C');
                 $texto_alias_examen = 'Consulta';
                 break;
             case 'D': // 2
-                $filtro_tipo_hora_medica = array(2);
+                // $filtro_tipo_hora_medica = array(2);
+                $filtro_tipo_hora_medica = array('D');
                 $texto_alias_examen = 'Consulta Dental';
                 break;
             case 'T': // 3
-                $filtro_tipo_hora_medica = array(3);
+                // $filtro_tipo_hora_medica = array(3);
+                $filtro_tipo_hora_medica = array('T');
                 $texto_alias_examen = 'Consulta Telemedicina';
                 break;
             case 'E': // 4
-                $filtro_tipo_hora_medica = array(4);
+                // $filtro_tipo_hora_medica = array(4);
+                $filtro_tipo_hora_medica = array('E');
                 $texto_alias_examen = 'Consulta Examen';
                 break;
         }
@@ -2002,12 +2005,18 @@ class EscritorioProfesional extends Controller
         // 7.  Inasistida -> naranjo
         // 8.  Llamando -> morado (monitor sala espera)
         // validar si paciente tiene otra consulta
+        // var_dump($paciente->id);
+        // var_dump($profesional->id);
+        // var_dump($filtro_tipo_hora_medica);
+        // var_dump(\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'));
         $validar = HoraMedica::where('id_paciente', $paciente->id)
                                 ->whereIn('id_estado',[1,2,4,5,6,8])
                                 ->where('id_profesional',$profesional->id)
                                 ->whereIn('tipo_hora_medica',$filtro_tipo_hora_medica)
                                 ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
                                 ->first();
+        // var_dump($validar);
+        // exit();
         if($validar)
         {
             return json_encode(array(
