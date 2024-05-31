@@ -241,7 +241,7 @@ class EscritorioAsistenteCmMnAg extends Controller
 
     public function cargarConfirmarHora(Request $request)
     {
-        $data = array();
+        $datos = array();
 
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
         $filtro = array();

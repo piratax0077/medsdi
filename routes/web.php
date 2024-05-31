@@ -725,6 +725,7 @@ Route::group([
     Route::get('Reservar_Hora', [App\Http\Controllers\EscritorioAsistente::class, 'reservar_hora'])->name('asistente.reservar_hora');
     Route::get('Mis_Profesionales', [App\Http\Controllers\EscritorioAsistente::class, 'mis_profesionales'])->name('asistente.mis_profesionales');
     Route::get('Flujo_Caja', [App\Http\Controllers\FlujoCajaController::class, 'ver_flujo_caja'])->name('asistente.flujo_caja');
+	Route::get('hora/confirmar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'confirmarHora'])->name('asistente.cargar_hora_confirmar');
 	Route::get('hora/por/confirmar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'cargarConfirmarHora'])->name('asistente.cargar_hora_por_confirmar');
     Route::get('Administracion_asistente', [App\Http\Controllers\EscritorioAsistente::class, 'administracion_asistente'])->name('asistente.administracion_asistente');
 
