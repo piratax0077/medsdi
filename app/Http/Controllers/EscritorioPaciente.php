@@ -2941,4 +2941,64 @@ class EscritorioPaciente extends Controller
         return $datos;
     }
 
+    public function editarAutorizacion(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if( $request->auto_fmu == '')
+        {
+            $valido = 0;
+            $error['auto_fmu'] = 'campo requerido';
+        }
+        if( $request->auto_inf_turno == '')
+        {
+            $valido = 0;
+            $error['auto_inf_turno'] = 'campo requerido';
+        }
+        if( $request->auto_inf_confd == '')
+        {
+            $valido = 0;
+            $error['auto_inf_confd'] = 'campo requerido';
+        }
+
+        if($valido)
+        {
+
+            $paciente = Paciente::find($request->id_paciente);
+
+            if($paciente)
+            {
+                $paciente->auto_fmu = $request->auto_fmu;
+                $paciente->auto_inf_turno = $request->auto_inf_turno;
+                $paciente->auto_inf_confd = $request->auto_inf_confd;
+
+                if($paciente->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'exito';
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'falla en registro';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Paciente no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
 }

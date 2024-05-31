@@ -1128,21 +1128,40 @@
                                     <!--DATOS ROMPE CLAVE-->
                                     <div class="card-body rompeclave collapse show" id="rompeclave_1">
                                         <div class="row">
-                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                            <div class="col-md-4">
                                                 <form>
                                                     <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder ml-0">¿Autoriza a que servicio <br>de urgencia entre a su FMU?
-                                                           </label>
-                                                        <div class="col-sm-7 my-auto ml-0"> Si</div>
+                                                        <div class="col-sm-10 col-form-label font-weight-bolder ml-0">¿Autoriza a que servicio de Hospitalización y/o Urgencia tenga acceso a su FMU?</div>
+                                                        @if ($paciente->auto_fmu)
+                                                            <div class="col-sm-2 my-auto ml-0 " id="txt_auto_fmu"><span class="text-success">SI</span></div>
+                                                        @else
+                                                            <div class="col-sm-2 my-auto ml-0 " id="txt_auto_fmu"><span class="text-danger">NO</span></div>
+                                                        @endif
+
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                            <div class="col-md-4">
                                                 <form>
                                                     <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder ml-0">¿Autoriza
-                                                            además <br> entrar a datos confidenciales?</label>
-                                                        <div class="col-sm-7 my-auto ml-0"> Si </div>
+                                                        <div class="col-sm-10 col-form-label font-weight-bolder ml-0">¿Autoriza al Medico de turno de MED-SDI a dar información basica a los servicio de Hospitalización y/o Urgencia</div>
+                                                        @if ($paciente->auto_inf_turno)
+                                                            <div class="col-sm-2 my-auto ml-0 " id="txt_auto_inf_turno"><span class="text-success">SI</span></div>
+                                                        @else
+                                                            <div class="col-sm-2 my-auto ml-0 " id="txt_auto_inf_turno"><span class="text-danger">NO</span></div>
+                                                        @endif
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <form>
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-10 col-form-label font-weight-bolder ml-0">¿Autoriza además entrar a datos confidenciales?</div>
+                                                        @if ($paciente->auto_inf_confd)
+                                                            <div class="col-sm-2 my-auto ml-0" id="txt_auto_info_confd"><span class="text-success">SI</span></div>
+                                                        @else
+                                                            <div class="col-sm-2 my-auto ml-0" id="txt_auto_info_confd"><span class="text-danger">NO</span></div>
+                                                        @endif
                                                     </div>
                                                 </form>
                                             </div>
@@ -1152,34 +1171,86 @@
                                     <!--(EDITAR)DATOS ROMPE CLAVE-->
                                     <div class="card-body rompeclave collapse" id="rompeclave_2">
                                         <div class="row">
-                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">¿Autoriza a que servicio <br>de urgencia entre a su FMU? </label>
-                                                    <div class="col-sm-7 my-auto">
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                                                            <label class="form-check-label" for="rompeclave_si">Si</label>
-                                                        </div>
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                                            <label class="form-check-label" for="rompeclave_no">No</label>
-                                                        </div>
+                                                    <label class="col-sm-6 col-form-label font-weight-bolder">¿Autoriza a que servicio de Hospitalización y/o Urgencia tenga acceso a su FMU?</label>
+                                                    <div class="col-sm-5 my-auto">
+                                                        @if ($paciente->auto_fmu)
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="auto_fmu" id="auto_fmu" value="SI"  checked="checked">
+                                                                <label class="form-check-label" for="auto_fmu">SI</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="auto_fmu" id="auto_fmu" value="NO">
+                                                                <label class="form-check-label" for="auto_fmu">NO</label>
+                                                            </div>
+                                                        @else
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="auto_fmu" id="auto_fmu" value="SI">
+                                                                <label class="form-check-label" for="auto_fmu">SI</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="auto_fmu" id="auto_fmu" value="NO" checked="checked">
+                                                                <label class="form-check-label" for="auto_fmu">NO</label>
+                                                            </div>
+                                                        @endif
+
+
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">¿Autoriza además <br> entrar a datos confidenciales?</label>
-                                                    <!--hoy-->
-                                                    <div class="col-sm-7 my-auto">
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                                                            <label class="form-check-label" for="datos_confidenciales_si">Si</label>
-                                                        </div>
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                                            <label class="form-check-label" for="datos_confidenciales_no">No</label>
-                                                        </div>
+                                                    <label class="col-sm-6 col-form-label font-weight-bolder">¿Autoriza al Medico de turno de MED-SDI a dar información basica a los servicio de Hospitalización y/o Urgencia</label>
+                                                    <div class="col-sm-5 my-auto">
+                                                        @if ($paciente->auto_inf_turno)
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="auto_inf_turno" id="auto_inf_turno" value="SI" checked="checked">
+                                                                <label class="form-check-label" for="auto_inf_turno">SI</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="auto_inf_turno" id="auto_inf_turno" value="NO">
+                                                                <label class="form-check-label" for="auto_inf_turno">NO</label>
+                                                            </div>
+                                                        @else
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="auto_inf_turno" id="auto_inf_turno" value="SI">
+                                                                <label class="form-check-label" for="auto_inf_turno">SI</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="auto_inf_turno" id="auto_inf_turno" value="NO" checked="checked">
+                                                                <label class="form-check-label" for="auto_inf_turno">NO</label>
+                                                            </div>
+                                                        @endif
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-6 col-form-label font-weight-bolder">¿Autoriza además entrar a datos confidenciales?</label>
+                                                    <div class="col-sm-5 my-auto">
+                                                        @if ($paciente->auto_inf_confd)
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="auto_inf_confd" id="auto_inf_confd" value="SI" checked="checked">
+                                                                <label class="form-check-label" for="auto_inf_confd">SI</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="auto_inf_confd" id="auto_inf_confd" value="NO">
+                                                                <label class="form-check-label" for="auto_inf_confd">NO</label>
+                                                            </div>
+                                                        @else
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="auto_inf_confd" id="auto_inf_confd" value="SI">
+                                                                <label class="form-check-label" for="auto_inf_confd">SI</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="auto_inf_confd" id="auto_inf_confd" value="NO" checked="checked">
+                                                                <label class="form-check-label" for="auto_inf_confd">NO</label>
+                                                            </div>
+                                                        @endif
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -1197,19 +1268,13 @@
                                                         posible a disminuir las secuelas de una
                                                         <strong>URGENCIA</strong>.
                                                     <p>
-
-                                                    <p class="text-center">En el caso de que esta acción sea
-                                                        requerida una vez pasada la urgencia <br><strong>SALUD
-                                                            DIGITAL INTEGRADA RECOMIENDA CAMBIAR SUS CLAVES DE
-                                                            ACCESO</strong>.
-                                                    <p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-end">
-                                                <button type="submit" class="btn btn-sm btn-danger-light-c mr-2"><i class="feather icon-x"></i> Cancelar</button>
-                                                <button type="submit" class="btn btn-sm btn-info-light-c"><i class="feather icon-save"></i> Guardar cambios</button>
+                                                <button type="button" class="btn btn-sm btn-danger-light-c mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                <button type="button" class="btn btn-sm btn-info-light-c" onclick="registrar_autorizaciones();"><i class="feather icon-save"></i> Guardar cambios</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1360,6 +1425,28 @@
             validateOn: 'change',
             useThousandsSeparator : false
         });
+
+        $('input[name="auto_fmu"]').change(function(){
+            console.log($('input[name="auto_fmu"]:checked').val());
+            if($('input[name="auto_fmu"]:checked').val() == 'NO')
+            {
+                $('input[name="auto_inf_turno"]').attr('disabled', false);
+                $('input[name="auto_inf_turno"][value="NO"]').prop('checked', true);
+            }
+            else
+            {
+                $('input[name="auto_inf_turno"]').attr('disabled', true);
+                $('input[name="auto_inf_turno"][value="SI"]').prop('checked', true);
+            }
+        });
+
+        // $('input[name="auto_inf_turno"]').change(function(){
+        //     console.log($('input[name="auto_inf_turno"]:checked').val());
+        // });
+
+        // $('input[name="auto_inf_confd"]').change(function(){
+        //     console.log($('input[name="auto_inf_confd"]:checked').val());
+        // });
 
     });
 
@@ -2315,6 +2402,158 @@
         .fail(function(jqXHR, ajaxOptions, thrownError) {
             console.log(jqXHR, ajaxOptions, thrownError)
         });
+    }
+
+    function registrar_autorizaciones()
+    {
+        console.log($('input[name="auto_fmu"]:checked').val());
+        console.log($('input[name="auto_inf_turno"]:checked').val());
+        console.log($('input[name="auto_inf_confd"]:checked').val());
+
+        var auto_fmu = $('input[name="auto_fmu"]:checked').val();
+        var auto_inf_turno = $('input[name="auto_inf_turno"]:checked').val();
+        var auto_inf_confd = $('input[name="auto_inf_confd"]:checked').val();
+
+        console.log('paso 1');
+        if(auto_fmu == '')
+        {
+            auto_fmu = 0;
+        }
+        else
+        {
+            if(auto_fmu == 'SI')
+            {
+                auto_fmu = 1;
+                auto_inf_turno == 'SI';
+            }
+            else
+            {
+                auto_fmu = 0;
+            }
+        }
+
+        if(auto_inf_turno == '')
+        {
+            auto_inf_turno = 0;
+        }
+        else
+        {
+            if(auto_inf_turno == 'SI')
+            {
+                auto_inf_turno = 1;
+            }
+            else
+            {
+                auto_inf_turno = 0;
+            }
+        }
+
+        if(auto_inf_confd == '')
+        {
+            auto_inf_confd = 0;
+        }
+        else
+        {
+            if(auto_inf_confd == 'SI')
+            {
+                auto_inf_confd = 1;
+            }
+            else
+            {
+                auto_inf_confd = 0;
+            }
+        }
+        console.log('paso 2');
+
+        let url = "{{ route('paciente.perfil.registro_autorizacion') }}";
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                _token: CSRF_TOKEN,
+                id_paciente: $('#id_paciente').val(),
+                auto_fmu: auto_fmu,
+                auto_inf_turno: auto_inf_turno,
+                auto_inf_confd: auto_inf_confd,
+            },
+        })
+        .done(function(data) {
+
+            console.log('paso 3');
+            console.log(data);
+
+            if(data.estado == 1)
+            {
+                swal({
+                    title: "Modificacion de autorizaciones",
+                    text: "Actualizacion con Exito",
+                    icon: "success",
+                });
+
+
+                var txt_auto_fmu = '<span class="text-success">SI</span>';
+                if(auto_fmu == 1)
+                {
+                    txt_auto_fmu = '<span class="text-success">SI</span>';
+                }
+                else
+                {
+                    txt_auto_fmu = '<span class="text-danger">NO</span>';
+                }
+                $('#txt_auto_fmu').html(txt_auto_fmu);
+
+                var txt_auto_inf_turno = '<span class="text-success">SI</span>';
+                if(auto_inf_turno == 1)
+                {
+                    txt_auto_inf_turno = '<span class="text-success">SI</span>';
+                }
+                else
+                {
+                    txt_auto_inf_turno = '<span class="text-danger">NO</span>';
+                }
+                $('#txt_auto_inf_turno').html(txt_auto_inf_turno);
+
+                var txt_auto_inf_confd = '<span class="text-success">SI</span>';
+                if(auto_inf_confd == 1)
+                {
+                    txt_auto_inf_confd = '<span class="text-success">SI</span>';
+                }
+                else
+                {
+                    txt_auto_inf_confd = '<span class="text-danger">NO</span>';
+                }
+                $('#txt_auto_inf_confd').html(txt_auto_inf_confd);
+
+                $('#rompeclave_1').show();
+                $('#rompeclave_2').hide();
+            }
+            else
+            {
+                var mensaje = '';
+                if(data.error)
+                {
+                    $.each(data.error, function (indexInArray, valueOfElement)
+                    {
+                        mensaje += valueOfElement+'\n';
+                    });
+                }
+                else
+                {
+                    mensaje += 'Intente nuevamente.';
+                }
+                swal({
+                    title: "Modificacion de autorizaciones",
+                    text: "Se presento un problema.\n"+mensaje,
+                    icon: "error",
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+
     }
 
 </script>

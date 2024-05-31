@@ -323,6 +323,8 @@ Route::group([
     Route::post('Perfil/editcontacto', [App\Http\Controllers\EscritorioPaciente::class, 'editcontacto'])->name('paciente.perfil.editcontacto');
     Route::post('Perfil/editdirec', [App\Http\Controllers\EscritorioPaciente::class, 'editdirec'])->name('paciente.perfil.editdirec');
     Route::get('Perfil/crearContacto', [App\Http\Controllers\EscritorioPaciente::class, 'crearcontacto'])->name('paciente.perfil.crearcontacto');
+    Route::post('Perfil/autorizacion/editar', [App\Http\Controllers\EscritorioPaciente::class, 'editarAutorizacion'])->name('paciente.perfil.registro_autorizacion');
+
 
 
     Route::get('get/informacion/{id_dependiente_activo?}', [App\Http\Controllers\EscritorioPaciente::class, 'getPacienteUser'])->name('paciente.get.informacion');
