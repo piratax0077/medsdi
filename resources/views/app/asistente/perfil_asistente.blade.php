@@ -614,9 +614,9 @@
 
     {{--  @include( 'app.asistente.modales.modal_perfil' )  --}}
     {{--  CONTACTO DE EMERGENCIA  --}}
-    @include( 'app.asistente.modales.agregar_contacto_emergencia' )
-    @include( 'app.profesional.modales.informacion_contacto_emergencia' )
-    @include( 'app.profesional.modales.editar_contacto_emergencia' )
+    @include('app.asistente.modales.agregar_contacto_emergencia')
+    @include('app.profesional.modales.informacion_contacto_emergencia')
+    @include('app.profesional.modales.editar_contacto_emergencia')
 
 @endsection
 
@@ -631,6 +631,8 @@
                 $("#editar_telefono_uno").unbind();
             });
         })
+
+
     </script>
 @endsection
 

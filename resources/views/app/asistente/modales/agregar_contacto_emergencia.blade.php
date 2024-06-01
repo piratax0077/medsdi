@@ -73,7 +73,8 @@
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label class="floating-label-activo">Regi&oacute;n</label>
-                                <select id="region_agregar" onchange="buscar_ciudad();" name="region_agregar" class="form-control" required>
+
+                                <select id="region_agregar_emergencia" onchange="buscar_ciudad_general('region_agregar_emergencia', 'ciudad_agregar_emergencia', 0);" name="region_agregar_emergencia" class="form-control" required>
                                     <option value="">Seleccione</option>
                                     @foreach ($region as $reg)
                                         @if (isset($region))
@@ -87,7 +88,7 @@
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label class="floating-label-activo">Comuna</label>
-                                <select id="ciudad_agregar" name="ciudad_agregar" class="form-control" required>
+                                <select id="ciudad_agregar_emergencia" name="ciudad_agregar_emergencia" class="form-control" required>
                                     <option value="0">Seleccione</option>
                                 </select>
                             </div>
@@ -153,3 +154,11 @@
         </div>
     </div>
 </div>
+
+<script>
+    function cerrar_agregar_contacto_emergencia() {
+        $('#agregar_contacto_emergencia').modal('hide');
+        $('#form_contacto_nuevo').hide();
+        //  $(this).find('form').trigger('reset');
+    }
+</script>

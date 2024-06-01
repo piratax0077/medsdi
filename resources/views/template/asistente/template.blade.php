@@ -2403,21 +2403,21 @@
                         let ciudades_agregar = $('#ciudad_agregar');
 
                         ciudades.find('option').remove();
-                        ciudades.append('<option value="0">seleccione</option>');
+                        ciudades.append('<option value="0">Seleccione</option>');
                         $(data).each(function(i, v) { // indice, valor
                             ciudades.append('<option value="' + v.id + '">' + v.nombre +
                                 '</option>');
                         })
 
                         ciudades_contacto.find('option').remove();
-                        ciudades_contacto.append('<option value="0">seleccione</option>');
+                        ciudades_contacto.append('<option value="0">Seleccione</option>');
                         $(data).each(function(i, v) { // indice, valor
                             ciudades_contacto.append('<option value="' + v.id + '">' + v.nombre +
                                 '</option>');
                         })
 
                         ciudades_agregar.find('option').remove();
-                        ciudades_agregar.append('<option value="0">seleccione</option>');
+                        ciudades_agregar.append('<option value="0">Seleccione</option>');
                         $(data).each(function(i, v) { // indice, valor
                             ciudades_agregar.append('<option value="' + v.id + '">' + v.nombre +
                                 '</option>');
@@ -2763,11 +2763,9 @@
                         $('#numero_dir_contacto').val(data.direccion.numero_dir);
                         $('#label_numero_dir_contacto').addClass('floating-label-activo');
 
-
-                        $('#region_agregar').val('');
                         $('#region_contacto_modificar').val(data.region.id);
 
-                        buscar_ciudad(data.ciudad.id);
+                        buscar_ciudad_general('region_contacto_modificar', 'ciudad_contacto_modificar', data.ciudad.id);
 
                         $('#email_contacto').val(data.email);
                         $('#label_email_contacto').addClass('floating-label-activo');
@@ -2881,6 +2879,51 @@
             $('#agregar_contacto_emergencia').modal('show');
         }
 
+        function buscar_ciudad_general(input_region, input_ciudad, id_ciudad=0)
+        {
+            var region = $('#'+input_region).val();
+            console.log(region);
+            let url = "{{ route('home.buscar_ciudad_region') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    region: region,
+                },
+            })
+            .done(function(data) {
+                if (data != null) {
+                    data = JSON.parse(data);
+
+                    let ciudades = $('#'+input_ciudad);
+
+                    ciudades.find('option').remove();
+                    ciudades.append('<option value="0">seleccione</option>');
+                    $(data).each(function(i, v) { // indice, valor
+                        ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                    })
+
+                    if(id_ciudad != 0)
+                    {
+                        ciudades.val(id_ciudad);
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar las ciudades",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        };
+
         {{--  BUSCCAR INFORMACION DE CONTACTO DE EMERGENCIA  --}}
         function buscar_contacto() {
 
@@ -2907,10 +2950,12 @@
 
                         } else {
                             data = JSON.parse(data);
+
+                            $('#region_agregar_emergencia').val(data.ciudad.id_region);
                             for (let i = 0; i < data.region.length; i++) {
                                 if (data.region[i].id == data.ciudad.id_region) {
                                     $('#region_agregar').val(data.region[i].id);
-                                    buscar_ciudad(data.ciudad.id);
+                                    buscar_ciudad_general('region_agregar_emergencia', 'ciudad_agregar_emergencia', data.ciudad.id)
                                 }
                             }
                             $('#form_contacto_nuevo').show();
@@ -2925,7 +2970,7 @@
 
                             let ciudad = data.ciudad.id;
                             {{--  $("#ciudad_agregar option[value=" + ciudad + "]").attr("selected", true);  --}}
-                            $('#ciudad_agregar').val(ciudad);
+
                         }
                     } else {
 
