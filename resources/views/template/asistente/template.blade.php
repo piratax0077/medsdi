@@ -3043,7 +3043,7 @@
             if(id_ciudad == '' || id_ciudad == '0')
             {
                 valido = 0;
-                mensaje += 'Debe ingresar ciudad.\n';
+                mensaje += 'Debe ingresar Comuna.\n';
             }
             if(email == '')
             {
