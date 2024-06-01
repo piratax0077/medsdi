@@ -399,34 +399,6 @@
             });
             /** fin formulario pestaña 1 */
 
-            $('#descripcion_hipotesis').keyup(function(){
-                if($.trim(this.value) != '')
-                {
-                   if( lic_token != '' && lic_estado == 1)
-                    {
-                        $('.btn_agregar_medicamento').removeAttr("disabled");
-                        $('.btn_medicamento_pdf').removeAttr("disabled");
-                        $('.btn_agregar_examen').removeAttr("disabled");
-                        $('.btn_examenes_pdf').removeAttr("disabled");
-                    }
-                    else
-                    {
-                        $('.btn_agregar_medicamento').attr('disabled','disabled');
-                        $('.btn_medicamento_pdf').attr('disabled','disabled');
-                        $('.btn_agregar_examen').attr('disabled','disabled');
-                        $('.btn_examenes_pdf').attr('disabled','disabled');
-                    }
-
-                }
-                else
-                {
-                    $('.btn_agregar_medicamento').attr('disabled','disabled');
-                    $('.btn_medicamento_pdf').attr('disabled','disabled');
-                    $('.btn_agregar_examen').attr('disabled','disabled');
-                    $('.btn_examenes_pdf').attr('disabled','disabled');
-                }
-            });
-
             $("#descripcion_cie").autocomplete({
                 source: function(request, response) {
                     // Fetch data

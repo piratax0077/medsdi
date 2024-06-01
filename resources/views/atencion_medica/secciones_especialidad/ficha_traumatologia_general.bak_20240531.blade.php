@@ -7,7 +7,7 @@
             <div class="col-sm-12 col-md-12">
                 <ul class="nav nav-tabs-secciones mb-3 mt-3" id="traumato_general" role="tablist">
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones active text-uppercase" id="atencion_traumato-tab" data-toggle="tab" href="#atencion_traumato" role="tab" aria-controls="atencion_traumato_gen" aria-selected="false">Ficha Traumatología y Ortopedia</a>
+                        <a class="nav-secciones active text-uppercase" id="atencion_traumato-tab" data-toggle="tab" href="#atencion_traumato" role="tab" aria-controls="atencion_traumato_gen" aria-selected="false">Traumatología y Ortopédia</a>
                     </li>
                 </ul>
             </div>
@@ -37,18 +37,24 @@
                         <div class="tab-pane fade show active " id="atencion_traumato" role="tabpanel" aria-labelledby="atencion_traumato-tab">
                             <div class="row">
                                 <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12 mt-3 mb-0">
+                                            <h6 class="f-16 text-c-blue">Ficha de atención Traumatológica y Ortopédica </h6>
+                                            <hr>
+                                        </div>
+                                    </div>
                                     <!--FORMULARIOS-->
                                     <div class="row">
-									
+
                                         <!--Formulario / Menor de edad-->
-										@include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
-										<!--Cierre: Formulario / Menor de edad-->
+                                        @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
+                                        <!--Cierre: Formulario / Menor de edad-->
 
                                         <!--Motivo consulta-->
                                         @include('general.secciones_ficha.motivo')
 
                                         <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" id="traumato">
+                                        <div class="col-sm-12 col-md-12" id="traumato">
                                             <div class="card-a">
                                                 <div class="card-header-a" id="exam_esp_traumatologia">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_traumatologia_c" aria-expanded="false" aria-controls="exam_esp_traumatologia_c">
@@ -60,12 +66,12 @@
                                                         <div id="form-traumato">
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <ul class="nav nav-tabs-aten nav-fill mb-2" id="ev-crec_des_trauma" role="tablist">
+                                                                    <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-crec_des_trauma" role="tablist">
                                                                         {{-- <li class="nav-item">
                                                                             <a class="nav-link-aten text-reset active" id="exam-traumato-ft-tab" data-toggle="tab" href="#exam-traumato-ft" role="tab" aria-controls="exam-traumato-ft" aria-selected="true">Ficha tipo</a>
                                                                         </li> --}}
                                                                         <li class="nav-item">
-                                                                            <a class="nav-link-aten text-reset active" id="examen-segment-traumato-tab" data-toggle="tab" href="#examen-segment-traumato" role="tab" aria-controls="examen-segment-traumato" aria-selected="false">Exámen segmentario</a>
+                                                                            <a class="nav-link-aten text-reset active" id="examen-segment-traumato-tab" data-toggle="tab" href="#examen-segment-traumato" role="tab" aria-controls="examen-segment-traumato" aria-selected="false">Exámen físico</a>
                                                                         </li>
                                                                         <li class="nav-item">
                                                                             <a class="nav-link-aten text-reset" id="examen-traumato-tab" data-toggle="tab" href="#examen-traumato" role="tab" aria-controls="examen-traumato" aria-selected="false">Tumores y otros </a>
@@ -108,7 +114,7 @@
                                                                         <div class="tab-pane fade show active" id="examen-segment-traumato" role="tabpanel" aria-labelledby="examen-segment-traumato-tab">
                                                                             <div class="row">
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                    <h6 class="t-aten">Examen segmentario</h6>
+                                                                                    <h6 class="f-16 text-c-blue mb-3">Examen segmentario</h6>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="form-row">
@@ -123,7 +129,7 @@
                                                                                         </select>
                                                                                     </div>
                                                                                     <div class="form-group" id="div_e_causa_traum" style="display:none">
-                                                                                        <label class="floating-label-activo-sm" for="mc_masas_tu">Describir examen de otra causa</label>
+                                                                                        <label class="floating-label-activo-sm" for="mc_masas_tu">Describir examen de Otra Causa</label>
                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Causa" data-seccion="Examen Segmentario" data-tipo="Traumatología" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_e_causa_traum" id="obs_e_causa_traum"></textarea>
                                                                                     </div>
                                                                                 </div>
@@ -145,7 +151,7 @@
                                                                         <div class="tab-pane fade show" id="examen-traumato" role="tabpanel" aria-labelledby="examen-traumato-tab">
                                                                             <div class="row">
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                    <h6 class="t-aten">Masas y Tumores</h6>
+                                                                                    <h6 class="f-16 text-c-blue mb-3">Masas y Tumores</h6>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="form-row">
@@ -171,18 +177,20 @@
                                                                                    $(document).ready(function() {
                                                                                     });
                                                                             </script>
-                                                                            <div class="form-row">
-                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                            <div class="form-row mt-2">
+                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0">
                                                                                     <h6 class="t-aten">Plan de Tratamiento</h6>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="form-row mt-0">
-                                                                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                            <div class="form-row">
+                                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 mt-0">
                                                                                     <label class="ml-0"><strong>Tratamiento médico</strong></label>
                                                                                     <div class="switch switch-success d-inline m-r-10">
                                                                                         <input type="checkbox" id="tto_trauma" name="tto_trauma" value="1" onchange="javascript:showContentTto_trauma()" />
                                                                                         <label for="tto_trauma" class="cr"></label>
                                                                                     </div>
+                                                                                </div>
+                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                     <div id="contentTto_trauma" style="display: none;">
                                                                                         <div class="form-row">
                                                                                             <div class="form-group col-md-12 mt-1">
@@ -192,13 +200,14 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 mt-0">
                                                                                     <label class="ml-0"><strong>Procedimiento</strong></label>
                                                                                     <div class="switch switch-success d-inline m-r-10">
                                                                                         <input type="checkbox" id="pr_trauma" name="pr_trauma" value="1" onchange="javascript: showContentProc_trauma()" />
                                                                                         <label for="pr_trauma" class="cr"></label>
                                                                                     </div>
-
+                                                                                </div>
+                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                     <div id="contentProc_trauma" style="display: none;">
                                                                                         <div class="form-row">
                                                                                             <div class="form-group col-md-4">
@@ -212,7 +221,7 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0">
                                                                                     <label class="ml-0"><strong>Cirugía</strong></label>
                                                                                     <div class="switch switch-success d-inline m-r-10">
                                                                                         <input type="checkbox" class="custom-control-input" id="tr_gen_cir" name="tr_gen_cir" value="{!! old('tr_gen_cir') !!}">
@@ -231,6 +240,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
+                                                                            <hr>
                                                                             <div class="form-row">
                                                                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                     <label class="floating-label-activo-sm" for="obs_gen_plan_tto">Obs. Plan de tratamiento</label>
@@ -248,43 +258,42 @@
                                         </div>
 
                                         <!-- EXAMEN ESPECIALIDAD ORTOPEDIA -->
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" id="ortopedia">
+                                        <div class="col-sm-12 col-md-12" id="ortopedia">
                                             <div class="card-a">
                                                 <div class="card-header-a" id="exam_esp_ortopedia">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_ortopedia_c" aria-expanded="false" aria-controls="exam_esp_ortopedia_c">
-                                                        Examen Paciente Ortopedia
+                                                        Examen Paciente Ortopédia
                                                     </button>
                                                 </div>
                                                 <div id="exam_esp_ortopedia_c" class="collapse" aria-labelledby="exam_esp_ortopedia" data-parent="#exam_esp_ortopedia">
                                                     <div class="card-body-aten-a">
                                                         <div id="form-ortop">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <ul class="nav nav-tabs-aten nav-fill mb-2" id="ortopedia" role="tablist">
-                                                                        <li class="nav-item">
-                                                                            <a class="nav-link-aten text-reset " id="ortopedia_infanto_juv-tab" data-toggle="tab" href="#ortopedia_infanto_juv" role="tab" aria-controls="ortopedia_infanto_juv" aria-selected="true">Ortopedia del Infante</a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a class="nav-link-aten text-reset active" id="atenc_ortopedia_ad_tab" data-toggle="tab" href="#atenc_ortopedia_ad" role="tab" aria-controls="atenc_ortopedia_ad" aria-selected="true">Ortopedia Adulto</a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
+                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                <ul class="nav nav-tabs-aten nav-fill mb-3" id="ortopedia" role="tablist">
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link-aten text-reset " id="ortopedia_infanto_juv-tab" data-toggle="tab" href="#ortopedia_infanto_juv" role="tab" aria-controls="ortopedia_infanto_juv" aria-selected="true">Ortopedia del Infante</a>
+                                                                    </li>
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link-aten text-reset active" id="atenc_ortopedia_ad_tab" data-toggle="tab" href="#atenc_ortopedia_ad" role="tab" aria-controls="atenc_ortopedia_ad" aria-selected="true">Ortopedia Adulto</a>
+                                                                    </li>
+                                                                </ul>
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                     <div class="tab-content" id="ortopedia">
                                                                         {{-- ortopedia infantil --}}
                                                                         <div class="tab-pane fade" id="ortopedia_infanto_juv" role="tabpanel" aria-labelledby="ortopedia_infanto_juv-tab">
+                                                                            <hr>
                                                                             <div class="form-row mt-2">
-                                                                                <div class="col-sm-12 col-md-3 col-lg-2 col-xl-2">
-                                                                                    <div class="nav flex-column nav-pills mb-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                    <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                                                                         <a class="nav-link-aten text-reset active" id="orto_ped_gen-tab" data-toggle="tab" href="#orto_ped_gen" role="tab" aria-controls="orto_ped_gen" aria-selected="false">General</a>
                                                                                         <a class="nav-link-aten text-reset" id="orto_ped_ex_axial-tab" data-toggle="tab" href="#orto_ped_ex_axial" role="tab" aria-controls="orto_ped_ex_axial" aria-selected="false">Exploración Axial</a>
                                                                                         <a class="nav-link-aten text-reset" id="orto_ped_ms-tab" data-toggle="tab" href="#orto_ped_ms" role="tab" aria-controls="orto_ped_ms" aria-selected="false">Exploración Periférica Mb. Superior</a>
                                                                                         <a class="nav-link-aten text-reset" id="orto_ped_mi-tab" data-toggle="tab" href="#orto_ped_mi" role="tab" aria-controls="orto_ped_mi" aria-selected="false">Exploración Periférica Mb. Inferior</a>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="col-sm-12 col-md-9 col-lg-10 col-xl-10">
+                                                                                <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
                                                                                     <div class="tab-content" id="v-pills-tabContent">
                                                                                         <div class="tab-pane fade show active" id="orto_ped_gen" role="tabpanel" aria-labelledby="orto_ped_gen-tab">
                                                                                             <div class="form-row">
@@ -293,25 +302,25 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="form-row">
-                                                                                                <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="peso_ped"> Peso</label>
                                                                                                         <input type="text" class="form-control form-control-sm" name="peso_ped" id="peso_ped">
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="talla_ped"> Talla</label>
                                                                                                         <input type="text" class="form-control form-control-sm" name="talla_ped" id="talla_ped">
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                 <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                                                                                                <div class="col-md-8">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="mov_espont">Movilidad Espontánea</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" data-titulo="Movilidad Espontánea" data-seccion="Exámen especialidad" data-tipo="traumatología" name="mov_espont" id="mov_espont" placeholder="ESTUDIO MOVILIDAD ESPONTÁNEA"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <div class="col-md-12">
                                                                                                     <div class="form-group" >
                                                                                                         <label class="floating-label-activo-sm" for="obs_gen_ex_esp">Obs. Generales</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" rows="2"  onfocus="this.rows=3" onblur="this.rows=2;" data-titulo="Obs. Generales" data-seccion="Exámen especialidad" data-tipo="traumatología" name="obs_gen_ex_esp" id="obs_gen_ex_esp" placeholder="OBSERVACIONES GENERALES DEL EXAMEN"></textarea>
@@ -326,31 +335,31 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="form-row">
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="exp_ax_mov_cerv">Movilidad Cervical</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Movilidad Cervical" data-seccion="Exploración Axial" data-tipo="traumatología" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="exp_ax_mov_cerv" id="exp_ax_mov_cerv"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="exp_ax_mus_ecm">Musc Esternocleidomastoídeo</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Musc Esternocleidomastoídeo" data-seccion="Exploración Axial" data-tipo="traumatología" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="exp_ax_mus_ecm" id="exp_ax_mus_ecm"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="exp_ax_t_adms"> Test de Adams</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Test de Adams" data-seccion="Exploración Axial" data-tipo="traumatología" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="exp_ax_t_adms" id="exp_ax_t_adms"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="exp_ax_angiom">Angiomas vellosidades etc.</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Angiomas vellosidades etc" data-seccion="Exploración Axial" data-tipo="traumatología" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="exp_ax_angiom" id="exp_ax_angiom"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="exp_ax_cif_lumb">Cifosis Lumbar</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Cifosis Lumbar" data-seccion="Exploración Axial" data-tipo="traumatología" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="exp_ax_cif_lumb" id="exp_ax_cif_lumb"></textarea>
@@ -365,19 +374,19 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="form-row">
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="fe_ext_msup"> Flexo-extensión de codo</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Flexo-extensión de codo" data-seccion="Exploración Periférica Mb. Superior"data-tipo="traumatología"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="fe_ext_msup" id="fe_ext_msup"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="dedo_res_ext_msup"> Dedo en resorte</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo=" Dedo en resorte" data-seccion="Exploración Periférica Mb. Superior"data-tipo="traumatología"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="dedo_res_ext_msup" id="dedo_res_ext_msup"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="rig_ext_msup">  Rigidez</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Rigidez" data-seccion="Exploración Periférica Mb. Superior" data-tipo="traumatología" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="rig_ext_msup" id="rig_ext_msup"></textarea>
@@ -398,43 +407,43 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="form-row">
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-3">
+                                                                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="ex_minf_cad_orland">Cadera M. de Ortolani Barlow</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Cadera M. de Ortolani Barlow" data-seccion="Exploración Periférica Mb. Inferior" data-tipo="traumatología" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_minf_cad_orland" id="ex_minf_cad_orland"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-3">
+                                                                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="ex_minf_abd">Abducción</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Abducción" data-seccion="Exploración Periférica Mb. Inferior" data-tipo="traumatología" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_minf_abd" id="ex_minf_abd"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-3">
+                                                                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="ex_minf_pp">Pliegues Poplíteos</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Pliegues Poplíteos" data-seccion="Exploración Periférica Mb. Inferior" data-tipo="traumatología" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_minf_pp" id="ex_minf_pp"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-3">
+                                                                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="ex_minf_rfr">Rodillas Flexo recurvatum</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Rodillas Flexo recurvatum" data-seccion="Exploración Periférica Mb. Inferior" data-tipo="traumatología" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_minf_rfr" id="ex_minf_rfr"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="ex_minf_p_fd">Pié Flexión dorsal</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Pié Flexión dorsal" data-seccion="Exploración Periférica Mb. Inferior" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_minf_p_fd" id="ex_minf_p_fd"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm" for="ex_minf_p_vvrp">Pié Valgo / Varo de retropíe</label>
+                                                                                                        <label class="floating-label-activo-sm" for="ex_minf_p_vvrp">Pié Valgo/Varo de retropíe</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Pié Valgo/Varo de retropíe" data-seccion="Exploración Periférica Mb. Inferior" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_minf_p_vvrp" id="ex_minf_p_vvrp"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="ex_minf_aspl">Aspecto Plantar</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Aspecto Plantar" data-seccion="Exploración Periférica Mb. Inferior" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_minf_aspl" id="ex_minf_aspl"></textarea>
@@ -455,15 +464,16 @@
 
                                                                         {{-- ortopedia adulto --}}
                                                                         <div class="tab-pane fade  show active" id="atenc_ortopedia_ad" role="tabpanel" aria-labelledby="atenc_ortopedia_ad_tab">
+                                                                            <hr>
                                                                             <div class="form-row mt-2">
-                                                                                <div class="col-sm-12 col-md-3 col-lg-2 col-xl-2">
+                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                     <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                                                                         <a class="nav-link-aten text-reset active" id="orto_adult_gen-tab" data-toggle="tab" href="#orto_adult_gen" role="tab" aria-controls="orto_adult_gen" aria-selected="false">General</a>
                                                                                         <a class="nav-link-aten text-reset" id="orto_adult_ex_axial-tab" data-toggle="tab" href="#orto_adult_ex_axial" role="tab" aria-controls="orto_adult_ex_axial" aria-selected="false">Exploración Axial</a>
                                                                                         <a class="nav-link-aten text-reset" id="orto_adult_ms-tab" data-toggle="tab" href="#orto_adult_ms" role="tab" aria-controls="orto_padultms" aria-selected="false">Exploración Periférica</a>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="col-sm-12 col-md-9 col-lg-10 col-xl-10">
+                                                                                <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
                                                                                     <div class="tab-content" id="v-pills-tabContent">
                                                                                         <div class="tab-pane fade show active" id="orto_adult_gen" role="tabpanel" aria-labelledby="orto_adult_gen-tab">
                                                                                             <div class="form-row">
@@ -472,37 +482,38 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="form-row">
-                                                                                                <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="peso_ad">Peso</label>
                                                                                                         <input type="text" class="form-control form-control-sm" data-titulo="Peso" data-seccion="Exámen especialidad" data-tipo="ortopedia-Adultos" name="orto_peso_ad" id="orto_peso_ad">
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="talla_ad">Talla</label>
                                                                                                         <input type="text" class="form-control form-control-sm" data-titulo="Talla" data-seccion="Exámen especialidad" data-tipo="ortopedia-Adultos" name="orto_talla_ad" id="orto_talla_ad">
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                                                                                                    <div class="form-group" id="div_detalle_transito_intest">
+                                                                                                <div class="col-md-8">
+                                                                                                    <div class="form-group" id="div_detalle_transito_intest" >
                                                                                                         <label class="floating-label-activo-sm" for="orto_manip_ad">Manipulación</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" data-titulo="Manipulación" data-seccion="Exámen especialidad" data-tipo="ortopedia-Adultos" name="orto_manip_ad" id="orto_manip_ad" placeholder="RESULTADO DE LA MANIPULACIÓN"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                                                                                                    <div class="form-group" id="div_detalle_transito_intest">
+                                                                                                <div class="col-md-6">
+                                                                                                    <div class="form-group" id="div_detalle_transito_intest" >
                                                                                                         <label class="floating-label-activo-sm" for="orto_dolor_ad">Dolor</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" rows="2"  onfocus="this.rows=3" onblur="this.rows=2;" data-titulo="Dolor" data-seccion="Exámen especialidad" data-tipo="ortopedia-Adultos" name="orto_dolor_ad" id="orto_dolor_ad" placeholder="DOLOR, TIPO, CUANDO ETC."></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                                                                                                    <div class="form-group" id="div_detalle_transito_intest">
+                                                                                                <div class="col-md-6">
+                                                                                                    <div class="form-group" id="div_detalle_transito_intest" >
                                                                                                         <label class="floating-label-activo-sm" for="orto_marpos_ad">Marcha y Postura</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" rows="2"  onfocus="this.rows=3" onblur="this.rows=2;" data-titulo="Marcha y Postura" data-seccion="Exámen especialidad" data-tipo="ortopedia-Adultos" name="orto_marpos_ad" id="orto_marpos_ad" placeholder="ESTUDIO DE LA MARCHA Y ALTERACIONES POSTURALES"></textarea>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
+
                                                                                         </div>
                                                                                         <div class="tab-pane fade" id="orto_adult_ex_axial" role="tabpanel" aria-labelledby="orto_adult_ex_axial-tab">
                                                                                             <div class="form-row">
@@ -511,32 +522,32 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="form-row">
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="orto_ea_mv_ad">Movilidad Vertebral</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Movilidad Vertebral" data-seccion="Exploración Axial" data-tipo="ortopedia-Adultos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="orto_ea_mv_ad" id="orto_ea_mv_ad"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="orto_ea_rlp_ad">Ritmo Lumbo-Pélvico</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Ritmo Lumbo-Pélvico" data-seccion="Exploración Axial" data-tipo="ortopedia-Adultos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="orto_ea_rlp_ad" id="orto_ea_rlp_ad"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="orto_ea_icls_ad">indice Cif/Lord Sagital</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="indice Cif/Lord Sagital" data-seccion="Exploración Axial" data-tipo="ortopedia-Adultos"rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="orto_ea_icls_ad" id="orto_ea_icls_ad"></textarea>
                                                                                                     </div>
                                                                                                 </div>
 
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="orto_ea_ir_ad">Irritación radicular</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Irritación radicular" data-seccion="Exploración Axial" data-tipo="ortopedia-Adultos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="orto_ea_ir_ad" id="orto_ea_ir_ad"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="orto_ea_nb_ad">Neurológico básico</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Neurológico básico" data-seccion="Exploración Axial" data-tipo="ortopedia-Adultos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="orto_ea_nb_ad" id="orto_ea_nb_ad"></textarea>
@@ -551,39 +562,39 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="form-row">
-                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="orto_ep_bart_ad">Balance articular (inclinómetro)</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="balance articular (inclinómetro)" data-seccion="Exploración Periférica" data-tipo="ortopedia-Adultos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="orto_ep_bart_ad" id="obs_e_ext_sup" placeholder="ESTUDIO DEL BALANCE ARTICULAR (INCLINÓMETRO)"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="orto_ep_bmm_ad">Balance Muscular Manual</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Balance Muscular Manual" data-seccion="Exploración Periférica" data-tipo="ortopedia-Adultos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="orto_ep_bmm_ad" id="orto_ep_bmm_ad" placeholder="ESTUDIO DEL BALANCE MUSCULAR MANUAL"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="orto_ep_hlart_ad">Hiperlaxitud articular</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Hiperlaxitud articular" data-seccion="Exploración Periférica" data-tipo="ortopedia-Adultos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="orto_ep_hlart_ad" id="orto_ep_hlart_ad" placeholder="PRESENCIA DE HIPERLAXITUD ARTICULAR"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="orto_ep_dism_minf_ad">Dismetría de miembros inferiores</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Dismetría de miembros inferiores" data-seccion="Exploración Periférica" data-tipo="ortopedia-Adultos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="orto_ep_dism_minf_ad" id="orto_ep_dism_minf_ad" placeholder="DISMETRIA MB. INFERIORES"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm" for="orto_ep_si_ad">Signos Inflamatorios</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Signos Inflamatorios" data-seccion="Exploración Periférica" data-tipo="ortopedia-Adultos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="orto_ep_si_ad" id="orto_ep_si_ad" placeholder="PRESENCIA DE INFLAMACIÓN"></textarea>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm" for="orto_ep_tc_ad">Test Clínicos</label>
+                                                                                                        <label class="floating-label-activo-sm" for="orto_ep_tc_ad">Test Clinicos</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Test Clinicos" data-seccion="Exploración Periférica" data-tipo="ortopedia-Adultos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="orto_ep_tc_ad" id="orto_ep_tc_ad" placeholder="ANOTAR TEST CLÍNICOS REALIZADOS"></textarea>
                                                                                                     </div>
                                                                                                 </div>
@@ -595,8 +606,8 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="form-row">
-                                                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                    <label class="floating-label-activo-sm" for="orto_ep_obgen_ad">Obs. Ortopedia Adultos</label>
+                                                                                                <div class="form-group col-md-12">
+                                                                                                    <label class="floating-label-activo-sm" for="orto_ep_obgen_ad">Observaciones Ortopedia Adultos</label>
                                                                                                     <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Ortopedia Adultos" data-seccion="general" data-tipo="ortopedia-Adultos"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="orto_ep_obgen_ad" id="orto_ep_obgen_ad" placeholder="OBSERVACIONES GENERALES Y OTROS DATOS" ></textarea>
                                                                                                 </div>
                                                                                             </div>
@@ -605,6 +616,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -613,10 +625,11 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
 
-                                <!-- HOSPITALIZAR -->
+                                <!-- hospitalizar -->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
                                         <div class="card-header-a" id="hospitalizar_paciente">

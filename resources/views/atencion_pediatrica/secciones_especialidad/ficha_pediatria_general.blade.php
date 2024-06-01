@@ -425,48 +425,6 @@
 		}, 5000);
         $(document).ready(function() {
 
-            // $('#btn_recien_nacido').click(function () {
-            //     $('#recien_nacido').toggle();
-            // });
-
-            // /** Datos recien nacido **/
-            // $('#btn_vac_part_puerp').click(function () {
-            //     $('#vac_part_puerp').toggle();
-            // });
-
-            // /** Datos recien nacido **/
-            // $('#btn_extamiz').click(function () {
-            //     $('#extamiz').toggle();
-            // });
-
-            $('#descripcion_hipotesis').keyup(function(){
-                if($.trim(this.value) != '')
-                {
-                   if( lic_token != '' && lic_estado == 1)
-                    {
-                        $('.btn_agregar_medicamento').removeAttr("disabled");
-                        $('.btn_medicamento_pdf').removeAttr("disabled");
-                        $('.btn_agregar_examen').removeAttr("disabled");
-                        $('.btn_examenes_pdf').removeAttr("disabled");
-                    }
-                    else
-                    {
-                        $('.btn_agregar_medicamento').attr('disabled','disabled');
-                        $('.btn_medicamento_pdf').attr('disabled','disabled');
-                        $('.btn_agregar_examen').attr('disabled','disabled');
-                        $('.btn_examenes_pdf').attr('disabled','disabled');
-                    }
-
-                }
-                else
-                {
-                    $('.btn_agregar_medicamento').attr('disabled','disabled');
-                    $('.btn_medicamento_pdf').attr('disabled','disabled');
-                    $('.btn_agregar_examen').attr('disabled','disabled');
-                    $('.btn_examenes_pdf').attr('disabled','disabled');
-                }
-            });
-
             $("#descripcion_cie_esp").autocomplete({
                 source: function(request, response) {
                     // Fetch data

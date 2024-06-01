@@ -146,6 +146,49 @@
 
             });
 
+            $('#descripcion_hipotesis').keyup(function(){
+                if($.trim(this.value) != '')
+                {
+                   if( lic_token != '' && lic_estado == 1)
+                    {
+                        $('.btn_agregar_medicamento').removeAttr("disabled");
+                        $('.btn_medicamento_pdf').removeAttr("disabled");
+                        $('.btn_agregar_examen').removeAttr("disabled");
+                        $('.btn_examenes_pdf').removeAttr("disabled");
+
+                        $('.btn_agregar_medicamento').removeClass('btn-info');$('.btn_agregar_medicamento').addClass('btn-info-light-c');
+                        $('.btn_medicamento_pdf').removeClass('btn-primary');$('.btn_medicamento_pdf').addClass('btn-primary-light-c');
+                        $('.btn_agregar_examen').removeClass('btn-info');$('.btn_agregar_examen').addClass('btn-info-light-c');
+                        $('.btn_examenes_pdf').removeClass('btn-primary');$('.btn_examenes_pdf').addClass('btn-primary-light-c');
+                    }
+                    else
+                    {
+                        $('.btn_agregar_medicamento').attr('disabled','disabled');
+                        $('.btn_medicamento_pdf').attr('disabled','disabled');
+                        $('.btn_agregar_examen').attr('disabled','disabled');
+                        $('.btn_examenes_pdf').attr('disabled','disabled');
+
+                        $('.btn_agregar_medicamento').removeClass('btn-info-light-c');$('.btn_agregar_medicamento').addClass('btn-info');
+                        $('.btn_medicamento_pdf').removeClass('btn-primary-light-c');$('.btn_medicamento_pdf').addClass('btn-primary');
+                        $('.btn_agregar_examen').removeClass('btn-info-light-c');$('.btn_agregar_examen').addClass('btn-info');
+                        $('.btn_examenes_pdf').removeClass('btn-primary-light-c');$('.btn_examenes_pdf').addClass('btn-primary');
+                    }
+
+                }
+                else
+                {
+                    $('.btn_agregar_medicamento').attr('disabled','disabled');
+                    $('.btn_medicamento_pdf').attr('disabled','disabled');
+                    $('.btn_agregar_examen').attr('disabled','disabled');
+                    $('.btn_examenes_pdf').attr('disabled','disabled');
+
+                    $('.btn_agregar_medicamento').removeClass('btn-info-light-c');$('.btn_agregar_medicamento').addClass('btn-info');
+                    $('.btn_medicamento_pdf').removeClass('btn-primary-light-c');$('.btn_medicamento_pdf').addClass('btn-primary');
+                    $('.btn_agregar_examen').removeClass('btn-info-light-c');$('.btn_agregar_examen').addClass('btn-info');
+                    $('.btn_examenes_pdf').removeClass('btn-primary-light-c');$('.btn_examenes_pdf').addClass('btn-primary');
+                }
+            });
+
         });
 
         {{--  METODOS DE RECETA  --}}
