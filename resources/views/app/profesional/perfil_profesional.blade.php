@@ -129,14 +129,15 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="font-weight-bolder ml-0 mb-0">Profesión</label>
-                                                <div></div>
+                                                <div>{{ $txt_especialidades }}</div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="font-weight-bolder ml-0 mb-0">Especialidad</label>
-                                                <div>{{ $profesional->Especialidad()->first()->nombre }} </div>
+                                                <div>{{ $txt_tipo_especialidades }}</div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="font-weight-bolder ml-0 mb-0">Sub Especialidad</label>
+                                                <div>{{ $txt_sub_tipo_especialidades }}</div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="font-weight-bolder ml-0 mb-0">Tipo de atención</label>
@@ -180,41 +181,50 @@
                                                     <label class="floating-label-activo">Profesión</label>
                                                     <select class="form-control form-control-sm" id="exampleFormControlSelect1">
                                                         <option>Seleccione</option>
-                                                        <option selected>Médico cirujano</option>
-                                                        <option>Cirujano dentista</option>
+                                                        @foreach ($especialidades as $especialidad)
+                                                            @if ($especialidad->id == $profesional->id_especialidad)
+                                                                <option value="{{ $especialidad->id }}" selected>
+                                                                    {{ $especialidad->nombre }}
+                                                                </option>
+                                                            @else
+                                                                <option value="{{ $especialidad->id }}">
+                                                                    {{ $especialidad->nombre }}
+                                                                </option>
+                                                            @endif
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="floating-label-activo">Especialidad</label>
                                                     <select class="form-control form-control-sm" id="editar_especialidad" name="editar_especialidad">
-                                                        <option>Seleccione su Especialidad</option>
-                                                        @foreach ($especialidades as $especialidad)
-                                                        @if ($especialidad->id == $profesional->id_especialidad)
-                                                        <option value="{{ $especialidad->id }}" selected>
-                                                            {{ $especialidad->nombre }}
-                                                        </option>
-                                                        @else
-                                                        <option value="{{ $especialidad->id }}">
-                                                            {{ $especialidad->nombre }}
-                                                        </option>
-                                                        @endif
+                                                        <option>Seleccione</option>
+                                                        @foreach ($tipo_especialidades as $tipo)
+                                                            @if ($tipo->id == $profesional->id_tipo_especialidad)
+                                                                <option value="{{ $tipo->id }}" selected>
+                                                                    {{ $tipo->nombre }}
+                                                                </option>
+                                                            @else
+                                                                <option value="{{ $especialidad->id }}">
+                                                                    {{ $tipo->nombre }}
+                                                                </option>
+                                                            @endif
                                                         @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="floating-label-activo">Sub Especialidad</label>
                                                     <select class="form-control form-control-sm" id="editar_especialidad" name="editar_especialidad">
-                                                        <option>Seleccione su Especialidad</option>
-                                                        @foreach ($especialidades as $especialidad)
-                                                        @if ($especialidad->id == $profesional->id_especialidad)
-                                                        <option value="{{ $especialidad->id }}" selected>
-                                                            {{ $especialidad->nombre }}
-                                                        </option>
-                                                        @else
-                                                        <option value="{{ $especialidad->id }}">
-                                                            {{ $especialidad->nombre }}
-                                                        </option>
-                                                        @endif
+                                                        <option>Seleccione</option>
+                                                        @foreach ($sub_tipo_especialidades as $sub_tipo)
+                                                            @if ($sub_tipo->id == $profesional->id_sub_tipo_especialidad)
+                                                                <option value="{{ $sub_tipo->id }}" selected>
+                                                                    {{ $sub_tipo->nombre }}
+                                                                </option>
+                                                            @else
+                                                                <option value="{{ $sub_tipo->id }}">
+                                                                    {{ $sub_tipo->nombre }}
+                                                                </option>
+                                                            @endif
                                                         @endforeach
                                                     </select>
                                                 </div>

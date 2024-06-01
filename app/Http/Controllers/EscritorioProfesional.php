@@ -1335,7 +1335,42 @@ class EscritorioProfesional extends Controller
     public function mi_perfil()
     {
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $txt_especialidades = '';
+        $txt_tipo_especialidades = '';
+        $txt_sub_tipo_especialidades = '';
+
         $especialidades = Especialidad::all();
+
+        $tipo_especialidades = TipoEspecialidad::all();
+        if($profesional->id_especialidad)
+        {
+            $tipo_especialidades = TipoEspecialidad::where('id_especialidad', $profesional->id_especialidad)->get();
+            $txt_especialidades = '';
+            $especialidad_temp = Especialidad::where('id', $profesional->id_especialidad)->get()->first();
+            if($especialidad_temp)
+                $txt_especialidades = $especialidad_temp->nombre;
+        }
+
+        $sub_tipo_especialidades = SubTipoEspecialidad::all();
+        if($profesional->id_tipo_especialidad)
+        {
+            $sub_tipo_especialidades = SubTipoEspecialidad::where('id_tipo_especialidad', $profesional->id_tipo_especialidad)->get();
+            $txt_tipo_especialidades = '';
+            $tipo_especialidad_temp = TipoEspecialidad::where('id', $profesional->id_tipo_especialidad)->get()->first();
+            if($especialidad_temp)
+                $txt_tipo_especialidades = $tipo_especialidad_temp->nombre;
+        }
+
+        if($profesional->id_sub_tipo_especialidad)
+        {
+            $txt_sub_tipo_especialidades = '';
+            $sub_tipo_especialidades_temp = SubTipoEspecialidad::where('id', $profesional->id_sub_tipo_especialidad)->get()->first();
+
+            if($sub_tipo_especialidades_temp)
+                $txt_sub_tipo_especialidades = $sub_tipo_especialidades_temp->nombre;
+
+        }
+
         $regiones = Region::all();
         $ciudades = Ciudad::all();
         $perfil_academico = ProfesionalAntecedenteAcademico::where('id_profesional',$profesional->id)->get();
@@ -1374,6 +1409,11 @@ class EscritorioProfesional extends Controller
             [
                 'profesional' => $profesional,
                 'especialidades' => $especialidades,
+                'tipo_especialidades' => $tipo_especialidades,
+                'sub_tipo_especialidades' => $sub_tipo_especialidades,
+                'txt_especialidades' => $txt_especialidades,
+                'txt_tipo_especialidades' => $txt_tipo_especialidades,
+                'txt_sub_tipo_especialidades' => $txt_sub_tipo_especialidades,
                 'regiones' => $regiones,
                 'ciudades' => $ciudades,
                 'perfil_academico' => $perfil_academico,
