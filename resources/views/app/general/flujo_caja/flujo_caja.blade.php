@@ -60,7 +60,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="btn btn-sm btn-outline-info mr-1 active" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="true">
+                                    <a class="btn btn-sm btn-outline-info mr-1" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="true">
                                         Rendiciones de caja Historico
                                     </a>
                                 </li>
@@ -287,7 +287,7 @@
                                         </div>
 
                                         {{-- PESTAÑA GESTION RECEPCION DE PROGRAMAS --}}
-                                        <div class="tab-pane fade show " id="pills-programas" role="tabpanel" aria-labelledby="pills-programas-tab">
+                                        <div class="tab-pane" id="pills-programas" role="tabpanel" aria-labelledby="pills-programas-tab">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <h5 class="text-c-blue d-inline float-left f-18 pt-1">Rendición de programas</h5>
@@ -424,7 +424,7 @@
                                         </div>
 
                                         {{-- PESTAÑA DE GESTION DE BONOS --}}
-                                        <div class="tab-pane fade show " id="pills-gestion_bonos" role="tabpanel" aria-labelledby="pills-gestion_bonos-tab">
+                                        <div class="tab-pane" id="pills-gestion_bonos" role="tabpanel" aria-labelledby="pills-gestion_bonos-tab">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <h5 class="text-c-blue d-inline float-left f-18 pt-1">Gestión de Bonos</h5>
@@ -570,7 +570,7 @@
                                         </div>
 
                                         {{-- PESTAÑA DE GESTION DE BONOS PROGRAMAS --}}
-                                        <div class="tab-pane fade show " id="pills-gestion_bonos_programa" role="tabpanel" aria-labelledby="pills-gestion_bonos_programa-tab">
+                                        <div class="tab-pane" id="pills-gestion_bonos_programa" role="tabpanel" aria-labelledby="pills-gestion_bonos_programa-tab">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <h5 class="text-c-blue d-inline float-left f-18 pt-1">Gestión de Bonos Programa</h5>
@@ -682,7 +682,7 @@
                                         </div>
 
 										{{-- PESTAÑA DE VENTA DE BONOS PROGRAMAS --}}
-                                        <div class="tab-pane fade show " id="pills-venta_bonos" role="tabpanel" aria-labelledby="pills-venta_bonos-tab">
+                                        <div class="tab-pane" id="pills-venta_bonos" role="tabpanel" aria-labelledby="pills-venta_bonos-tab">
 											<div class="row">
                                                 <div class="col-md-12">
                                                     <h5 class="text-c-blue d-inline float-left f-18 pt-1">Venta de Bonos</h5>
@@ -749,7 +749,7 @@
                                                             <th class="text-center align-middle">T.Copago</th>
                                                             <th class="text-center align-middle"><label>Rut Prestador</label><br><label>Nombre</label></th>
                                                             <th class="text-center align-middle">Convenio</th>
-                                                            <th class="text-center align-middle">Asegurador</th>
+                                                            {{-- <th class="text-center align-middle">Asegurador</th> --}}
                                                             <th class="text-center align-middle">Accion</th>
                                                         </tr>
                                                     </thead>
