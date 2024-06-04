@@ -489,6 +489,7 @@ class EscritorioProfesional extends Controller
             $horas_dia = HoraMedica::where('id_profesional', $profesional->id)->whereDate('fecha_consulta', \Carbon\Carbon::now()->format('Y-m-d'))->get();
             foreach ($horas_dia as $h) {
                 $h->paciente = Paciente::where('id', $h->id_paciente)->first();
+                $h->lugar_atencion = LugarAtencion::where('id', $h->id_lugar_atencion)->first();
             }
 
             $lugar_atencion_prof = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->count();
@@ -2150,6 +2151,7 @@ class EscritorioProfesional extends Controller
 
         foreach ($horas_medicas as $h) {
             $h->id_paciente = Paciente::where('id', $h->id_paciente)->first();
+            $h->lugar_atencion = LugarAtencion::where('id', $h->id_lugar_atencion)->first();
         }
 
         return json_encode($horas_medicas);

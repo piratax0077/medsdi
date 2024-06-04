@@ -2951,8 +2951,7 @@
 
                             var hora_inicio = data[i].hora_inicio;
                             //var salida = formato(fecha);
-                            var paciente = data[i].id_paciente.nombres + ' ' + data[i].id_paciente.apellido_uno + ' ' +
-                                data[i].id_paciente.apellido_dos;
+                            var paciente = data[i].id_paciente.nombres + ' ' + data[i].id_paciente.apellido_uno + ' ' + data[i].id_paciente.apellido_dos;
 
                             var j = 1; //contador para asignar id al boton que borrara la fila
                             var fila = '';
@@ -2964,6 +2963,7 @@
                             fila += '	<strong>';
                             //fila += '		<br style="line-height: 1%;"><span>'+data[i].id_paciente.rut+'</span>';
                             fila += '</td>';
+                            fila += '<td class="text-center align-left">' + data[i].lugar_atencion.nombre + '</td>';
                             fila += '</tr>';
                             //var fila = '<tr class="tr_horas" id="row' + j + '"><td>' +
                             //    hora_inicio + '</td><td>' +

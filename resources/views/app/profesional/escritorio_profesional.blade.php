@@ -100,6 +100,7 @@
                                         <tr>
                                             <th class="text-center align-left">Hora</th>
                                             <th class="text-center align-left">Paciente</th>
+                                            <th class="text-center align-left">Lugar Atención</th>
                                             <!--<th class="text-center align-middle">Acción</th>-->
                                         </tr>
                                     </thead>
@@ -114,6 +115,7 @@
 														<strong>
 														<!--<br style="line-height: 1%;"><span>{{ $hd->paciente->rut }}</span>-->
                                                     </td>
+                                                    <td class="text-center align-left">{{ $hd->lugar_atencion->nombre }}</td>
                                                     <!--
                                                     <td class="text-center align-middle">
                                                         <button href="#!" class="btn btn-info btn-sm btn-icon"
