@@ -9109,11 +9109,11 @@ class ficha_atencionController extends Controller
                         $ficha_previas = FichaAtencion::where($filtro_previas)->get();
 
                         $datos['ficha_previas'] = $ficha_previas;
-
-
+						
                         /** FICHA ATENCION ACTUAL */
-                        if(!empty($hora->id_ficha_atencion))
+                        if(empty($hora->id_ficha_atencion))
                         {
+							
                             $nueva_ficha_atencion = new FichaAtencion();
                             $nueva_ficha_atencion->id_paciente = $paciente->id;
                             $nueva_ficha_atencion->id_profesional = $profesional->id;
