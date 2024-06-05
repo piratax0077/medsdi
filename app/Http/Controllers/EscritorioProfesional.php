@@ -120,7 +120,9 @@ class EscritorioProfesional extends Controller
         // $profesional->email = $request->email;
         // $profesional->fecha_nacimiento = $request->fecha_nacimiento;
         $profesional->sexo = $request->sexo;
-        $profesional->id_especialidad = $request->especialidad;
+        $profesional->id_especialidad = $request->id_especialidad;
+        $profesional->id_tipo_especialidad = $request->id_tipo_especialidad;
+        $profesional->id_sub_tipo_especialidad = $request->id_sub_tipo_especialidad;
         $profesional->save();
 
         if (!$profesional->save()) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Asistente;
 use App\Models\AsistenteContactoEmergencia;
 use App\Models\AsistenteTipo;
+use App\Models\Bancos;
 use App\Models\Bodega;
 use App\Models\Categoria;
 use App\Models\Ciudad;
@@ -13,6 +14,7 @@ use App\Models\ContratoDependiente;
 use App\Models\Direccion;
 use App\Models\Especialidad;
 use App\Models\HoraMedica;
+use App\Models\LiquidacionRecibo;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\Prevision;
@@ -110,6 +112,32 @@ class EscritorioAsistenteCmJefe extends Controller
         $regiones = Region::all();
         $ciudades = Ciudad::where('id_region',  $direccion_region)->get();
         $contacto = $asistente->ContactosEmergencia()->get();
+        $bancos = Bancos::where('estado',1)->get();
+        $liquidacion = LiquidacionRecibo::where('id_seccion',Auth::user()->id)->get();
+
+        $liqui_principal = 0;
+
+        if($liquidacion)
+        foreach ($liquidacion as $key => $value)
+        {
+            $id_banco = decrypt($value->casa);
+            $banco = Bancos::select('id', 'nombre')->where('id',$id_banco)->first();
+            $liquidacion[$key]->banco = $banco;
+            if($value->serie!='')
+                $liquidacion[$key]->serie  = decrypt($value->serie);
+            if($value->autor!='')
+                $liquidacion[$key]->autor = decrypt($value->autor);
+            if($value->casa!='')
+                $liquidacion[$key]->casa = decrypt($value->casa);
+            if($value->numero_control!='')
+                $liquidacion[$key]->numero_control = decrypt($value->numero_control);
+            if($value->email!='')
+                $liquidacion[$key]->email = decrypt($value->email);
+            if($value->otro!='')
+                $liquidacion[$key]->otro = decrypt($value->otro);
+            if($liqui_principal == 0 && $value->principal == 1)
+                $liqui_principal = 1;
+        }
 
         return view('app.asistente_cm.perfil_asistente', [
             'asistente' => $asistente,
@@ -120,6 +148,9 @@ class EscritorioAsistenteCmJefe extends Controller
             'direccion_region' => $direccion_region,
             'direccion_region_nombre' => $direccion_region_nombre,
             'contacto' => $contacto,
+            'bancos' => $bancos,
+            'liquidacion' => $liquidacion,
+            'liqui_principal' => $liqui_principal,
         ]);
     }
 

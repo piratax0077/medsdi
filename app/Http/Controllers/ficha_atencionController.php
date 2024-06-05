@@ -1258,6 +1258,7 @@ class ficha_atencionController extends Controller
                                                             }])
                                                             ->where('id_paciente', $paciente->id)
                                                             ->get();
+
         foreach ($examenes_especialidad_realizados as $key_ex_esp_realizado => $value_ex_esp_realizado)
         {
             if($value_ex_esp_realizado->id_sub_tipo_especialidad == 27)
@@ -9109,11 +9110,11 @@ class ficha_atencionController extends Controller
                         $ficha_previas = FichaAtencion::where($filtro_previas)->get();
 
                         $datos['ficha_previas'] = $ficha_previas;
-						
+
                         /** FICHA ATENCION ACTUAL */
                         if(empty($hora->id_ficha_atencion))
                         {
-							
+
                             $nueva_ficha_atencion = new FichaAtencion();
                             $nueva_ficha_atencion->id_paciente = $paciente->id;
                             $nueva_ficha_atencion->id_profesional = $profesional->id;

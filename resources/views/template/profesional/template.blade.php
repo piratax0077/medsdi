@@ -378,7 +378,9 @@
             let apellido_uno = $('#editar_apellido_uno').val();
             let apellido_dos = $('#editar_apellido_dos').val();
             let sexo = $('#editar_sexo').val();
-            let especialidad = $('#editar_especialidad').val();
+            let id_especialidad = $('#id_especialidad').val();
+            let id_tipo_especialidad = $('#id_tipo_especialidad').val();
+            let id_sub_tipo_especialidad = $('#id_sub_tipo_especialidad').val();
             let url = "{{ route('profesional.editar_datos_personales_perfil') }}";
 
             $.ajax({
@@ -393,7 +395,9 @@
                         apellido_uno: apellido_uno,
                         apellido_dos: apellido_dos,
                         sexo: sexo,
-                        especialidad: especialidad
+                        id_especialidad: id_especialidad,
+                        id_tipo_especialidad: id_tipo_especialidad,
+                        id_sub_tipo_especialidad: id_sub_tipo_especialidad,
 
                     },
                 })
@@ -3914,7 +3918,7 @@
             $('#mi_horario_table tbody').empty();
             $('#duracion_horario').val(0);
             $('#tipo_agenda_medica').val(0);
-            $('#dia_horario').val(0);
+            $('#dia_horario').val('');
             $('#hora_inicio_horario').val(0);
             $('#hora_termino_horario').val(0);
 
@@ -6537,6 +6541,104 @@
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
+        }
+
+        function carga_tipo_especialidad(input_origen, input_destino, id)
+        {
+            var id_especialidad = $('#'+input_origen).val();
+
+            if( id_especialidad )
+            {
+                let url = "{{ route('web.profesional.buscar_tipo_especialidad') }}";
+
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    data: {
+                        id_especialidad: id_especialidad
+                    },
+                })
+                .done(function(data) {
+
+                    if (data.estado == 1)
+                    {
+                        let tipo_especialidades = $('#'+input_destino);
+
+                        tipo_especialidades.find('option').remove();
+                        tipo_especialidades.append('<option value="">Seleccione</option>');
+                        if(data.registros.length > 0)
+                        {
+                            $(data.registros).each(function(i, v) { // indice, valor
+                                tipo_especialidades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                            })
+                        }
+                        else
+                        {
+                            tipo_especialidades.append('<option value="0">No Aplica</option>');
+                            tipo_especialidades.val(0);
+                        }
+                        if(id != '')
+                            tipo_especialidades.val(id);
+                    }
+                    else
+                    {
+                        console.log('sin registros');
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
+        }
+
+        function carga_sub_tipo_especialidad(input_origen, input_destino, id)
+        {
+            var id_tipo_especialidad = $('#'+input_origen).val();
+
+            if( id_tipo_especialidad )
+            {
+                let url = "{{ route('web.profesional.buscar_sub_tipo_especialidad') }}";
+
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    data: {
+                        id_tipo_especialidad: id_tipo_especialidad
+                    },
+                })
+                .done(function(data) {
+
+                    if (data.estado == 1)
+                    {
+                        let sub_tipo_especialidades = $('#'+input_destino);
+
+                        sub_tipo_especialidades.find('option').remove();
+                        sub_tipo_especialidades.append('<option value="">Seleccione</option>');
+                        if(data.registros.length > 0)
+                        {
+                            $(data.registros).each(function(i, v) { // indice, valor
+                                sub_tipo_especialidades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                            })
+                        }
+                        else
+                        {
+                            sub_tipo_especialidades.append('<option value="0">No Aplica</option>');
+                            sub_tipo_especialidades.val(0);
+                        }
+                        if(id != '')
+                            sub_tipo_especialidades.val(id);
+                    }
+                    else
+                    {
+                        console.log('sin registros');
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
         }
     </script>
 

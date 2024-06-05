@@ -550,9 +550,9 @@
                             </div>
                             <div class="col-sm-6 mb-2">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Día </label>
+                                    <label class="floating-label-activo-sm">Día </label>
                                     <select name="dia_horario" id="dia_horario" class=" form-control">
-                                        <option value="">Seleccione d&iacute;a de atenci&oacute;n</option>
+                                        <option value="" selected>Seleccione d&iacute;a de atenci&oacute;n</option>
                                         <option value="1">Lunes</option>
                                         <option value="2">Martes</option>
                                         <option value="3">Mi&eacute;rcoles</option>

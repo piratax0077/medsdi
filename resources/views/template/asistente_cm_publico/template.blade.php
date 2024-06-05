@@ -95,8 +95,66 @@
         </div>
     </div>
     {{--  @include('template.asistente_cm.menu')  --}}
-    @include('template.asistente_cm_publico.menu')
-    @include('template.asistente_cm_publico.header')
+
+    @php
+        $user = Auth::user();
+        // var_dump(  );
+
+        // echo json_encode(Auth::user()->roles);
+        // var_dump(Auth::user()->role());
+        // var_dump(auth()->user->role);
+        // die();
+    @endphp
+
+    @switch($user)
+        @case($user->hasRole('Asistente'))
+            @include('template.asistente_cm_publico.menu')
+            @include('template.asistente_cm_publico.header')
+        @break
+
+        @case($user->hasRole('AsistenteAdm'))
+            @include('template.asistente_adm_cm.menu')
+            @include('template.asistente_adm_cm.header')
+        @break
+
+        @case($user->hasRole('AsistenteJefaCaja'))
+            @include('template.asistente_cm_publico.menu')
+            @include('template.asistente_cm_publico.header')
+        @break
+
+        @case($user->hasRole('AsistenteCaja'))
+            @include('template.asistente_cm_publico.menu')
+            @include('template.asistente_cm_publico.header')
+        @break
+
+        @case($user->hasRole('AsistenteOnline'))
+            @include('template.asistente_on.menu')
+            @include('template.asistente_on.header')
+        @break
+
+        @case($user->hasRole('AsistenteManejoAgenda'))
+            @include('template.asistente_cm_manejo_agenda.menu')
+            @include('template.asistente_cm_manejo_agenda.header')
+        @break
+
+        {{--
+        @case($user->hasRole('AsistenteDentalTecn'))
+        @break
+
+        @case($user->hasRole('AsistenteDental'))
+        @break
+
+        @case($user->hasRole('AsistenteFarmacia'))
+        @break
+
+        @case($user->hasRole('AsistenteCargaExamenExterno'))
+        @break
+        --}}
+        @default
+            @include('template.asistente_cm_publico.menu')
+            @include('template.asistente_cm_publico.header')
+
+    @endswitch
 
     @yield('content')
     @yield('modales')

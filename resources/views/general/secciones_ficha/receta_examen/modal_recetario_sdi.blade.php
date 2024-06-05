@@ -705,7 +705,8 @@
     function i_medicamento()
     {
         ver_medicamento_ficha_medica_sdi();
-        $('#indicar_recetario').modal({backdrop: 'static', keyboard: false});
+        // $('#indicar_recetario').modal({backdrop: 'static', keyboard: false});
+        $('#indicar_recetario').modal('show',{backdrop: 'static', keyboard: false});
     }
 
     function cerrarModalMedicamentosFicha_sdi()
@@ -1484,6 +1485,7 @@
                         // buttons: "Aceptar",
                         //SuccessMode: true,
                     });
+                    $('#indicar_recetario').modal('hide');
                 }
                 else
                 {

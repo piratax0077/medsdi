@@ -179,7 +179,7 @@
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="floating-label-activo">Profesión</label>
-                                                    <select class="form-control form-control-sm" id="exampleFormControlSelect1">
+                                                    <select class="form-control form-control-sm" id="id_especialidad" name="id_especialidad" onchange="carga_tipo_especialidad('id_especialidad', 'id_tipo_especialidad', '');">
                                                         <option>Seleccione</option>
                                                         @foreach ($especialidades as $especialidad)
                                                             @if ($especialidad->id == $profesional->id_especialidad)
@@ -196,7 +196,7 @@
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="floating-label-activo">Especialidad</label>
-                                                    <select class="form-control form-control-sm" id="editar_especialidad" name="editar_especialidad">
+                                                    <select class="form-control form-control-sm" id="id_tipo_especialidad" name="id_tipo_especialidad" onchange="carga_sub_tipo_especialidad('id_tipo_especialidad', 'id_sub_tipo_especialidad', '');">
                                                         <option>Seleccione</option>
                                                         @foreach ($tipo_especialidades as $tipo)
                                                             @if ($tipo->id == $profesional->id_tipo_especialidad)
@@ -213,7 +213,7 @@
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="floating-label-activo">Sub Especialidad</label>
-                                                    <select class="form-control form-control-sm" id="editar_especialidad" name="editar_especialidad">
+                                                    <select class="form-control form-control-sm" id="id_sub_tipo_especialidad" name="id_sub_tipo_especialidad">
                                                         <option>Seleccione</option>
                                                         @foreach ($sub_tipo_especialidades as $sub_tipo)
                                                             @if ($sub_tipo->id == $profesional->id_sub_tipo_especialidad)

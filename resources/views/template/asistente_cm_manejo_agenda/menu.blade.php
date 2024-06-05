@@ -13,7 +13,7 @@
                 <div id="nav-user-link">
                     <ul class="list-inline">
                         <li class="list-inline-item">
-                            <a href="{{ ROUTE('asistenteon.perfil') }}" data-toggle="tooltip" title="Mi perfil">
+                            <a href="{{ ROUTE('asistentecm.ma.perfil') }}" data-toggle="tooltip" title="Mi perfil">
                                 <i class="feather icon-user"></i>
                             </a>
                         </li>
