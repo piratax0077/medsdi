@@ -147,6 +147,7 @@ class EscritorioAsistenteCmPublico extends Controller
             'region' => $regiones,
             'ciudades' => $ciudades,
             'direccion_ciudad' => $direccion_ciudad,
+            'direccion_ciudad_nombre' => $direccion_ciudad_objeto->nombre,
             'direccion_region' => $direccion_region,
             'direccion_region_nombre' => $direccion_region_nombre,
             'contacto' => $contacto,

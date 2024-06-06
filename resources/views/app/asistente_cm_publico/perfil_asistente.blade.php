@@ -61,7 +61,7 @@
 										<a class="btn btn-outline-info btn-sm mb-2 mx-2 active" id="personal-tab" data-toggle="tab" href="#info_personal" role="tab" aria-controls="info_personal" aria-selected="true"><i class="feather icon-user mr-2"></i>Información personal</a>
 									</li>
                                     <li class="nav-item">
-                                        <a class="btn btn-outline-info btn-sm mb-2 mx-2" id="liquidacion-tab" data-toggle="tab" href="#info_liquidacion" role="tab" aria-controls="info_liquidacion" aria-selected="false"><i class="feather icon-lock mr-2"></i>Manejo de Liquidaciones</a>
+                                        <a class="btn btn-outline-info btn-sm mb-2 mx-2" id="info-liquidacion-tab" data-toggle="tab" href="#info-liquidacion" role="tab" aria-controls="info-liquidacion" aria-selected="false"><i class="feather icon-lock mr-2"></i>Manejo de Cuentas</a>
                                     </li>
 									<li class="nav-item">
 										<a class="btn btn-outline-info btn-sm mb-2 mx-2" id="emergencia-tab" data-toggle="tab" href="#emergencia" role="tab" aria-controls="emergencia" aria-selected="false"><i class="feather icon-user-plus mr-2"></i>Contacto de emergencia</a>
@@ -265,7 +265,7 @@
 												<div class="form-group row">
 													<label class="col-sm-4 col-form-label font-weight-bolder" >Ciudad</label>
 													@if($asistente->Direccion()->first())
-														<div class="col-sm-7 my-auto ml-2" id="ver_ciudad"> {{ $asistente->Direccion()->first()->Ciudad()->first()->nombre }} </div>
+														<div class="col-sm-7 my-auto ml-2" id="ver_ciudad"> {{ $direccion_ciudad_nombre }} </div>
 													@else
 														<div class="col-sm-7 my-auto ml-2" id="ver_ciudad"></div>
 													@endif
@@ -1372,6 +1372,52 @@
         {{--  ***** FIN  FUNCIONES ******  --}}
 
         {{--  BUSCANDO CIUDAD --}}
+
+        function buscar_ciudad_general(input_region, input_ciudad, id_ciudad=0)
+        {
+            var region = $('#'+input_region).val();
+            console.log(region);
+            let url = "{{ route('home.buscar_ciudad_region') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    region: region,
+                },
+            })
+            .done(function(data) {
+                if (data != null) {
+                    data = JSON.parse(data);
+
+                    let ciudades = $('#'+input_ciudad);
+
+                    ciudades.find('option').remove();
+                    ciudades.append('<option value="0">seleccione</option>');
+                    $(data).each(function(i, v) { // indice, valor
+                        ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                    })
+
+                    if(id_ciudad != 0)
+                    {
+                        ciudades.val(id_ciudad);
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar las ciudades",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        };
+
         function buscar_ciudades(id_ciudad=0) {
             buscar_ciudad(id_ciudad);
         }

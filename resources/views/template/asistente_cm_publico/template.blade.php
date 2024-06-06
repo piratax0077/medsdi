@@ -108,8 +108,8 @@
 
     @switch($user)
         @case($user->hasRole('Asistente'))
-            @include('template.asistente_cm_publico.menu')
-            @include('template.asistente_cm_publico.header')
+            @include('template.asistente.menu')
+            @include('template.asistente.header')
         @break
 
         @case($user->hasRole('AsistenteAdm'))
