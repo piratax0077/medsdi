@@ -122,11 +122,11 @@
         {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
-		
+
     </div>
     <script>
     </script>
-	
+
     {{-- listo --}}
 	@include('atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_tunner_f')
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_ciclo")
@@ -151,6 +151,6 @@
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.m_ucalculoedadgest")
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.carnet_alta_obstetrico")
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.protocolo_parto")
-	
+
+    @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
 @endsection
-@include('app.profesional.modales.boton_flotante_agenda_autorizacion')

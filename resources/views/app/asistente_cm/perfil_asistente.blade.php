@@ -626,8 +626,11 @@
     <script>
         $(document).ready(function(){
             $( "#editar_telefono_uno" ).focus(function() {
-                $("#editar_telefono_uno").val("+569");
-                $("#editar_telefono_uno").unbind();
+                if($("#editar_telefono_uno").val() == '')
+                {
+                    $("#editar_telefono_uno").val("+569");
+                    $("#editar_telefono_uno").unbind();
+                }
             });
         })
         {{--  **** PERFIL DE ASISTENTE  --}}
