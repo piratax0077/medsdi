@@ -20,7 +20,7 @@
         <!-- data tables css -->
         <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
-		<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">																								
+		<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
         <!-- fileupload-custom css -->
         <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}?t={{ time() }}">
         <!--Accordion-->
@@ -50,10 +50,12 @@
 
         <!--Estilos escritorios-->
         <link rel="stylesheet"  href="{{ asset('css/escritorios.css') }}">
-        
+
 		<!-- SERLECT2-->
         <link rel="stylesheet"  href="{{ asset('css/plugins/select2.min.css') }}">
-		
+
+        @yield('css-btn-autorizacion')
+
         {{--  /** agregar css */  --}}
         <style>
             .ui-front {
@@ -174,6 +176,9 @@
 
         <!-- funciones generales -->
         <script src="{{ asset('js/funciones.js') }}"></script>
+
+
+        @yield('page-script-btn-autorizacion')
 
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');

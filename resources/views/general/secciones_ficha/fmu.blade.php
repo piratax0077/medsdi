@@ -406,22 +406,24 @@
                                                         <tbody>
                                                             @if ($examenes_especialidad_realizados)
                                                                 @foreach ($examenes_especialidad_realizados as $exam)
-                                                                    @if ($exam->HoraMedica->id_estado == 6 )
-                                                                        <tr>
-                                                                            <td>{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
-                                                                            <td>{{ $exam->id }}</td>
-                                                                            <td>{{ $exam->nombre }}</td>
-                                                                            <td>
-                                                                                @if ($exam->SubTipoEspecialidad)
-                                                                                    {{ $exam->SubTipoEspecialidad->nombre }}
-                                                                                @else
-                                                                                    -
-                                                                                @endif
-                                                                            </td>
-                                                                            <td>
-                                                                                <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad('{{ $exam->id }}',1);"><i class="feather icon-file-text"></i> Ver examen</button>
-                                                                            </td>
-                                                                        </tr>
+                                                                    @if ($exam->HoraMedica)
+                                                                        @if ($exam->HoraMedica->id_estado == 6 )
+                                                                            <tr>
+                                                                                <td>{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
+                                                                                <td>{{ $exam->id }}</td>
+                                                                                <td>{{ $exam->nombre }}</td>
+                                                                                <td>
+                                                                                    @if ($exam->SubTipoEspecialidad)
+                                                                                        {{ $exam->SubTipoEspecialidad->nombre }}
+                                                                                    @else
+                                                                                        -
+                                                                                    @endif
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad('{{ $exam->id }}',1);"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
                                                                     @endif
                                                                 @endforeach
                                                             @endif

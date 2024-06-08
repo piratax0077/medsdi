@@ -97,6 +97,7 @@
         <!-- SIDE BAR sico-->
         @include("atencion_otros_prof.modales"){{-- base de botones de sidebar --}}
         @include("atencion_otros_prof.include.sidebar_derecho_psicologia"){{-- modales y data de sidebar especialidad --}}
+		@include("general.modal.modal_no_disponible")
 
 
         <!--Modals de especialidad -->
@@ -115,9 +116,7 @@
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.modal_encuesta_aliment")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.modal_indicadores_nutri")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.planificacion_nutri")  --}}
-    @include('general.hospitalizacion.seccion_ficha_hospitalizacion.sala_hospitalizacion_op')
+    {{-- @include('general.hospitalizacion.seccion_ficha_hospitalizacion.sala_hospitalizacion_op') --}}
 
-
-
-
-@endsection
+	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
+@endsection																  

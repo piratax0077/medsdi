@@ -214,7 +214,7 @@
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="floating-label-activo">Sub Especialidad</label>
                                                     <select class="form-control form-control-sm" id="id_sub_tipo_especialidad" name="id_sub_tipo_especialidad">
-                                                        <option>Seleccione</option>
+                                                        <option value="">Seleccione</option>
                                                         @foreach ($sub_tipo_especialidades as $sub_tipo)
                                                             @if ($sub_tipo->id == $profesional->id_sub_tipo_especialidad)
                                                                 <option value="{{ $sub_tipo->id }}" selected>

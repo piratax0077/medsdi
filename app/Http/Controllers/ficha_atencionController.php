@@ -8603,6 +8603,7 @@ class ficha_atencionController extends Controller
         {
 
             $profesional = Profesional::find($hora->id_profesional);
+
             $paciente = Paciente::find($hora->id_paciente);
 
             $ficha_previas = '';
@@ -9320,6 +9321,49 @@ class ficha_atencionController extends Controller
                 case 6: //SICOLOGÍA
                     if(!empty($profesional->id_tipo_especialidad))
                     {
+                        /** FICHAS DE ATENCIONES PREVIAS */
+                        $filtro_previas = array();
+                        $filtro_previas[] = array('id_paciente', $paciente->id);
+                        $filtro_previas[] = array('confidencial', '0');
+                        $filtro_previas[] = array('finalizada', 1);
+                        $filtro_previas[] = array('id_profesional', $profesional->id);
+                        $ficha_previas = FichaAtencion::where($filtro_previas)->get();
+
+                        $datos['ficha_previas'] = $ficha_previas;
+
+
+                        /** FICHA ATENCION ACTUAL */
+                        if(empty($hora->id_ficha_atencion))
+                        {
+                            $nueva_ficha_atencion = new FichaAtencion();
+                            $nueva_ficha_atencion->id_paciente = $paciente->id;
+                            $nueva_ficha_atencion->id_profesional = $profesional->id;
+                            $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                            if ($nueva_ficha_atencion->save())
+                            {
+                                $hora->id_estado = 5;
+                                $hora->fecha_realizacion_consulta = now();
+                                $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
+                                $hora->save();
+                                $ficha_actual_nueva = $nueva_ficha_atencion->id;
+                            }
+                            else
+                            {
+                                $nueva_ficha_atencion = '';
+                            }
+                        }
+                        else
+                        {
+                            $filtro_fichaAtencion = array();
+                            $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                            $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
+                            $ficha_actual_nueva = FichaAtencion::where($filtro_fichaAtencion)->first();
+                        }
+
+                        $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                        $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
+
                         switch (intval($profesional->id_tipo_especialidad))
                         {
                             case 34:// 34	SICOLOGÍA GENERAL ADULTOS
