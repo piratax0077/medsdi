@@ -718,6 +718,16 @@ Route::group([
 });
 
 
+Route::group([
+    'middleware' => ['role:Profesional|Paciente|Admin'],
+    'prefix' => 'log/datos/medico',
+], function () {
+    /** HISTORICO MODIFICACION DE DATOS MEDICOS DEL PACIENTE */
+    Route::post('/registro', [App\Http\Controllers\PacienteHistoricoDatosMedicosController::class, 'registrar_r'] )->name('log.hist.medico.registro');
+    Route::get('/ver', [App\Http\Controllers\PacienteHistoricoDatosMedicosController::class, 'verRegistrosPaciente'] )->name('log.hist.medico.ver');
+});
+
+
 /* ASISTENTE CONSULTA*/
 Route::group([
     'middleware' => ['role:Asistente|Admin'],

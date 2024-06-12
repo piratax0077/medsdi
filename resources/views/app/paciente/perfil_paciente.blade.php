@@ -475,97 +475,60 @@
                                                             <div class="form-row">
                                                                 <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3">
                                                                     <label class="font-weight-bolder ml-0 mb-0">Fecha</label>
-                                                                    <div>00-00-000 00:00:00</div>
+                                                                    <div>
+                                                                        @if ($log_datos_medicos[0])
+                                                                            {{ date('d-m-Y H:i:s',strtotime($log_datos_medicos[0]->created_at)) }}
+                                                                        @else
+                                                                            00-00-000 00:00:00
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
                                                                 <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3">
                                                                     <label class="font-weight-bolder ml-0 mb-0">Nombre del Profesional</label>
                                                                     <div>
-                                                                        @if (isset($profesional))
-                                                                                {{ $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos }}
-                                                                                @endif
+                                                                        @if ($log_datos_medicos[0])
+                                                                            {{ $log_datos_medicos[0]->nombre . ' ' . $log_datos_medicos[0]->apellido_uno . ' ' . $log_datos_medicos[0]->apellido_dos }}
+                                                                        @else
+                                                                            -
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3">
                                                                     <label class="font-weight-bolder ml-0 mb-0">Rut del Profesional</label>
-                                                                    <div>@if (isset($profesional))
-                                                                                {{ $profesional->rut }}
-                                                                                @endif</div>
+                                                                    <div>
+                                                                        @if ($log_datos_medicos[0])
+                                                                            {{ $log_datos_medicos[0]->rut }}
+                                                                        @else
+                                                                            -
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
                                                                 <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3">
                                                                     <label class="font-weight-bolder ml-0 mb-0">Especialidad</label>
-                                                                    <div>@if (isset($profesional))
-                                                                                {{ $profesional->Especialidad()->first()->nombre }}
-                                                                                @endif</div>
+                                                                    <div>
+                                                                        @if ($log_datos_medicos[0])
+                                                                            {{ $log_datos_medicos[0]->tipo_especialidad }}
+                                                                            @if ($log_datos_medicos[0]->sub_tipo_especialidad)
+                                                                                , {{ $log_datos_medicos[0]->sub_tipo_especialidad}}
+                                                                            @endif
+                                                                        @else
+                                                                            -
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
                                                                 <div class="form-group col-sm-12 col-md-6 col-lg-12 col-xl-12">
                                                                     <label class="font-weight-bolder ml-0 mb-0">Detalle de actualización</label>
                                                                     <div>
-                                                                        ¿Donante de sangre? | Órganos a donar | Alergias
+                                                                        @if ($log_datos_medicos[0])
+                                                                            {!! $log_datos_medicos[0]->datos !!}
+                                                                        @else
+                                                                            -
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <!--Cierre: Datos profesional-->
-                                                        <!--(Editar)Datos profesional-->
-                                                        <div class="card-body info_basica_sos collapse" id="info_basica_sos_2">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group row">
-                                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Rut del
-                                                                            Profesional</label>
-                                                                        <div class="col-sm-7">
-                                                                            <input type="text" class="form-control" placeholder="Rut Profesional " value="00000000-0">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group row">
-                                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Fecha de
-                                                                            Actualización</label>
-                                                                        <!--hoy-->
-                                                                        <div class="col-sm-7">
-                                                                            <input type="date" class="form-control" placeholder="Fecha Actualización" value="">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group row">
-                                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Nombres y
-                                                                            Apellidos</label>
-                                                                        <div class="col-sm-7">
-                                                                            <input type="text" class="form-control" placeholder="Nombres y Apellidos" value="Luis Armando Sepulveda Vera">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group row">
-                                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Especialidad</label>
-                                                                        <div class="col-sm-7">
-                                                                            <input type="text" class="form-control" placeholder="Especialidad" value="Medicina Interna">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <div class="form-group row">
-                                                                        <label class="col-sm-12 col-form-label"></label>
-                                                                        <div class="col-sm-12 d-flex justify-content-end">
-                                                                            <button type="submit" class="btn btn-dark mr-2">Verificar
-                                                                                Profesional</button>
-                                                                            <!--Acá se verifican con la API Datos profesional si pasa se habilitan los otros formularios-->
-                                                                            <button type="submit" class="btn btn-danger mr-2">Cancelar</button>
-                                                                            <!--OJO Guardar fecha y nombre del que actualiza  formularios-->
-                                                                            <button type="submit" class="btn btn-info">Guardar
-                                                                                Cambios</button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!--Cierre: (Editar)Datos profesional-->
                                                     </div>
                                                     <!--Cierre: Card Datos profesional-->
                                                 </div>
@@ -585,17 +548,13 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        <tr>
-                                                                            <td>00/00/0000 <br>00:00:00</td>
-                                                                            <td>00.000.000-0<br>Nombre Apellidos<br>Especialidad</td>
-                                                                            <td class="text-wrap" style="font-size: 12px!important;">Medicamentos crónicos</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>00/00/0000 <br>00:00:00</td>
-                                                                            <td>6187674-k<br>Jaime Kriman Astorga<br>Otorrinolaringologo</td>
-                                                                            <td class="text-wrap" style="font-size: 12px!important;"> ¿Donante de sangre? | Órganos a donar | Alergias</td>
-
-                                                                        </tr>
+                                                                        @foreach ($log_datos_medicos as $log)
+                                                                            <tr>
+                                                                                <td>{{ date('d-m-Y',strtotime($log->created_at) ) }} <br>{{ date('H:i:s',strtotime($log->created_at) ) }}</td>
+                                                                                <td>{{ $log->rut }}<br>{{ $log->nombre.' '.$log->apellido_uno.' '.$log->apellido_dos }}<br> {{ !empty($log->especialidad)?$log->especialidad:'' }} {{ !empty($log->tipo_especialidad)?', '.$log->tipo_especialidad:'' }} {{ !empty($log->sub_tipo_especialidad)?', '.$log->sub_tipo_especialidad:'' }}</td>
+                                                                                <td class="text-wrap" style="font-size: 12px!important;">{!! $log->datos !!}</td>
+                                                                            </tr>
+                                                                        @endforeach
                                                                     </tbody>
                                                                 </table>
                                                             </div>

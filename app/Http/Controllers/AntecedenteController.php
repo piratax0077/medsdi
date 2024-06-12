@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Paciente;
 use App\Models\Profesional;
 use App\Models\TipoAntecedente;
+use Illuminate\Support\Facades\Log;
 
 class AntecedenteController extends Controller
 {
@@ -220,6 +221,45 @@ class AntecedenteController extends Controller
 						$datos['med_cronico']['msg'] = 'Falla Registros';
 					}
                 }
+
+                $texto_datos = '';
+
+                switch($request->id_tipo_antecedente)
+                {
+                    case 1: //Antecedentes Anestesias Pacientes
+                        $texto_datos .= 'Registro de Antecedentes Anestesias Pacientes -> Procedimiento: '.$request->procedimiento.', Incidente: '.$request->comentario.', Fecha:'.$request->fecha_regitro.'';
+                    break;
+                    case 2: //Patologías Crónicas
+                        $texto_datos .= 'Registro de Patologías Crónicas -> Nombre: '.$request->nombre.', Comentario:'.$request->comentario;
+                    break;
+                    case 3: //Antecedentes Cirugias y Procedimientos
+                        $texto_datos .= 'Registro de Antecedentes Cirugias y Procedimientos -> Fecha: '.$request->fecha.', Procedimiento: '.$request->procedimiento.', Incidente:'.$request->comentario.'';
+                    break;
+                    case 4: //Antecedentes Hemorragias Pacientes
+                        $texto_datos .= 'Registro de Antecedentes Hemorragias Pacientes -> Procedimiento: '.$request->procedimiento.', Incidente: '.$request->comentario.'';
+                    break;
+                    case 5: //Solicitud de Antecedentes a servicios asistenciales
+                        $texto_datos .= 'Registro de Solicitud de Antecedentes a servicios asistenciales -> Antecedente: '.$request->procedimiento.', Institución: '.$request->institucion.', Fecha:'.$request->fecha.'';
+                    break;
+                    case 6: //Antecedentes de Alergias
+                        $texto_datos .= 'Registro de Antecedentes de Alergias -> Alergia: '.$request->nombre.', Detalle:'.$request->comentario.'';
+                    break;
+                    case 7: //Antecedentes de Medicamento Crónico
+                        $texto_datos .= 'Registro de Antecedentes de Medicamento Crónico -> Medicamento: '.$request->nombre_medicamento_cronico.', Dosis:'.$request->dosis.'';
+                    break;
+                    case 8: //Presenta alguna discapacidad ?
+                        $texto_datos .= 'Registro de Presenta alguna discapacidad ? -> Tipo de Discapacidad: '.$request->discapacidad_tipo.', Grado: '.$request->discapacidad_grado.', Permanente:'.$request->discapacidad_permanente.'';
+                    break;
+                }
+
+                $profesional = Profesional::where('id_usuario', $request->id_users)->get()->first();
+
+                $return_log = PacienteHistoricoDatosMedicosController::registrar($request->id_paciente, $profesional->id, $texto_datos);
+
+                $datos['log_datos_med'] = $return_log;
+                Log::build([
+                    'path' => storage_path('logs/log_datos_medicos_' . date('Ymd') . '.log'),
+                ])->info(json_encode($return_log) );
             }
 			else
 			{
@@ -291,6 +331,8 @@ class AntecedenteController extends Controller
             if($registro)
             {
 
+                $previo = Antecedente::find($request->id);
+
                 if(!empty($request->id_paciente))
                     $registro->id_paciente = $request->id_paciente;
                 if(!empty($request->id_tipo_antecedente))
@@ -310,7 +352,66 @@ class AntecedenteController extends Controller
                     $datos['estado'] = 1;
                     $datos['msg'] = 'Registro Modificado';
                     $datos['request_data'] = $request->all();
-                }else{
+
+                    /** registro log  */
+                    $texto_datos = '';
+                    $datos_previo = (object)json_decode($previo->data);
+
+                    switch($request->id_tipo_antecedente)
+                    {
+                        case 1: //Antecedentes Anestesias Pacientes
+                            $texto_datos .= 'Registro de Antecedentes Anestesias Pacientes -> <br>';
+                            $texto_datos .= 'Previo: Procedimiento: '.$datos_previo->procedimiento.', Incidente: '.$datos_previo->comentario.', Fecha:'.$datos_previo->fecha_regitro.'<br>';
+                            $texto_datos .= 'Nuevo: Procedimiento: '.$request->procedimiento.', Incidente: '.$request->comentario.', Fecha:'.$request->fecha_regitro.'';
+                        break;
+                        case 2: //Patologías Crónicas
+                            $texto_datos .= 'Registro de Patologías Crónicas -> <br>';
+                            $texto_datos .= 'Previo: Nombre: '.$datos_previo->nombre.', Comentario:'.$datos_previo->comentario.'<br>';
+                            $texto_datos .= 'Nuevo: Nombre: '.$request->nombre.', Comentario:'.$request->comentario.'';
+                        break;
+                        case 3: //Antecedentes Cirugias y Procedimientos
+                            $texto_datos .= 'Registro de Antecedentes Cirugias y Procedimientos -> <br>';
+                            $texto_datos .= 'Previo: Fecha: '.$datos_previo->fecha.', Procedimiento: '.$datos_previo->procedimiento.', Incidente:'.$datos_previo->comentario.'<br>';
+                            $texto_datos .= 'Nuevo: Fecha: '.$request->fecha.', Procedimiento: '.$request->procedimiento.', Incidente:'.$request->comentario.'';
+                        break;
+                        case 4: //Antecedentes Hemorragias Pacientes
+                            $texto_datos .= 'Registro de Antecedentes Hemorragias Pacientes -> <br>';
+                            $texto_datos .= 'Previo: Procedimiento: '.$request->procedimiento.', Incidente: '.$datos_previo->comentario.'<br>';
+                            $texto_datos .= 'Nuevo: Procedimiento: '.$request->procedimiento.', Incidente: '.$request->comentario.'';
+                        break;
+                        case 5: //Solicitud de Antecedentes a servicios asistenciales
+                            $texto_datos .= 'Registro de Solicitud de Antecedentes a servicios asistenciales -> <br>';
+                            $texto_datos .= 'Previo: Antecedente: '.$datos_previo->procedimiento.', Institución: '.$datos_previo->institucion.', Fecha:'.$datos_previo->fecha.'<br>';
+                            $texto_datos .= 'Nuevo: Antecedente: '.$request->procedimiento.', Institución: '.$request->institucion.', Fecha:'.$request->fecha.'';
+                        break;
+                        case 6: //Antecedentes de Alergias
+                            $texto_datos .= 'Registro de Antecedentes de Alergias -> <br>';
+                            $texto_datos .= 'Previo: Alergia: '.$datos_previo->nombre.', Detalle:'.$datos_previo->comentario.'<br>';
+                            $texto_datos .= 'Nuevo: Alergia: '.$request->nombre.', Detalle:'.$request->comentario.'';
+                        break;
+                        case 7: //Antecedentes de Medicamento Crónico
+                            $texto_datos .= 'Registro de Antecedentes de Medicamento Crónico -> <br>';
+                            $texto_datos .= 'Previo: Medicamento: '.$datos_previo->nombre_medicamento_cronico.', Dosis:'.$datos_previo->dosis.'<br>';
+                            $texto_datos .= 'Nuevo: Medicamento: '.$request->nombre_medicamento_cronico.', Dosis:'.$request->dosis.'';
+                        break;
+                        case 8: //Presenta alguna discapacidad ?
+                            $texto_datos .= 'Registro de Presenta alguna discapacidad ? -> <br>';
+                            $texto_datos .= 'Previo: Tipo de Discapacidad: '.$datos_previo->discapacidad_tipo.', Grado: '.$datos_previo->discapacidad_grado.', Permanente:'.$datos_previo->discapacidad_permanente.'<br>';
+                            $texto_datos .= 'Nuevo: Tipo de Discapacidad: '.$request->discapacidad_tipo.', Grado: '.$request->discapacidad_grado.', Permanente:'.$request->discapacidad_permanente.'';
+                        break;
+                    }
+
+                    $profesional = Profesional::where('id_usuario', $request->id_users)->get()->first();
+
+                    $return_log = PacienteHistoricoDatosMedicosController::registrar($request->id_paciente, $profesional->id, $texto_datos);
+
+                    $datos['log_datos_med'] = $return_log;
+                    Log::build([
+                        'path' => storage_path('logs/log_datos_medicos_' . date('Ymd') . '.log'),
+                    ])->info(json_encode($return_log) );
+                }
+                else
+                {
                     $datos['estado'] = 0;
                     $datos['msg'] = 'Problemas al Modificar';
                     $datos['request_data'] = $request->all();
@@ -360,6 +461,52 @@ class AntecedenteController extends Controller
                         $datos['estado'] = 1;
                         $datos['msg'] = 'Registro Actualizado';
                         $datos['request'] = $request->all();
+
+
+                        $datos_actuales = (object)json_decode($registro->data);
+                        $texto_datos = '';
+                        switch($registro->id_tipo_antecedente)
+                        {
+                            case 1: //Antecedentes Anestesias Pacientes
+                                $texto_datos .= 'Registro de Antecedentes Anestesias Pacientes -> Eliminado<br>';
+                                $texto_datos .= 'Procedimiento: '.$datos_actuales->procedimiento.', Incidente: '.$datos_actuales->comentario.', Fecha:'.$datos_actuales->fecha_regitro.'<br>';
+                            break;
+                            case 2: //Patologías Crónicas
+                                $texto_datos .= 'Registro de Patologías Crónicas -> Eliminado<br>';
+                                $texto_datos .= 'Nombre: '.$datos_actuales->nombre.', Comentario:'.$datos_actuales->comentario.'';
+                            break;
+                            case 3: //Antecedentes Cirugias y Procedimientos
+                                $texto_datos .= 'Registro de Antecedentes Cirugias y Procedimientos -> Eliminado<br>';
+                                $texto_datos .= 'Fecha: '.$datos_actuales->fecha.', Procedimiento: '.$datos_actuales->procedimiento.', Incidente:'.$datos_actuales->comentario.'';
+                            break;
+                            case 4: //Antecedentes Hemorragias Pacientes
+                                $texto_datos .= 'Registro de Antecedentes Hemorragias Pacientes -> Eliminado<br>';
+                                $texto_datos .= 'Procedimiento: '.$request->procedimiento.', Incidente: '.$datos_actuales->comentario.'';
+                            break;
+                            case 5: //Solicitud de Antecedentes a servicios asistenciales
+                                $texto_datos .= 'Registro de Solicitud de Antecedentes a servicios asistenciales -> Eliminado<br>';
+                                $texto_datos .= 'Antecedente: '.$datos_actuales->procedimiento.', Institución: '.$datos_actuales->institucion.', Fecha:'.$datos_actuales->fecha.'';
+                            break;
+                            case 6: //Antecedentes de Alergias
+                                $texto_datos .= 'Registro de Antecedentes de Alergias -> Eliminado<br>';
+                                $texto_datos .= 'Alergia: '.$datos_actuales->nombre.', Detalle:'.$datos_actuales->comentario.'';
+                            break;
+                            case 7: //Antecedentes de Medicamento Crónico
+                                $texto_datos .= 'Registro de Antecedentes de Medicamento Crónico -> Eliminado<br>';
+                                $texto_datos .= 'Medicamento: '.$datos_actuales->nombre_medicamento_cronico.', Dosis:'.$datos_actuales->dosis.'';
+                            break;
+                            case 8: //Presenta alguna discapacidad ?
+                                $texto_datos .= 'Registro de Presenta alguna discapacidad ? -> Eliminado<br>';
+                                $texto_datos .= 'Tipo de Discapacidad: '.$datos_actuales->discapacidad_tipo.', Grado: '.$datos_actuales->discapacidad_grado.', Permanente:'.$datos_actuales->discapacidad_permanente.'';
+                            break;
+                        }
+
+                        $profesional = Profesional::where('id_usuario', $registro->id_users)->get()->first();
+
+                        $return_log = PacienteHistoricoDatosMedicosController::registrar($registro->id_paciente, $profesional->id, $texto_datos);
+
+                        $datos['return_log'] = $return_log;
+
                     }else{
                         $datos['estado'] = 0;
                         $datos['msg'] = 'Problemas al actualizar el registro';

@@ -288,7 +288,7 @@
         $('#title-antecedente').html('Agregar Antecedente');
 
         var data = {};
-        var url = '{{Request::root()}}/api/antecedente/registrar';
+        var url = '{{ url("/api/antecedente/registrar") }}';
         var tipo = $('#tipo-antecedente-m').val();
 
         /* CAMPOS */
@@ -341,7 +341,7 @@
         $('#title-antecedente').html('Modificar Antecedente');
 
         var data = {};
-        var url = '{{Request::root()}}/api/antecedente/modificar';
+        var url = '{{ url("api/antecedente/modificar") }}';
         var tipo = $('#tipo-antecedente-m').val();
 
         /* CAMPOS */
@@ -392,7 +392,7 @@
     const eliminarAntecedente = () => {
 
         var data = {};
-        var url = '{{Request::root()}}/api/antecedente/estado';
+        var url = '{{ url("/api/antecedente/estado") }}';
         var tipo =   $('#tipo-antecedente-m-desactivar').val();
 
         /* CAMPOS */

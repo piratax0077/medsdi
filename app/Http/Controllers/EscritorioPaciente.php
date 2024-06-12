@@ -56,6 +56,7 @@ use App\Models\PacienteControlPeso;
 use App\Models\PacienteControlPresion;
 use App\Models\PacienteControlOxigeno;
 use App\Models\PacienteControlOrina;
+use App\Models\PacienteHistoricoDatosMedicos;
 use App\Models\PacientesDependientes;
 use App\Models\Recomendacion;
 use App\Models\RecomendacionDetalle;
@@ -1041,6 +1042,20 @@ class EscritorioPaciente extends Controller
         $id_usuario = Auth::user()->id;
         $userData = Funciones::userData($id_usuario);
 
+        $log_datos_medicos = PacienteHistoricoDatosMedicos::select( 'paciente_historico_datos_medicos.id', 'paciente_historico_datos_medicos.id_paciente', 'paciente_historico_datos_medicos.id_profesional', 'paciente_historico_datos_medicos.datos', 'paciente_historico_datos_medicos.created_at',
+                                                        'profesionales.nombre', 'profesionales.apellido_uno', 'profesionales.apellido_dos', 'profesionales.rut',
+                                                        'especialidades.nombre as especialidad', 'tipos_especialidad.nombre as tipo_especialidad', 'sub_tipo_especialidad.nombre as sub_tipo_especialidad')
+                                    ->join('profesionales','profesionales.id', '=', 'paciente_historico_datos_medicos.id_profesional')
+                                    ->join('especialidades','especialidades.id', '=', 'profesionales.id_especialidad')
+                                    ->join('tipos_especialidad','tipos_especialidad.id', '=', 'profesionales.id_tipo_especialidad')
+                                    ->leftJoin('sub_tipo_especialidad','sub_tipo_especialidad.id', '=', 'profesionales.id_sub_tipo_especialidad')
+                                    ->where('id_paciente', $paciente->id)
+                                    ->orderBy('created_at', 'DESC')
+                                    ->get();
+
+
+        // echo json_encode($log_datos_medicos);
+        // die();
 
         return view('app.paciente.perfil_paciente',
             [
@@ -1063,6 +1078,7 @@ class EscritorioPaciente extends Controller
                 'patoligias_cronicas' => $patoligias_cronicas,
                 'medicamentos_cronicos' => $medicamentos_cronicos,
                 'grupo_sanguineo' => $grupo_sanguineo,
+                'log_datos_medicos' => $log_datos_medicos,
             ]
         );
     }

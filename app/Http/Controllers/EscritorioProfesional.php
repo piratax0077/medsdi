@@ -69,10 +69,12 @@ use App\Helpers\Funciones;
 use App\Models\AcompananteDependiente;
 use App\Models\FichaPediatriaGeneralTipo;
 use App\Models\Invitacion;
+use App\Models\PacienteHistoricoDatosMedicos;
 use App\Models\PacientesDependientes;
 use App\Models\ProfesionalHorariosBloqueo;
 use DateTime;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class EscritorioProfesional extends Controller
 {
@@ -1276,11 +1278,17 @@ class EscritorioProfesional extends Controller
         $paciente = Paciente::where('id', $request->id_paciente)->first();
 
         $antecedente = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
-
+        $nuevo = 0;
+        $previo = array();
+        $texto_datos = '';
         if ($antecedente == null) {
             $antecedente = new AntecedentesPaciente();
+            $nuevo = 1;
         }
-
+        else
+        {
+            $previo = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+        }
 
         $antecedente->transfusion = $request->edit_transfusion;
         $antecedente->dona_organos = $request->edit_donante_total;
@@ -1297,6 +1305,77 @@ class EscritorioProfesional extends Controller
         if ($antecedente->save()) {
             $paciente->id_antecedente = $antecedente->id;
             $paciente->save();
+
+            if($nuevo == 1)
+            {
+                if(!empty($request->edit_transfusion))
+                    $texto_datos .= 'Registro Transfusión:'.(($request->edit_transfusion==1)?'SI':'NO').' | ';
+                if(!empty($request->edit_donante_total))
+                    $texto_datos .= 'Registro Donante Total:'.(($request->edit_donante_total==1)?'SI':'NO').' | ';
+                if(!empty($request->edit_donante_parcial))
+                    $texto_datos .= 'Registro Donante Parcial:'.(($request->edit_donante_parcial==1)?'SI':'NO').' | ';
+                if(!empty($request->edit_dona_sangre))
+                    $texto_datos .= 'Registro Donante Sangre:'.(($request->edit_dona_sangre==1)?'SI':'NO').' | ';
+                if(!empty($request->comentarios_impedimento))
+                    $texto_datos .= 'Registro Posee Impedimento:'.$request->comentarios_impedimento.' | ';
+                if(!empty($request->comentarios_organo))
+                    $texto_datos .= 'Registro Organo a Donar:'.$request->comentarios_organo.' | ';
+                if(!empty($request->edit_hepatitis))
+                    $texto_datos .= 'Registro Vacuna o Hepatitis:'.(($request->edit_hepatitis==1)?'SI':'NO').' | ';
+                if(!empty($request->comentarios_hepatitis))
+                    $texto_datos .= 'Registro Comentrio Hepatitis o VIH:'.$request->comentarios_hepatitis.' | ';
+                if(!empty($request->editar_grupo_sanguineo))
+                {
+                    $grupo_sang = GrupoSanguineo::find($request->editar_grupo_sanguineo);
+                    if($grupo_sang)
+                        $texto_datos .= 'Registro GrupoSangineo:'.$grupo_sang->nombre_gs.' | ';
+                }
+            }
+            else
+            {
+                if(!empty($request->edit_transfusion) && ($previo->edit_transfusion != $request->edit_transfusion))
+                    $texto_datos .= 'Actualización Transfusión:'.(($previo->edit_transfusion==1)?'SI':'NO').' a '.(($request->edit_transfusion==1)?'SI':'NO').' | ';
+
+                if(!empty($request->edit_donante_total) && ($previo->edit_donante_total != $request->edit_donante_total))
+                    $texto_datos .= 'Actualización Donante Total:'.(($previo->edit_donante_total==1)?'SI':'NO').' a '.(($request->edit_donante_total==1)?'SI':'NO').' | ';
+
+                if(!empty($request->edit_donante_parcial) && ($previo->edit_donante_parcial != $request->edit_donante_parcial))
+                    $texto_datos .= 'Actualización Donante Parcial:'.(($previo->edit_donante_parcial==1)?'SI':'NO').' a '.(($request->edit_donante_parcial==1)?'SI':'NO').' | ';
+
+                if(!empty($request->edit_dona_sangre) && ($previo->edit_dona_sangre != $request->edit_dona_sangre))
+                    $texto_datos .= 'Actualización Donante Sangre:'.(($previo->edit_dona_sangre==1)?'SI':'NO').' a '.(($request->edit_dona_sangre==1)?'SI':'NO').' | ';
+
+                if(!empty($request->comentarios_impedimento) && ($previo->comentarios_impedimento != $request->comentarios_impedimento))
+                    $texto_datos .= 'Actualización Posee Impedimento:'.$request->comentarios_impedimento.' | ';
+
+                if(!empty($request->comentarios_organo) && ($previo->comentarios_organo != $request->comentarios_organo))
+                    $texto_datos .= 'Actualización Organo a Donar:'.$request->comentarios_organo.' | ';
+
+                if(!empty($request->edit_hepatitis) && ($previo->edit_hepatitis != $request->edit_hepatitis))
+                    $texto_datos .= 'Actualización Vacuna o Hepatitis:'.(($previo->edit_hepatitis==1)?'SI':'NO').' a '.(($request->edit_hepatitis==1)?'SI':'NO').' | ';
+
+                if(!empty($request->comentarios_hepatitis) && ($previo->comentarios_hepatitis != $request->comentarios_hepatitis))
+                    $texto_datos .= 'Actualización Comentrio Hepatitis o VIH:'.$request->comentarios_hepatitis.' | ';
+
+                if(!empty($request->editar_grupo_sanguineo) && ($previo->editar_grupo_sanguineo != $request->editar_grupo_sanguineo))
+                {
+                    $grupo_sang_prev = GrupoSanguineo::find($previo->editar_grupo_sanguineo);
+                    $grupo_sang = GrupoSanguineo::find($request->editar_grupo_sanguineo);
+                    if($grupo_sang)
+                        $texto_datos .= 'Actualización GrupoSangineo:'.$grupo_sang_prev.' a '.$grupo_sang->nombre_gs.' | ';
+                }
+            }
+
+            if(!empty($texto_datos))
+            {
+                $return_log = PacienteHistoricoDatosMedicosController::registrar($paciente->id, $profesional->id, $texto_datos);
+                // Log::useFiles(storage_path() . '/logs/log_datos_medicos_' . date('Ymd') . '.log');
+                // Log::debug( json_encode($return_log) );
+                Log::build([
+                    'path' => storage_path('logs/log_datos_medicos_' . date('Ymd') . '.log'),
+                  ])->info(json_encode($return_log) );
+            }
+
 
             return json_encode($antecedente);
         }
