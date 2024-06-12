@@ -420,12 +420,16 @@ Route::get('/aprobar/licencia/rechazar', [App\Http\Controllers\LicenciaAprobacio
 
 Route::group(
     [
-        'middleware' => ['role:Profesional|Admin|Paciente'],
+        // 'middleware' => ['role:Profesional|Admin|Paciente'],
+        'middleware' => ['auth:sanctum', 'verified'],
         // 'prefix' => 'Contacto',
     ],
     function () {
         Route::post('Perfil/Agregar_contacto', [ContactoEmergenciaController::class, 'registrar_contacto_emergencia'])->name('contacto_emergencia.registrar_contacto_emergencia');
         Route::post('buscar_contacto', [ContactoEmergenciaController::class, 'buscar_contacto'])->name('contacto_emergencia.buscar_contacto');
+        Route::get('Eliminar_contacto_paciente', [App\Http\Controllers\EscritorioProfesional::class, 'eliminar_contacto_paciente'])->name('contacto_emergencia.eliminar_contacto_paciente');
+        Route::get('Editar_contacto_emergencia', [App\Http\Controllers\EscritorioProfesional::class, 'editar_contacto_emergencia'])->name('contacto_emergencia.editar_contacto');
+        Route::get('Cargar_datos_contacto', [App\Http\Controllers\EscritorioProfesional::class, 'cargar_datos_contacto'])->name('cargar_datos_contacto');
         Route::get('Check_sdi_token',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdiToken'])->name('check_sdi_token');
         Route::get('Check_sdi',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdi'])->name('check_sdi'); // PARAMS OBLIGATORIOS urla=Inicio&urln=Mi_Ficha_Medica
         Route::get('Mi_Ficha_Medica', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('profesional.mi_ficha');

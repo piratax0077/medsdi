@@ -1670,7 +1670,7 @@
 
         function cargar_datos_contacto(id) {
             let id_contacto = id;
-            url = "{{ route('profesional.cargar_datos_contacto') }}";
+            url = "{{ route('cargar_datos_contacto') }}";
             $.ajax({
                     url: url,
                     type: "get",
@@ -1741,7 +1741,7 @@
             let id_contacto = contacto;
             let id_paciente = paciente
 
-            let url = "{{ route('profesional.eliminar_contacto_paciente') }}";
+            let url = "{{ route('contacto_emergencia.eliminar_contacto_paciente') }}";
 
             $.ajax({
                     url: url,
@@ -2109,7 +2109,7 @@
         function buscar_ciudades() {
 
             let region = $('#region_agregar').val();
-            let url = "{{ route('profesional.buscar_ciudad_region') }}";
+            let url = "{{ route('buscar_ciudad_region') }}";
             $.ajax({
 
                     url: url,
@@ -2154,7 +2154,7 @@
         function buscar_ciudades_mod(id_actual = 0) {
 
             let region = $('#region_contacto_modificar').val();
-            let url = "{{ route('profesional.buscar_ciudad_region') }}";
+            let url = "{{ route('buscar_ciudad_region') }}";
             $.ajax({
 
                     url: url,
@@ -2221,7 +2221,7 @@
             let id_ciudad = $("#ciudad_contacto_modificar").val();
             let prioridad = $("#prioridad_contacto").val();
             let parentezco = $("#parentezco_contacto").val();
-            let url = "{{ route('profesional.editar_contacto') }}";
+            let url = "{{ route('contacto_emergencia.editar_contacto') }}";
 
             var valido = 1;
             var mensaje = ''
