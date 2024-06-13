@@ -123,52 +123,59 @@ class EscritorioPaciente extends Controller
 
     public function index()
     {
-        // dd(Auth::user());
+        // dd(Auth::user()->id);
         $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
-        $region = Region::all();
-        $prevision = Prevision::all();
+        if($paciente)
+        {
+            $region = Region::all();
+            $prevision = Prevision::all();
 
-        $hora_medica = HoraMedica::select('horas_medicas.id', 'horas_medicas.fecha_consulta', 'horas_medicas.hora_inicio', 'horas_medicas.hora_termino', 'horas_medicas.alias_examen',
-                                            'horas_medicas.comentarios_confirmacion', 'horas_medicas.fecha_confirmacion', 'horas_medicas.comentarios_cancelacion', 'horas_medicas.fecha_cancelacion',
-                                            'horas_medicas.fecha_realizacion_consulta', 'horas_medicas.id_ficha_atencion', 'horas_medicas.id_profesional', 'horas_medicas.id_lugar_atencion',
-                                            'horas_medicas.id_asistente', 'horas_medicas.id_paciente', 'horas_medicas.acomp_representante', 'horas_medicas.acomp_acompanante',
-                                            'horas_medicas.acomp_lista', 'horas_medicas.autorizacion_atencion', 'horas_medicas.id_log_users_devices', 'horas_medicas.id_estado',
-                                            'profesionales.nombre as nombre_profesional', 'profesionales.apellido_uno as apellido_uno_profesional',
-                                            'lugares_atencion.nombre as nombre_lugar_atencion', 'direcciones.direccion as direccion_lugar_atencion', 'direcciones.numero_dir as numero_dir_lugar_atencion',
-                                            'especialidades.nombre as nombre_especialidad', 'tipos_especialidad.nombre as nombre_tipo_especialidad', 'sub_tipo_especialidad.nombre as nombre_sub_tipo_especialidad',
-                                            'parametros.valor as texto_estado', 'parametros.color as color_estado')
-                                    ->join('profesionales', 'profesionales.id', '=', 'horas_medicas.id_profesional')
-                                    ->join('especialidades', 'especialidades.id', '=', 'profesionales.id_especialidad')
-                                    ->join('tipos_especialidad', 'tipos_especialidad.id', '=', 'profesionales.id_tipo_especialidad')
-                                    ->rightJoin('sub_tipo_especialidad', 'sub_tipo_especialidad.id', '=', 'profesionales.id_sub_tipo_especialidad')
-                                    ->join('lugares_atencion', 'lugares_atencion.id', '=', 'horas_medicas.id_lugar_atencion')
-                                    ->join('direcciones', 'direcciones.id', '=', 'lugares_atencion.id_direccion')
-                                    ->join('parametros', function ($join) {
-                                        $join->on('parametros.id', '=', 'horas_medicas.id_estado')
-                                                ->where('parametros.referencia', '=', 'Agenda_Estado');
-                                    })
-                                    ->where('id_paciente', $paciente->id)
-                                    ->orderBy('fecha_consulta', 'DESC')
-                                    ->orderBy('hora_inicio', 'DESC')
-                                    ->get();
+            $hora_medica = HoraMedica::select('horas_medicas.id', 'horas_medicas.fecha_consulta', 'horas_medicas.hora_inicio', 'horas_medicas.hora_termino', 'horas_medicas.alias_examen',
+                                                'horas_medicas.comentarios_confirmacion', 'horas_medicas.fecha_confirmacion', 'horas_medicas.comentarios_cancelacion', 'horas_medicas.fecha_cancelacion',
+                                                'horas_medicas.fecha_realizacion_consulta', 'horas_medicas.id_ficha_atencion', 'horas_medicas.id_profesional', 'horas_medicas.id_lugar_atencion',
+                                                'horas_medicas.id_asistente', 'horas_medicas.id_paciente', 'horas_medicas.acomp_representante', 'horas_medicas.acomp_acompanante',
+                                                'horas_medicas.acomp_lista', 'horas_medicas.autorizacion_atencion', 'horas_medicas.id_log_users_devices', 'horas_medicas.id_estado',
+                                                'profesionales.nombre as nombre_profesional', 'profesionales.apellido_uno as apellido_uno_profesional',
+                                                'lugares_atencion.nombre as nombre_lugar_atencion', 'direcciones.direccion as direccion_lugar_atencion', 'direcciones.numero_dir as numero_dir_lugar_atencion',
+                                                'especialidades.nombre as nombre_especialidad', 'tipos_especialidad.nombre as nombre_tipo_especialidad', 'sub_tipo_especialidad.nombre as nombre_sub_tipo_especialidad',
+                                                'parametros.valor as texto_estado', 'parametros.color as color_estado')
+                                        ->join('profesionales', 'profesionales.id', '=', 'horas_medicas.id_profesional')
+                                        ->join('especialidades', 'especialidades.id', '=', 'profesionales.id_especialidad')
+                                        ->join('tipos_especialidad', 'tipos_especialidad.id', '=', 'profesionales.id_tipo_especialidad')
+                                        ->rightJoin('sub_tipo_especialidad', 'sub_tipo_especialidad.id', '=', 'profesionales.id_sub_tipo_especialidad')
+                                        ->join('lugares_atencion', 'lugares_atencion.id', '=', 'horas_medicas.id_lugar_atencion')
+                                        ->join('direcciones', 'direcciones.id', '=', 'lugares_atencion.id_direccion')
+                                        ->join('parametros', function ($join) {
+                                            $join->on('parametros.id', '=', 'horas_medicas.id_estado')
+                                                    ->where('parametros.referencia', '=', 'Agenda_Estado');
+                                        })
+                                        ->where('id_paciente', $paciente->id)
+                                        ->orderBy('fecha_consulta', 'DESC')
+                                        ->orderBy('hora_inicio', 'DESC')
+                                        ->get();
 
-        if (isset($paciente)) {
+            if (isset($paciente)) {
 
-            if($paciente->bienvenida == 0)
-            {
-                $regiones = Region::all();
-                return view('bienvenida.inicio_pacientes')->with([
-                    'paciente' => $paciente,
-                    'regiones' => $regiones,
-                ]);
+                if($paciente->bienvenida == 0)
+                {
+                    $regiones = Region::all();
+                    return view('bienvenida.inicio_pacientes')->with([
+                        'paciente' => $paciente,
+                        'regiones' => $regiones,
+                    ]);
 
+                }
+                else
+                    return view('app.paciente.escritorio_paciente')->with(['paciente' => $paciente, 'hora_medica' => $hora_medica]);
             }
-            else
-                return view('app.paciente.escritorio_paciente')->with(['paciente' => $paciente, 'hora_medica' => $hora_medica]);
-        }
 
-        /** formulario nuevos */
-        return view('auth.Registros.registro_paciente')->with(['region' => $region, 'prevision' => $prevision]);
+            /** formulario nuevos */
+            return view('auth.Registros.registro_paciente')->with(['region' => $region, 'prevision' => $prevision]);
+        }
+        else
+        {
+            return view('app.home.acceso');
+        }
     }
 
     public function agendarHora($id_profesion_ = 0,$id_especialidad_ = 0,$id_subespecialidad_ = 0)
@@ -262,9 +269,24 @@ class EscritorioPaciente extends Controller
         $desvinculados = [];
         $profesion = [];
         foreach ($fichas as $f) {
-            array_push($profesional, $f->profesional()->first());
+
             $profesional_ = Profesional::with('Especialidad')->find($f->id_profesional);
             $profesion[$profesional_->Especialidad->id] = $profesional_->Especialidad->nombre;
+
+            // busqueda de imagen
+            $array_rut = explode('-',$profesional_->rut);
+            $nombre_imagen = asset('images/iconos/usuario_profesional.svg');
+
+            if(file_exists(public_path('images/img_perfil/'.$array_rut[0].'.png')))
+            {
+                $nombre_imagen = asset('images/img_perfil/'.$array_rut[0].'.png');
+                $profesional_temp['img_profesional2'] = $nombre_imagen;
+            }
+            $profesional_temp = $f->profesional()->first();
+            $profesional_temp['img_profesional'] = $nombre_imagen;
+
+
+            array_push($profesional, $profesional_temp);
         }
 
         foreach ($fichas_desvinculados as $d) {
@@ -277,7 +299,8 @@ class EscritorioPaciente extends Controller
         $lista_especialidad = $profesion;
 
         // var_dump(Auth::user()->id);
-        // var_dump($profesional);
+        // echo json_encode($profesional);
+        // die();
         return view('app.paciente.medicos_paciente',
         [
             'paciente' => $paciente,

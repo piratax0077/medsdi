@@ -31,9 +31,9 @@
                                 <div class="col-md-12">
                                     <h5 class="text-white f-20 d-inline">Mis Dependientes {{ $titulo }}</h5>
 
-                                    @if ( $tipo_dependencias != '4' )
+                                    {{-- @if ( $tipo_dependencias != '4' ) --}}
                                         <button type="button" class="btn btn-purple-light-c btn-sm d-inline" id="btn-agregar-dep" name="btn-agregar-dep"><i class="feather icon-plus"></i> Agregar</button>
-                                    @endif
+                                    {{-- @endif --}}
                                     <input type="hidden" name="dependencia" id="dependencia" value="{{ $dependencia }}">
                                     <input type="hidden" name="tipo_dependencias" id="tipo_dependencias" value="{{ $tipo_dependencias }}">
                                 </div>
@@ -48,31 +48,33 @@
                 @if ($registros)
                     @if ($registros->count() >0 )
                         @foreach ($registros as $registro)
-                            <div class="col mb-4">
-                                <div class="card">
-                                    @if ($dependencia == 1)
-                                        <a href="{{ ROUTE('paciente.dependiente.home',['id_dependiente_activo'=>$registro->paciente->id]) }}">
-                                    @else
-                                        {{-- <a href="{{ ROUTE('paciente.home') }}"> --}}
-                                        <a href="{{ ROUTE('paciente.dependiente.home',['id_dependiente_activo'=>$registro->paciente->id]) }}">
-                                    @endif
-                                        <div class="card-body text-center" style="cursor:pointer">
-                                            @if($registro->paciente->sexo == 'M')
-                                                <img class="wid-60 text-center mt-1 rounded-circle" src="{{ asset('images/iconos/paciente-m.svg') }}">
-                                            @else
-                                                <img class="wid-60 text-center mt-1 rounded-circle" src="{{ asset('images/iconos/paciente-f.svg') }}">
-                                            @endif
-                                            <h5 class="mt-2 mb-0">{{ $registro->paciente->nombres.' '.$registro->paciente->apellido_uno. ' '.$registro->paciente->apellido_dos }}</h5>
-                                            {{-- <h6 class="mt-2">Relación: {{ $registro->relacion }}</h6> --}}
-                                            {{-- <h6 class="mt-2">Tipo Dependencia: <br />{{ $registro->Tipodependencia->nombre }}</h6> --}}
+                            @if ($registro->paciente)
+                                <div class="col mb-4">
+                                    <div class="card">
+                                        @if ($dependencia == 1)
+                                            <a href="{{ ROUTE('paciente.dependiente.home',['id_dependiente_activo'=>$registro->paciente->id]) }}">
+                                        @else
+                                            {{-- <a href="{{ ROUTE('paciente.home') }}"> --}}
+                                            <a href="{{ ROUTE('paciente.dependiente.home',['id_dependiente_activo'=>$registro->paciente->id]) }}">
+                                        @endif
+                                            <div class="card-body text-center" style="cursor:pointer">
+                                                @if($registro->paciente->sexo == 'M')
+                                                    <img class="wid-60 text-center mt-1 rounded-circle" src="{{ asset('images/iconos/paciente-m.svg') }}">
+                                                @else
+                                                    <img class="wid-60 text-center mt-1 rounded-circle" src="{{ asset('images/iconos/paciente-f.svg') }}">
+                                                @endif
+                                                <h5 class="mt-2 mb-0">{{ $registro->paciente->nombres.' '.$registro->paciente->apellido_uno. ' '.$registro->paciente->apellido_dos }}</h5>
+                                                {{-- <h6 class="mt-2">Relación: {{ $registro->relacion }}</h6> --}}
+                                                {{-- <h6 class="mt-2">Tipo Dependencia: <br />{{ $registro->Tipodependencia->nombre }}</h6> --}}
+                                            </div>
+                                        </a>
+                                        <div class="pb-3 px-2 pt-0 mt-0 text-center">
+                                            <div type="button" class="btn btn-sm btn-purple" onclick="ver_acomp_dep('{{ $paciente->id }}', '{{ $registro->paciente->id }}')"><i class="feather icon-user"></i> Ver acompañantes</div>
+                                            <div type="button" class="btn btn-sm btn-success-light-c" onclick="abrir_agregar_acompanante('{{ $registro->paciente->id }}', '{{ $paciente->id }}');"><i class="feather icon-plus"></i> Añadir acompañante</div>
                                         </div>
-                                    </a>
-                                    <div class="pb-3 px-2 pt-0 mt-0 text-center">
-                                        <div type="button" class="btn btn-sm btn-purple" onclick="ver_acomp_dep('{{ $paciente->id }}', '{{ $registro->paciente->id }}')"><i class="feather icon-user"></i> Ver acompañantes</div>
-                                        <div type="button" class="btn btn-sm btn-success-light-c" onclick="abrir_agregar_acompanante('{{ $registro->paciente->id }}', '{{ $paciente->id }}');"><i class="feather icon-plus"></i> Añadir acompañante</div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         @endforeach
                     @else
                         <h5>Sin Dependientes Registrados</h5>

@@ -140,7 +140,13 @@ class EscritorioAsistente extends Controller
     public function buscar_paciente()
     {
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
-        $asistente_tipo = AsistenteTipo::where('id',$asistente->id_asistente_tipo)->first();
+
+        // echo json_encode($asistente);
+        // die();
+        if($asistente->id_asistente_tipo)
+            $asistente_tipo = AsistenteTipo::where('id',$asistente->id_asistente_tipo)->first();
+        else
+            $asistente_tipo = AsistenteTipo::where('id',5)->first();
 
         $filtro = array();
         $filtro[] = array('tipo_empleado',strtoupper($asistente_tipo->nombre));

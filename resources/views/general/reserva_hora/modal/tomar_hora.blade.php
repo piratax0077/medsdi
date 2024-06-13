@@ -77,7 +77,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-light">
-                    <h6 class="modal-title text-primary f-18">Reservar hora médicaCCCCC</h6>
+                    <h6 class="modal-title text-primary f-18">Reservar hora médica</h6>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#reservar_hora').modal('hide');">
                         <span aria-hidden="true">&times;</span>
                     </button>

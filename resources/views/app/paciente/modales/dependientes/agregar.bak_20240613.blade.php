@@ -5,26 +5,23 @@
 
 <!-- Modal busqueda por rut -->
 <div class="modal fade" id="modal_agregar_dep_buscar" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Buscar Rut Dependiente</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                        <h6 class="modal-title text-primary mt-1" id="modal_indicar_examen">Buscar Rut de Dependiente</h6>
-                    </div>
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="col-md-12">
                         <input type="text" class="form-control form-control-sm" name="modal_agregar_dep_input_rut" id="modal_agregar_dep_input_rut" value="">
                     </div>
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mt-2">
-                        <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal" aria-label="Close"><i class="feather icon-x"></i> Cancelar</button>
-                        <button type="button" class="btn btn-info-light-c btn-sm" onclick="buscar_rut_dep();"><i class="feather icon-search"></i> Buscar</button>
-                    </div>
-
                 </div>
             </div>
-            <!--<div class="modal-footer">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary" onclick="buscar_rut_dep();">Buscar</button>
-            </div>-->
+            </div>
         </div>
     </div>
 </div>

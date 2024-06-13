@@ -48,6 +48,8 @@ class EscritorioDependientesController extends Controller
                                                     ->with('Tipodependencia')
                                                     ->where('id_responsable',$paciente->id)
                                                     ->get();
+                // echo json_encode($registros);
+                // die();
 
                 foreach ($registros as $key_2 => $value_2)
                 {

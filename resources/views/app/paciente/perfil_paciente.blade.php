@@ -1074,7 +1074,7 @@
                                     <!--CARD DATOS ROMPE CLAVE-->
                                     <div class="card">
                                         <div class="card-header d-flex align-items-center justify-content-between bg-primary">
-                                            <h5 class="mb-0 text-white">Romper clave</h5>
+                                            <h5 class="mb-0 text-white">Autorizaciones</h5>
                                             <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".rompeclave" aria-expanded="false" aria-controls="rompeclave_1 rompeclave_2">
                                                 <i class="feather icon-edit"></i>
                                             </button>

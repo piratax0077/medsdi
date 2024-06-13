@@ -81,7 +81,7 @@
                                                         <div class="col">
                                                             <div class="position-relative d-inline-block">
                                                                 <img class="img-radius img-fluid wid-80"
-                                                                    src="{{ asset('images/iconos/usuario_profesional.svg') }}"
+                                                                    src="{{ $p->img_profesional }}"
                                                                     alt="Mis médicos">
                                                             </div>
                                                         </div>
@@ -136,7 +136,7 @@
 @section('page-script')
     <script>
         function active_e(tipo_esp){
-            if(tipo_esp=='all') 
+            if(tipo_esp=='all')
             {
                 $('.filtro_le').removeClass('d-none');
             }else{
