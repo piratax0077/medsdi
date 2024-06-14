@@ -381,6 +381,7 @@
             let id_especialidad = $('#id_especialidad').val();
             let id_tipo_especialidad = $('#id_tipo_especialidad').val();
             let id_sub_tipo_especialidad = $('#id_sub_tipo_especialidad').val();
+            let id_tipo_atencion = $('#id_tipo_atencion').val();
             let url = "{{ route('profesional.editar_datos_personales_perfil') }}";
 
             $.ajax({
@@ -398,6 +399,7 @@
                         id_especialidad: id_especialidad,
                         id_tipo_especialidad: id_tipo_especialidad,
                         id_sub_tipo_especialidad: id_sub_tipo_especialidad,
+                        id_tipo_atencion: id_tipo_atencion,
 
                     },
                 })

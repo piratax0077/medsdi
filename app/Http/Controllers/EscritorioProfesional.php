@@ -126,6 +126,7 @@ class EscritorioProfesional extends Controller
         $profesional->id_especialidad = $request->id_especialidad;
         $profesional->id_tipo_especialidad = $request->id_tipo_especialidad;
         $profesional->id_sub_tipo_especialidad = $request->id_sub_tipo_especialidad;
+        $profesional->id_tipo_atencion = $request->id_tipo_atencion;
         $profesional->save();
 
         if (!$profesional->save()) {

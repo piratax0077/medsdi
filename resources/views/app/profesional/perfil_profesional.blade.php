@@ -141,6 +141,29 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="font-weight-bolder ml-0 mb-0">Tipo de atención</label>
+                                                <div>
+                                                    @if ($profesional->id_tipo_atencion)
+                                                            @switch($profesional->id_tipo_atencion)
+                                                                @case(1)
+                                                                    Adultos / Niños
+                                                                    @break
+                                                                @case(2)
+                                                                    Niños
+                                                                    @break
+                                                                @case(3)
+                                                                    Adultos
+                                                                    @break
+                                                                @case(4)
+                                                                    Atención Domiciliaria
+                                                                    @break
+
+                                                                @default
+                                                                    Adultos / Niños
+                                                            @endswitch
+                                                        @else
+                                                            Adultos / Niños
+                                                        @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -230,12 +253,46 @@
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="floating-label-activo">Tipo de atención</label>
-                                                    <select class="form-control form-control-sm" id="exampleFormControlSelect1">
-                                                        <option>Seleccione Preferencia Atención</option>
-                                                        <option>Niños</option>
-                                                        <option>Adultos</option>
-                                                        <option>Adultos / Niños</option>
-                                                        <option>Atención Domiciliaria</option>
+                                                    <select class="form-control form-control-sm" id="id_tipo_atencion">
+                                                        @if ($profesional->id_tipo_atencion)
+                                                            @switch($profesional->id_tipo_atencion)
+                                                                @case(1)
+                                                                    <option value="1" selected>Adultos / Niños</option>
+                                                                    <option value="2">Niños</option>
+                                                                    <option value="3">Adultos</option>
+                                                                    <option value="4">Atención Domiciliaria</option>
+                                                                    @break
+                                                                @case(2)
+                                                                    <option value="1" >Adultos / Niños</option>
+                                                                    <option value="2" selected>Niños</option>
+                                                                    <option value="3">Adultos</option>
+                                                                    <option value="4">Atención Domiciliaria</option>
+                                                                    @break
+                                                                @case(3)
+                                                                    <option value="1" >Adultos / Niños</option>
+                                                                    <option value="2" selected>Niños</option>
+                                                                    <option value="3">Adultos</option>
+                                                                    <option value="4">Atención Domiciliaria</option>
+                                                                    @break
+                                                                @case(4)
+                                                                    <option value="1" >Adultos / Niños</option>
+                                                                    <option value="2">Niños</option>
+                                                                    <option value="3">Adultos</option>
+                                                                    <option value="4" selected>Atención Domiciliaria</option>
+                                                                    @break
+
+                                                                @default
+                                                                    <option value="1" selected>Adultos / Niños</option>
+                                                                    <option value="2">Niños</option>
+                                                                    <option value="3">Adultos</option>
+                                                                    <option value="4">Atención Domiciliaria</option>
+                                                            @endswitch
+                                                        @else
+                                                            <option value="1" selected>Adultos / Niños</option>
+                                                            <option value="2">Niños</option>
+                                                            <option value="3">Adultos</option>
+                                                            <option value="4">Atención Domiciliaria</option>
+                                                        @endif
                                                     </select>
                                                 </div>
                                             </div>
