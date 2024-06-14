@@ -29,6 +29,7 @@ use App\Models\ProfesionOficio;
 use App\Models\Region;
 use App\Models\RegistroConfirmacionHoraAgenda;
 use App\Models\SubTipoEspecialidad;
+use App\Models\TipoBono;
 use App\Models\TipoEspecialidad;
 use App\Models\User;
 use DateTime;
@@ -47,11 +48,13 @@ class EscritorioAsistente extends Controller
 
         $region = Region::all();
         $prevision = Prevision::all();
+        $tipo_bonos = TipoBono::where('estado', 1)->get();
 
         $url = 'app.asistente.escritorio_asistente';
         $array_data = array(
             'asistente' => $asistente,
-            'prevision' => $prevision
+            'prevision' => $prevision,
+            'tipo_bonos' => $tipo_bonos,
         );
 
 
@@ -635,6 +638,7 @@ class EscritorioAsistente extends Controller
         $prevision = Prevision::all();
         $region = Region::all();
         $profesion_oficio = ProfesionOficio::all();
+        $tipo_bonos = TipoBono::where('estado', 1)->get();
 
         return view('app.asistente.agenda_por_profesional')->with([
             'asistente' => $asistente,
@@ -644,6 +648,7 @@ class EscritorioAsistente extends Controller
             'prevision' => $prevision,
             'region' => $region,
             'profesion_oficio' => $profesion_oficio,
+            'tipo_bonos' => $tipo_bonos,
         ]);
     }
 

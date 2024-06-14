@@ -12,6 +12,7 @@ use App\Models\Prevision;
 use App\Models\ProfesionOficio;
 use App\Models\Region;
 use App\Models\RegistroConfirmacionHoraAgenda;
+use App\Models\TipoBono;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -40,6 +41,7 @@ class EscritorioAsistenteCmMnAg extends Controller
             $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
             $profesionales = $lugares_atencion->profesionales()->get();
             $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
+            $tipo_bonos = TipoBono::where('estado', 1)->get();
 
             $url = 'app.asistente_cm_manejo_agenda.escritorio_asistente_manejo_agenda'; // Asistente Centro Medico Manejo de Agenda
             $array_data = array(
@@ -50,6 +52,7 @@ class EscritorioAsistenteCmMnAg extends Controller
                 'reg_confirmacion_hora' => $reg_confirmacion_hora,
                 'region' => $region,
                 'profesion_oficio' => $profesion_oficio,
+                'tipo_bonos' => $tipo_bonos,
             );
 
 

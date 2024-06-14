@@ -145,13 +145,16 @@
                     <button id="cerrar_tomar_hora" type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
-                    {{--  BUSCADOR DE RUT  --}}
-                    <div class="form-row div_rut_buscar">
-                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="form-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="form-group">
                                 <h6 class="text-c-blue f-14">Ingrese el RUT del paciente</h6>
                             </div>
                         </div>
+                    </div>
+
+                    {{--  BUSCADOR DE RUT  --}}
+                    <div class="form-row div_rut_buscar">
                         <div class="col-sm-9 col-md-9">
                             <form id="validacion_rut_form">
                                 <div class="form-group" id="validacion_rut_div">
@@ -180,9 +183,8 @@
 
                         <div id="reserva_datos_paciente" class="row mx-3">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <h6 class="text-c-blue f-16 d-inline">Información del paciente</h6>
-                                <button type="button" onclick="editar_info_paciente();" class="btn btn-sm btn-info-light-c float-right d-inline paciente_view">
-                                    <i class="feather icon-edit"></i> Editar
+                                <button type="button" onclick="editar_info_paciente();" class="btn btn-info">
+                                    <i class="feather icon-check"></i> Editar
                                 </button>
                                 <input type="hidden" name="modificando_paciente" id="modificando_paciente" value="0">
                             </div>
@@ -202,19 +204,10 @@
                                             <div class="paciente_view">
                                                 <span id="reserva_hora_nombre"></span>
                                             </div>
-
-                                                <div class="paciente_edit" style="display:none">
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-4">
-                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_nombre" value="">
-                                                    </div>
-                                                        <div class="col-sm-12 col-md-4">
-                                                            <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_uno" value="">
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-4">
-                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_dos" value="">
-                                                    </div>
-                                                </div>
+                                            <div class="paciente_edit" style="display:none">
+                                                <input type="text" id="input_reserva_hora_nombre" value="">
+                                                <input type="text" id="input_reserva_hora_apellido_uno" value="">
+                                                <input type="text" id="input_reserva_hora_apellido_dos" value="">
                                             </div>
                                         </td>
                                     </tr>
@@ -246,7 +239,7 @@
                                                 <span id="reserva_sexo"></span>
                                             </div>
                                             <div class="paciente_edit" style="display:none">
-                                                <select id="input_reserva_sexo" class="form-control form-control-sm">
+                                                <select id="input_reserva_sexo" class="form-control">
                                                     <option value="M">Masculino</option>
                                                     <option value="F">Femenino</option>
                                                 </select>
@@ -263,7 +256,7 @@
                                             </div>
                                             <div class="paciente_edit" style="display:none">
                                                 <select id="input_reserva_convenio" name="input_reserva_convenio" class="form-control form-control-sm">
-                                                    <option value="0">Seleccione</option>
+                                                    <option value="0">Selecione una opci&oacute;n</option>
                                                     @if (isset($prevision))
                                                         @foreach ($prevision as $p)
                                                             <option value="{{ $p->id }}">{{ $p->nombre }}</option>
@@ -282,42 +275,30 @@
                                                 <span id="reserva_direccion"></span>
                                             </div>
                                             <div class="paciente_edit" style="display:none">
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-9">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Direcci&oacute;n</label>
-                                                            <input type="address" class="form-control form-control-sm" name="input_reserva_direccion_direccion" id="input_reserva_direccion_direccion" value="">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Depto. | Ofic.</label>
-                                                            <input type="address" class="form-control form-control-sm" name="input_reserva_direccion_numero_dir" id="input_reserva_direccion_numero_dir" value="">
-                                                        </div>
-                                                    </div>
+                                                <div class="form-group">
+                                                    <label class="floating-label-activo-sm">Direcci&oacute;n</label>
+                                                    <input type="address" class="form-control form-control-sm" name="input_reserva_direccion_direccion" id="input_reserva_direccion_direccion" value="">
                                                 </div>
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Región</label>
-                                                            <select id="input_reserva_direccion_region" onchange="buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', 0);" name="input_reserva_direccion_region" class="form-control form-control-sm">
-                                                                <option value="0">Seleccione</option>
-                                                                @if (isset($region))
-                                                                    @foreach ($region as $reg)
-                                                                        <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
-                                                                    @endforeach
-                                                                @endif
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Ciudad</label>
-                                                            <select id="input_reserva_direccion_ciudad" name="input_reserva_direccion_ciudad" class="form-control form-control-sm">
-                                                                <option value="0">Seleccione</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
+                                                <div class="form-group">
+                                                    <label class="floating-label-activo-sm">Depto. | Ofic.</label>
+                                                    <input type="address" class="form-control form-control-sm" name="input_reserva_direccion_numero_dir" id="input_reserva_direccion_numero_dir" value="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="floating-label-activo-sm">Región</label>
+                                                    <select id="input_reserva_direccion_region" onchange="buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', 0);" name="input_reserva_direccion_region" class="form-control form-control-sm">
+                                                        <option value="0">Seleccione</option>
+                                                        @if (isset($region))
+                                                            @foreach ($region as $reg)
+                                                                <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="floating-label-activo-sm">Ciudad</label>
+                                                    <select id="input_reserva_direccion_ciudad" name="input_reserva_direccion_ciudad" class="form-control form-control-sm">
+                                                        <option value="0">Seleccione</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </td>
@@ -331,11 +312,7 @@
                                                 <span id="reserva_hora_email"></span>
                                             </div>
                                             <div class="paciente_edit" style="display:none">
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_email" value="">
-                                                    </div>
-                                                </div>
+                                                <input type="text" id="input_reserva_hora_email" value="">
                                             </div>
                                         </td>
                                     </tr>
@@ -348,28 +325,19 @@
                                                 <span id="reserva_hora_telefono"></span>
                                             </div>
                                             <div class="paciente_edit" style="display:none">
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_telefono" value="">
-                                                    </div>
-                                                </div>
+                                                <input type="text" id="input_reserva_hora_telefono" value="">
                                             </div>
                                         </td>
                                     </tr>
-                                   <!-- <tr class="paciente_edit" style="display: none;">
-                                        <hr>
-                                    </tr>-->
-                                    <br>
-                                    <tr class="paciente_edit">
-
+                                    <tr class="paciente_edit" style="display: none;">
                                         <td>
-                                            <button type="button" id="cancelar_modifcar_paciente" onclick="cancelar_modificacion_paciente();" class="btn btn-sm btn-danger">
-                                                <i class="feather icon-x"></i> Cancelar actualización
+                                            <button type="button" id="cancelar_modifcar_paciente" onclick="cancelar_modificacion_paciente();" class="btn btn-danger">
+                                                <i class="feather icon-check"></i> Cancelar Actualización
                                             </button>
                                         </td>
                                         <td>
-                                            <button type="button" id="actualizar_modificar_paciente" onclick="actualizar_paciente();" class="btn btn-sm btn-info">
-                                                <i class="feather icon-check"></i> Actualizar paciente
+                                            <button type="button" id="actualizar_modificar_paciente" onclick="actualizar_paciente();" class="btn btn-info">
+                                                <i class="feather icon-check"></i> Actualizar Paciente
                                             </button>
 
                                         </td>
@@ -377,15 +345,15 @@
                                 </tbody>
                             </table>
 
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" >
-                                <div class="form-group paciente_view">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="form-group">
                                     <label class="floating-label-activo-sm">Descripción reserva</label>
                                     <input type="text" class="form-control form-control-sm"
                                         name="reserva_hora_descripcion" id="reserva_hora_descripcion">
                                 </div>
                             </div>
 
-                            <div class="modal-footer mb-0 pt-1 pb-0 paciente_view">
+                            <div class="modal-footer mb-0 pt-1 pb-0">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal"><i
                                         class="feather icon-x"></i> Cancelar</button>
                                 <button type="button" onclick="agendar_hora();" class="btn btn-info"><i
@@ -885,7 +853,6 @@
                                 <label class="floating-label-activo-sm">Clase Pago</label>
                                 <select id="bono_id_clase_bono" name="bono_id_clase_bono"
                                     class="form-control form-control-sm">
-                                    <option value="0">Seleccione</option>
                                     <option value="1">Bono Fisico</option>
                                     <option value="2">Sencillito</option>
                                     <option value="3">Caja Vecina</option>
@@ -903,19 +870,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="input-group">
-                                <label class="floating-label-activo-sm">Convenio</label>
-                                 <select id="bono_prevision" name="bono_prevision" class="form-control form-control-sm">
-                                    <option value="0">Selecione una opción</option>
-                                    @foreach ($prevision as $prev)
-                                        <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-primary btn-sm" type="button"><i class="feather icon-edit"></i></button>
-                                </div>
-                            </div>
-                            <!--<div class="form-group fill">
+                            <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Convenio</label>
                                 <select id="bono_prevision" name="bono_prevision" class="form-control form-control-sm">
                                     <option value="0">Selecione una opción</option>
@@ -923,7 +878,7 @@
                                         <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
                                     @endforeach
                                 </select>
-                            </div>-->
+                            </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
@@ -941,27 +896,10 @@
                                 </div>
                                 <label>Recepción de programa</label>
                             </div>
-
-                            <div class="row" id="sesiones_programa" style="display: none;">
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label class="floating-label-active">Tipo Bono</label>
-                                        <select  id="bono_id_tipo_bono" name="bono_id_tipo_bono"class="form-control form-control-sm">
-                                            {{-- <option value="0">Seleccione</option> --}}
-                                            @foreach ($tipo_bonos as $t_bono)
-                                                <option value="{{ $t_bono->id }}">{{ $t_bono->nombre }}</option>
-                                            @endforeach
-                                        </select>
-
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label class="floating-label-active">Nº de Sesiones</label>
-                                        <input name="bono_sn_sesiones" id="bono_sn_sesiones" type="number"
-                                            class="form-control form-control-sm">
-                                    </div>
-                                </div>
+                            <div class="form-group" id="sesiones_programa" style="display:none">
+                                <label class="floating-label">Nº de Sesiones</label>
+                                <input name="bono_sn_sesiones" id="bono_sn_sesiones" type="number"
+                                    class="form-control form-control-sm">
                             </div>
                         </div>
                         <div class="col-sm-12">

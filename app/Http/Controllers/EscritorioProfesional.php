@@ -72,6 +72,7 @@ use App\Models\Invitacion;
 use App\Models\PacienteHistoricoDatosMedicos;
 use App\Models\PacientesDependientes;
 use App\Models\ProfesionalHorariosBloqueo;
+use App\Models\TipoBono;
 use DateTime;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -1735,6 +1736,7 @@ class EscritorioProfesional extends Controller
         $filtro_bloqueos[] = array('id_profesional', $profesional->id);
         $filtro_bloqueos[] = array('id_lugar_atencion', $lugarAtencion->id);
         $bloque_horario = ProfesionalHorariosBloqueo::where($filtro_bloqueos)->get();
+        $tipo_bonos = TipoBono::where('estado', 1)->get();
 
         return view('app.profesional.agenda')->with(
             [
@@ -1753,7 +1755,9 @@ class EscritorioProfesional extends Controller
                 'tipo_agendas' => $tipo_agendas,
                 'listaTipoAgendaProf' => $listaTipoAgendaProf,
                 'bloque_horario' => $bloque_horario,
+                'tipo_bonos' => $tipo_bonos,
             ]
+
         );
     }
 
@@ -3012,27 +3016,147 @@ class EscritorioProfesional extends Controller
                     break;
                     case  '2': /** Bono de Examen */
                         /** code */
+                        $hora_medica = HoraMedica::find($request->id_referencia);
+                            $hora_medica->id_estado = 4;
+                            if($hora_medica->save())
+                            {
+                                $datos['estado'] = 1;
+                                $datos['msj'] = 'Bono registrado';
+                                $datos['hora_medica']['estado'] = 1;
+                                $datos['hora_medica']['msj'] = 'Hora medica actualizada';
+                                $datos['hora_medica']['fecha_consulta'] = $hora_medica->fecha_consulta;
+                            }
+                            else
+                            {
+                                $datos['hora_medica']['estado'] = 0;
+                                $datos['hora_medica']['msj'] = 'Problema a actualizar hora medica';
+                            }
                     break;
                     case  '3': /** Bonos de Cirugía */
                         /** code */
+                        $hora_medica = HoraMedica::find($request->id_referencia);
+                            $hora_medica->id_estado = 4;
+                            if($hora_medica->save())
+                            {
+                                $datos['estado'] = 1;
+                                $datos['msj'] = 'Bono registrado';
+                                $datos['hora_medica']['estado'] = 1;
+                                $datos['hora_medica']['msj'] = 'Hora medica actualizada';
+                                $datos['hora_medica']['fecha_consulta'] = $hora_medica->fecha_consulta;
+                            }
+                            else
+                            {
+                                $datos['hora_medica']['estado'] = 0;
+                                $datos['hora_medica']['msj'] = 'Problema a actualizar hora medica';
+                            }
                     break;
                     case  '4': /** Bonos Parto Normal */
                         /** code */
+                        $hora_medica = HoraMedica::find($request->id_referencia);
+                            $hora_medica->id_estado = 4;
+                            if($hora_medica->save())
+                            {
+                                $datos['estado'] = 1;
+                                $datos['msj'] = 'Bono registrado';
+                                $datos['hora_medica']['estado'] = 1;
+                                $datos['hora_medica']['msj'] = 'Hora medica actualizada';
+                                $datos['hora_medica']['fecha_consulta'] = $hora_medica->fecha_consulta;
+                            }
+                            else
+                            {
+                                $datos['hora_medica']['estado'] = 0;
+                                $datos['hora_medica']['msj'] = 'Problema a actualizar hora medica';
+                            }
                     break;
                     case  '5': /** Bonos de Cesarea */
                         /** code */
+                        $hora_medica = HoraMedica::find($request->id_referencia);
+                            $hora_medica->id_estado = 4;
+                            if($hora_medica->save())
+                            {
+                                $datos['estado'] = 1;
+                                $datos['msj'] = 'Bono registrado';
+                                $datos['hora_medica']['estado'] = 1;
+                                $datos['hora_medica']['msj'] = 'Hora medica actualizada';
+                                $datos['hora_medica']['fecha_consulta'] = $hora_medica->fecha_consulta;
+                            }
+                            else
+                            {
+                                $datos['hora_medica']['estado'] = 0;
+                                $datos['hora_medica']['msj'] = 'Problema a actualizar hora medica';
+                            }
                     break;
                     case  '6': /** Bonos de Laboratorio */
                         /** code */
+                        $hora_medica = HoraMedica::find($request->id_referencia);
+                            $hora_medica->id_estado = 4;
+                            if($hora_medica->save())
+                            {
+                                $datos['estado'] = 1;
+                                $datos['msj'] = 'Bono registrado';
+                                $datos['hora_medica']['estado'] = 1;
+                                $datos['hora_medica']['msj'] = 'Hora medica actualizada';
+                                $datos['hora_medica']['fecha_consulta'] = $hora_medica->fecha_consulta;
+                            }
+                            else
+                            {
+                                $datos['hora_medica']['estado'] = 0;
+                                $datos['hora_medica']['msj'] = 'Problema a actualizar hora medica';
+                            }
                     break;
                     case  '7': /** Bonos de Radiologia */
                         /** code */
+                        $hora_medica = HoraMedica::find($request->id_referencia);
+                            $hora_medica->id_estado = 4;
+                            if($hora_medica->save())
+                            {
+                                $datos['estado'] = 1;
+                                $datos['msj'] = 'Bono registrado';
+                                $datos['hora_medica']['estado'] = 1;
+                                $datos['hora_medica']['msj'] = 'Hora medica actualizada';
+                                $datos['hora_medica']['fecha_consulta'] = $hora_medica->fecha_consulta;
+                            }
+                            else
+                            {
+                                $datos['hora_medica']['estado'] = 0;
+                                $datos['hora_medica']['msj'] = 'Problema a actualizar hora medica';
+                            }
                     break;
                     case  '8': /** Bonos de Fonaudiología */
                         /** code */
+                        $hora_medica = HoraMedica::find($request->id_referencia);
+                            $hora_medica->id_estado = 4;
+                            if($hora_medica->save())
+                            {
+                                $datos['estado'] = 1;
+                                $datos['msj'] = 'Bono registrado';
+                                $datos['hora_medica']['estado'] = 1;
+                                $datos['hora_medica']['msj'] = 'Hora medica actualizada';
+                                $datos['hora_medica']['fecha_consulta'] = $hora_medica->fecha_consulta;
+                            }
+                            else
+                            {
+                                $datos['hora_medica']['estado'] = 0;
+                                $datos['hora_medica']['msj'] = 'Problema a actualizar hora medica';
+                            }
                     break;
                     case  '9': /** Bonos de Kinesiología */
                         /** code */
+                        $hora_medica = HoraMedica::find($request->id_referencia);
+                            $hora_medica->id_estado = 4;
+                            if($hora_medica->save())
+                            {
+                                $datos['estado'] = 1;
+                                $datos['msj'] = 'Bono registrado';
+                                $datos['hora_medica']['estado'] = 1;
+                                $datos['hora_medica']['msj'] = 'Hora medica actualizada';
+                                $datos['hora_medica']['fecha_consulta'] = $hora_medica->fecha_consulta;
+                            }
+                            else
+                            {
+                                $datos['hora_medica']['estado'] = 0;
+                                $datos['hora_medica']['msj'] = 'Problema a actualizar hora medica';
+                            }
                     break;
                     case '10': /** Bonos de Nutrición */
                         /** code */

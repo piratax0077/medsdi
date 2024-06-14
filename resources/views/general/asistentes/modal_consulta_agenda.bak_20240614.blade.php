@@ -195,7 +195,7 @@
                             <input type="hidden" name="bono_hora_medica" id="bono_hora_medica">
                             <input type="hidden" name="bono_id_profesional" id="bono_id_profesional">
                             <input type="hidden" name="bono_id_paciente" id="bono_id_paciente">
-                            {{-- <input type="hidden" name="bono_id_tipo_bono" id="bono_id_tipo_bono" value="1"> --}}
+                            <input type="hidden" name="bono_id_tipo_bono" id="bono_id_tipo_bono" value="1">
                             <div class="col-sm-6">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Rut del Paciente</label>
@@ -246,17 +246,15 @@
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <div class="input-group">
+                                <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Convenio</label>
-                                     <select id="bono_prevision" name="bono_prevision" class="form-control form-control-sm">
-                                        <option value="0">Seleccione</option>
+                                    <select id="bono_prevision" name="bono_prevision"
+                                        class="form-control form-control-sm">
+                                        <option value="0">Selecione una opción</option>
                                         @foreach ($prevision as $prev)
                                             <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
                                         @endforeach
                                     </select>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-primary btn-sm" type="button"><i class="feather icon-edit"></i></button>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -275,26 +273,10 @@
                                     </div>
                                     <label>Recepción de programa</label>
                                 </div>
-                                <div class="row" id="sesiones_programa" style="display: none;">
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <label class="floating-label-active">Tipo Bono</label>
-                                            <select  id="bono_id_tipo_bono" name="bono_id_tipo_bono"class="form-control form-control-sm">
-                                                {{-- <option value="0">Seleccione</option> --}}
-                                                @foreach ($tipo_bonos as $t_bono)
-                                                    <option value="{{ $t_bono->id }}">{{ $t_bono->nombre }}</option>
-                                                @endforeach
-                                            </select>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <label class="floating-label-active">Nº de Sesiones</label>
-                                            <input name="bono_sn_sesiones" id="bono_sn_sesiones" type="number"
-                                                class="form-control form-control-sm">
-                                        </div>
-                                    </div>
+                                <div class="form-group" id="sesiones_programa" style="display:none">
+                                    <label class="floating-label">Nº de Sesiones</label>
+                                    <input name="bono_sn_sesiones" id="bono_sn_sesiones" type="number"
+                                        class="form-control form-control-sm">
                                 </div>
                             </div>
                             <div class="col-sm-12">
@@ -339,23 +321,21 @@
                             </div>
 
                             <div class="col-sm-6">
-                                 <div class="input-group">
+                                <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Previsión</label>
-                                     <select  id="venta_prevision" name="venta_prevision"class="form-control form-control-sm">
-                                        <option value="0">Seleccione</option>
+                                    <select id="venta_prevision" name="venta_prevision"
+                                        class="form-control form-control-sm">
+                                        <option value="0">Selecione una opción</option>
                                         @foreach ($prevision as $prev)
                                             <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
                                         @endforeach
                                     </select>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-primary btn-sm" type="button"><i class="feather icon-edit"></i></button>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-6" id="div_btn_pedir_autorizacion">
                                 <div class="form-group fill">
                                     <button type="button" onclick="conectar_api();"
-                                        class="btn btn-info btn-sm">Pedir autorización</button>
+                                        class="btn btn-info btn-sm has-ripple">Pedir Autorización</button>
                                 </div>
                             </div>
 
@@ -470,219 +450,187 @@
 
 
                     <div id="reserva_datos_paciente" class="row mx-3">
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <h6 class="text-c-blue f-16 d-inline">Información del paciente</h6>
-                                <button type="button" onclick="editar_info_paciente();" class="btn btn-sm btn-info-light-c float-right d-inline paciente_view">
-                                    <i class="feather icon-edit"></i> Editar
-                                </button>
-                                <input type="hidden" name="modificando_paciente" id="modificando_paciente" value="0">
-                            </div>
-                            <table class="table table-borderless table-xs">
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Rut</strong>
-                                        </th>
-                                        <td><span id="reserva_rut_paciente"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Nombre</strong>
-                                        </th>
-                                        <td>
-                                            <div class="paciente_view">
-                                                <span id="reserva_hora_nombre"></span>
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <button type="button" onclick="editar_info_paciente();" class="btn btn-info">
+                                <i class="feather icon-check"></i> Editar
+                            </button>
+                            <input type="hidden" name="modificando_paciente" id="modificando_paciente" value="0">
+                        </div>
+                        <table class="table table-borderless table-xs">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Rut</strong>
+                                    </th>
+                                    <td>
+                                        <div>
+                                            <span id="reserva_rut_paciente"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Nombre</strong>
+                                    </th>
+                                    <td>
+                                        <div class="paciente_view">
+                                            <span id="reserva_hora_nombre"></span>
+                                        </div>
+                                        <div class="paciente_edit" style="display:none">
+                                            <input type="text" id="input_reserva_hora_nombre" value="">
+                                            <input type="text" id="input_reserva_hora_apellido_uno" value="">
+                                            <input type="text" id="input_reserva_hora_apellido_dos" value="">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Fecha Nacimiento</strong>
+                                    </th>
+                                    <td>
+                                        <div class="paciente_view">
+                                            <span id="reserva_fecha_nacimiento"></span>
+                                        </div>
+                                        <div class="paciente_edit" style="display:none">
+                                            <input type="text" class="mask_date form-control form-control-sm"
+                                                name="input_reserva_fecha_nacimiento" id="input_reserva_fecha_nacimiento"
+                                                onchange="evaluar_edad();"
+                                                maxlength="10" placeholder="dd/mm/aaaa"
+                                                autocomplete="off"
+                                                data-mask="00/00/0000"
+                                            />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Sexo</strong>
+                                    </th>
+                                    <td>
+                                        <div class="paciente_view">
+                                            <span id="reserva_sexo"></span>
+                                        </div>
+                                        <div class="paciente_edit" style="display:none">
+                                            <select id="input_reserva_sexo" class="form-control">
+                                                <option value="M">Masculino</option>
+                                                <option value="F">Femenino</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Convenio</strong>
+                                    </th>
+                                    <td>
+                                        <div class="paciente_view">
+                                            <span id="reserva_convenio"></span>
+                                        </div>
+                                        <div class="paciente_edit" style="display:none">
+                                            <select id="input_reserva_convenio" name="input_reserva_convenio" class="form-control form-control-sm">
+                                                <option value="0">Selecione una opci&oacute;n</option>
+                                                @if (isset($prevision))
+                                                    @foreach ($prevision as $p)
+                                                        <option value="{{ $p->id }}">{{ $p->nombre }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Dirección</strong>
+                                    </th>
+                                    <td>
+                                        <div class="paciente_view">
+                                            <span id="reserva_direccion"></span>
+                                        </div>
+                                        <div class="paciente_edit" style="display:none">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Direcci&oacute;n</label>
+                                                <input type="address" class="form-control form-control-sm" name="input_reserva_direccion_direccion" id="input_reserva_direccion_direccion" value="">
                                             </div>
-
-                                                <div class="paciente_edit" style="display:none">
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-4">
-                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_nombre" value="">
-                                                    </div>
-                                                        <div class="col-sm-12 col-md-4">
-                                                            <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_uno" value="">
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-4">
-                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_dos" value="">
-                                                    </div>
-                                                </div>
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Depto. | Ofic.</label>
+                                                <input type="address" class="form-control form-control-sm" name="input_reserva_direccion_numero_dir" id="input_reserva_direccion_numero_dir" value="">
                                             </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Fecha Nacimiento</strong>
-                                        </th>
-                                        <td>
-                                            <div class="paciente_view">
-                                                <span id="reserva_fecha_nacimiento"></span>
-                                            </div>
-                                            <div class="paciente_edit" style="display:none">
-                                                <input type="text" class="mask_date form-control form-control-sm"
-                                                    name="input_reserva_fecha_nacimiento" id="input_reserva_fecha_nacimiento"
-                                                    onchange="evaluar_edad();"
-                                                    maxlength="10" placeholder="dd/mm/aaaa"
-                                                    autocomplete="off"
-                                                    data-mask="00/00/0000"
-                                                />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Sexo</strong>
-                                        </th>
-                                        <td>
-                                            <div class="paciente_view">
-                                                <span id="reserva_sexo"></span>
-                                            </div>
-                                            <div class="paciente_edit" style="display:none">
-                                                <select id="input_reserva_sexo" class="form-control form-control-sm">
-                                                    <option value="M">Masculino</option>
-                                                    <option value="F">Femenino</option>
-                                                </select>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Convenio</strong>
-                                        </th>
-                                        <td>
-                                            <div class="paciente_view">
-                                                <span id="reserva_convenio"></span>
-                                            </div>
-                                            <div class="paciente_edit" style="display:none">
-                                                <select id="input_reserva_convenio" name="input_reserva_convenio" class="form-control form-control-sm">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Región</label>
+                                                <select id="input_reserva_direccion_region" onchange="buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', 0);" name="input_reserva_direccion_region" class="form-control form-control-sm">
                                                     <option value="0">Seleccione</option>
-                                                    @if (isset($prevision))
-                                                        @foreach ($prevision as $p)
-                                                            <option value="{{ $p->id }}">{{ $p->nombre }}</option>
+                                                    @if (isset($region))
+                                                        @foreach ($region as $reg)
+                                                            <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
                                                         @endforeach
                                                     @endif
                                                 </select>
                                             </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Dirección</strong>
-                                        </th>
-                                        <td>
-                                            <div class="paciente_view">
-                                                <span id="reserva_direccion"></span>
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Ciudad</label>
+                                                <select id="input_reserva_direccion_ciudad" name="input_reserva_direccion_ciudad" class="form-control form-control-sm">
+                                                    <option value="0">Seleccione</option>
+                                                </select>
                                             </div>
-                                            <div class="paciente_edit" style="display:none">
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-9">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Direcci&oacute;n</label>
-                                                            <input type="address" class="form-control form-control-sm" name="input_reserva_direccion_direccion" id="input_reserva_direccion_direccion" value="">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-3">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Depto. | Ofic.</label>
-                                                            <input type="address" class="form-control form-control-sm" name="input_reserva_direccion_numero_dir" id="input_reserva_direccion_numero_dir" value="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Región</label>
-                                                            <select id="input_reserva_direccion_region" onchange="buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', 0);" name="input_reserva_direccion_region" class="form-control form-control-sm">
-                                                                <option value="0">Seleccione</option>
-                                                                @if (isset($region))
-                                                                    @foreach ($region as $reg)
-                                                                        <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
-                                                                    @endforeach
-                                                                @endif
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Ciudad</label>
-                                                            <select id="input_reserva_direccion_ciudad" name="input_reserva_direccion_ciudad" class="form-control form-control-sm">
-                                                                <option value="0">Seleccione</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Correo Electrónico</strong>
-                                        </th>
-                                        <td>
-                                            <div class="paciente_view">
-                                                <span id="reserva_hora_email"></span>
-                                            </div>
-                                            <div class="paciente_edit" style="display:none">
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_email" value="">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Teléfono</strong>
-                                        </th>
-                                        <td>
-                                            <div class="paciente_view">
-                                                <span id="reserva_hora_telefono"></span>
-                                            </div>
-                                            <div class="paciente_edit" style="display:none">
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_telefono" value="">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                   <!-- <tr class="paciente_edit" style="display: none;">
-                                        <hr>
-                                    </tr>-->
-                                    <br>
-                                    <tr class="paciente_edit">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Correo Electrónico</strong>
+                                    </th>
+                                    <td>
+                                        <div class="paciente_view">
+                                            <span id="reserva_hora_email"></span>
+                                        </div>
+                                        <div class="paciente_edit" style="display:none">
+                                            <input type="text" id="input_reserva_hora_email" value="">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Teléfono</strong>
+                                    </th>
+                                    <td>
+                                        <div class="paciente_view">
+                                            <span id="reserva_hora_telefono"></span>
+                                        </div>
+                                        <div class="paciente_edit" style="display:none">
+                                            <input type="text" id="input_reserva_hora_telefono" value="">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="paciente_edit" style="display: none;">
+                                    <td>
+                                        <button type="button" id="cancelar_modifcar_paciente" onclick="cancelar_modificacion_paciente();" class="btn btn-danger">
+                                            <i class="feather icon-check"></i> Cancelar Actualización
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" id="actualizar_modificar_paciente" onclick="actualizar_paciente();" class="btn btn-info">
+                                            <i class="feather icon-check"></i> Actualizar Paciente
+                                        </button>
 
-                                        <td>
-                                            <button type="button" id="cancelar_modifcar_paciente" onclick="cancelar_modificacion_paciente();" class="btn btn-sm btn-danger">
-                                                <i class="feather icon-x"></i> Cancelar actualización
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <button type="button" id="actualizar_modificar_paciente" onclick="actualizar_paciente();" class="btn btn-sm btn-info">
-                                                <i class="feather icon-check"></i> Actualizar paciente
-                                            </button>
-
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" >
-                                <div class="form-group paciente_view">
-                                    <label class="floating-label-activo-sm">Descripción reserva</label>
-                                    <input type="text" class="form-control form-control-sm"
-                                        name="reserva_hora_descripcion" id="reserva_hora_descripcion">
-                                </div>
-                            </div>
-
-                            <div class="modal-footer mb-0 pt-1 pb-0 paciente_view">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal"><i
-                                        class="feather icon-x"></i> Cancelar</button>
-                                <button type="button" onclick="agendar_hora();" class="btn btn-info"><i
-                                        class="feather icon-check"></i> Agendar hora</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Descripción reserva</label>
+                                <input type="text" class="form-control form-control-sm"
+                                    name="reserva_hora_descripcion" id="reserva_hora_descripcion">
                             </div>
                         </div>
+
+                        <div class="modal-footer mb-0 pt-1 pb-0">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i
+                                    class="feather icon-x"></i> Cancelar</button>
+                            <button type="button" onclick="agendar_hora();" class="btn btn-info"><i
+                                    class="feather icon-check"></i> Agendar hora</button>
+                        </div>
+                    </div>
 
                     <div id="reserva_agregar_paciente_hora">
                         <div class="form-row">

@@ -25,6 +25,7 @@ use App\Models\ProfesionOficio;
 use App\Models\Region;
 use App\Models\RegistroConfirmacionHoraAgenda;
 use App\Models\SubTipoEspecialidad;
+use App\Models\TipoBono;
 use App\Models\TipoEspecialidad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,6 +55,7 @@ class EscritorioAsistenteCmJefe extends Controller
             $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
             $profesionales = $lugares_atencion->profesionales()->get();
             $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
+            $tipo_bonos = TipoBono::where('estado', 1)->get();
 
             $url = 'app.asistente_cm.escritorio_asistente'; // institucion
             $array_data = array(
@@ -64,6 +66,7 @@ class EscritorioAsistenteCmJefe extends Controller
                 'reg_confirmacion_hora' => $reg_confirmacion_hora,
                 'region' => $region,
                 'profesion_oficio' => $profesion_oficio,
+                'tipo_bonos' => $tipo_bonos,
             );
 
 
