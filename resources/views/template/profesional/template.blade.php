@@ -4650,6 +4650,7 @@
         function cambio_estado_asistente(id) {
 
             let id_asistente = id;
+            let id_lugar_atencion = $('#mi_asistente_id_lugar_atencion').val();
             let url = "{{ route('profesional.cambio_estado_asistente') }}";
 
             if ($('#estado_asistente').prop('checked')) {
@@ -4665,7 +4666,8 @@
                             data: {
                                 //_token: _token,
                                 id_asistente: id_asistente,
-                                estado: estado
+                                estado: estado,
+                                id_lugar_atencion: id_lugar_atencion,
                             },
                         })
                         .done(function(data) {
@@ -4707,7 +4709,8 @@
                             data: {
                                 //_token: _token,
                                 id_asistente: id_asistente,
-                                estado: estado
+                                estado: estado,
+                                id_lugar_atencion: id_lugar_atencion,
                             },
                         })
                         .done(function(data) {

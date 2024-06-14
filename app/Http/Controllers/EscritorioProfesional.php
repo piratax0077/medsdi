@@ -1039,7 +1039,15 @@ class EscritorioProfesional extends Controller
     public function cambio_estado_asistente(Request $request)
     {
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-        $asistenteLugar = AsistenteLugarAtencion::where('id_asistente', $request->id_asistente)->where('id_profesional', $profesional->id)->first();
+        $filtro = array();
+        if(!empty($request->id_lugar_atencion))
+            $filtro[] = array('id_lugar_atencion', $request->id_lugar_atencion);
+
+        $filtro[] = array('id_asistente', $request->id_asistente);
+        $filtro[] = array('id_profesional', $profesional->id);
+        $asistenteLugar = AsistenteLugarAtencion::where($filtro)
+                                        ->where('id_profesional', $profesional->id)
+                                        ->first();
 
         $asistenteLugar->estado = $request->estado;
         if (!$asistenteLugar->save()) {
