@@ -8,83 +8,71 @@
             </div>
             <div class="modal-body">
                 <form>
-                     <div class="form-group row">
-                        <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3 t-aten-black-sm pt-2">I.- Olfatorio</h6>
-                        <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                            <textarea class="form-control form-control-sm" placeholder="DESCRIBIR EXAMEN" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_uno" id="pc_uno"></textarea>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                            <p class="fecha-sm"><strong>Fecha del examen</strong> 
+                                <script>
+                                    var f = new Date();
+                                    document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                 </script>
+                             </p>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3 t-aten-black-sm pt-2">II.- Óptico</h6>
-                        <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                            <textarea class="form-control form-control-sm" placeholder="DESCRIBIR EXAMEN" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_dos" id="pc_dos"></textarea>
+                    <div class="form-row">
+                         <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <label class="floating-label-activo-sm"for="pc_uno">I Olfatorio</label>
+                            <textarea class="form-control form-control-sm" placeholder="Describir examen" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_uno" id="pc_uno"></textarea>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3 t-aten-black-sm pt-2">III.- Oculo-Motor</h6>
-                        <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                            <textarea class="form-control form-control-sm" placeholder="DESCRIBIR EXAMEN" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_tres" id="pc_tres"></textarea>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <label class="floating-label-activo-sm" for="pc_dos">II Óptico</label>
+                            <textarea class="form-control form-control-sm" placeholder="Describir examen" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_dos" id="pc_dos"></textarea>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3 t-aten-black-sm pt-2">IV.- Troclear</h6>
-                        <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                            <textarea class="form-control form-control-sm" placeholder="DESCRIBIR EXAMEN" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_cuatro" id="pc_cuatro"></textarea>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <label class="floating-label-activo-sm" for="pc_tres">III Oculo-Motor</label>
+                            <textarea class="form-control form-control-sm" placeholder="Describir examen" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_tres" id="pc_tres"></textarea>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3 t-aten-black-sm pt-2">V.- Trigémino</h6>
-                        <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                            <textarea class="form-control form-control-sm" placeholder="DESCRIBIR EXAMEN" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_cinco" id="pc_cinco"></textarea>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <label class="floating-label-activo-sm" for="pc_cuatro">IV  Troclear</label>
+                            <textarea class="form-control form-control-sm" placeholder="Describir examen" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_cuatro" id="pc_cuatro"></textarea>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3 t-aten-black-sm pt-2">VI.- Abducente</h6>
-                        <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                            <textarea class="form-control form-control-sm" placeholder="DESCRIBIR EXAMEN" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_seis" id="pc_seis"></textarea>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <label class="floating-label-activo-sm" for="pc_cinco">V  Trigémino</label>
+                            <textarea class="form-control form-control-sm" placeholder="Describir examen" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_cinco" id="pc_cinco"></textarea>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3 t-aten-black-sm pt-2">VII.- Facial</h6>
-                        <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                            <textarea class="form-control form-control-sm" placeholder="DESCRIBIR EXAMEN" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_siete" id="pc_siete"></textarea>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <label class="floating-label-activo-sm" for="pc_seis">VI  Abducente</label>
+                            <textarea class="form-control form-control-sm" placeholder="Describir examen" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_seis" id="pc_seis"></textarea>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3 t-aten-black-sm pt-2">VIII.- Audítivo</h6>
-                        <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                            <textarea class="form-control form-control-sm" placeholder="DESCRIBIR EXAMEN" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_ocho" id="pc_ocho"></textarea>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <label class="floating-label-activo-sm" for="pc_siete">VII  Facial</label>
+                            <textarea class="form-control form-control-sm" placeholder="Describir examen" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_siete" id="pc_siete"></textarea>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3 t-aten-black-sm pt-2">IX.- Glosofaríngeo</h6>
-                        <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                            <textarea class="form-control form-control-sm" placeholder="DESCRIBIR EXAMEN" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_nueve" id="pc_nueve"></textarea>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <label class="floating-label-activo-sm" for="pc_ocho">VIII  Audítivo</label>
+                            <textarea class="form-control form-control-sm" placeholder="Describir examen" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_ocho" id="pc_ocho"></textarea>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3 t-aten-black-sm pt-2">X.- Vago</h6>
-                        <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                            <textarea class="form-control form-control-sm" placeholder="DESCRIBIR EXAMEN" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_diez" id="pc_diez"></textarea>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <label class="floating-label-activo-sm"for="pc_nueve">IX  Glosofaríngeo</label>
+                            <textarea class="form-control form-control-sm" placeholder="Describir examen" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_nueve" id="pc_nueve"></textarea>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3 t-aten-black-sm pt-2">XI.- Espinal (Accesorio)</h6>
-                        <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                            <textarea class="form-control form-control-sm" placeholder="DESCRIBIR EXAMEN" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_once" id="pc_once"></textarea>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <label class="floating-label-activo-sm" for="pc_diez">X  Vago</label>
+                            <textarea class="form-control form-control-sm" placeholder="Describir examen" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_diez" id="pc_diez"></textarea>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3 t-aten-black-sm pt-2">XII.- Hipogloso</h6>
-                        <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                            <textarea class="form-control form-control-sm" placeholder="DESCRIBIR EXAMEN" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_doce" id="pc_doce"></textarea>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <label class="floating-label-activo-sm" for="pc_once">XI  Espinal (Accesorio)</label>
+                            <textarea class="form-control form-control-sm" placeholder="Describir examen" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_once" id="pc_once"></textarea>
+                        </div>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <label class="floating-label-activo-sm" for="pc_doce">XII  Hipogloso</label>
+                            <textarea class="form-control form-control-sm" placeholder="Describir examen" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="pc_doce" id="pc_doce"></textarea>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-1">
-                            <h6 class="t-aten-black-sm">Conclusiones</h6>
+                            <h6 class="t-aten">Conclusiones</h6>
                             <div class="form-group">
-                                <label class="floating-label-activo-sm">Comentarios</label>
+                                <label class="floating-label-activo-sm" for="pc_conclusiones">Comentarios</label>
                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="pc_conclusiones" id="pc_conclusiones"></textarea>
                             </div>
                         </div>

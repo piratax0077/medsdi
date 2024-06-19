@@ -8,26 +8,36 @@
             </div>
             <div class="modal-body">
                 <form>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                            <p class="fecha-sm"><strong>Fecha del examen</strong> 
+                                <script>
+                                    var f = new Date();
+                                    document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                 </script>
+                             </p>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
-                            <h6 class="t-aten-black-sm">Prueba Índice - Nariz</h6>
+                            <h6 class="t-aten">Prueba Índice - Nariz</h6>
                             <div class="form-group">
-                                <label class="floating-label-activo-sm">Evaluación</label>
-                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="kine_metria_pin" id="kine_metria_pin"></textarea>
+                                <label class="floating-label-activo-sm" for="metria_pin">Evaluación</label>
+                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="metria_pin" id="metria_pin"></textarea>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
-                            <h6 class="t-aten-black-sm">Prueba Talón - Rodilla</h6>
+                            <h6 class="t-aten">Prueba Talón - Rodilla</h6>
                             <div class="form-group">
-                                <label class="floating-label-activo-sm">Evaluación</label>
-                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="kine_metria_ptr" id="kine_metria_ptr"></textarea>
+                                <label class="floating-label-activo-sm" for="metria_ptr">Evaluación</label>
+                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="metria_ptr" id="kine_metria_ptr"></textarea>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h6 class="t-aten-black-sm">Diadococinesia</h6>
+                            <h6 class="t-aten">Diadococinesia</h6>
                             <div class="form-group">
-                                <label class="floating-label-activo-sm">Evaluación</label>
-                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="kine_metria_d" id="kine_metria_d"></textarea>
+                                <label class="floating-label-activo-sm" for="metria_d">Evaluación</label>
+                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="metria_d" id="metria_d"></textarea>
                             </div>
                         </div>
                     </div>

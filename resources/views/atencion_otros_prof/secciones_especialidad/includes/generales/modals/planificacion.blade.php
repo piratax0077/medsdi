@@ -18,15 +18,15 @@
                     </div>
                     <div class="form-row">
                         <div class="col-sm-3 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Fecha Inicio Tratamiento</label>
+                            <label class="floating-label-activo-sm" for='fec_inicio_tto'>Fecha Inicio Tratamiento</label>
                             <input type="date" class="form-control form-control-sm" name="fec_inicio_tto" id="fec_inicio_tto">
                         </div>
                         <div class="col-sm-6 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Diagnósticos</label>
+                            <label class="floating-label-activo-sm" for='dg_ingreso'>Diagnósticos</label>
                             <input type="text" class="form-control form-control-sm" name="dg_ingreso" id="dg_ingreso">
                         </div>
                         <div class="col-sm-3 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Número de Sesiones</label>
+                            <label  class="floating-label-activo-sm" for='n_sesiones'>Número de Sesiones</label>
                             <input type="text" class="form-control form-control-sm" name="n_sesiones" id="n_sesiones">
                         </div>
                     </div>
@@ -35,7 +35,7 @@
                     <div class="form-row">
 
                         <div class="col-sm-12 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Objetivos</label>
+                            <label  class="floating-label-activo-sm" for='obj'>Objetivos</label>
                             <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obj" id="obj"></textarea>
                         </div>
                         <br>

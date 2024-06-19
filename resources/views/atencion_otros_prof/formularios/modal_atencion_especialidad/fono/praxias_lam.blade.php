@@ -27,10 +27,10 @@
                             <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias1.png') }}">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Lengua a Izquierda</label>
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">Si</option>
-                                    <option value="N">No</option>
-                                    <option value="D">Deficiente</option>
+                                <select class="form-control form-control-sm" name="li" id="li">
+                                    <option value="1">Si</option>
+                                    <option value="2">No</option>
+                                    <option value="3">Deficiente</option>
                                 </select>
                             </div>
                         </div>
@@ -38,10 +38,10 @@
                             <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias2.png') }}">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Lengua a Dererecha</label>
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                     <option value="S">Si</option>
-                                    <option value="N">No</option>
-                                    <option value="D">Deficiente</option>
+                                 <select class="form-control form-control-sm" name="ld" id="ld">
+                                     <option value="1">Si</option>
+                                    <option value="N2>No</option>
+                                    <option value="D3>Deficiente</option>
                                 </select>
                             </div>
                         </div>
@@ -49,10 +49,10 @@
                             <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias3.png') }}">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Inflar Mejilla Izq</label>
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">Si</option>
-                                    <option value="N">No</option>
-                                    <option value="D">Deficiente</option>
+                                 <select class="form-control form-control-sm" name="imi" id="imi">
+                                    <option value="1">Si</option>
+                                    <option value="2">No</option>
+                                    <option value="3">Deficiente</option>
                                 </select>
                             </div>
                         </div>
@@ -60,10 +60,10 @@
                             <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias4.png') }}">
                             <div class="form-group">
                                  <label class="floating-label-activo-sm">Inflar Mejilla Der</label>
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                     <option value="S">Si</option>
-                                    <option value="N">No</option>
-                                    <option value="D">Deficiente</option>
+                                 <select class="form-control form-control-sm" name="imd" id="imd">
+                                     <option value="1">Si</option>
+                                    <option value="N2>No</option>
+                                    <option value="D3>Deficiente</option>
                                 </select>
                             </div>
                         </div>
@@ -71,10 +71,10 @@
                             <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias5.png') }}">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Lengua a Arriba</label>
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">Si</option>
-                                    <option value="N">No</option>
-                                    <option value="D">Deficiente</option>
+                                 <select class="form-control form-control-sm" name="larrib" id="larrib">
+                                    <option value="1">Si</option>
+                                    <option value="2">No</option>
+                                    <option value="3">Deficiente</option>
                                 </select>
                             </div>
                         </div>
@@ -82,10 +82,10 @@
                             <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias6.png') }}">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Lengua Abajo</label>
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">Si</option>
-                                    <option value="N">No</option>
-                                    <option value="D">Deficiente</option>
+                                   <select class="form-control form-control-sm" name="labajo" id="labajo">
+                                    <option value="1">Si</option>
+                                    <option value="2">No</option>
+                                    <option value="3">Deficiente</option>
                                 </select>
                             </div>
                         </div>
@@ -93,10 +93,10 @@
                             <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias7.png') }}">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Inflar Ambas Mejillas</label>
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">Si</option>
-                                    <option value="N">No</option>
-                                    <option value="D">Deficiente</option>
+                                  <select class="form-control form-control-sm" name="inf_amej" id="inf_amej">
+                                    <option value="1">Si</option>
+                                    <option value="2">No</option>
+                                    <option value="3">Deficiente</option>
                                 </select>
                             </div>
                         </div>
@@ -104,10 +104,10 @@
                             <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias8.png') }}">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Desinflar Ambas Mejillas</label>
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">Si</option>
-                                    <option value="N">No</option>
-                                    <option value="D">Deficiente</option>
+                                  <select class="form-control form-control-sm" name="desammej" id="desammej">
+                                    <option value="1">Si</option>
+                                    <option value="2">No</option>
+                                    <option value="3">Deficiente</option>
                                 </select>
                             </div>
                         </div>
@@ -115,10 +115,10 @@
                             <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias9.png') }}">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Lengua Ancha</label>
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">Si</option>
-                                    <option value="N">No</option>
-                                    <option value="D">Deficiente</option>
+                                <select class="form-control form-control-sm" name="leng_ancha" id="leng_ancha">
+                                    <option value="1">Si</option>
+                                    <option value="2">No</option>
+                                    <option value="3">Deficiente</option>
                                 </select>
                             </div>
                         </div>
@@ -126,10 +126,10 @@
                             <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias10.png') }}">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Lengua Angosta</label>
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">Si</option>
-                                    <option value="N">No</option>
-                                    <option value="D">Deficiente</option>
+                                <select class="form-control form-control-sm" name="leng_ang" id="leng_ang">
+                                    <option value="1">Si</option>
+                                    <option value="2">No</option>
+                                    <option value="3">Deficiente</option>
                                 </select>
                             </div>
                         </div>
@@ -137,10 +137,10 @@
                             <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias11.png') }}">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Inflar Mejillas</label>
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">Si</option>
-                                    <option value="N">No</option>
-                                    <option value="D">Deficiente</option>
+                                <select class="form-control form-control-sm" name="inf_mej" id="inf_mej">
+                                    <option value="1">Si</option>
+                                    <option value="2">No</option>
+                                    <option value="3">Deficiente</option>
                                 </select>
                             </div>
                         </div>
@@ -148,10 +148,10 @@
                             <img class="w-60 img-fluid mb-3" src="{{ asset('images\fono\img\praxias12.png') }}">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Reventar con los Dedos</label>
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">Si</option>
-                                    <option value="N">No</option>
-                                    <option value="D">Deficiente</option>
+                                <select class="form-control form-control-sm" name="rev_dedos" id="rev_dedos">
+                                    <option value="1">Si</option>
+                                    <option value="2">No</option>
+                                    <option value="3">Deficiente</option>
                                 </select>
                             </div>
                         </div>

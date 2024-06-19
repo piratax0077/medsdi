@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header bg-info">
-				<h5 class="modal-title text-white mt-1">Interconsulta </h5>
+				<h5 class="modal-title text-white mt-1">Interconsulta</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
 			<div class="modal-body mb-0">
@@ -68,7 +68,7 @@
                                             <textarea type="text" class="form-control form-control-sm" rows="2" name="" id=""></textarea>
                                         </div>
                                         <div class="col-sm-12 col-md-12 text-center mb-2">
-                                            <button type="button" class="btn btn-sm btn-outline-primary"><i class="feather icon-file-text"></i> Ver documento en PDF</button>
+                                            <button type="button" class="btn btn-sm btn-info">Ver documento en PDF</button>
                                         </div>
                                     </div>
                                 </form>
@@ -106,7 +106,7 @@
                                             <input type="date" class="form-control form-control-sm" name="" id="">
                                         </div>
                                         <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                                            <button type="button" class="btn btn-sm btn-outline-primary btn-block"><i class="feather icon-file-text"></i> Ver documento en PDF</button>
+                                            <button type="button" class="btn btn-sm btn-info btn-block">Ver documento en PDF</button>
                                         </div>
 
                                     </div>

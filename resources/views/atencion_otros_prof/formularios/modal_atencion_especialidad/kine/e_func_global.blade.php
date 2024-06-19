@@ -30,61 +30,67 @@
                             <!--POSICIONES BAJAS-->
                             <div class="tab-pane fade show active" id="pos-baj-fg" role="tabpanel" aria-labelledby="pos-baj-fg-tab">
                                 <div class="form-row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="t-aten"> POSICIONES BAJAS</h6>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                                        <h6 class="t-aten d-inline float-left"> Posiciones bajas</h6>
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                            <script>
+                                                var f = new Date();
+                                                document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                             </script>
+                                         </p>
                                     </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <h6 class="t-aten-black-sm pt-2"> Control de cabeza</h6>
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                        <h6 class="mt-2 mb-2 f-14"> Control de cabeza</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Descripción</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="func_glob_cont_cab" id="func_glob_cont_cab"></textarea>
+                                           <label class="floating-label-activo-sm" for="cont_cab">Descripción</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cont_cab" id="cont_cab"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <h6 class="t-aten-black-sm pt-2"> Control de pelvis</h6>
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                        <h6 class="mt-2 mb-2 f-14"> Control de pelvis</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Descripción</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="func_glob_cont_pelvis" id="func_glob_cont_pelvis"></textarea>
+                                           <label class="floating-label-activo-sm" for="cont_pelvis">Descripción</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cont_pelvis" id="cont_pelvis"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <h6 class="t-aten-black-sm pt-2">Giros</h6>
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                        <h6 class="mt-2 mb-2 f-14">Giros</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Descripción</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="func_glob_cont_giros" id="func_glob_cont_giros"></textarea>
+                                           <label class="floating-label-activo-sm" for="cont_giros">Descripción</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cont_giros" id="cont_giros"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <h6 class="t-aten-black-sm pt-2">Arrastre</h6>
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                        <h6 class="mt-2 mb-2 f-14">Arrastre</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Descripción</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="func_glob_cont_arrastre" id="func_glob_cont_arrastre"></textarea>
+                                           <label class="floating-label-activo-sm" for="cont_arrastre">Descripción</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cont_arrastre" id="cont_arrastre"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <h6 class="t-aten-black-sm pt-2">Reincorporación</h6>
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                        <h6 class="mt-2 mb-2 f-14">Reincorporación</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Descripción</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="func_glob_cont_reinc" id="func_glob_cont_reinc"></textarea>
+                                           <label class="floating-label-activo-sm" for="cont_reinc">Descripción</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cont_reinc" id="cont_reinc"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <h6 class="t-aten-black-sm pt-2">Cuadrúpeda</h6>
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                        <h6 class="mt-2 mb-2 f-14">Cuadrúpeda</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Descripción</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="func_glob_cont_cuad" id="func_glob_cont_cuad"></textarea>
+                                           <label class="floating-label-activo-sm" for="cont_cuad">Descripción</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cont_cuad" id="cont_cuad"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -92,34 +98,40 @@
                             <!--POSICIONES MEDIAS-->
                             <div class="tab-pane fade show" id="pos-med-fg" role="tabpanel" aria-labelledby="pos-med-fg-tab">
                                 <div class="form-row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="t-aten"> POSICIONES MEDIAS</h6>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                                        <h6 class="t-aten d-inline float-left"> Posiciones medias</h6>
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                            <script>
+                                                var f = new Date();
+                                                document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                             </script>
+                                         </p>
                                     </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <h6 class="t-aten-black-sm pt-2"> Control de tronco</h6>
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                        <h6 class="mt-2 mb-2 f-14"> Control de tronco</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Descripción</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="func_glob_cont_tronco" id="func_glob_cont_tronco"></textarea>
+                                           <label class="floating-label-activo-sm" for="cont_tronco">Descripción</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cont_tronco" id="cont_tronco"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <h6 class="t-aten-black-sm pt-2">Sedestación</h6>
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                        <h6 class="mt-2 mb-2 f-14">Sedestación</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Descripción</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="func_glob_cont_sedest" id="func_glob_cont_sedest"></textarea>
+                                           <label class="floating-label-activo-sm" for="cont_sedest">Descripción</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cont_sedest" id="cont_sedest"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <h6 class="t-aten-black-sm pt-2">Transferencia</h6>
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                        <h6 class="mt-2 mb-2 f-14">Transferencia</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Descripción</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="func_glob_cont_trans" id="func_glob_cont_trans"></textarea>
+                                           <label class="floating-label-activo-sm" for="cont_trans" >Descripción</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cont_trans" id="cont_trans"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -127,34 +139,40 @@
                             <!--POSICIONES ALTAS-->
                             <div class="tab-pane fade show" id="pos-alt-fg" role="tabpanel" aria-labelledby="pos-alt-fg-tab">
                                 <div class="form-row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="t-aten"> POSICIONES ALTAS</h6>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                                        <h6 class="t-aten d-inline float-left"> Posiciones altas</h6>
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                            <script>
+                                                var f = new Date();
+                                                document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                             </script>
+                                         </p>
                                     </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <h6 class="t-aten-black-sm pt-2">Bipedestación</h6>
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                        <h6 class="mt-2 mb-2 f-14">Bipedestación</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Descripción</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="func_glob_cont_bipedest" id="func_glob_cont_bipedest"></textarea>
+                                           <label class="floating-label-activo-sm" for="cont_bipedest">Descripción</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cont_bipedest" id="cont_bipedest"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <h6 class="t-aten-black-sm pt-2">Equilibrio</h6>
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                        <h6 class="mt-2 mb-2 f-14">Equilibrio</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Descripción</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="func_glob_cont_equil" id="func_glob_cont_equil"></textarea>
+                                           <label class="floating-label-activo-sm" for="cont_equil">Descripción</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cont_equil" id="cont_equil"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <h6 class="t-aten-black-sm pt-2">Marcha</h6>
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                        <h6 class="mt-2 mb-2 f-14">Marcha</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Descripción</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="func_glob_cont_marcha" id="func_glob_cont_marcha"></textarea>
+                                           <label class="floating-label-activo-sm" for="cont_marcha">Descripción</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cont_marcha" id="cont_marcha"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -163,14 +181,18 @@
                             <!--OBSERVACIONES Y CONCLUSIONES-->
                             <div class="tab-pane fade show" id="obs-con-fg" role="tabpanel" aria-labelledby="obs-con-fg-tab">
                                 <div class="form-row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="t-aten">OBSERVACIONES Y CONCLUSIONES</h6>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                                        <h6 class="t-aten d-inline float-left">Observaciones y conclusiones</h6>
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                            <script>
+                                                var f = new Date();
+                                                document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                             </script>
+                                         </p>
                                     </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <div class="form-group">
-                                           <label class="floating-label-activo-sm">Comentarios</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="func_glob_cont_coment" id="func_glob_cont_coment"></textarea>
-                                        </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                           <label class="floating-label-activo-sm" for="cont_coment">Comentarios</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cont_coment" id="cont_coment"></textarea>
                                     </div>
                                 </div>
                             </div>

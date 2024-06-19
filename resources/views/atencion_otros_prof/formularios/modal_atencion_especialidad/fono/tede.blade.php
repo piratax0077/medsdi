@@ -45,6 +45,17 @@
                                         <img class="img-fluid w-60" src="{{ asset('images\fono\img\TEDE_1.png') }}">
                                     </div>
                                 </div>
+                                <div class="form-row">
+                                    <div class="col-sm-3 mt-2">
+                                        <label  class="floating-label-activo-sm">Número de Sesión</label>
+                                        <input type="number" class="form-control form-control-sm" name="num_ses_uno" id="num_ses_uno">
+                                    </div>
+                                    <div class="col-sm-9 mt-2">
+                                        <label  class="floating-label-activo-sm">Objetivos y Comentarios</label>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obj_com_ses_uno" id="obj_com_ses_uno"></textarea>
+                                    </div>
+                                </div>
+                                <br>
                             </div>
                             <!--TEDE 2-->
                             <div class="tab-pane fade show" id="tede-dos" role="tabpanel" aria-labelledby="tede-dos-tab">
@@ -53,6 +64,17 @@
                                         <img class="img-fluid w-60" src="{{ asset('images\fono\img\TEDE_2.png') }}">
                                     </div>
                                 </div>
+                                <div class="form-row">
+                                    <div class="col-sm-3 mt-2">
+                                        <label  class="floating-label-activo-sm">Número de Sesión</label>
+                                        <input type="number" class="form-control form-control-sm" name="num_ses_dos" id="num_ses_dos">
+                                    </div>
+                                    <div class="col-sm-9 mt-2">
+                                        <label  class="floating-label-activo-sm">Objetivos y Comentarios</label>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obj_com_ses_dos" id="obj_com_ses_dos"></textarea>
+                                    </div>
+                                </div>
+                                <br>
                             </div>
                             <!--TEDE 3-->
                             <div class="tab-pane fade show" id="tede-tres" role="tabpanel" aria-labelledby="tede-tres-tab">
@@ -61,6 +83,17 @@
                                         <img class="img-fluid w-60" src="{{ asset('images\fono\img\TEDE_3.png') }}">
                                     </div>
                                 </div>
+                                <div class="form-row">
+                                    <div class="col-sm-3 mt-2">
+                                        <label  class="floating-label-activo-sm">Número de Sesión</label>
+                                        <input type="number" class="form-control form-control-sm" name="num_ses_tres" id="num_ses_tres">
+                                    </div>
+                                    <div class="col-sm-9 mt-2">
+                                        <label  class="floating-label-activo-sm">Objetivos y Comentarios</label>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obj_com_ses_tres" id="obj_com_ses_tres"></textarea>
+                                    </div>
+                                </div>
+                                <br>
                             </div>
                             <!--TEDE 4-->
                             <div class="tab-pane fade show" id="tede-cuatro" role="tabpanel" aria-labelledby="tede-cuatro-tab">
@@ -69,25 +102,21 @@
                                         <img class="img-fluid w-60" src="{{ asset('images\fono\img\TEDE_4.png') }}">
                                     </div>
                                 </div>
+                                <div class="form-row">
+                                    <div class="col-sm-3 mt-2">
+                                        <label  class="floating-label-activo-sm">Número de Sesión</label>
+                                        <input type="number" class="form-control form-control-sm" name="num_ses_cuatro" id="num_ses_cuatro">
+                                    </div>
+                                    <div class="col-sm-9 mt-2">
+                                        <label  class="floating-label-activo-sm">Objetivos y Comentarios</label>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obj_com_ses_cuatro" id="obj_com_ses_cuatro"></textarea>
+                                    </div>
+                                    <br>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div> 
-
-
-                <form>
-                    <div class="form-row">
-                        <div class="col-sm-3 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Número de Sesiones</label>
-                            <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                        </div>
-                        <div class="col-sm-9 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Objetivos</label>
-                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="succion" id="succion"></textarea>
-                        </div>
-                        <br>
-                    </div>
-                </form>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>

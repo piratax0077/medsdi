@@ -8,47 +8,47 @@
 			<div class="modal-body">
                 <form>
                     <div class="form-row">
-                        <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                        <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                             <script>
                                var f = new Date();
                                document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
                             </script>
                         </div>
-                        <div class="form-group col-sm-12 col-md-12 col-lg-9 col-xl-9">
-                            <label class="floating-label-activo-sm">Médico Tratante</label>
+                        <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                            <label class="floating-label-activo-sm" for="med_tte">Médico Tratante</label>
                             <input type="text" class="form-control form-control-sm" name="med_tte" id="med_tte">
                         </div>
 
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                            <label class="floating-label-activo-sm">Diagnóstico kinesiológico</label>
+                        <div class="form-group col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                            <label class="floating-label-activo-sm" for="dg_kine">Diagnóstico kinesiológico</label>
                             <input type="text" class="form-control form-control-sm" name="dg_kine" id="dg_kine">
                         </div>
-                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                            <label class="floating-label-activo-sm">Sesiones</label>
+                        <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                            <label class="floating-label-activo-sm" for="ses_real">Sesiones</label>
                             <input type="text" class="form-control form-control-sm" name="ses_real" id="ses_real">
                         </div>
-                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                            <label class="floating-label-activo-sm">Sesiones pendientes</label>
+                        <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                            <label class="floating-label-activo-sm" for="ses_pend">sesiones pendientes</label>
                             <input type="text" class="form-control form-control-sm" name="ses_pend" id="ses_pend">
                         </div>
                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <label class="floating-label-activo-sm">Tratamiento realizado</label>
+                            <label class="floating-label-activo-sm" for="tto_realizado">Tratamiento realizado</label>
                             <input type="text" class="form-control form-control-sm" name="tto_realizado" id="tto_realizado">
                         </div>
                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <label class="floating-label-activo-sm">Comentarios</label>
+                            <label class="floating-label-activo-sm" for="com_inf_kine">Comentarios</label>
                             <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="com_inf_kine" id="com_inf_kine"></textarea>
                         </div>
 
                         <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                            <label class="floating-label-activo-sm">Proximo control</label>
-                            <input type="date" class="form-control form-control-sm btn-block" name="prox_cont_fono" id="prox_cont_fono">
+                            <label class="floating-label-activo-sm" for="prox_cont">Proximo control</label>
+                            <input type="date" class="form-control form-control-sm btn-block" name="prox_cont" id="prox_cont">
                         </div>
                     </div>
                 </form>
             </div>
 			<div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary btn-sm"><i class="feather icon-file-text"></i> Ver PDF</button>
+                <button type="button" class="btn btn-primary-light-c btn-sm"><i class="feather icon-file-text"></i> Ver PDF</button>
 				<button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
 				<button type="button" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
 			</div>

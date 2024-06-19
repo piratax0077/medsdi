@@ -1,4 +1,4 @@
-<div id="postura_march" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="postura" aria-hidden="true">
+<div id="postura_mot" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="postura_mot" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
@@ -34,31 +34,37 @@
                             <!--SEG.SUPERIOR-->
                             <div class="tab-pane fade show active" id="pos-seg-sup" role="tabpanel" aria-labelledby="pos-seg-sup-tab">
                                 <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                                        <h6 class="t-aten d-inline float-left"> Seg.Superior</h6>
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                            <script>
+                                                var f = new Date();
+                                                document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                             </script>
+                                         </p>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                           <label class="floating-label-activo-sm" for="ss_ant">Anterior</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="ss_ant" id="ss_ant"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                           <label class="floating-label-activo-sm" for="ss_poster">Posterior</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="ss_poster" id="ss_poster"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                           <label class="floating-label-activo-sm" for="ss_lat">Lateral</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="ss_lat" id="ss_lat"></textarea>
+                                        </div>
+                                    </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="t-aten"> SEG.SUPERIOR</h6>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Anterior</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="post_ss_ant" id="post_ss_ant"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <div class="form-group">
-                                           <label class="floating-label-activo-sm">Posterior</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="post_ss_post" id="post_ss_post"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <div class="form-group">
-                                           <label class="floating-label-activo-sm">Lateral</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="post_ss_lat" id="post_ss_lat"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <div class="form-group">
-                                           <label class="floating-label-activo-sm">Conclusiones</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="post_ss_conc" id="post_ss_conc"></textarea>
+                                           <label class="floating-label-activo-sm" for="ss_conc">Conclusiones</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="ss_conc" id="ss_conc"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -66,31 +72,37 @@
                             <!--SEG.MEDIOS-->
                             <div class="tab-pane fade show" id="pos-seg-med" role="tabpanel" aria-labelledby="pos-seg-med-tab">
                                 <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                                        <h6 class="t-aten d-inline float-left"> Seg.Medios</h6>
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                            <script>
+                                                var f = new Date();
+                                                document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                             </script>
+                                         </p>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                           <label class="floating-label-activo-sm" for="sm_ant">Anterior</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sm_ant" id="sm_ant"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                           <label class="floating-label-activo-sm" for="sm_post">Posterior</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sm_post" id="sm_post"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                           <label class="floating-label-activo-sm" for="sm_lat">Lateral</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sm_lat" id="sm_lat"></textarea>
+                                        </div>
+                                    </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="t-aten"> SEG.MEDIOS</h6>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Anterior</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="post_sm_ant" id="post_sm_ant"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <div class="form-group">
-                                           <label class="floating-label-activo-sm">Posterior</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="post_sm_post" id="post_sm_post"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <div class="form-group">
-                                           <label class="floating-label-activo-sm">Lateral</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="post_sm_lat" id="post_sm_lat"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <div class="form-group">
-                                           <label class="floating-label-activo-sm">Conclusiones</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="post_sm_conc" id="post_sm_conc"></textarea>
+                                           <label class="floating-label-activo-sm" for="sm_conc">Conclusiones</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sm_conc" id="sm_conc"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -98,31 +110,37 @@
                             <!--SEG.INFERIOR-->
                             <div class="tab-pane fade show" id="pos-seg-inf" role="tabpanel" aria-labelledby="pos-seg-inf-tab">
                                 <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                                        <h6 class="t-aten d-inline float-left">Seg.Inferior </h6>
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                            <script>
+                                                var f = new Date();
+                                                document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                             </script>
+                                         </p>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                           <label class="floating-label-activo-sm" for="inf_ant">Anterior</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="inf_ant" id="inf_ant"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                           <label class="floating-label-activo-sm" for="inf_post">Posterior</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="inf_post" id="inf_post"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                           <label class="floating-label-activo-sm" for="inf_lat">Lateral</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="inf_lat" id="inf_lat"></textarea>
+                                        </div>
+                                    </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="t-aten"> SEG.INFERIOR</h6>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Anterior</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="post_inf_ant" id="post_inf_ant"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <div class="form-group">
-                                           <label class="floating-label-activo-sm">Posterior</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="post_inf_post" id="post_inf_post"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <div class="form-group">
-                                           <label class="floating-label-activo-sm">Lateral</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="post_inf_lat" id="post_inf_lat"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <div class="form-group">
-                                           <label class="floating-label-activo-sm">Conclusiones</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="post_inf_conc" id="post_inf_conc"></textarea>
+                                           <label class="floating-label-activo-sm" for="inf_conc">Conclusiones</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="inf_conc" id="inf_conc"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -130,13 +148,19 @@
                             <!--PATRÓN POSTURAL-->
                             <div class="tab-pane fade show" id="pos-pat-post" role="tabpanel" aria-labelledby="pos-pat-post-tab">
                                 <div class="form-row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="t-aten">PATRÓN POSTURAL</h6>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                                        <h6 class="t-aten d-inline float-left"> Patrón Postural</h6>
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                            <script>
+                                                var f = new Date();
+                                                document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                             </script>
+                                         </p>
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="form-group">
-                                           <label class="floating-label-activo-sm">Evaluación</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="post_pat_post_eval" id="post_pat_post_eval"></textarea>
+                                           <label class="floating-label-activo-sm" for="post_eval">Evaluación</label>
+                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="post_eval" id="post_eval"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -144,14 +168,18 @@
                             <!--PATRÓN POSTURAL-->
                             <div class="tab-pane fade show" id="post-pat-march" role="tabpanel" aria-labelledby="post-pat-march-tab">
                                 <div class="form-row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="t-aten">PATRÓN DE MARCHA</h6>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                                        <h6 class="t-aten d-inline float-left"> Patrón de Marcha</h6>
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                            <script>
+                                                var f = new Date();
+                                                document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                             </script>
+                                         </p>
                                     </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <div class="form-group">
-                                           <label class="floating-label-activo-sm">Evaluación</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="post_eval_gral_marcha" id="post_eval_gral_marcha"></textarea>
-                                        </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                       <label class="floating-label-activo-sm" for="eval_gral_marcha">Evaluación</label>
+                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="eval_gral_marcha" id="eval_gral_marcha"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -167,7 +195,7 @@
     </div>
 </div>
 <script>
-    function postura_() {
-        $('#postura_march').modal('show');
+    function postura_m() {
+        $('#postura_mot').modal('show');
     }
 </script>

@@ -31,7 +31,7 @@
                                 </select>
                             </div>
                         </div>
-                        
+
                         <div class="col-sm-6 mt-2">
                             <div class="form-group fill">
                                 <label id="" name="" class="floating-label-activo-sm">Prioridad</label>
@@ -86,3 +86,8 @@
         </div>
     </div>
 </div>
+<script>
+    function examenes_fono() {
+        $('#indicar_examen_fono').modal('show');
+    }
+</script>

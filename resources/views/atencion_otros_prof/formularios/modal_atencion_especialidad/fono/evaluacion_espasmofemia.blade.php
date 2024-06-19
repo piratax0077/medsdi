@@ -20,19 +20,13 @@
                                 <a class="nav-link-aten text-reset" id="hab-eves-tab" data-toggle="tab" href="#hab-eves" role="tab" aria-controls="hab-eves" aria-selected="false">Habla</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="habesp-eves-tab" data-toggle="tab" href="#habesp-eves" role="tab" aria-controls="habesp-eves" aria-selected="false">Habla espontanea</a>
+                                <a class="nav-link-aten text-reset" id="lect-con-eves-tab" data-toggle="tab" href="#lect-con-eves" role="tab" aria-controls="lect-con-eves" aria-selected="false">Lectura </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="lect-sin-eves-tab" data-toggle="tab" href="#lect-sin-eves" role="tab" aria-controls="lect-sin-eves" aria-selected="false">Lectura sin ritmo</a>
+                                <a class="nav-link-aten text-reset" id="rep-palora-eves-tab" data-toggle="tab" href="#rep-palora-eves" role="tab" aria-controls="rep-palora-eves" aria-selected="false">Repeticiones</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="lect-con-eves-tab" data-toggle="tab" href="#lect-con-eves" role="tab" aria-controls="lect-con-eves" aria-selected="false">Lectura con ritmo</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="rep-palora-eves-tab" data-toggle="tab" href="#rep-palora-eves" role="tab" aria-controls="rep-palora-eves" aria-selected="false">Rep. de palabras y oraciones</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="rep-autom-eves-tab" data-toggle="tab" href="#rep-autom-eves" role="tab" aria-controls="rep-autom-eves" aria-selected="false">Rep. de series automáticas</a>
+                                <a class="nav-link-aten text-reset" id="dg_plan-tab" data-toggle="tab" href="#dg_plan" role="tab" aria-controls="dg_plan" aria-selected="false">Diagnóstico</a>
                             </li>
                         </ul>
                     </div>
@@ -46,17 +40,17 @@
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <h6 class="tit-gen">ANTECEDENTES GENERALES</h6>
                                     </div>
-                                </div>     
+                                </div>
                                 <div class="form-row">
-                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-2">
                                         <label class="floating-label-activo-sm">Comienzo</label>
                                         <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                            <option value="NO">Espontáneo</option>
-                                            <option value="NA">Provocado</option>
-                                            <option value="BU">Otro</option>
+                                            <option value="1">Espontáneo</option>
+                                            <option value="2">Provocado</option>
+                                            <option value="3">Otro</option>
                                         </select>
                                     </div>
-                                    <div class="form-group col-sm-12 col-md-6 col-lg-8 col-xl-8">
+                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-2">
                                         <label class="floating-label-activo-sm">Condiciones de aparición</label>
                                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cond_aparicion" id="cond_aparicion"></textarea>
                                     </div>
@@ -89,40 +83,46 @@
                                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="rel_fam" id="rel_fam"></textarea>
                                     </div>
                                 </div>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <label class="floating-label-activo-sm">Comentario y Observaciones Ant.Generales</label>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_coment_ag" id="obs_coment_ag"></textarea>
+                                    </div>
+                                </div>
                             </div>
                             <!--EVALUACIONES-->
                             <div class="tab-pane fade show" id="eval-eves" role="tabpanel" aria-labelledby="eval-eves-tab">
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="tit-gen">Evaluaciones</h6>
+                                        <h6 class="tit-gen">EVALUACIONES</h6>
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 mt-2">
                                         <label class="floating-label-activo-sm">Evaluación OFA</label>
-                                            <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                            <select class="form-control form-control-sm" name="ev_ofa" id="ev_ofa">
                                                 <option value="NO">Normal</option>
                                                 <option value="NA">Nasal</option>
                                                 <option value="BU">Bucal</option>
                                                 <option value="MI">Mixta</option>
                                             </select>
                                         </div>
-                                    <div class="form-group col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="form-group col-sm-12 col-md-8 col-lg-8 col-xl-8 mt-2 ">
                                         <label class="floating-label-activo-sm">Observaciones</label>
                                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_ofa" id="obs_ofa"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 mt-2">
                                         <label class="floating-label-activo-sm">Praxias</label>
-                                        <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                        <select class="form-control form-control-sm" name="praxias" id="praxias">
                                             <option value="NO">Normal</option>
                                             <option value="NA">Nasal</option>
                                             <option value="BU">Bucal</option>
                                             <option value="MI">Mixta</option>
                                         </select>
                                     </div>
-                                    <div class="form-group col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                    <div class="form-group col-sm-12 col-md-8 col-lg-8 col-xl-8 mt-2 ">
                                         <label class="floating-label-activo-sm">Observaciones</label>
                                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_praxias" id="obs_praxias"></textarea>
                                     </div>
@@ -130,7 +130,7 @@
                                 <div class="form-row">
                                     <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <label class="floating-label-activo-sm">Respiración</label>
-                                        <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
+                                        <select class="form-control form-control-sm" name="resp" id="resp">
                                             <option value="NO">Normal</option>
                                             <option value="NA">Nasal</option>
                                             <option value="BU">Bucal</option>
@@ -145,13 +145,13 @@
                                 <div class="form-row">
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm">Musculatura</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_musc" id="obs_musc"></textarea>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="musc" id="musc"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <label class="floating-label-activo-sm">Comentario y Observaciones</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_coment" id="obs_coment"></textarea>
+                                        <label class="floating-label-activo-sm">Comentario y Observaciones Evaluaciones</label>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_coment_eval" id="obs_coment_eval"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -159,26 +159,23 @@
                             <div class="tab-pane fade show" id="hab-eves" role="tabpanel" aria-labelledby="hab-eves-tab">
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="tit-gen">HABLA</h6>
+                                        <h6 class="tit-gen">HABLA EN GENERAL</h6>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm">Fluidez</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="habla_fluidez" id="habla_fluidez"></textarea>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="fluidez" id="fluidez"></textarea>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm">Ritmo</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="habla_ritmo" id="habla_ritmo"></textarea>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ritmo" id="ritmo"></textarea>
                                     </div>
                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm">Prosódia</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="habla_prosodia" id="habla_prosodia"></textarea>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="prosodia" id="prosodia"></textarea>
                                     </div>
                                 </div>
-                            </div>
-                            <!--HABLA ESPONTANEA-->
-                            <div class="tab-pane fade show" id="habesp-eves" role="tabpanel" aria-labelledby="habesp-eves-tab">
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <h6 class="tit-gen">HABLA ESPONTÁNEA</h6>
@@ -187,27 +184,35 @@
                                 <div class="form-row">
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm">Conducta Verbal</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="haesp_cond_verb" id="haesp_cond_verb"></textarea>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cond_verb" id="cond_verb"></textarea>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm">Conducta Motora Asociada</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="haesp_condmot" id="haesp_condmot"></textarea>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="condmot" id="condmot"></textarea>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm">Caractéres de Enunciados</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="haesp_enunc" id="haesp_enunc"></textarea>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="enunc" id="enunc"></textarea>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label  class="floating-label-activo-sm">Fenómenos Emocionales Asociados</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="haesp_emocional" id="haesp_emocional"></textarea>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="emocional" id="emocional"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <label class="floating-label-activo-sm">Comentario y Observaciones Habla</label>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_coment_hab" id="obs_coment_hab"></textarea>
                                     </div>
                                 </div>
                             </div>
-                            <!--LECTURA SIN RITMO-->
-                            <div class="tab-pane fade show" id="lect-sin-eves" role="tabpanel" aria-labelledby="lect-sin-eves-tab">
+                            <!--HABLA -->
+
+                            <!--LECTURA -->
+                            <div class="tab-pane fade show" id="lect-con-eves" role="tabpanel" aria-labelledby="lect-con-eves-tab">
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="tit-gen">Lectura sin ritmo</h6>
+                                        <h6 class="tit-gen">LECTURA SIN RITMO</h6>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -228,9 +233,6 @@
                                             <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lectsin_emoc" id="lectsin_emoc"></textarea>
                                     </div>
                                 </div>
-                            </div>
-                            <!--LECTURA CON RITMO-->
-                            <div class="tab-pane fade show" id="lect-con-eves" role="tabpanel" aria-labelledby="lect-con-eves-tab">
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <h6 class="tit-gen">Lectura con ritmo</h6>
@@ -254,80 +256,109 @@
                                             <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lectcon_emoc" id="lectcon_emoc"></textarea>
                                     </div>
                                 </div>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <label class="floating-label-activo-sm">Comentario y Observaciones Lectura</label>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_coment_lect" id="obs_coment_lect"></textarea>
+                                    </div>
+                                </div>
                             </div>
-                            <!--REP. DE PALABRAS Y ORACIONES-->
+
+                            <!--REPETICIONES-->
+
                             <div class="tab-pane fade show" id="rep-palora-eves" role="tabpanel" aria-labelledby="rep-palora-eves-tab">
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="tit-gen">Repetición de palabras y oraciones</h6>
+                                        <h6 class="tit-gen">REP. DE PALABRAS Y ORACIONES</h6>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm">Conducta Verbal</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_resp" id="obs_resp"></textarea>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="con_verb_pal_or" id="con_verb_pal_or"></textarea>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm">Conducta Motora Asociada</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_resp" id="obs_resp"></textarea>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="con_mot_pal_or" id="con_mot_pal_or"></textarea>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm">Caractéres de Enunciados</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_resp" id="obs_resp"></textarea>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="caract_enunc_pal_or" id="caract_enunc_pal_or"></textarea>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm">Fenómenos Emocionales Asociados</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_resp" id="obs_resp"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--REP. DE SERIES AUTOMATICAS-->
-                            <div class="tab-pane fade show" id="rep-autom-eves" role="tabpanel" aria-labelledby="rep-autom-eves-tab">
-                                <div class="form-row">
-                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="tit-gen">Repetición de series automáticas</h6>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="fen_asoc_pal_or" id="fen_asoc_pal_or"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                       <h6 class="tit-gen">REP. DE SERIES AUTOMÁTICAS </h6>
+                                   </div>
+                               </div>
+                               <div class="form-row">
+                                   <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                       <label class="floating-label-activo-sm">Conducta Verbal</label>
+                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="con_verb_pal_ser" id="con_verb_pal_ser"></textarea>
+                                   </div>
+                                   <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                       <label class="floating-label-activo-sm">Conducta Motora Asociada</label>
+                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="con_mot_pal_ser" id="con_mot_pal_ser"></textarea>
+                                   </div>
+                                   <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                       <label class="floating-label-activo-sm">Caractéres de Enunciados</label>
+                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="caract_enunc_pal_ser" id="caract_enunc_pal_ser"></textarea>
+                                   </div>
+                                   <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                       <label class="floating-label-activo-sm">Fenómenos Emocionales Asociados</label>
+                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="fen_asoc_pal_ser" id="fen_asoc_pal_ser"></textarea>
+                                   </div>
+                               </div>
+                               <div class="form-row">
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <label class="floating-label-activo-sm">Conducta Verbal</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_resp" id="obs_resp"></textarea>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <label class="floating-label-activo-sm">Conducta Motora Asociada</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_resp" id="obs_resp"></textarea>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <label class="floating-label-activo-sm">Caractéres de Enunciados</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_resp" id="obs_resp"></textarea>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <label class="floating-label-activo-sm">Fenómenos Emocionales Asociados</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_resp" id="obs_resp"></textarea>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6 col-lg-6 col-lg-6">
-                                        <label class="floating-label-activo-sm">Diagnóstico</label>
-                                        <div class="form-group">
-                                            <select class="form-control form-control-sm" name="dg_espasmp" id="dg_espasm">
-                                                <option value="NO">Espasmofémia Tónica</option>
-                                                <option value="NA">Espasmofémia Clónica</option>
-                                                <option value="BU">Espasmofémia Mixta</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6 col-lg-6 col-lg-6">
-                                        <label class="floating-label-activo-sm">Gravedad</label>
-                                        <div class="form-group">
-                                            <select class="form-control form-control-sm" name="grav_espasm" id="grav_espasm">
-                                                <option value="NO">Ligera</option>
-                                                <option value="NA">Moderada</option>
-                                                <option value="BU">Grave</option>
-                                                <option value="MI">Severa</option>
-                                            </select>
-                                        </div>
+                                        <label class="floating-label-activo-sm">Comentario y Observaciones Repeticiones</label>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_coment_rep" id="obs_coment_rep"></textarea>
                                     </div>
                                 </div>
                             </div>
+                            <!--REPETICIONES-->
+                            <!--DIAGNOSTICO PLAN-->
+                            <div class="tab-pane fade show" id="dg_plan" role="tabpanel" aria-labelledby="dg_plan-tab">
+                                <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <h6 class="tit-gen">DIAGNÓSTICO Y PLAN DE TRATAMIENTO</h6>
+                                    </div>
+                                </div>
+                               <div class="form-row">
+                                   <div class="col-sm-12 col-md-6 col-lg-6 col-lg-6">
+                                       <label class="floating-label-activo-sm">Diagnóstico</label>
+                                       <div class="form-group">
+                                           <select class="form-control form-control-sm" name="dg_espasmp" id="dg_espasm">
+                                               <option value="NO">Espasmofémia Tónica</option>
+                                               <option value="NA">Espasmofémia Clónica</option>
+                                               <option value="BU">Espasmofémia Mixta</option>
+                                           </select>
+                                       </div>
+                                   </div>
+                                   <div class="col-sm-12 col-md-6 col-lg-6 col-lg-6">
+                                       <label class="floating-label-activo-sm">Gravedad</label>
+                                       <div class="form-group">
+                                           <select class="form-control form-control-sm" name="grav_espasm" id="grav_espasm">
+                                               <option value="NO">Ligera</option>
+                                               <option value="NA">Moderada</option>
+                                               <option value="BU">Grave</option>
+                                               <option value="MI">Severa</option>
+                                           </select>
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="form-row">
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <label class="floating-label-activo-sm">Plan de trabajo</label>
+                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="plan" id="plan"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--DIAGNOSTICO PLAN-->
                         </div>
                     </div>
                 </div>
@@ -345,10 +376,10 @@
         $('#m_eval_espasmof').modal('show');
     }
 </script>
-	
-		
-	
-	
 
 
-	
+
+
+
+
+

@@ -7,7 +7,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>                      
+                <form>
                     <div class="form-row">
                         <div class="col-sm-4 mt-2">
                             <div class="form-group fill">
@@ -247,8 +247,8 @@
                     </div>
                 </form>
 
-                
-                   
+
+
 
             </div>
             <div class="modal-footer">
@@ -259,3 +259,8 @@
         </div>
     </div>
 </div>
+<script>
+    function pragma() {
+        $('#h_pragmati').modal('show');
+    }
+</script>

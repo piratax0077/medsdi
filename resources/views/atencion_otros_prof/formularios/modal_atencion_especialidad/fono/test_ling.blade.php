@@ -48,44 +48,20 @@
 
                     <div class="form-row">
                         <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Lengua a Izquierda</label>
-                            <div class="form-group fill">
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
+                            <label id="" name="" class="floating-label-activo-sm">Lamina 1</label>
+                            <input type="text" class="form-control form-control-sm" name="ling_lam1" id="ling_lam1">
                         </div>
                         <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Lengua a Dererecha</label>
-                            <div class="form-group fill">
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
+                            <label id="" name="" class="floating-label-activo-sm">Lamina 2</label>
+                            <input type="text" class="form-control form-control-sm" name="ling_lam2" id="ling_lam2">
                         </div>
                         <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Inflar Mejilla Izq</label>
-                            <div class="form-group fill">
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
+                            <label id="" name="" class="floating-label-activo-sm">Lamina 3</label>
+                            <input type="text" class="form-control form-control-sm" name="ling_lam3" id="ling_lam3">
                         </div>
                         <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Inflar Mejilla Der</label>
-                            <div class="form-group fill">
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
+                            <label id="" name="" class="floating-label-activo-sm">Lamina 4</label>
+                            <input type="text" class="form-control form-control-sm" name="ling_lam4" id="ling_lam4">
                         </div>
                     </div>
                     <div class="form-row" >
@@ -113,47 +89,23 @@
 
                     <div class="form-row">
                         <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Lengua a Arriba</label>
-                            <div class="form-group fill">
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
+                            <label id="" name="" class="floating-label-activo-sm">Lamina 5</label>
+                            <input type="text" class="form-control form-control-sm" name="ling_lam5" id="ling_lam5">
                         </div>
                         <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Lengua Abajo</label>
-                            <div class="form-group fill">
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
+                            <label id="" name="" class="floating-label-activo-sm">Lamina 6</label>
+                            <input type="text" class="form-control form-control-sm" name="ling_lam6" id="ling_lam6">
                         </div>
                         <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Inflar Ambas Mejillas</label>
-                            <div class="form-group fill">
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
+                            <label id="" name="" class="floating-label-activo-sm">Lamina 7</label>
+                            <input type="text" class="form-control form-control-sm" name="ling_lam7" id="ling_lam7">
                         </div>
                         <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Desinflar Ambas Mejillas</label>
-                            <div class="form-group fill">
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
+                            <label id="" name="" class="floating-label-activo-sm">Lamina 8</label>
+                            <input type="text" class="form-control form-control-sm" name="ling_lam8" id="ling_lam8">
                         </div>
                     </div>
-                    < <div class="form-row" >
+                    <div class="form-row" >
                         <div class="col-sm-3 mt-2" >
                             <div class="form-group fill">
                                 <img src="{{ asset('images\fono\img\ling9.png') }}" style="width:100%">
@@ -178,56 +130,32 @@
 
                     <div class="form-row">
                         <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Lengua Ancha</label>
-                            <div class="form-group fill">
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
+                            <label id="" name="" class="floating-label-activo-sm">Lamina 9</label>
+                            <input type="text" class="form-control form-control-sm" name="ling_lam9" id="ling_lam9">
                         </div>
                         <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Lengua Angosta</label>
-                            <div class="form-group fill">
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
+                            <label id="" name="" class="floating-label-activo-sm">Lamina 10</label>
+                            <input type="text" class="form-control form-control-sm" name="ling_lam10" id="ling_lam10">
                         </div>
                         <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Inflar Mejillas</label>
-                            <div class="form-group fill">
-                                <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
+                            <label id="" name="" class="floating-label-activo-sm">Lamina 11</label>
+                            <input type="text" class="form-control form-control-sm" name="ling_lam11" id="ling_lam11">
                         </div>
                         <div class="col-sm-3 mt-3">
-                            <label id="" name="" class="floating-label-activo-sm">Reventar con los Dedos</label>
-                            <div class="form-group fill">
-                                 <select class="form-control form-control-sm" name="modo_resp" id="modo_resp">
-                                    <option value="S">•	SI</option>
-                                    <option value="N">•	NO</option>
-                                    <option value="D">•	DEFICIENTE</option>
-                                </select>
-                            </div>
+                            <label id="" name="" class="floating-label-activo-sm">Lamina 12</label>
+                            <input type="text" class="form-control form-control-sm" name="ling_lam12" id="ling_lam12">
                         </div>
                     </div>
                      <br>
                         <hr>
                     <div class="form-row">
                         <div class="col-sm-3 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Número de Sesiones</label>
-                            <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                            <label id="" name="" class="floating-label-activo-sm">Número de Sesión</label>
+                            <input type="text" class="form-control form-control-sm" name="ling_ns" id="ling_ns">
                         </div>
                         <div class="col-sm-9 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Objetivos</label>
-                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="succion" id="succion"></textarea>
+                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
+                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ling_coment" id="ling_coment"></textarea>
                         </div>
                         <br>
                     </div>

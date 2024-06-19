@@ -59,12 +59,12 @@
 									</div>
                                     <div class="form-row">
                                         <div class="col-sm-3 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
-                                            <input type="text" class="form-control form-control-sm" name="lam_uno_psi_resp_ro" id="lam_uno_psi_resp_ro">
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_uno_resp">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_uno_resp" id="lam_uno_resp">
                                         </div>
                                         <div class="col-sm-9 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_uno_psi_coment_ro" id="lam_uno_psi_coment_ro"></textarea>
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_uno_com">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_uno_com" id="lam_uno_com"></textarea>
                                         </div>
                                         <br>
                                     </div>
@@ -80,12 +80,12 @@
 									</div>
                                     <div class="form-row">
                                         <div class="col-sm-3 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
-                                            <input type="text" class="form-control form-control-sm" name="lam_dos_psi_resp_ro" id="lam_dos_psi_resp_ro">
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_dos_resp">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_dos_psi_resp_ro" id="lam_dos_resp">
                                         </div>
                                         <div class="col-sm-9 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_dos_psi_coment_ro" id="lam_dos_psi_coment_ro"></textarea>
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_dos_com">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_dos_psi_coment_ro" id="lam_dos_com"></textarea>
                                         </div>
                                         <br>
                                     </div>
@@ -101,12 +101,12 @@
 									</div>
                                     <div class="form-row">
                                         <div class="col-sm-3 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
-                                            <input type="text" class="form-control form-control-sm" name="lam_tres_psi_resp_ro" id="lam_tres_psi_resp_ro">
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_tres_resp">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_tres_resp" id="lam_tres_resp">
                                         </div>
                                         <div class="col-sm-9 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_tres_psi_coment_ro" id="lam_tres_psi_coment_ro"></textarea>
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_tres_com">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_tres_com" id="lam_tres_com"></textarea>
                                         </div>
                                         <br>
                                     </div>
@@ -122,12 +122,12 @@
 									</div>
                                     <div class="form-row">
                                         <div class="col-sm-3 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
-                                            <input type="text" class="form-control form-control-sm" name="lam_cuatro_psi_resp_ro" id="lam_cuatro_psi_resp_ro">
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_cuatro_resp">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_cuatro_resp" id="lam_cuatro_resp">
                                         </div>
                                         <div class="col-sm-9 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_cuatro_psi_coment_ro" id="lam_cuatro_psi_coment_ro"></textarea>
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_cuatro_com">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_cuatro_com" id="lam_cuatro_com"></textarea>
                                         </div>
                                         <br>
                                     </div>
@@ -143,12 +143,12 @@
 									</div>
                                     <div class="form-row">
                                         <div class="col-sm-3 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
-                                            <input type="text" class="form-control form-control-sm" name="lam_cinco_psi_resp_ro" id="lam_cinco_psi_resp_ro">
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_cinco_resp">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_cinco_resp" id="lam_cinco_resp">
                                         </div>
                                         <div class="col-sm-9 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_cinco_psi_coment_ro" id="lam_cinco_psi_coment_ro"></textarea>
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_cinco_com">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_cinco_com" id="lam_cinco_com"></textarea>
                                         </div>
                                         <br>
                                     </div>
@@ -164,12 +164,12 @@
 									</div>
                                     <div class="form-row">
                                         <div class="col-sm-3 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
-                                            <input type="text" class="form-control form-control-sm" name="lam_seis_psi_resp_ro" id="lam_seis_psi_resp_ro">
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_seis_resp">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_seis_resp" id="lam_seis_resp">
                                         </div>
                                         <div class="col-sm-9 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_seis_psi_coment_ro" id="lam_seis_psi_coment_ro"></textarea>
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_seis_com">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_seis_com" id="lam_seis_com"></textarea>
                                         </div>
                                         <br>
                                     </div>
@@ -185,12 +185,12 @@
 									</div>
                                     <div class="form-row">
                                         <div class="col-sm-3 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
-                                            <input type="text" class="form-control form-control-sm" name="lam_siete_psi_resp_ro" id="lam_siete_psi_resp_ro">
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_siete_resp">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_siete_resp" id="lam_siete_resp">
                                         </div>
                                         <div class="col-sm-9 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_siete_psi_coment_ro" id="lam_siete_psi_coment_ro"></textarea>
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_siete_com">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_siete_com" id="lam_siete_com"></textarea>
                                         </div>
                                         <br>
                                     </div>
@@ -206,12 +206,12 @@
 									</div>
                                     <div class="form-row">
                                         <div class="col-sm-3 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
-                                            <input type="text" class="form-control form-control-sm" name="lam_ocho_psi_resp_ro" id="lam_ocho_psi_resp_ro">
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_ocho_resp">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_ocho_resp" id="lam_ocho_resp">
                                         </div>
                                         <div class="col-sm-9 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_ocho_psi_coment_ro" id="lam_ocho_psi_coment_ro"></textarea>
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_ocho_com">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_ocho_com" id="lam_ocho_com"></textarea>
                                         </div>
                                         <br>
                                     </div>
@@ -227,12 +227,12 @@
 									</div>
                                     <div class="form-row">
                                         <div class="col-sm-3 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
-                                            <input type="text" class="form-control form-control-sm" name="lam_nueve_psi_resp_ro" id="lam_nueve_psi_resp_ro">
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_nueve_resp">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_nueve_resp" id="lam_nueve_resp">
                                         </div>
                                         <div class="col-sm-9 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_nueve_psi_coment_ro" id="lam_nueve_psi_coment_ro"></textarea>
+                                            <label id="" name="" class="floating-label-activo-sm" for="lam_nueve_com">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_nueve_com" id="lam_nueve_com"></textarea>
                                         </div>
                                         <br>
                                     </div>
@@ -248,12 +248,12 @@
 									</div>
                                     <div class="form-row">
                                         <div class="col-sm-3 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Respuesta</label>
-                                            <input type="text" class="form-control form-control-sm" name="lam_diez_psi_resp_ro" id="lam_diez_psi_resp_ro">
+                                            <label id="" name="" class="floating-label-activo-sm"for="lam_diez_resp">Respuesta</label>
+                                            <input type="text" class="form-control form-control-sm" name="lam_diez_resp" id="lam_diez_resp">
                                         </div>
                                         <div class="col-sm-9 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Comentarios</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_diez_psi_coment_ro" id="lam_diez_psi_coment_ro"></textarea>
+                                            <label id="" name="" class="floating-label-activo-sm"for="lam_diez_com">Comentarios</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="lam_diez_com" id="lam_diez_com"></textarea>
                                         </div>
                                         <br>
                                     </div>
@@ -262,14 +262,19 @@
 					            <div class="tab-pane fade show" id="c_gen" role="tabpanel" aria-labelledby="c_gen_tab">
 									<div class="form-row">
                                         <div class="col-sm-12 mt-2">
-                                            <label id="" name="" class="floating-label-activo-sm">Comentarios Generales del test</label>
-                                            <textarea class="form-control form-control-sm" rows="20" onfocus="this.rows=20" onblur="this.rows=20;" name="comentarios_gen_ro" id="comentarios_gen_ro"></textarea>
+                                            <label id="" name="" class="floating-label-activo-sm" for="comentarios_gen" >Comentarios Generales del test</label>
+                                            <textarea class="form-control form-control-sm" rows="20" onfocus="this.rows=20" onblur="this.rows=20;" name="comentarios_gen" id="comentarios_gen"></textarea>
                                         </div>
                                         <br>
                                     </div>
 					            </div>
 					        </div>
 					    </div>
+                        <div class="col-md-12 col-sm-12 text-center">
+                            <hr>
+                            <button type="button" class="btn btn-danger">Cancelar</button>
+                            <button type="submit" class="btn btn-info">Guardar</button>
+                        </div>
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -279,3 +284,8 @@
 		</div>
 	</div>
 </div>
+<script>
+    function psi_rorsch() {
+        $('#test_rorsch').modal('show');
+    }
+</script>

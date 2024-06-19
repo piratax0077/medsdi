@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <form>
-                   
+
                     <div id="generales_preart" class="form-row">
                         <div class="col-sm-12 mt-2">
                             <div class="form-group fill">

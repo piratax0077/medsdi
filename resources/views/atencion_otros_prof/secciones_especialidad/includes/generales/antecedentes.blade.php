@@ -2,7 +2,7 @@
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
     <div class="card-a">
         <div class="card-header-a" id="antec_fam">
-            <button class="accor-open btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#antec_fam_c" aria-expanded="false" aria-controls="antec_fam_c">
+            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#antec_fam_c" aria-expanded="false" aria-controls="antec_fam_c">
                 Antecedentes patológicos propios y familiares de la especialidad
             </button>
         </div>
@@ -27,12 +27,12 @@
                             <div class="tab-pane fade show active" id="ant-familiares" role="tabpanel" aria-labelledby="ant-familiares-tab">
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="text-c-blue mb-3">ANTECEDENTES FAMILIARES</h6>
+                                        <h6 class="t-aten">ANTECEDENTES FAMILIARES</h6>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <label class="floating-label-activo-sm" for="pat_pat">Seleccionar patologias paternas</label>
+                                        <label class="floating-label-activo-sm" for="pat_pat">Seleccionar patologías paternas</label>
                                         <select class="form-control form-control-sm" name="pat_pat" id="pat_pat" multiple="multiple">
                                             <option value="1">Hipertensión</option>
                                             <option value="2">Diabetes</option>
@@ -43,7 +43,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <label class="floating-label-activo-sm" for="pat_mat">Seleccionar patologias maternas</label>
+                                        <label class="floating-label-activo-sm" for="pat_mat">Seleccionar patologías maternas</label>
                                         <select class="form-control form-control-sm" name="pat_mat" id="pat_mat" multiple="multiple">
                                             <option value="1">Hipertensión</option>
                                             <option value="2">Diabetes</option>
@@ -54,7 +54,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <label class="floating-label-activo-sm" for="pat_fam">Seleccionar patologias familiares</label>
+                                        <label class="floating-label-activo-sm" for="pat_fam">Seleccionar patologías familiares</label>
                                         <select class="form-control form-control-sm" name="pat_fam" id="pat_fam" multiple="multiple">
                                             <option value="1">Hipertensión</option>
                                             <option value="2">Diabetes</option>
@@ -70,7 +70,7 @@
                             <div class="tab-pane fade show" id="hab-pat" role="tabpanel" aria-labelledby="hab-pat-tab">
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="text-c-blue mb-3">ANTECEDENTES PATOLÓGICOS PROPIOS</h6>
+                                        <h6 class="t-aten">ANTECEDENTES PATOLÓGICOS PROPIOS</h6>
                                     </div>
                                 </div>
                                 <div class="form-row">

@@ -1,5 +1,5 @@
 <div id="est_ofa" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="est_ofa" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white mt-1" id="modal_ofa">Evaluación OFA</h5>
@@ -14,7 +14,7 @@
                                 <a class="nav-link-aten text-reset active" id="ofa-cara-tab" data-toggle="tab" href="#ofa_cara" role="tab" aria-controls="ofa_cara" aria-selected="false">Cara</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="boca-tab" data-toggle="tab" href="#boca" role="tab" aria-controls="boca" aria-selected="true">Boca</a>
+                                <a class="nav-link-aten text-reset" id="boca_eval_tab" data-toggle="tab" href="#boca_eval" role="tab" aria-controls="boca_eval" aria-selected="true">Boca</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link-aten text-reset" id="lengua-tab" data-toggle="tab" href="#lengua" role="tab" aria-controls="lengua" aria-selected="true">Lengua</a>
@@ -24,574 +24,638 @@
                             </li>
                         </ul>
                     </div>
+
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="tab-content" id="ev-ofa">
-                            <!--CARA-->
+                            <!--EVALUACIÓN GENERAL-->
                             <div class="tab-pane fade show active" id="ofa_cara" role="tabpanel" aria-labelledby="ofa-cara-tab">
-                                <form>
-                                    <div id="Boca" class="form-row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="tit-gen">EXAMEN DE LA CARA</h6>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <form>
+                                                        <div id="Boca" class="form-row">
+                                                            <div class="col-sm-12 mt-2">
+                                                                <div class="form-group fill">
+                                                                    <h6 class="floating-center">EXAMEN DE LA CARA</h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="est_osea">Estructura ósea</label>
+                                                                    <select name="est_osea" id="est_osea" data-titulo="Estructura ósea" data-seccion="EXAMEN DE LA CARA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('est_osea','div_est_osea','est_osea_obs',2);">
+                                                                        <option value="1"> Normal</option>
+                                                                        <option value="2"> Alterada (describir)</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_est_osea" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="est_osea_obs">Obs Estructura ósea</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Estructura ósea" data-seccion="EXAMEN DE LA CARA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="est_osea_obs" id="est_osea_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="form_fac">Forma Facial</label>
+                                                                    <select name="form_fac" id="form_fac" data-titulo="Forma Facial" data-seccion="EXAMEN DE LA CARA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('form_fac','div_form_fac','form_fac_obs',2);">
+                                                                        <option value="1"> Normal</option>
+                                                                        <option value="2"> Alterada (describir)</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_form_fac" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="form_fac_obs">Obs Forma Facial</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Forma Facial" data-seccion="EXAMEN DE LA CARA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="form_fac_obs" id="form_fac_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="ap_bucal">Apertura Bucal</label>
+                                                                    <select name="ap_bucal" id="ap_bucal" data-titulo="Apertura Bucal" data-seccion="EXAMEN DE LA CARA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ap_bucal','div_ap_bucal','ap_bucal_obs',2);">
+                                                                        <option value="1">Adecuada</option>
+                                                                        <option value="2">Alteracion Funcional</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_ap_bucal" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="ap_bucal_obs">Obs.Apertura Bucal</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs.Apertura Bucal" data-seccion="EXAMEN DE LA CARA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ap_bucal_obs" id="ap_bucal_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="dientes" >Dientes</label>
+                                                                    <select name="dientes" id="dientes" data-titulo="Dientes" data-seccion="EXAMEN DE LA CARA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('dientes','div_dientes','dientes_obs',2);">
+                                                                        <option value="1">Normales</option>
+                                                                        <option value="2">Anormales</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_dientes"  style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="dientes_obs">Obs Dientes</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Dientes" data-seccion="EXAMEN DE LA CARA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="dientes_obs" id="dientes_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="mordid" >Mordida</label>
+                                                                    <select name="mordid" id="mordid" data-titulo="Mordida" data-seccion="EXAMEN DE LA CARA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mordid','div_mordid','mordid_obs',2);">
+                                                                        <option value="0">Seleccione</option>
+                                                                        <option value="1"> Normal</option>
+                                                                        <option value="2">Alteracion Funcional</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_mordid" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="mordid_obs">Obs Mordida</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Mordida" data-seccion="EXAMEN DE LA CARA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="mordid_obs" id="mordid_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="nariz">Nariz</label>
+                                                                    <select name="nariz" id="nariz" data-titulo="Nariz" data-seccion="EXAMEN DE LA CARA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('nariz','div_nariz','nariz_obs',2);">
+                                                                        <option value="1">Normal</option>
+                                                                        <option value="2">Con Alteraciones</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_nariz" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="nariz_obs">Obs Nariz</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs Nariz" data-seccion="EXAMEN DE LA CARA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="nariz_obs" id="nariz_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12 mt-2">
+                                                                <div class="form-group" id="div_ofa_vest_boc">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="cara_obs" >Obs Examen de la Cara</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs Examen de la Cara" data-seccion="EXAMEN DE LA CARA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cara_obs" id="cara_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-row">
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Estructura ósea</label>
-                                                <select name="ofa_ca_eo" id="ofa_ca_eo" data-titulo="Estructura ósea" data-seccion="EXAMEN DE LA CARA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_ca_eo','div_ofa_ca_eo','ofa_ca_eo_obs',2);">
-                                                    <option value="1"> Normal</option>
-                                                    <option value="2"> Alterada (Describir)</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_ca_eo" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Estructura ósea</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs. Estructura ósea" data-seccion="EXAMEN DE LA CARA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_ca_eo_obs" id="ofa_ca_eo_obs"></textarea>
-                                            </div>
-                                        </div>
-                                       <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Forma Facial</label>
-                                                <select name="ofa_ca_ff" id="ofa_ca_ff" data-titulo="Forma Facial" data-seccion="EXAMEN DE LA CARA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_ca_ff','div_ofa_ca_ff','ofa_ca_ff_obs',2);">
-                                                    <option value="1"> Normal</option>
-                                                    <option value="2"> Alterada (Describir)</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_ca_ff" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Forma Facial</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs. Forma Facial" data-seccion="EXAMEN DE LA CARA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_ca_ff_obs" id="ofa_ca_ff_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Apertura Bucal</label>
-                                                <select name="ofa_ca_ab" id="ofa_ca_ab" data-titulo="Apertura Bucal" data-seccion="EXAMEN DE LA CARA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_ca_ab','div_ofa_ca_ab','ofa_ca_ab_obs',2);">
-                                                    <option value="1">Adecuada</option>
-                                                    <option value="2">Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_ca_ab" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Apertura Bucal</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs.Apertura Bucal" data-seccion="EXAMEN DE LA CARA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_ca_ab_obs" id="ofa_ca_ab_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Dientes</label>
-                                                <select name="ofa_car_di" id="ofa_car_di" data-titulo="Dientes" data-seccion="EXAMEN DE LA CARA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_car_di','div_ofa_car_di','ofa_car_di_obs',2);">
-                                                    <option value="1">Normales</option>
-                                                    <option value="2">Anormales</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_car_di" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Dientes</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs. Dientes" data-seccion="EXAMEN DE LA CARA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_car_di_obs" id="ofa_car_di_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Mordida</label>
-                                                <select name="ofa_ca_mord" id="ofa_ca_mord" data-titulo="Mordida" data-seccion="EXAMEN DE LA CARA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_ca_mord','div_ofa_ca_mord','ofa_ca_mord_obs',2);">
-                                                    <option value="0">Seleccione</option>
-                                                    <option value="1"> Normal</option>
-                                                    <option value="2">Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_ca_mord" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Mordida</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs. Mordida" data-seccion="EXAMEN DE LA CARA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_ca_mord_obs" id="ofa_ca_mord_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Nariz</label>
-                                                <select name="ofa_cara_na" id="ofa_cara_na" data-titulo="Nariz" data-seccion="EXAMEN DE LA CARA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_cara_na','div_ofa_cara_na','ofa_cara_na_obs',2);">
-                                                    <option value="1">Normal</option>
-                                                    <option value="2">Con Alteraciones</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_cara_na" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Nariz</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Nariz" data-seccion="EXAMEN DE LA CARA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_cara_na_obs" id="ofa_cara_na_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="form-group" id="div_ofa_vest_boc">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Examen de la Cara</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Examen de la Cara" data-seccion="EXAMEN DE LA CARA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_cara_obs" id="ofa_cara_obs"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                                </div>
                             </div>
-                            <!--BOCA-->
-                            <div class="tab-pane fade show" id="boca" role="tabpanel" aria-labelledby="boca-tab">
-                                <form>
-                                    <div id="Boca" class="form-row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="tit-gen">BOCA</h6> 
+                            <div class="tab-pane fade show" id="boca_eval" role="tabpanel" aria-labelledby="boca_eval_tab">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <form>
+                                                        <div id="Boca" class="form-row">
+                                                            <div class="col-sm-12 mt-2">
+                                                                <div class="form-group fill">
+                                                                    <h6 class="floating-center">BOCA</h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="vestib">Vestíbulo Bucal</label>
+                                                                    <select name="vestib" id="vestib" data-titulo="Vestíbulo Bucal" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('vestib','div_vestib','vestib_obs',2);">
+                                                                        <option value="1"> Adecuado</option>
+                                                                        <option value="2"> Alteracion Funcional</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_vestib" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="vestib_obs">Obs Vestíbulo</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Vestíbulo Bucal" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="vestib_obs" id="vestib_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="fren_sup">Frenillo Superior</label>
+                                                                    <select name="fren_sup" id="fren_sup" data-titulo="Frenillo Superior" data-seccion="BOCA"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('fren_sup','div_fren_sup','fren_sup_obs',2);">
+                                                                        <option value="1">Adecuado</option>
+                                                                        <option value="2">Alteracion Funcional</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_fren_sup" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="fren_sup_obs">Obs Frenillo Superior</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Frenillo Superior" data-seccion="BOCA"rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="fren_sup_obs" id="fren_sup_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="fren_inf">Frenillo Inferior</label>
+                                                                    <select name="fren_inf" id="fren_inf" data-titulo="Frenillo Inferior" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('fren_inf','div_fren_inf','fren_inf_obs',2);">
+                                                                        <option value="1">Adecuado</option>
+                                                                        <option value="2">Alteracion Funcional</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_fren_inf" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="fren_inf_obs">Obs Frenillo Inferior</label>
+                                                                    <textarea class="form-control form-control-sm"data-titulo="Obs. Frenillo Inferior" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="fren_inf_obs" id="fren_inf_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="fren_subl">Frenillo Sublingual</label>
+                                                                    <select name="fren_subl" id="fren_subl" data-titulo="Frenillo Sublingual" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('fren_subl','div_fren_subl','fren_subl_obs',2);">
+                                                                        <option value="1">Adecuado</option>
+                                                                        <option value="2">Alteracion Funcional</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_fren_subl" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="fren_subl_obs">Obs Frenillo Sublingual</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Frenillo Sublingual" data-seccion="BOCA"rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="fren_subl_obs" id="fren_subl_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="palad_duro">Paladar Duro</label>
+                                                                    <select name="palad_duro" id="palad_duro"data-titulo="Paladar Duro" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('palad_duro','div_palad_duro','palad_duro_obs',7);">
+                                                                        <option value="0">Seleccione</option>
+                                                                        <option value="1"> Normal</option>
+                                                                        <option value="2"> Ojival</option>
+                                                                        <option value="3"> Plano</option>
+                                                                        <option value="4"> Fisurado Evidente</option>
+                                                                        <option value="5"> Sospecha Fisura Submucosa</option>
+                                                                        <option value="6"> Tumor</option>
+                                                                        <option value="7"> Otra</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_palad_duro" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="palad_duro_obs">Obs Paladar Duro</label>
+                                                                    <textarea class="form-control form-control-sm"data-titulo="Obs. Paladar Duro" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="palad_duro_obs" id="palad_duro_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="palad_bl">Paladar Blando</label>
+                                                                    <select name="palad_bl" id="palad_bl"data-titulo="Paladar Blando" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('palad_bl','div_palad_bl','palad_bl_obs',2);">
+                                                                        <option value="1">Adecuado</option>
+                                                                        <option value="2">Alteracion Funcional</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_palad_bl" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="palad_bl_obs">Obs Paladar Blando</label>
+                                                                    <textarea class="form-control form-control-sm"data-titulo="Obs. Paladar Blando" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="palad_bl_obs" id="palad_bl_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="cierre_vf">Cierre Velo-faringeo</label>
+                                                                    <select name="cierre_vf" id="cierre_vf"data-titulo="Cierre Velo-faringeo" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cierre_vf','div_cierre_vf','cierre_vf_obs',5);">
+                                                                        <option value="1">Coronal</option>
+                                                                        <option value="2">Sagital</option>
+                                                                        <option value="3">Circular</option>
+                                                                        <option value="4">Circular en Rodete de Passavant</option>
+                                                                        <option value="5">Otro(describir)</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_cierre_vf" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="cierre_vf_obs">Cierre Velo-faringeo</label>
+                                                                    <textarea class="form-control form-control-sm"data-titulo="Obs. Cierre Velo-faringeo" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cierre_vf_obs" id="cierre_vf_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="uvul">Úvula</label>
+                                                                    <select name="uvul" id="uvul" data-titulo="Úvula" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('uvul','div_uvul','uvul_obs',7);">
+                                                                        <option value="0">Seleccione</option>
+                                                                        <option value="1"> Normal</option>
+                                                                        <option value="2"> Ausente</option>
+                                                                        <option value="3"> Bífida</option>
+                                                                        <option value="4"> Larga</option>
+                                                                        <option value="5"> Corta</option>
+                                                                        <option value="6"> Tumor</option>
+                                                                        <option value="7"> Otra</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_uvul" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="uvul_obs">Obs Úvula</label>
+                                                                    <textarea class="form-control form-control-sm"data-titulo="Obs. Úvula" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="uvul_obs" id="uvul_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="amigd">Amigdalas</label>
+                                                                    <select name="amigd" id="amigd" data-titulo="Amigdalas" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('amigd','div_amigd','amigd_obs',3);">
+                                                                        <option value="0">Seleccione</option>
+                                                                        <option value="1"> Normal</option>
+                                                                        <option value="2">Hipertroficas</option>
+                                                                        <option value="3"> Otra</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_amigd" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="amigd_obs">Obs Amigdalas</label>
+                                                                    <textarea class="form-control form-control-sm"data-titulo="Obs. Amigdalas" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="amigd_obs" id="amigd_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="adenoi">Adenoídes</label>
+                                                                    <select name="adenoi" id="adenoi" data-titulo="Adenoídes" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('adenoi','div_adenoi','adenoi_obs',3);">
+                                                                        <option value="0">Seleccione</option>
+                                                                        <option value="1"> Normal</option>
+                                                                        <option value="2">Hipertroficas</option>
+                                                                        <option value="3"> Otra</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_adenoi" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm"for="adenoi_obs" >Obs Adenoídes</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Adenoídes" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="adenoi_obs" id="adenoi_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-8 mt-2">
+
+                                                                <div class="form-group" id="div_ofa_vest_boc">
+                                                                    <label  class="floating-label-activo-sm" for="obs_gral_boc" >Obs Examen de la Boca</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs Examen de la Boca" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_gral_boc" id="obs_gral_boc"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-row">
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Vestíbulo Bucal</label>
-                                                <select name="ofa_vest_boc" id="ofa_vest_boc" data-titulo="Vestíbulo Bucal" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_vest_boc','div_ofa_vest_boc','ofa_vest_boc_obs',2);">
-                                                    <option value="1"> Adecuado</option>
-                                                    <option value="2"> Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_vest_boc" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Vestíbulo</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs. Vestíbulo Bucal" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_vest_boc_obs" id="ofa_vest_boc_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Frenillo Superior</label>
-                                                <select name="ofa_fre_sup" id="ofa_fre_sup" data-titulo="Frenillo Superior" data-seccion="BOCA"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_fre_sup','div_ofa_fre_sup','ofa_fre_sup_obs',2);">
-                                                    <option value="1">Adecuado</option>
-                                                    <option value="2">Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_fre_sup" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Frenillo Superior</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs. Frenillo Superior" data-seccion="BOCA"rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_fre_sup_obs" id="ofa_fre_sup_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Frenillo Inferior</label>
-                                                <select name="ofa_fr_inf" id="ofa_fr_inf" data-titulo="Frenillo Inferior" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_fr_inf','div_ofa_fr_inf','ofa_fr_inf_obs',2);">
-                                                    <option value="1">Adecuado</option>
-                                                    <option value="2">Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_fr_inf" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Frenillo Inferior</label>
-                                                <textarea class="form-control form-control-sm"data-titulo="Obs. Frenillo Inferior" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_fr_inf_obs" id="ofa_fr_inf_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Frenillo Sublingual</label>
-                                                <select name="ofa_fr_sl" id="ofa_fr_sl" data-titulo="Frenillo Sublingual" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_fr_sl','div_ofa_fr_sl','ofa_fr_sl_obs',2);">
-                                                    <option value="1">Adecuado</option>
-                                                    <option value="2">Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_fr_sl" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Frenillo Sublingual</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs. Frenillo Sublingual" data-seccion="BOCA"rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_fr_sl_obs" id="ofa_fr_sl_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Paladar Duro</label>
-                                                <select name="ofa_pd" id="ofa_pd"data-titulo="Paladar Duro" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_pd','div_ofa_pd','ofa_pd_obs',7);">
-                                                    <option value="0">Seleccione</option>
-                                                    <option value="1"> Normal</option>
-                                                    <option value="2"> Ojival</option>
-                                                    <option value="3"> Plano</option>
-                                                    <option value="4"> Fisurado Evidente</option>
-                                                    <option value="5"> Sospecha Fisura Submucosa</option>
-                                                    <option value="6"> Tumor</option>
-                                                    <option value="7"> Otra</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_pd" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Paladar Duro</label>
-                                                <textarea class="form-control form-control-sm"data-titulo="Obs. Paladar Duro" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_pd_obs" id="ofa_pd_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Paladar Blando</label>
-                                                <select name="ofa_pb" id="ofa_pb"data-titulo="Paladar Blando" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_pb','div_ofa_pb','ofa_pb_obs',2);">
-                                                    <option value="1">Adecuado</option>
-                                                    <option value="2">Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_pb" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Paladar Blando</label>
-                                                <textarea class="form-control form-control-sm"data-titulo="Obs. Paladar Blando" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_pb_obs" id="ofa_pb_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Cierre Velo-faringeo</label>
-                                                <select name="ofa_cvf" id="ofa_cvf"data-titulo="Cierre Velo-faringeo" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_cvf','div_ofa_cvf','ofa_cvf_obs',5);">
-                                                    <option value="1">Coronal</option>
-                                                    <option value="2">Sagital</option>
-                                                    <option value="3">Circular</option>
-                                                    <option value="4">Circular en Rodete de Passavant</option>
-                                                    <option value="5">Otro (Describir)</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_cvf" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Cierre Velo-faringeo</label>
-                                                <textarea class="form-control form-control-sm"data-titulo="Obs. Cierre Velo-faringeo" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_cvf_obs" id="ofa_cvf_obs"></textarea>
-                                            </div>
-                                        </div>
-                                       <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Úvula</label>
-                                                <select name="ofa_uvul" id="ofa_uvul" data-titulo="Úvula" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_uvul','div_ofa_uvul','ofa_uvul_obs',7);">
-                                                    <option value="0">Seleccione</option>
-                                                    <option value="1"> Normal</option>
-                                                    <option value="2"> Ausente</option>
-                                                    <option value="3"> Bífida</option>
-                                                    <option value="4"> Larga</option>
-                                                    <option value="5"> Corta</option>
-                                                    <option value="6"> Tumor</option>
-                                                    <option value="7"> Otra</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_uvul" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Úvula</label>
-                                                <textarea class="form-control form-control-sm"data-titulo="Obs. Úvula" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_uvul_obs" id="ofa_uvul_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Amigdalas</label>
-                                                <select name="ofa_amig" id="ofa_amig" data-titulo="Amigdalas" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_amig','div_ofa_amig','ofa_amig_obs',3);">
-                                                    <option value="0">Seleccione</option>
-                                                    <option value="1"> Normal</option>
-                                                    <option value="2">Hipertroficas</option>
-                                                    <option value="3"> Otra</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_amig" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Amigdalas</label>
-                                                <textarea class="form-control form-control-sm"data-titulo="Obs. Amigdalas" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_amig_obs" id="ofa_amig_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Adenoídes</label>
-                                                <select name="ofa_aden" id="ofa_aden" data-titulo="Adenoídes" data-seccion="BOCA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_aden','div_ofa_aden','ofa_aden_obs',3);">
-                                                    <option value="0">Seleccione</option>
-                                                    <option value="1"> Normal</option>
-                                                    <option value="2">Hipertroficas</option>
-                                                    <option value="3"> Otra</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_aden" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Adenoídes</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs. Adenoídes" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_aden_obs" id="ofa_aden_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                                            <div class="form-group" id="div_ofa_vest_boc">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs Examen de la Boca</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Examen de la Boca" data-seccion="BOCA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_boc_obs" id="ofa_boc_obs"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                                </div>
                             </div>
-                            <!--LENGUA-->
                             <div class="tab-pane fade show" id="lengua" role="tabpanel" aria-labelledby="lengua-tab">
-                                <form>
-                                    <div id="Boca" class="form-row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="tit-gen">EXAMEN DE LA LENGUA</h6>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <form>
+                                                        <div id="Boca" class="form-row">
+                                                            <div class="col-sm-12 mt-2">
+                                                                <div class="form-group fill">
+                                                                    <h6 class="floating-center">EXAMEN DE LA LENGUA</h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="forma">Forma Lingual</label>
+                                                                    <select name="forma" id="forma" data-titulo="Forma Lingual" data-seccion="EXAMEN DE LA LENGUA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('forma','div_forma','forma_obs',2);">
+                                                                        <option value="1"> Normal</option>
+                                                                        <option value="2"> Alterada (describir)</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_forma" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="forma_obs">Obs Forma Lingual</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Forma Lingual" data-seccion="EXAMEN DE LA LENGUA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="forma_obs" id="forma_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="posicion">Posición</label>
+                                                                    <select name="posicion" id="posicion" data-titulo="Posición" data-seccion="EXAMEN DE LA LENGUA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('posicion','div_posicion','posicion_obs',2);">
+                                                                        <option value="1">Adecuado</option>
+                                                                        <option value="2">Alteracion Funcional</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_posicion" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="posicion_obs">Obs Posición</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Posición" data-seccion="EXAMEN DE LA LENGUA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="posicion_obs" id="posicion_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm"for="tono" >Tono Lingual</label>
+                                                                    <select name="tono" id="tono" data-titulo="Tono Lingual" data-seccion="EXAMEN DE LA LENGUA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tono','div_tono','otono_obs',2);">
+                                                                        <option value="1">Adecuado</option>
+                                                                        <option value="2">Alteracion Funcional</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_tono" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="tono_obs">Obs.Tono Lingual</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs.Tono Lingual" data-seccion="EXAMEN DE LA LENGUA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="tono_obs" id="tono_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="cicatriz">Cicatrices</label>
+                                                                    <select name="cicatriz" id="cicatriz" data-titulo="Cicatrices" data-seccion="EXAMEN DE LA LENGUA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cicatriz','div_cicatriz','cicatriz_obs',2);">
+                                                                        <option value="1">Adecuado</option>
+                                                                        <option value="2">Alteracion Funcional</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_cicatriz" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="cicatriz_obs">Obs Cicatrices</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Cicatrices" data-seccion="EXAMEN DE LA LENGUA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cicatriz_obs" id="cicatriz_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="tam">Tamaño</label>
+                                                                    <select name="tam" id="tam" data-titulo="Tamaño" data-seccion="EXAMEN DE LA LENGUA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tam','div_tam','tam_obs',4);">
+                                                                        <option value="0">Seleccione</option>
+                                                                        <option value="1"> Normal</option>
+                                                                        <option value="2"> Microglosia</option>
+                                                                        <option value="3"> Macroglosia</option>
+                                                                        <option value="4"> Otra(describir)</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_tam" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="tam_obs">Obs Tamaño</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs. Tamaño" data-seccion="EXAMEN DE LA LENGUA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="tam_obs" id="tam_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4 mt-2">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm" for="funcion">Funcionalidad Lingual</label>
+                                                                    <select name="funcion" id="funcion" data-titulo="Funcionalidad Lingual" data-seccion="EXAMEN DE LA LENGUA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('funcion','div_funcion','funcion_obs',2);">
+                                                                        <option value="1">Adecuada</option>
+                                                                        <option value="2">Alteracion Funcional</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group" id="div_funcion" style="display:none">
+                                                                    <label id="" name="" class="floating-label-activo-sm" for="funcion_obs">Obs Funcionalidad Lingual</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs Funcionalidad Lingual" data-seccion="EXAMEN DE LA LENGUA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="funcion_obs" id="funcion_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12 mt-2">
+                                                                <div class="form-group" id="div_ofa_vest_boc">
+                                                                    <label id="" name="" class="floating-label}
+                                                                    -activo-sm" for="leng_obs">Obs Examen de la Lengua</label>
+                                                                    <textarea class="form-control form-control-sm" data-titulo="Obs Examen de la Lengua" data-seccion="EXAMEN DE LA LENGUA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="leng_obs" id="leng_obs"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-row">
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Forma Lingual</label>
-                                                <select name="ofa_le_f" id="ofa_le_f" data-titulo="Forma Lingual" data-seccion="EXAMEN DE LA LENGUA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_le_f','div_ofa_le_f','ofa_le_f_obs',2);">
-                                                    <option value="1"> Normal</option>
-                                                    <option value="2"> Alterada (Describir)</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_le_f" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Forma Lingual</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs. Forma Lingual" data-seccion="EXAMEN DE LA LENGUA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_le_f_obs" id="ofa_le_f_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Posición</label>
-                                                <select name="ofa_le_po" id="ofa_le_po" data-titulo="Posición" data-seccion="EXAMEN DE LA LENGUA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_le_po','div_ofa_le_po','ofa_le_po_obs',2);">
-                                                    <option value="1">Adecuado</option>
-                                                    <option value="2">Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_le_po" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Posición</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs. Posición" data-seccion="EXAMEN DE LA LENGUA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_le_po_obs" id="ofa_le_po_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Tono Lingual</label>
-                                                <select name="ofa_le_to" id="ofa_le_to" data-titulo="Tono Lingual" data-seccion="EXAMEN DE LA LENGUA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_le_to','div_ofa_le_to','ofa_le_to_obs',2);">
-                                                    <option value="1">Adecuado</option>
-                                                    <option value="2">Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_le_to" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Tono Lingual</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs.Tono Lingual" data-seccion="EXAMEN DE LA LENGUA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_le_to_obs" id="ofa_le_to_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Cicatrices</label>
-                                                <select name="ofa_le_ci" id="ofa_le_ci" data-titulo="Cicatrices" data-seccion="EXAMEN DE LA LENGUA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_le_ci','div_ofa_le_ci','ofa_le_ci_obs',2);">
-                                                    <option value="1">Adecuado</option>
-                                                    <option value="2">Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_le_ci" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Cicatrices</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs. Cicatrices" data-seccion="EXAMEN DE LA LENGUA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_le_ci_obs" id="ofa_le_ci_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Tamaño</label>
-                                                <select name="ofa_le_ta" id="ofa_le_ta" data-titulo="Tamaño" data-seccion="EXAMEN DE LA LENGUA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_le_ta','div_ofa_le_ta','ofa_le_ta_obs',4);">
-                                                    <option value="0">Seleccione</option>
-                                                    <option value="1"> Normal</option>
-                                                    <option value="2"> Microglosia</option>
-                                                    <option value="3"> Macroglosia</option>
-                                                    <option value="4"> Otra (Describir)</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_le_ta" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Tamaño</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs. Tamaño" data-seccion="EXAMEN DE LA LENGUA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_le_ta_obs" id="ofa_le_ta_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Funcionalidad Lingual</label>
-                                                <select name="ofa_le_fu" id="ofa_le_fu" data-titulo="Funcionalidad Lingual" data-seccion="EXAMEN DE LA LENGUA" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_le_fu','div_ofa_le_fu','ofa_le_fu_obs',2);">
-                                                    <option value="1">Adecuada</option>
-                                                    <option value="2">Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_le_fu" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Funcionalidad Lingual</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Funcionalidad Lingual" data-seccion="EXAMEN DE LA LENGUA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_le_fu_obs" id="ofa_le_fu_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="form-group" id="div_ofa_vest_boc">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Examen de la Lengua</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Examen de la Lengua" data-seccion="EXAMEN DE LA LENGUA" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_leng_obs" id="ofa_leng_obs"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>                    
+                                </div>
                             </div>
-                            <!--LABIOS-->
                             <div class="tab-pane fade show" id="ofa_labios" role="tabpanel" aria-labelledby="ofa-labios-tab">
-                                <form>
-                                    <div id="labios" class="form-row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="tit-gen">EXAMEN DE LOS LABIOS</h6>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                            <a class="nav-link-aten text-reset active" id="lab_sup-tab" data-toggle="tab" href="#lab_sup" role="tab" aria-controls="lab_sup" aria-selected="true">Labio Superior</a>
+                                            <a class="nav-link-aten text-reset" id="lab_inf-tab" data-toggle="tab" href="#lab_inf" role="tab" aria-controls="lab_inf" aria-selected="true">Labio Inferior</a>
                                         </div>
                                     </div>
-                                    <div id="labios_sup" class="form-row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="t-aten"> Labio Superior</h6>
+                                    <div class="col-sm-9">
+
+                                        <div class="tab-content" id="v-pills-tabContent">
+                                            <div class="tab-pane fade show active" id="lab_sup" role="tabpanel" aria-labelledby="lab_sup-tab">
+                                                <div class="col-sm-12 col-md-12">
+                                                    <div class="form-row">
+                                                        <form>
+                                                            <div id="labios_sup" class="form-row">
+                                                                <div class="col-sm-3 mt-2">
+                                                                    <div class="form-group fill">
+                                                                        <H6 class="floating-center" > Labio Superior</H6>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <div class="col-sm-4 mt-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm" for="formalab" >Forma Labio</label>
+                                                                        <select name="formalab" id="formalab" data-titulo="Forma Labios" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('formalab','div_formalab','formalab_obs',2);">
+                                                                            <option value="1"> Normal</option>
+                                                                            <option value="2"> Alterada (describir)</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_formalab" style="display:none">
+                                                                        <label id="" name="" class="floating-label-activo-sm" for="formalab_obs" >Obs Forma Labios</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs Forma Labios" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="formalab_obs" id="formalab_obs"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4 mt-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm" for="tonolab" >Tono</label>
+                                                                        <select name="tonolab" id="tonolab" data-titulo="Tono" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tonolab','div_tonolab','tonolab_obs',2);">
+                                                                            <option value="1">Adecuado</option>
+                                                                            <option value="2">Alterado</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_tonolab" style="display:none">
+                                                                        <label id="" name="" class="floating-label-activo-sm" for="tonolab_obs">Obs Tono</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs Obs Tono" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="tonolab_obs" id="tonolab_obs"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4 mt-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm" for="cicatriz_lab" >Cicatriz</label>
+                                                                        <select name="cicatriz_lab" id="cicatriz_lab" data-titulo="Cicatriz" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cicatriz_lab','div_cicatriz_lab','cicatriz_lab_obs',2);">
+                                                                            <option value="1">No</option>
+                                                                            <option value="2">Si (describir)</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_cicatriz_lab" style="display:none">
+                                                                        <label id="" name="" class="floating-label-activo-sm"  for="cicatriz_lab_obs" >Obs.Cicatriz</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs.Cicatriz" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cicatriz_lab_obs" id="cicatriz_lab_obs"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4 mt-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm" for="posicion_lab">Posición</label>
+                                                                        <select name="posicion_lab" id="posicion_lab" data-titulo="Posición" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('posicion_lab','div_posicion_lab','posicion_lab_obs',2);">
+                                                                            <option value="1">Adecuado</option>
+                                                                            <option value="2">Alteracion Funcional</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_posicion_lab" style="display:none">
+                                                                        <label id="" name="" class="floating-label-activo-sm" for="posicion_lab_obs">Obs Posición</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs Posición" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="posicion_lab_obs" id="posicion_lab_obs"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4 mt-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm" for="tamano_lab">Tamaño</label>
+                                                                        <select name="tamano_lab" id="tamano_lab" data-titulo="Tamaño" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tamano_lab','div_tamano_lab','tamano_lab_obs',2);">
+                                                                            <option value="0">Seleccione</option>
+                                                                            <option value="1"> Normal</option>
+                                                                            <option value="2"> Anormal (describir)</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_tamano_lab" style="display:none">
+                                                                        <label id="" name="" class="floating-label-activo-sm" for="tamano_lab_obs">Obs Tamaño</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs Tamaño" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="tamano_lab_obs" id="tamano_lab_obs"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4 mt-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm"for="funcionalidad" >Funcionalidad Labial</label>
+                                                                        <select name="funcionalidad" id="funcionalidad" data-titulo="Funcionalidad Labial" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('funcionalidad','div_funcionalidad','funcionalidad_obs',2);">
+                                                                            <option value="1">Adecuada</option>
+                                                                            <option value="2">Alteracion Funcional</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_funcionalidad" style="display:none">
+                                                                        <label id="" name="" class="floating-label-activo-sm" for="funcionalidad_obs">Obs Funcionalidad Labial</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs Funcionalidad Labial" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="funcionalidad_obs" id="funcionalidad_obs"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-12 mt-2">
+                                                                    <div class="form-group" id="div_ofa_vest_boc">
+                                                                        <label id="" name="" class="floating-label-activo-sm" for="obs_lab">Obs Examen del Labio Superior</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs Examen del Labio Superior" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_lab_sup" id="obs_lab_sup"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade show " id="lab_inf" role="tabpanel" aria-labelledby="lab_inf-tab">
+                                                <div class="col-sm-12 col-md-12">
+                                                    <div class="form-row">
+                                                        <form>
+                                                            <div id="labios_inf" class="form-row">
+                                                                <div class="col-sm-3 mt-2">
+                                                                    <div class="form-group fill">
+                                                                        <H6 class="floating-center" > Labio Inferior</H6>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <div class="col-sm-4 mt-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm" for="formalab" >Forma Labio</label>
+                                                                        <select name="formalabi" id="formalabi" data-titulo="Forma Labios" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('formalabi','div_formalabi','formalabi_obs',2);">
+                                                                            <option value="1"> Normal</option>
+                                                                            <option value="2"> Alterada (describir)</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_formalabi" style="display:none">
+                                                                        <label id="" name="" class="floating-label-activo-sm" for="formalab_obs" >Obs Forma Labios</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs Forma Labios" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="formalabi_obs" id="formalabi_obs"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4 mt-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm" for="tonolab" >Tono</label>
+                                                                        <select name="tonolabi" id="tonolabi" data-titulo="Tono" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tonolabi','div_tonolabi','tonolabi_obs',2);">
+                                                                            <option value="1">Adecuado</option>
+                                                                            <option value="2">Alterado</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_tonolab" style="display:none">
+                                                                        <label id="" name="" class="floating-label-activo-sm" for="tonolabi_obs">Obs Tono</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs Obs Tono" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="tonolabi_obs" id="tonolabi_obs"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4 mt-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm" for="cicatriz_lab" >Cicatriz</label>
+                                                                        <select name="cicatrizi_lab" id="cicatrizi_lab" data-titulo="Cicatriz" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cicatrizi_lab','div_cicatrizi_lab','cicatrizi_lab_obs',2);">
+                                                                            <option value="1">No</option>
+                                                                            <option value="2">Si (describir)</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_cicatrizi_lab" style="display:none">
+                                                                        <label id="" name="" class="floating-label-activo-sm"  for="cicatriz_lab_obs" >Obs.Cicatriz</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs.Cicatriz" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cicatrizi_lab_obs" id="cicatrizi_lab_obs"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4 mt-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm" for="posicion_lab">Posición</label>
+                                                                        <select name="posicioni_lab" id="posicioni_lab" data-titulo="Posición" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('posicioni_lab','div_posicioni_lab','posicioni_lab_obs',2);">
+                                                                            <option value="1">Adecuado</option>
+                                                                            <option value="2">Alteracion Funcional</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_posicioni_lab" style="display:none">
+                                                                        <label id="" name="" class="floating-label-activo-sm" for="posicion_lab_obs">Obs Posición</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs Posición" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="posicioni_lab_obs" id="posicioni_lab_obs"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4 mt-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm" for="tamano_lab">Tamaño</label>
+                                                                        <select name="tamanoi_lab" id="tamanoi_lab" data-titulo="Tamaño" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tamanoi_lab','div_tamanoi_lab','tamanoi_lab_obs',2);">
+                                                                            <option value="0">Seleccione</option>
+                                                                            <option value="1"> Normal</option>
+                                                                            <option value="2"> Anormal (describir)</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_tamanoi_lab" style="display:none">
+                                                                        <label  class="floating-label-activo-sm" for="tamano_lab_obs">Obs Tamaño</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs Tamaño" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="tamanoi_lab_obs" id="tamanoi_lab_obs"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4 mt-2">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm"for="funcionalidad" >Funcionalidad Labial</label>
+                                                                        <select name="funcionalidadi" id="funcionalidadi" data-titulo="Funcionalidad Labial" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('funcionalidadi','div_funcionalidadi','funcionalidadi_obs',2);">
+                                                                            <option value="1">Adecuada</option>
+                                                                            <option value="2">Alteracion Funcional</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group" id="div_funcionalidadi" style="display:none">
+                                                                        <label  class="floating-label-activo-sm" for="funcionalidad_obs">Obs Funcionalidad Labial</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs Funcionalidad Labial" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="funcionalidadi_obs" id="funcionalidadi_obs"></textarea>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-sm-12 mt-2">
+
+                                                                    <div class="form-group" id="div_ofa_vest_boc">
+                                                                        <label id="" name="" class="floating-label-activo-sm" for="obs_lab_sup">Obs Examen del Labio Inferior</label>
+                                                                        <textarea class="form-control form-control-sm" data-titulo="Obs Examen del Labio Superior" data-seccion="OFA LABIO INFERIO" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_lab_supi" id="obs_lab_supi"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-row">
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Forma Labio</label>
-                                                <select name="ofa_ls_f" id="ofa_ls_f" data-titulo="Forma Labios" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_ls_f','div_ofa_ls_f','ofa_ls_f_obs',2);">
-                                                    <option value="1"> Normal</option>
-                                                    <option value="2"> Alterada (Describir)</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_ls_f" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Forma Labios</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Forma Labios" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_ls_f_obs" id="ofa_ls_f_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Tono</label>
-                                                <select name="ofa_ls_t" id="ofa_ls_t" data-titulo="Tono" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_ls_t','div_ofa_ls_t','ofa_ls_t_obs',2);">
-                                                    <option value="1">Adecuado</option>
-                                                    <option value="2">Alterado</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_ls_t" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Tono</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Obs Tono" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_ls_t_obs" id="ofa_ls_t_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Cicatriz</label>
-                                                <select name="ofa_ls_c" id="ofa_ls_c" data-titulo="Cicatriz" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_ls_c','div_ofa_ls_c','ofa_ls_c_obs',2);">
-                                                    <option value="1">No</option>
-                                                    <option value="2">Si (Describir)</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_ls_c" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Cicatriz</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs.Cicatriz" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_ls_c_obs" id="ofa_ls_c_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Posición</label>
-                                                <select name="ofa_ls_ps" id="ofa_ls_ps" data-titulo="Posición" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_ls_ps','div_ofa_ls_ps','ofa_ls_ps_obs',2);">
-                                                    <option value="1">Adecuado</option>
-                                                    <option value="2">Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_ls_ps" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Posición</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Posición" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_ls_ps_obs" id="ofa_ls_ps_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Tamaño</label>
-                                                <select name="ofa_ls_tm" id="ofa_ls_tm" data-titulo="Tamaño" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_ls_tm','div_ofa_ls_tm','ofa_ls_tm_obs',2);">
-                                                    <option value="0">Seleccione</option>
-                                                    <option value="1"> Normal</option>
-                                                    <option value="2"> Anormal (Describir)</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_ls_tm" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Tamaño</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Tamaño" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_ls_tm_obs" id="ofa_ls_tm_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Funcionalidad Labial</label>
-                                                <select name="ofa_ls_func" id="ofa_ls_func" data-titulo="Funcionalidad Labial" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_ls_func','div_ofa_ls_func','ofa_ls_func_obs',2);">
-                                                    <option value="1">Adecuada</option>
-                                                    <option value="2">Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_ls_func" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Funcionalidad Labial</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Funcionalidad Labial" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_ls_func_obs" id="ofa_ls_func_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="form-group" id="div_ofa_vest_boc">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Examen del Labio Superior</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Examen del Labio Superior" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_lab_obs" id="ofa_lab_obs"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="labios_inf" class="form-row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="t-aten">  Labio Inferior</h6>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Forma Labio</label>
-                                                <select name="ofa_li_f" id="ofa_li_f" data-titulo="Forma Labios" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_li_f','div_ofa_li_f','ofa_li_f_obs',2);">
-                                                    <option value="1"> Normal</option>
-                                                    <option value="2"> Alterada (Describir)</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_li_f" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Forma Labios</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Forma Labios" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_li_f_obs" id="ofa_li_f_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Tono</label>
-                                                <select name="ofa_li_t" id="ofa_li_t" data-titulo="Tono" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_li_t','div_ofa_li_t','ofa_li_t_obs',2);">
-                                                    <option value="1">Adecuado</option>
-                                                    <option value="2">Alterado</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_li_t" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Tono</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Obs Tono" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_li_t_obs" id="ofa_li_t_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Cicatriz</label>
-                                                <select name="ofa_li_c" id="ofa_li_c" data-titulo="Cicatriz" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_li_c','div_ofa_li_c','ofa_li_c_obs',2);">
-                                                    <option value="1">No</option>
-                                                    <option value="2">Si (Describir)</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_li_c" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Cicatriz</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs.Cicatriz" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_li_c_obs" id="ofa_li_c_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Posición</label>
-                                                <select name="ofa_li_ps" id="ofa_li_ps" data-titulo="Posición" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_li_ps','div_ofa_li_ps','ofa_li_ps_obs',2);">
-                                                    <option value="1">Adecuado</option>
-                                                    <option value="2">Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_li_ps" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Posición</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Posición" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_li_ps_obs" id="ofa_li_ps_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Tamaño</label>
-                                                <select name="ofa_li_tm" id="ofa_li_tm" data-titulo="Tamaño" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_li_tm','div_ofa_li_tm','ofa_li_tm_obs',2);">
-                                                    <option value="0">Seleccione</option>
-                                                    <option value="1"> Normal</option>
-                                                    <option value="2"> Anormal (Describir)</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_li_tm" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Tamaño</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Tamaño" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_li_tm_obs" id="ofa_li_tm_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Funcionalidad Labial</label>
-                                                <select name="ofa_li_func" id="ofa_li_func" data-titulo="Funcionalidad Labial" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ofa_li_func','div_ofa_li_func','ofa_li_func_obs',2);">
-                                                    <option value="1">Adecuada</option>
-                                                    <option value="2">Alteracion Funcional</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_ofa_li_func" style="display:none">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Funcionalidad Labial</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Funcionalidad Labial" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_li_func_obs" id="ofa_li_func_obs"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="form-group" id="div_ofa_vest_boc">
-                                                <label id="" name="" class="floating-label-activo-sm">Obs. Examen del Labio Inferior</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Obs Examen del Labio Superior" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ofa_lab_obs" id="ofa_lab_obs"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-info">Guardar</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"> <i class="feather icon-x"></i> Cancelar</button>
-                <button type="submit" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>
     </div>

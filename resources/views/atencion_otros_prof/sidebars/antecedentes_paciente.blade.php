@@ -3,7 +3,7 @@
     <header class="bs-canvas-header p-3 bg-info overflow-auto">
         <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true"
                 class="text-light">&times;</span></button>
-        <h5 class="d-inline-block text-light mb-0 float-right mt-1">Antecedentes del paciente pediatrico</h5>
+        <h5 class="d-inline-block text-light mb-0 float-right mt-1">Antecedentes del paciente</h5>
     </header>
     <div class="bs-canvas-content">
         <div class="accordion" id="accordionExample">
@@ -89,7 +89,7 @@
                                 @if (isset($paciente))
                                     @if ($paciente->Direccion()->first()->Ciudad()->first() != null)
                                         {{ $paciente->Direccion()->first()->Ciudad()->first()->nombre }}<br>
-                                        {{ $paciente->Direccion()->first()->Ciudad()->first()->nombre }}
+                                        {{ $paciente->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
                                     @else
                                         <span class="error">NO HA REGISTRADO CIUDAD !</span>
                                     @endif
@@ -406,7 +406,7 @@
                 </div>
             </div>
 
-            {{--  <div class="card-sidebar">
+			{{--  <div class="card-sidebar">
                 <div class="card-header-sidebar" id="headingThree">
                     <h2 class="mb-0">
                         <button class="btn btn-light btn-block text-left collapsed" type="button"

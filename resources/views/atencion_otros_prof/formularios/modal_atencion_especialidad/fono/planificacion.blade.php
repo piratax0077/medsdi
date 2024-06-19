@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <form>
-                   
+
                     <div id="planificacion" class="form-row">
                         <div class="col-sm-12 mt-2">
                             <div class="form-group fill">
@@ -18,28 +18,28 @@
                     </div>
                     <div class="form-row">
                         <div class="col-sm-4 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Fecha Inicio Tratamiento</label>
-                            <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                            <label  class="floating-label-activo-sm">Fecha Inicio Tratamiento</label>
+                            <input type="text" class="form-control form-control-sm" name="fecha_inicio" id="fecha_inicio">
                         </div>
                         <div class="col-sm-4 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Diagnóstico</label>
-                            <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                            <label  class="floating-label-activo-sm">Diagnóstico</label>
+                            <input type="text" class="form-control form-control-sm" name="dg_inicial" id="dg_inicial">
                         </div>
                         <div class="col-sm-4 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Día y Hora de Tratamiento</label>
-                            <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                            <label  class="floating-label-activo-sm">Día y Hora de Tratamiento</label>
+                            <input type="text" class="form-control form-control-sm" name="dia_tto" id="dia_tto">
                         </div>
                     </div>
                      <br>
                         <hr>
                     <div class="form-row">
                         <div class="col-sm-3 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Número de Sesiones</label>
-                            <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                            <label  class="floating-label-activo-sm">Número de Sesiones</label>
+                            <input type="text" class="form-control form-control-sm" name="n_sesiones" id="n_sesiones">
                         </div>
                         <div class="col-sm-9 mt-2">
-                            <label id="" name="" class="floating-label-activo-sm">Objetivos</label>
-                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="succion" id="succion"></textarea>
+                            <label  class="floating-label-activo-sm">Objetivos</label>
+                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="objetivos" id="objetivos"></textarea>
                         </div>
                         <br>
                     </div>

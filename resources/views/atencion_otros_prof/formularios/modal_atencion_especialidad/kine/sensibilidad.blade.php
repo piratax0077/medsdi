@@ -8,26 +8,36 @@
             </div>
             <div class="modal-body">
                 <form>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <p class="fecha-sm"><strong>Fecha del examen</strong> 
+                                <script>
+                                    var f = new Date();
+                                    document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                 </script>
+                             </p>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
-                            <h6 class="t-aten-black-sm">I.- Primaria</h6>
+                            <h6 class="t-aten">I.- Primaria</h6>
                             <div class="form-group">
-                                <label class="floating-label-activo-sm">Examen</label>
-                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="kine_sens_prim" id="kine_sens_prim"></textarea>
+                                <label class="floating-label-activo-sm" for="sens_prim">Examen</label>
+                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="sens_prim" id="sens_prim"></textarea>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
-                            <h6 class="t-aten-black-sm">II.- Secundaria</h6>
+                            <h6 class="t-aten">II.- Secundaria</h6>
                             <div class="form-group">
-                                <label class="floating-label-activo-sm">Examen</label>
-                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="kine_sens_sec" id="kine_sens_sec"></textarea>
+                                <label class="floating-label-activo-sm" for="sens_sec">Examen</label>
+                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="sens_sec" id="sens_sec"></textarea>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h6 class="t-aten-black-sm">Conclusiones</h6>
+                            <h6 class="t-aten">Conclusiones</h6>
                             <div class="form-group">
-                                <label class="floating-label-activo-sm">Comentarios</label>
-                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="kine_sens_comentarios" id="kine_sens_comentarios"></textarea>
+                                <label class="floating-label-activo-sm" for="sens_coment">Comentarios</label>
+                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="sens_coment" id="sens_coment"></textarea>
                             </div>
                         </div>
                     </div>

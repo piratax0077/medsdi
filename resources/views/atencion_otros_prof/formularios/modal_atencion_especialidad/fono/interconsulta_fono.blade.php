@@ -26,13 +26,13 @@
                     <div class="form-group col-sm-6 col-md-6">
                         <label class="floating-label">Región</label>
                         <select id="region_comuna" name="region_comuna" class="form-control form-control-sm"  >
-                        <option>Región de Valparaíso</option> 
+                        <option>Región de Valparaíso</option>
                         </select>
                     </div>
                     <div class="form-group col-sm-6 col-md-6">
                         <label class="floating-label">Comuna</label>
                         <select id="region_comuna" name="region_comuna" class="form-control form-control-sm"  >
-                        <option>Viña del Mar</option> 
+                        <option>Viña del Mar</option>
                         </select>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
                                 <div class="col-sm-6 col-md-6 text-center mb-2">
                                     <button type="button" class="btn btn-sm btn-primary">Ver documento en PDF</button>
                                 </div>
-                               
+
                             </div>
                         </form>
                     </div>
@@ -112,7 +112,7 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
 				<button type="button" class="btn btn-success">Guardar</button>
-			</div>	
+			</div>
 		</div>
 	</div>
 </div>

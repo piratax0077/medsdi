@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <ul class="nav nav-tabs-aten nav-fill mb-2" id="ex-inferior" role="tablist">
+                        <ul class="nav nav-tabs-aten nav-fill mb-3" id="ex-inferior" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link-aten text-reset active" id="n_motores-tab" data-toggle="tab" href="#n_motores" role="tab" aria-controls="n_motores" aria-selected="true">Examen Muscular</a>
                             </li>
@@ -32,21 +32,27 @@
                             <div class="tab-pane fade show active" id="n_motores" role="tabpanel" aria-labelledby="n_motores-tab">
                                 <div id="contenedor_grupo_musc">
                                     <div id="grupo_musc">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                                                <h6 class="t-aten d-inline mr-2">Ex.Muscular <span class="fecha-sm">
+                                                (<script>
+                                                    var f = new Date();
+                                                    document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                                 </script>)
+                                                </span></h6>
+                                                 
+                                                <button type="button" class="btn btn-info-light-c btn-xxs btn-agregar-grupo-musc d-inline float-right mb-2"><i class="feather icon-plus"></i> Añadir Grupo</button>
+                                            </div>
+                                        </div>
                                         <form>
                                             <div class="form-row">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                                                    <h6 class="t-aten float-left d-inline pt-2">Ex.Muscular</h6>
-                                                    <button type="button" class="btn btn-info-light-c btn-xxs btn-agregar-grupo-musc float-right d-inline" ><i class="feather icon-plus"></i> Añadir Grupo</button>
-                                                </div>
-                                                <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3">
-                                                    <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Grupo Estudiado</label>
+                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="floating-label-activo-sm" for="ex_musc_grupo_es" >Grupo Estudiado</label>
                                                         <input type="text" class="form-control form-control-sm" name="ex_musc_grupo_es" id="ex_musc_grupo_es">
-                                                    </div>
                                                 </div>
-                                                <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                     <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Masa Muscular</label>
+                                                        <label class="floating-label-activo-sm" for="est_masa_musc" >Masa Muscular</label>
                                                         <select name="est_masa_musc" id="est_masa_musc" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('est_masa_musc','div_est_masa_musc','obs_est_masa_musc',5);">
                                                             <option selected  value="1">Normal</option>
                                                             <option value="2">Hipotrofia</option>
@@ -56,15 +62,13 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group" id="div_est_masa_musc" style="display:none;">
-                                                        <label class="floating-label-activo-sm">Descripción <i>(Otro)</i></label>
+                                                        <label class="floating-label-activo-sm" for="obs_est_masa_musc">Otro<i> (Descripción)</i></label>
                                                         <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_est_masa_musc" id="obs_est_masa_musc"></textarea>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                                                    <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Obs. Grupo Estudiado</label>
-                                                        <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_emm_ge" id="obs_emm_ge"></textarea>
-                                                    </div>
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                    <label class="floating-label-activo-sm" for="obs_emm_ge">Obs. Grupo Estudiado</label>
+                                                    <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_emm_ge" id="obs_emm_ge"></textarea>
                                                 </div>
                                             </div>
                                         </form>
@@ -76,20 +80,28 @@
                                 <div id="contenedor_grupo_mov">
                                     <div id="grupo_mov">
                                         <form>
-                                            <div class="form-row">
-                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                                                    <h6 class="t-aten float-left d-inline pt-2">Movimientos involuntarios</h6>
-                                                    <button type="button" class="btn btn-info-light-c btn-xxs btn-agregar-grupo-mov float-right d-inline" ><i class="feather icon-plus"></i> Añadir Grupo</button>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                                                    <h6 class="t-aten d-inline mr-2">Movimientos involuntarios <span class="fecha-sm">
+                                                    (<script>
+                                                        var f = new Date();
+                                                        document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                                     </script>)
+                                                    </span></h6>
+                                                     
+                                                    <button type="button" class="btn btn-info-light-c btn-xxs btn-agregar-grupo-mov d-inline float-right mb-2"><i class="feather icon-plus"></i> Añadir Grupo</button>
                                                 </div>
-                                                <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                     <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Grupo Estudiado</label>
+                                                        <label class="floating-label-activo-sm" for="mov_inv_grupo_es">Grupo Estudiado</label>
                                                         <input type="text" class="form-control form-control-sm" name="mov_inv_grupo_es" id="mov_inv_grupo_es">
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                     <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Tipo Movimiento</label>
+                                                        <label class="floating-label-activo-sm" for="est_mov_inv">Tipo Movimiento</label>
                                                         <select name="est_mov_inv"  id="est_mov_inv" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('est_mov_inv','div_est_mov_invo','obs_est_mov_inv',9);">
                                                             <option selected  value="1">No</option>
                                                             <option value="2">Fasciculaciones</option>
@@ -103,13 +115,13 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group" id="div_est_mov_inv" style="display:none;">
-                                                        <label class="floating-label-activo-sm">Descripción <i>(Otro)</i></label>
+                                                        <label class="floating-label-activo-sm" for="obs_est_mov_inv">Otro <i>(Descripción)</i></label>
                                                         <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_est_mov_inv" id="obs_est_mov_inv"></textarea>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Obs. Grupo Estudiado</label>
+                                                        <label class="floating-label-activo-sm" for="obs_eminv">Obs. Grupo Estudiado</label>
                                                         <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_eminv" id="obs_eminv"></textarea>
                                                     </div>
                                                 </div>
@@ -123,20 +135,28 @@
                                 <div id="contenedor_grupo_tono">
                                     <div id="grupo_tono">
                                         <form>
-                                            <div class="form-row">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                                                    <h6 class="t-aten float-left d-inline pt-2">Tono muscular</h6>
-                                                    <button type="button" class="btn btn-info-light-c btn-xxs btn-agregar-grupo-tono float-right d-inline" ><i class="feather icon-plus"></i> Añadir Grupo</button>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
+                                                    <h6 class="t-aten d-inline mr-2">Tono muscular <span class="fecha-sm">
+                                                    (<script>
+                                                        var f = new Date();
+                                                        document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
+                                                     </script>)
+                                                    </span></h6>
+                                                     
+                                                    <button type="button" class="btn btn-info-light-c btn-xxs btn-agregar-grupo-tono d-inline float-right mb-2"><i class="feather icon-plus"></i> Añadir Grupo</button>
                                                 </div>
+                                            </div>
+                                            <div class="form-row">
                                                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                     <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Grupo Estudiado</label>
+                                                        <label class="floating-label-activo-sm" for="tono_grupo_estudio">Grupo Estudiado</label>
                                                         <input type="text" class="form-control form-control-sm" name="tono_grupo_estudio" id="tono_grupo_estudio">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                     <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Tono Muscular</label>
+                                                        <label class="floating-label-activo-sm" for="est_tono">Tono Muscular</label>
                                                         <select name="est_tono"   id="est_tono" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('est_tono','div_est_tono','obs_est_tono',6);">
                                                             <option selected  value="1">Normal</option>
                                                             <option value="2">Hipertonía</option>
@@ -147,13 +167,13 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group" id="div_est_tono" style="display:none;">
-                                                        <label class="floating-label-activo-sm">Descripción <i>Otro</i></label>
+                                                        <label class="floating-label-activo-sm" for="obs_est_tono">Descripción <i>Otro</i></label>
                                                         <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_est_tono" id="obs_est_tono"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Observaciones Grupo Estudiado</label>
+                                                        <label class="floating-label-activo-sm" for="obs_tono_musc_grupo_es">Obs. Grupo Estudiado</label>
                                                         <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tono_musc_grupo_es" id="obs_tono_musc_grupo_es"></textarea>
                                                     </div>
                                                 </div>
@@ -165,51 +185,56 @@
                             <!--estudio emg-->
                             <div class="tab-pane fade show" id="emg" role="tabpanel" aria-labelledby="emg-tab">
                                 <div class="form-row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="t-aten">EMG y Estudio Conducción Nerviosa</h6>
-                                    </div>
+                 
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <h6 class="t-aten">EMG y Est. Conducción Nerviosa</h6>
+                                        </div>
+                
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
-                                            <label class="floating-label-activo-sm">Grupo Estudiado</label>
+                                            <label class="floating-label-activo-sm" for="emg_grupo_es">Grupo Estudiado</label>
                                             <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="emg_grupo_es" id="emg_grupo_es"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
-                                            <label class="floating-label-activo-sm">EMG</label>
+                                            <label class="floating-label-activo-sm" for="est_emg">EMG</label>
                                             <select name="est_emg" id="est_emg" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('est_emg','div_est_emg','obs_est_emg',2);">
                                                 <option selected  value="1">Normal</option>
                                                 <option value="2">Anormal</option>
                                             </select>
                                         </div>
                                         <div class="form-group" id="div_est_emg" style="display:none;">
-                                            <label class="floating-label-activo-sm">Descripción</label>
+                                            <label class="floating-label-activo-sm" for="obs_est_emg">Descripción</label>
                                             <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_est_emg" id="obs_est_emg"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
-                                            <label class="floating-label-activo-sm">Estudio Cond Nerviosa</label>
+                                            <label class="floating-label-activo-sm" for="Ex_cuello">Estudio Cond Nerviosa</label>
                                             <select name="ecn" data-titulo="Ex_cuello" data-seccion="Cuello"  id="ecn" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('ecn','div_ecn','obs_ecn',2);">
                                                 <option selected  value="1">Normal</option>
                                                 <option value="2">Anormal</option>
                                             </select>
                                         </div>
                                         <div class="form-group" id="div_ecn" style="display:none;">
-                                            <label class="floating-label-activo-sm">Descripción</label>
+                                            <label class="floating-label-activo-sm" for="obs_ecn">Descripción</label>
                                             <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ecn" id="obs_ecn"></textarea>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <label class="floating-label-activo-sm">Obs. Eval. Eléctrica Masa Muscular</label>
+                                        <label class="floating-label-activo-sm" for="emg_grupo_es">Obs. Eval eléctrica Masa Muscular</label>
                                         <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="emg_grupo_es" id="emg_grupo_es"></textarea>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row mt-3">
+                            <br>
+                            <div class="form-row mt-7">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Eval. Masa Muscular en General</label>
+                                        <label class="floating-label-activo-sm" for="eval_est_mmgral">Eval Masa Muscular en General</label>
                                         <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="eval_est_mmgral" id="eval_est_mmgral"></textarea>
                                     </div>
                                 </div>
