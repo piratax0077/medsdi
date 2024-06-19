@@ -1173,21 +1173,16 @@
             $.ajax({
                     url: url,
                     type: "get",
-                    data: {
-
-                    }
-
+                    data: {}
                 })
                 .done(function(data) {
 
                     if (data == 'fail') {
                         console.log('fail');
-
                         swal("Advertencia",
                             "Bienvenido!!\n Debe ingresar en la pestaña Panel de Configuración, Mis Lugares de Atención y registrar por lo menos un lugar de atención.",
                             "warning");
                         //  alert('No tiene lugares de atención asignados, favor registrar uno');
-
                     } else {
 
                         let lugares_atencion = $('#lugares_atencion');
@@ -1197,12 +1192,12 @@
                         lugares_atencion.find('option').remove();
                         lugares_atencion.append('<option value="0">Seleccione</option>');
                         let contador = 0;
-                        for (let i = 0; i < data.length; i++) {
-
-                            if (data[i].pivot.estado == '1') {
-
-                                lugares_atencion.append('<option value="' + data[i].id + '">' + data[i].nombre +
-                                    '</option>');
+                        console.log(data.length);
+                        for (let i = 0; i < data.length; i++)
+                        {
+                            if (data[i].pivot.estado == '1')
+                            {
+                                lugares_atencion.append('<option value="' + data[i].id + '">' + data[i].nombre + '</option>');
                                 contador++;
                             }
                         }
@@ -1210,12 +1205,20 @@
                         if (contador == 0) {
                             swal("Oops", "No tiene lugares de atención asignados, favor registrar uno", "error")
                             //  alert('No tiene lugares de atención asignados, favor registrar uno');
-                        } else {
-                            $('#modal_seleccionar_lugar_atencion').modal('show');
-                            validar_seleccionar_lugar_atencion();
                         }
-
-
+                        else
+                        {
+                            if(contador == 1)
+                            {
+                                lugares_atencion.val(data[0].id);
+                                window.location.href = "{{ route('profesional.mi_agenda') }}?lugares_atencion="+data[0].id;
+                            }
+                            else
+                            {
+                                $('#modal_seleccionar_lugar_atencion').modal('show');
+                                validar_seleccionar_lugar_atencion();
+                            }
+                        }
                     }
                     // $(data).each(function(i, v) { // indice, valor
 

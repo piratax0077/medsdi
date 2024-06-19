@@ -174,7 +174,11 @@ class EscritorioPaciente extends Controller
         }
         else
         {
-            return view('app.home.acceso');
+            // return view('app.home.acceso');
+            $region = Region::all();
+            $prevision = Prevision::all();
+            /** formulario nuevos */
+            return view('auth.Registros.registro_paciente')->with(['region' => $region, 'prevision' => $prevision]);
         }
     }
 

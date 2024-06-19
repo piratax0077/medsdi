@@ -882,6 +882,8 @@
                                                             $('#bono_hora_medica').val(info.event.id);
                                                             $('#bono_id_profesional').val(data.profesional.id);
                                                             $('#bono_id_paciente').val(data.paciente.id);
+                                                            $('#bono_prevision').val(data.paciente.id_prevision);
+                                                            $('#bono_prevision_txt').val( $('#bono_prevision option:selected').text() );
 
                                                             /** PESTAÑA DE VENTA DE BONO */
                                                             $('#venta_rut').val(data.paciente.rut);

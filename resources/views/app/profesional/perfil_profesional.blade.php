@@ -372,11 +372,11 @@
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="font-weight-bolder ml-0 mb-0">Región</label>
-                                                    <div>{{ $profesional->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}</div>
+                                                    <div>{{ $direccion_txt_region_profesional }}</div>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="font-weight-bolder ml-0 mb-0">Comuna</label>
-                                                    <div>{{ $profesional->Direccion()->first()->Ciudad()->first()->nombre }}</div>
+                                                    <div>{{ $direccion_txt_ciudad_profesional }}</div>
                                                 </div>
                                             </div>
                                             <div class="form-row">
@@ -398,8 +398,7 @@
                                                         <option value="">Seleccione una Región</option>
                                                         @if (isset($regiones))
                                                             @foreach ($regiones as $region)
-                                                            <option value="{{ $region->id }}" @if ($region->id ==
-                                                                $profesional->Direccion()->first()->Ciudad()->first()->Region()->first()->id) selected @endif>
+                                                            <option value="{{ $region->id }}" @if ($region->id == $profesional->Direccion()->first()->Ciudad()->first()->Region()->first()->id) selected @endif>
                                                                 {{ $region->nombre }}
                                                             </option>
                                                             @endforeach
@@ -407,14 +406,14 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="floating-label-activo">Ciudad</label>
+                                                    <label class="floating-label-activo">Ciudad {{ $direccion_id_ciudad_profesional}}</label>
                                                     <select class="form-control form-control-sm" id="perfil_ciudad" name="perfil_ciudad">
-                                                        <option value="">Seleccione su comuna</option>
+                                                        <option value="">Seleccione su comuna </option>
                                                         @if (isset($ciudades))
                                                             @foreach ($ciudades as $ciudad)
-                                                            <option value="{{ $ciudad->id }}" @if ($profesional->Direccion()->first()->id_ciudad) selected @endif>
-                                                                {{ $ciudad->nombre }}
-                                                            </option>
+                                                                <option value="{{ $ciudad->id }}" @if ($direccion_id_ciudad_profesional == $ciudad->id) selected @endif>
+                                                                    {{ $ciudad->nombre }}
+                                                                </option>
                                                             @endforeach
                                                         @endif
                                                     </select>

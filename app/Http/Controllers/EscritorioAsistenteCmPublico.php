@@ -39,9 +39,12 @@ class EscritorioAsistenteCmPublico extends Controller
     {
         $array_data = array();
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
-
         $region = Region::all();
         $prevision = Prevision::all();
+
+        if (!isset($asistente))
+            return view('auth.Registros.registro_asistente')->with(['region' => $region, 'prevision' => $prevision]);
+
         $asistente_tipo = AsistenteTipo::where('id',$asistente->id_asistente_tipo)->first();
         $profesion_oficio = ProfesionOficio::all();
 

@@ -847,6 +847,11 @@
                             aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body pb-0">
+                    <div class="form-row mb-2">
+                        <div class="col-sm-12">
+                            <p style="color: #f00; font-size: 10px;">Recuerde que siempre se debe validar <span style="font-weight: 800;"> Datos del Paciente, Profesional y Convenio con los datos del Bono Fisico</span></p>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <input type="hidden" name="bono_hora_medica" id="bono_hora_medica">
                         <input type="hidden" name="bono_id_profesional" id="bono_id_profesional">
@@ -856,42 +861,42 @@
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Rut del Paciente</label>
                                 <input type="person" class="form-control form-control-sm" name="bono_paciente_rut"
-                                    id="bono_paciente_rut">
+                                    id="bono_paciente_rut" disabled="disabled">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Nombre del Paciente</label>
                                 <input type="text" class="form-control form-control-sm" name="bono_paciente_nombre"
-                                    id="bono_paciente_nombre">
+                                    id="bono_paciente_nombre" disabled="disabled">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm"> Nombre Profesional</label>
                                 <input type="text" class="form-control form-control-sm" name="bono_profesional_nombre"
-                                    id="bono_profesional_nombre">
+                                    id="bono_profesional_nombre" disabled="disabled">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm"> Rut Profesional</label>
                                 <input type="text" class="form-control form-control-sm" name="bono_profesional_rut"
-                                    id="bono_profesional_rut">
+                                    id="bono_profesional_rut" disabled="disabled">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Clase Pago</label>
-                                <select id="bono_id_clase_bono" name="bono_id_clase_bono"
-                                    class="form-control form-control-sm">
+                                <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm">
                                     <option value="0">Seleccione</option>
-                                    <option value="1">Bono Fisico</option>
-                                    <option value="2">Sencillito</option>
+                                    <option value="1">Emitido por Institucion</option>
+                                    <option value="2">Váucher</option>
                                     <option value="3">Caja Vecina</option>
                                     <option value="4">Bono Web</option>
                                     <option value="5">Bono Web Pre-Pago</option>
                                     <option value="6">Particular</option>
+                                    <option value="7">COPAGO Fonasa</option>
                                 </select>
                             </div>
                         </div>
@@ -905,14 +910,15 @@
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <label class="floating-label-activo-sm">Convenio</label>
-                                 <select id="bono_prevision" name="bono_prevision" class="form-control form-control-sm">
+                                <input type="text" class="form-control form-control-sm" name="bono_prevision_txt" id="bono_prevision_txt" disabled="disabled" value="">
+                                 <select id="bono_prevision" name="bono_prevision" class="form-control form-control-sm"  style="display: none;" onchange="$('#bono_prevision_txt').val( $('#bono_prevision option:selected').text() );$('#bono_prevision_txt').show();$('#bono_prevision').hide();actualizar_prevision_paciente('bono_id_paciente', 'bono_prevision');">
                                     <option value="0">Selecione una opción</option>
                                     @foreach ($prevision as $prev)
                                         <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
                                     @endforeach
                                 </select>
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-primary btn-sm" type="button"><i class="feather icon-edit"></i></button>
+                                    <button class="btn btn-outline-primary btn-sm" type="button" onclick="$('#bono_prevision_txt').hide();$('#bono_prevision').show();"><i class="feather icon-edit"></i></button>
                                 </div>
                             </div>
                             <!--<div class="form-group fill">
@@ -1596,6 +1602,53 @@
             });
         };
 
+        function actualizar_prevision_paciente(input_paciente, input_prevision)
+        {
+            var paciente = $('#'+input_paciente).val();
+            var prevision = $('#'+input_prevision).val();
+
+            let url = "{{ route('paciente.prevision.actualizar') }}";
+            $.ajax({
+                url: url,
+                type: "post",
+                data: {
+                    _token: CSRF_TOKEN,
+                    id_paciente: paciente,
+                    id_prevision: prevision,
+                },
+            })
+            .done(function(data) {
+                if (data != null) {
+                    if(data.estado == 1)
+                    {
+                        swal({
+                            title: "Actualizacion de Convenio del Paciente.",
+                            text: "Convenio del Paciente actualizado.",
+                            icon: "success",
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Actualizacion de Convenio del Paciente.",
+                            text: "Se presento una falla al intentar actualizar el Convenio del Paciente.",
+                            icon: "error",
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Actualizacion de Convenio del Paciente.",
+                        text: "Se presento una falla al intentar actualizar el Convenio del Paciente.",
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
 
     </script>
 @endsection

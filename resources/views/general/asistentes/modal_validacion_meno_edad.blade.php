@@ -72,12 +72,13 @@
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Clase Pago</label>
                                     <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm">
-                                        <option value="1">Bono Fisico</option>
-                                        <option value="2">Sencillito</option>
+                                        <option value="1">Emitido por Institucion</option>
+                                        <option value="2">Váucher</option>
                                         <option value="3">Caja Vecina</option>
                                         <option value="4">Bono Web</option>
                                         <option value="5">Bono Web Pre-Pago</option>
                                         <option value="6">Particular</option>
+                                        <option value="7">COPAGO Fonasa</option>
                                     </select>
                                 </div>
                             </div>

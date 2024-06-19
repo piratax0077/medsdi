@@ -1058,7 +1058,7 @@ Route::group([
     Route::get('/horas/bloqueo/ver', [App\Http\Controllers\ProfesionalHorariosBloqueoController::class, 'verRegistros'])->name('bloqueo.horas.ver');
     Route::post('/horas/bloqueo/estado', [App\Http\Controllers\ProfesionalHorariosBloqueoController::class, 'estado'])->name('bloqueo.horas.estado');
 
-    /** NULACION DE HORAS */
+    /** ANULACION DE HORAS */
     Route::get('/horas/ver', [App\Http\Controllers\HoraMedicaController::class, 'verRegistrosDia'])->name('agenda.dia.horas.ver');
 
 
@@ -1073,6 +1073,8 @@ Route::group([
     Route::get('perfil/contacto/editar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'editar_contacto_emergencia'])->name('asistentecm.editar_contacto');
     Route::get('perfil/contacto/eliminar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'eliminar_contacto_asistente'])->name('asistentecm.eliminar_contacto_asistente');
     Route::get('perfil/contacto/buscar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscar_contacto'])->name('asistentecm.buscar_contacto');
+
+    Route::post('perfil/paceinte/prevision/actualizar', [App\Http\Controllers\PacienteController::class, 'actualizarPrevision'])->name('paciente.prevision.actualizar');
 
 });
 

@@ -1427,6 +1427,33 @@ class EscritorioProfesional extends Controller
     public function mi_perfil()
     {
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $direccion_profesional = Direccion::where('id',$profesional->id_direccion)->first();
+        $direccion_id_ciudad_profesional = '';
+        $direccion_txt_ciudad_profesional = '';
+        $direccion_region_profesional = '';
+        $direccion_id_region_profesional = '';
+        $direccion_txt_region_profesional = '';
+
+        $regiones = Region::all();
+        $ciudades = Ciudad::all();
+
+        if($direccion_profesional)
+        {
+            $direccion_id_ciudad_profesional = $direccion_profesional->id_ciudad;
+            $direccion_region_profesional = Ciudad::select('nombre','id_region')->where('id',$direccion_id_ciudad_profesional)->first();
+
+            if($direccion_region_profesional)
+            {
+                $direccion_txt_ciudad_profesional = $direccion_region_profesional->nombre;
+
+                $ciudades = Ciudad::where('id_region', $direccion_region_profesional->id_region)->get();
+                $direccion_id_region_profesional = $direccion_region_profesional->id_region;
+
+                $direccion_txt_region_profesional_temp = Region::find($direccion_id_region_profesional);
+                $direccion_txt_region_profesional = $direccion_txt_region_profesional_temp->nombre;
+            }
+        }
+
         $txt_especialidades = '';
         $txt_tipo_especialidades = '';
         $txt_sub_tipo_especialidades = '';
@@ -1463,8 +1490,6 @@ class EscritorioProfesional extends Controller
 
         }
 
-        $regiones = Region::all();
-        $ciudades = Ciudad::all();
         $perfil_academico = ProfesionalAntecedenteAcademico::where('id_profesional',$profesional->id)->get();
         $tipo_ant_academico = TipoAntecedenteAcademico::all();
         $bancos = Bancos::where('estado',1)->get();
@@ -1500,6 +1525,11 @@ class EscritorioProfesional extends Controller
         return view('app.profesional.perfil_profesional')->with(
             [
                 'profesional' => $profesional,
+                'direccion_id_ciudad_profesional' => $direccion_id_ciudad_profesional,
+                'direccion_txt_ciudad_profesional' => $direccion_txt_ciudad_profesional,
+                'direccion_region_profesional' => $direccion_region_profesional,
+                'direccion_id_region_profesional' => $direccion_id_region_profesional,
+                'direccion_txt_region_profesional' => $direccion_txt_region_profesional,
                 'especialidades' => $especialidades,
                 'tipo_especialidades' => $tipo_especialidades,
                 'sub_tipo_especialidades' => $sub_tipo_especialidades,

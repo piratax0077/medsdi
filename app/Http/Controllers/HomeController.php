@@ -107,9 +107,9 @@ class HomeController extends Controller
     {
         $usuario = User::where('id', Auth::user()->id)->first();
         $roles = $usuario->roles()->get();
-        if (count($roles) > 1) {
-            return redirect('/Acceso');
-        }
+        // if (count($roles) > 1) {
+        //     return redirect('/Acceso');
+        // }
 
         switch ($roles[0]->name) {
             case 'Admin':
@@ -265,7 +265,7 @@ class HomeController extends Controller
     {
         $datos = array();
 
-        $validacionEmail = Paciente::where('email',@Auth::user()->email)->first();
+        $validacionEmail = Asistente::where('email',@Auth::user()->email)->first();
 
         if(!$validacionEmail)
         {
