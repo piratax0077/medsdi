@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GinemodalantecedentesPartoPuerperio extends Model
+class FichaFonoaudiologia extends Model
 {
     use HasFactory;
-    protected $table = 'gine_modal_antecedentes_parto_puerperio';
+
+    protected $table = 'ficha_fonoaudiologia';
+
 }

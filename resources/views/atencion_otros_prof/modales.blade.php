@@ -35,6 +35,7 @@
             <div class="redes">
                 <a id="boton_1" class="fas fa-user fa-2x" data-toggle="canvas" data-target="#antecedentes_paciente" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left" style="cursor:pointer;"> </a>
                 <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left" style="cursor:pointer;"></a>
+                <a id="boton_4" class="fas fa-bed fa-2x" data-toggle="canvas" data-target="#formularios_signos_vitales" aria-expanded="false" aria-controls="bs-canvas-right" title="formularios Signos Vitales" data-placement="left" style="cursor:pointer;"></a>
                 @if($profesional->Especialidad()->first())
                     @if($profesional->Especialidad()->first()->nombre == 'MATRÓN/A')
                         <a id="boton_3" class="fas fa-child fa-2x" data-toggle="canvas" data-target="#formularios_matrona" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Matrón/a" data-placement="left"></a>
@@ -83,6 +84,7 @@
 
 @include('atencion_medica.sidebars.antecedentes_paciente')
 @include('atencion_medica.sidebars.formularios_atencion')
+@include('atencion_medica.sidebars.formularios_signos_vitales')
 
 @section('js-sidebar')
     <script>

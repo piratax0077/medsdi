@@ -20,9 +20,7 @@
                                     @endphp
                                     {{ $fecha }}
                                 </p>
-                                <p class="font-italic mt-0 mb-0 text-white">
-                                    <span class="f-16 f-w-600">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</span>, RUT: <span class="f-16 f-w-600">{{ $paciente->rut}}</span> , Edad <span class="f-16 f-w-600">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</span>
-                                </p>
+
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -44,14 +42,12 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
-                                    <li class="nav-item">
-                                        @if (request('token') && request('fmu') == 1)
+
+                                    <li class="nav-item" id="nav-fmu">
+                                        @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
                                         @else
-                                            @php
-                                                $url_temp = 'Profesional/Paciente/Ficha_consulta?_token='.request('_token').'&id_hora_realizar='.request('id_hora_realizar').'&lugar_atencion_id='.request('lugar_atencion_id').'';
-                                            @endphp
-                                            <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $paciente->id_usuario,'urla'=> $url_temp.'&fmu=0','urln' => $url_temp.'&fmu=1', 'id_tipo' => 2]) }}">FMU</a>
+                                            <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
                                         @endif
                                     </li>
                                     <li class="nav-item">
@@ -75,10 +71,9 @@
                         <div class="tab-pane fade show active" id="atender" role="tabpanel" aria-labelledby="atender-tab">
                             @include('atencion_otros_prof.secciones_especialidad.ficha_psico_adulto')
                         </div>
-                        <!--Licencia-->
                         <!--Ficha Médica Única-->
                         <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
-                            @include('general.secciones_ficha.fmu')
+							@include('general.secciones_ficha.fmu')
                         </div>
                         <!--Atenciones previas-->
                         <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
@@ -97,26 +92,11 @@
         <!-- SIDE BAR sico-->
         @include("atencion_otros_prof.modales"){{-- base de botones de sidebar --}}
         @include("atencion_otros_prof.include.sidebar_derecho_psicologia"){{-- modales y data de sidebar especialidad --}}
-		@include("general.modal.modal_no_disponible")
-
-
-        <!--Modals de especialidad -->
-        {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
-
-        <!--Modals formularios generales-->
-        {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
+        @include("general.modal.modal_no_disponible")
 
 
     </div>
-    {{--  @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.informe_nutri")
-    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.modal_dieta_diaria")
-    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.modal_dieta")
-    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.modal_encuesta_aliment")
-    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.modal_indicadores_nutri")
-    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.planificacion_nutri")  --}}
-    {{-- @include('general.hospitalizacion.seccion_ficha_hospitalizacion.sala_hospitalizacion_op') --}}
 
-	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
-@endsection																  
+
+    @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
+@endsection
