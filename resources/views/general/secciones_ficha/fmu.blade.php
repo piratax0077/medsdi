@@ -65,7 +65,7 @@
                                         		 <h6 class="f-16">Paciente Crónico: {!! ($antecedentes_paciente->transfusion == '1'?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}</h6>
                                         	</div>
                                         	<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
-                                        		<h6 class="f-16">Transfuciones: {!! ($cantidad_ante_cronicos > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}</h6>
+                                        		<h6 class="f-16">Transfusiones: {!! ($cantidad_ante_cronicos > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}</h6>
                                         	</div>
                                         	<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
                                         		<h6 class="f-16">Alergias:  {!! ($cantidad_ante_alergias > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}</h6>
@@ -115,23 +115,7 @@
                                                     <div class="tab-pane fade show active" id="seccion_ident_contacto" role="tabpanel" aria-labelledby="seccion_ident_contacto-tab">
                                                         <div class="row">
                                                             <div class="col-sm-6 col-md-4">
-                                                                <p><i class="feather icon-home"></i><strong> Dirección</strong> <br>
-                                                                    @if ($direccion)
-                                                                        @php
-                                                                            if(isset($direccion->direccion))
-                                                                                echo $direccion->direccion.' ';
-                                                                            if(isset($direccion->numero))
-                                                                                echo $direccion->numero.', ';
-                                                                            if(isset($direccion->ciudad))
-                                                                                echo $$direccion->ciudad->nombre.', ';
-                                                                            if(isset($direccion->ciudad->region))
-                                                                                echo $direccion->ciudad->region->nombre.' ';
-                                                                        @endphp
-                                                                        {{-- {{$direccion->direccion}} {{$direccion->numero}}, {{$direccion->ciudad->nombre}}, {{$direccion->ciudad->region->nombre}}     --}}
-                                                                    @else
-                                                                        Sin registro cargado
-                                                                    @endif
-                                                                    </p>
+                                                                <p><i class="feather icon-home"></i><strong> Dirección</strong> <br>{{$direccion->direccion}} {{$direccion->numero}}, {{$direccion->ciudad->nombre}}, {{$direccion->ciudad->region->nombre}}</p>
                                                             </div>
                                                             <div class="col-sm-6 col-md-4">
                                                                 <p><i class="feather icon-phone"></i><strong> Telefono</strong> <br>{{$paciente->telefono_uno}} / {{$paciente->telefono_dos}}</p>
