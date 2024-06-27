@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '4728c1906bb8b62d593373357211b8e7e22d1dcf',
+    'reference' => '52f3fc206905416b58ce97011f89538a7ff4abaf',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -237,6 +237,15 @@ private static $installed = array (
       array (
       ),
       'reference' => 'c83e88a30524f9360b11f585f71e6b17313b7187',
+    ),
+    'firebase/php-jwt' => 
+    array (
+      'pretty_version' => 'v6.10.0',
+      'version' => '6.10.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'a49db6f0a5033aef5143295342f1c95521b075ff',
     ),
     'fruitcake/laravel-cors' => 
     array (
@@ -577,7 +586,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '4728c1906bb8b62d593373357211b8e7e22d1dcf',
+      'reference' => '52f3fc206905416b58ce97011f89538a7ff4abaf',
     ),
     'laravel/sail' => 
     array (

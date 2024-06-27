@@ -9,6 +9,7 @@
         "bacon/bacon-qr-code": "^2.0",
         "barryvdh/laravel-dompdf": "^2.0",
         "doctrine/dbal": "^3.6",
+        "firebase/php-jwt": "^6.10",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.5",
         "jubaer/zoom-laravel": "^1.3",
