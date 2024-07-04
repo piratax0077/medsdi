@@ -1238,6 +1238,10 @@ Route::group([
 	/** busqueda en tabla de persona */
     Route::get('/personas/buscar', [App\Http\Controllers\EscritorioGeneral::class, 'getPersona'])->name('personas.buscador');
 
+    /** OTROS PROFESIONALES */
+    /** PSICOLOGIA */
+    Route::post('Ficha_Atencion/crear/sico', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_sico'])->name('ficha.otro.prof.registrar_ficha_sico');
+
 });
 
 /**--CENTRO MEDICO--**/

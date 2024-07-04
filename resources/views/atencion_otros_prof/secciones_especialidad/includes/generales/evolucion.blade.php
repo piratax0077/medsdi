@@ -18,14 +18,14 @@
                 </div>
                 <div id="mot-consulta-ev-c" class="collapse" aria-labelledby="mot-consulta-ev" data-parent="#mot-consulta-ev">
                     <div class="card-body-aten-a">
-                        <form>
-                            <div class="form-row">
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <label class="floating-label-activo-sm" for="dg_ingreso">Diagnóstico de Ingreso</label>
-                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=10" onblur="this.rows=1;" name="dg_ingreso" id="dg_ingreso"></textarea>
-                                </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label class="floating-label-activo-sm" for="dg_ingreso">Diagnóstico de Ingreso</label>
+                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=10" onblur="this.rows=1;" name="dg_ingreso" id="dg_ingreso"></textarea>
                             </div>
-                        </form>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -39,14 +39,14 @@
                 </div>
                 <div id="eval-actual-c" class="collapse" aria-labelledby="eval-actual" data-parent="#eval-actual">
                     <div class="card-body-aten-a">
-                        <form>
-                            <div class="form-row">
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <label class="floating-label-activo-sm" for="evaluacion_control">Evaluación actual</label>
-                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=10" onblur="this.rows=1;" name="evaluacion_control" id="evaluacion_control"></textarea>
-                                </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label class="floating-label-activo-sm" for="evaluacion_control">Evaluación actual</label>
+                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=10" onblur="this.rows=1;" name="evaluacion_control" id="evaluacion_control"></textarea>
                             </div>
-                        </form>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -61,14 +61,14 @@
                 </div>
                 <div id="plan-c" class="collapse" aria-labelledby="plan" data-parent="#plan">
                     <div class="card-body-aten-a">
-                        <form>
-                            <div class="form-row">
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <label class="floating-label-activo-sm" for="plan_prop_evol">Plan propuesto</label>
-                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=10" onblur="this.rows=1;" name="plan_prop_evol" id="plan_prop_evol"></textarea>
-                                </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label class="floating-label-activo-sm" for="plan_prop_evol">Plan propuesto</label>
+                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=10" onblur="this.rows=1;" name="plan_prop_evol" id="plan_prop_evol"></textarea>
                             </div>
-                        </form>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -83,18 +83,18 @@
                 </div>
                 <div id="mot-consulta-c" class="collapse" aria-labelledby="mot-consulta" data-parent="#mot-consulta">
                     <div class="card-body-aten-a">
-                        <form>
-                            <div class="form-row">
-                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                    <label class="floating-label-activo-sm"for="sesion_n_dex" >Nº Sesión</label>
-                                    <input type="number" class="form-control form-control-sm" name="sesion_n_dex" id="sesion_n_dex">
-                                </div>
-                                <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
-                                    <label class="floating-label-activo-sm"for="evol_result" >Resultados</label>
-                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=10" onblur="this.rows=1;" name="evol_result" id="evol_result"></textarea>
-                                </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <label class="floating-label-activo-sm"for="sesion_n_dex" >Nº Sesión</label>
+                                <input type="number" class="form-control form-control-sm" name="sesion_n_dex" id="sesion_n_dex">
                             </div>
-                        </form>
+                            <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                <label class="floating-label-activo-sm"for="evol_result" >Resultados</label>
+                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=10" onblur="this.rows=1;" name="evol_result" id="evol_result"></textarea>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -109,20 +109,20 @@
                 </div>
                 <div id="ind_prox_control-c" class="collapse" aria-labelledby="ind_prox_control" data-parent="#ind_prox_control">
                     <div class="card-body-aten-a">
-                        <form>
-                            <div class="form-row">
-                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                    <label class="floating-label-activo-sm" for="prox_control" >Próximo Control</label>
-                                    <input type="date" class="form-control form-control-sm" name="prox_control" id="prox_control">
-                                </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <label class="floating-label-activo-sm" for="prox_control" >Próximo Control</label>
+                                <input type="date" class="form-control form-control-sm" name="prox_control" id="prox_control">
                             </div>
-                            <div class="form-row">
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <label class="floating-label-activo-sm" for="evol_indicaciones">Indicaciones</label>
-                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=10" onblur="this.rows=1;" name="evol_indicaciones" id="evol_indicaciones"></textarea>
-                                </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label class="floating-label-activo-sm" for="evol_indicaciones">Indicaciones</label>
+                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=10" onblur="this.rows=1;" name="evol_indicaciones" id="evol_indicaciones"></textarea>
                             </div>
-                        </form>
+                        </div>
+
                     </div>
                 </div>
             </div>

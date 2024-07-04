@@ -29,7 +29,7 @@
                         <div class="tab-content" id="pills-tablas_examenes">
                             <!--TAB 1-->
                             <div class="tab-pane fade show active" id="rec_auto" role="tabpanel" aria-labelledby="rec_auto_tab">
-                                <form id="form_indicar_terapia">
+                                {{-- <form id="form_indicar_terapia"> --}}
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="tab-content" id="venereas">
@@ -81,7 +81,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>
+                                {{-- </form> --}}
                             </div>
                         </div>
                     </div>

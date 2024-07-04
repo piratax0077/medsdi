@@ -74,6 +74,7 @@ use App\Models\FichaOftFondoOjoTipo;
 use App\Models\FichaOftTipo;
 use App\Models\FichaOrtopedia;
 use App\Models\FichaOrtopediaAdulto;
+use App\Models\FichaOtrosProfesionales;
 use App\Models\FichaPediatriaCns;
 use App\Models\FichaPediatriaGeneral;
 use App\Models\FichaPediatriaGeneralTipo;
@@ -9319,34 +9320,36 @@ class ficha_atencionController extends Controller
 
                     break;
                 case 6: //SICOLOGÍA
+
                     if(!empty($profesional->id_tipo_especialidad))
                     {
                         /** FICHAS DE ATENCIONES PREVIAS */
                         $filtro_previas = array();
                         $filtro_previas[] = array('id_paciente', $paciente->id);
-                        $filtro_previas[] = array('confidencial', '0');
-                        $filtro_previas[] = array('finalizada', 1);
                         $filtro_previas[] = array('id_profesional', $profesional->id);
-                        $ficha_previas = FichaAtencion::where($filtro_previas)->get();
+                        $filtro_previas[] = array('finalizada', 1);
+                        $ficha_previas = FichaOtrosProfesionales::where($filtro_previas)->get();
 
                         $datos['ficha_previas'] = $ficha_previas;
-
-
+						
                         /** FICHA ATENCION ACTUAL */
                         if(empty($hora->id_ficha_atencion))
                         {
-                            $nueva_ficha_atencion = new FichaAtencion();
+                            $nueva_ficha_atencion = new FichaOtrosProfesionales();
                             $nueva_ficha_atencion->id_paciente = $paciente->id;
                             $nueva_ficha_atencion->id_profesional = $profesional->id;
+                            $nueva_ficha_atencion->id_especialidad = $profesional->id_especialidad;
+                            $nueva_ficha_atencion->id_tipo_especialidad = $profesional->id_tipo_especialidad;
                             $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
 
                             if ($nueva_ficha_atencion->save())
                             {
                                 $hora->id_estado = 5;
                                 $hora->fecha_realizacion_consulta = now();
-                                $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
+                                $hora->id_ficha_atencion = NULL;
+                                $hora->id_ficha_otros_prof = $nueva_ficha_atencion->id;
                                 $hora->save();
-                                $ficha_actual_nueva = $nueva_ficha_atencion->id;
+                                $ficha_actual_nueva = $nueva_ficha_atencion;
                             }
                             else
                             {
@@ -9358,7 +9361,7 @@ class ficha_atencionController extends Controller
                             $filtro_fichaAtencion = array();
                             $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
                             $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
-                            $ficha_actual_nueva = FichaAtencion::where($filtro_fichaAtencion)->first();
+                            $ficha_actual_nueva = FichaOtrosProfesionales::where($filtro_fichaAtencion)->first();
                         }
 
                         $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;

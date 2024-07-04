@@ -70,46 +70,46 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <form>
-                            <div class="form-row">
-                                <div class="form-group col-sm-12 col-md-12">
-                                    <label class="floating-label">Diagnóstico</label>
-                                    <input type="text" class="form-control form-control-sm" name="" id="">
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12">
-                                    <label class="floating-label">Tratamiento</label>
-                                    <textarea type="text" class="form-control form-control-sm" rows="2" name="" id=""></textarea>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12">
-                                    <label class="floating-label">Comentario</label>
-                                    <textarea type="text" class="form-control form-control-sm" rows="2" name="" id=""></textarea>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12">
-                                    <label class="floating-label-activo-sm">Fecha</label>
-                                    <input type="date" class="form-control form-control-sm" name="" id="">
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12">
-                                    <label class="floating-label">Nombre del profesional</label>
-                                    <input type="text" class="form-control form-control-sm" name="" id="">
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12">
-                                    <label class="floating-label">Email</label>
-                                    <input type="email" class="form-control form-control-sm" name="" id="">
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12">
-                                    <label class="floating-label-activo-sm">Fecha de control</label>
-                                    <input type="date" class="form-control form-control-sm" name="" id="">
-                                </div>
-                                <div class="col-sm-12 col-md-12 text-center mb-2">
-                                    <button type="button" class="btn btn-sm btn-primary">Ver documento en PDF</button>
-                                </div>
-                                <div class="col-md-12 col-sm-12 text-center">
-                                <hr>
-                                    <button type="button" class="btn btn-danger">Cancelar</button>
-                                    <button type="submit" class="btn btn-info">Guardar</button>
-                                </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-sm-12 col-md-12">
+                                <label class="floating-label">Diagnóstico</label>
+                                <input type="text" class="form-control form-control-sm" name="" id="">
                             </div>
-                        </form>
+                            <div class="form-group col-sm-12 col-md-12">
+                                <label class="floating-label">Tratamiento</label>
+                                <textarea type="text" class="form-control form-control-sm" rows="2" name="" id=""></textarea>
+                            </div>
+                            <div class="form-group col-sm-12 col-md-12">
+                                <label class="floating-label">Comentario</label>
+                                <textarea type="text" class="form-control form-control-sm" rows="2" name="" id=""></textarea>
+                            </div>
+                            <div class="form-group col-sm-12 col-md-12">
+                                <label class="floating-label-activo-sm">Fecha</label>
+                                <input type="date" class="form-control form-control-sm" name="" id="">
+                            </div>
+                            <div class="form-group col-sm-12 col-md-12">
+                                <label class="floating-label">Nombre del profesional</label>
+                                <input type="text" class="form-control form-control-sm" name="" id="">
+                            </div>
+                            <div class="form-group col-sm-12 col-md-12">
+                                <label class="floating-label">Email</label>
+                                <input type="email" class="form-control form-control-sm" name="" id="">
+                            </div>
+                            <div class="form-group col-sm-12 col-md-12">
+                                <label class="floating-label-activo-sm">Fecha de control</label>
+                                <input type="date" class="form-control form-control-sm" name="" id="">
+                            </div>
+                            <div class="col-sm-12 col-md-12 text-center mb-2">
+                                <button type="button" class="btn btn-sm btn-primary">Ver documento en PDF</button>
+                            </div>
+                            <div class="col-md-12 col-sm-12 text-center">
+                            <hr>
+                                <button type="button" class="btn btn-danger">Cancelar</button>
+                                <button type="submit" class="btn btn-info">Guardar</button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
