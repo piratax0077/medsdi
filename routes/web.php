@@ -1735,6 +1735,7 @@ Route::group([
     Route::get('/control/medicamento/buscar', [App\Http\Controllers\DireccionSaludController::class, 'buscarControlMedicamento'])->name('ministerio.control_medicamento.buscar');
 
     Route::get('/control/farmacia', [App\Http\Controllers\DireccionSaludController::class, 'CargarControlFarmacia'])->name('ministerio.control_farmacia');
+    Route::get('/control/licencia', [App\Http\Controllers\DireccionSaludController::class, 'CargarControlLicencia'])->name('ministerio.control_licencia');
 });
 
 /** web */
@@ -1876,6 +1877,7 @@ Route::get('meeting', function () {
     return view('atencion_medica.secciones_especialidad.meeting');
 });
 
+Route::post('/iniciar-llamada/{id}', [App\Http\Controllers\ZoomManagerController::class, 'iniciarLlamada'])->name('iniciar_llamada');
 
 
 /** PARA VISUALIZAR DEMOS */
