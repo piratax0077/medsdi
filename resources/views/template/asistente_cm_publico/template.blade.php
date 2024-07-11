@@ -94,7 +94,6 @@
             </div>
         </div>
     </div>
-    {{--  @include('template.asistente_cm.menu')  --}}
 
     @php
         $user = Auth::user();
@@ -118,8 +117,8 @@
         @break
 
         @case($user->hasRole('AsistenteJefaCaja'))
-            @include('template.asistente_cm_publico.menu')
-            @include('template.asistente_cm_publico.header')
+            @include('template.asistente_cm.menu')
+            @include('template.asistente_cm.header')
         @break
 
         @case($user->hasRole('AsistenteCaja'))
