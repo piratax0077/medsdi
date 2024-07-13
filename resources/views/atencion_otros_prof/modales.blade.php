@@ -504,11 +504,14 @@
         function ver_pdf_informe_medico(id_ficha_atencion)
         {
 
+            console.log('ver_pdf_informe_medico');
+            console.log(id_ficha_atencion);
+
             let url = "{{ route('pdf.informe_medico') }}";
             Fancybox.show(
                 [
                     {
-                    src: '{{ route("pdf.informe_medico") }}?id_ficha_atencion='+id_ficha_atencion,
+                    src: '{{ route("pdf.informe_medico") }}?id_ficha_otro_prof='+id_ficha_atencion,
                     type: "iframe",
                     preload: false,
                     },
