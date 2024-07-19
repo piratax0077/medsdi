@@ -82,6 +82,15 @@
                 </div>
             </div>
         </div>
+
+        <div class="row m-b-30">
+            <div class="col-md-12">
+                @if(Session::has('mensaje'))
+                    <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('mensaje') }}</p>
+                @endif
+            </div>
+        </div>
+
         <!--CIERRE: Row Botones -->
         <!--Tabla agenda del día y flujo de caja-->
         <div class="row m-b-30">

@@ -74,7 +74,7 @@
                             </a>
                         </div>
 
-                        <div class="card subir px-4 py-2">
+                        {{-- <div class="card subir px-4 py-2">
                             <a href="{{ ROUTE('asistentejcm.administracion_asistente') }}">
                                 <div class="row my-auto">
                                     <div class="col-md-4 col-xs-12 d-inline">
@@ -85,7 +85,7 @@
                                     </div>
                                 </div>
                             </a>
-                        </div>
+                        </div> --}}
 
                         <div class="card subir px-4 py-2">
                             <a href="{{ ROUTE('asistentejcm.rendir') }}">

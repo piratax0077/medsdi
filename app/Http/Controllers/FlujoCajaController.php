@@ -12,9 +12,11 @@ use App\Models\Paciente;
 use App\Models\Parametro;
 use App\Models\Prevision;
 use App\Models\Profesional;
+use App\Models\ProfesionalAsistente;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\RendicionCaja;
 use App\Models\Servicios;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -131,12 +133,6 @@ class FlujoCajaController extends Controller
             $filtro[] = array('id_profesional',$profesional->id);
             $filtro_rendicion[] = array('id_profesional_receptor',$profesional->id);
         }
-        else if(Auth::user()->hasRole('Asistente') || Auth::user()->hasRole('AsistenteAdm') || Auth::user()->hasRole('AsistenteJefaCaja') || Auth::user()->hasRole('AsistenteCaja') || Auth::user()->hasRole('AsistenteOnline'))
-        {
-            $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
-            $filtro[] = array('id_asistente',$asistente->id);
-            $filtro_rendicion[] = array('id_asistente',$asistente->id);
-        }
         else if(Auth::user()->hasRole('Institucion'))
         {
             $institucion = Instituciones::where('id_usuario',Auth::user()->id)->first();
@@ -170,6 +166,7 @@ class FlujoCajaController extends Controller
 
         $bonos = Bono::where($filtro)
             ->where('numero_sesiones','=','0')
+            // ->where('estado_consulta','<>',8)
             ->get();
 
         $bonos_programa = Bono::where($filtro)
@@ -179,7 +176,7 @@ class FlujoCajaController extends Controller
         $bonos_rendidos = Bono::where($filtro)
             ->where('numero_sesiones','=','0')
             ->where('rendido','1')
-            // ->where('estado_consulta',6)
+            ->where('estado_consulta','<>',8)
             ->where('id_clase_bono','<>',6)
             ->get();
 
@@ -232,7 +229,7 @@ class FlujoCajaController extends Controller
         $bonos_ = Bono::where($filtro)
             ->where('numero_sesiones','=','0')
             ->where('rendido','1')
-            ->where('estado_consulta',6)
+            ->whereIn('estado_consulta',[4,6])
             ->where('id_clase_bono','<>',6)
             ->get();
 
@@ -259,6 +256,7 @@ class FlujoCajaController extends Controller
         }
 
 
+
         // return view('page.flujo_cajas.profesional.flujo_caja')->with([
         return view('app.profesional.flujo_caja')->with([
             'bono' => $bonos,
@@ -274,6 +272,7 @@ class FlujoCajaController extends Controller
             'bonos_agrupados_convenio' => $bonosAgrupadosPorConvenio,
             'bonos_rendidos_generados' => $bonos_rendidos_generados,
         ]);
+
     }
 
     public function home(){
@@ -285,13 +284,35 @@ class FlujoCajaController extends Controller
                         ->where('numero_sesiones','=','0')
                         ->get();
 
-
+        $id_lugar_atencion = array();
+        $es_institucion = 0;
         $contrato = ContratoDependiente::where('id_empleado',$asistente->id)->first();
-
         if($contrato)
         {
+            $id_lugar_atencion = array($contrato->id_lugar_atencion);
+            $es_institucion = 1;
+        }
+        else
+        {
+            $asistentes_lugar_atencion = AsistenteLugarAtencion::where('id_asistente', $asistente->id)->pluck('id_lugar_atencion')->toArray();
+            if($asistentes_lugar_atencion)
+            {
+                $id_lugar_atencion = $asistentes_lugar_atencion;
+            }
+            else
+            {
+                /** no manejar por que se debe evaluar con jaime */
+                $profesionales_asistentes = ProfesionalAsistente::where('id_asistente', $asistente->id)->pluck('id_profesional')->toArray();
+                $id_lugar_atencion = array();
+            }
+        }
 
-            $id_lugar_atencion = $contrato->id_lugar_atencion;
+
+
+        if(!empty($id_lugar_atencion))
+        {
+
+
             $filtro = array();
             $filtro[] = array('id_asistente',$asistente->id);
             $filtro[] = array('numero_sesiones','=','0');
@@ -355,33 +376,46 @@ class FlujoCajaController extends Controller
 
             }
 
-            $institucion = Instituciones::where('id_lugar_atencion',$id_lugar_atencion)->first();
-            $lista_asistente_lugar = AsistenteLugarAtencion::where('id_lugar_atencion',$id_lugar_atencion)->where('id_institucion',$institucion->id)->pluck('id_asistente')->toArray();
 
-            /** PERSONAL QUE RECIBE */
-            /** ASISTENTE */
-            $listado_recibe_a = Asistente::select('id', 'nombres', 'apellido_uno', 'apellido_dos')->whereIn('id_asistente_tipo', [1,2,3])
-                                            ->whereIn('id', $lista_asistente_lugar)
-                                            ->whereNotIn('id',[$asistente->id]);
+            if($es_institucion)
+            {
+                $institucion = Instituciones::whereIn('id_lugar_atencion',$id_lugar_atencion)->first();
+                $lista_asistente_lugar = AsistenteLugarAtencion::whereIn('id_lugar_atencion',$id_lugar_atencion)->where('id_institucion',$institucion->id)->pluck('id_asistente')->toArray();
+
+                /** PERSONAL QUE RECIBE */
+                /** ASISTENTE */
+                $listado_recibe_a = Asistente::select('id', 'nombres', 'apellido_uno', 'apellido_dos')->whereIn('id_asistente_tipo', [1,2,3])
+                                                ->whereIn('id', $lista_asistente_lugar)
+                                                ->whereNotIn('id',[$asistente->id]);
 
 
 
-            /** ADMINISTRADOR CENTRO, ADMINISTRADOR COMERCIAL */
-            $listado_recibe = ContratoDependiente::select('id_empleado as id', 'nombres', 'apellido_uno', 'apellido_dos')
-                                ->where('id_institucion', $institucion->id)
-                                ->where('tipo_empleado', 'like', '%ADMINISTRADOR%')
-                                ->whereNotIn('id_empleado',[$asistente->id])
-                                ->union($listado_recibe_a)
-                                ->get();
+                /** ADMINISTRADOR CENTRO, ADMINISTRADOR COMERCIAL */
+                $listado_recibe = ContratoDependiente::select('id_empleado as id', 'nombres', 'apellido_uno', 'apellido_dos')
+                                    ->where('id_institucion', $institucion->id)
+                                    ->where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->whereNotIn('id_empleado',[$asistente->id])
+                                    ->union($listado_recibe_a)
+                                    ->get();
 
-            $institucion = Instituciones::where('id_lugar_atencion',$id_lugar_atencion)->first();
-            $lista_asistente_lugar = AsistenteLugarAtencion::where('id_lugar_atencion',$id_lugar_atencion)->where('id_institucion',$institucion->id)->pluck('id_lugar_atencion')->toArray();
+                $institucion = Instituciones::whereIn('id_lugar_atencion',$id_lugar_atencion)->first();
+                $lista_asistente_lugar = AsistenteLugarAtencion::whereIn('id_lugar_atencion',$id_lugar_atencion)->where('id_institucion',$institucion->id)->pluck('id_lugar_atencion')->toArray();
 
-            /** PERSONAL QUE RECIBE */
-            /** profesional */
-            $lista_profesionales = ProfesionalesLugaresAtencion::whereIn('id_lugar_atencion', $lista_asistente_lugar)->pluck('id_profesional')->toArray();
+                /** PERSONAL QUE RECIBE */
+                /** profesional */
+                $lista_profesionales = ProfesionalesLugaresAtencion::whereIn('id_lugar_atencion', $lista_asistente_lugar)->pluck('id_profesional')->toArray();
 
-            $profesionales = Profesional::whereIn('id', $lista_profesionales)->orderBy('apellido_uno', 'ASC')->get();
+                $profesionales = Profesional::whereIn('id', $lista_profesionales)->orderBy('apellido_uno', 'ASC')->get();
+            }
+            else
+            {
+                $listado_recibe = '';
+                $asistentes_lugar_atencion = AsistenteLugarAtencion::where('id_asistente', $asistente->id)->pluck('id_profesional')->toArray();
+                if($asistentes_lugar_atencion)
+                {
+                    $profesionales = $listado_recibe = Profesional::select('id', 'nombre', 'apellido_uno', 'apellido_dos')->whereIn('id', $asistentes_lugar_atencion)->get();
+                }
+            }
 
             $bonos_profesionales = Bono::where($filtro)
                                     ->whereDay('fecha_atencion','<=', date('d'))
@@ -391,6 +425,7 @@ class FlujoCajaController extends Controller
 
             // return view('page.flujo_cajas.asistente_cm.home')->with([
             return view('app.general.asistente.flujo_caja.home')->with([
+                'es_institucion' => $es_institucion,
                 'asistente' => $asistente,
                 'lista_bonos' => implode('|',$lista_bonos),
                 'bono' => $bonos,
@@ -407,7 +442,7 @@ class FlujoCajaController extends Controller
         }
         else
         {
-            return back()->with('mensaje','Contrato no encontrado');
+            return back()->with('mensaje','Lugar de Atención no valido');
         }
 
     }
@@ -1315,97 +1350,134 @@ class FlujoCajaController extends Controller
 
     public function cargaBonosAsistenteDia(Request $request)
     {
-        $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
-        $contrato = ContratoDependiente::where('id_empleado',$asistente->id)->first();
-
-        if($contrato)
-        {
-            $id_lugar_atencion = $contrato->id_lugar_atencion;
-            $filtro = array();
-            $filtro[] = array('id_asistente',$asistente->id);
-            $filtro[] = array('numero_sesiones','=','0');
-            $filtro[] = array('rendido','0');
+        try {
 
 
+            $id_lugar_atencion = array();
+            $es_institucion = 0;
 
-            if(!empty($request->id_profesional))
-                $filtro[] = array('id_profesional',$request->id_profesional);
+            $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
+            $contrato = ContratoDependiente::where('id_empleado',$asistente->id)->first();
 
-            /** rendicion a cm */
-            /** bono  */
-            $bonos = Bono::where($filtro)
-                ->whereDay('fecha_atencion','<=', date('d'))
-                ->whereMonth('fecha_atencion',  date('m'))
-                ->whereYear('fecha_atencion', date('Y'))
-                ->with(['TipoBono' => function($query){
-                    $query->select('id', 'nombre');
-                }])
-                ->with(['Convenio' => function($query){
-                    $query->select('id', 'nombre');
-                }])
-                ->with(['Paciente' => function($query){
-                    $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos', 'rut');
-                }])
-                ->with(['Profesional' => function($query){
-                    $query->select('id', 'nombre', 'apellido_uno', 'apellido_dos', 'rut');
-                }])
-                ->get();
-
-
-            // var_dump($bonos);
-            /** programa */
-            // $bonos_programa = Bono::where($filtro)
-            //     ->where('numero_sesiones','>','0')
-            //     ->where('rendido','0')
-            //     ->get();
-
-            $total = 0;
-            $total_bonos = 0;
-            $total_efectivo = 0;
-            $total_otros = 0;
-            $lista_bonos = array();
-
-            foreach ($bonos as $bono){
-                $lista_bonos[] = $bono->id;
-
-                $total++;
-                // 1->Bono Fisico
-                if($bono->id_clase_bono == 1)
-                    $total_bonos++;
-                // 2->Sencillito
-                else if($bono->id_clase_bono == 2)
-                    $total_bonos++;
-                // 3->Caja Vecina
-                else if($bono->id_clase_bono == 3)
-                    $total_bonos++;
-                // 4->Bono Web
-                else if($bono->id_clase_bono == 4)
-                    $total_bonos++;
-                // 5->Bono Web Pre-Pago
-                else if($bono->id_clase_bono == 5)
-                    $total_bonos++;
-                // 6->Particular
-                else if($bono->id_clase_bono == 6)
-                    $total_efectivo += $bono->valor_atencion;
+            if($contrato)
+            {
+                $id_lugar_atencion = array($contrato->id_lugar_atencion);
+                $es_institucion = 1;
+            }
+            else
+            {
+                $asistentes_lugar_atencion = AsistenteLugarAtencion::where('id_asistente', $asistente->id)->pluck('id_lugar_atencion')->toArray();
+                if($asistentes_lugar_atencion)
+                {
+                    $id_lugar_atencion = $asistentes_lugar_atencion;
+                }
                 else
-                    $total_otros++;
-
+                {
+                    /** no manejar por que se debe evaluar con jaime */
+                    // $profesionales_asistentes = ProfesionalAsistente::where('id_asistente', $asistente->id)->pluck('id_profesional')->toArray();
+                    $id_lugar_atencion = array();
+                }
             }
 
-            return array(
-                'estado' => 1,
-                'lista_bonos' => implode('|',$lista_bonos),
-                'bono' => $bonos,
-                'total' => $total,
-                'total_bonos' => $total_bonos,
-                'total_efectivo' => $total_efectivo,
-                'total_otros' => $total_otros,
-            );
+
+
+            if(!empty($id_lugar_atencion))
+            // if($contrato)
+            {
+                $filtro = array();
+                $filtro[] = array('id_asistente',$asistente->id);
+                $filtro[] = array('numero_sesiones','=','0');
+                $filtro[] = array('rendido','0');
+
+
+
+                if(!empty($request->id_profesional))
+                    $filtro[] = array('id_profesional',$request->id_profesional);
+
+                /** rendicion a cm */
+                /** bono  */
+                $bonos = Bono::where($filtro)
+                    ->whereDay('fecha_atencion','<=', date('d'))
+                    ->whereMonth('fecha_atencion',  date('m'))
+                    ->whereYear('fecha_atencion', date('Y'))
+                    ->with(['TipoBono' => function($query){
+                        $query->select('id', 'nombre');
+                    }])
+                    ->with(['Convenio' => function($query){
+                        $query->select('id', 'nombre');
+                    }])
+                    ->with(['Paciente' => function($query){
+                        $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos', 'rut');
+                    }])
+                    ->with(['Profesional' => function($query){
+                        $query->select('id', 'nombre', 'apellido_uno', 'apellido_dos', 'rut');
+                    }])
+                    ->get();
+
+
+                // var_dump($bonos);
+                /** programa */
+                // $bonos_programa = Bono::where($filtro)
+                //     ->where('numero_sesiones','>','0')
+                //     ->where('rendido','0')
+                //     ->get();
+
+                $total = 0;
+                $total_bonos = 0;
+                $total_efectivo = 0;
+                $total_otros = 0;
+                $lista_bonos = array();
+
+                foreach ($bonos as $bono){
+                    $lista_bonos[] = $bono->id;
+
+                    $total++;
+                    // 1->Bono Fisico
+                    if($bono->id_clase_bono == 1)
+                        $total_bonos++;
+                    // 2->Sencillito
+                    else if($bono->id_clase_bono == 2)
+                        $total_bonos++;
+                    // 3->Caja Vecina
+                    else if($bono->id_clase_bono == 3)
+                        $total_bonos++;
+                    // 4->Bono Web
+                    else if($bono->id_clase_bono == 4)
+                        $total_bonos++;
+                    // 5->Bono Web Pre-Pago
+                    else if($bono->id_clase_bono == 5)
+                        $total_bonos++;
+                    // 6->Particular
+                    else if($bono->id_clase_bono == 6)
+                        $total_efectivo += $bono->valor_atencion;
+                    else
+                        $total_otros++;
+
+                }
+
+                return array(
+                    'estado' => 1,
+                    'lista_bonos' => implode('|',$lista_bonos),
+                    'bono' => $bonos,
+                    'total' => $total,
+                    'total_bonos' => $total_bonos,
+                    'total_efectivo' => $total_efectivo,
+                    'total_otros' => $total_otros,
+                );
+            }
+            else
+            {
+                // return back()->with('mensaje','Contrato no encontrado');
+                return array(
+                    'estado' => 0,
+                    'msj' => 'sin contrato',
+
+                );
+            }
+        } catch (Exception $th) {
+            return $th->getMessage();
         }
-        else
-        {
-            return back()->with('mensaje','Contrato no encontrado');
-        }
+
     }
 
     public function rendicionDetalle(Request $request)

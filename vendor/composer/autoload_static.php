@@ -961,6 +961,7 @@ class ComposerStaticInitd459a58ec74f07a7ef1bd14a09a45cec
         'App\\Models\\FichaSicoBiopatografia' => __DIR__ . '/../..' . '/app/Models/FichaSicoBiopatografia.php',
         'App\\Models\\FichaSicoExamenMental' => __DIR__ . '/../..' . '/app/Models/FichaSicoExamenMental.php',
         'App\\Models\\FichaSicoHistFamiliar' => __DIR__ . '/../..' . '/app/Models/FichaSicoHistFamiliar.php',
+        'App\\Models\\FichaSicoHistFamiliarRelaciones' => __DIR__ . '/../..' . '/app/Models/FichaSicoHistFamiliarRelaciones.php',
         'App\\Models\\FichaSicoOtrosTest' => __DIR__ . '/../..' . '/app/Models/FichaSicoOtrosTest.php',
         'App\\Models\\FichaSicoTestRorshchach' => __DIR__ . '/../..' . '/app/Models/FichaSicoTestRorshchach.php',
         'App\\Models\\FichaSicologia' => __DIR__ . '/../..' . '/app/Models/FichaSicologia.php',

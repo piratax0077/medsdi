@@ -11,7 +11,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Rendir Caja Diaria</h5>
+                                <h5 class="m-b-10 font-weight-bold">Rendir caja diaria</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -19,7 +19,7 @@
                                         <i class="feather icon-home"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Flujo de Caja</a></li>
+                                <li class="breadcrumb-item"><a href="#">Flujo de caja</a></li>
                             </ul>
                         </div>
                     </div>
@@ -29,219 +29,238 @@
 
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-body">
+                    <div class="user-profile user-card pt-0 mt-2">
+                        <div class="card-body py-0">
+                            <div class="user-about-block m-0">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="nav nav-tabs profile-tabs nav-fill mt-2" id="myTab" role="tablist">
+                                            @if ($es_institucion)
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-reset active" id="tab_redicion_cm-tab" data-toggle="tab" href="#tab_redicion_cm" role="tab" aria-controls="tab_redicion_cm" aria-selected="true">Rendición a CM</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-reset" id="tab_redicion_prof-tab" data-toggle="tab" href="#tab_redicion_prof" role="tab" aria-controls="tab_redicion_prof" aria-selected="true">Rendición a profesional</a>
+                                                </li>
+                                            @else
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-reset active" id="tab_redicion_prof-tab" data-toggle="tab" href="#tab_redicion_prof" role="tab" aria-controls="tab_redicion_prof" aria-selected="true">Rendición a profesional</a>
+                                                </li>
+                                            @endif
+
+
+                                            <li class="nav-item">
+                                                <a class="nav-link text-reset" id="tab_recepcion_programas-tab" data-toggle="tab" href="#tab_recepcion_programas" role="tab" aria-controls="tab_recepcion_programas" aria-selected="true">Recepción de programas</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="tab-content mt-4" id="pills-tabContent">
+                        {{-- PESTAÑA RENDICION DE CAJA CM--}}
+                        <div class="tab-pane fade show active " id="tab_redicion_cm" role="tabpanel" aria-labelledby="tab_redicion_cm-tab">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12">
-                                    <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="btn btn-outline-info btn-sm mb-2 mx-2 active" id="tab_redicion_cm-tab" data-toggle="tab" href="#tab_redicion_cm" role="tab" aria-controls="tab_redicion_cm" aria-selected="true"><i class="feather icon-user mr-2"></i>Rendicion a CM</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="btn btn-outline-info btn-sm mb-2 mx-2" id="tab_redicion_prof-tab" data-toggle="tab" href="#tab_redicion_prof" role="tab" aria-controls="tab_redicion_prof" aria-selected="false"><i class="feather icon-lock mr-2"></i>Rendicion a Profesional</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <button class="btn btn-outline-info btn-sm mb-2 mx-2" id="tab_recepcion_programas-tab" data-toggle="tab" href="#tab_recepcion_programas" role="tab" aria-controls="tab_recepcion_programas" aria-selected="false">Recepcion de Programas</button>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content" id="pills-tabContent">
-                                        {{-- PESTAÑA RENDICION DE CAJA --}}
-                                        <div class="tab-pane fade show active " id="tab_redicion_cm" role="tabpanel" aria-labelledby="tab_redicion_cm-tab">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Rendir Caja del {{ date('d-m-Y') }}</h5>
-                                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                                        <i class="feather icon-home"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <hr>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                     <h5 class="text-c-blue f-18 pt-1">Rendir caja del {{ date('d-m-Y') }}</h5>
+                                </div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card">
+                                        <div class="card-body">
                                             <div class="form-row">
                                                 <input type="hidden" name="lista_bonos" id="lista_bonos" value="{{ $lista_bonos }}">
-                                                <div class="col-10">
-                                                    <div class="row">
-                                                        <div class="col-sm-6 col-md-2">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Número de Bonos</label>
-                                                                <input type="number" class="form-control form-control-sm" id="numero_bonos" name="numero_bonos" value="{{ $total_bonos }}" readonly="readonly">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6 col-md-2">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Efectivo</label>
-                                                                <input type="number" class="form-control form-control-sm" id="efectivo" name="efectivo" value="{{ $total_efectivo }}" readonly="readonly">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6 col-md-2">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Otros</label>
-                                                                <input type="number" class="form-control form-control-sm" id="otros" name="otros" value="{{ $total_otros }}" readonly="readonly">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6 col-md-2">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Total Documentos</label>
-                                                                <input type="number" class="form-control form-control-sm" id="total" name="total" value="{{ $total }}" readonly="readonly">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6 col-md-2">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Recibe Caja :</label>
-                                                                <select name="id_asistente_receptor" id="id_asistente_receptor" class="form-control form-control-sm">
-                                                                    @if($listado_recibe)
-                                                                        @foreach ( $listado_recibe as $recibe )
-                                                                            <option value="{{ $recibe->id }}">{{ strtoupper($recibe->nombres.' '.$recibe->apellido_uno.' '.$recibe->apellido_dos) }}</option>
-                                                                        @endforeach
-                                                                    @endif
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6 col-md-2">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Observaciones :</label>
-                                                                <textarea  name="observaciones_rendicion" id="observaciones_rendicion" onfocus="this.rows=2" onblur="this.rows=1;" class="form-control caja-texto form-control-sm"></textarea>
-                                                            </div>
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxxl-1">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Nº de Bonos</label>
+                                                            <input type="number" class="form-control form-control-sm" id="numero_bonos" name="numero_bonos" value="{{ $total_bonos }}" readonly="readonly">
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <input type="hidden" name="input_lista_archivo" id="input_lista_archivo" value="">
-                                                            <div class="form-row">
-                                                                <div class="form-group col-12">
-                                                                    <!-- [ Main Content ] start -->
-                                                                    <div class="dropzone" id="mis-archivos-rendicion" action="{{ route('rendir.archivo.carga') }}">
-                                                                    </div>
-                                                                    <!-- [ file-upload ] end -->
+                                                    <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxxl-1">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Efectivo</label>
+                                                            <input type="number" class="form-control form-control-sm" id="efectivo" name="efectivo" value="{{ $total_efectivo }}" readonly="readonly">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxxl-1">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Otros</label>
+                                                            <input type="number" class="form-control form-control-sm" id="otros" name="otros" value="{{ $total_otros }}" readonly="readonly">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxxl-1">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Total documentos</label>
+                                                            <input type="number" class="form-control form-control-sm" id="total" name="total" value="{{ $total }}" readonly="readonly">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 col-xxxl-3">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Recibe caja</label>
+                                                            <select name="id_asistente_receptor" id="id_asistente_receptor" class="form-control form-control-sm">
+                                                                @if($listado_recibe)
+                                                                    @foreach ( $listado_recibe as $recibe )
+                                                                        <option value="{{ $recibe->id }}">{{ strtoupper($recibe->nombres.' '.$recibe->apellido_uno.' '.$recibe->apellido_dos) }}</option>
+                                                                    @endforeach
+                                                                @endif
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 col-xxx-3">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Observaciones</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="observaciones_rendicion" id="observaciones_rendicion"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-1 col-xxxl-1">
+                                                         <button class="btn btn-block btn-sm btn-outline-primary" onclick="$('#up_archivo_cm').toggle();"> <i class="feather icon-upload"></i> Subir archivo</button>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-1 col-xxxl-1">
+                                                        <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja();" id="btn_rendicion_caja_diaria"><i class="feather icon-check"></i> Rendir caja</button>
+                                                    </div>
+                                                    <div id="up_archivo_cm" style="display:none" class="col-sm-12 col-md-12">
+                                                        <input type="hidden" name="input_lista_archivo" id="input_lista_archivo" value="">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-12">
+                                                                <!-- [ Main Content ] start -->
+                                                                <div class="dropzone" id="mis-archivos-rendicion" action="{{ route('rendir.archivo.carga') }}">
                                                                 </div>
+                                                                <!-- [ file-upload ] end -->
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-2">
-                                                    <div class="row">
-                                                        <div class="col-12 text-center">
-                                                            <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja();" id="btn_rendicion_caja_diaria">Rendir Caja</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-12">
-                                                    <table id="tabla_rendir_caja" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-center align-middle">Tipo</th>
-                                                                <th class="text-center align-middle">Código</th>
-                                                                <th class="text-center align-middle">Convenio</th>
-                                                                <th class="text-center align-middle">Clase Bono</th>
-                                                                <th class="text-center align-middle">Tipo Bono</th>
-                                                                <th class="text-center align-middle">Aporte Convenio</th>
-                                                                <th class="text-center align-middle">Aporte Seguros</th>
-
-
-                                                                <th class="text-center align-middle">Copago Paciente</th>
-                                                                <th class="text-center align-middle">Valor total</th>
-                                                                <th class="text-center align-middle">F/Atención</th>
-                                                                <th class="text-center align-middle">Paciente</th>
-
-                                                                <th class="text-center align-middle">Profesional</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-
-                                                            @if( isset($bono) )
-                                                                @foreach($bono as $key_b => $value_b)
-                                                                    <tr >
-                                                                        <td class="align-middle text-center">{{ $value_b->TipoBono()->first()->nombre }}</td>
-                                                                        <td class="align-middle text-center">{{ $value_b->numero_bono }}</td>
-                                                                        <td class="align-middle text-center">{{ $value_b->Convenio()->first()->nombre }}</td>
-                                                                        <td class="align-middle text-center">
-                                                                            @if($value_b->id_clase_bono == 1)
-                                                                                Bono Fisico
-                                                                            @elseif($value_b->id_clase_bono == 2)
-                                                                                Sencillito
-                                                                            @elseif($value_b->id_clase_bono == 3)
-                                                                                Caja Vecina
-                                                                            @elseif($value_b->id_clase_bono == 4)
-                                                                                Bono Web
-                                                                            @elseif($value_b->id_clase_bono == 5)
-                                                                                Bono Web Pre-Pago
-                                                                            @elseif($value_b->id_clase_bono == 6)
-                                                                                Particular
-                                                                            @else
-                                                                                Otro
-                                                                            @endif
-                                                                        </td>
-                                                                        <td class="align-middle text-center">Bono Consulta</td>
-                                                                        <td></td>
-
-                                                                        <td></td>
-                                                                        <td class="align-middle text-center">$10.000 <button class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Pago mediante: Efectivo, Tarjeta"><i class="fas fa-search"></i></button> </td>
-                                                                        <td class="align-middle text-center">${{ number_format($value_b->valor_atencion, 2, ",", ".") }}</td>
-                                                                        <td class="align-middle text-center">{{ $value_b->fecha_atencion }}</td>
-
-
-                                                                        <td class="align-middle text-center">
-                                                                            <span>{{ $value_b->Paciente()->first()->nombres }} {{ $value_b->Paciente()->first()->apellido_uno }} {{ $value_b->Paciente()->first()->apellido_dos }}</span><br>
-                                                                            <span>{{ $value_b->Paciente()->first()->rut }}</span>
-                                                                        </td>
-
-                                                                        <td class="align-middle text-center">
-                                                                            <span>{{ $value_b->Profesional()->first()->nombres }} {{ $value_b->Profesional()->first()->apellido_uno }} {{ $value_b->Profesional()->first()->apellido_dos }}</span><br>
-                                                                            <span>{{ $value_b->Profesional()->first()->rut }}</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            @endif
-                                                        </tbody>
-
-                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        {{-- PESTAÑA RENDICION DE CAJA A PROFESIONAL --}}
-                                        <div class="tab-pane fade" id="tab_redicion_prof" role="tabpanel" aria-labelledby="tab_redicion_prof-tab">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card">
+                                        <div class="card-body">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Rendir Caja a Profesional del {{ date('d-m-Y') }}</h5>
-                                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                                        <i class="feather icon-home"></i>
-                                                    </a>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="dt-responsive table-responsive">
+                                                        <table id="tabla_rendir_caja" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="align-middle">Tipo</th>
+                                                                    <th class="align-middle">Código</th>
+                                                                    <th class="align-middle">Convenio</th>
+                                                                    <th class="align-middle">Clase bono</th>
+                                                                    <th class="align-middle">Tipo bono</th>
+                                                                    <th class="align-middle">Aporte convenio</th>
+                                                                    <th class="align-middle">Aporte seguros</th>
+                                                                    <th class="align-middle">Copago paciente</th>
+                                                                    <th class="align-middle">Valor total</th>
+                                                                    <th class="align-middle">F/Atención</th>
+                                                                    <th class="align-middle">Paciente</th>
+                                                                    <th class="align-middle">Profesional</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if( isset($bono) )
+                                                                    @foreach($bono as $key_b => $value_b)
+                                                                        <tr >
+                                                                            <td class="align-middle">{{ $value_b->TipoBono()->first()->nombre }}</td>
+                                                                            <td class="align-middle">{{ $value_b->numero_bono }}</td>
+                                                                            <td class="align-middle">{{ $value_b->Convenio()->first()->nombre }}</td>
+                                                                            <td class="align-middle">
+                                                                                @if($value_b->id_clase_bono == 1)
+                                                                                    Bono Fisico
+                                                                                @elseif($value_b->id_clase_bono == 2)
+                                                                                    Sencillito
+                                                                                @elseif($value_b->id_clase_bono == 3)
+                                                                                    Caja Vecina
+                                                                                @elseif($value_b->id_clase_bono == 4)
+                                                                                    Bono Web
+                                                                                @elseif($value_b->id_clase_bono == 5)
+                                                                                    Bono Web Pre-Pago
+                                                                                @elseif($value_b->id_clase_bono == 6)
+                                                                                    Particular
+                                                                                @else
+                                                                                    Otro
+                                                                                @endif
+                                                                            </td>
+                                                                            <td class="align-middle">Bono consulta</td>
+                                                                            <td></td>
+
+                                                                            <td></td>
+                                                                            <td class="align-middle">$10.000 <button class="btn btn-outline-success btn-xxs" data-toggle="tooltip" data-placement="top" title="Pago mediante: Efectivo, Tarjeta"><i class="fas fa-search"></i></button> </td>
+                                                                            <td class="align-middle">${{ number_format($value_b->valor_atencion, 2, ",", ".") }}</td>
+                                                                            <td class="align-middle">{{ $value_b->fecha_atencion }}</td>
+
+
+                                                                            <td class="align-middle">
+                                                                                <span>{{ $value_b->Paciente()->first()->nombres }} {{ $value_b->Paciente()->first()->apellido_uno }} {{ $value_b->Paciente()->first()->apellido_dos }}</span><br>
+                                                                                <span>{{ $value_b->Paciente()->first()->rut }}</span>
+                                                                            </td>
+
+                                                                            <td class="align-middle">
+                                                                                <span>{{ $value_b->Profesional()->first()->nombres }} {{ $value_b->Profesional()->first()->apellido_uno }} {{ $value_b->Profesional()->first()->apellido_dos }}</span><br>
+                                                                                <span>{{ $value_b->Profesional()->first()->rut }}</span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                @endif
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        {{-- PESTAÑA RENDICION DE CAJA A PROFESIONAL --}}
+                        <div class="tab-pane fade" id="tab_redicion_prof" role="tabpanel" aria-labelledby="tab_redicion_prof-tab">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <h5 class="text-c-blue f-18 pt-1">Rendir caja a Profesional del {{ date('d-m-Y') }}</h5>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-body">
                                             <div class="form-row">
                                                 <input type="hidden" name="lista_bonos_prof" id="lista_bonos_prof" value="">
-                                                <div class="col-10">
-                                                    <div class="row">
-                                                        <div class="col-sm-6 col-md-2">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="form-row">
+                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
                                                             <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Número de Bonos</label>
+                                                                <label class="floating-label-activo-sm">Nº de bonos</label>
                                                                 <input type="number" class="form-control form-control-sm" id="numero_bonos_prof" name="numero_bonos_prof" value="" readonly="readonly">
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-6 col-md-2">
+                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
                                                             <div class="form-group">
                                                                 <label class="floating-label-activo-sm">Efectivo</label>
                                                                 <input type="number" class="form-control form-control-sm" id="efectivo_prof" name="efectivo_prof" value="" readonly="readonly">
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-6 col-md-2">
+                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
                                                             <div class="form-group">
                                                                 <label class="floating-label-activo-sm">Otros</label>
                                                                 <input type="number" class="form-control form-control-sm" id="otros_prof" name="otros_prof" value="" readonly="readonly">
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-6 col-md-2">
+                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
                                                             <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Total Documentos</label>
+                                                                <label class="floating-label-activo-sm">Total documentos</label>
                                                                 <input type="number" class="form-control form-control-sm" id="total_prof" name="total_prof" value="" readonly="readonly">
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-6 col-md-2">
+                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 col-xxx-3">
                                                             <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Recibe Caja :</label>
+                                                                <label class="floating-label-activo-sm">Recibe caja</label>
                                                                 <select name="id_asistente_receptor_prof" id="id_asistente_receptor_prof" class="form-control form-control-sm" onclick="cargar_registros_prof();">
                                                                     @if($listado_recibe_prof)
                                                                         @foreach ( $listado_recibe_prof as $recibe )
@@ -251,147 +270,152 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-6 col-md-2">
+                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 col-xxx-3">
                                                             <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Observaciones:</label>
-                                                                <textarea name="" id="" cols="3" rows="1" class="form-control floating" onfocus="this.rows=2" onblur="this.rows=1;"></textarea>
+                                                                <label class="floating-label-activo-sm">Observaciones</label>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"></textarea>
                                                             </div>
                                                         </div>
+                                                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                            <button class="btn btn-block btn-sm btn-outline-primary" onclick="$('#up_archivo_prof').toggle();"> <i class="feather icon-upload"></i> Subir archivo</button>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                            <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja_prof();" id="btn_rendicion_caja_diaria"><i class="feather icon-check"></i> Rendir Caja</button>
+                                                        </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <input type="hidden" name="input_lista_archivo_prof" id="input_lista_archivo_prof" value="">
-                                                            <div class="form-row">
-                                                                <div class="form-group col-12">
-                                                                    <!-- [ Main Content ] start -->
-                                                                    <div class="dropzone" id="mis-archivos-rendicion-prof" action="{{ route('rendir.archivo.carga') }}">
+                                                    <div class="form-row">
+                                                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                            <div id="up_archivo_prof" style="display:none" >
+                                                                <input type="hidden" name="input_lista_archivo_prof" id="input_lista_archivo_prof" value="">
+                                                                <div class="form-row">
+                                                                    <div class="form-group col-12">
+                                                                        <!-- [ Main Content ] start -->
+                                                                        <div class="dropzone" id="mis-archivos-rendicion-prof" action="{{ route('rendir.archivo.carga') }}">
+                                                                        </div>
+                                                                        <!-- [ file-upload ] end -->
                                                                     </div>
-                                                                    <!-- [ file-upload ] end -->
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-2">
-                                                    <div class="row">
-                                                        <div class="col-12 text-center">
-                                                            <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja_prof();" id="btn_rendicion_caja_diaria">Rendir Caja</button>
-                                                        </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="dt-responsive table-responsive">
+                                                        <table id="tabla_rendir_caja_prof" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                        <!--<table id="tabla_rendir_caja_prof" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">-->
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="align-middle">Tipo</th>
+                                                                    <th class="align-middle">Código</th>
+                                                                    <th class="align-middle">Convenio</th>
+                                                                    <th class="align-middle">Clase bono</th>
+                                                                    <th class="align-middle">Tipo bono</th>
+                                                                    <th class="align-middle">Aporte convenio</th>
+                                                                    <th class="align-middle">Aporte seguros</th>
+                                                                    <th class="align-middle">Copago paciente</th>
+                                                                    <th class="align-middle">Valor total</th>
+                                                                    <th class="align-middle">F/Atención</th>
+                                                                    <th class="align-middle">Paciente</th>
+                                                                    <th class="align-middle">Profesional</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-12">
-                                                    <table id="tabla_rendir_caja_prof" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-center align-middle">Tipo</th>
-                                                                <th class="text-center align-middle">Código</th>
-                                                                <th class="text-center align-middle">Convenio</th>
-                                                                <th class="text-center align-middle">Clase Bono</th>
-                                                                <th class="text-center align-middle">Tipo Bono</th>
-                                                                <th class="text-center align-middle">Aporte Convenio</th>
-                                                                <th class="text-center align-middle">Aporte Seguros</th>
-
-
-                                                                <th class="text-center align-middle">Copago Paciente</th>
-                                                                <th class="text-center align-middle">Valor total</th>
-                                                                <th class="text-center align-middle">F/Atención</th>
-                                                                <th class="text-center align-middle">Paciente</th>
-
-                                                                <th class="text-center align-middle">Profesional</th>
-                                                                <th></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                        {{-- PESTAÑA RENDICION PROGRAMAS DE CAJA A PROFESIONAL --}}
-                                        <div class="tab-pane fade" id="tab_recepcion_programas" role="tabpanel" aria-labelledby="tab_recepcion_programas-tab">
+                        {{-- PESTAÑA RENDICION PROGRAMAS DE CAJA A PROFESIONAL --}}
+                        <div class="tab-pane fade" id="tab_recepcion_programas" role="tabpanel" aria-labelledby="tab_recepcion_programas-tab">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <h5 class="text-c-blue f-18 pt-1">Recepción de programas del {{ date('d-m-Y') }}</h5>
+                                </div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                    <div class="card">
+                                        <div class="card-body">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <h5 class="text-c-blue d-inline float-left f-18 pt-1">Recepcion de Programas del {{ date('d-m-Y') }}</h5>
-                                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                                        <i class="feather icon-home"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <hr>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="dt-responsive table-responsive">
+                                                        <table id="tabla_rendir_caja" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="align-middle">Tipo</th>
+                                                                    <th class="align-middle">Código</th>
+                                                                    <th class="align-middle">Convenio</th>
+                                                                    <th class="align-middle">Tipo Bono</th>
+                                                                    <th class="align-middle">Aporte Convenio</th>
+                                                                    <th class="align-middle">Aporte Seguros</th>
+                                                                    <th class="align-middle">Copago Paciente</th>
+                                                                    <th class="align-middle">Valor total</th>
+                                                                    <th class="align-middle">F/Atención</th>
+                                                                    <th class="align-middle">Paciente</th>
+                                                                    <th class="align-middle">Profesional</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
 
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-12">
-                                                    <table id="tabla_rendir_caja" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-center align-middle">Tipo</th>
-                                                                <th class="text-center align-middle">Código</th>
-                                                                <th class="text-center align-middle">Convenio</th>
-                                                                <th class="text-center align-middle">Tipo Bono</th>
-                                                                <th class="text-center align-middle">Aporte Convenio</th>
-                                                                <th class="text-center align-middle">Aporte Seguros</th>
+                                                                @if( isset($bono) )
+                                                                    @foreach($bono as $key_b => $value_b)
+                                                                        <tr >
+                                                                            <td class="align-middle text-center">{{ $value_b->TipoBono()->first()->nombre }}</td>
+                                                                            <td class="align-middle text-center">{{ $value_b->numero_bono }}</td>
+                                                                            <td class="align-middle text-center">{{ $value_b->Convenio()->first()->nombre }}</td>
+                                                                            <td class="align-middle text-center">
+                                                                                @if($value_b->id_clase_bono == 1)
+                                                                                    Bono Fisico
+                                                                                @elseif($value_b->id_clase_bono == 2)
+                                                                                    Sencillito
+                                                                                @elseif($value_b->id_clase_bono == 3)
+                                                                                    Caja Vecina
+                                                                                @elseif($value_b->id_clase_bono == 4)
+                                                                                    Bono Web
+                                                                                @elseif($value_b->id_clase_bono == 5)
+                                                                                    Bono Web Pre-Pago
+                                                                                @elseif($value_b->id_clase_bono == 6)
+                                                                                    Particular
+                                                                                @else
+                                                                                    Otro
+                                                                                @endif
+                                                                            </td>
+                                                                            <td></td>
 
-
-                                                                <th class="text-center align-middle">Copago Paciente</th>
-                                                                <th class="text-center align-middle">Valor total</th>
-                                                                <th class="text-center align-middle">F/Atención</th>
-                                                                <th class="text-center align-middle">Paciente</th>
-
-                                                                <th class="text-center align-middle">Profesional</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-
-                                                            @if( isset($bono) )
-                                                                @foreach($bono as $key_b => $value_b)
-                                                                    <tr >
-                                                                        <td class="align-middle text-center">{{ $value_b->TipoBono()->first()->nombre }}</td>
-                                                                        <td class="align-middle text-center">{{ $value_b->numero_bono }}</td>
-                                                                        <td class="align-middle text-center">{{ $value_b->Convenio()->first()->nombre }}</td>
-                                                                        <td class="align-middle text-center">
-                                                                            @if($value_b->id_clase_bono == 1)
-                                                                                Bono Fisico
-                                                                            @elseif($value_b->id_clase_bono == 2)
-                                                                                Sencillito
-                                                                            @elseif($value_b->id_clase_bono == 3)
-                                                                                Caja Vecina
-                                                                            @elseif($value_b->id_clase_bono == 4)
-                                                                                Bono Web
-                                                                            @elseif($value_b->id_clase_bono == 5)
-                                                                                Bono Web Pre-Pago
-                                                                            @elseif($value_b->id_clase_bono == 6)
-                                                                                Particular
-                                                                            @else
-                                                                                Otro
-                                                                            @endif
-                                                                        </td>
-                                                                        <td></td>
-
-                                                                        <td></td>
-                                                                        <td class="align-middle text-center"><button class="btn btn-outline-success btn-sm"><i class="fas fa-search"></i></button> </td>
-                                                                        <td class="align-middle text-center">${{ number_format($value_b->valor_atencion, 2, ",", ".") }}</td>
-                                                                        <td class="align-middle text-center">{{ $value_b->fecha_atencion }}</td>
+                                                                            <td></td>
+                                                                            <td class="align-middle text-center"><button class="btn btn-outline-success btn-sm"><i class="fas fa-search"></i></button> </td>
+                                                                            <td class="align-middle text-center">${{ number_format($value_b->valor_atencion, 2, ",", ".") }}</td>
+                                                                            <td class="align-middle text-center">{{ $value_b->fecha_atencion }}</td>
 
 
-                                                                        <td class="align-middle text-center">
-                                                                            <span>{{ $value_b->Paciente()->first()->nombres }} {{ $value_b->Paciente()->first()->apellido_uno }} {{ $value_b->Paciente()->first()->apellido_dos }}</span><br>
-                                                                            <span>{{ $value_b->Paciente()->first()->rut }}</span>
-                                                                        </td>
+                                                                            <td class="align-middle text-center">
+                                                                                <span>{{ $value_b->Paciente()->first()->nombres }} {{ $value_b->Paciente()->first()->apellido_uno }} {{ $value_b->Paciente()->first()->apellido_dos }}</span><br>
+                                                                                <span>{{ $value_b->Paciente()->first()->rut }}</span>
+                                                                            </td>
 
-                                                                        <td class="align-middle text-center">
-                                                                            <span>{{ $value_b->Profesional()->first()->nombres }} {{ $value_b->Profesional()->first()->apellido_uno }} {{ $value_b->Profesional()->first()->apellido_dos }}</span><br>
-                                                                            <span>{{ $value_b->Profesional()->first()->rut }}</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            @endif
-                                                        </tbody>
+                                                                            <td class="align-middle text-center">
+                                                                                <span>{{ $value_b->Profesional()->first()->nombres }} {{ $value_b->Profesional()->first()->apellido_uno }} {{ $value_b->Profesional()->first()->apellido_dos }}</span><br>
+                                                                                <span>{{ $value_b->Profesional()->first()->rut }}</span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                @endif
+                                                            </tbody>
 
-                                                    </table>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -402,6 +426,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -418,6 +443,12 @@
 @endsection
 
 @section('page-script')
+  <script>
+    $('#up_archivo_cm').click(function(){
+            $('#upload_archivo_cm').toggle();
+        });
+    </script>
+
     <script>
             let clase_bono = ['Bono Fisico' ,'Sencillito' ,'Caja Vecina' ,'Bono Web' ,'Bono Web Pre-Pago' ,'Particular'];
             var tiempo = 0; // CANTIDAD MINUTOS A ESPERAR PARA APROBACION

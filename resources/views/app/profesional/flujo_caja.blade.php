@@ -995,34 +995,34 @@
                 },
                 success: function(resp){
                     console.log(resp);
-                    // let data = array_bonos_agrupados;
-                    // console.log(data);
-                    // // dar formato a la fecha
-                    // let fecha_hoy = new Date();
-                    // fecha_hoy = fecha_hoy.getDate() + '-' + (fecha_hoy.getMonth() + 1) + '-' + fecha_hoy.getFullYear();
+                    let data = array_bonos_agrupados;
+                    console.log(data);
+                    // dar formato a la fecha
+                    let fecha_hoy = new Date();
+                    fecha_hoy = fecha_hoy.getDate() + '-' + (fecha_hoy.getMonth() + 1) + '-' + fecha_hoy.getFullYear();
 
-                    // // Recorre cada propiedad del objeto
-                    // for (let key in data) {
-                    //     if (data.hasOwnProperty(key)) {
-                    //         let array = data[key];
-                    //         let csv = '';
-                    //         let rut_profesional = array[0].rut_profesional;
-                    //         let convenio = array[0].convenio;
-                    //         console.log(rut_profesional);
+                    // Recorre cada propiedad del objeto
+                    for (let key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            let array = data[key];
+                            let csv = '';
+                            let rut_profesional = array[0].rut_profesional;
+                            let convenio = array[0].convenio;
+                            console.log(rut_profesional);
 
-                    //         // Recorre cada elemento del array
-                    //         array.forEach(function(row){
-                    //             csv += row.numero_bono + ',' + row.rut_paciente + ',' + fecha_hoy + '\n';
-                    //         });
+                            // Recorre cada elemento del array
+                            array.forEach(function(row){
+                                csv += row.numero_bono + ',' + row.rut_paciente + ',' + fecha_hoy + '\n';
+                            });
 
-                    //         console.log(csv);
-                    //         let hiddenElement = document.createElement('a');
-                    //         hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-                    //         hiddenElement.target = '_blank';
-                    //         hiddenElement.download = 'gestionBonos_'+key+'_'+fecha_hoy+'_'+rut_profesional+'_'+convenio+'.csv';
-                    //         hiddenElement.click();
-                    //     }
-                    // }
+                            console.log(csv);
+                            let hiddenElement = document.createElement('a');
+                            hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+                            hiddenElement.target = '_blank';
+                            hiddenElement.download = 'gestionBonos_'+key+'_'+fecha_hoy+'_'+rut_profesional+'_'+convenio+'.csv';
+                            hiddenElement.click();
+                        }
+                    }
                 },
                 error: function(error){
                     console.log(error);
