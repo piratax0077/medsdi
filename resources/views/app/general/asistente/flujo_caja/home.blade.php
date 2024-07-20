@@ -264,7 +264,7 @@
                                                                 <select name="id_asistente_receptor_prof" id="id_asistente_receptor_prof" class="form-control form-control-sm" onclick="cargar_registros_prof();">
                                                                     @if($listado_recibe_prof)
                                                                         @foreach ( $listado_recibe_prof as $recibe )
-                                                                            <option value="{{ $recibe->id }}">{{ strtoupper($recibe->apellido_uno.' '.$recibe->apellido_dos) }}</option>
+                                                                            <option value="{{ $recibe->id }}">{{ strtoupper($recibe->nombre.' '.$recibe->apellido_uno).' ('.$recibe->rut.')' }}</option>
                                                                         @endforeach
                                                                     @endif
                                                                 </select>

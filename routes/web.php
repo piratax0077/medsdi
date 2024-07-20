@@ -1659,6 +1659,9 @@ Route::group([
     Route::get('data', [App\Http\Controllers\FlujoCajaController::class, 'dataFlujoCaja'])->name('flujo_caja.data_flujo_caja');
     Route::get('data_programa', [App\Http\Controllers\FlujoCajaController::class, 'dataFlujoCajaPrograma'])->name('flujo_caja.data_flujo_caja_programa');
     Route::get('data_rendidos', [App\Http\Controllers\FlujoCajaController::class, 'dataFlujoCajaRendidos'])->name('flujo_caja.data_flujo_caja_rendidos');
+    Route::get('data/profesional/rendidos', [App\Http\Controllers\FlujoCajaController::class, 'dataProfesionalRendiciones'])->name('flujo_caja.profesional.data_rendidos');
+    Route::get('data/profesional/rendidos/programa', [App\Http\Controllers\FlujoCajaController::class, 'dataProfesionalBonosRendidosPrograma'])->name('flujo_caja.profesional.data_rendidos_programa');
+    Route::get('data/profesional/gestion/bonos', [App\Http\Controllers\FlujoCajaController::class, 'dataProfesionalGestionBonos'])->name('flujo_caja.profesional.data_gestion_bonos');
     Route::get('data_rendidos_programas', [App\Http\Controllers\FlujoCajaController::class, 'dataFlujoCajaRendidosProgramas'])->name('flujo_caja.data_flujo_caja_rendidos_programa');
 
     Route::get('dame_rendicion/{id}', [App\Http\Controllers\FlujoCajaController::class, 'dameRendicion'])->name('flujo_caja.profesional.rendicion.show');
