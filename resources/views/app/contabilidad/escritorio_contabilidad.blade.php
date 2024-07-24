@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="card subir" onclick="en_construccion()";>
-						  {{--  <a href="{{ ROUTE('asistente_adm.mis_profesionales') }}"></a>--}}
+						   <a href="{{ ROUTE('asistente_adm.mis_profesionales') }}"></a>
 							<div class="card-body text-center" style="cursor:pointer">
 								<img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
 								<h5 class="mt-1 mb-0">Info Personal</h5>
@@ -53,7 +53,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card subir" onclick="en_construccion()";>
-                         {{--  <a href="{{ ROUTE('asistente.flujo_caja') }}"></a>--}}
+                          <a href="{{ ROUTE('asistente.flujo_caja') }}"></a>
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
                                 <h5 class="mt-1 mb-0"> Pendientes de Pago</h5>
@@ -62,13 +62,11 @@
                 </div>
 
 				<div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
-                        {{-- <a href="{{ ROUTE('asistente_adm.gastos') }}"></a>--}}
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-                                <h5 class="mt-1 mb-0">Liquidaciones de Sueldos</h5>
-                            </div>
-                        </a>
+                    <div class="card subir" onclick="llamar_liquidaciones_sueldo()";>
+                        <div class="card-body text-center" style="cursor:pointer">
+                            <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
+                            <h5 class="mt-1 mb-0">Liquidaciones de Sueldos</h5>
+                        </div>
                     </div>
                 </div>
 				<div class="col-md-4">
@@ -119,7 +117,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
+                    <div class="card subir" onclick="llamar_estadisticas()";>
                          {{--  <a href="{{ ROUTE('asistente_adm.gastos') }}"></a>--}}
                         <div class="card-body text-center" style="cursor:pointer">
                             <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
@@ -142,5 +140,40 @@
     </div>
 </div>
 @include('app.adm_cm.modales.en_construccion')
+{{-- @include('app.contabilidad.modals.modal_agregar_gasto') --}}
+{{-- @include('app.contabilidad.modals.modal_editar_gasto') --}}
+@include('app.contabilidad.modals.modal_estadisticas')
+@include('app.contabilidad.modals.modal_liquidaciones')
+{{-- @include('app.contabilidad.modals.modal_pagado')
+@include('app.contabilidad.modals.modal_pagar_gasto')
+@include('app.contabilidad.modals.remuneraciones') --}}
 <!--Cierre: Container Completo-->
+@endsection
+
+@section('page-script')
+<script>
+    function llamar_estadisticas(){
+        console.log('llamar_estadisticas');
+        $('#modal_estadisticas').modal('show');
+        $.ajax({
+            url: "{{ ROUTE('contabilidad.estadisticas') }}",
+            type: 'GET',
+            success: function(data){
+                $('#modal_body_estadisticas').html(data);
+            }
+        })
+    }
+
+    function llamar_liquidaciones_sueldo(){
+        console.log('llamar_liquidaciones_sueldo');
+        $('#modal_liquidaciones_sueldo').modal('show');
+        $.ajax({
+            url: "{{ ROUTE('contabilidad.liquidaciones') }}",
+            type: 'GET',
+            success: function(data){
+                $('#modal_body_liquidaciones_sueldo').html(data);
+            }
+        })
+    }
+</script>
 @endsection

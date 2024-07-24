@@ -118,10 +118,6 @@ class EscritorioProfesional extends Controller
         $profesional->nombre = $request->nombre;
         $profesional->apellido_uno = $request->apellido_uno;
         $profesional->apellido_dos = $request->apellido_dos;
-        // $profesional->telefono_uno = $request->telefono_uno;
-        // $profesional->celular = $request->celular;
-        // $profesional->email = $request->email;
-        // $profesional->fecha_nacimiento = $request->fecha_nacimiento;
         $profesional->sexo = $request->sexo;
         $profesional->id_especialidad = $request->id_especialidad;
         $profesional->id_tipo_especialidad = $request->id_tipo_especialidad;

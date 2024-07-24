@@ -327,6 +327,8 @@ class AdministradorCmController extends Controller
 
         // echo json_encode($personal);
 
+        $especialidades = Especialidad::all();
+
         return view('app.adm_cm.configuracion')->with([
             'tipo_institucion' => $tipo_institucion,
             'institucion' => $institucion,
@@ -335,7 +337,7 @@ class AdministradorCmController extends Controller
             'ciudades' => $ciudades,
             'personal' => $personal,
             'lista_tipo_contrato' => (object)$lista_tipo_contrato,
-
+            'especialidades' => $especialidades,
         ]);
     }
 
@@ -3177,9 +3179,14 @@ class AdministradorCmController extends Controller
         return view('');
     }
 
-    public function areaEstadistica(Request $request)
+    public function areaEstadistica()
     {
-        return view('');
+
+        return view('app.contabilidad.secciones_contabilidad.estadisticas_inicio');
+    }
+
+    public function areaLiquidaciones(){
+        return view('app.contabilidad.secciones_contabilidad.liquidaciones');
     }
 
     /** ADMINISTRADOR COMERCIAL */

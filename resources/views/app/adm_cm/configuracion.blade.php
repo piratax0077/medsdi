@@ -1778,19 +1778,20 @@
                                 <div class="form-group fill">
                                     <!--Cargar especialidades-->
                                     <label class="floating-label">Especialidad</label>
-                                    <select class="form-control form-control-sm">
+                                    <select class="form-control form-control-sm" id="especialidad_cm" name="especialidad_cm">
                                         <option>Seleccione</option>
-                                        <option>Medicina general</option>
-                                        <option>Medicina interna</option>
-                                        <option>Otorrinolaringología</option>
-                                        <option>etc.. cargar todas las especialidades posibles</option>
+                                        @if(isset($especialidades))
+                                            @foreach ($especialidades as $especialidad)
+                                                <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
                         </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-info btn-sm mx-auto">Añadir</button>
+                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_especialidad_cm()">Añadir</button>
                 </div>
                 </form>
             </div>
@@ -2631,6 +2632,101 @@
                     DangerMode: true,
                 });
             }
+        }
+
+        function guardar_especialidad_cm(){
+            var valido = 1;
+            var mensaje = '';
+            let id_institucion = $('#id_institucion').val();
+            let especialidad = $('#especialidad_cm').val();
+
+            var data = {
+                id_institucion : id_institucion,
+                especialidad : especialidad,
+            };
+
+
+            if(id_institucion == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido Institución\n';
+            }
+            if(id_lugar_atencion == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido Lugar Atención\n';
+            }
+            if(id_admin_creador == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido Usuario Creador\n';
+            }
+            if(id_tipo_admin_creador == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido Tipo Usuario Creador\n';
+            }
+            if(especialidad == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido Especialidad\n';
+            }
+
+            if(valido == 1)
+            {
+                let url = "{{ route('adm_cm.registrar_especialidad') }}";
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    data: {
+                        //_token: _token,
+                        region: region,
+                    },
+                })
+                .done(function(data) {
+                    if (data != null) {
+                        if(data.estado == 1)
+                        {
+
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Error",
+                                text: "Error al cargar ingresar especialidad",
+                                icon: "error",
+                                buttons: "Aceptar",
+                                DangerMode: true,
+                            });
+                        }
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar especialidad",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+
+            }
+            else
+            {
+                swal({
+                    title: "Campos requeridos",
+                    text: mensaje,
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+
         }
 
     </script>

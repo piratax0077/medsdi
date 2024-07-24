@@ -1252,6 +1252,7 @@ Route::group([
 	Route::post('/Configuracion/perfil/datos/responsable/editar', [App\Http\Controllers\AdministradorCmController::class, 'editarDatosPerfilResponsable'])->name('adm_cm.editar_datos_perfil_responsable');
 	Route::get('/Configuracion/perfil/datos/personal/persona', [App\Http\Controllers\AdministradorCmController::class, 'cargaPersonalPersona'])->name('adm_cm.cargar_personal_persona');
 	Route::post('/Configuracion/perfil/actualizar/personal/clave/centro', [App\Http\Controllers\AdministradorCmController::class, 'actualizarAccesoPersonal'])->name('adm_cm.actualizar_acceso_personal');
+    Route::post('/registrar_especialidad', [App\Http\Controllers\AdministradorCmController::class, 'registrar_especialidad'])->name('adm_cm.registrar_especialidad');
 
     Route::get('/Configuracion/perfil_cm', [App\Http\Controllers\AdministradorCmController::class, 'perfil'])->name('adm_cm.perfil_cm');
 	Route::get('/Configuracion/departamentos_servicios', [App\Http\Controllers\AdministradorCmController::class, 'departamentos'])->name('adm_cm.departamentos_servicios');
@@ -1307,7 +1308,8 @@ Route::group([
 
     Route::get('/Administracion/Contabilidad', [App\Http\Controllers\AdministradorCmController::class, 'areaContabilidad'])->name('adm_cm.area_contabilidad');
     Route::get('/Administracion/Bodega', [App\Http\Controllers\AdministradorCmController::class, 'areaBodega'])->name('adm_cm.area_bodega');
-    Route::get('/Administracion/Estadistica', [App\Http\Controllers\AdministradorCmController::class, 'areaEstadistica'])->name('adm_cm.area_estadistica');
+    Route::get('/Administracion/Estadistica', [App\Http\Controllers\AdministradorCmController::class, 'areaEstadistica'])->name('contabilidad.estadisticas');
+    Route::get('/Administracion/Liquidaciones', [App\Http\Controllers\AdministradorCmController::class, 'areaLiquidaciones'])->name('contabilidad.liquidaciones');
     Route::get('/Administracion/Insumos', [App\Http\Controllers\AdministradorCmController::class, 'insumos'])->name('adm_cm.insumos');
 
 	Route::get('/Administrador/ciudad/buscar', [App\Http\Controllers\AdministradorCmController::class, 'buscar_ciudad_region'])->name('adm_cm.buscar_ciudad_region');
@@ -1329,7 +1331,7 @@ Route::group([
 
     /** FLUJO DE CAJA */
     // Route::get('/comercial/flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionCmAdm'])->name('adm_cm.comercial.flujo.caja.index');
-
+    Route::get('estadisticas_cm', [App\Http\Controllers\AdministradorCmController::class, 'areaEstadistica'])->name('asistente_adm.estadisticas');
 
 });
 
@@ -1364,10 +1366,12 @@ Route::group([
     Route::get('/gastos', [App\Http\Controllers\AdministradorCmController::class, 'asistente_adm_gastos'])->name('asistente_adm.gastos');
 
 
+
     /** CONTRATOS */
     Route::get('Contratos/cargar', [App\Http\Controllers\AdministradorCmController::class, 'asistente_adm_cargar_contrato'])->name('asistente_adm.cargar_contrato');
     Route::get('Contratos/cargar/detalle', [App\Http\Controllers\AdministradorCmController::class, 'asistente_adm_detalle_contrato'])->name('asistente_adm.detalle_contrato');
 });
+
 
 
 /** ADMIN */
