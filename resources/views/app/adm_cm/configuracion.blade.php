@@ -797,55 +797,29 @@
                                                     <thead>
                                                         <tr>
                                                             <th class="text-wrap text-center align-middle">Especialidad</th>
+                                                            <th class="text-wrap text-center align-middle">N° Profesionales</th>
                                                             <th class="text-wrap text-center align-middle">Acción</th>
+                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        @if(isset($especialidades_cm))
+                                                        @foreach($especialidades_cm as $especialidad)
                                                         <tr>
-                                                            <td class="align-middle text-center">Médicina general</td>
+                                                            <td class="align-middle text-center">{{ $especialidad->nombre }}</td>
+                                                            <td class="align-middle text-center">5</td>
                                                             <td class="align-middle text-center">
                                                                 <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="esp-1">
-                                                                    <label class="custom-control-label" for="esp-1"></label>
+                                                                    <input type="checkbox" class="custom-control-input" id="esp-{{ $especialidad->id }}">
+                                                                    <label class="custom-control-label" for="esp-{{ $especialidad->id }}"></label>
                                                                 </div>
                                                             </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="align-middle text-center">Médicina interna</td>
                                                             <td class="align-middle text-center">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="esp-2">
-                                                                    <label class="custom-control-label" for="esp-2"></label>
-                                                                </div>
+                                                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm({{ $especialidad->id }});"><i class="feather icon-trash"></i></button>
                                                             </td>
                                                         </tr>
-                                                        <tr>
-                                                            <td class="align-middle text-center">Otorrinolaringologia</td>
-                                                            <td class="align-middle text-center">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="esp-3">
-                                                                    <label class="custom-control-label" for="esp-3"></label>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="align-middle text-center">Odontología</td>
-                                                            <td class="align-middle text-center">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="esp-4">
-                                                                    <label class="custom-control-label" for="esp-4"></label>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="align-middle text-center">Cardiología</td>
-                                                            <td class="align-middle text-center">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="esp-5">
-                                                                    <label class="custom-control-label" for="esp-5"></label>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
+                                                        @endforeach
+                                                        @endif
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -861,7 +835,7 @@
                                             <div class="col-md-12">
                                                 <h6 class="f-18 d-inline mt-3 text-info">Otros Profesionales</h6>
                                                 <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
-                                                    <button type="button" class="btn btn-sm btn-info" onclick="ag_especialidad();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="ag_otra_especialidad();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -869,59 +843,33 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-sm-6 col-md-12">
-                                                <table id="especialidades_cm" class="display table table-striped table-xs dt-responsive nowrap" style="width:100%">
+                                                <table id="otros_profesionales_cm" class="display table table-striped table-xs dt-responsive nowrap" style="width:100%">
                                                     <thead>
                                                         <tr>
                                                             <th class="text-wrap text-center align-middle">Especialidad</th>
+                                                            <th class="text-wrap text-center align-middle">N° Profesionales</th>
                                                             <th class="text-wrap text-center align-middle">Acción</th>
+                                                            <th class="text-wrap"></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td class="align-middle text-center">Médicina general</td>
-                                                            <td class="align-middle text-center">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="esp-1">
-                                                                    <label class="custom-control-label" for="esp-1"></label>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="align-middle text-center">Médicina interna</td>
-                                                            <td class="align-middle text-center">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="esp-2">
-                                                                    <label class="custom-control-label" for="esp-2"></label>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="align-middle text-center">Otorrinolaringologia</td>
-                                                            <td class="align-middle text-center">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="esp-3">
-                                                                    <label class="custom-control-label" for="esp-3"></label>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="align-middle text-center">Odontología</td>
-                                                            <td class="align-middle text-center">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="esp-4">
-                                                                    <label class="custom-control-label" for="esp-4"></label>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="align-middle text-center">Cardiología</td>
-                                                            <td class="align-middle text-center">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="esp-5">
-                                                                    <label class="custom-control-label" for="esp-5"></label>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
+                                                        @if(isset($otras_especialidades_cm))
+                                                            @foreach($otras_especialidades_cm as $especialidad)
+                                                            <tr>
+                                                                <td class="align-middle text-center">{{ $especialidad->nombre }}</td>
+                                                                <td class="align-middle text-center">5</td>
+                                                                <td class="align-middle text-center">
+                                                                    <div class="custom-control custom-switch">
+                                                                        <input type="checkbox" class="custom-control-input" id="esp-{{ $especialidad->id }}">
+                                                                        <label class="custom-control-label" for="esp-{{ $especialidad->id }}"></label>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="align-middle text-center">
+                                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_otra_especialidad_cm({{ $especialidad->id }});"><i class="feather icon-trash"></i></button>
+                                                                </td>
+                                                            </tr>
+                                                            @endforeach
+                                                        @endif
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -1797,7 +1745,40 @@
             </div>
         </div>
     </div>
-
+{{--  MODAL ESPECIALIDADES  --}}
+<div id="a_otra_especialidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_otra_especialidad" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Añadir otra especialidad</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <!--Cargar especialidades-->
+                                <label class="floating-label">Especialidad</label>
+                                <select class="form-control form-control-sm" id="especialidad_cm_otra" name="especialidad_cm_otra">
+                                    <option>Seleccione</option>
+                                    @if(isset($especialidades))
+                                        @foreach ($especialidades as $especialidad)
+                                            <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_otra_especialidad_cm()">Añadir</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <!--Cierre: Container Completo-->
 @endsection
@@ -1846,6 +1827,10 @@
         /*-Añadir especialidad-*/
         function ag_especialidad() {
             $('#a_especialidad').modal('show');
+        }
+
+        function ag_otra_especialidad(){
+            $('#a_otra_especialidad').modal('show');
         }
 
         /*-Añadir área-*/
@@ -2640,31 +2625,10 @@
             let id_institucion = $('#id_institucion').val();
             let especialidad = $('#especialidad_cm').val();
 
-            var data = {
-                id_institucion : id_institucion,
-                especialidad : especialidad,
-            };
-
-
             if(id_institucion == '')
             {
                 valido = 0;
                 mensaje += 'Campo requerido Institución\n';
-            }
-            if(id_lugar_atencion == '')
-            {
-                valido = 0;
-                mensaje += 'Campo requerido Lugar Atención\n';
-            }
-            if(id_admin_creador == '')
-            {
-                valido = 0;
-                mensaje += 'Campo requerido Usuario Creador\n';
-            }
-            if(id_tipo_admin_creador == '')
-            {
-                valido = 0;
-                mensaje += 'Campo requerido Tipo Usuario Creador\n';
             }
             if(especialidad == '')
             {
@@ -2674,20 +2638,61 @@
 
             if(valido == 1)
             {
+
+                var data = {
+                    id_institucion : id_institucion,
+                    especialidad : especialidad,
+                    _token: CSRF_TOKEN,
+                    principal:1,
+                };
                 let url = "{{ route('adm_cm.registrar_especialidad') }}";
                 $.ajax({
                     url: url,
-                    type: "get",
-                    data: {
-                        //_token: _token,
-                        region: region,
-                    },
+                    type: "post",
+                    data: data,
                 })
                 .done(function(data) {
+                     console.log(data);
                     if (data != null) {
                         if(data.estado == 1)
                         {
-
+                            let especialidades = data.especialidades;
+                            let otras_especialidades = data.otras_especialidades;
+                            $('#especialidades_cm tbody').empty();
+                            $('#otras_especialidades_cm tbody').empty();
+                            $(especialidades).each(function(i, v) { // indice, valor
+                                $('#especialidades_cm tbody').append(`
+                                <tr>
+                                    <td class="align-items-center text-center">${v.nombre}</td>
+                                    <td class="align-items-center text-center">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="esp-${v.id}">
+                                            <label class="custom-control-label" for="esp-${v.id}"></label>
+                                        </div>
+                                    </td>
+                                    <td class="align-items-center text-center">
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                                    </td>
+                                </tr>
+                                `);
+                            });
+                            $(otras_especialidades).each(function(i, v) { // indice, valor
+                                $('#otras_especialidades_cm tbody').append(`
+                                <tr>
+                                    <td class="align-items-center text-center">${v.nombre}</td>
+                                    <td class="align-items-center text-center">5</td>
+                                    <td class="align-items-center text-center">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="esp-${v.id}">
+                                            <label class="custom-control-label" for="esp-${v.id}"></label>
+                                        </div>
+                                    </td>
+                                    <td class="align-items-center text-center">
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_otra_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                                    </td>
+                                </tr>
+                                `);
+                            });
                         }
                         else
                         {
@@ -2727,6 +2732,286 @@
                 });
             }
 
+        }
+
+        function guardar_otra_especialidad_cm(){
+            var valido = 1;
+            var mensaje = '';
+            let id_institucion = $('#id_institucion').val();
+            let especialidad = $('#especialidad_cm_otra').val();
+
+            if(id_institucion == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido Institución\n';
+            }
+            if(especialidad == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido Especialidad\n';
+            }
+
+            if(valido == 1)
+            {
+
+                var data = {
+                    id_institucion : id_institucion,
+                    especialidad : especialidad,
+                    _token: CSRF_TOKEN,
+                    principal:0,
+                };
+                let url = "{{ route('adm_cm.registrar_especialidad') }}";
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    data: data,
+                })
+                .done(function(data) {
+                     console.log(data);
+                    if (data != null) {
+                        if(data.estado == 1)
+                        {
+                            let especialidades = data.especialidades;
+                            let otras_especialidades = data.otras_especialidades;
+                            $('#especialidades_cm tbody').empty();
+                            $('#otros_profesionales_cm tbody').empty();
+                            $(especialidades).each(function(i, v) { // indice, valor
+                                $('#especialidades_cm tbody').append(`
+                                <tr>
+                                    <td class="align-items-center text-center">${v.nombre}</td>
+                                    <td class="align-items-center text-center">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="esp-${v.id}">
+                                            <label class="custom-control-label" for="esp-${v.id}"></label>
+                                        </div>
+                                    </td>
+                                    <td class="align-items-center text-center">
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                                    </td>
+                                </tr>
+                                `);
+                            });
+                            $(otras_especialidades).each(function(i, v) { // indice, valor
+                                $('#otros_profesionales_cm tbody').append(`
+                                <tr>
+                                    <td class="align-items-center text-center">${v.nombre}</td>
+                                    <td class="align-items-center text-center">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="esp-${v.id}">
+                                            <label class="custom-control-label" for="esp-${v.id}"></label>
+                                        </div>
+                                    </td>
+                                    <td class="align-items-center text-center">
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_otra_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                                    </td>
+                                </tr>
+                                `);
+                            });
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Error",
+                                text: "Error al cargar ingresar especialidad",
+                                icon: "error",
+                                buttons: "Aceptar",
+                                DangerMode: true,
+                            });
+                        }
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar especialidad",
+                            icon: "error",
+                            buttons: "[Aceptar], [Cancelar]",
+                            DangerMode: true,
+                        });
+                    }
+                });
+            }
+        }
+
+        function eliminar_especialidad_cm(id){
+            // preguntar si desea eliminar
+            swal({
+                title: "Eliminar Especialidad",
+                text: "¿Está seguro que desea eliminar la especialidad?",
+                icon: "warning",
+                buttons: ["Cancelar", "Aceptar"],
+                DangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    confirmar_eliminar_especialidad_cm(id);
+                }
+            });
+
+        }
+
+        function confirmar_eliminar_especialidad_cm(id){
+            let id_institucion = $('#id_institucion').val();
+            let data = {
+                id_institucion : id_institucion,
+                id : id,
+                _token: CSRF_TOKEN,
+            };
+            let url = "{{ route('adm_cm.eliminar_especialidad') }}";
+            $.ajax({
+                url: url,
+                type: "post",
+                data: data,
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    if(data.estado == 1)
+                    {
+                        let especialidades = data.especialidades;
+                        $('#especialidades_cm tbody').empty();
+                        $(especialidades).each(function(i, v) { // indice, valor
+                            $('#especialidades_cm tbody').append(`
+                            <tr>
+                                <td class="align-items-center text-center">${v.nombre}</td>
+                                <td class="align-items-center text-center">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="esp-${v.id}">
+                                        <label class="custom-control-label" for="esp-${v.id}"></label>
+                                    </div>
+                                </td>
+                                <td class="align-items-center text-center">
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                                </td>
+                            </tr>
+                            `);
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar especialidad",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar especialidad",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        function eliminar_otra_especialidad_cm(id){
+            // preguntar si desea eliminar
+            swal({
+                title: "Eliminar Especialidad",
+                text: "¿Está seguro que desea eliminar la especialidad?",
+                icon: "warning",
+                buttons: ["Cancelar", "Aceptar"],
+                DangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    confirmar_eliminar_otra_especialidad_cm(id);
+                }
+            });
+
+        }
+
+        function confirmar_eliminar_otra_especialidad_cm(id){
+            let id_institucion = $('#id_institucion').val();
+            let data = {
+                id_institucion : id_institucion,
+                id : id,
+                _token: CSRF_TOKEN,
+            };
+            let url = "{{ route('adm_cm.eliminar_otra_especialidad') }}";
+            $.ajax({
+                url: url,
+                type: "post",
+                data: data,
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    if(data.estado == 1)
+                    {
+                        let especialidades = data.especialidades;
+                        let otras_especialidades = data.otras_especialidades;
+                        $('#especialidades_cm tbody').empty();
+                        $('#otros_profesionales_cm tbody').empty();
+                        $(especialidades).each(function(i, v) { // indice, valor
+                            $('#especialidades_cm tbody').append(`
+                            <tr>
+                                <td class="align-items-center text-center">${v.nombre}</td>
+                                <td class="align-items-center text-center">5</td>
+                                <td class="align-items-center text-center">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="esp-${v.id}">
+                                        <label class="custom-control-label" for="esp-${v.id}"></label>
+                                    </div>
+                                </td>
+                                <td class="align-items-center text-center">
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                                </td>
+                            </tr>
+                            `);
+                        });
+                        $(otras_especialidades).each(function(i, v) { // indice, valor
+                            $('#otros_profesionales_cm tbody').append(`
+                            <tr>
+                                <td class="align-items-center text-center">${v.nombre}</td>
+                                <td class="align-items-center text-center">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="esp-${v.id}">
+                                        <label class="custom-control-label" for="esp-${v.id}"></label>
+                                    </div>
+                                </td>
+                                <td class="align-items-center text-center">
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_otra_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                                </td>
+                            </tr>
+                            `);
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar especialidad",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar especialidad",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
         }
 
     </script>

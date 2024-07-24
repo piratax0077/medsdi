@@ -1252,7 +1252,9 @@ Route::group([
 	Route::post('/Configuracion/perfil/datos/responsable/editar', [App\Http\Controllers\AdministradorCmController::class, 'editarDatosPerfilResponsable'])->name('adm_cm.editar_datos_perfil_responsable');
 	Route::get('/Configuracion/perfil/datos/personal/persona', [App\Http\Controllers\AdministradorCmController::class, 'cargaPersonalPersona'])->name('adm_cm.cargar_personal_persona');
 	Route::post('/Configuracion/perfil/actualizar/personal/clave/centro', [App\Http\Controllers\AdministradorCmController::class, 'actualizarAccesoPersonal'])->name('adm_cm.actualizar_acceso_personal');
-    Route::post('/registrar_especialidad', [App\Http\Controllers\AdministradorCmController::class, 'registrar_especialidad'])->name('adm_cm.registrar_especialidad');
+    Route::post('/registrar_especialidad', [App\Http\Controllers\AdministradorCmController::class, 'registrar_especialidad_cm'])->name('adm_cm.registrar_especialidad');
+    Route::post('/eliminar_especialidad', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_especialidad_cm'])->name('adm_cm.eliminar_especialidad');
+    Route::post('/eliminar_otra_especialidad', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_otra_especialidad'])->name('adm_cm.eliminar_otra_especialidad');
 
     Route::get('/Configuracion/perfil_cm', [App\Http\Controllers\AdministradorCmController::class, 'perfil'])->name('adm_cm.perfil_cm');
 	Route::get('/Configuracion/departamentos_servicios', [App\Http\Controllers\AdministradorCmController::class, 'departamentos'])->name('adm_cm.departamentos_servicios');
@@ -1345,6 +1347,8 @@ Route::group([
     Route::get('/ver', [App\Http\Controllers\GastosInstitucionalesController::class, 'ver_registro'])->name('gastos.ver');
     Route::post('/editar', [App\Http\Controllers\GastosInstitucionalesController::class, 'modificar'])->name('gastos.editar');
 });
+
+
 
 Route::group([
     'middleware' => ['role:Admin|AsistenteAdm|Adm_Comercial|Institucion|Adm_Institucion'],
