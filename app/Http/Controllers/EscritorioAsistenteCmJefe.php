@@ -978,7 +978,10 @@ class EscritorioAsistenteCmJefe extends Controller
     public function administracion_asistente()
     {
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
+        // var_dump($asistente);
         $asistente_tipo = Asistente::where('id_usuario', Auth::user()->id)->first();
+        // echo json_encode($asistente_tipo);
+        // die();
         $result_solicitudes = SolicitudController::verSolicitudesSolicitante($asistente->id);
         $solicitudes = '';
 
@@ -999,9 +1002,13 @@ class EscritorioAsistenteCmJefe extends Controller
             else if($asistente->id_asistente_tipo == "2") // Asistente Jefa
             {
                 $filtro = array();
-                $filtro[] = array('tipo_empleado',$asistente_tipo->nombre);
+                $filtro[] = array('id_empleado',$asistente->id);
                 $filtro[] = array('estado',2) ;
                 $contrato = ContratoDependiente::where($filtro)->first();
+
+                // var_dump($filtro);
+                // var_dump($contrato);
+
                 $id_lugar_atencion = $contrato->id_lugar_atencion;
                 $id_institucion = $contrato->id_institucion;
 

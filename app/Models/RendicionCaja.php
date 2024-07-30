@@ -25,4 +25,12 @@ class RendicionCaja extends Model
     public function ProfesionalReceptor(){
         return $this->hasOne(Profesional::class, 'id', 'id_profesional_receptor');
     }
+
+    public function ScopeFiltrofecha($query, $fecha)
+    {
+        if(!empty($fecha))
+        {
+            return $query->whereDate('fecha_rendicion', '=', $fecha);
+        }
+    }
 }

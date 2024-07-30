@@ -15,6 +15,7 @@ class FichaOtrosProfesionales extends Migration
     {
         Schema::create('ficha_otros_profesionales', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('id_lugar_atencion');
             $table->bigInteger('id_especialidad');
             $table->bigInteger('id_tipo_especialidad');
             $table->bigInteger('id_profesional');
@@ -28,7 +29,7 @@ class FichaOtrosProfesionales extends Migration
             $table->string('espect_pcte')->nullable();
             $table->string('hipotesis')->nullable();
             $table->string('indicaciones')->nullable();
-            $table->string('espect_pcte')->nullable();
+            $table->integer('finalizada')->default(0);
             $table->string('otro')->nullable();
             $table->string('otro1')->nullable();
             $table->integer('estado')->default(1);
@@ -57,6 +58,7 @@ class FichaOtrosProfesionales extends Migration
             $table->integer('estado')->default(1);
             $table->timestamps();
         });
+
         Schema::create('otros_prof_seccion_eval_psico_neuro', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_especialidad');
@@ -78,6 +80,7 @@ class FichaOtrosProfesionales extends Migration
             $table->integer('estado')->default(1);
             $table->timestamps();
         });
+
         Schema::create('otros_prof_seccion_evolucion', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_especialidad');
@@ -97,6 +100,7 @@ class FichaOtrosProfesionales extends Migration
             $table->integer('estado')->default(1);
             $table->timestamps();
         });
+
         Schema::create('otros_prof_seccion_controles', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_especialidad');
@@ -113,6 +117,7 @@ class FichaOtrosProfesionales extends Migration
             $table->integer('estado')->default(1);
             $table->timestamps();
         });
+
         Schema::create('otros_prof_seccion_comunicacion', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_especialidad');
@@ -130,6 +135,7 @@ class FichaOtrosProfesionales extends Migration
             $table->integer('estado')->default(1);
             $table->timestamps();
         });
+
         Schema::create('otros_prof_seccion_plan', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_especialidad');
@@ -156,11 +162,12 @@ class FichaOtrosProfesionales extends Migration
     public function down()
     {
         Schema::dropIfExists('ficha_otros_profesionales');
-        Schema::dropIfExists('otros_prof_seccion_plan');
-        Schema::dropIfExists('otros_prof_seccion_antecedentes');
+        Schema::dropIfExists('otros_prof_seccion_comunicacion');
+        Schema::dropIfExists('otros_prof_seccion_controles');
         Schema::dropIfExists('otros_prof_seccion_eval_psico_neuro');
         Schema::dropIfExists('otros_prof_seccion_evolucion');
-        Schema::dropIfExists('otros_prof_seccion_controles');
-        Schema::dropIfExists('otros_prof_seccion_comunicacion');
+        Schema::dropIfExists('otros_prof_seccion_plan');
+        Schema::dropIfExists('otros_prof_seccion_antecedentes');
+
     }
 }

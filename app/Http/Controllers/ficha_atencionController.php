@@ -74,6 +74,7 @@ use App\Models\FichaOftFondoOjoTipo;
 use App\Models\FichaOftTipo;
 use App\Models\FichaOrtopedia;
 use App\Models\FichaOrtopediaAdulto;
+use App\Models\FichaOtrosProfesionales;
 use App\Models\FichaPediatriaCns;
 use App\Models\FichaPediatriaGeneral;
 use App\Models\FichaPediatriaGeneralTipo;
@@ -2339,7 +2340,10 @@ class ficha_atencionController extends Controller
             $certificado->comentarios = isset( $request->comentarios_certificado)? $request->comentarios_certificado:'';
             $certificado->id_profesional = $profesional->id;
             $certificado->id_paciente = $hora_medica->id_paciente;
-            $certificado->id_ficha_atencion = $hora_medica->id_ficha_atencion;
+            if(!empty($hora_medica->id_ficha_atencion))
+                $certificado->id_ficha_atencion = $hora_medica->id_ficha_atencion;
+            if(!empty($hora_medica->id_ficha_otros_prof))
+                $certificado->id_ficha_otro_prof = $hora_medica->id_ficha_otros_prof;
             $certificado->id_lugar_atencion = $request->id_lugar_atencion;
             $certificado->cod_auto =  session('lic_token');
 
@@ -2531,7 +2535,10 @@ class ficha_atencionController extends Controller
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
         // $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
-        $ficha_atencion = FichaAtencion::find($request->id_fc);
+        if($request->id_fc)
+            $ficha_atencion = FichaAtencion::find($request->id_fc);
+        else if($request->id_fc_op)
+            $ficha_atencion = FichaOtrosProfesionales::find($request->id_fc_op);
 
         $nombre_especialidad = '';
         if(!empty($request->sub_tipo_especialidad))
@@ -2550,6 +2557,17 @@ class ficha_atencionController extends Controller
         $interconsulta->id_paciente = $ficha_atencion->id_paciente;
         $interconsulta->id_profesional_soli = $profesional->id;
         $interconsulta->cod_auto_soli = session('lic_token');
+        if($request->id_fc)
+        {
+            $interconsulta->id_ficha_atencion_soli = $ficha_atencion->id;
+            // $interconsulta->id_ficha_otro_prof_soli = '';
+        }
+        else if($request->id_fc_op)
+        {
+            // $interconsulta->id_ficha_atencion_soli = '';
+            $interconsulta->id_ficha_otro_prof_soli = $ficha_atencion->id;
+        }
+
         $interconsulta->id_ficha_atencion_soli = $ficha_atencion->id;
         $interconsulta->id_lugar_atencion_soli = $ficha_atencion->id_lugar_atencion;
         $interconsulta->id_recuperacion = $request->id_recuperacion;
@@ -2860,7 +2878,10 @@ class ficha_atencionController extends Controller
             $informe->informe_medico = $request->comentarios_informe_medico;
             $informe->fecha_informe_medico = date('Y-m-d');
             $informe->id_paciente = $hora_medica->id_paciente;
-            $informe->id_ficha_atencion = $hora_medica->id_ficha_atencion;
+            if(!empty($hora_medica->id_ficha_atencion))
+                $informe->id_ficha_atencion = $hora_medica->id_ficha_atencion;
+            if(!empty($hora_medica->id_ficha_otros_prof))
+                $informe->id_ficha_otro_prof = $hora_medica->id_ficha_otros_prof;
             $informe->id_profesional = $profesional->id;
             $informe->id_lugar_atencion = $request->id_lugar_atencion;
             $informe->cod_auto = session('lic_token');
@@ -7388,17 +7409,31 @@ class ficha_atencionController extends Controller
     public function pdf_certificado_reposo(Request $request)
     {
         $datos = array();
-        $certificadoReposo = CertificadoReposo::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+        if(!empty($request->id_ficha_atencion))
+            $certificadoReposo = CertificadoReposo::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+        else if(!empty($request->id_ficha_otros_prof))
+            $certificadoReposo = CertificadoReposo::where('id_ficha_otro_prof', $request->id_ficha_otros_prof)->first();
+
+        // echo json_encode($certificadoReposo);
+        // die();
+
         if($certificadoReposo->count()>0)
         {
 
-            $ficha_atencion = FichaAtencion::find($request->id_ficha_atencion);
+            if(!empty($request->id_ficha_atencion))
+                $ficha_atencion = FichaAtencion::find($request->id_ficha_atencion);
+            else if(!empty($request->id_ficha_otros_prof))
+                $ficha_atencion = FichaOtrosProfesionales::find($request->id_ficha_otros_prof);
+
+            // echo json_encode($ficha_atencion);
+            // die();
+
             $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
             $profesional = Profesional::find($ficha_atencion->id_profesional);
             $paciente = Paciente::find($ficha_atencion->id_paciente);
 
             /** token certificado */
-            $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 7, $certificadoReposo->id);
+            $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 7, $certificadoReposo->id);
             if($temp_token['estado'] == 1)
             {
                 $token_receta = $temp_token['certificado'];
@@ -7407,7 +7442,7 @@ class ficha_atencionController extends Controller
             }
             else
             {
-                $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 7, $certificadoReposo->id);
+                $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, rand(111,999), $paciente->id, 7, $certificadoReposo->id);
                 $token_receta = $temp_token['certificado'];
                 $url_documento = CertificadoController::generarUrlDocumento($token_receta);
                 $qr_documento = GeneradorQrController::generar($url_documento);
@@ -7500,23 +7535,36 @@ class ficha_atencionController extends Controller
     {
         $datos = array();
         $filtro = array();
-        $filtro[] = array('id_ficha_atencion', $request->id_ficha_atencion);
+        if(!empty($request->id_ficha_atencion))
+            $filtro[] = array('id_ficha_atencion', $request->id_ficha_atencion);
+        if(!empty($request->id_ficha_otro_prof))
+            $filtro[] = array('id_ficha_otro_prof', $request->id_ficha_otro_prof);
         if(!empty($request->id_tipo_informe))
             $filtro[] = array('id_tipo_informe', $request->id_tipo_informe);
         else
             $filtro[] = array('id_tipo_informe', 1);
 
+        // echo json_encode($filtro);
+        // die();
         $informMedico = InformeMedico::where($filtro)->first();
+        // echo json_encode($informMedico);
+        // die();
         if($informMedico)
         {
             $tipo_informe = TipoInforme::find($informMedico->id_tipo_informe);
-            $ficha_atencion = FichaAtencion::find($request->id_ficha_atencion);
-            $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
+
+            $ficha_atencion = '';
+            if(!empty($request->id_ficha_atencion))
+                $ficha_atencion = FichaAtencion::find($request->id_ficha_atencion);
+            else if(!empty($request->id_ficha_otro_prof))
+                $ficha_atencion = FichaOtrosProfesionales::find($request->id_ficha_otro_prof);
+
+            $lugar_atencion = LugarAtencion::find($informMedico->id_lugar_atencion);
             $profesional = Profesional::find($ficha_atencion->id_profesional);
             $paciente = Paciente::find($ficha_atencion->id_paciente);
 
             /** token documento */
-            $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 10, $informMedico->id);
+            $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 10, $informMedico->id);
             if($temp_token['estado'] == 1)
             {
                 $token_receta = $temp_token['certificado'];
@@ -7525,7 +7573,7 @@ class ficha_atencionController extends Controller
             }
             else
             {
-                $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 10, $informMedico->id);
+                $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, rand(111,999), $paciente->id, 10, $informMedico->id);
                 $token_receta = $temp_token['certificado'];
                 $url_documento = CertificadoController::generarUrlDocumento($token_receta);
                 $qr_documento = GeneradorQrController::generar($url_documento);
@@ -9319,34 +9367,36 @@ class ficha_atencionController extends Controller
 
                     break;
                 case 6: //SICOLOGÍA
+
                     if(!empty($profesional->id_tipo_especialidad))
                     {
                         /** FICHAS DE ATENCIONES PREVIAS */
                         $filtro_previas = array();
                         $filtro_previas[] = array('id_paciente', $paciente->id);
-                        $filtro_previas[] = array('confidencial', '0');
-                        $filtro_previas[] = array('finalizada', 1);
                         $filtro_previas[] = array('id_profesional', $profesional->id);
-                        $ficha_previas = FichaAtencion::where($filtro_previas)->get();
+                        $filtro_previas[] = array('finalizada', 1);
+                        $ficha_previas = FichaOtrosProfesionales::where($filtro_previas)->get();
 
                         $datos['ficha_previas'] = $ficha_previas;
-
 
                         /** FICHA ATENCION ACTUAL */
                         if(empty($hora->id_ficha_atencion))
                         {
-                            $nueva_ficha_atencion = new FichaAtencion();
+                            $nueva_ficha_atencion = new FichaOtrosProfesionales();
                             $nueva_ficha_atencion->id_paciente = $paciente->id;
                             $nueva_ficha_atencion->id_profesional = $profesional->id;
+                            $nueva_ficha_atencion->id_especialidad = $profesional->id_especialidad;
+                            $nueva_ficha_atencion->id_tipo_especialidad = $profesional->id_tipo_especialidad;
                             $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
 
                             if ($nueva_ficha_atencion->save())
                             {
                                 $hora->id_estado = 5;
                                 $hora->fecha_realizacion_consulta = now();
-                                $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
+                                $hora->id_ficha_atencion = NULL;
+                                $hora->id_ficha_otros_prof = $nueva_ficha_atencion->id;
                                 $hora->save();
-                                $ficha_actual_nueva = $nueva_ficha_atencion->id;
+                                $ficha_actual_nueva = $nueva_ficha_atencion;
                             }
                             else
                             {
@@ -9358,7 +9408,7 @@ class ficha_atencionController extends Controller
                             $filtro_fichaAtencion = array();
                             $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
                             $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
-                            $ficha_actual_nueva = FichaAtencion::where($filtro_fichaAtencion)->first();
+                            $ficha_actual_nueva = FichaOtrosProfesionales::where($filtro_fichaAtencion)->first();
                         }
 
                         $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;

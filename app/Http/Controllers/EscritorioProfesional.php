@@ -3026,6 +3026,13 @@ class EscritorioProfesional extends Controller
             $bono->numero_sesiones = empty($request->numero_sesiones)?'0':$request->numero_sesiones;
             $bono->estado_consulta = 4;
 
+            $usuario = User::where('id', Auth::user()->id)->first();
+            $roles = $usuario->roles()->orderBy('id', 'DESC')->pluck('name')->toArray();
+            if( in_array( 'Profesional', $roles) )
+            {
+                $bono->rendido = 1;
+            }
+
             if($bono->save())
             {
                 $datos['bono']['estado'] = 1;

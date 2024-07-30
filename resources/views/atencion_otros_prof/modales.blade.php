@@ -242,7 +242,7 @@
             Fancybox.show(
                 [
                     {
-                    src: '{{ route("pdf.certificado_reposo") }}?id_ficha_atencion='+id_ficha_atencion,
+                    src: '{{ route("pdf.certificado_reposo") }}?id_ficha_otros_prof='+id_ficha_atencion,
                     type: "iframe",
                     preload: false,
                     },
@@ -311,7 +311,7 @@
                             nombre_profesional_inter: nombre_profesional_inter,
                             hipotesis_interconsulta: hipotesis_interconsulta,
                             comentarios_interconsulta: comentarios_interconsulta,
-                            id_fc: id_fc,
+                            id_fc_op: id_fc,
                         },
                     })
                     .done(function(response) {
@@ -504,11 +504,14 @@
         function ver_pdf_informe_medico(id_ficha_atencion)
         {
 
+            console.log('ver_pdf_informe_medico');
+            console.log(id_ficha_atencion);
+
             let url = "{{ route('pdf.informe_medico') }}";
             Fancybox.show(
                 [
                     {
-                    src: '{{ route("pdf.informe_medico") }}?id_ficha_atencion='+id_ficha_atencion,
+                    src: '{{ route("pdf.informe_medico") }}?id_ficha_otro_prof='+id_ficha_atencion,
                     type: "iframe",
                     preload: false,
                     },

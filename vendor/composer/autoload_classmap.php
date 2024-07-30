@@ -319,6 +319,7 @@ return array(
     'App\\Models\\FichaSicoBiopatografia' => $baseDir . '/app/Models/FichaSicoBiopatografia.php',
     'App\\Models\\FichaSicoExamenMental' => $baseDir . '/app/Models/FichaSicoExamenMental.php',
     'App\\Models\\FichaSicoHistFamiliar' => $baseDir . '/app/Models/FichaSicoHistFamiliar.php',
+    'App\\Models\\FichaSicoHistFamiliarRelaciones' => $baseDir . '/app/Models/FichaSicoHistFamiliarRelaciones.php',
     'App\\Models\\FichaSicoOtrosTest' => $baseDir . '/app/Models/FichaSicoOtrosTest.php',
     'App\\Models\\FichaSicoTestRorshchach' => $baseDir . '/app/Models/FichaSicoTestRorshchach.php',
     'App\\Models\\FichaSicologia' => $baseDir . '/app/Models/FichaSicologia.php',

@@ -13,7 +13,9 @@ use App\Models\FichaFonoaudiologia;
 use App\Models\FichaFonoHablaLenguaje;
 use App\Models\FichaSicoAntPsiquiatricos;
 use App\Models\FichaSicoBiopatografia;
+use App\Models\FichaSicoExamenMental;
 use App\Models\FichaSicoHistFamiliar;
+use App\Models\FichaSicoHistFamiliarRelaciones;
 use App\Models\FichaSicologia;
 use App\Models\FichaSicoOtrosTest;
 use App\Models\FichaSicosocial;
@@ -22,6 +24,7 @@ use App\Models\FonoInforme;
 use App\Models\HoraMedica;
 use App\Models\KineInforme;
 use App\Models\KinePlanificacion;
+use App\Models\OtrosProfesionalesSeccionAntecedentes;
 use App\Models\Profesional;
 use Illuminate\Http\Request;
 
@@ -33,9 +36,10 @@ class FichaAtencionOtrosProfController extends Controller
     {
 
         $id_profesional = $request->id_profesional_fc;
+        $profesional = Profesional::find($id_profesional);
         $id_paciente = $request->id_paciente_fc;
-        $id_especialidad = $request->id_especialidad_fc;
-        $id_tipo_especialidad = $request->id_tipo_especialidad_fc;
+        $id_especialidad = $profesional->id_especialidad_fc;
+        $id_tipo_especialidad = $profesional->id_tipo_especialidad_fc;
         /** REGISTRO FICHA OTROS PROFESIONALES */
         $ficha_ot_prof = new FichaOtrosProfesionales();
         // $ficha_ot_prof->id = '';
@@ -52,9 +56,8 @@ class FichaAtencionOtrosProfController extends Controller
         $ficha_ot_prof->espect_pcte = $request->espect_pcte;
         $ficha_ot_prof->hipotesis = $request->hipotesis;
         $ficha_ot_prof->indicaciones = $request->indicaciones;
-        $ficha_ot_prof->espect_pcte = $request->espect_pcte;
-        $ficha_ot_prof->otro = '';
-        $ficha_ot_prof->otro1 = '';
+        $ficha_ot_prof->otro = $request->otro;
+        $ficha_ot_prof->otro1 = $request->otro1;
         $ficha_ot_prof->estado = 1;
 
         if($ficha_ot_prof->save())
@@ -98,6 +101,391 @@ class FichaAtencionOtrosProfController extends Controller
         return (object)$datos;
 
     }
+
+    public function store_sico(Request $request)//listo - revisado
+    {
+        // echo json_encode($request->all());
+        // die();
+        $campos_requeridos = 1;
+        $mensaje = '';
+        if(empty( trim($request->hipotesis)))
+        {
+            $campos_requeridos = 0;
+            $mensaje = 'El Diagnóstico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
+        }
+
+        if($campos_requeridos)
+        {
+            /** FICHA ATENCION  */
+            $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+            $ficha = FichaOtrosProfesionales::where('id', $hora_medica->id_ficha_otros_prof)->first();
+            $id_profesional = $request->id_profesional_fc;
+            $id_paciente = $request->id_paciente_fc;
+            $ficha->dg_ingreso = $request->dg_ingreso;
+            // $ficha->antecedentes = $request->cond_fis_ingreso;
+            $ficha->hipotesis = $request->hipotesis;
+            $ficha->id_paciente = $id_paciente;
+            $ficha->id_profesional = $id_profesional;
+            $ficha->finalizada = 1;
+
+            if (!$ficha->save())
+            {
+                return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
+            }
+            else
+            {
+                $profesional = Profesional::find($id_profesional);
+
+                $tipo_mensaje = 'success';
+                $mensaje .= 'Ficha Clínica guardada de forma correcta\n';
+
+                /** REGISTRO FICHA SICOLOGIA */
+                $ficha_sico = new FichaSicologia();
+                $ficha_sico->id_otros_profesionales = $ficha->id;
+                $ficha_sico->id_profesional = $id_profesional;
+                $ficha_sico->id_paciente = $id_paciente;
+                $ficha_sico->presentacion= $request->presentacion;
+                $ficha_sico->conciencia = $request->conciencia;
+                $ficha_sico->actitud = $request->actitud;
+                $ficha_sico->atencion_concentracion = $request->atencion_concentracion;
+                $ficha_sico->afectividad = $request->afectividad;
+                $ficha_sico->pensamiento = $request->pensamiento;
+                $ficha_sico->sensopercepcion = $request->sensopercepcion;
+                $ficha_sico->psicomotricidad = $request->psicomotricidad;
+                $ficha_sico->sueno = $request->sueno;
+                $ficha_sico->higiene = $request->higiene;
+                $ficha_sico->alimentacion = $request->alimentacion;
+                $ficha_sico->psi_solo_control = $request->psi_solo_control;
+                $ficha_sico->psi_ter_indiv =$request->psi_ter_indiv;
+                $ficha_sico->psi_ter_grup =$request->psi_ter_grup;
+                $ficha_sico->psi_sol_hosp =$request->psi_sol_hosp;
+                $ficha_sico->obs_plan_tratamiento =$request->obs_plan_tratamiento;
+                $ficha_sico->dsm_5 =$request->dsm_5;
+                $ficha_sico->dsm_5p =$request->dsm_5p;
+                $ficha_sico->otro = '';
+                $ficha_sico->otro1 = '';
+                $ficha_sico->estado = 1;
+                if($ficha_sico->save())
+                {
+                    $mensaje .= 'Ficha Clínica Sicología guardada de forma correcta\n';
+
+                    //  finalizar hora medica
+                    $hora_medica->id_estado = 6;
+                    $mensaje_estado_hora_medica = '';
+                    if (!$hora_medica->save()) {
+                        $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
+                    }
+                    else
+                    {
+                        $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.\n';
+                    }
+                    $mensaje .= $mensaje_estado_hora_medica;
+
+                    /** REGISTRO SECCION ANTECEDENTES */
+                    // otros_prof_seccion_antecedentes
+                    $seccion_ant = new OtrosProfesionalesSeccionAntecedentes();
+                    $seccion_ant->id_ficha_otros_prof = $ficha->id;
+                    $seccion_ant->id_profesional = $id_profesional;
+                    $seccion_ant->id_paciente = $id_paciente;
+                    $seccion_ant->id_especialidad = $profesional->id_especialidad;
+                    $seccion_ant->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+                    $seccion_ant->pat_pat = $request->pat_pat;
+                    $seccion_ant->pat_mat = $request->pat_mat;
+                    $seccion_ant->pat_fam = $request->pat_fam;
+                    $seccion_ant->pat_prop = $request->pat_prop;
+                    $seccion_ant->sint_act = $request->sint_act;
+                    $seccion_ant->gin_obt = $request->gin_obt;
+                    $seccion_ant->ot_pat_act = $request->ot_pat_act;
+                    $seccion_ant->ot_sint_act = $request->ot_sint_act;
+                    $seccion_ant->ot_ant_gine = $request->ot_ant_gine;
+                    $seccion_ant->otro = '';
+                    $seccion_ant->otro1 = '';
+                    $seccion_ant->estado = 1;
+                    if($seccion_ant->save())
+                    {
+                        $mensaje .= 'Ficha Seccion Antecedentes registrada con exito\n';
+                    }
+                    else
+                    {
+                        $mensaje .= 'Ficha Seccion Antecedentes con problema al registrar\n';
+                    }
+
+                    /** REGISTRO FICHA SICOSOCIAL   */
+                    $ficha_sicosocial = new FichaSicosocial();
+                    $ficha_sicosocial->id_ficha_otros_prof = $ficha->id;
+                    $ficha_sicosocial->id_especialidad = $profesional->id_especialidad;
+                    $ficha_sicosocial->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+                    $ficha_sicosocial->id_paciente = $id_paciente;
+                    $ficha_sicosocial->id_profesional = $id_profesional;
+                    $ficha_sicosocial->lugar_nacimiento = $request->lugar_nacimiento;
+                    $ficha_sicosocial->estado_civil = $request->estado_civil;
+                    $ficha_sicosocial->niv_ed = $request->niv_ed;
+                    $ficha_sicosocial->ocupacion = $request->ocupacion;
+                    $ficha_sicosocial->religion = $request->religion;
+                    $ficha_sicosocial->vive_con = $request->vive_con;
+                    $ficha_sicosocial->vive_obs = $request->vive_obs;
+                    $ficha_sicosocial->alcohol = $request->alcohol;
+                    $ficha_sicosocial->tabaco = $request->tabaco;
+                    $ficha_sicosocial->sustancias_ilicitas = $request->sustancias_ilicitas;
+                    $ficha_sicosocial->sexualidad = $request->sexualidad;
+                    $ficha_sicosocial->com_generales = $request->com_generales;
+                    $ficha_sicosocial->ant_laborales = $request->ant_laborales;
+                    $ficha_sicosocial->ant_esparc = $request->ant_esparc;
+                    $ficha_sicosocial->obs_generales = $request->obs_generales;
+                    $ficha_sicosocial->otro = '';
+                    $ficha_sicosocial->otro1 = '';
+                    $ficha_sicosocial->estado = 1;
+
+                    if($ficha_sicosocial->save())
+                    {
+                        $mensaje .= 'Ficha Sico-Social registrada con exito\n';
+                    }
+                    else
+                    {
+                        $mensaje .= 'Ficha Sico-Social con problema al registrar\n';
+                    }
+
+                    /** REGISTRO FICHA SICOBIOPATOGRAFIA   */
+                    $ficha_sicobiopatografia = new FichaSicoBiopatografia();
+                    $ficha_sicobiopatografia->id_ficha_otros_prof = $ficha->id;
+                    $ficha_sicobiopatografia->id_especialidad = $profesional->id_especialidad;
+                    $ficha_sicobiopatografia->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+                    $ficha_sicobiopatografia->id_paciente = $id_paciente;
+                    $ficha_sicobiopatografia->id_profesional = $id_profesional;
+                    $ficha_sicobiopatografia->prenatal = $request->prenatal;
+                    $ficha_sicobiopatografia->natal = $request->natal;
+                    $ficha_sicobiopatografia->infancia = $request->infancia;
+                    $ficha_sicobiopatografia->adolescencia = $request->adolescencia;
+                    $ficha_sicobiopatografia->edad_adulta = $request->edad_adulta;
+                    $ficha_sicobiopatografia->ad_mayor = $request->ad_mayor;
+                    $ficha_sicobiopatografia->actualidad = $request->actualidad;
+                    $ficha_sicobiopatografia->otro = '';
+                    $ficha_sicobiopatografia->otro1 = '';
+                    $ficha_sicobiopatografia->estado = 1;
+
+                    if($ficha_sicobiopatografia->save())
+                    {
+                        $mensaje .= 'Ficha Sico-Biopatografía registrada con exito\n';
+                    }
+                    else
+                    {
+                        $mensaje .= 'Ficha Sico-Biopatografía con problema al registrar\n';
+                    }
+
+                    /** REGISTRO FICHA SICOHISTORIAFAMILIAR   */
+                    $ficha_sico_hist_fam = new FichaSicoHistFamiliar();
+                    $ficha_sico_hist_fam->id_ficha_otros_prof = $ficha->id;
+                    $ficha_sico_hist_fam->id_especialidad = $profesional->id_especialidad;
+                    $ficha_sico_hist_fam->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+                    $ficha_sico_hist_fam->id_paciente = $id_paciente;
+                    $ficha_sico_hist_fam->id_profesional = $id_profesional;
+
+                    $ficha_sico_hist_fam->nombre_padre = $request->nombre_padre;
+                    $ficha_sico_hist_fam->rel_padre = $request->rel_padre;
+
+                    $ficha_sico_hist_fam->nombre_madre = $request->nombre_madre;
+                    $ficha_sico_hist_fam->rel_madre = $request->rel_madre;
+
+                    $ficha_sico_hist_fam->rel_entre_padres = $request->rel_entre_padres;
+
+                    $ficha_sico_hist_fam->tiene_hnos = $request->tiene_hnos;
+                    $ficha_sico_hist_fam->cantidad_hnos = $request->cantidad_hnos;
+                    // $ficha_sico_hist_fam->nombre_hno = $request->nombre_hno;
+                    // $ficha_sico_hist_fam->rel_hf_hno = $request->rel_hf_hno;
+                    $ficha_sico_hist_fam->rel_entre_hnos = $request->rel_entre_hnos;
+
+                    $ficha_sico_hist_fam->nombre_pareja = $request->nombre_pareja;
+                    $ficha_sico_hist_fam->rel_pareja = $request->rel_pareja;
+                    $ficha_sico_hist_fam->rel_hf_pareja_obs = $request->rel_hf_pareja_obs;
+
+                    $ficha_sico_hist_fam->tiene_hijos = $request->tiene_hijos;
+                    $ficha_sico_hist_fam->cantidad_hijos = $request->cantidad_hijos;
+                    // $ficha_sico_hist_fam->nombre_hijo = $request->nombre_hijo;
+                    // $ficha_sico_hist_fam->rel_hijo = $request->rel_hijo;
+                    $ficha_sico_hist_fam->rel_entre_hijos = $request->rel_entre_hijos;
+
+                    $ficha_sico_hist_fam->cantidad_ot_per = $request->cantidad_ot_per;
+                    // $ficha_sico_hist_fam->nombre_ot_per = $request->nombre_ot_per;
+                    // $ficha_sico_hist_fam->rel_ot_per = $request->rel_ot_per;
+                    $ficha_sico_hist_fam->rel_obs_generales = $request->rel_obs_generales;
+
+                    $ficha_sico_hist_fam->otro = '';
+                    $ficha_sico_hist_fam->otro1 = '';
+                    $ficha_sico_hist_fam->estado = 1;
+                    if($ficha_sico_hist_fam->save())
+                    {
+                        $mensaje .= 'Ficha Sico-Historia-Familiar registrada con exito\n';
+
+
+                        if( $request->tiene_hnos == 1 )
+                        {
+                            for ($i=1; $i <= $request->cantidad_hnos ; $i++) {
+                                $ficha_relacion = new FichaSicoHistFamiliarRelaciones();
+                                $ficha_relacion->id_ficha_sico_hist_familiar = $ficha_sico_hist_fam->id;
+                                $ficha_relacion->id_especialidad = $ficha->id_especialidad;
+                                $ficha_relacion->id_tipo_especialidad = $ficha->id_tipo_especialidad;
+                                $ficha_relacion->id_ficha_otros_prof = $ficha->id;
+                                $ficha_relacion->id_profesional = $id_profesional;
+                                $ficha_relacion->id_paciente = $id_paciente;
+                                $ficha_relacion->id_tipo_relacion = 1;
+                                $ficha_relacion->nombre = $request['psi_hf_nombre_hno_'.$i];
+                                $ficha_relacion->rel = $request['psi_rel_hf_hno_'.$i];
+                                $ficha_relacion->otro = '';
+                                $ficha_relacion->estado = 1;
+                                if($ficha_relacion->save())
+                                {
+                                    $mensaje .= 'Ficha Sico-Historia-Familiar hermnano registrada con exito\n';
+                                }
+                                else
+                                {
+                                    $mensaje .= 'Ficha Sico-Historia-Familiar hermnano '.$request->psi_hf_nombre_hno_.''.$i.'falla en registro \n';
+                                }
+                            }
+
+                        }
+
+                        if( $request->tiene_hijos == 1)
+                        {
+                            for ($i=1; $i <= $request->cantidad_hijos ; $i++) {
+                                $ficha_relacion = new FichaSicoHistFamiliarRelaciones();
+                                $ficha_relacion->id_ficha_sico_hist_familiar = $ficha_sico_hist_fam->id;
+                                $ficha_relacion->id_especialidad = $ficha->id_especialidad;
+                                $ficha_relacion->id_tipo_especialidad = $ficha->id_tipo_especialidad;
+                                $ficha_relacion->id_ficha_otros_prof = $ficha->id;
+                                $ficha_relacion->id_profesional = $id_profesional;
+                                $ficha_relacion->id_paciente = $id_paciente;
+                                $ficha_relacion->id_tipo_relacion = 2;
+                                $ficha_relacion->nombre = $request['psi_hf_nombre_hno_'.$i];
+                                $ficha_relacion->rel = $request['psi_rel_hf_hno_'.$i];
+                                $ficha_relacion->otro = '';
+                                $ficha_relacion->estado = 1;
+                                if($ficha_relacion->save())
+                                {
+                                    $mensaje .= 'Ficha Sico-Historia-Familiar hermnano registrada con exito\n';
+                                }
+                                else
+                                {
+                                    $mensaje .= 'Ficha Sico-Historia-Familiar hermnano '.$request->psi_hf_nombre_hno_.''.$i.'falla en registro \n';
+                                }
+                            }
+                        }
+
+                        if( $request->cantidad_ot_per == 1)
+                        {
+                            for ($i=1; $i <= $request->cantidad_ot_per ; $i++) {
+                                $ficha_relacion = new FichaSicoHistFamiliarRelaciones();
+                                $ficha_relacion->id_ficha_sico_hist_familiar = $ficha_sico_hist_fam->id;
+                                $ficha_relacion->id_especialidad = $ficha->id_especialidad;
+                                $ficha_relacion->id_tipo_especialidad = $ficha->id_tipo_especialidad;
+                                $ficha_relacion->id_ficha_otros_prof = $ficha->id;
+                                $ficha_relacion->id_profesional = $id_profesional;
+                                $ficha_relacion->id_paciente = $id_paciente;
+                                $ficha_relacion->id_tipo_relacion = 3;
+                                $ficha_relacion->nombre = $request['psi_hf_nombre_ot_per_'.$i];
+                                $ficha_relacion->rel = $request['psi_hf_rel_ot_per_'.$i];
+                                $ficha_relacion->otro = '';
+                                $ficha_relacion->estado = 1;
+                                if($ficha_relacion->save())
+                                {
+                                    $mensaje .= 'Ficha Sico-Historia-Familiar hermnano registrada con exito\n';
+                                }
+                                else
+                                {
+                                    $mensaje .= 'Ficha Sico-Historia-Familiar hermnano '.$request->psi_hf_nombre_hno_.''.$i.'falla en registro \n';
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $mensaje .= 'Ficha Sico-Historia-Familiar con problema al registrar\n';
+                    }
+
+                    /** REGISTRO FICHA SICOANTECEDENTES PSIQUIATRICOS   */
+                    $ficha_sicoantpsiq = new FichaSicoAntPsiquiatricos();
+                    $ficha_sicoantpsiq->id_ficha_otros_prof = $ficha->id;
+                    $ficha_sicoantpsiq->id_especialidad = $profesional->id_especialidad;
+                    $ficha_sicoantpsiq->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+                    $ficha_sicoantpsiq->id_paciente = $id_paciente;
+                    $ficha_sicoantpsiq->id_profesional = $id_profesional;
+                    $ficha_sicoantpsiq->ant_medicos = $request->ant_medicos;
+                    $ficha_sicoantpsiq->ant_suicidio = $request->ant_suicidio;
+                    $ficha_sicoantpsiq->enf_mentales = $request->enf_mentales;
+                    $ficha_sicoantpsiq->trat_psicologicos_prev = $request->trat_psicologicos_prev;
+                    $ficha_sicoantpsiq->trat_psiquiatricos_prev = $request->trat_psiquiatricos_prev;
+                    $ficha_sicoantpsiq->medicacion_actual = $request->medicacion_actual;
+                    $ficha_sicoantpsiq->otro = '';
+                    $ficha_sicoantpsiq->otro1 = '';
+                    $ficha_sicoantpsiq->estado = 1;
+                    if($ficha_sicoantpsiq->save())
+                    {
+                        $mensaje .= 'Ficha Sico-Antecedentes Psiquiatricos registrada con exito\n';
+                    }
+                    else
+                    {
+                        $mensaje .= 'Ficha Sico-Antecedentes Psiquiatricos con problema al registrar\n';
+                    }
+
+                    /** REGISTRO FICHA SICO EXAMEN MENTAL   */
+                    $ficha_sicoexamenmental = new FichaSicoExamenMental();
+
+                    $ficha_sicoexamenmental->id_ficha_otros_prof = $ficha->id;
+                    $ficha_sicoexamenmental->id_especialidad = $profesional->id_especialidad;
+                    $ficha_sicoexamenmental->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+                    $ficha_sicoexamenmental->id_paciente = $id_paciente;
+                    $ficha_sicoexamenmental->id_profesional = $id_profesional;
+                    $ficha_sicoexamenmental->presentacion = $request->presentacion;
+                    $ficha_sicoexamenmental->conciencia = $request->conciencia;
+                    $ficha_sicoexamenmental->actitud = $request->actitud;
+                    $ficha_sicoexamenmental->atencion_concentracion = $request->atencion_concentracion;
+                    $ficha_sicoexamenmental->afectividad = $request->afectividad;
+                    $ficha_sicoexamenmental->pensamiento = $request->pensamiento;
+                    $ficha_sicoexamenmental->sensopercepcion = $request->sensopercepcion;
+                    $ficha_sicoexamenmental->psicomotricidad = $request->psicomotricidad;
+                    $ficha_sicoexamenmental->sueno = $request->sueno;
+                    $ficha_sicoexamenmental->higiene = $request->higiene;
+                    $ficha_sicoexamenmental->alimentacion = $request->alimentacion;
+                    $ficha_sicoexamenmental->otro = '';
+                    $ficha_sicoexamenmental->otro1 = '';
+                    $ficha_sicoexamenmental->estado = 1;
+                    if($ficha_sicoexamenmental->save())
+                    {
+                        $mensaje .= 'Ficha Sico-Examen-Mental registrada con exito\n';
+                    }
+                    else
+                    {
+                        $mensaje .= 'Ficha Sico-Examen-Mental con problema al registrar\n';
+                    }
+
+                    if($request->cerrarsession == 0 || $request->cerrarsession =='')
+                    {
+                        /** redireccion Redirect funciona correcto */
+                        return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+                    }
+                    else if($request->cerrarsession == 1)
+                    {
+                        //si funciona
+                        // $request->session()->invalidate();
+                        $request->session()->regenerateToken();
+                        return \Redirect::route('home.ingreso');
+
+                    }
+                }
+                else
+                {
+                    $mensaje .= 'Ficha Clínica Sicología con problema al registrar\n';
+                }
+            }
+
+        }
+        else
+        {
+            return back()->with('error', $mensaje)->withInput();
+        }
+    }
+
+
+
 
     public function store_kine(Request $request)// revisado
     {
@@ -527,295 +915,7 @@ class FichaAtencionOtrosProfController extends Controller
         }
     }
 
-    public function store_sico(Request $request)//listo - revisado
-    {
 
-        $campos_requeridos = 1;
-        $mensaje = '';
-        if(empty( trim($request->hipotesis)))
-        {
-            $campos_requeridos = 0;
-            $mensaje = 'El Diagnóstico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
-        }
-
-        if($campos_requeridos)
-        {
-            /** FICHA ATENCION  */
-            $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
-            $ficha = FichaOtrosProfesionales::where('id', $hora_medica->id_ficha_otros_prof)->first();
-            $id_profesional = $request->id_profesional_fc;
-            $id_paciente = $request->id_paciente_fc;
-            $ficha->motivo = $request->dg_ingreso;
-            $ficha->antecedentes = $request->cond_fis_ingreso;
-            $ficha->hipotesis = $request->hipotesis;
-            $ficha->id_paciente = $id_paciente;
-            $ficha->id_profesional = $id_profesional;
-            $ficha->finalizada = 1;
-
-            if (!$ficha->save())
-            {
-                return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
-            }
-            else
-            {
-                $profesional = Profesional::find($id_profesional);
-
-                /** ficha otros prof general */
-                $store_ot = $this->store_ot_prof($request, $ficha);
-                if($store_ot->estado == 1)
-                {
-                    $mensaje .= $store_ot->msj;
-                    $tipo_mensaje = 'success';
-                    $mensaje .= 'Ficha Clínica guardada de forma correcta\n';
-
-                    /** REGISTRO FICHA SICOLOGIA */
-                    $ficha_sico = new FichaSicologia();
-                    $ficha_sico->id_ficha_otros_prof = $ficha->id;
-                    $ficha_sico->id_profesional = $id_profesional;
-                    $ficha_sico->id_paciente = $id_paciente;
-                    $ficha_sico->presentacion= $request->presentacion;
-                    $ficha_sico->conciencias = $request->conciencia;
-                    $ficha_sico->actitud = $request->actitud;
-                    $ficha_sico->atencion_concentracion = $request->atencion_concentracion;
-                    $ficha_sico->afectividad = $request->afectividad;
-                    $ficha_sico->pensamiento = $request->pensamiento;
-                    $ficha_sico->sensopercepcion = $request->sensopercepcion;
-                    $ficha_sico->psicomotricidad = $request->psicomotricidad;
-                    $ficha_sico->sueno = $request->sueno;
-                    $ficha_sico->higiene = $request->higiene;
-                    $ficha_sico->alimentacion = $request->alimentacion;
-                    $ficha_sico->psi_solo_control = $request->psi_solo_control;
-                    $ficha_sico->psi_ter_indiv =$request->psi_ter_indiv;
-                    $ficha_sico->psi_ter_grup =$request->psi_ter_grup;
-                    $ficha_sico->psi_sol_hosp =$request->psi_sol_hosp;
-                    $ficha_sico->obs_plan_tratamiento =$request->obs_plan_tratamiento;
-                    $ficha_sico->dsm_5 =$request->dsm_5;
-                    $ficha_sico->dsm_5p =$request->dsm_5p;
-                    $ficha_sico->otro = '';
-                    $ficha_sico->otro1 = '';
-                    $ficha_sico->estado = 1;
-                    if($ficha_sico->save())
-                    {
-                        $mensaje .= 'Ficha Clínica Sicología guardada de forma correcta\n';
-
-                        //  finalizar hora medica
-                        $hora_medica->id_estado = 6;
-                        $mensaje_estado_hora_medica = '';
-                        if (!$hora_medica->save()) {
-                            $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
-                        }
-                        else
-                        {
-                            $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.\n';
-                        }
-                        $mensaje .= $mensaje_estado_hora_medica;
-
-
-                        /** REGISTRO FICHA SICOSOCIAL   */
-
-                        {
-
-                            $ficha_sicosocial = new FichaSicosocial();
-                            $ficha_sicosocial->id_ficha_otros_prof = $ficha->id;
-                            $ficha_sicosocial->id_especialidad = $profesional->id_especialidad;
-                            $ficha_sicosocial->id_tipo_especialidad = $profesional->id_tipo_especialidad;
-                            $ficha_sicosocial->id_paciente = $id_paciente;
-                            $ficha_sicosocial->id_profesional = $id_profesional;
-                            $ficha_sicosocial->lugar_nacimiento = $request->lugar_nacimiento;
-                            $ficha_sicosocial->estado_civil = $request->estado_civil;
-                            $ficha_sicosocial->niv_ed = $request->niv_ed;
-                            $ficha_sicosocial->ocupacion = $request->ocupacion;
-                            $ficha_sicosocial->religion = $request->religion;
-                            $ficha_sicosocial->vive_con = $request->vive_con;
-                            $ficha_sicosocial->vive_obs = $request->vive_obs;
-                            $ficha_sicosocial->alcohol = $request->alcohol;
-                            $ficha_sicosocial->tabaco = $request->tabaco;
-                            $ficha_sicosocial->sustancias_ilicitas = $request->sustancias_ilicitas;
-                            $ficha_sicosocial->sexualidad = $request->sexualidad;
-                            $ficha_sicosocial->com_generales = $request->com_generales;
-                            $ficha_sicosocial->ant_laborales = $request->ant_laborales;
-                            $ficha_sicosocial->ant_esparc = $request->ant_esparc;
-                            $ficha_sicosocial->obs_generales = $request->obs_generales;
-                            $ficha_sicosocial->otro = '';
-                            $ficha_sicosocial->otro2 = '';
-                            $ficha_sicosocial->estado = 1;
-
-                            if($ficha_sicosocial->save())
-                            {
-                                $mensaje .= 'Ficha Sico-Social registrada con exito\n';
-                            }
-                            else
-                            {
-                                $mensaje .= 'Ficha Sico-Social con problema al registrar\n';
-                            }
-                        }
-                        /** REGISTRO FICHA SICOBIOPATOGRAFIA   */
-
-                        {
-
-                            $ficha_sicobiopatografia = new FichaSicoBiopatografia();
-                            $ficha_sicobiopatografia->id_ficha_otros_prof = $ficha->id;
-                            $ficha_sicobiopatografia->id_especialidad = $profesional->id_especialidad;
-                            $ficha_sicobiopatografia->id_tipo_especialidad = $profesional->id_tipo_especialidad;
-                            $ficha_sicobiopatografia->id_paciente = $id_paciente;
-                            $ficha_sicobiopatografia->id_profesional = $id_profesional;
-                            $ficha_sicobiopatografia->prenatal = $request->prenatal;
-                            $ficha_sicobiopatografia->natal = $request->natal;
-                            $ficha_sicobiopatografia->infancia = $request->infancia;
-                            $ficha_sicobiopatografia->adolescencia = $request->adolescencia;
-                            $ficha_sicobiopatografia->edad_adulta = $request->edad_adulta;
-                            $ficha_sicobiopatografia->ad_mayor = $request->ad_mayor;
-                            $ficha_sicobiopatografia->actualidad = $request->actualidad;
-                            $ficha_sicobiopatografia->otro = '';
-                            $ficha_sicobiopatografia->otro2 = '';
-                            $ficha_sicobiopatografia->estado = 1;
-
-                            if($ficha_sicobiopatografia->save())
-                            {
-                                $mensaje .= 'Ficha Sico-Biopatografía registrada con exito\n';
-                            }
-                            else
-                            {
-                                $mensaje .= 'Ficha Sico-Biopatografía con problema al registrar\n';
-                            }
-                        }
-                         /** REGISTRO FICHA SICOHISTORIAFAMILIAR   */
-
-                         {
-
-                            $ficha_sico_hist_fam = new FichaSicoHistFamiliar();
-                            $ficha_sico_hist_fam->id_ficha_otros_prof = $ficha->id;
-                            $ficha_sico_hist_fam->id_especialidad = $profesional->id_especialidad;
-                            $ficha_sico_hist_fam->id_tipo_especialidad = $profesional->id_tipo_especialidad;
-                            $ficha_sico_hist_fam->id_paciente = $id_paciente;
-                            $ficha_sico_hist_fam->id_profesional = $id_profesional;
-                            $ficha_sico_hist_fam->nombre_padre = $request->nombre_padre;
-                            $ficha_sico_hist_fam->rel_padre = $request->rel_padre;
-                            $ficha_sico_hist_fam->nombre_madre = $request->nombre_madre;
-                            $ficha_sico_hist_fam->rel_madre = $request->rel_madre;
-                            $ficha_sico_hist_fam->rel_entre_padres = $request->rel_entre_padres;
-                            $ficha_sico_hist_fam->tiene_hnos = $request->tiene_hnos;
-                            $ficha_sico_hist_fam->cantidad_hnos = $request->cantidad_hnos;
-                            $ficha_sico_hist_fam->nombre_hno = $request->nombre_hno;
-                            $ficha_sico_hist_fam->rel_hf_hno = $request->rel_hf_hno;
-                            $ficha_sico_hist_fam->rel_entre_hnos = $request->rel_entre_hnos;
-                            $ficha_sico_hist_fam->nombre_pareja = $request->nombre_pareja;
-                            $ficha_sico_hist_fam->rel_pareja = $request->rel_pareja;
-                            $ficha_sico_hist_fam->rel_hf_pareja_obs = $request->rel_hf_pareja_obs;
-                            $ficha_sico_hist_fam->tiene_hijos = $request->tiene_hijos;
-                            $ficha_sico_hist_fam->cantidad_hijos = $request->cantidad_hijos;
-                            $ficha_sico_hist_fam->nombre_hijo = $request->nombre_hijo;
-                            $ficha_sico_hist_fam->rel_hijo = $request->rel_hijo;
-                            $ficha_sico_hist_fam->rel_entre_hijos = $request->rel_entre_hijos;
-                            $ficha_sico_hist_fam->nombre_ot_per = $request->nombre_ot_per;
-                            $ficha_sico_hist_fam->rel_ot_per = $request->rel_ot_per;
-                            $ficha_sico_hist_fam->rel_obs_generales = $request->rel_obs_generales;
-                            $ficha_sico_hist_fam->otro = '';
-                            $ficha_sico_hist_fam->otro2 = '';
-                            $ficha_sico_hist_fam->estado = 1;
-                            if($ficha_sico_hist_fam->save())
-                            {
-                                $mensaje .= 'Ficha Sico-Historia-Familiar registrada con exito\n';
-                            }
-                            else
-                            {
-                                $mensaje .= 'Ficha Sico-Historia-Familiar con problema al registrar\n';
-                            }
-                        }
-                         /** REGISTRO FICHA SICOANTECEDENTES PSIQUIATRICOS   */
-
-                         {
-
-                            $ficha_sicoantpsiq = new FichaSicoAntPsiquiatricos();
-                            $ficha_sicoantpsiq->id_ficha_otros_prof = $ficha->id;
-                            $ficha_sicoantpsiq->id_especialidad = $profesional->id_especialidad;
-                            $ficha_sicoantpsiq->id_tipo_especialidad = $profesional->id_tipo_especialidad;
-                            $ficha_sicoantpsiq->id_paciente = $id_paciente;
-                            $ficha_sicoantpsiq->id_profesional = $id_profesional;
-                            $ficha_sicoantpsiq->ant_medicos = $request->ant_medicos;
-                            $ficha_sicoantpsiq->ant_suicidio = $request->ant_suicidio;
-                            $ficha_sicoantpsiq->enf_mentales = $request->enf_mentales;
-                            $ficha_sicoantpsiq->trat_psicologicos_prev = $request->trat_psicologicos_prev;
-                            $ficha_sicoantpsiq->trat_psiquiatricos_prev = $request->trat_psiquiatricos_prev;
-                            $ficha_sicoantpsiq->medicacion_actual = $request->medicacion_actual;
-                            $ficha_sicoantpsiq->otro = '';
-                            $ficha_sicoantpsiq->otro2 = '';
-                            $ficha_sicoantpsiq->estado = 1;
-                            if($ficha_sicoantpsiq->save())
-                            {
-                                $mensaje .= 'Ficha Sico-Antecedentes Psiquiatricos registrada con exito\n';
-                            }
-                            else
-                            {
-                                $mensaje .= 'Ficha Sico-Antecedentes Psiquiatricos con problema al registrar\n';
-                            }
-                        }
-                         /** REGISTRO FICHA SICO EXAMEN MENTAL   */
-
-                         {
-
-                            $ficha_sicoexamenmental = new FichaSicoAntPsiquiatricos();
-                            $ficha_sicoexamenmental->id_ficha_otros_prof = $ficha->id;
-                            $ficha_sicoexamenmental->id_especialidad = $profesional->id_especialidad;
-                            $ficha_sicoexamenmental->id_tipo_especialidad = $profesional->id_tipo_especialidad;
-                            $ficha_sicoexamenmental->id_paciente = $id_paciente;
-                            $ficha_sicoexamenmental->id_profesional = $id_profesional;
-                            $ficha_sicoexamenmental->presentacion = $request->presentacion;
-                            $ficha_sicoexamenmental->conciencia = $request->conciencia;
-                            $ficha_sicoexamenmental->actitud = $request->actitud;
-                            $ficha_sicoexamenmental->atencion_concentracion = $request->atencion_concentracion;
-                            $ficha_sicoexamenmental->afectividad = $request->afectividad;
-                            $ficha_sicoexamenmental->pensamiento = $request->pensamiento;
-                            $ficha_sicoexamenmental->sensopercepcion = $request->sensopercepcion;
-                            $ficha_sicoexamenmental->psicomotricidad = $request->psicomotricidad;
-                            $ficha_sicoexamenmental->sueno = $request->sueno;
-                            $ficha_sicoexamenmental->higiene = $request->higiene;
-                            $ficha_sicoexamenmental->alimentacion = $request->alimentacion;
-                            $ficha_sicoexamenmental->otro = '';
-                            $ficha_sicoexamenmental->otro2 = '';
-                            $ficha_sicoexamenmental->estado = 1;
-                            if($ficha_sicoexamenmental->save())
-                            {
-                                $mensaje .= 'Ficha Sico-Examen-Mental registrada con exito\n';
-                            }
-                            else
-                            {
-                                $mensaje .= 'Ficha Sico-Examen-Mental con problema al registrar\n';
-                            }
-                        }
-
-
-                        if($request->cerrarsession == 0 || $request->cerrarsession =='')
-                        {
-                            /** redireccion Redirect funciona correcto */
-                            return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
-                        }
-                        else if($request->cerrarsession == 1)
-                        {
-                        //si funciona
-                            $request->session()->invalidate();
-                            $request->session()->regenerateToken();
-                            return \Redirect::route('home.ingreso');
-
-                        }
-                    }
-                    else
-                    {
-                        $mensaje .= 'Ficha Clínica Sicología con problema al registrar\n';
-                    }
-                }
-                else
-                {
-                    $mensaje .= $store_ot->msj;
-                }
-            }
-
-        }
-        else
-        {
-            return back()->with('error', $mensaje)->withInput();
-        }
-    }
 
     public function store_nutri(Request $request)//listo - revisado
     {
@@ -1958,40 +2058,40 @@ class FichaAtencionOtrosProfController extends Controller
         }
     }
       /** REGISTRO INFORME FONO - Registro*/
-      public function FonoInformeRegistro(Request $request)
-      {
+    public function FonoInformeRegistro(Request $request)
+    {
 
-          {
+        {
 
-              $fono_informe = new FonoInforme();
+            $fono_informe = new FonoInforme();
 
-              $fono_informe->id_ficha_otros_prof = $ficha_otros_prof->id;
-              $fono_informe->id_ficha_fonoaudiologia = $ficha_fonoaudiologia;
-              $fono_informe->id_paciente = $id_paciente;
-              $fono_informe->id_profesional = $id_profesional;
+            $fono_informe->id_ficha_otros_prof = $ficha_otros_prof->id;
+            $fono_informe->id_ficha_fonoaudiologia = $ficha_fonoaudiologia;
+            $fono_informe->id_paciente = $id_paciente;
+            $fono_informe->id_profesional = $id_profesional;
 
-              $fono_informe->med_tte = $request->med_tte;
-              $fono_informe->nombre_paciente = $request->nombre_paciente;
-              $fono_informe->edad = $request->nedad;
-              $fono_informe->email = $request->email;
-              $fono_informe->dg_fono = $request->ddg_fono;
-              $fono_informe->ses_real= $request->ses_real;
-              $fono_informe->ses_pend = $request->ses_pend;
-              $fono_informe->tto_realizado = $request->tto_realizado;
-              $fono_informe->com_inf_fono = $request->com_inf_fono;
-              $fono_informe->nomb_fono= $request->nomb_fono;
-              $fono_informe->prox_cont_fono= $request->prox_cont_fono;
-              $fono_informe->otro = '';
-              $fono_informe->otro2 = '';
-              $fono_informe->estado = 1;
-              if($fono_informe->save())
-              {
-                  $mensaje .= 'Informe registrado con exito\n';
-              }
-              else
-              {
-                  $mensaje .= 'Informe con problema al registrar\n';
-              }
-          }
-      }
+            $fono_informe->med_tte = $request->med_tte;
+            $fono_informe->nombre_paciente = $request->nombre_paciente;
+            $fono_informe->edad = $request->nedad;
+            $fono_informe->email = $request->email;
+            $fono_informe->dg_fono = $request->ddg_fono;
+            $fono_informe->ses_real= $request->ses_real;
+            $fono_informe->ses_pend = $request->ses_pend;
+            $fono_informe->tto_realizado = $request->tto_realizado;
+            $fono_informe->com_inf_fono = $request->com_inf_fono;
+            $fono_informe->nomb_fono= $request->nomb_fono;
+            $fono_informe->prox_cont_fono= $request->prox_cont_fono;
+            $fono_informe->otro = '';
+            $fono_informe->otro2 = '';
+            $fono_informe->estado = 1;
+            if($fono_informe->save())
+            {
+                $mensaje .= 'Informe registrado con exito\n';
+            }
+            else
+            {
+                $mensaje .= 'Informe con problema al registrar\n';
+            }
+        }
+    }
 }

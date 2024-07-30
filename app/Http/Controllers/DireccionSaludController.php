@@ -334,4 +334,9 @@ class DireccionSaludController extends Controller
     {
         return view('direccion_salud.escritorio_control_farmacia')->with([]);
     }
+
+    public function CargarControlLicencia()
+    {
+        return view('direccion_salud.escritorio_control_licencia')->with([]);
+    }
 }

@@ -61,6 +61,15 @@
                                 </div>
                             </a>
                         </div>
+
+                        <div class="card subir">
+                            <a href="{{ route('ministerio.control_licencia') }}">
+                                <div class="card-body text-center px-2" style="cursor:pointer">
+                                    <img class="wid-40 text-center" src="{{ asset('images/iconos/examenes-ro.svg') }}">
+                                    <h6 class="mt-1 f-13">Control de licencias medicas</h6>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

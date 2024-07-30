@@ -15,7 +15,8 @@ class FichaSicologia extends Migration
     {
         Schema::create('ficha_sicologia', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('id_ficha_atencion');
+            $table->bigInteger('id_ficha_atencion')->nullable();
+            $table->bigInteger('id_otros_profesionales');
             $table->bigInteger('id_profesional');
             $table->bigInteger('id_paciente');
             $table->string('presentacion')->nullable();
@@ -25,7 +26,7 @@ class FichaSicologia extends Migration
             $table->string('afectividad')->nullable();
             $table->string('pensamiento')->nullable();
             $table->string('sensopercepcion')->nullable();
-            $table->string(' psicomotricidad')->nullable();
+            $table->string('psicomotricidad')->nullable();
             $table->string('sueno')->nullable();
             $table->string('higiene')->nullable();
             $table->string('alimentacion')->nullable();
@@ -33,19 +34,20 @@ class FichaSicologia extends Migration
             $table->integer('psi_ter_indiv')->nullable();
             $table->integer('psi_ter_grup')->nullable();
             $table->integer('psi_sol_hosp')->nullable();
-            $table->integer('obs_plan_tratamiento')->nullable();
-            $table->integer('dsm_5')->nullable();
-            $table->integer('dsm_5p')->nullable();
+            $table->string('obs_plan_tratamiento')->nullable();
+            $table->string('dsm_5')->nullable();
+            $table->string('dsm_5p')->nullable();
             $table->string('otro')->nullable();
             $table->string('otro1')->nullable();
             $table->integer('estado')->default(1);
             $table->timestamps();
         });
+
         Schema::create('ficha_sico_sicosocial', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_especialidad');
             $table->bigInteger('id_tipo_especialidad');
-            $table->bigInteger('id_ficha_atencion');
+            $table->bigInteger('id_ficha_otros_prof');
             $table->bigInteger('id_profesional');
             $table->bigInteger('id_paciente');
             $table->string('lugar_nacimiento')->nullable();
@@ -88,37 +90,63 @@ class FichaSicologia extends Migration
             $table->integer('estado')->default(1);
             $table->timestamps();
         });
+
         Schema::create('ficha_sico_hist_familiar', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_especialidad');
             $table->bigInteger('id_tipo_especialidad');
-            $table->bigInteger('id_ficha_atencion');
+            $table->bigInteger('id_ficha_otros_prof');
             $table->bigInteger('id_profesional');
             $table->bigInteger('id_paciente');
+
             $table->string('nombre_padre')->nullable();
             $table->string('rel_padre')->nullable();
+
             $table->string('nombre_madre')->nullable();
             $table->string('rel_madre')->nullable();
+
             $table->string('rel_entre_padres')->nullable();
-            $table->string('tiene_hnos')->nullable();
-            $table->string('cantidad_hnos')->nullable();
-            $table->string('nombre_hno')->nullable();
-            $table->string('rel_hf_hno')->nullable();
+
+            $table->integer('tiene_hnos')->default(0);
+            $table->integer('cantidad_hnos')->default(0);
+            // $table->string('nombre_hno')->nullable();
+            // $table->string('rel_hf_hno')->nullable();
             $table->string('rel_entre_hnos')->nullable();
+
             $table->string('nombre_pareja')->nullable();
             $table->string('rel_pareja')->nullable();
             $table->string('rel_hf_pareja_obs')->nullable();
-            $table->string('tiene_hijos')->nullable();
-            $table->string('cantidad_hijos')->nullable();
-            $table->string('nombre_hijo')->nullable();
-            $table->string('rel_hijo')->nullable();
+
+            $table->integer('tiene_hijos')->default(0);
+            $table->integer('cantidad_hijos')->default(0);
+            // $table->string('nombre_hijo')->nullable();
+            // $table->string('rel_hijo')->nullable();
             $table->string('rel_entre_hijos')->nullable();
-            $table->string('nombre_ot_per')->nullable();
-            $table->string('rel_ot_per')->nullable();
+
+            $table->integer('cantidad_ot_per')->default(0);
+            // $table->string('nombre_ot_per')->nullable();
+            // $table->string('rel_ot_per')->nullable();
             $table->string('rel_obs_generales')->nullable();
+
             $table->string('otro')->nullable();
             $table->string('otro1')->nullable();
-            $table->string('estado')->default(1);
+            $table->integer('estado')->default(1);
+            $table->timestamps();
+        });
+
+        Schema::create('ficha_sico_hist_familiar_relaciones', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('id_ficha_sico_hist_familiar');
+            $table->bigInteger('id_especialidad');
+            $table->bigInteger('id_tipo_especialidad');
+            $table->bigInteger('id_ficha_otros_prof');
+            $table->bigInteger('id_profesional');
+            $table->bigInteger('id_paciente');
+            $table->bigInteger('id_tipo_relacion'); //1.hermano, 2.hijos, 3.otras personas
+            $table->string('nombre')->nullable();
+            $table->string('rel')->nullable();
+            $table->string('otro')->nullable();
+            $table->integer('estado')->default(1);
             $table->timestamps();
         });
 
@@ -126,7 +154,7 @@ class FichaSicologia extends Migration
             $table->id();
             $table->bigInteger('id_especialidad');
             $table->bigInteger('id_tipo_especialidad');
-            $table->bigInteger('id_ficha_atencion');
+            $table->bigInteger('id_ficha_otros_prof');
             $table->bigInteger('id_profesional');
             $table->bigInteger('id_paciente');
             $table->string('ant_medicos')->nullable();
@@ -145,7 +173,7 @@ class FichaSicologia extends Migration
             $table->id();
             $table->bigInteger('id_especialidad');
             $table->bigInteger('id_tipo_especialidad');
-            $table->bigInteger('id_ficha_atencion');
+            $table->bigInteger('id_ficha_otros_prof');
             $table->bigInteger('id_profesional');
             $table->bigInteger('id_paciente');
             $table->string('presentacion')->nullable();
@@ -169,7 +197,7 @@ class FichaSicologia extends Migration
             $table->id();
             $table->bigInteger('id_especialidad');
             $table->bigInteger('id_tipo_especialidad');
-            $table->bigInteger('id_ficha_atencion');
+            $table->bigInteger('id_ficha_otros_prof');
             $table->bigInteger('id_profesional');
             $table->bigInteger('id_paciente');
             $table->string('lam_uno_resp')->nullable();
@@ -203,7 +231,7 @@ class FichaSicologia extends Migration
             $table->id();
             $table->bigInteger('id_especialidad');
             $table->bigInteger('id_tipo_especialidad');
-            $table->bigInteger('id_ficha_atencion');
+            $table->bigInteger('id_ficha_otros_prof');
             $table->bigInteger('id_profesional');
             $table->bigInteger('id_paciente');
             $table->string('nomb_test')->nullable();
@@ -225,14 +253,15 @@ class FichaSicologia extends Migration
      */
     public function down()
     {
-
         Schema::dropIfExists('ficha_sicologia');
         Schema::dropIfExists('ficha_sico_sicosocial');
         Schema::dropIfExists('ficha_sico_biopatografia');
         Schema::dropIfExists('ficha_sico_hist_familiar');
+        Schema::dropIfExists('ficha_sico_hist_familiar_relaciones');
         Schema::dropIfExists('ficha_sico_ant_psiquiatricos');
         Schema::dropIfExists('ficha_sico_ex_mental');
         Schema::dropIfExists('ficha_sico_test_rorshchach');
         Schema::dropIfExists('ficha_sico_otros_test');
+
     }
 }

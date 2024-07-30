@@ -8,7 +8,6 @@ use App\Models\Bono;
 use App\Models\RendicionCaja;
 use App\Models\LogUsersDevices;
 use App\Models\Profesional;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,13 +44,6 @@ class RendicionCajaController extends Controller
             $valido = 0;
         }
 
-       
-
-        // if(empty($request->observaciones)){
-        //     $error['observaciones'] = 'Campo requerido';
-        //     $valido = 0;
-        // }
-
         if($valido)
         {
             $tipo_rendicion = 1; // rendicion caja institucion
@@ -59,7 +51,6 @@ class RendicionCajaController extends Controller
             $fecha_rendicion = date('Y-m-d H:i:s');
 
             $asistenteReceptor = Asistente::where('id', $request->id_asistente_receptor)->first();
-            
             if($asistenteReceptor)
             {
                 // $asistenteReceptor = Asistente::where('id', $request->id_asistente_receptor)->first();
@@ -69,9 +60,7 @@ class RendicionCajaController extends Controller
                 $asistenteReceptor = AdminInstServ::where('id', $request->id_asistente_receptor)->first();
             }
 
-
             $bonos = $request->bonos;
-            $observaciones = $request->observaciones;
 
             $total = 0;
             $total_bonos = 0;
@@ -136,10 +125,9 @@ class RendicionCajaController extends Controller
             $rendicionCaja->total_otros = $total_otros;
 
             $rendicionCaja->id_asistente_receptor = $asistenteReceptor->id;
-            $rendicionCaja->id_profesional_receptor = 3;
-            $rendicionCaja->fecha_recepcion = Carbon::now()->format('Y-m-d H:i:s');
+            // $rendicionCaja->fecha_recepcion = ;
             $rendicionCaja->codigo_autorizacion = '';
-            $rendicionCaja->observacion = $observaciones;
+            $rendicionCaja->observacion = '';
             $rendicionCaja->otro = '';
             $rendicionCaja->estado = 0;
 
@@ -253,7 +241,7 @@ class RendicionCajaController extends Controller
                     $datos['autorizacion']['msj'] = 'Solicitud de aprobacion enviada';
                     $datos['autorizacion']['fecha_inicio'] = $fecha_actual;
                     $datos['autorizacion']['fecha_termino'] = $fecha_vencimiento;
-                    $datos['autorizacion']['tiempo'] = 10;
+                    $datos['autorizacion']['tiempo'] = env('TIEMPO_ESPERA');
                     $datos['autorizacion']['last_id'] = $log_users_devices->id;
 
                     $rendicionCaja->id_log_users_devices = $log_users_devices->id;
@@ -316,11 +304,6 @@ class RendicionCajaController extends Controller
             $valido = 0;
         }
 
-        if(empty($request->observaciones)){
-            // $error['observaciones'] = 'Campo requerido';
-            // $valido = 0;
-        }
-
         if($valido)
         {
             $tipo_rendicion = 1; // rendicion caja institucion
@@ -328,7 +311,6 @@ class RendicionCajaController extends Controller
             $fecha_rendicion = date('Y-m-d H:i:s');
             $profesionalReceptor = Profesional::where('id', $request->id_asistente_receptor)->first();
             $bonos = $request->bonos;
-            $observaciones = $request->observaciones;
 
             $total = 0;
             $total_bonos = 0;
@@ -346,12 +328,12 @@ class RendicionCajaController extends Controller
                     if($bono->save())
                     {
                         $datos['update_bonos'][$bono->id]['estado'] = 1;
-                        $datos['update_bonos'][$bono->id]['msj'] = 'registro actualizado';
+                        $datos['update_bonos'][$bono->id]['maj'] = 'registro actualizado';
                     }
                     else
                     {
                         $datos['update_bonos'][$bono->id]['estado'] = 0;
-                        $datos['update_bonos'][$bono->id]['msj'] = 'registro NO actualizado';
+                        $datos['update_bonos'][$bono->id]['maj'] = 'registro NO actualizado';
                     }
 
                     $total++;
@@ -396,7 +378,7 @@ class RendicionCajaController extends Controller
             $rendicionCaja->id_profesional_receptor = $profesionalReceptor->id;
             // $rendicionCaja->fecha_recepcion = ;
             $rendicionCaja->codigo_autorizacion = '';
-            $rendicionCaja->observacion = $observaciones;
+            $rendicionCaja->observacion = '';
             $rendicionCaja->otro = '';
             $rendicionCaja->estado = 0;
 
@@ -496,7 +478,7 @@ class RendicionCajaController extends Controller
                     $datos['autorizacion']['msj'] = 'Solicitud de aprobacion enviada';
                     $datos['autorizacion']['fecha_inicio'] = $fecha_actual;
                     $datos['autorizacion']['fecha_termino'] = $fecha_vencimiento;
-                    $datos['autorizacion']['tiempo'] = 10;
+                    $datos['autorizacion']['tiempo'] = env('TIEMPO_ESPERA');
                     $datos['autorizacion']['last_id'] = $log_users_devices->id;
 
                     $rendicionCaja->id_log_users_devices = $log_users_devices->id;
@@ -793,12 +775,12 @@ class RendicionCajaController extends Controller
                         if($rendicionCaja->save())
                         {
                             $datos['update_rendicion']['estado'] = 1;
-                            $datos['update_rendicion']['msj'] = 'Rendicion Actualizada en Espera';
+                            $datos['update_rendicion']['msj'] = 'Rendicion Actualizada en Espaera';
                         }
                         else
                         {
                             $datos['update_rendicion']['estado'] = 0;
-                            $datos['update_rendicion']['msj'] = 'Falla Actualizando Rendicion en Espera';
+                            $datos['update_rendicion']['msj'] = 'Falla Actualizando Rendicion en Espaera';
                         }
                     }
                     if($log_users_devices->estado == 1)//VALIDO
@@ -835,8 +817,8 @@ class RendicionCajaController extends Controller
                 }
                 else
                 {
-                    $datos['estado'] = 1;
-                    $datos['msj'] = 'Autorizacion Administrada por FRANCISCO';
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Autorizacion no encontrada';
                 }
             }
             else
