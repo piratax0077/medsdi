@@ -19,7 +19,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right profile-notification">
                             <div class="pro-head">
-                                <span>Mensajes ({{ count($mensajes) }})</span>
+                                <span>Mensajes !!({{ count($mensajes) }})</span>
                             </div>
                             <ul></ul>
                             <ul class="pro-body">
