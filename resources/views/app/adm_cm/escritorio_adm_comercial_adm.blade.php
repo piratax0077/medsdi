@@ -20,7 +20,6 @@
             </div>
         </div>
         <!--Cierre: Header-->
-		<div class="col-sm-12">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card subir py-auto bg-info">
@@ -153,7 +152,6 @@
 					</div>
 				</div>
             </div>
-        </div>
         <!--CIERRE: Row Botones -->
     </div>
 </div>

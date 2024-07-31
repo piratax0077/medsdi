@@ -12,6 +12,7 @@ use App\Models\Asistente;
 use App\Models\AsistenteLugarAtencion;
 use App\Models\Bono;
 use App\Models\Bancos;
+use Carbon\Carbon;
 use App\Models\CertificadoReposo;
 use App\Models\Ciudad;
 use App\Models\ContactoEmergencia;
@@ -60,7 +61,6 @@ use App\Models\TipoAntecedenteAcademico;
 use App\Models\TipoEspecialidad;
 use App\Models\SubTipoEspecialidad;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -580,6 +580,11 @@ class EscritorioProfesional extends Controller
         $mensajes = $mensajes->merge($m);
         // Ordenar la colección por el campo created_at
         $mensajes = $mensajes->sortBy('created_at');
+
+        foreach($mensajes as $mensaje){
+            $mensaje->usuario = User::where('id', $mensaje->id_usuario)->first();
+            $mensaje->usuario = $mensaje->usuario->name;
+        }
 
         return $mensajes;
     }
@@ -4976,6 +4981,28 @@ class EscritorioProfesional extends Controller
      }
 
 
+     public function historial_mensajes(){
+        $mensajes = $this->dame_mensajes(Auth::user()->id);
 
+        return view('app.profesional.receta_online.historial_mensajes',['mensajes' => $mensajes]);
+     }
 
+     public function mis_documentos(){
+        return view('app.profesional.receta_online.mis_documentos');
+     }
+
+     public function ver_mensaje($id){
+        try {
+            $mensaje = MensajesProfesional::find($id);
+            $remitente = User::find($mensaje->id_usuario);
+            $mensaje->remitente = $remitente->name;
+
+            $mensaje->fecha_emision = Carbon::parse($mensaje->created_at)->format('d-m-Y H:i:s');
+            return $mensaje;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+     }
 }

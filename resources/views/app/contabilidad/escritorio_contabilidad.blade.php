@@ -9,7 +9,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Escritorio Contabilidad</h5>
+                            <h5 class="m-b-10 font-weight-bold">Escritorio contabilidad</h5>
                         </div>
 
                         <ul class="breadcrumb">
@@ -21,150 +21,119 @@
             </div>
         </div>
         <!--Cierre: Header-->
-		<div class="col-sm-12">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="card subir">
-						  <a href="{{ ROUTE('contabilidad.secciones_contabilidad.rrhh') }}">
-							<div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-								<h5 class="mt-1 mb-0">Recursos Humanos</h5>
-							</div>
-                        </a>
-                    </div>
+        <div class="row row-cols-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-4">
+            <div class="col">
+                <div class="card mb-3 subir text-center py-2" style="cursor:pointer">
+					  <a href="{{ ROUTE('contabilidad.secciones_contabilidad.rrhh') }}">
+						<img class="wid-50 text-center" src="{{ asset('images/comercial/rh.png') }}">
+						<h6 class="mt-1 mb-0">Recursos humanos</h6>
+                    </a>
                 </div>
-                <div class="col-md-3">
-                    <div class="card subir">
-						  <a href="{{ ROUTE('contabilidad.secciones_contabilidad.info-pago_sueldos') }}">
-							<div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-								<h5 class="mt-1 mb-0">Info sueldos Personal</h5>
-							</div>
-                        </a>
-                    </div>
+            </div>
+            <div class="col">
+                <div class="card mb-3 subir text-center py-2">
+					  <a href="{{ ROUTE('contabilidad.secciones_contabilidad.info-pago_sueldos') }}">
+						<img class="wid-50 text-center" src="{{ asset('images/comercial/pago-personal.png') }}">
+						<h6 class="mt-1 mb-0">Info. sueldos personal</h6>
+                    </a>
                 </div>
-                <div class="col-md-3">
-                    <div class="card subir">
-                       <a href="{{ ROUTE('contabilidad.secciones_contabilidad.liquidaciones') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-                                <h5 class="mt-1 mb-0">Liquidaciones a Profesionales</h5>
-                            </div>
-                        </a>
-                    </div>
+            </div>
+            <div class="col">
+                 <div class="card mb-3 subir text-center py-2">
+                   <a href="{{ ROUTE('contabilidad.secciones_contabilidad.liquidaciones') }}">
+                        <img class="wid-50 text-center" src="{{ asset('images/comercial/liquidaciones.png') }}">
+                        <h6 class="mt-1 mb-0">Liquidaciones a profesionales</h6>
+                    </a>
                 </div>
-                <div class="col-md-3">
-					<div class="card subir">
-					   <a href="{{ ROUTE('contabilidad.secciones_contabilidad.remuneraciones') }}">
-							<div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-								<h5 class="mt-1 mb-0">Planillas de Pago remuneraciones</h5>
-							</div>
-                        </a>
-					</div>
+            </div>
+            <div class="col">
+				<div class="card mb-3 subir text-center py-2" style="cursor:pointer">
+				   <a href="{{ ROUTE('contabilidad.secciones_contabilidad.remuneraciones') }}">
+						<img class="wid-50 text-center" src="{{ asset('images/comercial/salario.png') }}">
+						<h6 class="mt-1 mb-0">Pago remuneraciones</h6>
+                    </a>
 				</div>
-                <div class="col-md-3">
-                    <div class="card subir">
-                         <a href="{{ ROUTE('contabilidad.secciones_contabilidad.contable') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                <h5 class="mt-1 mb-0"> Libro Contable</h5>
-                            </div>
-                        </a>
-                    </div>
+			</div>
+            <div class="col">
+                <div class="card mb-3 subir text-center py-2">
+                     <a href="{{ ROUTE('contabilidad.secciones_contabilidad.contable') }}">
+                        <img class="wid-50 text-center" src="{{ asset('images/comercial/libro-contable.png') }}">
+                        <h6 class="mt-1 mb-0"> Libro contable</h6>
+                    </a>
                 </div>
-				{{--  <div class="col-md-3">
-					<div class="card subir" onclick="en_construccion()";>  --}}
-					   {{-- <a href="{{ ROUTE('asistente_adm.asistente_adm_pedidos') }}"></a>--}}
-							{{--  <div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-								<h5 class="mt-1 mb-0">Imposiciones y leyes sociales</h5>
-							</div>
-						</a>
-					</div>
-				</div>  --}}
- {{--
-				<div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
-                        <a href="{{ ROUTE('asistente_adm.gastos') }}"></a>
-                        <div class="card-body text-center" style="cursor:pointer">
-                            <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-                            <h5 class="mt-1 mb-0">Pagos Personal del Centro</h5>
-                        </div>
-                    </div>
-                </div>
---}}
+            </div>
+	<!--{{--  <div class="col-md-3">
+				<div class="card subir text-center" onclick="en_construccion()";>  --}}
+				   {{-- <a href="{{ ROUTE('asistente_adm.asistente_adm_pedidos') }}">--}}
+						<img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+						<h5 class="mt-1 mb-0">Imposiciones y leyes sociales</h5>
+						
+					</a>
+				</div>
+			</div>  --}}-->
 
-                <div class="col-md-3">
-                    <div class="card subir">
-                          <a href="{{ ROUTE('contabilidad.secciones_contabilidad.ingresos') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-50 text-center" src="{{ asset('images/iconos/profesional_1.svg') }}">
-                                <h5 class="mt-2">Ingresos</h5>
-                            </div>
-                        </a>
-                    </div>
+			<!--<div class="col-md-3">
+                <div class="card subir text-center" onclick="en_construccion()"; style="cursor:pointer">
+                    <a href="#">
+                        <img class="wid-50 text-center" src="{{ asset('images/comercial/pago-personal.png') }}">
+                        <h6 class="mt-1 mb-0">Pagos personal del centro</h6>
+                    </a>
                 </div>
-
-                <div class="col-md-3">
-                    <div class="card subir">
-                        <a href="{{ ROUTE('contabilidad.secciones_contabilidad.egresos') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-50 text-center" src="{{ asset('images/iconos/profesional_1.svg') }}">
-                                <h5 class="mt-2">Egresos</h5>
-                            </div>
-                        </a>
-                    </div>
+            </div>-->
+            <div class="col">
+                <div class="mb-3 card subir text-center py-2" style="cursor:pointer">
+                      <a href="{{ ROUTE('contabilidad.secciones_contabilidad.ingresos') }}">
+                        <img class="wid-50 text-center" src="{{ asset('images/comercial/ingresos.png') }}">
+                        <h6 class="mt-2">Ingresos</h6>
+                    </a>
                 </div>
-                <div class="col-md-3">
-                    <div class="card subir" onclick="en_construccion()";>
-                        {{--  <a href="{{ ROUTE('asistente_adm.gastos') }}"></a>--}}
-                        <div class="card-body text-center" style="cursor:pointer">
-                            <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-                            <h5 class="mt-1 mb-0">Impuestos</h5>
-                        </div>
-                    </div>
+            </div>
+            <div class="col">
+                <div class="mb-3 card subir text-center py-2" style="cursor:pointer">
+                    <a href="{{ ROUTE('contabilidad.secciones_contabilidad.egresos') }}">
+                        <img class="wid-50 text-center" src="{{ asset('images/comercial/egresos.png') }}">
+                        <h6 class="mt-2">Egresos</h6>
+                    </a>
                 </div>
-
-                <div class="col-md-3">
-                    <div class="card subir" onclick="en_construccion()";>
-                    {{--  <a href="{{ ROUTE('asistente_adm.asistente_adm_pedidos') }}"></a>--}}
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                <h5 class="mt-1 mb-0">Convenios</h5>
-                            </div>
-                    </div>
+            </div>
+            <div class="col">
+                <div class="mb-3 card subir text-center py-2" onclick="en_construccion()"; style="cursor:pointer">
+                   <a href="#">
+                        <img class="wid-50 text-center" src="{{ asset('images/comercial/impuesto.png') }}">
+                        <h6 class="mt-1 mb-0">Impuestos</h6>
+                    </a>
                 </div>
-
-                <div class="col-md-3">
-                    <div class="card subir">
-                          <a href="{{ ROUTE('proveedores') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                <h5 class="mt-1 mb-0"> Proveedores</h5>
-                            </div>
-                        </a>
-                    </div>
+            </div>
+            <div class="col">
+                <div class="mb-3 card subir text-center py-2" onclick="en_construccion()"; style="cursor:pointer">
+                    <a href="#">
+                        <img class="wid-50 text-center" src="{{ asset('images/comercial/convenios.png') }}">
+                        <h6 class="mt-1 mb-0">Convenios</h6>
+                    </a>
                 </div>
-                <div class="col-md-3">
-                    <div class="card subir">
-                       <a href="{{ ROUTE('contabilidad.secciones_contabilidad.factura') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                <h5 class="mt-1 mb-0"> Facturar</h5>
-                            </div>
-                        </a>
-                    </div>
+            </div>
+            <div class="col">
+                <div class="mb-3 card subir text-center py-2" style="cursor:pointer">
+                      <a href="{{ ROUTE('proveedores') }}">
+                        <img class="wid-50 text-center" src="{{ asset('images/comercial/provedor.png') }}">
+                        <h6 class="mt-1 mb-0">Proveedores</h6>
+                    </a>
                 </div>
-
-                <div class="col-md-3">
-                    <div class="card subir" onclick="en_construccion()";>
-                         {{--  <a href="{{ ROUTE('asistente_adm.gastos') }}"></a>--}}
-                        <div class="card-body text-center" style="cursor:pointer">
-                            <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-                            <h5 class="mt-1 mb-0">Estadisticas del Centro</h5>
-                        </div>
-                    </div>
+            </div>
+            <div class="col">
+                <div class="mb-3 card subir text-center py-2" style="cursor:pointer">
+                   <a href="{{ ROUTE('contabilidad.secciones_contabilidad.factura') }}">
+                        <img class="wid-50 text-center" src="{{ asset('images/comercial/factura.svg') }}">
+                        <h6 class="mt-1 mb-0">Facturar</h6>
+                    </a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3 card subir text-center py-2" onclick="en_construccion()"; style="cursor:pointer">
+                     <a href="#">
+                        <img class="wid-50 text-center" src="{{ asset('images/comercial/estadisticas.png') }}">
+                        <h6 class="mt-1 mb-0">Estadisticas del CM</h6>
+                    </a>
                 </div>
             </div>
         </div>

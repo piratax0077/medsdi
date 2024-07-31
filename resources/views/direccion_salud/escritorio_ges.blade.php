@@ -10,7 +10,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio GES</h5>
+                                <h5 class="m-b-10 font-weight-bold">GES</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -25,9 +25,9 @@
 
             <div class="row m-b-10" >
                 <div class="col-sm-12">
-                    <div class="card-a">
-                        <div class="card-header-a" id="tabla-registros">
-                            <h5 class="font-weight-bold">Registros</h5>
+                    <div class="card">
+                        <div class="card-top bg-info" id="tabla-registros">
+                            <h5 class="font-weight-bold">GES</h5>
                         </div>
                         <div id="tabla-registros-c" class="collapse show" aria-labelledby="tabla-registros" data-parent="#tabla-registros">
                             <div class="card-body-aten-a shadow-none">

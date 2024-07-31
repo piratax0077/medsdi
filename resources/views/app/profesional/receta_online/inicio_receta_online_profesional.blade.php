@@ -78,6 +78,19 @@
                         </a>
                     </div>
                 </div>
+                <div class="col">
+                    <div class="card subir">
+                        <a href="{{ ROUTE('profesional.historial_mensajes') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center mb-3"
+                                    src="{{ asset('images/iconos/documentos-ro.svg') }}" alt="Mis documentos">
+                                <h5 class="titulos_tarjetas">
+                                    Historial de mensajes
+                                </h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!--CIERRE:Botones-->

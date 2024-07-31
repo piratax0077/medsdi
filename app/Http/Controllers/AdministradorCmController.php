@@ -20,6 +20,7 @@ use App\Models\Instituciones;
 use App\Models\LugarAtencion;
 use App\Models\MensajesDifusion;
 use App\Models\MensajesProfesional;
+use App\Models\Mensajes;
 use App\Models\Paciente;
 use App\Models\Profesional;
 use App\Models\ProfesionalesLugaresAtencion;
@@ -34,6 +35,8 @@ use App\Models\TipoInstitucion;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+
+use Carbon\Carbon;
 
 class AdministradorCmController extends Controller
 {
@@ -1146,18 +1149,22 @@ class AdministradorCmController extends Controller
 
     public function mensaje_difusion(Request $req){
         try {
-            $para = $req->para;
-            // convertir el array a json
-            $para = json_encode($para);
-            $mensaje_difusion = new MensajesDifusion();
-            $mensaje_difusion->id_usuario = Auth::user()->id;
-            $mensaje_difusion->destinatarios = $para;
-            $mensaje_difusion->titulo = $req->titulo;
-            $mensaje_difusion->asunto = $req->detalle;
-            $mensaje_difusion->mensaje = $req->mensaje;
-            $mensaje_difusion->estado = 1;
+            $destinatarios = $req->para;
+            $datos_mensaje = [
+                'titulo' => $req->titulo,
+                'asunto' => $req->detalle,
+                'mensaje' => $req->mensaje,
+            ];
+            $mensaje = new Mensajes;
+            $mensaje->id_usuario = Auth::user()->id;
+            $mensaje->destinatarios = $destinatarios ? json_encode($destinatarios) : null;
+            $mensaje->id_receptor = null;
+            $mensaje->datos_mensaje = json_encode($datos_mensaje);
+            $mensaje->tipo_mensaje = 1; // Difusion
+            $mensaje->fecha_envio = Carbon::now()->format('Y-m-d H:i:s');
+            $mensaje->estado = 1; // 1: No leido, 2: Leido
 
-            $mensaje_difusion->save();
+            $mensaje->save();
 
             $datos = array();
             $datos['estado'] = 1;
@@ -1179,29 +1186,55 @@ class AdministradorCmController extends Controller
 
     }
 
+    // public function mensaje_profesional(Request $req){
+    //     try {
+    //         //code...
+    //         $mensaje_profesional = new MensajesProfesional();
+    //         $mensaje_profesional->id_usuario = Auth::user()->id;
+    //         $mensaje_profesional->id_profesional = intval($req->id_profesional_mensaje);
+    //         $mensaje_profesional->titulo = $req->titulo;
+    //         $mensaje_profesional->asunto = $req->detalle;
+    //         $mensaje_profesional->mensaje = $req->mensaje;
+    //         $mensaje_profesional->save();
+    //         $datos = array();
+    //         $datos['estado'] = 1;
+    //         $datos['msj'] = 'mensaje enviado';
+    //         // get dropzone image
+    //         if ($req->file('file')) {
+    //             $file = $req->file('file');
+    //             $filename = time().'_'.$file->getClientOriginalName();
+    //             $req->file->storeAs('uploads/', $filename, 'public');
+    //             $form->update([
+    //                 'image' => '/storage/uploads/'.$filename
+    //             ]);
+    //         }
+    //         return $datos;
+    //     } catch (\Exception $e) {
+    //         //throw $th;
+    //         return $e->getMessage();
+    //     }
+    // }
+
+
     public function mensaje_profesional(Request $req){
         try {
-            //code...
-            $mensaje_profesional = new MensajesProfesional();
-            $mensaje_profesional->id_usuario = Auth::user()->id;
-            $mensaje_profesional->id_profesional = intval($req->id_profesional_mensaje);
-            $mensaje_profesional->titulo = $req->titulo;
-            $mensaje_profesional->asunto = $req->detalle;
-            $mensaje_profesional->mensaje = $req->mensaje;
-            $mensaje_profesional->save();
-            $datos = array();
-            $datos['estado'] = 1;
-            $datos['msj'] = 'mensaje enviado';
-            // get dropzone image
-            if ($req->file('file')) {
-                $file = $req->file('file');
-                $filename = time().'_'.$file->getClientOriginalName();
-                $req->file->storeAs('uploads/', $filename, 'public');
-                $form->update([
-                    'image' => '/storage/uploads/'.$filename
-                ]);
-            }
-            return $datos;
+            $id_receptor = intval($req->id_profesional_mensaje);
+            $datos_mensaje = [
+                'titulo' => $req->titulo,
+                'asunto' => $req->detalle,
+                'mensaje' => $req->mensaje,
+            ];
+            $mensaje = new Mensajes;
+            $mensaje->id_usuario = Auth::user()->id;
+            $mensaje->destinatarios = null;
+            $mensaje->id_receptor = $id_receptor ? $id_receptor : null;
+            $mensaje->datos_mensaje = json_encode($datos_mensaje);
+            $mensaje->tipo_mensaje = 2; // Directo a profesional
+            $mensaje->fecha_envio = Carbon::now()->format('Y-m-d H:i:s');
+            $mensaje->estado = 1; // 1: No leido, 2: Leido
+
+            $mensaje->save();
+            return ['estado' => 1, 'msj' => 'mensaje enviado'];
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();

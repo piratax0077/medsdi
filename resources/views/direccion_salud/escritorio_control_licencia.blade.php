@@ -10,7 +10,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio CONTROL LICENCIA</h5>
+                                <h5 class="m-b-10 font-weight-bold">Control de licencias</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -28,7 +28,7 @@
                 <div class="col-sm-12">
                     <div class="card-a">
                         <div class="card-header-a mb-3" id="tabla-registros">
-                            <h5 class="font-weight-bold">Registros</h5>
+                            <h5 class="font-weight-bold">Control de licencias</h5>
                         </div>
                         <div id="tabla-registros-c" class="collapse show" aria-labelledby="tabla-registros" data-parent="#tabla-registros">
 
@@ -37,7 +37,7 @@
                                 <div class="row m-b-10 ml-3" >
                                     <ul class="nav nav-pills mt-3 mb-4" id="pills-tab-licencias" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link-modal active" id="pills-tab-emitida-profesional" data-toggle="pill" href="#pills-emitida-profesional" role="tab" aria-controls="pills-emitida-profesional" aria-selected="true">Emitidas pro Profesionales</a>
+                                            <a class="nav-link-modal active" id="pills-tab-emitida-profesional" data-toggle="pill" href="#pills-emitida-profesional" role="tab" aria-controls="pills-emitida-profesional" aria-selected="true">Emitidas por profesionales</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link-modal" id="pills-tab-recibida-paciente" data-toggle="pill" href="#pills-recibida-paciente" role="tab" aria-controls="pills-recibida-paciente" aria-selected="false">Recibidas por Paciente</a>

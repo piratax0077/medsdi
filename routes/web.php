@@ -511,6 +511,8 @@ Route::group([
     Route::get('Ficha_medica_unica_atencion/{id}', [App\Http\Controllers\EscritorioProfesional::class, 'miFichaMedicaAtencion'])->name('profesional.ficha_medica_unica_atencion');
     Route::get('Mi_perfil', [App\Http\Controllers\EscritorioProfesional::class, 'mi_perfil'])->name('profesional.mi_perfil');
     Route::get('Receta_online', [App\Http\Controllers\EscritorioProfesional::class, 'index_receta'])->name('profesional.index_receta_online');
+    Route::get('historial_mensajes', [App\Http\Controllers\EscritorioProfesional::class, 'historial_mensajes'])->name('profesional.historial_mensajes');
+    Route::get('ver_mensaje/{id}', [App\Http\Controllers\EscritorioProfesional::class, 'ver_mensaje'])->name('profesional.ver_mensaje');
     Route::get('Mis_recetas', [App\Http\Controllers\EscritorioProfesional::class, 'mis_recetas'])->name('profesional.mis_recetas');
     Route::get('Mis_examenes', [App\Http\Controllers\EscritorioProfesional::class, 'mis_examenes'])->name('profesional.mis_examenes');
     Route::get('Mis_certificados', [App\Http\Controllers\EscritorioProfesional::class, 'mis_certificados'])->name('profesional.mis_certificados');
@@ -1246,7 +1248,7 @@ Route::group([
 	/** OTROS PROFESIONALES */
     /** PSICOLOGIA */
     Route::post('Ficha_Atencion/crear/sico', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_sico'])->name('ficha.otro.prof.registrar_ficha_sico');
-	
+
 });
 
 /**--CENTRO MEDICO--**/
