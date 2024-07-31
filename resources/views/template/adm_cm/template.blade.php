@@ -49,6 +49,8 @@
 
     <!-- fileupload-custom css -->
     <link rel="stylesheet" href='{{ asset('css/plugins/dropzone.min.css') }}'/>
+     <!-- fileupload-custom css -->
+     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
 
     <!--Accordion-->
     <link rel="stylesheet" type="text/css" href='{{ asset('css/accordion.css') }}'/>
@@ -137,6 +139,9 @@
     <script src="{{ asset('js/plugins/jquery.peity.min.js') }}"></script>
     <!-- validador de rut -->
     <script src="{{ asset('js/rut.min.js') }}"></script>
+        <!-- file-upload Js -->
+        <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
+        <!-- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script> -->
 
     <!--Gráficos-->
     {{--  <script src="{{ asset('js/graficos/sf-prof-admin-cm.js') }}"></script>
@@ -273,6 +278,7 @@
         }
 
         $(document).ready(function () {
+
             $('.loader-bg').hide();
 
             $('#at_profesionales').DataTable({

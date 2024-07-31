@@ -35,7 +35,7 @@
                         <a href="{{ ROUTE('adm_cm.examenes') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-70 text-center" src="{{ asset('images/iconos/examen.svg') }}">
-                                <h5 class="mt-2">Comunicación</h5>
+                                <h5 class="mt-2">Decretos ministeriales recibidos</h5>
                             </div>
                         </a>
                     </div>
@@ -45,7 +45,7 @@
                          <a href="{{ ROUTE('adm_cm.procedimientos') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-70 text-center" src="{{ asset('images/iconos/examen.svg') }}">
-                                <h5 class="mt-2">item 1</h5>
+                                <h5 class="mt-2">Historial enviados</h5>
                             </div>
                         </a>
                     </div>

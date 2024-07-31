@@ -314,6 +314,7 @@ Route::group([
     /* 2.- Receta Online */
     Route::get('Receta_Online/Mis_Recetas', [App\Http\Controllers\EscritorioPaciente::class, 'receta_misrecetas'])->name('paciente.receta.receta');
     Route::get('Receta_Online/Mis_Examenes', [App\Http\Controllers\EscritorioPaciente::class, 'receta_misexamenes'])->name('paciente.receta.examen');
+	Route::get('Receta_Online/Mis_Documentos', [App\Http\Controllers\EscritorioPaciente::class, 'receta_misdocumentos'])->name('paciente.receta.documentos');
     Route::get('Receta_Online/Mis_Certificados', [App\Http\Controllers\EscritorioPaciente::class, 'receta_miscertificados'])->name('paciente.receta.certificado');
     Route::get('Receta_Online/Mis_Licencias', [App\Http\Controllers\EscritorioPaciente::class, 'receta_mislicencias'])->name('paciente.receta.licencia');
     Route::get('Receta_Online/licencia/pdf', [App\Http\Controllers\LicenciaAprobacionController::class, 'pdfLicenciaPaciente'])->name('paciente.licencia.pdf');
@@ -727,7 +728,6 @@ Route::group([
     Route::get('/ver', [App\Http\Controllers\PacienteHistoricoDatosMedicosController::class, 'verRegistrosPaciente'] )->name('log.hist.medico.ver');
 });
 
-
 /* ASISTENTE CONSULTA*/
 Route::group([
     'middleware' => ['role:Asistente|Admin'],
@@ -827,7 +827,7 @@ Route::group([
     Route::get('Mis_Profesionales', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'mis_profesionales'])->name('asistentecm.mis_profesionales');
 
     // Route::get('caja/rendir', [App\Http\Controllers\FlujoCajaController::class, 'rendirCajaDiaria'])->name('asistentecm.rendir');
-    Route::get('caja/rendir', [App\Http\Controllers\FlujoCajaController::class, 'home'])->name('asistentecm.rendir');
+	Route::get('caja/rendir', [App\Http\Controllers\FlujoCajaController::class, 'home'])->name('asistentecm.rendir');
 
 
     // Route::get('caja/rendir/bonos', [App\Http\Controllers\FlujoCajaController::class, 'cargaBonosAsistenteDia'])->name('asistentecm.rendicion_carga_bonos');
@@ -981,6 +981,7 @@ Route::group([
     /** carga archivo rendir */
     Route::post('caja/carga/archivo', [App\Http\Controllers\CargaArchivoController::class, 'cargaArchivoTemp'])->name('rendir.archivo.carga');
     Route::post('caja/carga/mover_r', [App\Http\Controllers\CargaArchivoController::class, 'moverArchivo_r'])->name('rendir.archivo.mover_r');
+
 });
 
 Route::group([
@@ -1242,10 +1243,10 @@ Route::group([
 	/** busqueda en tabla de persona */
     Route::get('/personas/buscar', [App\Http\Controllers\EscritorioGeneral::class, 'getPersona'])->name('personas.buscador');
 
-    /** OTROS PROFESIONALES */
+	/** OTROS PROFESIONALES */
     /** PSICOLOGIA */
     Route::post('Ficha_Atencion/crear/sico', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_sico'])->name('ficha.otro.prof.registrar_ficha_sico');
-
+	
 });
 
 /**--CENTRO MEDICO--**/
@@ -1260,9 +1261,14 @@ Route::group([
 	Route::post('/Configuracion/perfil/datos/responsable/editar', [App\Http\Controllers\AdministradorCmController::class, 'editarDatosPerfilResponsable'])->name('adm_cm.editar_datos_perfil_responsable');
 	Route::get('/Configuracion/perfil/datos/personal/persona', [App\Http\Controllers\AdministradorCmController::class, 'cargaPersonalPersona'])->name('adm_cm.cargar_personal_persona');
 	Route::post('/Configuracion/perfil/actualizar/personal/clave/centro', [App\Http\Controllers\AdministradorCmController::class, 'actualizarAccesoPersonal'])->name('adm_cm.actualizar_acceso_personal');
-    Route::post('/registrar_especialidad', [App\Http\Controllers\AdministradorCmController::class, 'registrar_especialidad_cm'])->name('adm_cm.registrar_especialidad');
-    Route::post('/eliminar_especialidad', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_especialidad_cm'])->name('adm_cm.eliminar_especialidad');
+	Route::post('/registrar_especialidad', [App\Http\Controllers\AdministradorCmController::class, 'registrar_especialidad_cm'])->name('adm_cm.registrar_especialidad');
+    Route::post('/editar_especialidad', [App\Http\Controllers\AdministradorCmController::class, 'editar_especialidad_cm'])->name('adm_cm.editar_especialidad');
+	Route::post('/eliminar_especialidad', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_especialidad_cm'])->name('adm_cm.eliminar_especialidad');
     Route::post('/eliminar_otra_especialidad', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_otra_especialidad'])->name('adm_cm.eliminar_otra_especialidad');
+    Route::get('/dame_especialidad/{id}', [App\Http\Controllers\AdministradorCmController::class, 'dame_especialidad'])->name('adm_cm.dame_especialidad');
+    Route::post('/cambiar_estado_especialidad', [App\Http\Controllers\AdministradorCmController::class, 'cambiar_estado_especialidad'])->name('adm_cm.cambiar_estado_especialidad');
+    Route::post('/registrar_area_profesional', [App\Http\Controllers\AdministradorCmController::class, 'registrar_area_profesional'])->name('adm_cm.registrar_area_profesional');
+    Route::post('/eliminar_area_profesional', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_area_profesional'])->name('adm_cm.eliminar_area_profesional');
 
     Route::get('/Configuracion/perfil_cm', [App\Http\Controllers\AdministradorCmController::class, 'perfil'])->name('adm_cm.perfil_cm');
 	Route::get('/Configuracion/departamentos_servicios', [App\Http\Controllers\AdministradorCmController::class, 'departamentos'])->name('adm_cm.departamentos_servicios');
@@ -1315,15 +1321,24 @@ Route::group([
     Route::get('/Administracion/Comercial/sueldos', [App\Http\Controllers\AdministradorCmController::class, 'sueldos'])->name('adm_cm.sueldos');
     Route::post('/Administracion/Comercial/remuneracion/registrar', [App\Http\Controllers\RemuneracionesController::class, 'registrar'])->name('adm_cm.remuneracion.registrar');
     Route::post('/Administracion/Comercial/remuneracion/pagada', [App\Http\Controllers\RemuneracionesController::class, 'pagada'])->name('adm_cm.remuneracion.pagada');
-
+	/** CONTABILIDAD */
+    Route::get('/Contabilidad/LibroContable', [App\Http\Controllers\AdministradorCmController::class, 'ContadorLibroContable'])->name('contabilidad.secciones_contabilidad.contable');
+    Route::get('/Contabilidad/Liquidaciones', [App\Http\Controllers\AdministradorCmController::class, 'ContadorLiquidaciones'])->name('contabilidad.secciones_contabilidad.liquidaciones');
+    Route::get('/Contabilidad/Remuneraciones', [App\Http\Controllers\AdministradorCmController::class, 'ContadorRemuneraciones'])->name('contabilidad.secciones_contabilidad.remuneraciones');
+    Route::get('/Contabilidad/Info/personal', [App\Http\Controllers\AdministradorCmController::class, 'ContadorSueldos'])->name('contabilidad.secciones_contabilidad.info-pago_sueldos');
+    Route::get('/Contabilidad/Recursos/Humanos', [App\Http\Controllers\AdministradorCmController::class, 'ContadorRrHh'])->name('contabilidad.secciones_contabilidad.rrhh');
+    Route::get('/Contabilidad/Facturar', [App\Http\Controllers\AdministradorCmController::class, 'ContadorFacturas'])->name('contabilidad.secciones_contabilidad.factura');
+    Route::get('/Contabilidad/Ingresos', [App\Http\Controllers\ComprasController::class, 'index'])->name('contabilidad.secciones_contabilidad.ingresos');
+    Route::get('/Contabilidad/Egresos', [App\Http\Controllers\AdministradorCmController::class, 'ContadorEgresos'])->name('contabilidad.secciones_contabilidad.egresos');
     Route::get('/Administracion/Contabilidad', [App\Http\Controllers\AdministradorCmController::class, 'areaContabilidad'])->name('adm_cm.area_contabilidad');
     Route::get('/Administracion/Bodega', [App\Http\Controllers\AdministradorCmController::class, 'areaBodega'])->name('adm_cm.area_bodega');
-    Route::get('/Administracion/Estadistica', [App\Http\Controllers\AdministradorCmController::class, 'areaEstadistica'])->name('contabilidad.estadisticas');
-    Route::get('/Administracion/Liquidaciones', [App\Http\Controllers\AdministradorCmController::class, 'areaLiquidaciones'])->name('contabilidad.liquidaciones');
+    Route::get('/Administracion/Estadistica', [App\Http\Controllers\AdministradorCmController::class, 'areaEstadistica'])->name('adm_cm.area_estadistica');
     Route::get('/Administracion/Insumos', [App\Http\Controllers\AdministradorCmController::class, 'insumos'])->name('adm_cm.insumos');
 
 	Route::get('/Administrador/ciudad/buscar', [App\Http\Controllers\AdministradorCmController::class, 'buscar_ciudad_region'])->name('adm_cm.buscar_ciudad_region');
 
+    Route::post('/mensaje_profesional', [App\Http\Controllers\AdministradorCmController::class, 'mensaje_profesional'])->name('mensaje_profesional');
+    Route::post('/mensaje_difusion', [App\Http\Controllers\AdministradorCmController::class, 'mensaje_difusion'])->name('mensaje_difusion');
 	/** CAMBIO CONTRASEÑA DEL RESPONSABLE */
     Route::get('/Administrador/responsable/contrasena/cambio', [App\Http\Controllers\AdministradorCmController::class, 'cambioContrasenaPerfilResponsable'])->name('adm_cm.cambio_contrasena_responsable');
 
@@ -1341,8 +1356,8 @@ Route::group([
 
     /** FLUJO DE CAJA */
     // Route::get('/comercial/flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionCmAdm'])->name('adm_cm.comercial.flujo.caja.index');
-    Route::get('estadisticas_cm', [App\Http\Controllers\AdministradorCmController::class, 'areaEstadistica'])->name('asistente_adm.estadisticas');
 
+    Route::post('dame_profesional_cm', [App\Http\Controllers\AdministradorCmController::class, 'dame_profesional'])->name('adm_cm.dame_profesional_cm');
 });
 
 Route::group([
@@ -1355,8 +1370,6 @@ Route::group([
     Route::get('/ver', [App\Http\Controllers\GastosInstitucionalesController::class, 'ver_registro'])->name('gastos.ver');
     Route::post('/editar', [App\Http\Controllers\GastosInstitucionalesController::class, 'modificar'])->name('gastos.editar');
 });
-
-
 
 Route::group([
     'middleware' => ['role:Admin|AsistenteAdm|Adm_Comercial|Institucion|Adm_Institucion'],
@@ -1378,12 +1391,10 @@ Route::group([
     Route::get('/gastos', [App\Http\Controllers\AdministradorCmController::class, 'asistente_adm_gastos'])->name('asistente_adm.gastos');
 
 
-
     /** CONTRATOS */
     Route::get('Contratos/cargar', [App\Http\Controllers\AdministradorCmController::class, 'asistente_adm_cargar_contrato'])->name('asistente_adm.cargar_contrato');
     Route::get('Contratos/cargar/detalle', [App\Http\Controllers\AdministradorCmController::class, 'asistente_adm_detalle_contrato'])->name('asistente_adm.detalle_contrato');
 });
-
 
 
 /** ADMIN */
@@ -1667,16 +1678,15 @@ Route::group([
     Route::get('data', [App\Http\Controllers\FlujoCajaController::class, 'dataFlujoCaja'])->name('flujo_caja.data_flujo_caja');
     Route::get('data_programa', [App\Http\Controllers\FlujoCajaController::class, 'dataFlujoCajaPrograma'])->name('flujo_caja.data_flujo_caja_programa');
     Route::get('data_rendidos', [App\Http\Controllers\FlujoCajaController::class, 'dataFlujoCajaRendidos'])->name('flujo_caja.data_flujo_caja_rendidos');
-    Route::get('data/profesional/rendidos', [App\Http\Controllers\FlujoCajaController::class, 'dataProfesionalRendiciones'])->name('flujo_caja.profesional.data_rendidos');
+	Route::get('data/profesional/rendidos', [App\Http\Controllers\FlujoCajaController::class, 'dataProfesionalRendiciones'])->name('flujo_caja.profesional.data_rendidos');
     Route::get('data/profesional/rendidos/programa', [App\Http\Controllers\FlujoCajaController::class, 'dataProfesionalBonosRendidosPrograma'])->name('flujo_caja.profesional.data_rendidos_programa');
-    Route::get('data/profesional/gestion/bonos', [App\Http\Controllers\FlujoCajaController::class, 'dataProfesionalGestionBonos'])->name('flujo_caja.profesional.data_gestion_bonos');
+	Route::get('data/profesional/gestion/bonos', [App\Http\Controllers\FlujoCajaController::class, 'dataProfesionalGestionBonos'])->name('flujo_caja.profesional.data_gestion_bonos');
     Route::get('data_rendidos_programas', [App\Http\Controllers\FlujoCajaController::class, 'dataFlujoCajaRendidosProgramas'])->name('flujo_caja.data_flujo_caja_rendidos_programa');
 
-    Route::get('dame_rendicion/{id}', [App\Http\Controllers\FlujoCajaController::class, 'dameRendicion'])->name('flujo_caja.profesional.rendicion.show');
+	Route::get('dame_rendicion/{id}', [App\Http\Controllers\FlujoCajaController::class, 'dameRendicion'])->name('flujo_caja.profesional.rendicion.show');
     Route::post('cambiar_estado', [App\Http\Controllers\FlujoCajaController::class, 'cambiarEstado'])->name('flujo_caja.profesional.rendicion.cambiar_estado');
 
-    Route::get('caja/rendir/bonos', [App\Http\Controllers\FlujoCajaController::class, 'cargaBonosAsistenteDia'])->name('asistentecm.rendicion_carga_bonos');
-
+	Route::get('caja/rendir/bonos', [App\Http\Controllers\FlujoCajaController::class, 'cargaBonosAsistenteDia'])->name('asistentecm.rendicion_carga_bonos');
 });
 
 /** BUSCADOR DE PROFESIONAL */
@@ -1755,7 +1765,7 @@ Route::group([
     Route::get('/control/medicamento/buscar', [App\Http\Controllers\DireccionSaludController::class, 'buscarControlMedicamento'])->name('ministerio.control_medicamento.buscar');
 
     Route::get('/control/farmacia', [App\Http\Controllers\DireccionSaludController::class, 'CargarControlFarmacia'])->name('ministerio.control_farmacia');
-    Route::get('/control/licencia', [App\Http\Controllers\DireccionSaludController::class, 'CargarControlLicencia'])->name('ministerio.control_licencia');
+	Route::get('/control/licencia', [App\Http\Controllers\DireccionSaludController::class, 'CargarControlLicencia'])->name('ministerio.control_licencia');
 });
 
 /** web */
@@ -1764,7 +1774,7 @@ Route::get('/profesional/tipo_especialidad', [App\Http\Controllers\EscritorioGen
 Route::get('/profesional/sub_tipo_especialidad', [App\Http\Controllers\EscritorioGeneral::class, 'cargar_sub_tipo_especialidad'])->name('web.profesional.buscar_sub_tipo_especialidad');
 Route::get('/profesional/buscador', [App\Http\Controllers\EscritorioGeneral::class, 'buscarProfesionalBuscador'])->name('web.profesionales.buscador');
 
-
+Route::get('/profesional/mensaje/{id}', [App\Http\Controllers\EscritorioGeneral::class, 'mensaje'])->name('profesional.mensaje');
 /** envio de correo prueba */
 Route::get('/correo/envio', [App\Http\Controllers\SendMailController::class, 'envioCorreoR'])->name('correo.envio');
 Route::get('/correo/envio_test', [App\Http\Controllers\SendMailController::class, 'envioCorreoTest'])->name('correo.envio.test');
@@ -1861,7 +1871,7 @@ Route::get('/getProveedor/{id}', [App\Http\Controllers\ProveedoresController::cl
 Route::post('/guardarProveedor', [App\Http\Controllers\ProveedoresController::class, 'guardarProveedor'])->name('guardarProveedor');
 Route::post('/guardarProveedorCompras', [App\Http\Controllers\ProveedoresController::class, 'guardarProveedorCompras'])->name('guardarProveedorCompras');
 Route::post('/editarProveedor', [App\Http\Controllers\ProveedoresController::class, 'editarProveedor'])->name('editarProveedor');
-
+Route::get('/cambiarEstadoProveedor/{id}', [App\Http\Controllers\ProveedoresController::class,'cambiarEstadoProveedor'])->name('cambiarEstadoProveedor');
 // Productos
 Route::post('/guardarMarca', [App\Http\Controllers\ProductosController::class,'guardarMarca'])->name('guardarMarca');
 Route::post('/guardarMedida', [App\Http\Controllers\ProductosController::class,'guardarMedida'])->name('guardarMedida');
@@ -1897,7 +1907,6 @@ Route::get('meeting', function () {
     return view('atencion_medica.secciones_especialidad.meeting');
 });
 
-Route::post('/iniciar-llamada/{id}', [App\Http\Controllers\ZoomManagerController::class, 'iniciarLlamada'])->name('iniciar_llamada');
 
 
 /** PARA VISUALIZAR DEMOS */

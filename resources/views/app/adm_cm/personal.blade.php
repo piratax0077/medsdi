@@ -53,8 +53,10 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="btn-group mr-2 float-right mt- mb-">
+                                                        @if(!$adm_medico)
                                                         <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_personal();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo/a asistente</button>
                                                         <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
+                                                        @endif
                                                         <div class="dropdown-menu">
                                                             <button class="dropdown-item" type="button" class="btn  btn-primary" onclick="Asociar_personal();">Asociar asistente</button>
                                                         </div>

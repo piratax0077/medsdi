@@ -28,7 +28,14 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="card-deck">
-
+                        <div class="card subir">
+                            <a href="{{ route('ministerio.enfer_noti_obliga') }}">
+                                <div class="card-body text-center px-2" style="cursor:pointer">
+                                    <img class="wid-40 text-center" src="{{ asset('images/iconos/panel_configuracion.svg') }}">
+                                    <h6 class="mt-1">Envio, comunicados y <br> decretos de difusion</h6>
+                                </div>
+                            </a>
+                        </div>
                         <div class="card subir">
                             <a href="{{ route('ministerio.ges') }}">
                                 <div class="card-body text-center px-2" style="cursor:pointer">
@@ -45,6 +52,7 @@
                                 </div>
                             </a>
                         </div>
+
                         <div class="card subir">
                             <a href="{{ route('ministerio.control_medicamento') }}">
                                 <div class="card-body text-center px-2" style="cursor:pointer">

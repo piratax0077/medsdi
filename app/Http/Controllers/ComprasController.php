@@ -9,6 +9,8 @@ use App\Models\TipoProducto;
 use App\Models\Region;
 use App\Models\Producto;
 use App\Models\Compras_detalle;
+use App\Models\Marcas_productos;
+use App\Models\Unidades_medidas;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -17,7 +19,7 @@ class ComprasController extends Controller
 {
     //
 
-    public function index(){
+    public function index_(){
         $proveedores = Proveedor::select('proveedores.*', 'tipo_producto.nombre as tipo_producto')
         ->join('tipo_producto', 'proveedores.id_tipo_producto', '=', 'tipo_producto.id')
         ->get();
@@ -26,13 +28,33 @@ class ComprasController extends Controller
         $productos_controller = new ProductosController();
         $marcas = $productos_controller->dameMarcas();
         $unidades_medidas = $productos_controller->dameMedidas();
-
         return view('app.bodega.compras', [
-            'proveedores' => $proveedores,
-            'tipos_producto' => $tipos_producto,
+            'proveedores' => $proveedores, 
+            'tipos_producto' => $tipos_producto, 
             'region' => $regiones,
             'marcas' => $marcas,
             'unidades_medidas' => $unidades_medidas
+        ]);
+    }
+	
+	public function index(){
+        $proveedores = Proveedor::select('proveedores.*', 'tipo_producto.nombre as tipo_producto')
+        ->join('tipo_producto', 'proveedores.id_tipo_producto', '=', 'tipo_producto.id')
+        ->get();
+        $tipos_producto = TipoProducto::all();
+        $regiones = Region::orderBy('nombre')->get();
+        $productos_controller = new ProductosController();
+        $bodegas_controller = new BodegasController();
+        $marcas = $productos_controller->dameMarcas();
+        $unidades_medidas = $productos_controller->dameMedidas();
+        $bodegas = $bodegas_controller->dameBodegas(1);
+        return view('app.bodega.compras', [
+            'proveedores' => $proveedores, 
+            'tipos_producto' => $tipos_producto, 
+            'region' => $regiones,
+            'marcas' => $marcas,
+            'unidades_medidas' => $unidades_medidas,
+            'bodegas' => $bodegas
         ]);
     }
 
@@ -44,9 +66,11 @@ class ComprasController extends Controller
             ->where('id_proveedor', $req->proveedor)
             ->first();
             if($compra){
-                return ['mensaje' => 'existe', 'id_compra' => $compra->id];
+                $productos = $this->dameProductosPorFactura($compra->id);
+                return ['mensaje' => 'existe', 'id_compra' => $compra->id, 'productos' => $productos];
             }
             $compra = new Compras();
+            $compra->id_institucion = 2; // debe cambiar por el id de la institución del usuario
             $compra->id_proveedor = $req->proveedor;
             //$compra->id_usuario = Auth::user()->id;
             $compra->id_usuario = 1;
@@ -85,7 +109,7 @@ class ComprasController extends Controller
             //throw $th;
             return $e->getMessage();
         }
-
+        
     }
 
     public function guardarItemFactura(Request $req){
@@ -94,14 +118,19 @@ class ComprasController extends Controller
             $producto_controlador = new ProductosController();
             if ($req->nuevo == "SI") {
                 $id_producto = $producto_controlador->guardarProducto($req);
+                if($id_producto == false){
+                    return ['mensaje' => 'El producto ya existe'];
+                }
             }else{
                 $id_producto = $req->id_producto;
+                $prod = producto::find($id_producto);
+                // le sumamos la cantidad al stock actual
+                $prod->stock_actual += $req->cantidad;
+                $prod->save();
             }
-
             $producto = Producto::find($id_producto);
-
-            // if($producto != null){
-            if($producto){
+            
+            if($producto != null){
                 $this->guardarDetalleFactura($req, $producto);
 
                 $productos = $this->dameProductosPorFactura($req->id_compra);
@@ -111,17 +140,17 @@ class ComprasController extends Controller
             }else{
                 return ['mensaje' => $producto];
             }
-
+            
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();
         }
-
+        
     }
 
     public function eliminarItemFactura(Request $req){
         try {
-
+            
             $id_compra = $req->id_compra;
             $id_item = $req->id_item;
             $detalle = Compras_detalle::where('id_compra', $id_compra)->where('id', $id_item)->first();
@@ -145,7 +174,7 @@ class ComprasController extends Controller
     }
 
     public function buscarFacturasPorProveedor(Request $req){
-
+      
         $compras = Compras::select('compras.*', 'proveedores.nombre as proveedor')
         ->join('proveedores', 'compras.id_proveedor', '=', 'proveedores.id')
         ->where('compras.id_proveedor', $req->id_proveedor)
@@ -183,7 +212,7 @@ class ComprasController extends Controller
             //throw $th;
             return $e->getMessage();
         }
-
+        
     }
 
     public function detalleCompraProducto($idProducto){
@@ -217,7 +246,7 @@ class ComprasController extends Controller
                 ->groupBy('productos.codigo_interno','productos.id')
                 ->get();
             }else{
-                $productos = Producto::select('productos.codigo_interno','productos.id', DB::raw('MAX(productos.nombre) as nombre_producto'), DB::raw('MAX(tipo_producto.nombre) as tipo_producto'), DB::raw('MAX(unidades_medidas.nombre) as unidad_medida'), DB::raw('MAX(marcas_productos.nombre) as marca'), DB::raw('SUM(compras_detalle.cantidad) as cantidad'),DB::raw('MAX(productos.precio_unitario) as precio_unitario'), DB::raw('MAX(proveedores.nombre) as proveedor'))
+                $productos = Producto::select('productos.codigo_interno','productos.id', DB::raw('MAX(productos.nombre) as nombre_producto'), DB::raw('MAX(tipo_producto.nombre) as tipo_producto'), DB::raw('MAX(unidades_medidas.nombre) as unidad_medida'), DB::raw('MAX(marcas_productos.nombre) as marca'), DB::raw('SUM(compras_detalle.cantidad) as cantidad'),DB::raw('MAX(compras_detalle.precio_compra) as precio_unitario'), DB::raw('MAX(proveedores.nombre) as proveedor'))
                 ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
                 ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
                 ->leftjoin('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
@@ -229,11 +258,16 @@ class ComprasController extends Controller
                 ->groupBy('productos.codigo_interno','productos.id')
                 ->get();
             }
+
+            
+
+
+
             return $productos;
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();
         }
-
+        
     }
 }

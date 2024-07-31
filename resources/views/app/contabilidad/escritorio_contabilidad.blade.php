@@ -23,101 +23,142 @@
         <!--Cierre: Header-->
 		<div class="col-sm-12">
             <div class="row">
-                <div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
-						   <a href="{{ ROUTE('asistente_adm.mis_profesionales') }}"></a>
+                <div class="col-md-3">
+                    <div class="card subir">
+						  <a href="{{ ROUTE('contabilidad.secciones_contabilidad.rrhh') }}">
 							<div class="card-body text-center" style="cursor:pointer">
 								<img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-								<h5 class="mt-1 mb-0">Info Personal</h5>
+								<h5 class="mt-1 mb-0">Recursos Humanos</h5>
 							</div>
+                        </a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
-                          {{--  <a href="{{ ROUTE('asistente_adm.liquidacion_profesionales') }}"></a>--}}
+                <div class="col-md-3">
+                    <div class="card subir">
+						  <a href="{{ ROUTE('contabilidad.secciones_contabilidad.info-pago_sueldos') }}">
+							<div class="card-body text-center" style="cursor:pointer">
+								<img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
+								<h5 class="mt-1 mb-0">Info sueldos Personal</h5>
+							</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card subir">
+                       <a href="{{ ROUTE('contabilidad.secciones_contabilidad.liquidaciones') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-50 text-center" src="{{ asset('images/iconos/profesional_1.svg') }}">
-                                <h5 class="mt-2">Ingresos</h5>
+                                <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
+                                <h5 class="mt-1 mb-0">Liquidaciones a Profesionales</h5>
                             </div>
+                        </a>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
-                         {{--   <a href="{{ ROUTE('asistente_adm.liquidacion_profesionales') }}"></a>--}}
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-50 text-center" src="{{ asset('images/iconos/profesional_1.svg') }}">
-                                <h5 class="mt-2">Egresos</h5>
-                            </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
-                          <a href="{{ ROUTE('asistente.flujo_caja') }}"></a>
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                <h5 class="mt-1 mb-0"> Pendientes de Pago</h5>
-                            </div>
-                    </div>
-                </div>
-
-				<div class="col-md-4">
-                    <div class="card subir" onclick="llamar_liquidaciones_sueldo()";>
-                        <div class="card-body text-center" style="cursor:pointer">
-                            <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-                            <h5 class="mt-1 mb-0">Liquidaciones de Sueldos</h5>
-                        </div>
-                    </div>
-                </div>
-				<div class="col-md-4">
-					<div class="card subir" onclick="en_construccion()";>
-					   {{-- <a href="{{ ROUTE('asistente_adm.asistente_adm_pedidos') }}"></a>--}}
+                <div class="col-md-3">
+					<div class="card subir">
+					   <a href="{{ ROUTE('contabilidad.secciones_contabilidad.remuneraciones') }}">
 							<div class="card-body text-center" style="cursor:pointer">
 								<img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-								<h5 class="mt-1 mb-0">Imposiciones</h5>
+								<h5 class="mt-1 mb-0">Planillas de Pago remuneraciones</h5>
+							</div>
+                        </a>
+					</div>
+				</div>
+                <div class="col-md-3">
+                    <div class="card subir">
+                         <a href="{{ ROUTE('contabilidad.secciones_contabilidad.contable') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                                <h5 class="mt-1 mb-0"> Libro Contable</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+				{{--  <div class="col-md-3">
+					<div class="card subir" onclick="en_construccion()";>  --}}
+					   {{-- <a href="{{ ROUTE('asistente_adm.asistente_adm_pedidos') }}"></a>--}}
+							{{--  <div class="card-body text-center" style="cursor:pointer">
+								<img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+								<h5 class="mt-1 mb-0">Imposiciones y leyes sociales</h5>
 							</div>
 						</a>
 					</div>
-				</div>
-
+				</div>  --}}
+ {{--
 				<div class="col-md-4">
                     <div class="card subir" onclick="en_construccion()";>
-                         {{--  <a href="{{ ROUTE('asistente_adm.gastos') }}"></a>--}}
+                        <a href="{{ ROUTE('asistente_adm.gastos') }}"></a>
                         <div class="card-body text-center" style="cursor:pointer">
                             <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
                             <h5 class="mt-1 mb-0">Pagos Personal del Centro</h5>
                         </div>
                     </div>
                 </div>
-				<div class="col-md-4">
-					<div class="card subir" onclick="en_construccion()";>
-					   {{--  <a href="{{ ROUTE('asistente_adm.asistente_adm_pedidos') }}"></a>--}}
-							<div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-								<h5 class="mt-1 mb-0">Planillas de Pago</h5>
-							</div>
-					</div>
-				</div>
-				<div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
-                        {{--   <a href="{{ ROUTE('asistente_adm.cargar_contrato') }}"></a>--}}
+--}}
+
+                <div class="col-md-3">
+                    <div class="card subir">
+                          <a href="{{ ROUTE('contabilidad.secciones_contabilidad.ingresos') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                <h5 class="mt-1 mb-0"> Proveedores</h5>
+                                <img class="wid-50 text-center" src="{{ asset('images/iconos/profesional_1.svg') }}">
+                                <h5 class="mt-2">Ingresos</h5>
                             </div>
+                        </a>
                     </div>
                 </div>
-				<div class="col-md-4">
+
+                <div class="col-md-3">
+                    <div class="card subir">
+                        <a href="{{ ROUTE('contabilidad.secciones_contabilidad.egresos') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-50 text-center" src="{{ asset('images/iconos/profesional_1.svg') }}">
+                                <h5 class="mt-2">Egresos</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
                     <div class="card subir" onclick="en_construccion()";>
-                         {{--  <a href="{{ ROUTE('asistente_adm.gastos') }}"></a>--}}
+                        {{--  <a href="{{ ROUTE('asistente_adm.gastos') }}"></a>--}}
                         <div class="card-body text-center" style="cursor:pointer">
                             <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
                             <h5 class="mt-1 mb-0">Impuestos</h5>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card subir" onclick="llamar_estadisticas()";>
+
+                <div class="col-md-3">
+                    <div class="card subir" onclick="en_construccion()";>
+                    {{--  <a href="{{ ROUTE('asistente_adm.asistente_adm_pedidos') }}"></a>--}}
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                                <h5 class="mt-1 mb-0">Convenios</h5>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card subir">
+                          <a href="{{ ROUTE('proveedores') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                                <h5 class="mt-1 mb-0"> Proveedores</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card subir">
+                       <a href="{{ ROUTE('contabilidad.secciones_contabilidad.factura') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                                <h5 class="mt-1 mb-0"> Facturar</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card subir" onclick="en_construccion()";>
                          {{--  <a href="{{ ROUTE('asistente_adm.gastos') }}"></a>--}}
                         <div class="card-body text-center" style="cursor:pointer">
                             <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
@@ -125,55 +166,11 @@
                         </div>
                     </div>
                 </div>
-				<div class="col-md-4">
-					<div class="card subir" onclick="en_construccion()";>
-					   {{--  <a href="{{ ROUTE('asistente_adm.asistente_adm_pedidos') }}"></a>--}}
-							<div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-								<h5 class="mt-1 mb-0">Recepción y Despacho de Licencias</h5>
-							</div>
-					</div>
-				</div>
             </div>
         </div>
         <!--CIERRE: Row Botones -->
     </div>
 </div>
 @include('app.adm_cm.modales.en_construccion')
-{{-- @include('app.contabilidad.modals.modal_agregar_gasto') --}}
-{{-- @include('app.contabilidad.modals.modal_editar_gasto') --}}
-@include('app.contabilidad.modals.modal_estadisticas')
-@include('app.contabilidad.modals.modal_liquidaciones')
-{{-- @include('app.contabilidad.modals.modal_pagado')
-@include('app.contabilidad.modals.modal_pagar_gasto')
-@include('app.contabilidad.modals.remuneraciones') --}}
 <!--Cierre: Container Completo-->
-@endsection
-
-@section('page-script')
-<script>
-    function llamar_estadisticas(){
-        console.log('llamar_estadisticas');
-        $('#modal_estadisticas').modal('show');
-        $.ajax({
-            url: "{{ ROUTE('contabilidad.estadisticas') }}",
-            type: 'GET',
-            success: function(data){
-                $('#modal_body_estadisticas').html(data);
-            }
-        })
-    }
-
-    function llamar_liquidaciones_sueldo(){
-        console.log('llamar_liquidaciones_sueldo');
-        $('#modal_liquidaciones_sueldo').modal('show');
-        $.ajax({
-            url: "{{ ROUTE('contabilidad.liquidaciones') }}",
-            type: 'GET',
-            success: function(data){
-                $('#modal_body_liquidaciones_sueldo').html(data);
-            }
-        })
-    }
-</script>
 @endsection

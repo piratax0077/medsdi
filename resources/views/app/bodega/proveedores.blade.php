@@ -46,6 +46,7 @@
                                 <th class="text-center align-middle">Correo electrónico</th>
                                 <th class="text-center align-middle">Editar</th>
                                 <th class="text-center align-middle">Habilitar /<br> deshabilitar</th>
+                                <th class="text-center align-middle">Accion</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,9 +62,12 @@
                                 </td>
                                 <td class="align-middle text-center">
                                     <div class="switch switch-success d-inline m-r-10">
-                                        <input type="checkbox" id="activo-{{ $proveedor->id }}" checked="">
+                                        <input type="checkbox" id="activo-{{ $proveedor->id }}" @if($proveedor->estado == 1) checked @endif onchange="cambiarEstadoProveedor({{ $proveedor->id }})">
                                         <label for="activo-{{ $proveedor->id }}" class="cr"></label>
                                     </div>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_proveedor({{ $proveedor->id }});"><i class="feather icon-trash"></i></button>
                                 </td>
                             </tr>
                             @endforeach
@@ -157,7 +161,7 @@
                             <input class="form-control form-control-sm" name="numero" id="numero" type="text" >
                         </div>
                     </div>
-                    
+
 					<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <div class="form-group fill">
                             <label class="floating-label-activo-sm">Región</label>
@@ -177,7 +181,7 @@
 						<div class="form-group">
 							<label class="floating-label-activo-sm">Ciudad</label>
 							<select id="comunas" name="comunas" class="form-control form-control-sm" required>
-								
+
 
 							</select>
 						</div>
@@ -208,7 +212,7 @@
                     @csrf
                     <div class="row">
                         <input class="form-control form-control-sm" name="id_proveedor" id="id_proveedor" type="hidden">
-                            
+
                         <div class="col-sm-12">
                             <div class="form-group fill">
                                 <label class="floating-label">Proveedor</label>
@@ -287,7 +291,7 @@
 						<div class="form-group">
 							<label class="floating-label-activo-sm">Ciudad</label>
 							<select id="comunas_editar" name="comunas_editar" class="form-control form-control-sm" required>
-								
+
 
 							</select>
 						</div>
@@ -303,4 +307,28 @@
     </div>
 </div>
 
+@endsection
+
+@section('page-script')
+<script>
+    function cambiarEstadoProveedor(id_proveedor) {
+        console.log('cambiando estado del proveedor ' + id_proveedor);
+        let url = '{{ ROUTE("cambiarEstadoProveedor", ":id") }}';
+        url = url.replace(':id', id_proveedor);
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(response) {
+                if(response.mensaje == 'OK'){
+                    console.log('estado cambiado');
+                } else {
+                    console.log('error al cambiar estado');
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+</script>
 @endsection

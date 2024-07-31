@@ -1,5 +1,24 @@
-<div class="tab-pane fade" id="pills-rrhh" role="tabpanel" aria-labelledby="pills-rrhh-tab">
-    <div class="row">
+@extends('template.adm_cm.template')
+@section('content')
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                        <div class="page-header-title">
+                            <h5 class="m-b-10 font-weight-bold">Escritorio Contabilidad/RRHH</h5>
+                        </div>
+
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.area_contabilidad') }}">Escritorio Contabilidad</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Cierre: Header-->
         <div class="col-md-12">
             <!--Card Nav Pills-->
             <div class="card">
@@ -17,11 +36,11 @@
                     </ul>
                 </div>
             </div>
-        </div>         
+        </div>
         <div class="col-md-12">
             <!--Cierre: Card Nav Pills-->
             <div class="tab-content" id="rrhh_cm">
-               
+
                 <!--Tab Profesionales de la salud-->
                 <div class="tab-pane fade show active"id="pills-prof-salud" role="tabpanel" aria-labelledby="pills-prof-salud-tab">
                     <div class="row mb-n10">
@@ -82,7 +101,7 @@
                                                     <i class="feather icon-edit"></i> Editar</button>
                                                     <button type="button" class="btn btn-danger btn-sm">
                                                     <i class="feather icon-x-circle"></i> Desasociar</button>
-                                                </td>                        
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -149,7 +168,7 @@
                                                     <i class="feather icon-edit"></i> Editar</button>
                                                     <button type="button" class="btn btn-danger btn-sm">
                                                     <i class="feather icon-x-circle"></i> Desasociar</button>
-                                                </td>                        
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -159,7 +178,7 @@
                     </div>
                 </div>
                 <!--Cierre: Tab asistentes-->
-                
+
                 <!--Tab personal limpieza y mantencion-->
                 <div class="tab-pane fade" id="pills-limpieza-mantencion" role="tabpanel" aria-labelledby="pills-limpieza-mantencion-tab">
                     <div class="row mb-n10">
@@ -171,7 +190,7 @@
                                             <div class="col-md-6">
                                                 <h4 class="text-white f-20 mt-2 mb-2 float-left">Limpieza y mantención</h4>
                                             </div>
-                                            <div class="col-md-6"> 
+                                            <div class="col-md-6">
                                                 <div class="btn-group mr-2 float-right mt- mb-">
                                                     <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#registrar_personalaseoymantencion"><i class="fa fa-plus" aria-hidden="true"></i> Registrar Personal mantención</button>
                                                 </div>
@@ -217,7 +236,7 @@
                                                     <i class="feather icon-edit"></i> Editar</button>
                                                     <button type="button" class="btn btn-danger btn-sm">
                                                     <i class="feather icon-x-circle"></i> Desasociar</button>
-                                                </td>                        
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -232,16 +251,18 @@
         </div>
     </div>
 </div>
-<?php
-    include("modals_contador/datoscuenta.php");  
-    include("modals_contador/liquidacion.php");
-    include("modals_contador/datos_profesional.php");
-    include("modals_contador/contacto.php");
-    include("modals_contador/editar_profesional.php");
-    include("modals_contador/editar_asistentes.php");
-    include("modals_contador/aseo_mantecion.php");
-    include("modals_contador/aseo_mantecion_editar.php");
-?>
+    @include('app.contabilidad.modals.registrar_asistentes')
+    @include('app.contabilidad.modals.liquidacion')
+    @include('app.contabilidad.modals.datos_profesional')
+    @include('app.contabilidad.modals.datoscuenta')
+    @include('app.contabilidad.modals.contacto')
+    @include('app.contabilidad.modals.contacto_ser')
+    @include('app.contabilidad.modals.editar_profesional')
+    @include('app.contabilidad.modals.editar_asistentes')
+    @include('app.contabilidad.modals.aseo_mantencion_editar')
+    @include('app.contabilidad.modals.aseo_mantencion')
+
+@endsection
 <script type="text/javascript">
     function liquidacion (){
         $('#liquidacion').modal('show');

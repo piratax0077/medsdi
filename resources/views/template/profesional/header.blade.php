@@ -10,6 +10,38 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ml-auto">
+                @if(isset($mensajes))
+                @if(count($mensajes) > 0)
+                <li>
+                    <div class="dropdown drp-user">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Mensajes" data-placement="button">
+                            <i class="feather icon-message-square p-16"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right profile-notification">
+                            <div class="pro-head">
+                                <span>Mensajes ({{ count($mensajes) }})</span>
+                            </div>
+                            <ul></ul>
+                            <ul class="pro-body">
+                                @foreach ($mensajes as $mensaje)
+                                    <li>
+                                        <a href="{{ route('profesional.mensaje', ['id' => $mensaje->id]) }}" class="dropdown-item">
+                                            <div class="media">
+                                                <img class="img-radius img-40" src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="Foto de perfil" style="width: 50px;">
+                                                <div class="media-body ml-3">
+                                                    <h6 class="pro-title">{{ $mensaje->titulo }}</h6>
+                                                    <p class="pro-date">{{ $mensaje->created_at->diffForHumans() }}</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                @endif
+                @endif
                 @if (count(Auth::user()->roles()->get()) > 1)
                     <li>
                         <div class="dropdown drp-user">

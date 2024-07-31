@@ -777,7 +777,7 @@
                     <!--ESPECIALIDADES Y ÁREAS-->
                     <div class="tab-pane fade" id="ar-dep" role="tabpanel" aria-labelledby="ar-dep-tab">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <!--Especialidades-->
                                 <div class="card">
                                     <div class="card-header pt-3 pb-2 bg-light">
@@ -796,7 +796,8 @@
                                                 <table id="especialidades_cm" class="display table table-striped table-xs dt-responsive nowrap" style="width:100%">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-wrap text-center align-middle">Especialidad</th>
+                                                            <th class="text-wrap text-center align-middle">Tipo Especialidad</th>
+                                                            <th class="text-wrap text-center align-middle">SubTipo Especialidad</th>
                                                             <th class="text-wrap text-center align-middle">N° Profesionales</th>
                                                             <th class="text-wrap text-center align-middle">Acción</th>
                                                             <th></th>
@@ -807,14 +808,16 @@
                                                         @foreach($especialidades_cm as $especialidad)
                                                         <tr>
                                                             <td class="align-middle text-center">{{ $especialidad->nombre }}</td>
-                                                            <td class="align-middle text-center">5</td>
+                                                            <td class="align-middle text-center">{{ $especialidad->sub_tipo }}</td>
+                                                            <td class="align-middle text-center">{{ $especialidad->num_profesionales }}</td>
                                                             <td class="align-middle text-center">
                                                                 <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="esp-{{ $especialidad->id }}">
+                                                                    <input type="checkbox" class="custom-control-input" id="esp-{{ $especialidad->id }}" onchange="cambiarEstadoEspecialidad({{ $especialidad->id }})" @if($especialidad->estado == 1) checked @endif>
                                                                     <label class="custom-control-label" for="esp-{{ $especialidad->id }}"></label>
                                                                 </div>
                                                             </td>
                                                             <td class="align-middle text-center">
+                                                                <button type="button" class="btn btn-outline-warning btn-sn btn-icon" onclick="dame_especialidad_cm({{ $especialidad->id }})"><i class="fas fa-edit"></i></button>
                                                                 <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm({{ $especialidad->id }});"><i class="feather icon-trash"></i></button>
                                                             </td>
                                                         </tr>
@@ -827,7 +830,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            {{-- <div class="col-md-4">
                                 <!--Especialidades-->
                                 <div class="card">
                                     <div class="card-header pt-3 pb-2 bg-light">
@@ -876,8 +879,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
+                            </div> --}}
+                            <div class="col-md-6">
                                 <!--Área-->
                                 <div class="card">
                                     <div class="card-header pt-3 pb-2 bg-light">
@@ -897,64 +900,20 @@
                                                     <thead>
                                                         <tr>
                                                             <th class="text-wrap text-left align-middle">Área</th>
+                                                            <th class="text-wrap text-left align-middle">Responsable</th>
                                                             <th class="text-wrap text-left align-middle">Acción</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        @foreach($areas_cm as $area)
                                                         <tr>
-                                                            <td class="align-middle text-left">Admin. Médica</td>
+                                                            <td class="align-middle text-left">{{ $area->tipo_area }}</td>
+                                                            <td class="align-middle text-left">{{ $area->nombre_responsable . ' ' . $area->apellido_uno_responsable . ' ' . $area->apellido_dos_responsable }}</td>
                                                             <td class="align-middle text-left">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="area-1">
-                                                                    <label class="custom-control-label" for="area-1"></label>
-                                                                </div>
+                                                                <button type="button" class="btn btn-outline-warning btn-sn btn-icon" onclick="dame_area_cm({{ $area->id }})"><i class="fas fa-edit"></i></button>
+                                                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_area_cm({{ $area->id }});"><i class="feather icon-trash"></i></button>
                                                             </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="align-middle text-left">Admin. comercial</td>
-                                                            <td class="align-middle text-left">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="area-2">
-                                                                    <label class="custom-control-label" for="area-2"></label>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="align-middle text-left">boxes y Consultas</td>
-                                                            <td class="align-middle text-left">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="area-3">
-                                                                    <label class="custom-control-label" for="area-3"></label>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="align-middle text-left">Asistentes</td>
-                                                            <td class="align-middle text-left">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="area-4">
-                                                                    <label class="custom-control-label" for="area-4"></label>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="align-middle text-left">Mantención y Limpieza</td>
-                                                            <td class="align-middle text-left">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="area-5">
-                                                                    <label class="custom-control-label" for="area-5"></label>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="align-middle text-left">Farmacia y Bodega</td>
-                                                            <td class="align-middle text-left">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="area-6">
-                                                                    <label class="custom-control-label" for="area-6"></label>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
+                                                        @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -1687,16 +1646,25 @@
                                 <div class="form-group fill">
                                     <!--Cargar áreas-->
                                     <label class="floating-label">Área</label>
-                                    <select class="form-control form-control-sm">
+                                    <select class="form-control form-control-sm" id="area">
                                         <option>Seleccione</option>
-                                        <option>Administración financiera</option>
-                                        <option>Administración comercial</option>
-                                        <option>Otorrinolaringología</option>
-                                        <option>Traumatología</option>
-                                        <option>Rehabilitación</option>
-                                        <option>Administración</option>
-                                        <option>Mantención</option>
-                                        <option>etc.. cargar todas las áreas de un centro médico</option>
+                                        @foreach($tipos_areas_cm as $area)
+                                            <option value="{{ $area->id }}">{{ $area->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <!--Cargar áreas-->
+                                    <label class="floating-label">Responsable</label>
+                                    <select class="form-control form-control-sm" id="responsable_area">
+                                        <option>Seleccione</option>
+                                        @if(isset($profesionales))
+                                        @foreach($profesionales as $profesional)
+                                            <option value="{{ $profesional->id }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
+                                        @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -1705,7 +1673,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-info btn-sm mx-auto">Añadir</button>
+                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="registrar_area_profesional()">Añadir</button>
                 </div>
             </div>
         </div>
@@ -1725,8 +1693,8 @@
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <!--Cargar especialidades-->
-                                    <label class="floating-label">Especialidad</label>
-                                    <select class="form-control form-control-sm" id="especialidad_cm" name="especialidad_cm">
+                                    <label class="floating-label-activo-sm">Tipo Especialidad</label>
+                                    <select class="form-control form-control-sm" id="especialidad_cm" name="especialidad_cm" onchange="buscar_sub_tipo_especialidad(this);">
                                         <option>Seleccione</option>
                                         @if(isset($especialidades))
                                             @foreach ($especialidades as $especialidad)
@@ -1736,10 +1704,72 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Sub Tipo Especialidad</label>
+                                    <select class="form-control form-control-sm" name="sub_tipo_especialidad_cm" id="sub_tipo_especialidad_cm">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">N° Profesionales</label>
+                                    <input type="number" name="num_profesionales" id="num_profesionales" class="form-control form-control-sm">
+                                </div>
+                            </div>
                         </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_especialidad_cm()">Añadir</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{-- MODAL EDITAR ESPECIALIDAD --}}
+    <div id="editar_especialidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editar_especialidad" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white text-center">Editar especialidad</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <!--Cargar especialidades-->
+                                    <label class="floating-label-activo-sm">Tipo Especialidad</label>
+                                    <select class="form-control form-control-sm" id="editar_especialidad_nombre" name="editar_especialidad_nombre" onchange="buscar_sub_tipo_especialidad(this);">
+                                        <option>Seleccione</option>
+                                        @if(isset($especialidades))
+                                            @foreach ($especialidades as $especialidad)
+                                                <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Sub Tipo Especialidad</label>
+                                    <select class="form-control form-control-sm" name="editar_especialidad_sub_tipo" id="editar_especialidad_sub_tipo">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">N° Profesionales</label>
+                                    <input type="number" name="editar_especialidad_num_profesionales" id="editar_especialidad_num_profesionales" class="form-control form-control-sm">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_especialidad_cm()">Editar</button>
                 </div>
                 </form>
             </div>
@@ -1779,7 +1809,9 @@
         </div>
     </div>
 </div>
-
+<input type="hidden" id="id_especialidad_cm" name="id_especialidad_cm" value="">
+<input type="hidden" id="id_institucion" name="id_institucion" value="">
+<input type="hidden" id="id_lugar_atencion" name="id_lugar_atencion" value="">
 <!--Cierre: Container Completo-->
 @endsection
 
@@ -2624,6 +2656,8 @@
             var mensaje = '';
             let id_institucion = $('#id_institucion').val();
             let especialidad = $('#especialidad_cm').val();
+            let sub_tipo_especialidad = $('#sub_tipo_especialidad_cm').val();
+            let num_profesionales = $('#num_profesionales').val();
 
             if(id_institucion == '')
             {
@@ -2635,6 +2669,16 @@
                 valido = 0;
                 mensaje += 'Campo requerido Especialidad\n';
             }
+            if(sub_tipo_especialidad == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido Sub Tipo Especialidad\n';
+            }
+            if(num_profesionales == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido N° Profesionales\n';
+            }
 
             if(valido == 1)
             {
@@ -2642,8 +2686,10 @@
                 var data = {
                     id_institucion : id_institucion,
                     especialidad : especialidad,
+                    sub_tipo_especialidad: sub_tipo_especialidad,
                     _token: CSRF_TOKEN,
                     principal:1,
+                    num_profesionales:num_profesionales,
                 };
                 let url = "{{ route('adm_cm.registrar_especialidad') }}";
                 $.ajax({
@@ -2664,13 +2710,18 @@
                                 $('#especialidades_cm tbody').append(`
                                 <tr>
                                     <td class="align-items-center text-center">${v.nombre}</td>
+                                    <td class="align-items-center text-center">${v.sub_tipo}</td>
+                                    <td class="align-items-center text-center">
+                                        ${v.num_profesionales}
+                                    </td>
                                     <td class="align-items-center text-center">
                                         <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="esp-${v.id}">
+                                            <input type="checkbox" class="custom-control-input" id="esp-${v.id}" onchange="cambiarEstadoEspecialidad(${v.id})" ${v.estado == 1 ? 'checked' : ''}>
                                             <label class="custom-control-label" for="esp-${v.id}"></label>
                                         </div>
                                     </td>
                                     <td class="align-items-center text-center">
+                                        <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="editar_especialidad_cm(${v.id})"><i class="fas fa-edit"></i></button>
                                         <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
                                     </td>
                                 </tr>
@@ -2779,6 +2830,10 @@
                                 $('#especialidades_cm tbody').append(`
                                 <tr>
                                     <td class="align-items-center text-center">${v.nombre}</td>
+                                    <td class="align-items-center text-center">${v.sub_tipo}</td>
+                                    <td class="align-items-center text-center">
+                                        5
+                                    </td>
                                     <td class="align-items-center text-center">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input" id="esp-${v.id}">
@@ -2833,6 +2888,44 @@
             }
         }
 
+        function dame_especialidad_cm(id){
+            console.log(id);
+            $('#id_especialidad_cm').val(id);
+            // Construye la URL con la id adjunta
+            var url = "{{ url('Administrador/dame_especialidad') }}/" + id;
+            $.ajax({
+                url: url,
+                type: "get",
+            })
+            .done(function(data) {
+                // abrir modal
+            $('#editar_especialidad').modal('show');
+                console.log(data);
+                if (data != null) {
+                    $('#id_lugar_atencion').val(data.id_lugar_atencion);
+                    $('#id_institucion').val(data.id_institucion);
+                    $('#editar_especialidad_id').val(data.id);
+                    $('#editar_especialidad_nombre').val(data.id_tipo_especialidad);
+                    $('#editar_especialidad_sub_tipo').val(data.sub_tipo);
+                    $('#editar_especialidad_num_profesionales').val(data.num_profesionales);
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar especialidad",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
         function eliminar_especialidad_cm(id){
             // preguntar si desea eliminar
             swal({
@@ -2874,13 +2967,18 @@
                             $('#especialidades_cm tbody').append(`
                             <tr>
                                 <td class="align-items-center text-center">${v.nombre}</td>
+                                <td class="align-items-center text-center">${v.sub_tipo}</td>
+                                    <td class="align-items-center text-center">
+                                        ${v.num_profesionales}
+                                    </td>
                                 <td class="align-items-center text-center">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="esp-${v.id}">
+                                        <input type="checkbox" class="custom-control-input" id="esp-${v.id}" onchange="cambiarEstadoEspecialidad(${v.id})" ${v.estado == 1 ? 'checked' : ''}>
                                         <label class="custom-control-label" for="esp-${v.id}"></label>
                                     </div>
                                 </td>
                                 <td class="align-items-center text-center">
+                                    <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="editar_especialidad_cm(${v.id})"><i class="fas fa-edit"></i></button>
                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
                                 </td>
                             </tr>
@@ -3013,6 +3111,408 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         }
+
+        function buscar_tipo_especialidad(id='')
+        {
+            let tipo_especialidad_registro = $('#agregar_profesional_nuevo_especialidad');
+            tipo_especialidad_registro.find('option').remove();
+
+            let sub_tipo_especialidad_registro = $('#agregar_profesional_nuevo_sub_tipo_especialidad');
+            sub_tipo_especialidad_registro.find('option').remove();
+
+            let especialidad = $('#especialidad_cm').val();
+            console.log(especialidad);
+            let url = "{{ route('home.buscar_especialidad') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    //_token: _token,
+                    especialidad: especialidad,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    let especialidades = $('#tipo_especialidad_cm');
+
+                    especialidades.find('option').remove();
+                    especialidades.append('<option value="">Seleccione</option>');
+                    if(data.length > 0)
+                    {
+                        $(data).each(function(i, v) { // indice, valor
+                            especialidades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                        })
+                    }
+                    else
+                    {
+                        especialidades.append('<option value="0">No Aplica</option>');
+                        especialidades.val(0);
+
+                        let sub_especialidades = $('#agregar_profesional_nuevo_sub_tipo_especialidad');
+                        sub_especialidades.append('<option value="0">No Aplica</option>');
+                        sub_especialidades.val(0);
+                    }
+                    if(id != '')
+                        especialidades.val(id);
+
+
+                } else {
+                    alert('No se pudo Cargar los tipos de especialidad');
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+    function buscar_sub_tipo_especialidad(id='')
+    {
+        let sub_tipo_especialidad_registro = $('#agregar_profesional_nuevo_sub_tipo_especialidad');
+        sub_tipo_especialidad_registro.find('option').remove();
+
+        let especialidad = $('#especialidad_cm').val();
+        console.log(especialidad);
+        let url = "{{ route('home.buscar_sub_tipo_especialidad') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                //_token: _token,
+                especialidad: especialidad,
+            },
+        })
+        .done(function(data) {
+            if (data != null) {
+                data = JSON.parse(data);
+                console.log(data);
+                console.log(data.length);
+                let sub_especialidades = $('#sub_tipo_especialidad_cm');
+
+                sub_especialidades.find('option').remove();
+                sub_especialidades.append('<option value="">Seleccione</option>');
+                if(data.length > 0)
+                {
+                    $(data).each(function(i, v) { // indice, valor
+                        sub_especialidades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                    })
+                }
+                else
+                {
+                    sub_especialidades.append('<option value="0">No Aplica</option>');
+                    sub_especialidades.val(0);
+                }
+                if(id != '')
+                    sub_especialidades.val(id);
+
+            } else {
+                alert('No se pudo Cargar los tipos de especialidad');
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function cambiarEstadoEspecialidad(id){
+        let estado = $('#esp-'+id).prop('checked');
+        if(estado)
+            estado = 1;
+        else
+            estado = 0;
+        let id_institucion = $('#id_institucion').val();
+        let data = {
+            id : id,
+            estado : estado,
+            id_institucion : id_institucion,
+            _token: CSRF_TOKEN,
+        };
+        let url = "{{ route('adm_cm.cambiar_estado_especialidad') }}";
+        $.ajax({
+            url: url,
+            type: "post",
+            data: data,
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data != null) {
+                if(data.estado == 1)
+                {
+                    let especialidades = data.especialidades;
+                    $('#especialidades_cm tbody').empty();
+                    $(especialidades).each(function(i, v) { // indice, valor
+                        $('#especialidades_cm tbody').append(`
+                        <tr>
+                            <td class="align-items-center text-center">${v.nombre}</td>
+                            <td class="align-items-center text-center">${v.sub_tipo}</td>
+                            <td class="align-items-center text-center">
+                                ${v.num_profesionales}
+                            </td>
+                            <td class="align-items-center text-center">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="esp-${v.id}" onchange="cambiarEstadoEspecialidad(${v.id})" ${v.estado == 1 ? 'checked' : ''}>
+                                    <label class="custom-control-label" for="esp-${v.id}"></label>
+                                </div>
+                            </td>
+                            <td class="align-items-center text-center">
+                                <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="dame_especialidad_cm(${v.id})"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                            </td>
+                        </tr>
+                        `);
+                    });
+                    swal({
+                        title: "Estado Cambiado",
+                        text: "Estado Cambiado Correctamente",
+                        icon: "success",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cambiar estado",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cambiar estado",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function registrar_area_profesional(){
+        let area = $('#area').val();
+        let responsable = $('#responsable_area').val();
+
+        let data = {
+            area : area,
+            responsable : responsable,
+            _token: CSRF_TOKEN,
+        }
+
+        let url = "{{ route('adm_cm.registrar_area_profesional') }}";
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: data,
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data != null) {
+                if(data.estado == 1)
+                {
+                    // cerrar modal
+                    $('#a_area').modal('hide');
+                    let areas = data.areas;
+                    $('#area_cm tbody').empty();
+                    $(areas).each(function(i, v) { // indice, valor
+                        $('#area_cm tbody').append(`
+                        <tr>
+                            <td class="align-items-left text-left">${v.tipo_area}</td>
+                            <td class="align-items-left text-left">${v.nombre_responsable} ${v.apellido_uno_responsable} ${v.apellido_dos_responsable}</td>
+                            <td class="align-items-left text-left">
+                                <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="dame_area_profesionale(${v.id})"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_area_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                            </td>
+                        </tr>
+                        `);
+                    });
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar área profesional",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar ingresar área profesional",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+    }
+
+    function eliminar_area_cm(id){
+        swal({
+            title: "Eliminar Área Profesional",
+            text: "¿Está seguro que desea eliminar el área profesional?",
+            icon: "warning",
+            buttons: ["Cancelar", "Aceptar"],
+            DangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                confirmar_eliminar_area_profesional(id);
+            }
+        });
+    }
+
+    function confirmar_eliminar_area_profesional(id){
+        let data = {
+            id : id,
+            _token: CSRF_TOKEN,
+        };
+        let url = "{{ route('adm_cm.eliminar_area_profesional') }}";
+        $.ajax({
+            url: url,
+            type: "post",
+            data: data,
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data != null) {
+                if(data.estado == 1)
+                {
+                    let areas = data.areas;
+                    $('#area_cm tbody').empty();
+                    $(areas).each(function(i, v) { // indice, valor
+                        $('#area_cm tbody').append(`
+                        <tr>
+                            <td class="align-items-left text-left">${v.tipo_area}</td>
+                            <td class="align-items-left text-left">${v.nombre_responsable} ${v.apellido_uno_responsable} ${v.apellido_dos_responsable}</td>
+                            <td class="align-items-left text-left">
+                                <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="dame_area_profesionale(${v.id})"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_area_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                            </td>
+                        </tr>
+                        `);
+                    });
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar área profesional",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar ingresar área profesional",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function editar_especialidad_cm(){
+        var numero_profesionales = $('#editar_especialidad_num_profesionales').val();
+        var id_especialidad_cm = $('#id_especialidad_cm').val();
+        var id_lugar_atencion = $('#id_lugar_atencion').val();
+        var id_institucion = $('#id_institucion').val();
+
+        var url = "{{ route('adm_cm.editar_especialidad') }}";
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                id_especialidad_cm : id_especialidad_cm,
+                numero_profesionales : numero_profesionales,
+                id_lugar_atencion : id_lugar_atencion,
+                id_institucion : id_institucion,
+                _token: CSRF_TOKEN,
+            },
+            success: function(data){
+                console.log(data);
+            if (data != null) {
+                if(data.estado == 1)
+                {
+                    // cerrar modal
+                    $('#editar_especialidad').modal('hide');
+                    let especialidades = data.especialidades;
+                    $('#especialidades_cm tbody').empty();
+                    $(especialidades).each(function(i, v) { // indice, valor
+                                $('#especialidades_cm tbody').append(`
+                                <tr>
+                                    <td class="align-items-center text-center">${v.nombre}</td>
+                                    <td class="align-items-center text-center">${v.sub_tipo}</td>
+                                    <td class="align-items-center text-center">
+                                        ${v.num_profesionales}
+                                    </td>
+                                    <td class="align-items-center text-center">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="esp-${v.id}" onchange="cambiarEstadoEspecialidad(${v.id})" ${v.estado == 1 ? 'checked' : ''}>
+                                            <label class="custom-control-label" for="esp-${v.id}"></label>
+                                        </div>
+                                    </td>
+                                    <td class="align-items-center text-center">
+                                        <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="dame_especialidad_cm(${v.id})"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                                    </td>
+                                </tr>
+                                `);
+                            });
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar área profesional",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar ingresar área profesional",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+            },
+            error: function(jqXHR, ajaxOptions, thrownError){
+                console.log(jqXHR, ajaxOptions, thrownError);
+            }
+        });
+    }
+
 
     </script>
 @endsection

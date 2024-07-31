@@ -16,6 +16,7 @@ class ProveedoresController extends Controller
             $regiones = Region::orderBy('nombre')->get();
             $proveedores = Proveedor::select('proveedores.*', 'tipo_producto.nombre as tipo_producto')
             ->join('tipo_producto', 'proveedores.id_tipo_producto', '=', 'tipo_producto.id')
+            ->orderBy('proveedores.id', 'asc')
             ->get();
             $tipo_producto = TipoProducto::all();
             return view('app.bodega.proveedores',[
@@ -126,5 +127,12 @@ class ProveedoresController extends Controller
         $proveedor->id_region = $req->region_editar;
         $proveedor->save();
         return redirect()->route('proveedores');
+    }
+
+    public function cambiarEstadoProveedor($id){
+        $proveedor = Proveedor::find($id);
+        $proveedor->estado = !$proveedor->estado;
+        $proveedor->save();
+        return ['mensaje' => 'OK'];
     }
 }

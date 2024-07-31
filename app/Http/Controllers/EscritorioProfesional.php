@@ -38,6 +38,8 @@ use App\Models\Interconsulta;
 use App\Models\LugarAtencion;
 use App\Models\LiquidacionRecibo;
 use App\Models\LogUsersDevices;
+use App\Models\MensajesProfesional;
+use App\Models\MensajesDifusion;
 use App\Models\NotificacionConfirmacion;
 use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
@@ -495,7 +497,7 @@ class EscritorioProfesional extends Controller
             }
 
             $lugar_atencion_prof = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->count();
-
+            $mensajes = $this->dame_mensajes($profesional->id);
             //if($profesional->bienvenida == 0)
             if( $lugar_atencion_prof == 0 )
             {
@@ -511,6 +513,7 @@ class EscritorioProfesional extends Controller
                     'profesional' => $profesional,
                     'hora_dia' => $horas_dia,
                     'tipo_agendas' => $tipo_agendas,
+                    'mensajes' => $mensajes
                 ]);
             }
         }
@@ -538,6 +541,48 @@ class EscritorioProfesional extends Controller
         ]);
     }
 
+    public function dame_mensajes($id){
+        $profesional = Profesional::where('id', $id)->first();
+        // revisar si tiene mensaje para profesional
+        $mensajes = MensajesProfesional::where('id_profesional', $profesional->id)->where('estado', 1)->get();
+
+        $mensajes_difusion = MensajesDifusion::where('estado', 1)->get();
+        foreach ($mensajes_difusion as $mensaje) {
+            $mensaje->destinatarios = json_decode($mensaje->destinatarios);
+        }
+
+        // revisar si su rol tiene mensaje de difusion
+        $User = User::where('id', $profesional->id_usuario)->first();
+        $roles = $User->roles()->orderBy('id', 'DESC')->get();
+        $m = [];
+        foreach($mensajes_difusion as $mensaje)
+        {
+            foreach($mensaje->destinatarios as $destinatario){
+
+                foreach($roles as $rol){
+                    if(intval($destinatario) == $rol->id){
+                        array_push($m, $mensaje);
+                    }
+                }
+            }
+        }
+        // Asegúrate de que $mensajes sea una colección
+        if (!($mensajes instanceof Collection)) {
+            $mensajes = collect($mensajes);
+        }
+
+        // Asegúrate de que $m sea una colección
+        if (!($m instanceof Collection)) {
+            $m = collect($m);
+        }
+
+        // Unir los mensajes
+        $mensajes = $mensajes->merge($m);
+        // Ordenar la colección por el campo created_at
+        $mensajes = $mensajes->sortBy('created_at');
+
+        return $mensajes;
+    }
 
     public function validar_rut(Request $request)
     {
