@@ -66,7 +66,7 @@
     <style>
         .ui-front {
             position: absolute;
-            z-index: 2006;
+            z-index: 3000;
             overflow: auto;
         }
 
