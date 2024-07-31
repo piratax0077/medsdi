@@ -689,7 +689,6 @@
 
         function ver_pdf_receta(id_ficha_atencion)
         {
-
             let url = "{{ route('pdf.receta_medicamentos') }}";
             Fancybox.show(
                 [
@@ -721,9 +720,9 @@
         {{--  METODOS DE EXAMENES  --}}
         function mostrar_modal_examen_cirguria() {
 
-            {{--  $("#indicar_examenes").modal("show");  --}}
             ver_examenes_ficha_medica();
             ver_examenes_ficha_medica_esp();
+			$("#indicar_examenes").modal("show");
             $('#indicar_examenes').modal({backdrop: 'static', keyboard: false});
 
         }
@@ -1000,10 +999,15 @@
         {
 
             let url = "{{ route('pdf.orden_examenes') }}";
+            @if(!empty(session('lic_token')) && session('lic_estado') == 1)
+                var token = "session('lic_token')";
+            @else
+                var token = '';
+            @endif
             Fancybox.show(
                 [
                     {
-                    src: url+'?id_ficha_atencion='+id_ficha_atencion,
+                    src: url+'?id_ficha_atencion='+id_ficha_atencion+'&auto='+token,
                     type: "iframe",
                     preload: false,
                     },
