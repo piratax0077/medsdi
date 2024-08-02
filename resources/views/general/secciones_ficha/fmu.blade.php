@@ -292,7 +292,22 @@
                                         @if ($tratamiento_activo)
                                             @foreach ( $tratamiento_activo as $receta)
                                                 @foreach ( $receta['detalle'] as $detalle)
-                                                    <li style="font-size: 12px">{{ $detalle['producto'] }}<br/>&nbsp;&nbsp;<span style="font-size: 9px; font-weight: bold;">{{ $detalle['farmaco'] }}</span></li>
+                                                    @if ($detalle['id_tipo_control'] == 8)
+                                                        <li style="font-size: 12px">
+                                                            Receta Magistral<br/>&nbsp;&nbsp;
+                                                            <span style="font-size: 9px; font-weight: bold;">
+                                                                @php
+                                                                    $producto_detalle_temp = json_decode($detalle['producto']);
+                                                                    // var_dump($producto_detalle_temp[0]) ;
+                                                                @endphp
+                                                                @foreach ( $producto_detalle_temp as $det_temp)
+                                                                    {{ $det_temp->nombre }}: {{ $det_temp->cantidad }} |
+                                                                @endforeach
+                                                            </span>
+                                                        </li>
+                                                    @else
+                                                        <li style="font-size: 12px">{{ $detalle['producto'] }}<br/>&nbsp;&nbsp;<span style="font-size: 9px; font-weight: bold;">{{ $detalle['farmaco'] }}</span></li>
+                                                    @endif
                                                 @endforeach
                                             @endforeach
                                         @else
