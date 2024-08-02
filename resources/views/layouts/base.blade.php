@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="es">
 @include('include.header')
 @yield('page-styles')
-<body>    
-    @yield('content')   
-    @yield('page-script')  
+<body>
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill">
+            </div>
+        </div>
+    </div>
+    @include('template.profesional.menu')
+    @include('template.profesional.header')
+
+    @yield('content')
+
+    @include('template.include.nocomplatible')
+
 </body>
+@yield('page-script')
 @include('include.script')
 </html>
