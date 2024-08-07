@@ -188,6 +188,14 @@
                                 </div>
                             </a>
                         </div>
+                        <div class="card social-widget-card bg-c-info opacidad px-0">
+                            <a href="{{ route('app.descarga') }}" class="btn" type="button">
+                                <div class="card-body">
+                                    <img class="wid-30 mb-3" src="{{ asset('images/iconos/lock.svg') }}">
+                                    <h5 class="my-auto text-white">SDIPASS</h5>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

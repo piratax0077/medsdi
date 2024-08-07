@@ -1,8 +1,8 @@
-<div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
+<div class="user-profile user-card mt-0 bg-fondo-gris">
     <div class="col-md-12 py-0 px-2 shadow-none">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <h4 class="text-c-blue mt-3 f-18 mb-0">Exámenes</h4>
+                <h4 class="text-c-blue mt-3 f-20 mb-0">Exámenes</h4>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <ul class="nav nav-tabs-secciones mb-2" id="pediatria_general" role="tablist">
@@ -10,7 +10,7 @@
                         <a class="nav-secciones active text-uppercase" id="bandeja-entrada-tab" data-toggle="tab" href="#bandeja-entrada" role="tab" aria-controls="bandeja-entrada" aria-selected="false">Bandeja de entrada</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="ex-esp-rev-tab" data-toggle="tab" href="#ex-esp-rev" role="tab" aria-controls="ex-esp-rev" aria-selected="false">Examenes Especialidad</a>
+                        <a class="nav-secciones text-uppercase" id="ex-esp-rev-tab" data-toggle="tab" href="#ex-esp-rev" role="tab" aria-controls="ex-esp-rev" aria-selected="false">Examenes especialidad</a>
                     </li>
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="ex-rx-tab" data-toggle="tab" href="#ex-rx" role="tab" aria-controls="ex-rx" aria-selected="false">Exámenes radiológicos</a>
@@ -25,16 +25,17 @@
                     <!--BANDEJA DE ENTRADA-->
                     <div class="tab-pane fade show active" id="bandeja-entrada" role="tabpanel" aria-labelledby="bandeja-entrada-tab">
                         <div class="card">
+                            <div class="card-top">
+                                    <h6>Bandeja de entrada</h6>
+                                </div>
                             <div class="card-body pt-2">
-                                <h6 class="text-c-blue">Bandeja de entrada</h6>
-                                <hr class="mt-2">
                                 <div class="dt-responsive table-responsive">
                                     <table id="bandeja_entrada" class="display table dt-responsive nowrap table-xs align-middle" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Fecha</th>
-                                                <th>Nº de Orden</th>
-                                                <th>Nombre del Examen</th>
+                                                <th>Nº de orden</th>
+                                                <th>Nombre del examen</th>
                                                 <th>Tipo de Examen</th>
                                                 <th>Examen</th>
                                             </tr>
@@ -56,7 +57,7 @@
 																	@endif
 																</td>
 																<td>
-																	<button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad('{{ $exam->id }}',1);"><i class="feather icon-file-text"></i> Ver examen</button>
+																	<button type="button" class="btn btn-xxs btn-success-light-c" onclick="verExamenEspecialidad('{{ $exam->id }}',1);"><i class="feather icon-activity"></i> Ver</button>
 																</td>
 															</tr>
 														@endif
@@ -82,9 +83,9 @@
                                                             </td>
                                                             <td>
                                                                 @if ($result_ex->ResultadoExamenArchivo->count()>0)
-                                                                    <button type="button" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',1);"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                    <button type="button" class="btn btn-xxs btn-success-light-c" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',1);"><i class="feather icon-activity"></i> Ver</button>
                                                                 @else
-                                                                    <button type="button" disabled="disabled" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                    <button type="button" disabled="disabled" class="btn btn-xxs btn-success-light-c" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-activity"></i> Ver</button>
                                                                 @endif
                                                             </td>
                                                         </tr>
@@ -99,12 +100,13 @@
                         </div>
                     </div>
 
-                    <!-- EXAMEN ESPECIALIDAD REVISADOS -->
+                    <!-- EXAMEN ESPECIALIDAD  -->
                     <div class="tab-pane fade" id="ex-esp-rev" role="tabpanel" aria-labelledby="ex-esp-rev-tab">
                         <div class="card">
+                            <div class="card-top">
+                                    <h6>Exámenes especialidad</h6>
+                                </div>
                             <div class="card-body">
-                                <h6 class="text-c-blue">Examenes Especialidad</h6>
-                                <hr>
                                 <div class="dt-responsive table-responsive">
                                     <table id="tabla_ex_esp" class="display table dt-responsive nowrap table-xs align-middle" style="width:100%">
                                         <thead>
@@ -133,7 +135,7 @@
 																	@endif
 																</td>
 																<td>
-																	<button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad('{{ $exam->id }}',0);"><i class="feather icon-file-text"></i> Ver examen</button>
+																	<button type="button" class="btn btn-xxs btn-success-light-c" onclick="verExamenEspecialidad('{{ $exam->id }}',0);"><i class="feather icon-activity"></i> Ver</button>
 																</td>
 															</tr>
 														@endif
@@ -151,9 +153,10 @@
                     <div class="tab-pane fade show" id="ex-rx" role="tabpanel" aria-labelledby="ex-rx-tab">
                        <div class="dt-responsive table-responsive">
                             <div class="card">
+                                <div class="card-top">
+                                    <h6>Exámenes radiológicos</h6>
+                                </div>
                                 <div class="card-body">
-                                    <h6 class="text-c-blue">Exámenes radiológicos</h6>
-                                    <hr>
                                     <table id="exam_radiologicos" class="display table dt-responsive nowrap table-xs" style="width:100%">
                                         <thead>
                                         <tr>
@@ -184,9 +187,9 @@
                                                                 </td>
                                                                 <td>
                                                                     @if ($result_ex->ResultadoExamenArchivo->count()>0)
-                                                                        <button type="button" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',0);"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                        <button type="button" class="btn btn-xxs btn-success-light-c" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',0);"><i class="feather icon-activity"></i> Ver examen</button>
                                                                     @else
-                                                                        <button type="button" disabled="disabled" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                        <button type="button" disabled="disabled" class="btn btn-xxs btn-success-light-c" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-activity"></i> Ver examen</button>
                                                                     @endif
                                                                 </td>
                                                             </tr>
@@ -205,9 +208,10 @@
                     <div class="tab-pane fade show" id="ex-generales" role="tabpanel" aria-labelledby="ex-generales-tab">
                        <div class="dt-responsive table-responsive">
                             <div class="card">
+                                <div class="card-top">
+                                    <h6>Exámenes generales</h6>
+                                </div>
                                 <div class="card-body">
-                                     <h6 class="text-c-blue">Exámenes generales</h6>
-                                     <hr>
                                     <div class="dt-responsive table-responsive pb-4">
                                         <table id="exam_general" class="display table dt-responsive nowrap table-xs align-middle" style="width:100%">
                                             <thead>
@@ -239,9 +243,9 @@
                                                                     </td>
                                                                     <td>
                                                                         @if ($result_ex->ResultadoExamenArchivo->count()>0)
-                                                                            <button type="button" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',0);"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                            <button type="button" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',0);"><i class="feather icon-activity"></i> Ver</button>
                                                                         @else
-                                                                            <button type="button" disabled="disabled" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                                            <button type="button" disabled="disabled" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-activity"></i> Ver</button>
                                                                         @endif
                                                                     </td>
                                                                 </tr>
@@ -315,7 +319,7 @@
         else
         {
             swal({
-                title: "Ver Examen Especialidad",
+                title: "Ver examen especialidad",
                 text:"No Se encuentra examen",
                 icon: "error"
             });
@@ -408,7 +412,7 @@
         else
         {
             swal({
-                title: "Ver Resultado de Examen Laboratorio",
+                title: "Ver resultado de examen laboratorio",
                 text:"No Se encuentra resultado de examen Laboratorio",
                 icon: "error"
             });
@@ -463,7 +467,7 @@
                     }
                     fila += '    </td>';
                     fila += '    <td>';
-                    fila += '        <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad(\''+value.id+'\', 1);"><i class="feather icon-file-text"></i> Ver examen</button>';
+                    fila += '        <button type="button" class="btn btn btn-success-light-cbtn-xxs" onclick="verExamenEspecialidad(\''+value.id+'\', 1);"><i class="feather icon-activity"></i> Ver examen</button>';
                     fila += '    </td>';
                     fila += '</tr>';
 
@@ -518,9 +522,9 @@
                     fila += '    </td>';
                     fila += '    <td>';
                     if(value.cantidad > 0)
-                        fila += '        <button type="button" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_'+value.id+'" onclick="verResultadoExamen(\''+value.id+'\',1);"><i class="feather icon-file-text"></i> Ver examen</button>';
+                        fila += '        <button type="button" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_'+value.id+'" onclick="verResultadoExamen(\''+value.id+'\',1);"><i class="feather icon-activity"></i> Ver</button>';
                     else
-                        fila += '        <button type="button" disabled="disabled" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_'+value.id+'"><i class="feather icon-file-text"></i> Ver examen</button>';
+                        fila += '        <button type="button" disabled="disabled" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_'+value.id+'"><i class="feather icon-activity"></i> Ver</button>';
 
                     fila += '    </td>';
                     fila += '</tr>';
@@ -581,7 +585,7 @@
                     }
                     fila += '    </td>';
                     fila += '    <td>';
-                    fila += '        <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad(\''+value.id+'\',0);"><i class="feather icon-file-text"></i> Ver examen</button>';
+                    fila += '        <button type="button" class="btn btn-success-light-c btn-xxs" onclick="verExamenEspecialidad(\''+value.id+'\',0);"><i class="feather icon-activity"></i> Ver</button>';
                     fila += '    </td>';
                     fila += '</tr>';
 
@@ -645,9 +649,9 @@
                     fila += '    </td>';
                     fila += '    <td>';
                     if(value.cantidad > 0)
-                        fila += '        <button type="button" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_'+value.id+'" onclick="verResultadoExamen(\''+value.id+'\',0);"><i class="feather icon-file-text"></i> Ver examen</button>';
+                        fila += '        <button type="button" class="btn btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_'+value.id+'" onclick="verResultadoExamen(\''+value.id+'\',0);"><i class="feather icon-file-text"></i> Ver examen</button>';
                     else
-                        fila += '        <button type="button" disabled="disabled" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_'+value.id+'"><i class="feather icon-file-text"></i> Ver examen</button>';
+                        fila += '        <button type="button" disabled="disabled" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_'+value.id+'"><i class="feather icon-file-text"></i> Ver examen</button>';
 
                     fila += '    </td>';
                     fila += '</tr>';

@@ -10,7 +10,19 @@ File: style.css
 /* cyrillic-ext */
 @import url(plugins/animate.min.css);
 
+
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+
+// <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 200 to 1000
+
+.nunito-<uniquifier> {
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+
 
 @font-face {
     font-family: 'Nunito';
@@ -31,7 +43,9 @@ File: style.css
   }
 
 
-
+.bg-fondo-gris {
+    background-color: #F4F4F4!important;
+}
 /*
  * Container style
  */
@@ -2307,7 +2321,7 @@ pre code {
 .form-control::placeholder {
     color: #adb5bd;
     opacity: 1;
-    font-size: 0.70rem;
+    font-size: 0.8rem;
     padding-top: 4px;
 }
 
@@ -5108,6 +5122,21 @@ input[type="button"].btn-block {
     color: #fff;
 }
 
+.card-info {
+    background: #fff!important;
+    margin-bottom: 0.6rem!important;
+    padding:1px!important;
+    border-radius: 4px!important;
+    box-shadow: 0 4px 10px -2px rgba(54, 80, 138, 0.4) !important;
+}
+
+.card-top {
+    padding: 0.6rem  0.6rem 0.4rem!important;
+    margin-bottom: 0!important;
+    background-color: rgba(0, 0, 0, 0)!important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125)!important;
+}
+
 .card {
     position: relative;
     display: flex;
@@ -5177,6 +5206,7 @@ input[type="button"].btn-block {
     color: #1a49a3;
     border-bottom: 0px solid rgba(0, 0, 0, 0.125);
 }
+
 
 .card-header:first-child {
     border-radius: calc(0.25rem - 0px) calc(0.25rem - 0px) 0 0;
@@ -5519,7 +5549,7 @@ a.badge:hover, a.badge:focus {
 
 .badge-primary-light {
     color: #1a49a3!important;
-    background-color: #f0f6ff!important;
+    background-color: #d2e3fb !important;
     margin-bottom: 1rem!important;
     font-weight: 700!important;
     text-transform: uppercase!important;
@@ -20569,7 +20599,7 @@ a.badge-light-dark.active, a.badge-light-dark:active, a.badge-light-dark:focus, 
 body {
     font-family: "Nunito Sans", sans-serif;
     font-size: 13px;
-    color: #373a3c;
+    color: #596679;
     font-weight: 400;
     background: #4680ff;
     position: relative;
@@ -33736,41 +33766,43 @@ text-align: left;
 background: #fff!important;
 margin-bottom: 0.8rem!important;
 padding:1px;
-border-radius: 4px!important;
-box-shadow: 0 2px 4px -2px rgba(54, 80, 138, 0.4) !important;
+border-radius: 5px!important;
+border: 1px solid #c6c9cc;
+/*box-shadow: 0 2px 4px -2px rgba(54, 80, 138, 0.4) !important;*/
 }
 
 
 
 .card-header-a {
-    padding: 0rem 0.4rem!important;
+    font-size: 1.5rem;
+    padding: 0rem 1.4rem 0rem 0.4rem!important;
     background-color: #ffffff!important;
     color: #1a49a3;
-        border-bottom: 0px solid #e2e5e8!important;
-        border-radius: 4px!important;
-        border: 1px solid #fff;
+    border-bottom: 1px solid #c6c9cc!important;
+    border-radius: 4px!important;
+    border: 0px solid #c6c9cc!important;
 
 }
 
 .card-body-aten-a {
+     border-top: 1px solid #c6c9cc!important;
     padding-top: 0.65rem!important;
     padding-button: 0.65rem!important;
     padding-left: 0.5rem!important;
     padding-right: 0.5rem!important;
-    border-top: 1px solid #E8E8E8!important;
-    box-shadow: none;
+    border-bottom: 0px solid #c6c9cc!important;
 }
 
 /* CARDS INFO MODAL */
 .card-previas {
-    background: #fff!important;
-    margin-bottom: 0.8rem!important;
-    padding:1px;
-    border-radius: 4px!important;
-    box-shadow: 
-    -webkit-box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.12)!important;
-    -moz-box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.12)!important;
-    box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.12)!important;"
+background: #fff!important;
+margin-bottom: 0.8rem!important;
+padding:1px;
+border-radius: 4px!important;
+box-shadow: 
+-webkit-box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.12)!important;
+-moz-box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.12)!important;
+box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.12)!important;"
 }
 
 .card-header-previas {
@@ -33868,7 +33900,7 @@ box-shadow: 0 2px 4px -2px rgba(54, 80, 138, 0.4) !important;
   width: 100%;
   text-align: left;
   outline: none;
-  font-size: 0.82rem;
+  font-size: 0.90rem;
   transition: 0.4s;
   padding: 5px 0px 0px 3px;
   color: #1a49a3!important;
@@ -34952,6 +34984,23 @@ margin-bottom: 0px;
 .nav-link-card {
     display: block;
     padding: 0.5rem 1rem;
+}
+
+
+.nav-secciones {
+    color: #C7C8C9;
+    font-size: 0.67rem!important;
+    background-color: #fff;
+    padding: 3px 6px!important;
+    border-radius: 0.2rem;
+    margin-bottom: 0.5rem!important;
+    margin-top: 0.5rem!important;
+    margin-left: 0rem!important;
+    margin-right:0.100rem!important;
+    line-height: 1.5;
+    border: 1px solid #d6d7db!important;
+    font-weight:600!important;
+    transition: 0.2s!important;
 }
 
 

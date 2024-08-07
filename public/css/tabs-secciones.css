@@ -13,6 +13,7 @@
 
 .nav-secciones {
     color: #C7C8C9;
+    border: solid 1px #dbdbdb!important;
     font-size: 0.67rem!important;
     background-color: #fff;
     padding: 3px 6px!important;
@@ -22,7 +23,6 @@
     margin-left: 0rem!important;
     margin-right:0.100rem!important;
     line-height: 1.5;
-     border: solid 1px #fff!important;
     font-weight:600!important;
     transition: 0.2s!important;
 }

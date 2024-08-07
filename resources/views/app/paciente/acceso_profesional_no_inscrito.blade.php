@@ -40,14 +40,18 @@
     <div class="auth-wrapper">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-6 mx-auto ">
+                <div class="col-md-8 mx-auto ">
                     <!--Ingreso a Atención profesional no inscrito-->
                     <div class="card lg">
                         <div class="card-body">
+
                             <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <button class="btn btn-xxs btn-info-light float-right"><i class="feather feather icon-home"></i> Volver a mi escritorio</button>
+                                </div>
                                 <div class="col-sm-12 text-center">
                                     <img src="{{ asset('images/iconos/p_no_inscrito.svg') }}" alt=""
-                                        class="img-fluid mb-3 wid-60">
+                                        class="img-fluid mb-2 wid-60">
                                     <h5 class="text-info">Atención de profesional no registrado</h5>
 
                                     <p class="f-w-400 mb-4">Para acceder complete los campos</p>
@@ -56,86 +60,78 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                         <div class="form-row">
-                                            <div class="form-group col-md-4">
-                                                <label class="floating-label">Rut</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                                                <label class="floating-label-activo-sm">Rut</label>
                                                 <input type="text" class="form-control form-control-sm" name="rut_profesional" id="rut_profesional" oninput="formatoRut(this)">
                                             </div>
-
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="floating-label">Nombres</label>
+                                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                                                <label class="floating-label-activo-sm">Nombres</label>
                                                 <input type="text" class="form-control form-control-sm"
                                                     name="nombre_profesional" id="nombre_profesional">
                                             </div>
-                                            <div class="form-group col-md-3">
-                                                <label class="floating-label">Primer Apellido</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                                                <label class="floating-label-activo-sm">Primer apellido</label>
                                                 <input type="text" class="form-control form-control-sm"
                                                     name="primer_apellido_profesional" id="primer_apellido_profesional">
                                             </div>
-                                            <div class="form-group col-md-3">
-                                                <label class="floating-label">Segundo Apellidos</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                                                <label class="floating-label-activo-sm">Segundo apellidos</label>
                                                 <input type="text" class="form-control form-control-sm"
                                                     name="segundo_apellido_profesional"
                                                     id="segundo_apellido_profesional">
                                             </div>
-
                                         </div>
                                         <div class="form-row">
-                                            <div class="form-group col-md-4">
-                                                <label class="floating-label">Profesi&oacute;n</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                <label class="floating-label-activo-sm">Profesi&oacute;n</label>
                                                 <select onchange="cargarListaEspecialidad()"  id="lista_profesion" name="lista_profesion" class="form-control form-control-sm">
-                                                        <option value="0">Seleccione una profesión</option>
+                                                        <option value="0">Seleccione</option>
                                                     @foreach ($profesion as $p)
                                                         <option value="{{$p->id}}">{{$p->nombre}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <label class="floating-label">Especialidad</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                <label class="floating-label-activo-sm">Especialidad</label>
                                                 <select onchange="cargarListaSubEspecialidad()" id="lista_especialidad" name="lista_especialidad" class="form-control form-control-sm">
-                                                    <option value="0">Especialidad</option>
+                                                    <option value="0">Seleccione</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <label class="floating-label">Sub Especialidad</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                <label class="floating-label-activo-sm">Sub Especialidad</label>
                                                 <select id="lista_sub_especialidad" name="lista_sub_especialidad" class="form-control form-control-sm">
-                                                <option value="0">Sub Especialidad</option>
+                                                <option value="0">Seleccione</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-md-6">
-                                                <label class="floating-label">Correo Electrónico</label>
+                                                  <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <label class="floating-label-activo-sm">Correo electrónico</label>
                                                 <input type="text" class="form-control form-control-sm"
                                                     name="email_profesional" id="email_profesional">
                                             </div>
-                                            <div class="form-group col-md-3">
-                                                <label class="floating-label">Teléfono Pricipal</label>
+                                                  <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <label class="floating-label-activo-sm">Teléfono</label>
                                                 <input type="text" class="form-control form-control-sm"
-                                                    name="telefono_uno_profesional" id="telefono_uno_profesional">
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <label class="floating-label">Teléfono Opcional</label>
-                                                <input type="text" class="form-control form-control-sm"
-                                                    name="telefono_dos_profesional" id="telefono_dos_profesional">
+                                                    name="telefono_rofesional" id="telefono_profesional">
                                             </div>
                                         </div>
+                                        <!--NO LE ENCUENTRO RELEVANCIA A ESTOS DATOS PARA UN PRE REGISTRO-->
                                         <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="floating-label">Dirección de consulta</label>
+                                            <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                                <label class="floating-label-activo-sm">Dirección de consulta</label>
                                                 <input type="address" class="form-control form-control-sm"
                                                     name="direccion_consulta_profesional"
                                                     id="direccion_consulta_profesional">
                                             </div>
-                                            <div class="form-group col-md-6">
-                                                <label class="floating-label">N&uacute;mero / Oficina</label>
+                                            <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                <label class="floating-label-activo-sm">Nº</label>
                                                 <input type="address" class="form-control form-control-sm"
                                                     name="numero_dir_consulta_profesional"
                                                     id="numero_dir_consulta_profesional">
                                             </div>
-                                            <div class="form-group col-md-6">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Región</label>
                                                 <select id="lista_region" onchange="cargarListaCiudades();" name="lista_region" class="form-control form-control-sm">
-                                                    <option tion value="0">Seleccione una opción </option>
+                                                    <option tion value="0">Seleccione</option>
                                                     @if (count($regiones) > 0)
                                                         @foreach ($regiones as $region)
                                                             <option value="{{ $region->id }}">{{ $region->nombre }}
@@ -145,17 +141,17 @@
                                                     @endif
                                                 </select>
                                             </div>
-                                            <div class="form-group col-md-6">
-                                                <label class="floating-label">Ciudad</label>
+                                                  <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <label class="floating-label-activo-sm">Ciudad</label>
                                                 <select id="lista_ciudades" name="lista_ciudades" class="form-control form-control-sm">
-                                                    <option value="S">Seleccione una ciudad </option>
+                                                    <option value="S">Seleccione</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-sm-10 mx-auto mt-2">
-                                                <button onclick="registrar()" class="btn btn-block btn-info mb-2 mx-auto">
-                                                Guardar y Atender a Paciente
+                                            <div class="col-sm-12 col-md-6 mx-auto mt-2">
+                                                <button onclick="registrar()" class="btn  btn-block btn-info mb-2">
+                                                <i class="feather icon-check"></i> Guardar y atender a paciente
                                                 </button>
                                                 <!--
                                                 <p class="mb-2 text-muted text-center">¿No has recibido los códigos de
